@@ -49,6 +49,8 @@ class Game():
         venue = gameData['venue']
         self.venue_id = venue['id']
         self.venue_name = venue['name']
+        self.venue_city = venue['location']['city']
+        self.venue_state = venue['location']['state']
         self.field_info = venue['fieldInfo']
 
         weather = gameData['weather']
@@ -57,8 +59,8 @@ class Game():
         self.wind = weather['wind']
 
         gameInfo = gameData['gameInfo']
-        self.attendance = gameInfo['attendance']
-        self.gameDuration = gameInfo['gameDurationMinutes']
+        self.attendance = gameData.get('gameInfo', {}).get('attendance', '-')
+        self.gameDuration = gameData.get('gameInfo', {}).get('gameDurationMinutes', '-')
 
 
         # Game Team data
@@ -99,6 +101,7 @@ class Game():
 
         # Game liveData
         self._allPlays = liveData['plays']['allPlays']
+        self._currentPlay = liveData['plays']['allPlays']
 
 
 
