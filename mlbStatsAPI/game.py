@@ -73,10 +73,25 @@ class Game():
         # self.away_hits =
         # self.away_errs =
 
-
         self._away_team_full = away['name']
         self._away_team = away['clubName']
         self._away_team_abbrv = away['abbreviation']
+
+        home = gameData['teams']['home']
+        _home_score_data = self._linescore['teams']['home']
+        self._home_info = home
+        self.home_id = home['id']
+        # self.away_fullName =
+        # self.away_clubName =
+        # self.away_abbrv =
+        # self.away_runs =
+        # self.away_hits =
+        # self.away_errs =
+
+
+        self._home_team_full = home['name']
+        self._home_team = home['clubName']
+        self._home_team_abbrv = home['abbreviation']
 
 
 
