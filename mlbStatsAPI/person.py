@@ -1,6 +1,6 @@
 import requests
 
-class person:
+class Person:
 
     def __init__(self, personId):
 
@@ -9,7 +9,7 @@ class person:
         #           'timecode':timecode}
         params = {}
 
-        prsn = requests.get(game_url,params=params).json()['people']
+        prsn = requests.get(game_url,params=params).json()['people'][0]
         self._raw_person_data = prsn
 
 
@@ -24,44 +24,44 @@ class person:
         # self.birthStateProvince = prsn['birthStateProvince']
         # self.birthCountry = prsn['birthCountry']
 
-        self.height = prse['height']
-        self.weight = prse['weight']
-        self.active = prse['active']
+        self.height = prsn['height']
+        self.weight = prsn['weight']
+        self.active = prsn['active']
 
-        primaryPosition = prse['primaryPosition']
+        primaryPosition = prsn['primaryPosition']
         self.primaryPosition_name = primaryPosition['name']
         self.primaryPosition_type = primaryPosition['type']
 
-        self.useName = prse['useName']
-        self.boxscoreName = prse['boxscoreName']
-        self.nickName = prse['nickName']
-        self.gender = prse['gender']
+        self.useName = prsn['useName']
+        self.boxscoreName = prsn['boxscoreName']
+        self.nickName = prsn['nickName']
+        self.gender = prsn['gender']
 
-        # self.nameMatrilineal = prse['nameMatrilineal']
+        # self.nameMatrilineal = prsn['nameMatrilineal']
 
-        self.isPlayer = prse['isPlayer']
+        self.isPlayer = prsn['isPlayer']
 
-        self.isVerified = prse['isVerified']
-        self.mlbDebutDate = prse['mlbDebutDate']
+        self.isVerified = prsn['isVerified']
+        self.mlbDebutDate = prsn['mlbDebutDate']
 
-        self.batSide_code = prse['batSide']['code']
-        self.batSide_description = prse['batSide']['description']
+        self.batSide_code = prsn['batSide']['code']
+        self.batSide_description = prsn['batSide']['description']
 
-        self.pitchHand_code = prse['pitchHand']['code']
-        self.pitchHand_description = prse['pitchHand']['description']
-
-
-        # self.nameFirstLast = prse['nameFirstLast']
-        self.nameTitle = prse['nameTitle']
-        self.nameSlug = prse['nameSlug']
-
-        # self.firstLastName = prse['firstLastName']
-        # self.lastFirstName = prse['lastFirstName']
-        # self.lastInitName = prse['lastInitName']
-        # self.initLastName = prse['initLastName']
-        # self.fullFMLName = prse['fullFMLName']
-        # self.fullLFMName = prse['fullLFMName']
+        self.pitchHand_code = prsn['pitchHand']['code']
+        self.pitchHand_description = prsn['pitchHand']['description']
 
 
-        self.strikeZoneTop = prse['strikeZoneTop']
-        self.strikeZoneBottom = prse['strikeZoneBottom']
+        # self.nameFirstLast = prsn['nameFirstLast']
+        self.nameTitle = prsn['nameTitle']
+        self.nameSlug = prsn['nameSlug']
+
+        # self.firstLastName = prsn['firstLastName']
+        # self.lastFirstName = prsn['lastFirstName']
+        # self.lastInitName = prsn['lastInitName']
+        # self.initLastName = prsn['initLastName']
+        # self.fullFMLName = prsn['fullFMLName']
+        # self.fullLFMName = prsn['fullLFMName']
+
+
+        self.strikeZoneTop = prsn['strikeZoneTop']
+        self.strikeZoneBottom = prsn['strikeZoneBottom']
