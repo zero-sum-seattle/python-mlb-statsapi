@@ -7,7 +7,6 @@ def lookup_player(firstName, lastName, season=None):
     if not season:
         season = datetime.now().year
 
-
     fields = "people,id,fullName,firstName,lastName,primaryNumber,currentTeam,id,primaryPosition,code,abbreviation,useName,boxscoreName,nickName,mlbDebutDate,nameFirstLast,firstLastName,lastFirstName,lastInitName,initLastName,fullFMLName,fullLFMName"
 
     lookupUrl = f'https://statsapi.mlb.com/api/v1/sports/1/players?fields={fields}&season={season}'
@@ -58,17 +57,7 @@ def liveGames_data():
         }
     )
 
-    # r = statsapi.get("schedule", params)
-
-
-    # c.BASE = 'https://statsapi.mlb.com/api'
-
     url = 'https://statsapi.mlb.com/api/v1' + "/schedule?"
-    #
-    # params = {
-    #     "sportId":1,
-    #     "hydrate": "linescore",
-    # }
 
     r = requests.get(url,params=params).json()
 
