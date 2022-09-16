@@ -2,7 +2,7 @@ from datetime import datetime
 import requests
 
 def lookup_player(firstName, lastName, season=None):
-    """Get data about players based on full name."""
+    """Get data about players based on full name. """
 
     if not season:
         season = datetime.now().year
