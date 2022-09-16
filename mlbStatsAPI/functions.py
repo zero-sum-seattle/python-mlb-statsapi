@@ -1,4 +1,30 @@
+from datetime import datetime
 import requests
+
+def lookup_player(firstName, lastName, season=None):
+    """Get data about players based on first, last, or full name."""
+    params = {
+        "sportId": str(1),
+        "fields": "people,id,fullName,firstName,lastName,primaryNumber,currentTeam,id,primaryPosition,code,abbreviation,useName,boxscoreName,nickName,mlbDebutDate,nameFirstLast,firstLastName,lastFirstName,lastInitName,initLastName,fullFMLName,fullLFMName",
+    }
+
+    if not season:
+        season = datetime.now().year
+
+
+    fields = "people,id,fullName,firstName,lastName,primaryNumber,currentTeam,id,primaryPosition,code,abbreviation,useName,boxscoreName,nickName,mlbDebutDate,nameFirstLast,firstLastName,lastFirstName,lastInitName,initLastName,fullFMLName,fullLFMName"
+
+    lookupUrl = f'https://statsapi.mlb.com/api/v1/sports/1/players?fields={fields}&season={season}'
+
+    r = requests.get(lookupUrl).json()
+
+    players = []
+    for player in r["people"]:
+        if (player['firstName'].lower() == firstName.lower() or player['useName'].lower() == firstName.lower()):
+            if player['lastName'].lower() == lastName.lower():
+                players.append(player)
+
+    return players
 
 def liveGames_print():
     """Get a formatted list of live games."""
