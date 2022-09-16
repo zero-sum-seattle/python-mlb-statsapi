@@ -2,11 +2,7 @@ from datetime import datetime
 import requests
 
 def lookup_player(firstName, lastName, season=None):
-    """Get data about players based on first, last, or full name."""
-    params = {
-        "sportId": str(1),
-        "fields": "people,id,fullName,firstName,lastName,primaryNumber,currentTeam,id,primaryPosition,code,abbreviation,useName,boxscoreName,nickName,mlbDebutDate,nameFirstLast,firstLastName,lastFirstName,lastInitName,initLastName,fullFMLName,fullLFMName",
-    }
+    """Get data about players based on full name."""
 
     if not season:
         season = datetime.now().year
