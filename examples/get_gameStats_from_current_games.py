@@ -54,11 +54,7 @@ def print_game_stats(gamePk):
     print ("     [ ]   [ ]                    [__]                                       [__]")
     print ("        [ ]                         \{:^41}/".format((game._linescore['defense']['pitcher']['fullName'])))
     print ("                                      \                 ---                 /")
-    print ("     {:^9}                          \{:^33}/".format(game._linescore['inningState']+' '+str(game._linescore['currentInning']),
-                                                                    game._currentPlay['matchup']['pitchHand']['code']
-                                                                    +"hp "+
-                                                                    str(game._linescore['defense']['pitcher']['id'])))
-
+    print ("     {:^9}                          \{:^33}/".format(game._linescore['inningState']+' '+str(game._linescore['currentInning']),game._currentPlay['matchup']['pitchHand']['code']+"hp "+str(game._linescore['defense']['pitcher']['id'])))
     print ("     ---------                            \                             /")
     print ("     Balls   {}                              \                         /".format(game._linescore['balls']))
     print ("     Strikes {}                                \                     /".format(game._linescore['strikes']))
