@@ -94,18 +94,9 @@ class Person:
             primaryPosition.get('abbreviation','-')
         )
 
-        # self.fullName = prsn['fullName']
-        # self.firstName = prsn['firstName']
-        # self.middleName = prsn.get('middleName','')
-        # self.lastName = prsn['lastName']
-        # self.pronunciation = prsn.get('pronunciation','')
-        # self.useName = prsn['useName']
-        # self.boxscoreName = prsn['boxscoreName']
-        # self.nickName = prsn.get('nickName','')
+
         self._primaryNumber = prsn['primaryNumber']
         self._currentAge = prsn['currentAge']
-
-
 
         self.birthDate = prsn.get('birthDate','')
         self.birthCity = prsn.get('birthCity','')
@@ -126,8 +117,6 @@ class Person:
             prsn['strikeZoneTop'],
             prsn['strikeZoneBottom']
         )
-        # self._strikeZoneTop = prsn['strikeZoneTop']
-        # self._strikeZoneBottom = prsn['strikeZoneBottom']
 
         self._active = prsn['active']
         self._draftYear = prsn['draftYear']
@@ -380,8 +369,7 @@ class Person:
 
     @property
     def playerId(self) -> int:
-        """Player Mlb Advanced Media official ID number
-        """
+        """Player Mlb Advanced Media official ID number"""
         return self._playerId
 
     @property
@@ -391,22 +379,22 @@ class Person:
 
     @property
     def number(self) -> int:
-        """ """
+        """Players jersey number"""
         return self._primaryNumber
 
     @property
     def age(self) -> int:
-        """ """
+        """Players age"""
         return self._currentAge
 
     @property
     def height(self) -> int:
-        """ """
+        """Players height"""
         return self._height
 
     @property
     def weight(self) -> int:
-        """ """
+        """Players weight"""
         return self._weight
 
     @property
@@ -443,17 +431,17 @@ class Person:
 
     @property
     def active(self) -> bool:
-        """ """
+        """If the player is active or not"""
         return self._active
 
     @property
     def draftYear(self) -> int:
-        """ """
+        """The year the player was drafted in"""
         return self._draftYear
 
     @property
     def mlbDebutDate(self) -> str:
-        """ """
+        """Debut date as a string"""
         return self._mlbDebutDate
 
 
