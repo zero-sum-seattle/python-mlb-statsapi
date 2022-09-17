@@ -153,7 +153,7 @@ def check_if_gameId_in_list_of_dict(list_of_dict, value):
     return False
 
 def selectACurrentGame():
-    liveGameData = mlbStatsAPI.liveGames_data()
+    liveGameData = mlbStatsAPI.liveGames()
 
     if not liveGameData:
         sys.exit("Error:    There are no live games being played at the moment. Please try again when there is a live game! \n")
