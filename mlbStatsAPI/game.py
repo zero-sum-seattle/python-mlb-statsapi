@@ -101,7 +101,7 @@ class Game():
 
         # Game liveData
         self._allPlays = liveData['plays']['allPlays']
-        self._currentPlay = liveData['plays']['allPlays']
+        self._currentPlay = liveData['plays']['currentPlay']
 
 
 

@@ -9,5 +9,5 @@ game = Game
 person = Person
 
 from .functions import lookup_player
-from .functions import liveGames_print
-from .functions import liveGames_data
+from .functions import liveGames
+from .functions import todaysGames
