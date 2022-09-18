@@ -1,40 +1,102 @@
 import requests
 from . import objects as objs
+from dataclasses import dataclass, asdict
+
+@dataclass(frozen=True)
+class PersonName:
+    __slots__ = ['personId','full','first','middle','last','boxscore','use','nick','pronunciation']
+    personId: int
+    full: str
+    first: str
+    middle: str
+    last: str
+    boxscore: str
+    use: str
+    nick: str
+    pronunciation: str
+
+    def __str__(self) -> str:
+        return str(self.full)
+
+    def __repr__(self) -> str:
+        return str(self.full)
+
+    @property
+    def id(self):
+        return self.mlbam
+
+    def asdict(self):
+        return asdict(self)
+
+@dataclass(frozen=True)
+class Position:
+    __slots__ = ['code','name','type','abbreviation']
+    code: str
+    name: str
+    type: str
+    abbreviation: str
+
+    @property
+    def abbrv(self):
+        return self.abbreviation
+
+    def __str__(self):
+        return str(self.abbreviation)
+
+    def __repr__(self):
+        return f'<{self.abbreviation}, {self.name}>'
+
+    def asdict(self):
+        return asdict(self)
+
+@dataclass(frozen=True)
+class StrikeZone:
+    __slots__ = ['top','bottom']
+    top: int
+    bottom: int
+
+    def asdict(self):
+        return asdict(self)
+
 
 class Person:
 
     def __init__(self, personId):
 
-        group = "[hitting,pitching,fielding,catching,running]"
+        group = "[hitting,pitching,fielding]"
 
         type = "[season,seasonAdvanced,career,careerAdvanced,yearByYear,yearByYearAdvanced,sabermetrics,expectedStatistics,sprayChart,hotColdZones]"
 
-        person_url = f'https://statsapi.mlb.com/api/v1/people/{personId}?'
+        person_url = f'https://statsapi.mlb.com/api/v1/people/{personId}?hydrate=stats(group={group},type={type})'
 
-        params = {
-            "hydrate": "stats(group="
-            + group
-            + ",type="
-            + type
-            + ")"
-        }
-
-        prsn = requests.get(person_url,params=params).json()['people'][0]
+        prsn = requests.get(person_url).json()['people'][0]
         # self._raw_person_data = prsn
 
-        self.personId = personId
-        self.primaryPosition = prsn.get('primaryPosition',{})
+        self._playerId = personId
+        primaryPosition = prsn.get('primaryPosition',{})
 
-        self.fullName = prsn['fullName']
-        self.firstName = prsn['firstName']
-        self.middleName = prsn.get('middleName','')
-        self.lastName = prsn['lastName']
-        self.pronunciation = prsn.get('pronunciation','')
-        self.useName = prsn['useName']
-        self.boxscoreName = prsn['boxscoreName']
-        self.nickName = prsn.get('nickName','')
-        self.primaryNumber = prsn['primaryNumber']
-        self.currentAge = prsn['currentAge']
+        self._name = PersonName (
+            personId=personId,
+            full=prsn['fullName'],
+            first=prsn["firstName"],
+            middle=prsn.get('middleName',''),
+            last=prsn["lastName"],
+            boxscore=prsn['boxscoreName'],
+            use=prsn.get('useName',''),
+            nick=prsn.get('nickName',''),
+            pronunciation=prsn.get('pronunciation','')
+        )
+
+        self._position = Position(
+            primaryPosition.get('code','-'),
+            primaryPosition.get('name','-'),
+            primaryPosition.get('type','-'),
+            primaryPosition.get('abbreviation','-')
+        )
+
+
+        self._primaryNumber = prsn['primaryNumber']
+        self._currentAge = prsn['currentAge']
 
         self.birthDate = prsn.get('birthDate','')
         self.birthCity = prsn.get('birthCity','')
@@ -46,15 +108,19 @@ class Person:
         self.deathState =  prsn.get('deathStateProvince',''),
         self.deathCountry =  prsn.get('deathCountry',''),
 
-        self.height = prsn['height']
-        self.weight = prsn['weight']
-        self.bats = prsn['batSide']['code']
-        self.throws = prsn['pitchHand']['code']
-        self.strikeZoneTop = prsn['strikeZoneTop']
-        self.strikeZoneBottom = prsn['strikeZoneBottom']
+        self._height = prsn['height']
+        self._weight = prsn['weight']
+        self._bats = prsn['batSide']['code']
+        self._throws = prsn['pitchHand']['code']
 
-        self.active = prsn['active']
-        self.mlbDebutDate = prsn['mlbDebutDate']
+        self._strikeZone = StrikeZone (
+            prsn['strikeZoneTop'],
+            prsn['strikeZoneBottom']
+        )
+
+        self._active = prsn['active']
+        self._draftYear = prsn['draftYear']
+        self._mlbDebutDate = prsn['mlbDebutDate']
 
 
 
@@ -271,9 +337,6 @@ class Person:
                 stat_dict["hotColdZones"] = stats
 
 
-
-
-
         self._stats = objs.PlayerStats(
             season_hitting = stat_dict["season_hitting"],
             season_pitching = stat_dict["season_pitching"],
@@ -304,11 +367,118 @@ class Person:
         )
 
 
+    @property
+    def playerId(self) -> int:
+        """Player Mlb Advanced Media official ID number"""
+        return self._playerId
 
+    @property
+    def name(self) -> PersonName:
+        """Name variations for player"""
+        return self._name
+
+    @property
+    def number(self) -> int:
+        """Players jersey number"""
+        return self._primaryNumber
+
+    @property
+    def age(self) -> int:
+        """Players age"""
+        return self._currentAge
+
+    @property
+    def height(self) -> int:
+        """Players height"""
+        return self._height
+
+    @property
+    def weight(self) -> int:
+        """Players weight"""
+        return self._weight
+
+    @property
+    def position(self) -> Position:
+        """
+        Keys/Attributes:
+        ----------------
+        - 'code'            : int (3)
+        - 'name'            : str ('First Base')
+        - 'type'            : str ('Infielder')
+        - 'abbreviation'    : str ('1B')
+        """
+        return self._position;
+
+    @property
+    def bats(self) -> str:
+        """Code for for player's batting side ('R','L','S')"""
+        return self._bats
+
+    @property
+    def throws(self) -> str:
+        """Code for for player's throwing arm ('R','L','S')"""
+        return self._throws
+
+    @property
+    def stikeZone(self) -> StrikeZone:
+        """
+        Keys/Attributes:
+        ----------------
+        - 'top'     : int (3.59)
+        - 'bottom'  : int (1.76)
+        """
+        return self._strikeZone
+
+    @property
+    def active(self) -> bool:
+        """If the player is active or not"""
+        return self._active
+
+    @property
+    def draftYear(self) -> int:
+        """The year the player was drafted in"""
+        return self._draftYear
+
+    @property
+    def mlbDebutDate(self) -> str:
+        """Debut date as a string"""
+        return self._mlbDebutDate
 
 
     @property
     def stats(self):
         """Player stats
+
+        Stats Groups
+        ------------
+        - hitting
+        - pitching
+        - fielding
+        - sprayChart
+        - hotColdZones
+
+        hitting,
+        pitching,
+        fielding stat Categories
+        ----------------
+        - season.regular
+        - season.advanced
+        - career.regular
+        - career.advanced
+        - yearByYear.regular
+        - yearByYear.advanced
+        - sabermetrics
+        - expectedStatistics
+
+
+        Notes:
+
+        Stats returned will always be in side a list. This is due to a number of things.
+        First is the case of a player changing clubs mid season. This results in three
+        splits returned from hitting.season.regular. One is the over all and the other two
+        are for each club the player was with. Another example is yearbyyear where the
+        splits are each year. For these reasons all stats returned will be nestled in
+        a list.
+
         """
         return self._stats
