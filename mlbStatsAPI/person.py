@@ -23,7 +23,7 @@ class PersonName:
 
     @property
     def id(self):
-        return self.mlbam
+        return self.personId
 
     def asdict(self):
         return asdict(self)

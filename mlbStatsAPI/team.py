@@ -104,6 +104,115 @@ class leagueRecord:
     def asdict(self):
         return asdict(self)
 
+@dataclass(frozen=True)
+class splitRecordData:
+    __slots__ = ['wins','losses','pct']
+    wins: int
+    losses: int
+    pct: str
+
+    def __str__(self) -> str:
+        return str(self.pct)
+
+    def __repr__(self) -> str:
+        return str(self.pct)
+
+    def asdict(self):
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class splitRecord:
+    __slots__ = ['sr_home','sr_way','sr_left','sr_right','sr_leftHome','sr_leftAway','sr_rightHome',
+                'sr_rightAway','sr_lastTen','sr_extraInning','sr_oneRun','sr_winners','sr_day',
+                'sr_night','sr_grass','sr_turf']
+
+
+    sr_home: splitRecordData
+    sr_away: splitRecordData
+    sr_left: splitRecordData
+    sr_right: splitRecordData
+    sr_leftHome: splitRecordData
+    sr_leftAway: splitRecordData
+    sr_rightHome: splitRecordData
+    sr_rightAway: splitRecordData
+    sr_lastTen: splitRecordData
+    sr_extraInning: splitRecordData
+    sr_oneRun: splitRecordData
+    sr_winners: splitRecordData
+    sr_day: splitRecordData
+    sr_night: splitRecordData
+    sr_grass: splitRecordData
+    sr_turf: splitRecordData
+
+
+    @property
+    def home(self):
+        return self.sr_home
+
+    @property
+    def away(self):
+        return self.sr_away
+
+    @property
+    def left(self):
+        return self.sr_left
+
+    @property
+    def right(self):
+        return self.sr_right
+
+    @property
+    def leftHome(self):
+        return self.sr_leftHome
+
+    @property
+    def leftAway(self):
+        return self.sr_leftAway
+
+    @property
+    def rightHome(self):
+        return self.sr_rightHome
+
+    @property
+    def rightAway(self):
+        return self.sr_rightAway
+
+    @property
+    def lastTen(self):
+        return self.sr_lastTen
+
+    @property
+    def extraInning(self):
+        return self.sr_extraInning
+
+    @property
+    def oneRun(self):
+        return self.sr_oneRun
+
+    @property
+    def winners(self):
+        return self.sr_winners
+
+    @property
+    def day(self):
+        return self.sr_day
+
+    @property
+    def night(self):
+        return self.sr_night
+
+    @property
+    def grass(self):
+        return self.sr_grass
+
+    @property
+    def turf(self):
+        return self.sr_turf
+
+    def asdict(self):
+        return asdict(self)
+
 
 
 
@@ -173,6 +282,50 @@ class Team():
             pct = record['leagueRecord']['pct']
         )
 
+        splitRecords = record['records']['splitRecords']
+
+        splitRecordsDic = {
+            "home": {},
+            "away": {},
+            "left": {},
+            "right": {},
+            "leftHome": {},
+            "leftAway": {},
+            "rightHome": {},
+            "rightAway": {},
+            "lastTen": {},
+            "extraInning": {},
+            "oneRun": {},
+            "winners": {},
+            "day": {},
+            "night": {},
+            "grass": {},
+            "turf": {}
+        }
+
+        for sRec in splitRecords:
+            splitRecordsDic[sRec["type"]] = sRec
+
+
+        self._splitRecords = splitRecord (
+            sr_home = splitRecordsDic['home'],
+            sr_away = splitRecordsDic['away'],
+            sr_left = splitRecordsDic['left'],
+            sr_right = splitRecordsDic['right'],
+            sr_leftHome = splitRecordsDic['leftHome'],
+            sr_leftAway = splitRecordsDic['leftAway'],
+            sr_rightHome = splitRecordsDic['rightHome'],
+            sr_rightAway = splitRecordsDic['rightAway'],
+            sr_lastTen = splitRecordsDic['lastTen'],
+            sr_extraInning = splitRecordsDic['extraInning'],
+            sr_oneRun = splitRecordsDic['oneRun'],
+            sr_winners = splitRecordsDic['winners'],
+            sr_day = splitRecordsDic['day'],
+            sr_night = splitRecordsDic['night'],
+            sr_grass = splitRecordsDic['grass'],
+            sr_turf = splitRecordsDic['turf']
+        )
+
 
     @property
     def teamId(self):
@@ -205,3 +358,7 @@ class Team():
     @property
     def leagueRecord(self):
         return self._leagueRecord
+
+    @property
+    def splitRecords(self):
+        return self._splitRecords
