@@ -3,23 +3,37 @@ import requests
 
 class Game():
 
-    def __init__(self,game_pk, timecode=None):
+    def __init__(self, game_pk: int, timecode=None):
+        """# Game
+        MLB Game instance
+        Paramaters
+        ----------
+        Required:
+            game_pk : int or str
+                Unique primary key for specific game
+        Optonal:
+            timecode : str
+                specify a value to retrieve a "snapshot" of the game at a specific
+                point in time
+                Format = "YYYYmmdd_HHMMDD"
+
+        """
 
         if timecode == '':
             timecode = None
         if timecode is not None and timecode.find('_') == -1:
             timecode = parse(timecode).strftime(r'%Y%m%d_%H%M%S')
 
-
-        self._game_pk = game_pk
-
-
         game_url = f'https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live?'
-        # params = {'hydrate':'venue,flags,preState',
-        #           'timecode':timecode}
+
         params = {'timecode':timecode}
 
         gm = requests.get(game_url,params=params).json()
+
+
+
+        self.__gameId = game_pk
+
         self._raw_game_data = gm
 
         self.meta = gm['metaData']
@@ -109,3 +123,9 @@ class Game():
 
 
         # def print_game_plays():
+
+
+    @property
+    def gameId(self) -> int:
+        """game Pk ID number"""
+        return self.__gameId
