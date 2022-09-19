@@ -21,11 +21,11 @@ byDayOfWeek
 """
 URLS:
 
-https://statsapi.mlb.com/api/v1/teams/110?hydrate=standings
+https://statsapi.mlb.com/api/v1/teams/{teamId}?hydrate=standings
 
 https://statsapi.mlb.com/api/{ver}/teams/{teamId}/roster/40Man
 
-https://statsapi.mlb.com/api/v1/teams/110/stats?stats=atGameStart&group=hitting,pitching,fielding,catching
+https://statsapi.mlb.com/api/v1/teams/{teamId}/stats?stats=atGameStart&group=hitting,pitching,fielding,catching
 """
 
 @dataclass(frozen=True)
@@ -123,98 +123,65 @@ class splitRecordData:
 
 @dataclass(frozen=True)
 class splitRecord:
-    __slots__ = ['sr_home','sr_way','sr_left','sr_right','sr_leftHome','sr_leftAway','sr_rightHome',
-                'sr_rightAway','sr_lastTen','sr_extraInning','sr_oneRun','sr_winners','sr_day',
-                'sr_night','sr_grass','sr_turf']
+    __slots__ = ['home','away','left','right','leftHome','leftAway','rightHome',
+                'rightAway','lastTen','extraInning','oneRun','winners','day',
+                'night','grass','turf']
 
-
-    sr_home: splitRecordData
-    sr_away: splitRecordData
-    sr_left: splitRecordData
-    sr_right: splitRecordData
-    sr_leftHome: splitRecordData
-    sr_leftAway: splitRecordData
-    sr_rightHome: splitRecordData
-    sr_rightAway: splitRecordData
-    sr_lastTen: splitRecordData
-    sr_extraInning: splitRecordData
-    sr_oneRun: splitRecordData
-    sr_winners: splitRecordData
-    sr_day: splitRecordData
-    sr_night: splitRecordData
-    sr_grass: splitRecordData
-    sr_turf: splitRecordData
-
-
-    @property
-    def home(self):
-        return self.sr_home
-
-    @property
-    def away(self):
-        return self.sr_away
-
-    @property
-    def left(self):
-        return self.sr_left
-
-    @property
-    def right(self):
-        return self.sr_right
-
-    @property
-    def leftHome(self):
-        return self.sr_leftHome
-
-    @property
-    def leftAway(self):
-        return self.sr_leftAway
-
-    @property
-    def rightHome(self):
-        return self.sr_rightHome
-
-    @property
-    def rightAway(self):
-        return self.sr_rightAway
-
-    @property
-    def lastTen(self):
-        return self.sr_lastTen
-
-    @property
-    def extraInning(self):
-        return self.sr_extraInning
-
-    @property
-    def oneRun(self):
-        return self.sr_oneRun
-
-    @property
-    def winners(self):
-        return self.sr_winners
-
-    @property
-    def day(self):
-        return self.sr_day
-
-    @property
-    def night(self):
-        return self.sr_night
-
-    @property
-    def grass(self):
-        return self.sr_grass
-
-    @property
-    def turf(self):
-        return self.sr_turf
+    home: splitRecordData
+    away: splitRecordData
+    left: splitRecordData
+    right: splitRecordData
+    leftHome: splitRecordData
+    leftAway: splitRecordData
+    rightHome: splitRecordData
+    rightAway: splitRecordData
+    lastTen: splitRecordData
+    extraInning: splitRecordData
+    oneRun: splitRecordData
+    winners: splitRecordData
+    day: splitRecordData
+    night: splitRecordData
+    grass: splitRecordData
+    turf: splitRecordData
 
     def asdict(self):
         return asdict(self)
 
+@dataclass(frozen=True)
+class teamRecord:
+    __slots__ = ['runsAllowed','runsScored','wins','losses','runDifferential','winningPercentage']
+    runsAllowed: int
+    runsScored: int
+    wins: int
+    losses: int
+    runDifferential: int
+    winningPercentage: str
 
+    def asdict(self):
+        return asdict(self)
 
+@dataclass(frozen=True)
+class teamStats:
+    __slots__ = ['season_hitting','season_pitching','season_fielding',
+                'seasonAdvanced_hitting','seasonAdvanced_pitching',
+                'seasonAdvanced_fielding','career_hitting','career_pitching',
+                'career_fielding','careerAdvanced_hitting','careerAdvanced_pitching',
+                'careerAdvanced_fielding']
+    season_hitting: dict
+    season_pitching: dict
+    season_fielding: dict
+    seasonAdvanced_hitting: dict
+    seasonAdvanced_pitching: dict
+    seasonAdvanced_fielding: dict
+    career_hitting: dict
+    career_pitching: dict
+    career_fielding: dict
+    careerAdvanced_hitting: dict
+    careerAdvanced_pitching: dict
+    careerAdvanced_fielding: dict
+
+    def asdict(self):
+        return asdict(self)
 
 class Team():
 
@@ -227,7 +194,7 @@ class Team():
 
 
         teamInfo = requests.get(team_base_url+"?hydrate=standings").json()['teams'][0]
-        rosterData = requests.get(team_base_url+"/roster/40Man").json()
+        # rosterData = requests.get(team_base_url+"/roster/40Man").json()
         statsData = requests.get(team_base_url+f'/stats?stats={type}&group={group}').json()
 
         self._teamId = teamId
@@ -306,25 +273,69 @@ class Team():
         for sRec in splitRecords:
             splitRecordsDic[sRec["type"]] = sRec
 
-
         self._splitRecords = splitRecord (
-            sr_home = splitRecordsDic['home'],
-            sr_away = splitRecordsDic['away'],
-            sr_left = splitRecordsDic['left'],
-            sr_right = splitRecordsDic['right'],
-            sr_leftHome = splitRecordsDic['leftHome'],
-            sr_leftAway = splitRecordsDic['leftAway'],
-            sr_rightHome = splitRecordsDic['rightHome'],
-            sr_rightAway = splitRecordsDic['rightAway'],
-            sr_lastTen = splitRecordsDic['lastTen'],
-            sr_extraInning = splitRecordsDic['extraInning'],
-            sr_oneRun = splitRecordsDic['oneRun'],
-            sr_winners = splitRecordsDic['winners'],
-            sr_day = splitRecordsDic['day'],
-            sr_night = splitRecordsDic['night'],
-            sr_grass = splitRecordsDic['grass'],
-            sr_turf = splitRecordsDic['turf']
+            home = splitRecordsDic['home'],
+            away = splitRecordsDic['away'],
+            left = splitRecordsDic['left'],
+            right = splitRecordsDic['right'],
+            leftHome = splitRecordsDic['leftHome'],
+            leftAway = splitRecordsDic['leftAway'],
+            rightHome = splitRecordsDic['rightHome'],
+            rightAway = splitRecordsDic['rightAway'],
+            lastTen = splitRecordsDic['lastTen'],
+            extraInning = splitRecordsDic['extraInning'],
+            oneRun = splitRecordsDic['oneRun'],
+            winners = splitRecordsDic['winners'],
+            day = splitRecordsDic['day'],
+            night = splitRecordsDic['night'],
+            grass = splitRecordsDic['grass'],
+            turf = splitRecordsDic['turf']
         )
+
+        self._record = teamRecord (
+            runsAllowed = record['runsAllowed'],
+            runsScored = record['runsScored'],
+            wins = record['wins'],
+            losses = record['losses'],
+            runDifferential = record['runDifferential'],
+            winningPercentage = record['winningPercentage']
+        )
+
+
+        statDic = {
+            "season_hitting" : {},
+            "season_pitching" : {},
+            "season_fielding" : {},
+            "seasonAdvanced_hitting" : {},
+            "seasonAdvanced_pitching" : {},
+            "seasonAdvanced_fielding" : {},
+            "career_hitting" : {},
+            "career_pitching" : {},
+            "career_fielding" : {},
+            "careerAdvanced_hitting" : {},
+            "careerAdvanced_pitching" : {},
+            "careerAdvanced_fielding" : {}
+        }
+
+        for s in statsData["stats"]:
+            statDic[s["type"]["displayName"]+"_"+s["group"]["displayName"]] = s["splits"][0]['stat']
+
+
+        self._stats = teamStats (
+            season_hitting = statDic["season_hitting"],
+            season_pitching = statDic["season_pitching"],
+            season_fielding = statDic["season_fielding"],
+            seasonAdvanced_hitting = statDic["seasonAdvanced_hitting"],
+            seasonAdvanced_pitching = statDic["seasonAdvanced_pitching"],
+            seasonAdvanced_fielding = statDic["seasonAdvanced_fielding"],
+            career_hitting = statDic["career_hitting"],
+            career_pitching = statDic["career_pitching"],
+            career_fielding = statDic["career_fielding"],
+            careerAdvanced_hitting = statDic["careerAdvanced_hitting"],
+            careerAdvanced_pitching = statDic["careerAdvanced_pitching"],
+            careerAdvanced_fielding = statDic["careerAdvanced_fielding"]
+        )
+
 
 
     @property
@@ -362,3 +373,11 @@ class Team():
     @property
     def splitRecords(self):
         return self._splitRecords
+
+    @property
+    def record(self):
+        return self._record
+
+    @property
+    def stats(self):
+        return self._stats
