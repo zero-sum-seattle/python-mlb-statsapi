@@ -66,6 +66,47 @@ class idName:
     def asdict(self):
         return asdict(self)
 
+@dataclass(frozen=True)
+class teamRanking:
+    __slots__ = ['division','league','wildCard','overall','gamesPlayed','gamesBack',
+                'wildCardGamesBack','leagueGamesBack','springLeagueGamesBack',
+                'overallGamesBack','divisionGamesBack','conferenceGamesBack']
+    division: str
+    league: str
+    wildCard: str
+    overall: str
+    gamesPlayed: int
+    gamesBack: str
+    wildCardGamesBack: str
+    leagueGamesBack: str
+    springLeagueGamesBack: str
+    overallGamesBack: str
+    divisionGamesBack: str
+    conferenceGamesBack: str
+
+    def asdict(self):
+        return asdict(self)
+
+@dataclass(frozen=True)
+class leagueRecord:
+    __slots__ = ['wins','losses','ties','pct']
+    wins: int
+    losses: int
+    ties: int
+    pct: str
+
+    def __str__(self) -> str:
+        return str(self.pct)
+
+    def __repr__(self) -> str:
+        return str(self.pct)
+
+    def asdict(self):
+        return asdict(self)
+
+
+
+
 class Team():
 
     def __init__(self, teamId: int, season: int = None):
@@ -108,6 +149,29 @@ class Team():
             name = teamInfo['venue']['name']
         )
 
+        record = teamInfo['record']
+
+        self._ranking = teamRanking (
+            division = record['divisionRank'],
+            league = record['leagueRank'],
+            wildCard = record['wildCardRank'],
+            overall = record['sportRank'],
+            gamesPlayed = record['gamesPlayed'],
+            gamesBack = record['gamesBack'],
+            wildCardGamesBack = record['wildCardGamesBack'],
+            leagueGamesBack = record['leagueGamesBack'],
+            springLeagueGamesBack = record['springLeagueGamesBack'],
+            overallGamesBack = record['sportGamesBack'],
+            divisionGamesBack = record['divisionGamesBack'],
+            conferenceGamesBack = record['conferenceGamesBack']
+        )
+
+        self._leagueRecord = leagueRecord (
+            wins = record['leagueRecord']['wins'],
+            losses = record['leagueRecord']['losses'],
+            ties = record['leagueRecord']['ties'],
+            pct = record['leagueRecord']['pct']
+        )
 
 
     @property
@@ -133,3 +197,11 @@ class Team():
     @property
     def venue(self):
         return self._venue
+
+    @property
+    def ranking(self):
+        return self._ranking
+
+    @property
+    def leagueRecord(self):
+        return self._leagueRecord
