@@ -1,3 +1,6 @@
+import requests
+from dataclasses import dataclass, asdict
+
 """
 Avaliable stats
 
@@ -46,8 +49,8 @@ class teamName:
 
 @dataclass(frozen=True)
 class idName:
-    __slots__ = ['id','name']
-    id: int
+    __slots__ = ['Id','name']
+    Id: int
     name: str
 
     def __str__(self) -> str:
@@ -58,7 +61,7 @@ class idName:
 
     @property
     def id(self):
-        return self.id
+        return self.Id
 
     def asdict(self):
         return asdict(self)
@@ -77,31 +80,31 @@ class Team():
         rosterData = requests.get(team_base_url+"/roster/40Man").json()
         statsData = requests.get(team_base_url+f'/stats?stats={type}&group={group}').json()
 
-        self._teamId = teamInfo['']
+        self._teamId = teamId
 
         self._name = teamName(
-            full = teamInfo['name']
-            location = teamInfo['locationName']
-            franchise = teamInfo['franchiseName']
-            club = teamInfo['clubName']
-            short = teamInfo['shortName']
+            full = teamInfo['name'],
+            location = teamInfo['locationName'],
+            franchise = teamInfo['franchiseName'],
+            club = teamInfo['clubName'],
+            short = teamInfo['shortName'],
             abbreviation = teamInfo['abbreviation']
         )
 
         self._springLeague = idName(
-            id = teamInfo['springLeague']['id'],
+            Id = teamInfo['springLeague']['id'],
             name = teamInfo['springLeague']['name']
         )
         self._league = idName(
-            id = teamInfo['league']['id'],
+            Id = teamInfo['league']['id'],
             name = teamInfo['league']['name']
         )
         self._division = idName(
-            id = teamInfo['division']['id'],
+            Id = teamInfo['division']['id'],
             name = teamInfo['division']['name']
         )
         self._venue = idName(
-            id = teamInfo['venue']['id'],
+            Id = teamInfo['venue']['id'],
             name = teamInfo['venue']['name']
         )
 
