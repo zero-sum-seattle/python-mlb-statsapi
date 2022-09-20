@@ -630,6 +630,59 @@ class Game():
 
         Keys/Attributes:
         ------------
+        currentInning:          int
+        currentInningOrdinal:   str
+        inningState:            str
+        inningHalf:             str
+        isTopInning:            bool
+        scheduledInnings:       int
+        fielding:               Fielding
+        hitting:                Hitting
+        balls:                  int
+        strikes:                int
+        outs:                   int
 
+
+        Fielding Keys/Attributes:
+        ------------
+        team: NameAndId
+        pitcher: NameAndId
+        catcher: NameAndId
+        first: NameAndId
+        second: NameAndId
+        third: NameAndId
+        shortstop: NameAndId
+        left: NameAndId
+        center: NameAndId
+        right: NameAndId
+        batter: NameAndId
+        onDeck: NameAndId
+        inHole: NameAndId
+        battingOrder: int
+
+        Hitting  Keys/Attributes:
+        ------------
+        team: NameAndId
+        battingOrder: int
+        batter: NameAndId
+        onDeck: NameAndId
+        inHole: NameAndId
+        pitcher: NameAndId
+        onBase: OnBase
+
+        OnBase Keys/Attributes:
+        ------------
+        onBase: bool
+        onFirst: bool
+        onSecond: bool
+        onThird: bool
+        first: NameAndId
+        second: NameAndId
+        third: NameAndId
+
+        NameAndId Keys/Attributes:
+        ------------
+        Id:     int
+        name:   str
         """
         return self._lineScore
