@@ -3,6 +3,26 @@ from dataclasses import dataclass, asdict
 
 from .team import TeamName
 
+
+@dataclass(frozen=True)
+class NameAndId:
+    __slots__ = ['Id','name']
+    Id: int
+    name: str
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+    def __repr__(self) -> str:
+        return f'{self.name}'
+
+    @property
+    def id(self):
+        return self.Id
+
+    def asdict(self):
+        return asdict(self)
+
 @dataclass(frozen=True)
 class GameTime:
     __slots__ = ['dateTime','originalDate','officialDate','dayNight','time','ampm']
@@ -113,6 +133,100 @@ class Flags:
     def asdict(self):
         return asdict(self)
 
+@dataclass(frozen=True)
+class Fielding:
+    __slots__ = ['team','pitcher','catcher','first','second','third','shortstop',
+                'left','center','right','batter','onDeck','inHole','battingOrder']
+    team: NameAndId
+    pitcher: NameAndId
+    catcher: NameAndId
+    first: NameAndId
+    second: NameAndId
+    third: NameAndId
+    shortstop: NameAndId
+    left: NameAndId
+    center: NameAndId
+    right: NameAndId
+    batter: NameAndId
+    onDeck: NameAndId
+    inHole: NameAndId
+    battingOrder: int
+
+    def __str__(self) -> str:
+        return str(self.team)
+
+    def __repr__(self) -> str:
+        return str(self.team)
+
+    def asdict(self):
+        return asdict(self)
+
+@dataclass(frozen=True)
+class OnBase:
+    __slots__ = ['onBase','onFirst','onSecond','onThird','first','second','third']
+    onBase: bool
+    onFirst: bool
+    onSecond: bool
+    onThird: bool
+    first: NameAndId
+    second: NameAndId
+    third: NameAndId
+
+    def __str__(self) -> str:
+        return str(self.onBase)
+
+    def __repr__(self) -> str:
+        return str(self.onBase)
+
+    def asdict(self):
+        return asdict(self)
+
+@dataclass(frozen=True)
+class Hitting:
+    __slots__ = ['team','battingOrder','batter','onDeck','inHole','pitcher','onBase']
+    team: NameAndId
+    battingOrder: int
+    batter: NameAndId
+    onDeck: NameAndId
+    inHole: NameAndId
+    pitcher: NameAndId
+    onBase: OnBase
+
+    def __str__(self) -> str:
+        return str(self.team)
+
+    def __repr__(self) -> str:
+        return str(self.team)
+
+    def asdict(self):
+        return asdict(self)
+
+@dataclass(frozen=True)
+class LineScore:
+    __slots__ = ['currentInning','currentInningOrdinal','inningState','inningHalf',
+                'isTopInning','scheduledInnings','fielding','hitting','balls',
+                'strikes','outs']
+    currentInning: int
+    currentInningOrdinal: str
+    inningState: str
+    inningHalf: str
+    isTopInning: bool
+    scheduledInnings: int
+    fielding: Fielding
+    hitting: Hitting
+    balls: int
+    strikes: int
+    outs: int
+
+    # def __str__(self) -> str:
+    #     return str(self.team)
+    #
+    # def __repr__(self) -> str:
+    #     return str(self.team)
+
+    def asdict(self):
+        return asdict(self)
+
 class Game():
 
     def __init__(self, game_pk: int, timecode=None):
@@ -152,6 +266,9 @@ class Game():
         gameData = gm['gameData']
         liveData = gm['liveData']
 
+
+        # gameData
+        # --------
         datetime = gameData['datetime']
         self._datetime = GameTime (
             dateTime = datetime['dateTime'],
@@ -222,9 +339,9 @@ class Game():
 
         weather = gameData['weather']
         self._weather = Weather (
-            condition = weather['condition'],
-            temp = weather['temp'],
-            wind = weather['wind']
+            condition = weather.get('condition', ''),
+            temp = weather.get('temp', ''),
+            wind =weather.get('wind', '')
         )
 
         flags = gameData['flags']
@@ -237,6 +354,150 @@ class Game():
             homeTeamPerfectGame = flags['homeTeamPerfectGame']
         )
 
+
+        # liveData
+        # --------
+
+        # Plays
+
+        # LineScore
+        lineScore = liveData["linescore"]
+        fielding = lineScore.get("defense", {})
+        hitting = lineScore.get("offense", {})
+        fBase = hitting.get('first', {})
+        sBase = hitting.get('second', {})
+        tBase = hitting.get('third', {})
+
+        if not fBase:
+            fBaseB = False
+        else:
+            fBaseB = True
+
+        if not sBase:
+            sBaseB = False
+        else:
+            sBaseB = True
+
+        if not tBase:
+            tBaseB = False
+        else:
+            tBaseB = True
+
+        if fBaseB or sBaseB or tBaseB:
+            onBaseB = True
+        else:
+            onBaseB = False
+
+
+        self._lineScore = LineScore (
+            currentInning = lineScore.get('currentInning', 0),
+            currentInningOrdinal = lineScore.get('currentInningOrdinal', ''),
+            inningState = lineScore.get('inningState', 'None'),
+            inningHalf = lineScore.get('inningHalf', 'None'),
+            isTopInning = lineScore.get('isTopInning', False),
+            scheduledInnings = lineScore.get('scheduledInnings', 9),
+            fielding = Fielding (
+                team = NameAndId (
+                    Id = fielding.get('team', {}).get('id'),
+                    name = fielding.get('team', {}).get('name', '')
+                ),
+                pitcher = NameAndId (
+                    Id = fielding.get('pitcher', {}).get('id'),
+                    name = fielding.get('pitcher', {}).get('fullName', '')
+                ),
+                catcher = NameAndId (
+                    Id = fielding.get('catcher', {}).get('id'),
+                    name = fielding.get('catcher', {}).get('fullName', '')
+                ),
+                first = NameAndId (
+                    Id = fielding.get('first', {}).get('id'),
+                    name = fielding.get('first', {}).get('fullName', '')
+                ),
+                second = NameAndId (
+                    Id = fielding.get('second', {}).get('id'),
+                    name = fielding.get('second', {}).get('fullName', '')
+                ),
+                third = NameAndId (
+                    Id = fielding.get('third', {}).get('id'),
+                    name = fielding.get('third', {}).get('fullName', '')
+                ),
+                shortstop = NameAndId (
+                    Id = fielding.get('shortstop', {}).get('id'),
+                    name = fielding.get('shortstop', {}).get('fullName', '')
+                ),
+                left = NameAndId (
+                    Id = fielding.get('left', {}).get('id'),
+                    name = fielding.get('left', {}).get('fullName', '')
+                ),
+                center = NameAndId (
+                    Id = fielding.get('center', {}).get('id'),
+                    name = fielding.get('center', {}).get('fullName', '')
+                ),
+                right = NameAndId (
+                    Id = fielding.get('right', {}).get('id'),
+                    name = fielding.get('right', {}).get('fullName', '')
+                ),
+                batter = NameAndId (
+                    Id = fielding.get('batter', {}).get('id'),
+                    name = fielding.get('batter', {}).get('fullName', '')
+                ),
+                onDeck = NameAndId (
+                    Id = fielding.get('onDeck', {}).get('id'),
+                    name = fielding.get('onDeck', {}).get('fullName', '')
+                ),
+                inHole = NameAndId (
+                    Id = fielding.get('inHole', {}).get('id'),
+                    name = fielding.get('inHole', {}).get('fullName', '')
+                ),
+                battingOrder = fielding.get('battingOrder')
+            ),
+            hitting = Hitting (
+                team = NameAndId (
+                    Id = hitting.get('team', {}).get('id'),
+                    name = hitting.get('team', {}).get('name', '')
+                ),
+                battingOrder = hitting.get('battingOrder'),
+                batter = NameAndId (
+                    Id = hitting.get('batter', {}).get('id'),
+                    name = hitting.get('batter', {}).get('fullName', '')
+                ),
+                onDeck = NameAndId (
+                    Id = hitting.get('onDeck', {}).get('id'),
+                    name = hitting.get('onDeck', {}).get('fullName', '')
+                ),
+                inHole = NameAndId (
+                    Id = hitting.get('inHole', {}).get('id'),
+                    name = hitting.get('inHole', {}).get('fullName', '')
+                ),
+                pitcher = NameAndId (
+                    Id = hitting.get('pitcher', {}).get('id'),
+                    name = hitting.get('pitcher', {}).get('fullName', '')
+                ),
+                onBase = OnBase (
+                    onBase = onBaseB,
+                    onFirst = fBaseB,
+                    onSecond = sBaseB,
+                    onThird = tBaseB,
+                    first = NameAndId (
+                        Id = fBase.get('id'),
+                        name = fBase.get('fullName')
+                    ),
+                    second = NameAndId (
+                        Id = sBase.get('id'),
+                        name = sBase.get('fullName')
+                    ),
+                    third = NameAndId (
+                        Id = tBase.get('id'),
+                        name = tBase.get('fullName')
+                    )
+                )
+            ),
+            balls = lineScore.get('balls', 0),
+            strikes = lineScore.get('strikes', 0),
+            outs = lineScore.get('outs', 0)
+        )
+
+        # BoxScore
 
     @property
     def gameId(self) -> int:
@@ -362,3 +623,13 @@ class Game():
         homeTeamPerfectGame:    bool
         """
         return self._flags
+
+    @property
+    def lineScore(self):
+        """lineScore dataclass
+
+        Keys/Attributes:
+        ------------
+
+        """
+        return self._lineScore
