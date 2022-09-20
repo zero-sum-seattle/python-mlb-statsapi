@@ -99,6 +99,20 @@ class Weather:
     def asdict(self):
         return asdict(self)
 
+@dataclass(frozen=True)
+class Flags:
+    __slots__ = ['noHitter','perfectGame','awayTeamNoHitter',
+                'awayTeamPerfectGame','homeTeamNoHitter','homeTeamPerfectGame']
+    noHitter: bool
+    perfectGame: bool
+    awayTeamNoHitter: bool
+    awayTeamPerfectGame: bool
+    homeTeamNoHitter: bool
+    homeTeamPerfectGame: bool
+
+    def asdict(self):
+        return asdict(self)
+
 class Game():
 
     def __init__(self, game_pk: int, timecode=None):
@@ -213,6 +227,16 @@ class Game():
             wind = weather['wind']
         )
 
+        flags = gameData['flags']
+        self._flags = Flags (
+            noHitter = flags['noHitter'],
+            perfectGame = flags['perfectGame'],
+            awayTeamNoHitter = flags['awayTeamNoHitter'],
+            awayTeamPerfectGame = flags['awayTeamPerfectGame'],
+            homeTeamNoHitter = flags['homeTeamNoHitter'],
+            homeTeamPerfectGame = flags['homeTeamPerfectGame']
+        )
+
 
     @property
     def gameId(self) -> int:
@@ -323,3 +347,18 @@ class Game():
         wind:       str
         """
         return self._weather
+
+    @property
+    def flags(self):
+        """flags dataclass
+
+        Keys/Attributes:
+        ------------
+        noHitter:               bool
+        perfectGame:            bool
+        awayTeamNoHitter:       bool
+        awayTeamPerfectGame:    bool
+        homeTeamNoHitter:       bool
+        homeTeamPerfectGame:    bool
+        """
+        return self._flags
