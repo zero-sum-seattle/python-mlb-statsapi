@@ -183,6 +183,23 @@ class teamStats:
     def asdict(self):
         return asdict(self)
 
+
+
+"""
+ Team
+
+    Parameters
+    ----------
+    teamId : int
+        Team id number ex: 110
+    season : int:None
+        Season number as year ex: 2022
+
+    Methods:
+    --------
+
+"""
+
 class Team():
 
     def __init__(self, teamId: int, season: int = None):
@@ -337,47 +354,180 @@ class Team():
         )
 
 
-
     @property
     def teamId(self):
+        """Team Id"""
         return self._teamId
 
     @property
     def name(self):
+        """Team name dataclass
+
+        Keys/Attributes:
+        ------------
+        full:           str
+        location:       str
+        franchise:      str
+        club:           str
+        short:          str
+        abbreviation:   str
+
+        Usage:
+        ------------
+        name.location returns the location as a string
+        """
         return self._name
 
     @property
     def springLeague(self):
+        """springLeague
+        Name and id for the teams spring league
+
+        Keys/Attributes:
+        ------------
+        Id:     int
+        name:   str
+        """
         return self._springLeague
 
     @property
     def league(self):
+        """league
+        Name and id for the teams league (normal season)
+
+        Keys/Attributes:
+        ------------
+        Id:     int
+        name:   str
+        """
         return self._league
 
     @property
     def division(self):
+        """division
+        Name and id for the teams division
+
+        Keys/Attributes:
+        ------------
+        Id:     int
+        name:   str
+        """
         return self._division
 
     @property
     def venue(self):
+        """venue
+        Name and id for the teams home venue
+
+        Keys/Attributes:
+        ------------
+        Id:     int
+        name:   str
+        """
         return self._venue
 
     @property
     def ranking(self):
+        """teamRanking Dataclass
+
+        Keys/Attributes:
+        ------------
+        division:               str
+        league:                 str
+        wildCard:               str
+        overall:                str
+        gamesPlayed:            int
+        gamesBack:              str
+        wildCardGamesBack:      str
+        leagueGamesBack:        str
+        springLeagueGamesBack:  str
+        overallGamesBack:       str
+        divisionGamesBack:      str
+        conferenceGamesBack:    str
+        """
         return self._ranking
 
     @property
     def leagueRecord(self):
+        """LeagueRecord dataclass
+
+        Keys/Attributes:
+        ------------
+        wins:   int
+        losses: int
+        ties:   int
+        pct:    str
+        """
         return self._leagueRecord
 
     @property
     def splitRecords(self):
+        """splitRecords
+
+        Split records Groups:
+        ------------
+        home
+        away
+        left
+        right
+        leftHome
+        leftAway
+        rightHome
+        rightAway
+        lastTen
+        extraInning
+        oneRun
+        winners
+        day
+        night
+        grass
+        turf
+
+        Group Keys/Attributes:
+        ------------
+        wins:   int
+        losses: int
+        pct:    str
+
+        Usage:
+        ------------
+        extraInning.wins
+        """
         return self._splitRecords
 
     @property
     def record(self):
+        """record  teamRecod dataClass
+        Team records for season
+
+        Keys/Attributes:
+        ------------
+        runsAllowed:        int
+        runsScored:         int
+        wins:               int
+        losses:             int
+        runDifferential:    int
+        winningPercentage:  str
+        """
         return self._record
 
     @property
     def stats(self):
+        """stats teamStats dataClass
+
+        Keys/Attributes:
+        ------------
+        season_hitting:             dict
+        season_pitching:            dict
+        season_fielding:            dict
+        seasonAdvanced_hitting:     dict
+        seasonAdvanced_pitching:    dict
+        seasonAdvanced_fielding:    dict
+        career_hitting:             dict
+        career_pitching:            dict
+        career_fielding:            dict
+        careerAdvanced_hitting:     dict
+        careerAdvanced_pitching:    dict
+        careerAdvanced_fielding:    dict
+        """
         return self._stats
