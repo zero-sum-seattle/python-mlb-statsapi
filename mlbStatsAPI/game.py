@@ -1,8 +1,10 @@
 import requests
 from dataclasses import dataclass, asdict
 
+from .team import TeamName
+
 @dataclass(frozen=True)
-class gameTime:
+class GameTime:
     __slots__ = ['dateTime','originalDate','officialDate','dayNight','time','ampm']
     dateTime: str
     originalDate: str
@@ -137,7 +139,7 @@ class Game():
         liveData = gm['liveData']
 
         datetime = gameData['datetime']
-        self._datetime = gameTime (
+        self._datetime = GameTime (
             dateTime = datetime['dateTime'],
             originalDate = datetime['originalDate'],
             officialDate = datetime['officialDate'],
@@ -154,6 +156,28 @@ class Game():
             statusCode = status['statusCode'],
             startTimeTBD = status['startTimeTBD'],
             abstractGameCode = status['abstractGameCode']
+        )
+
+        home = gameData['teams']['home']
+        self._home = TeamName (
+            Id = home['id'],
+            full = home['name'],
+            location = home['locationName'],
+            franchise = home['franchiseName'],
+            club = home['clubName'],
+            short = home['shortName'],
+            abbreviation = home['abbreviation']
+        )
+
+        away = gameData['teams']['away']
+        self._away = TeamName (
+            Id = away['id'],
+            full = away['name'],
+            location = away['locationName'],
+            franchise = away['franchiseName'],
+            club = away['clubName'],
+            short = away['shortName'],
+            abbreviation = away['abbreviation']
         )
 
         venue = gameData['venue']
@@ -224,6 +248,38 @@ class Game():
         abstractGameCode:   str
         """
         return self._status
+
+    @property
+    def home(self):
+        """team.TeamName dataclass
+
+        Keys/Attributes:
+        ------------
+        Id:             int
+        full:           str
+        location:       str
+        franchise:      str
+        club:           str
+        short:          str
+        abbreviation:   str
+        """
+        return self._home
+
+    @property
+    def away(self):
+        """team.TeamName dataclass
+
+        Keys/Attributes:
+        ------------
+        Id:             int
+        full:           str
+        location:       str
+        franchise:      str
+        club:           str
+        short:          str
+        abbreviation:   str
+        """
+        return self._away
 
     @property
     def venue(self):
