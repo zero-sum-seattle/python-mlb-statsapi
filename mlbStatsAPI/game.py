@@ -462,6 +462,17 @@ class Game():
         # --------
 
         # Plays
+        plays = liveData["plays"]
+
+
+            # allPlays
+
+            # currentPlay
+
+            # scoringPlays
+        self._scoringPlays = plays.get('scoringPlays', [])
+
+            # playsByInning
 
         # LineScore
         lineScore = liveData["linescore"]
@@ -845,6 +856,23 @@ class Game():
         homeTeamPerfectGame:    bool
         """
         return self._flags
+
+    # allPlays
+
+    # currentPlay
+    
+
+    @property
+    def scoringPlays(self):
+        """scoringPlays
+
+        List[int]
+
+        List that holds ints that represent which play was a scoring play
+        """
+        return self._scoringPlays
+
+    # playsByInning
 
     @property
     def lineScore(self):
