@@ -241,6 +241,16 @@ class LineScore:
     def asdict(self):
         return asdict(self)
 
+@dataclass(frozen=True)
+class Decisions:
+    __slots__ = ['winner','looser','save']
+    winner: NameAndId
+    looser: NameAndId
+    save: NameAndId
+
+    def asdict(self):
+        return asdict(self)
+
 class Game():
 
     def __init__(self, game_pk: int, timecode=None):
@@ -530,6 +540,26 @@ class Game():
 
         # BoxScore
 
+        # decisions
+        decisions = liveData.get('decisions', {})
+
+        self._decisions = Decisions (
+            winner = NameAndId (
+                id = decisions.get('winner', {}).get('id'),
+                name = decisions.get('winner', {}).get('fullName', '')
+            )
+            looser = NameAndId (
+                id = decisions.get('looser', {}).get('id'),
+                name = decisions.get('looser', {}).get('fullName', '')
+            )
+            save = NameAndId (
+                id = decisions.get('save', {}).get('id'),
+                name = decisions.get('save', {}).get('fullName', '')
+            )
+        )
+
+
+
     @property
     def gameId(self) -> int:
         """game Pk ID number"""
@@ -726,3 +756,28 @@ class Game():
         name:   str
         """
         return self._lineScore
+
+
+    # Should this be brought out to three seperate?
+    # From decisions to:
+    #   winner
+    #   looser
+    #   save
+    #
+    # So you would just call game.winner instead of game.decisions.winner ?    
+    @property
+    def decisions(self):
+        """Decisions dataclass
+
+        Keys/Attributes:
+        ------------
+        winner: NameAndId
+        looser: NameAndId
+        save:   NameAndId
+
+        NameAndId Keys/Attributes:
+        ------------
+        Id:     int
+        name:   str
+        """
+        return self._decisions
