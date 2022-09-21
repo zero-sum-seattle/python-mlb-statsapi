@@ -2,6 +2,7 @@ import requests
 from dataclasses import dataclass, asdict
 
 from .team import TeamName
+from .person import Position as PersonPosition
 
 
 @dataclass(frozen=True)
@@ -241,6 +242,84 @@ class LineScore:
     def asdict(self):
         return asdict(self)
 
+
+@dataclass(frozen=True)
+class Stats_BSHA:
+    __slots__ = ['batting','pitching','fielding']
+    batting: dict
+    pitching: dict
+    fielding: dict
+
+    # def __str__(self) -> str:
+    #     return str(self.team)
+    #
+    # def __repr__(self) -> str:
+    #     return str(self.team)
+
+    def asdict(self):
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class players_BSHA:
+    __slots__ = ['playerId','name','parentTeamId','jerseyNumber','position',
+                'gameStats','seasonStats','battingOrder','isCurrentBatter',
+                'isCurrentPitcher','isOnBench','isSubstitute']
+    playerId: int
+    name: str
+    parentTeamId: int
+    jerseyNumber: str
+    position: PersonPosition
+    gameStats: Stats_BSHA
+    seasonStats: Stats_BSHA
+    battingOrder: str
+    isCurrentBatter: bool
+    isCurrentPitcher: bool
+    isOnBench: bool
+    isSubstitute: bool
+
+    def __str__(self) -> str:
+        return str(self.name)
+
+    def __repr__(self) -> str:
+        return str(self.name)
+
+    @property
+    def id(self):
+        return self.playerId
+
+    def asdict(self):
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class Team_BSHA:
+    __slots__ = ['teamId','name','teamStats','players','batters','pitchers',
+                'bench','bullpen','battingOrder']
+    teamId: int
+    name: TeamName
+    teamStats: Stats_BSHA
+    players: dict # dict{str(id):players_BSHA}
+    batters: list # list[int(id)]
+    pitchers: list # list[int(id)]
+    bench: list # list[int(id)]
+    bullpen: list # list[int(id)]
+    battingOrder: str
+
+    def __str__(self) -> str:
+        return str(self.name)
+
+    def __repr__(self) -> str:
+        return str(self.name)
+
+    @property
+    def id(self):
+        return self.teamId
+
+    def asdict(self):
+        return asdict(self)
+
+
 @dataclass(frozen=True)
 class Decisions:
     __slots__ = ['winner','looser','save']
@@ -314,7 +393,7 @@ class Game():
         )
 
         home = gameData['teams']['home']
-        self._home = TeamName (
+        home_name = TeamName (
             Id = home['id'],
             full = home['name'],
             location = home['locationName'],
@@ -325,7 +404,7 @@ class Game():
         )
 
         away = gameData['teams']['away']
-        self._away = TeamName (
+        away_name = TeamName (
             Id = away['id'],
             full = away['name'],
             location = away['locationName'],
@@ -539,6 +618,116 @@ class Game():
         )
 
         # BoxScore
+        boxScore = liveData["boxscore"]
+        BS_homeTeam = boxScore['teams']['home']
+        BS_awayTeam = boxScore['teams']['away']
+
+        homePlayerDict = {}
+        awayPlayerDict = {}
+
+        for homePlayer, value in BS_homeTeam["players"].keys():
+            if homePlayer[:2] == "ID":
+                pIdKey = homePlayer[2:]
+            else:
+                pIdKey = homePlayer
+
+            homePlayerDict["pIdKey"] = players_BSHA (
+                playerId = value["person"]["id"],
+                name = value["person"]["fullName"],
+                parentTeamId = value["parentTeamId"],
+                jerseyNumber = value.get("jerseyNumber"),
+                position = PersonPosition (
+                    code = value["position"]["code"],
+                    name = value["position"]["name"],
+                    type = value["position"]["type"],
+                    abbreviation = value["position"]["abbreviation"]
+                ),
+                gameStats = Stats_BSHA (
+                    batting = value["stats"]["batting"],
+                    pitching = value["stats"]["pitching"],
+                    fielding = value["stats"]["fielding"]
+                ),
+                seasonStats = Stats_BSHA (
+                    batting = value["seasonStats"]["batting"],
+                    pitching = value["seasonStats"]["pitching"],
+                    fielding = value["seasonStats"]["fielding"]
+                ),
+                battingOrder = value.get("battingOrder"),
+                isCurrentBatter = value["gameStatus"]["isCurrentBatter"],
+                isCurrentPitcher = value["gameStatus"]["isCurrentPitcher"],
+                isOnBench = value["gameStatus"]["isOnBench"],
+                isSubstitute = value["gameStatus"]["isSubstitute"]
+            )
+
+        for awayPlayer, value in BS_awayTeam["players"].keys():
+            if awayPlayer[:2] == "ID":
+                pIdKey = awayPlayer[2:]
+            else:
+                pIdKey = awayPlayer
+
+            awayPlayerDict["pIdKey"] = players_BSHA (
+                playerId = value["person"]["id"],
+                name = value["person"]["fullName"],
+                parentTeamId = value["parentTeamId"],
+                jerseyNumber = value.get("jerseyNumber"),
+                position = PersonPosition (
+                    code = value["position"]["code"],
+                    name = value["position"]["name"],
+                    type = value["position"]["type"],
+                    abbreviation = value["position"]["abbreviation"]
+                ),
+                gameStats = Stats_BSHA (
+                    batting = value["stats"]["batting"],
+                    pitching = value["stats"]["pitching"],
+                    fielding = value["stats"]["fielding"]
+                ),
+                seasonStats = Stats_BSHA (
+                    batting = value["seasonStats"]["batting"],
+                    pitching = value["seasonStats"]["pitching"],
+                    fielding = value["seasonStats"]["fielding"]
+                ),
+                battingOrder = value.get("battingOrder"),
+                isCurrentBatter = value["gameStatus"]["isCurrentBatter"],
+                isCurrentPitcher = value["gameStatus"]["isCurrentPitcher"],
+                isOnBench = value["gameStatus"]["isOnBench"],
+                isSubstitute = value["gameStatus"]["isSubstitute"]
+            )
+
+        self._homeTeam = Team_BSHA (
+            teamId = BS_homeTeam["team"]["id"],
+            name = home_name,
+            teamStats = Stats_BSHA (
+                batting = BS_homeTeam['teamStats']['batting'],
+                pitching = BS_homeTeam['teamStats']['pitching'],
+                fielding = BS_homeTeam['teamStats']['fielding']
+            ),
+            players = homePlayerDict,
+            # playerStats
+            batters = BS_homeTeam['batters'],
+            pitchers = BS_homeTeam['pitchers'],
+            bench = BS_homeTeam['bench'],
+            bullpen = BS_homeTeam['bullpen'],
+            battingOrder = BS_homeTeam['battingOrder']
+        )
+
+        self._awayTeam = Team_BSHA (
+            teamId = BS_awayTeam["team"]["id"],
+            name = away_name,
+            teamStats = Stats_BSHA (
+                batting = BS_awayTeam['teamStats']['batting'],
+                pitching = BS_awayTeam['teamStats']['pitching'],
+                fielding = BS_awayTeam['teamStats']['fielding']
+            ),
+            players = awayPlayerDict,
+            # playerStats
+            batters = BS_awayTeam['batters'],
+            pitchers = BS_awayTeam['pitchers'],
+            bench = BS_awayTeam['bench'],
+            bullpen = BS_awayTeam['bullpen'],
+            battingOrder = BS_awayTeam['battingOrder']
+        )
+
+
 
         # decisions
         decisions = liveData.get('decisions', {})
@@ -594,38 +783,6 @@ class Game():
         abstractGameCode:   str
         """
         return self._status
-
-    @property
-    def home(self):
-        """team.TeamName dataclass
-
-        Keys/Attributes:
-        ------------
-        Id:             int
-        full:           str
-        location:       str
-        franchise:      str
-        club:           str
-        short:          str
-        abbreviation:   str
-        """
-        return self._home
-
-    @property
-    def away(self):
-        """team.TeamName dataclass
-
-        Keys/Attributes:
-        ------------
-        Id:             int
-        full:           str
-        location:       str
-        franchise:      str
-        club:           str
-        short:          str
-        abbreviation:   str
-        """
-        return self._away
 
     @property
     def venue(self):
@@ -758,13 +915,128 @@ class Game():
         return self._lineScore
 
 
+    @property
+    def home(self):
+        """Team_BSHA dataclass
+
+        Keys/Attributes:
+        ------------
+        teamId:         int
+        name:           TeamName
+        teamStats:      Stats_BSHA
+        players:        dict # dict{str(id):players_BSHA}
+        batters:        list # list[int(id)]
+        pitchers:       list # list[int(id)]
+        bench:          list # list[int(id)]
+        bullpen:        list # list[int(id)]
+        battingOrder:   str
+
+
+        TeamName Keys/Attributes:
+        ------------
+        Id:             int
+        full:           str
+        location:       str
+        franchise:      str
+        club:           str
+        short:          str
+        abbreviation:   str
+
+        players_BSHA dict{str(id):players_BSHA} Keys/Attributes:
+        ------------
+        playerId:           int
+        name:               str
+        parentTeamId:       int
+        jerseyNumber:       str
+        position:           PersonPosition
+        gameStats:          Stats_BSHA
+        seasonStats:        Stats_BSHA
+        battingOrder:       str
+        isCurrentBatter:    bool
+        isCurrentPitcher:   bool
+        isOnBench:          bool
+        isSubstitute:       bool
+
+        PersonPosition Keys/Attributes:
+        ------------
+        code:           str
+        name:           str
+        type:           str
+        abbreviation:   str
+
+        Stats_BSHA Keys/Attributes:
+        ------------
+        batting:    dict
+        pitching:   dict
+        fielding:   dict
+        """
+        return self._home
+
+    @property
+    def away(self):
+        """team.TeamName dataclass
+
+        Keys/Attributes:
+        ------------
+        teamId:         int
+        name:           TeamName
+        teamStats:      Stats_BSHA
+        players:        dict # dict{str(id):players_BSHA}
+        batters:        list # list[int(id)]
+        pitchers:       list # list[int(id)]
+        bench:          list # list[int(id)]
+        bullpen:        list # list[int(id)]
+        battingOrder:   str
+
+
+        TeamName Keys/Attributes:
+        ------------
+        Id:             int
+        full:           str
+        location:       str
+        franchise:      str
+        club:           str
+        short:          str
+        abbreviation:   str
+
+        players_BSHA dict{str(id):players_BSHA} Keys/Attributes:
+        ------------
+        playerId:           int
+        name:               str
+        parentTeamId:       int
+        jerseyNumber:       str
+        position:           PersonPosition
+        gameStats:          Stats_BSHA
+        seasonStats:        Stats_BSHA
+        battingOrder:       str
+        isCurrentBatter:    bool
+        isCurrentPitcher:   bool
+        isOnBench:          bool
+        isSubstitute:       bool
+
+        PersonPosition Keys/Attributes:
+        ------------
+        code:           str
+        name:           str
+        type:           str
+        abbreviation:   str
+
+        Stats_BSHA Keys/Attributes:
+        ------------
+        batting:    dict
+        pitching:   dict
+        fielding:   dict
+        """
+        return self._away
+
+
     # Should this be brought out to three seperate?
     # From decisions to:
     #   winner
     #   looser
     #   save
     #
-    # So you would just call game.winner instead of game.decisions.winner ?    
+    # So you would just call game.winner instead of game.decisions.winner ?
     @property
     def decisions(self):
         """Decisions dataclass
