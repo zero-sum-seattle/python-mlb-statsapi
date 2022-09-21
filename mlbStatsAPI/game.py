@@ -134,6 +134,46 @@ class Flags:
     def asdict(self):
         return asdict(self)
 
+
+@dataclass(frozen=True)
+class HitCoordinate:
+    __slots__ = ['x', 'y']
+    x: int
+    y: int
+
+@dataclass(frozen=True)
+class Hit_LD:
+    __slots__ = ['inning','pitcher','batter','coordinates','type','description']
+    inning: int
+    pitcher: NameAndId
+    batter: NameAndId
+    coordinates: HitCoordinate
+    type: str
+    description: str
+
+    def __str__(self) -> str:
+        return str(self.description)
+
+    def __repr__(self) -> str:
+        return str(self.description)
+
+    def asdict(self):
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class Inning_LD:
+    __slots__ = ['startIndex','endIndex','top','bottom','homeHits','awayHits']
+    startIndex: int
+    endIndex: int
+    top: list # list[int]
+    bottom: list # list[int]
+    homeHits: list # list[Hit_LD]
+    awayHits: list # list[Hit_LD]
+
+    def asdict(self):
+        return asdict(self)
+
 @dataclass(frozen=True)
 class Fielding:
     __slots__ = ['team','pitcher','catcher','first','second','third','shortstop',
@@ -469,10 +509,73 @@ class Game():
 
             # currentPlay
 
-            # scoringPlays
+        # scoringPlays
         self._scoringPlays = plays.get('scoringPlays', [])
 
-            # playsByInning
+        # playsByInning
+        self._playsByInning = []
+
+        for inning in plays["playsByInning"]:
+
+            hits_home = []
+            hits_away = []
+
+            for hit in inning["hits"]["home"]:
+                hit = Hit_LD (
+                    inning = hit["inning"],
+                    pitcher = NameAndId (
+                        Id = hit["pitcher"]["id"],
+                        name = hit["pitcher"]["fullName"]
+                    ),
+                    batter = NameAndId (
+                        Id = hit["batter"]["id"],
+                        name = hit["batter"]["fullName"]
+                    ),
+                    coordinates = HitCoordinate (
+                        x = hit["coordinates"]["x"],
+                        y = hit["coordinates"]["y"]
+                    )
+                    type = hit["type"],
+                    description = hit["description"]
+
+                )
+                hits_home.append(hit)
+
+            for hit in inning["hits"]["away"]:
+                hit = Hit_LD (
+                    inning = hit["inning"],
+                    pitcher = NameAndId (
+                        Id = hit["pitcher"]["id"],
+                        name = hit["pitcher"]["fullName"]
+                    ),
+                    batter = NameAndId (
+                        Id = hit["batter"]["id"],
+                        name = hit["batter"]["fullName"]
+                    ),
+                    coordinates = HitCoordinate (
+                        x = hit["coordinates"]["x"],
+                        y = hit["coordinates"]["y"]
+                    )
+                    type = hit["type"],
+                    description = hit["description"]
+
+                )
+                hits_away.append(hit)
+
+            inningInfo = Inning_LD (
+                startIndex = inning["startIndex"],
+                endIndex = inning["endIndex"],
+                top = inning["top"],
+                bottom = inning["bottom"],
+                homeHits = hits_home
+                awayHits = hits_away,
+            )
+
+            self._playsByInning.append(inningInfo)
+
+
+
+
 
         # LineScore
         lineScore = liveData["linescore"]
@@ -860,7 +963,7 @@ class Game():
     # allPlays
 
     # currentPlay
-    
+
 
     @property
     def scoringPlays(self):
@@ -873,6 +976,41 @@ class Game():
         return self._scoringPlays
 
     # playsByInning
+    @property
+    def playsByInning(self):
+        """playsByInning
+
+        List[Inning_LD]
+
+        List that holds Inning_LD objects that hold the plays for that inning
+
+        Inning_LD Keys/Attributes:
+        ------------
+        startIndex: int
+        endIndex:   int
+        top:        list # list[int]
+        bottom:     list # list[int]
+        homeHits:   list # list[Hit_LD]
+        awayHits:   list # list[Hit_LD]
+
+
+        Hit_LD Keys/Attributes:
+        ------------
+        inning:         int
+        pitcher:        NameAndId
+        batter:         NameAndId
+        coordinates:    HitCoordinate
+        type:           str
+        description:    str
+
+
+        HitCoordinate Keys/Attributes:
+        ------------
+        x: int
+        y: int
+        """
+        return self._playsByInning
+
 
     @property
     def lineScore(self):
