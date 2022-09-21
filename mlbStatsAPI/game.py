@@ -625,11 +625,13 @@ class Game():
         homePlayerDict = {}
         awayPlayerDict = {}
 
-        for homePlayer, value in BS_homeTeam["players"].keys():
+        for homePlayer in BS_homeTeam["players"].keys():
             if homePlayer[:2] == "ID":
                 pIdKey = homePlayer[2:]
             else:
                 pIdKey = homePlayer
+
+            value = BS_homeTeam["players"][homePlayer]
 
             homePlayerDict["pIdKey"] = players_BSHA (
                 playerId = value["person"]["id"],
@@ -659,11 +661,13 @@ class Game():
                 isSubstitute = value["gameStatus"]["isSubstitute"]
             )
 
-        for awayPlayer, value in BS_awayTeam["players"].keys():
+        for awayPlayer in BS_awayTeam["players"].keys():
             if awayPlayer[:2] == "ID":
                 pIdKey = awayPlayer[2:]
             else:
                 pIdKey = awayPlayer
+
+            value = BS_awayTeam["players"][awayPlayer]
 
             awayPlayerDict["pIdKey"] = players_BSHA (
                 playerId = value["person"]["id"],
@@ -734,15 +738,15 @@ class Game():
 
         self._decisions = Decisions (
             winner = NameAndId (
-                id = decisions.get('winner', {}).get('id'),
+                Id = decisions.get('winner', {}).get('id'),
                 name = decisions.get('winner', {}).get('fullName', '')
-            )
+            ),
             looser = NameAndId (
-                id = decisions.get('looser', {}).get('id'),
+                Id = decisions.get('looser', {}).get('id'),
                 name = decisions.get('looser', {}).get('fullName', '')
-            )
+            ),
             save = NameAndId (
-                id = decisions.get('save', {}).get('id'),
+                Id = decisions.get('save', {}).get('id'),
                 name = decisions.get('save', {}).get('fullName', '')
             )
         )
