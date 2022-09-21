@@ -284,7 +284,7 @@ class Person:
         )
 
 
-        self._primaryNumber = prsn['primaryNumber']
+        self._primaryNumber = prsn.get('primaryNumber', -1)
         self._currentAge = prsn['currentAge']
 
         self.birthDate = prsn.get('birthDate','')
@@ -568,7 +568,10 @@ class Person:
 
     @property
     def number(self) -> int:
-        """Players jersey number"""
+        """Players jersey number
+
+        If no primaryNumber was found -1 is returned.
+        """
         return self._primaryNumber
 
     @property
