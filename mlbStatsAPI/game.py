@@ -202,21 +202,35 @@ class Hitting:
         return asdict(self)
 
 @dataclass(frozen=True)
+class HomeAndAway_ls:
+    __slots__ = ['home','away']
+    home: int
+    away: int
+
+    def asdict(self):
+        return asdict(self)
+
+@dataclass(frozen=True)
 class LineScore:
     __slots__ = ['currentInning','currentInningOrdinal','inningState','inningHalf',
-                'isTopInning','scheduledInnings','fielding','hitting','balls',
-                'strikes','outs']
+                'isTopInning','scheduledInnings','innings','fielding','hitting',
+                'balls','strikes','outs','runs','hits','errors','leftOnBase']
     currentInning: int
     currentInningOrdinal: str
     inningState: str
     inningHalf: str
     isTopInning: bool
     scheduledInnings: int
+    innings: list
     fielding: Fielding
     hitting: Hitting
     balls: int
     strikes: int
     outs: int
+    runs: HomeAndAway_ls
+    hits: HomeAndAway_ls
+    errors: HomeAndAway_ls
+    leftOnBase: HomeAndAway_ls
 
     # def __str__(self) -> str:
     #     return str(self.team)
@@ -396,6 +410,7 @@ class Game():
             inningHalf = lineScore.get('inningHalf', 'None'),
             isTopInning = lineScore.get('isTopInning', False),
             scheduledInnings = lineScore.get('scheduledInnings', 9),
+            innings = lineScore.get('innings', []),
             fielding = Fielding (
                 team = NameAndId (
                     Id = fielding.get('team', {}).get('id'),
@@ -494,7 +509,23 @@ class Game():
             ),
             balls = lineScore.get('balls', 0),
             strikes = lineScore.get('strikes', 0),
-            outs = lineScore.get('outs', 0)
+            outs = lineScore.get('outs', 0),
+            runs = HomeAndAway_ls (
+                home = lineScore.get('teams', {}).get('home', {}).get('runs'),
+                away = lineScore.get('teams', {}).get('away', {}).get('runs')
+            ),
+            hits = HomeAndAway_ls (
+                home = lineScore.get('teams', {}).get('home', {}).get('hits'),
+                away = lineScore.get('teams', {}).get('away', {}).get('hits')
+            ),
+            errors = HomeAndAway_ls (
+                home = lineScore.get('teams', {}).get('home', {}).get('errors'),
+                away = lineScore.get('teams', {}).get('away', {}).get('errors')
+            ),
+            leftOnBase = HomeAndAway_ls (
+                home = lineScore.get('teams', {}).get('home', {}).get('leftOnBase'),
+                away = lineScore.get('teams', {}).get('away', {}).get('leftOnBase')
+            )
         )
 
         # BoxScore
@@ -636,49 +667,58 @@ class Game():
         inningHalf:             str
         isTopInning:            bool
         scheduledInnings:       int
+        innings:                list[dict]
         fielding:               Fielding
         hitting:                Hitting
         balls:                  int
         strikes:                int
         outs:                   int
+        runs:                   HomeAndAway_ls
+        hits:                   HomeAndAway_ls
+        errors:                 HomeAndAway_ls
+        leftOnBase:             HomeAndAway_ls
 
+        HomeAndAway_ls Keys/Attributes:
+        ------------
+        home:   int
+        away:   int
 
         Fielding Keys/Attributes:
         ------------
-        team: NameAndId
-        pitcher: NameAndId
-        catcher: NameAndId
-        first: NameAndId
-        second: NameAndId
-        third: NameAndId
-        shortstop: NameAndId
-        left: NameAndId
-        center: NameAndId
-        right: NameAndId
-        batter: NameAndId
-        onDeck: NameAndId
-        inHole: NameAndId
-        battingOrder: int
+        team:           NameAndId
+        pitcher:        NameAndId
+        catcher:        NameAndId
+        first:          NameAndId
+        second:         NameAndId
+        third:          NameAndId
+        shortstop:      NameAndId
+        left:           NameAndId
+        center:         NameAndId
+        right:          NameAndId
+        batter:         NameAndId
+        onDeck:         NameAndId
+        inHole:         NameAndId
+        battingOrder:   int
 
         Hitting  Keys/Attributes:
         ------------
-        team: NameAndId
-        battingOrder: int
-        batter: NameAndId
-        onDeck: NameAndId
-        inHole: NameAndId
-        pitcher: NameAndId
-        onBase: OnBase
+        team:           NameAndId
+        battingOrder:   int
+        batter:         NameAndId
+        onDeck:         NameAndId
+        inHole:         NameAndId
+        pitcher:        NameAndId
+        onBase:         OnBase
 
         OnBase Keys/Attributes:
         ------------
-        onBase: bool
-        onFirst: bool
-        onSecond: bool
-        onThird: bool
-        first: NameAndId
-        second: NameAndId
-        third: NameAndId
+        onBase:     bool
+        onFirst:    bool
+        onSecond:   bool
+        onThird:    bool
+        first:      NameAndId
+        second:     NameAndId
+        third:      NameAndId
 
         NameAndId Keys/Attributes:
         ------------
