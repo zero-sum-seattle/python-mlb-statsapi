@@ -29,8 +29,9 @@ https://statsapi.mlb.com/api/v1/teams/{teamId}/stats?stats=atGameStart&group=hit
 """
 
 @dataclass(frozen=True)
-class teamName:
-    __slots__ = ['full','location','franchise','club','short','abbreviation']
+class TeamName:
+    __slots__ = ['Id','full','location','franchise','club','short','abbreviation']
+    Id: int
     full: str
     location: str
     franchise: str
@@ -43,6 +44,10 @@ class teamName:
 
     def __repr__(self) -> str:
         return str(self.full)
+
+    @property
+    def id(self):
+        return self.Id
 
     def asdict(self):
         return asdict(self)
@@ -216,7 +221,8 @@ class Team():
 
         self._teamId = teamId
 
-        self._name = teamName(
+        self._name = TeamName(
+            Id = teamInfo['id'],
             full = teamInfo['name'],
             location = teamInfo['locationName'],
             franchise = teamInfo['franchiseName'],
