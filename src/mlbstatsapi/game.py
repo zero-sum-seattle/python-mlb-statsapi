@@ -1587,7 +1587,7 @@ class Game():
         return self.__gameId
 
     @property
-    def datetime(self):
+    def datetime(self) -> datetime:
         """datetime dataclass
 
         Keys/Attributes:
@@ -1602,7 +1602,7 @@ class Game():
         return self._datetime
 
     @property
-    def status(self):
+    def status(self) -> status:
         """status dataclass
 
         Keys/Attributes:
@@ -1617,7 +1617,7 @@ class Game():
         return self._status
 
     @property
-    def venue(self):
+    def venue(self) -> venue:
         """venue dataclass
 
         Keys/Attributes:
@@ -1648,7 +1648,7 @@ class Game():
         return self._venue
 
     @property
-    def weather(self):
+    def weather(self) -> weather:
         """weather dataclass
 
         Keys/Attributes:
@@ -1660,7 +1660,7 @@ class Game():
         return self._weather
 
     @property
-    def flags(self):
+    def flags(self) -> flags:
         """flags dataclass
 
         Keys/Attributes:
@@ -1865,7 +1865,7 @@ class Game():
 
     # currentPlay
     @property
-    def currentPlay(self):
+    def currentPlay(self) -> Play:
         """Play dataclass
 
         Keys/Attributes:
@@ -2096,7 +2096,7 @@ class Game():
 
 
     @property
-    def lineScore(self):
+    def lineScore(self) -> lineScore:
         """lineScore dataclass
 
         Keys/Attributes:
@@ -2169,7 +2169,7 @@ class Game():
 
 
     @property
-    def home(self):
+    def home(self) -> Team_BSHA:
         """Team_BSHA dataclass
 
         Keys/Attributes:
@@ -2185,6 +2185,7 @@ class Game():
         battingOrder:   str
 
 
+        team.teamName
         TeamName Keys/Attributes:
         ------------
         Id:             int
@@ -2210,6 +2211,7 @@ class Game():
         isOnBench:          bool
         isSubstitute:       bool
 
+        person.position
         PersonPosition Keys/Attributes:
         ------------
         code:           str
@@ -2226,8 +2228,8 @@ class Game():
         return self._home
 
     @property
-    def away(self):
-        """team.TeamName dataclass
+    def away(self) -> Team_BSHA:
+        """Team_BSHA dataclass
 
         Keys/Attributes:
         ------------
@@ -2241,7 +2243,7 @@ class Game():
         bullpen:        list # list[int(id)]
         battingOrder:   str
 
-
+        team.teamName
         TeamName Keys/Attributes:
         ------------
         Id:             int
@@ -2291,7 +2293,7 @@ class Game():
     #
     # So you would just call game.winner instead of game.decisions.winner ?
     @property
-    def decisions(self):
+    def decisions(self) -> Decisions:
         """Decisions dataclass
 
         Keys/Attributes:

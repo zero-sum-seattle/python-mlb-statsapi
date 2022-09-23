@@ -425,12 +425,12 @@ class Team():
 
 
     @property
-    def teamId(self):
+    def teamId(self) -> int:
         """Team Id"""
         return self._teamId
 
     @property
-    def name(self):
+    def name(self) -> TeamName:
         """Team name dataclass
 
         Keys/Attributes:
@@ -449,7 +449,7 @@ class Team():
         return self._name
 
     @property
-    def springLeague(self):
+    def springLeague(self) -> idName:
         """springLeague
         Name and id for the teams spring league
 
@@ -461,7 +461,7 @@ class Team():
         return self._springLeague
 
     @property
-    def league(self):
+    def league(self) -> idName:
         """league
         Name and id for the teams league (normal season)
 
@@ -473,7 +473,7 @@ class Team():
         return self._league
 
     @property
-    def division(self):
+    def division(self) -> idName:
         """division
         Name and id for the teams division
 
@@ -485,7 +485,7 @@ class Team():
         return self._division
 
     @property
-    def venue(self):
+    def venue(self) -> idName:
         """venue
         Name and id for the teams home venue
 
@@ -497,7 +497,7 @@ class Team():
         return self._venue
 
     @property
-    def ranking(self):
+    def ranking(self) -> teamRanking:
         """teamRanking Dataclass
 
         Keys/Attributes:
@@ -518,7 +518,7 @@ class Team():
         return self._ranking
 
     @property
-    def leagueRecord(self):
+    def leagueRecord(self) -> leagueRecord:
         """LeagueRecord dataclass
 
         Keys/Attributes:
@@ -531,7 +531,7 @@ class Team():
         return self._leagueRecord
 
     @property
-    def splitRecords(self):
+    def splitRecords(self) -> splitRecords:
         """splitRecords
 
         Split records Groups:
@@ -566,8 +566,8 @@ class Team():
         return self._splitRecords
 
     @property
-    def record(self):
-        """record  teamRecod dataClass
+    def record(self) -> teamRecord:
+        """record  teamRecord dataClass
         Team records for season
 
         Keys/Attributes:
@@ -582,7 +582,7 @@ class Team():
         return self._record
 
     @property
-    def stats(self):
+    def stats(self) -> teamStats:
         """stats teamStats dataClass
 
         Keys/Attributes:
