@@ -1,0 +1,2 @@
+﻿class TheMlbStatsApiException(Exception):
+    pass
