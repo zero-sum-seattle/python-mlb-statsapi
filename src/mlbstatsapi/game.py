@@ -1587,7 +1587,7 @@ class Game():
         return self.__gameId
 
     @property
-    def datetime(self) -> datetime:
+    def datetime(self) -> GameTime:
         """datetime dataclass
 
         Keys/Attributes:
@@ -1602,7 +1602,7 @@ class Game():
         return self._datetime
 
     @property
-    def status(self) -> status:
+    def status(self) -> Status:
         """status dataclass
 
         Keys/Attributes:
@@ -1617,7 +1617,7 @@ class Game():
         return self._status
 
     @property
-    def venue(self) -> venue:
+    def venue(self) -> Venue:
         """venue dataclass
 
         Keys/Attributes:
@@ -1648,7 +1648,7 @@ class Game():
         return self._venue
 
     @property
-    def weather(self) -> weather:
+    def weather(self) -> Weather:
         """weather dataclass
 
         Keys/Attributes:
@@ -1660,7 +1660,7 @@ class Game():
         return self._weather
 
     @property
-    def flags(self) -> flags:
+    def flags(self) -> Flags:
         """flags dataclass
 
         Keys/Attributes:
@@ -2096,7 +2096,7 @@ class Game():
 
 
     @property
-    def lineScore(self) -> lineScore:
+    def lineScore(self) -> LineScore:
         """lineScore dataclass
 
         Keys/Attributes:

@@ -531,7 +531,7 @@ class Team():
         return self._leagueRecord
 
     @property
-    def splitRecords(self) -> splitRecords:
+    def splitRecords(self) -> splitRecord:
         """splitRecords
 
         Split records Groups:
