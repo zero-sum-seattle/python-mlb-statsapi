@@ -2306,3 +2306,17 @@ class Game():
         name:   str
         """
         return self._decisions
+
+    def hasUpdated() -> bool:
+        """Returns true if game has updated"""
+
+        lookupUrl = f'https://statsapi.mlb.com/api/v1/game/{gamePk}/playByPlay'
+        r = requests.get(lookupUrl).json()
+
+        if r["currentPlay"]["about"]["atBatIndex"] > self._currentPlay.atBatIndex:
+            return True
+        else:
+            if len(r["currentPlay"]["actionIndex"]) > len(self._currentPlay.actionIndex):
+                return True
+
+        return False
