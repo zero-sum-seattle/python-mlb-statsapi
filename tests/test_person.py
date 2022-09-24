@@ -12,7 +12,6 @@ class TestPerson(unittest.TestCase):
     def tearDownClass(cls) -> None:
         pass
 
-
     def test_player_instance_type_error(self): 
          with self.assertRaises(TypeError):
             player = Person()
@@ -31,9 +30,14 @@ class TestPerson(unittest.TestCase):
     def test_player_base_class_attributes(self):
         player = Person(664034, "Ty France", "/api/v1/people/664034")
         self.assertTrue(hasattr(player, "_load_stats"))
+
+    def test_player_generate_stats(self):
+        player = Person(664034, "Ty France", "/api/v1/people/664034")
+        self.assertTrue(hasattr(player, "_load_stats"))
         player.generate_stats()
         self.assertTrue(hasattr(player, "stats"))
         self.assertIsInstance(player.stats, List)
+        self.assertIsInstance(player.stats[0], Stats)
     
 
     # def test_player_preload_instance(self):
