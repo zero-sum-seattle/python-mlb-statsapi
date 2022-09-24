@@ -42,3 +42,14 @@ class TestMlbDataApi(unittest.TestCase):
         id = mlb.get_team_id('Mariners') # Return Mariners Team ID in a List
         self.assertEqual(id, [136])
 
+    def test_mlb_get_person(self):
+        mlb = Mlb()
+        person = mlb.get_person('664034')
+        self.assertIsInstance(person[0], Person)
+        self.assertEqual(person[0].id, 664034)
+    
+    def test_mlb_get_team(self):
+        mlb = Mlb()
+        team = mlb.get_team('133')
+        self.assertIsInstance(team[0], Team)
+        self.assertEqual(team[0].id, 133)
