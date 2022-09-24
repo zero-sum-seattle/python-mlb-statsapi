@@ -297,22 +297,86 @@ class Team():
             splitRecordsDic[sRec["type"]] = sRec
 
         self._splitRecords = splitRecord (
-            home = splitRecordsDic['home'],
-            away = splitRecordsDic['away'],
-            left = splitRecordsDic['left'],
-            right = splitRecordsDic['right'],
-            leftHome = splitRecordsDic['leftHome'],
-            leftAway = splitRecordsDic['leftAway'],
-            rightHome = splitRecordsDic['rightHome'],
-            rightAway = splitRecordsDic['rightAway'],
-            lastTen = splitRecordsDic['lastTen'],
-            extraInning = splitRecordsDic['extraInning'],
-            oneRun = splitRecordsDic['oneRun'],
-            winners = splitRecordsDic['winners'],
-            day = splitRecordsDic['day'],
-            night = splitRecordsDic['night'],
-            grass = splitRecordsDic['grass'],
-            turf = splitRecordsDic['turf']
+            home = splitRecordData (
+                wins = splitRecordsDic['home']['wins'],
+                losses = splitRecordsDic['home']['losses'],
+                pct = splitRecordsDic['home']['pct']
+            ),
+            away = splitRecordData (
+                wins = splitRecordsDic['away']['wins'],
+                losses = splitRecordsDic['away']['losses'],
+                pct = splitRecordsDic['away']['pct']
+            ),
+            left = splitRecordData (
+                wins = splitRecordsDic['left']['wins'],
+                losses = splitRecordsDic['left']['losses'],
+                pct = splitRecordsDic['left']['pct']
+            ),
+            right = splitRecordData (
+                wins = splitRecordsDic['right']['wins'],
+                losses = splitRecordsDic['right']['losses'],
+                pct = splitRecordsDic['right']['pct']
+            ),
+            leftHome = splitRecordData (
+                wins = splitRecordsDic['leftHome']['wins'],
+                losses = splitRecordsDic['leftHome']['losses'],
+                pct = splitRecordsDic['leftHome']['pct']
+            ),
+            leftAway = splitRecordData (
+                wins = splitRecordsDic['leftAway']['wins'],
+                losses = splitRecordsDic['leftAway']['losses'],
+                pct = splitRecordsDic['leftAway']['pct']
+            ),
+            rightHome = splitRecordData (
+                wins = splitRecordsDic['rightHome']['wins'],
+                losses = splitRecordsDic['rightHome']['losses'],
+                pct = splitRecordsDic['rightHome']['pct']
+            ),
+            rightAway = splitRecordData (
+                wins = splitRecordsDic['rightAway']['wins'],
+                losses = splitRecordsDic['rightAway']['losses'],
+                pct = splitRecordsDic['rightAway']['pct']
+            ),
+            lastTen = splitRecordData (
+                wins = splitRecordsDic['lastTen']['wins'],
+                losses = splitRecordsDic['lastTen']['losses'],
+                pct = splitRecordsDic['lastTen']['pct']
+            ),
+            extraInning = splitRecordData (
+                wins = splitRecordsDic['extraInning']['wins'],
+                losses = splitRecordsDic['extraInning']['losses'],
+                pct = splitRecordsDic['extraInning']['pct']
+            ),
+            oneRun = splitRecordData (
+                wins = splitRecordsDic['oneRun']['wins'],
+                losses = splitRecordsDic['oneRun']['losses'],
+                pct = splitRecordsDic['oneRun']['pct']
+            ),
+            winners = splitRecordData (
+                wins = splitRecordsDic['winners']['wins'],
+                losses = splitRecordsDic['winners']['losses'],
+                pct = splitRecordsDic['winners']['pct']
+            ),
+            day = splitRecordData (
+                wins = splitRecordsDic['day']['wins'],
+                losses = splitRecordsDic['day']['losses'],
+                pct = splitRecordsDic['day']['pct']
+            ),
+            night = splitRecordData (
+                wins = splitRecordsDic['night']['wins'],
+                losses = splitRecordsDic['night']['losses'],
+                pct = splitRecordsDic['night']['pct']
+            ),
+            grass = splitRecordData (
+                wins = splitRecordsDic['grass']['wins'],
+                losses = splitRecordsDic['grass']['losses'],
+                pct = splitRecordsDic['grass']['pct']
+            ),
+            turf = splitRecordData (
+                wins = splitRecordsDic['turf']['wins'],
+                losses = splitRecordsDic['turf']['losses'],
+                pct = splitRecordsDic['turf']['pct']
+            )
         )
 
         self._record = teamRecord (
@@ -361,12 +425,12 @@ class Team():
 
 
     @property
-    def teamId(self):
+    def teamId(self) -> int:
         """Team Id"""
         return self._teamId
 
     @property
-    def name(self):
+    def name(self) -> TeamName:
         """Team name dataclass
 
         Keys/Attributes:
@@ -385,7 +449,7 @@ class Team():
         return self._name
 
     @property
-    def springLeague(self):
+    def springLeague(self) -> idName:
         """springLeague
         Name and id for the teams spring league
 
@@ -397,7 +461,7 @@ class Team():
         return self._springLeague
 
     @property
-    def league(self):
+    def league(self) -> idName:
         """league
         Name and id for the teams league (normal season)
 
@@ -409,7 +473,7 @@ class Team():
         return self._league
 
     @property
-    def division(self):
+    def division(self) -> idName:
         """division
         Name and id for the teams division
 
@@ -421,7 +485,7 @@ class Team():
         return self._division
 
     @property
-    def venue(self):
+    def venue(self) -> idName:
         """venue
         Name and id for the teams home venue
 
@@ -433,7 +497,7 @@ class Team():
         return self._venue
 
     @property
-    def ranking(self):
+    def ranking(self) -> teamRanking:
         """teamRanking Dataclass
 
         Keys/Attributes:
@@ -454,7 +518,7 @@ class Team():
         return self._ranking
 
     @property
-    def leagueRecord(self):
+    def leagueRecord(self) -> leagueRecord:
         """LeagueRecord dataclass
 
         Keys/Attributes:
@@ -467,29 +531,29 @@ class Team():
         return self._leagueRecord
 
     @property
-    def splitRecords(self):
+    def splitRecords(self) -> splitRecord:
         """splitRecords
 
         Split records Groups:
         ------------
-        home
-        away
-        left
-        right
-        leftHome
-        leftAway
-        rightHome
-        rightAway
-        lastTen
-        extraInning
-        oneRun
-        winners
-        day
-        night
-        grass
-        turf
+        home:           splitRecordData
+        away:           splitRecordData
+        left:           splitRecordData
+        right:          splitRecordData
+        leftHome:       splitRecordData
+        leftAway:       splitRecordData
+        rightHome:      splitRecordData
+        rightAway:      splitRecordData
+        lastTen:        splitRecordData
+        extraInning:    splitRecordData
+        oneRun:         splitRecordData
+        winners:        splitRecordData
+        day:            splitRecordData
+        night:          splitRecordData
+        grass:          splitRecordData
+        turf:           splitRecordData
 
-        Group Keys/Attributes:
+        splitRecordData Keys/Attributes:
         ------------
         wins:   int
         losses: int
@@ -502,8 +566,8 @@ class Team():
         return self._splitRecords
 
     @property
-    def record(self):
-        """record  teamRecod dataClass
+    def record(self) -> teamRecord:
+        """record  teamRecord dataClass
         Team records for season
 
         Keys/Attributes:
@@ -518,7 +582,7 @@ class Team():
         return self._record
 
     @property
-    def stats(self):
+    def stats(self) -> teamStats:
         """stats teamStats dataClass
 
         Keys/Attributes:

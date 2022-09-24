@@ -563,7 +563,20 @@ class Person:
 
     @property
     def name(self) -> PersonName:
-        """Name variations for player"""
+        """Name variations for player
+
+        Keys/Attributes:
+        ----------------
+        personId:       int
+        full:           str
+        first:          str
+        middle:         str
+        last:           str
+        boxscore:       str
+        use:            str
+        nick:           str
+        pronunciation:  str
+        """
         return self._name
 
     @property
@@ -594,10 +607,10 @@ class Person:
         """
         Keys/Attributes:
         ----------------
-        - 'code'            : int (3)
-        - 'name'            : str ('First Base')
-        - 'type'            : str ('Infielder')
-        - 'abbreviation'    : str ('1B')
+        code:           int
+        name:           str
+        type:           str
+        abbreviation:   str
         """
         return self._position;
 
@@ -616,8 +629,8 @@ class Person:
         """
         Keys/Attributes:
         ----------------
-        - 'top'     : int (3.59)
-        - 'bottom'  : int (1.76)
+        top:    int
+        bottom: int
         """
         return self._strikeZone
 
@@ -638,16 +651,16 @@ class Person:
 
 
     @property
-    def stats(self):
+    def stats(self) -> PlayerStats:
         """Player stats
 
         Stats Groups
         ------------
-        - hitting
-        - pitching
-        - fielding
-        - sprayChart
-        - hotColdZones
+        hitting: StatGroup
+        pitching: StatGroup
+        fielding: StatGroup
+        sprayChart: list # List [dict]
+        hotColdZones: list # List [dict]
 
         hitting,
         pitching,
