@@ -1,6 +1,6 @@
 ﻿from typing import Dict, List
 import unittest
-from mlbstatsapi.mlbapi import Mlb, MlbResult
+from mlbstatsapi.mlbapi import *
 from mlbstatsapi.mlb import *
 from mlbstatsapi.exceptions import TheMlbStatsApiException
 

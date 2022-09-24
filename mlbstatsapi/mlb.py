@@ -1,9 +1,11 @@
 ﻿from typing import List, Dict
 from mlbstatsapi.mlbdataadapter import MlbDataAdapter
 
+class MlbObject:
+    def __init__(self):
+        self._load_stats = MlbDataAdapter()
 
-
-class Person():
+class Person(MlbObject):
     # Basic Person Class
     id: int
     full_name: str
@@ -14,17 +16,17 @@ class Person():
         self.id = id # person id
         self.full_name = fullName # person full_name
         self.link = link # person link
-        self.stats = []
         self.__dict__.update(kwargs) # let's do this for a sloppy apply
 
         if preload:
-            statdata = []
-            self.__load_stats = MlbDataAdapter()
+            statobjects = []
             for group in ('hitting', 'fielding'):
-                for type in ('season', 'career'):
-                    statdata = self.__load_stats.get(endpoint=f"/people/{self.id}/stats?stats={type}&group={group}")
-                    self.stats.append(Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data)
-
+                 for type in ('season', 'career'):
+                    statdata = self._load_stats.get(endpoint=f"/people/{self.id}/stats?stats={type}&group={group}")
+                    statobjects.append(Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data)
+            self.stats = statobjects
+        else:
+            self.stats = []
 
 
 class Team():

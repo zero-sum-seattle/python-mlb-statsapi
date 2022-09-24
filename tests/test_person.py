@@ -24,6 +24,9 @@ class TestPerson(unittest.TestCase):
         self.assertEqual(player.full_name, "Ty France")
         self.assertEqual(player.link, "/api/v1/people/664034")
 
+    def test_player_base_class(self):
+        player = Person(664034, "Ty France", "/api/v1/people/664034")
+        self.assertIsInstance(player, MlbObject)
     
     def test_player_preload_instance(self):
         player = Person(664034, "Ty France", "/api/v1/people/664034", preload=True)
