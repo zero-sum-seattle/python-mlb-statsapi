@@ -1,13 +1,22 @@
 ﻿from typing import Dict, List
 import unittest
-from mlbstatsapi.mlb import MlbDataAdapter, Mlb, MlbResult
-from mlbstatsapi.team import Team
-from mlbstatsapi.person import Person
+from mlbstatsapi.mlbapi import Mlb, MlbResult
+from mlbstatsapi.mlb import *
 from mlbstatsapi.exceptions import TheMlbStatsApiException
 
 
 
 class TestMlbDataApi(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        pass
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
+
+
     def test_mlb_adapter_200(self):
         mlb = Mlb() # Create instance of our baseclass
         mlbdata = mlb._mlb_adapter.get("/divisions") # A static endpoint to just return JSON
