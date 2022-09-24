@@ -4,14 +4,24 @@ from mlbstatsapi.mlbdataadapter import MlbDataAdapter
 class MlbObject:
     _load_stats = MlbDataAdapter()
     
-    def generate_stats(self):
+    def generate_stats(self, type: List[str] = ["season"], group: List[str] = ["hitting"]):
         # This should work for both Teams and Person
-        if isinstance(self, Person):
-            statdata = self._load_stats.get(endpoint=f"/people/{self.id}/stats?stats=season&group=hitting")
-            self.stats = [ Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data ]
-        elif isinstance(self, Team):
-            statdata = self._load_stats.get(endpoint=f"/team/{self.id}/stats?stats=season&group=hitting")
-            self.stats = [ Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data ]
+        statList = [] # Empty List to hold Stats while they are created
+        if isinstance(self, Person): # if self is a Person
+            if type: # if type is not None
+                for statType in type: # for statType in type: List[str]
+                    statdata = self._load_stats.get(endpoint=f"/people/{self.id}/stats?stats={statType}&group=hitting") # get stats
+                    statList += [ Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data ] # Add Stat to List[statList]
+
+            self.stats = statList # Apply Stat Objects to self
+
+        elif isinstance(self, Team): # if self is a Team
+            if type: # if type is not None
+                for statType in type:
+                    statdata = self._load_stats.get(endpoint=f"/people/{self.id}/stats?stats={statType}&group=hitting") # get stats
+                    statList += [ Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data ] # Add Stat to List[statList]
+
+            self.stats = statList # Apply Stat Objects to self
         else:
             # implement other class stats for leagues, etc, also you shouldn't be able to call this on the MlbObject
             pass
