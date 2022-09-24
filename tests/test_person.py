@@ -27,7 +27,15 @@ class TestPerson(unittest.TestCase):
     def test_player_base_class(self):
         player = Person(664034, "Ty France", "/api/v1/people/664034")
         self.assertIsInstance(player, MlbObject)
+
+    def test_player_base_class_attributes(self):
+        player = Person(664034, "Ty France", "/api/v1/people/664034")
+        self.assertTrue(hasattr(player, "_load_stats"))
+        player.generate_stats()
+        self.assertTrue(hasattr(player, "stats"))
+        self.assertIsInstance(player.stats, List)
     
-    def test_player_preload_instance(self):
-        player = Person(664034, "Ty France", "/api/v1/people/664034", preload=True)
-        self.assertIsInstance(player.stats[0], Stats)
+
+    # def test_player_preload_instance(self):
+    #     player = Person(664034, "Ty France", "/api/v1/people/664034", preload=True)
+    #     self.assertIsInstance(player.stats[0], Stats)
