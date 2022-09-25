@@ -1,26 +1,23 @@
 ﻿from typing import List, Dict
 from mlbstatsapi.mlbdataadapter import MlbDataAdapter
+from .exceptions import TheMlbStatsApiException
+
 
 class MlbObject:
-    _load_stats = MlbDataAdapter()
+    _mlb_adapter = MlbDataAdapter()
     
-    def generate_stats(self, type: List[str] = ["season"], group: List[str] = ["hitting"]):
+    def generate_stats(self, stattypes: List[str] = ["season"], group: List[str] = ["hitting"]):
         # This should work for both Teams and Person
+
         statList = [] # Empty List to hold Stats while they are created
-        if isinstance(self, Person): # if self is a Person
-            if type: # if type is not None
-                for statType in type: # for statType in type: List[str]
-                    statdata = self._load_stats.get(endpoint=f"/people/{self.id}/stats?stats={statType}&group=hitting") # get stats
-                    statList += [ Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data ] # Add Stat to List[statList]
-
-            self.stats = statList # Apply Stat Objects to self
-
-        elif isinstance(self, Team): # if self is a Team
-            if type: # if type is not None
-                for statType in type:
-                    statdata = self._load_stats.get(endpoint=f"/people/{self.id}/stats?stats={statType}&group=hitting") # get stats
-                    statList += [ Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data ] # Add Stat to List[statList]
-
+        if self in [Person, Team]: # if self is a Person, Team
+            if stattypes: # if type is not None
+                for statType in stattypes: # for statType in type: List[str]
+                    try:
+                        statdata = self._mlb_adapter.get(endpoint=f"/team/{self.id}/stats?stats={statType}&group=hitting") # get stats
+                        statList += [ Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data ] # Add Stat to List[statList]
+                    except TheMlbStatsApiException as e: # This isn't best practice to a try except loop in here
+                        continue # let's just move on if it fails we should log this 
             self.stats = statList # Apply Stat Objects to self
         else:
             # implement other class stats for leagues, etc, also you shouldn't be able to call this on the MlbObject
@@ -38,14 +35,7 @@ class Person(MlbObject):
         self.full_name = fullName # person full_name
         self.link = link # person link
         self.__dict__.update(kwargs) # let's do this for a sloppy apply
-        #     statobjects = []
-        #     for group in ('hitting', 'fielding'):
-        #          for type in ('season', 'career'):
-        #             statdata = self._load_stats.get(endpoint=f"/people/{self.id}/stats?stats={type}&group={group}")
-        #             statobjects.append(Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data)
-        #     self.stats = statobjects
-        # else:
-        #     self.stats = []
+
 
 class Team(MlbObject):
     id: int
@@ -59,6 +49,16 @@ class Team(MlbObject):
         self.__dict__.update(kwargs)
 
 class Sport():
+    id: int
+    link: str
+    abbreviation: str
+
+    def __init__(self, id: int, link: str, abbreviation: str) -> None:
+        self.id = id
+        self.link = link
+        self.abbreviation = abbreviation
+
+class Game():
     id: int
     link: str
     abbreviation: str
