@@ -5,19 +5,16 @@ from .exceptions import TheMlbStatsApiException
 
 class MlbObject:
     _mlb_adapter = MlbDataAdapter()
-    
+
     def generate_stats(self, stattypes: List[str] = ["season"], group: List[str] = ["hitting"]):
         # This should work for both Teams and Person
-
         statList = [] # Empty List to hold Stats while they are created
-        if self in [Person, Team]: # if self is a Person, Team
-            if stattypes: # if type is not None
-                for statType in stattypes: # for statType in type: List[str]
-                    try:
-                        statdata = self._mlb_adapter.get(endpoint=f"/team/{self.id}/stats?stats={statType}&group=hitting") # get stats
-                        statList += [ Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data ] # Add Stat to List[statList]
-                    except TheMlbStatsApiException as e: # This isn't best practice to a try except loop in here
-                        continue # let's just move on if it fails we should log this 
+        if type(self) is Person or Team: # if self is a Person, Team
+            mlb_class = "people" if self is Person else ("team" if self is Team else "people") # this is so hacky until I figure out the best way to return class name as string
+            for statType in stattypes: # for statType in type: List[str]
+                statdata = self._mlb_adapter.get(endpoint=f"/{mlb_class}/{self.id}/stats?stats={statType}&group=hitting") # get stats
+                statList += [ Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data ] # Add Stat to List[statList]
+                print(statList)
             self.stats = statList # Apply Stat Objects to self
         else:
             # implement other class stats for leagues, etc, also you shouldn't be able to call this on the MlbObject
@@ -29,7 +26,6 @@ class Person(MlbObject):
     id: int
     full_name: str
     link: str
-
     def __init__(self, id: int, fullName: str, link: str, preload: bool = False, **kwargs) -> None:
         self.id = id # person id
         self.full_name = fullName # person full_name
@@ -41,7 +37,6 @@ class Team(MlbObject):
     id: int
     name: str
     link: str
-
     def __init__(self, id: int, name: str, link: str, **kwargs) -> None:
         self.id = id
         self.name = name

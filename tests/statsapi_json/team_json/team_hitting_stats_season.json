@@ -1,5 +1,4 @@
-﻿// https://statsapi.mlb.com/api/v1/teams/133/stats?stats=season&group=hitting
-{
+﻿{
     "copyright" : "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
     "stats" : [ {
       "type" : {
