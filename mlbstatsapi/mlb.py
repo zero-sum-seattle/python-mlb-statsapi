@@ -14,7 +14,6 @@ class MlbObject:
             for statType in stattypes: # for statType in type: List[str]
                 statdata = self._mlb_adapter.get(endpoint=f"/{mlb_class}/{self.id}/stats?stats={statType}&group=hitting") # get stats
                 statList += [ Stats(**stat) for stat in statdata.data['stats'] if "stats" in statdata.data ] # Add Stat to List[statList]
-                print(statList)
             self.stats = statList # Apply Stat Objects to self
         else:
             # implement other class stats for leagues, etc, also you shouldn't be able to call this on the MlbObject
@@ -48,7 +47,7 @@ class Sport():
     link: str
     abbreviation: str
 
-    def __init__(self, id: int, link: str, abbreviation: str) -> None:
+    def __init__(self, id: int, link: str, abbreviation: str, **kwargs) -> None:
         self.id = id
         self.link = link
         self.abbreviation = abbreviation
@@ -64,6 +63,9 @@ class Game():
         self.abbreviation = abbreviation
 
 class Stats():
+    group: str
+    statype: str
+
     def __init__(self, group: str, type: str, **kwargs) -> None:
         self.group = group
         self.type = type
