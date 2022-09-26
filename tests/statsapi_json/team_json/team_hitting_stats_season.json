@@ -1,0 +1,54 @@
+﻿{
+    "copyright" : "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "stats" : [ {
+      "type" : {
+        "displayName" : "season"
+      },
+      "group" : {
+        "displayName" : "hitting"
+      },
+      "exemptions" : [ ],
+      "splits" : [ {
+        "season" : "2022",
+        "stat" : {
+          "gamesPlayed" : 149,
+          "groundOuts" : 1316,
+          "airOuts" : 1275,
+          "runs" : 519,
+          "doubles" : 230,
+          "triples" : 12,
+          "homeRuns" : 126,
+          "strikeOuts" : 1289,
+          "baseOnBalls" : 394,
+          "intentionalWalks" : 6,
+          "hits" : 1055,
+          "hitByPitch" : 57,
+          "avg" : ".216",
+          "atBats" : 4884,
+          "obp" : ".281",
+          "slg" : ".345",
+          "ops" : ".626",
+          "caughtStealing" : 21,
+          "stolenBases" : 72,
+          "stolenBasePercentage" : ".774",
+          "groundIntoDoublePlay" : 103,
+          "numberOfPitches" : 20803,
+          "plateAppearances" : 5388,
+          "totalBases" : 1687,
+          "rbi" : 489,
+          "leftOnBase" : 888,
+          "sacBunts" : 20,
+          "sacFlies" : 31,
+          "babip" : ".265",
+          "groundOutsToAirouts" : "1.03",
+          "catchersInterference" : 2,
+          "atBatsPerHomeRun" : "38.76"
+        },
+        "team" : {
+          "id" : 133,
+          "name" : "Oakland Athletics",
+          "link" : "/api/v1/teams/133"
+        }
+      } ]
+    } ]
+  }
