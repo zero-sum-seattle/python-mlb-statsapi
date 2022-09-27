@@ -28,8 +28,8 @@ class Person(MlbObject):
     stats: List
     def __init__(self, id: int, fullName: str = None, link: str = None, reload: bool = False, **kwargs) -> None:
         self.id = id # person id
-        self.full_name = if fullName is not None else None # person full_name
-        self.link = if link is not None else None # person link
+        self.full_name = fullName # person full_name
+        self.link = link# person link
         self.__dict__.update(kwargs) # let's do this for a sloppy apply
 
 
