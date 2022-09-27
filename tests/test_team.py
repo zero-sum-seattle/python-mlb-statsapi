@@ -31,9 +31,9 @@ class TestTeam(unittest.TestCase):
         team = Team(133, "Oakland Athletrics", "/api/v1/teams/133")
         self.assertTrue(hasattr(team, "_mlb_adapter"))
 
-    def test_team_stats_generate(self):
-        team = Team(133, "Oakland Athletrics", "/api/v1/teams/133")
-        team.generate_stats()
-        self.assertTrue(hasattr(team, "stats"))
-        self.assertIsInstance(team.stats, List)
-        self.assertIsInstance(team.stats[0], Stats)
+    # def test_team_stats_generate(self):
+    #     team = Team(133, "Oakland Athletrics", "/api/v1/teams/133")
+    #     team.generate_stats()
+    #     self.assertTrue(hasattr(team, "stats"))
+    #     self.assertIsInstance(team.stats, List)
+    #     self.assertIsInstance(team.stats[0], Stats)
