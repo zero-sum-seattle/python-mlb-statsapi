@@ -25,9 +25,11 @@ class TestMlbDataApi(unittest.TestCase):
         self.assertIsInstance(mlbdata.data, Dict) # Check results are a Dict
 
     def test_mlb_adapter_400(self):
-        with self.assertRaises(TheMlbStatsApiException): # Fix my damn imports
-            mlb = Mlb() # Create instance of our baseclass
-            mlbdata = mlb._mlb_adapter.get("/notaendpoint") # A static endpoint to just return JSON
+        mlb = Mlb() # Create instance of our baseclass
+        mlbdata = mlb._mlb_adapter.get("/notaendpoint") # A static endpoint to just return JSON
+        self.assertEqual(mlbdata.status_code, 404)
+        self.assertEqual(mlbdata.message, "Not Found")
+        self.assertEqual(mlbdata.data, [])
 
     def test_mlbdataapi_get_people(self):
         mlb = Mlb()
