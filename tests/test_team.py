@@ -16,7 +16,7 @@ class TestTeam(unittest.TestCase):
         with self.assertRaises(TypeError):
             team = Team()
 
-    def test_player_instance_id_instance_success(self):        
+    def test_player_instance_id_instance_success(self):
         team = Team(133, "Oakland Athletics", "/api/v1/teams/133")
         self.assertEqual(team.id, 133)
         self.assertIsInstance(team, Team)
@@ -37,7 +37,3 @@ class TestTeam(unittest.TestCase):
         self.assertTrue(hasattr(team, "stats"))
         self.assertIsInstance(team.stats, List)
         self.assertIsInstance(team.stats[0], Stats)
-
-
-
-

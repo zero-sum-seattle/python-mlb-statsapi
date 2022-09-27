@@ -55,13 +55,17 @@ class Sport():
 
 class Game():
     id: int
-    link: str
-    abbreviation: str
 
-    def __init__(self, id: int, link: str, abbreviation: str) -> None:
+    metaData: dict
+    gameData: dict
+    liveData: dict
+
+    def __init__(self, id: int, **kwargs) -> None:
         self.id = id
-        self.link = link
-        self.abbreviation = abbreviation
+
+        self.metaData = kwargs.get('metaData', {})
+        self.gameData = kwargs.get('gameData', {})
+        self.liveData = kwargs.get('liveData', {})
 
 class Stats():
     group: str
@@ -81,4 +85,3 @@ class League():
         self.id = id
         self.name = name
         self.link = link
-

@@ -19,14 +19,14 @@ class TestMlbDataApi(unittest.TestCase):
 
     def test_mlb_adapter_200(self):
         mlb = Mlb() # Create instance of our baseclass
-        mlbdata = mlb._mlb_adapter.get("/divisions") # A static endpoint to just return JSON
+        mlbdata = mlb._mlb_adapter_v1.get("/divisions") # A static endpoint to just return JSON
         self.assertIsInstance(mlbdata, MlbResult) # Test result is MlbResult class
         self.assertEqual(mlbdata.status_code, 200) # Check HTTP Status 200
         self.assertIsInstance(mlbdata.data, Dict) # Check results are a Dict
 
     def test_mlb_adapter_400(self):
         mlb = Mlb() # Create instance of our baseclass
-        mlbdata = mlb._mlb_adapter.get("/notaendpoint") # A static endpoint to just return JSON
+        mlbdata = mlb._mlb_adapter_v1.get("/notaendpoint") # A static endpoint to just return JSON
         self.assertEqual(mlbdata.status_code, 404)
         self.assertEqual(mlbdata.message, "Not Found")
         self.assertEqual(mlbdata.data, [])
@@ -58,9 +58,15 @@ class TestMlbDataApi(unittest.TestCase):
         person = mlb.get_person('664034')
         self.assertIsInstance(person[0], Person)
         self.assertEqual(person[0].id, 664034)
-    
+
     def test_mlb_get_team(self):
         mlb = Mlb()
         team = mlb.get_team('133')
         self.assertIsInstance(team[0], Team)
         self.assertEqual(team[0].id, 133)
+
+    def test_mlb_get_game(self):
+        mlb = Mlb()
+        game = mlb.get_game(662242)
+        self.assertIsInstance(game, Game)
+        self.assertEqual(game.id, 662242)
