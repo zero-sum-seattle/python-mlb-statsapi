@@ -17,6 +17,7 @@ class MlbDataAdapter:
         full_url = self.url + endpoint # pass endpoint from inhertited classes
         logline_pre = f"url={full_url}"
         logline_post = f" ,".join((logline_pre, "success={}, status_code={}, message={}"))
+
         try: 
             self._logger.debug(logline_post)
             response = requests.get(url=full_url) # mlbstats API only uses get calls
@@ -27,23 +28,25 @@ class MlbDataAdapter:
 
         try:
             data = response.json()
+
         except (ValueError, requests.JSONDecodeError) as e: # catch a JSON error
-            self._logger.error(msg=(str(e))) # log error JSON 
+            self._logger.error(msg=(str(e)))
             raise TheMlbStatsApiException("Bad JSON in response") from e
+
         if response.status_code <= 200 and response.status_code <= 299: # catch HTTP errors
             self._logger.debug(msg=logline_post.format("success", response.status_code, response.reason)) # log success 
             return MlbResult(response.status_code, message=response.reason, data=data) # return result
+
         elif response.status_code >= 400 and response.status_code <= 499:  # catch HTTP error
             self._logger.error(msg=logline_post.format("Invalid Request", response.status_code, response.reason)) # log failure
             return MlbResult(response.status_code, message=response.reason)
+
         elif response.status_code >= 500 and response.status_code <= 599:
             self._logger.error(msg=logline_post.format("Internal error occurred", response.status_code, response.reason))
             return MlbResult(response.status_code, message=response.reason)
+
         else:
             raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}") # raise exception 
-
-
-
 
 
 class MlbResult:
