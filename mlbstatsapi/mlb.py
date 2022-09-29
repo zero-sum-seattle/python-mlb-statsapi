@@ -27,7 +27,7 @@ class Person(MlbObject):
     link: str
     mlb_class = "people"
     stats: List
-    
+
     def __init__(self, id: int, fullName: str = None, link: str = None, reload: bool = False, **kwargs) -> None:
         self.id = id # person id
         self.full_name = fullName # person full_name
@@ -40,6 +40,7 @@ class Team(MlbObject):
     name: str
     link: str
     mlb_class = "team"
+
     def __init__(self, id: int, name: str, link: str, **kwargs) -> None:
         self.id = id
         self.name = name
@@ -56,19 +57,106 @@ class Sport():
         self.link = link
         self.abbreviation = abbreviation
 
+
+class GameMetaData():
+    wait: int
+    timeStamp: str
+    gameEvents: List[str]
+    logicalEvents: List[str]
+
+    def __init__(self,
+                wait: int,
+                timeStamp: str,
+                gameEvents: List[str],
+                logicalEvents: List[str],
+                **kwargs) -> None:
+        self.wait = wait
+        self.timeStamp = timeStamp
+        self.gameEvents = gameEvents
+        self.logicalEvents = logicalEvents
+
+
+class GameGameData():
+    game: Dict
+    datetime: Dict
+    status: Dict
+    teams: Dict
+    players: Dict
+    venue: Dict
+    officialVenue: Dict
+    weather: Dict
+    gameInfo: Dict
+    review: Dict
+    flags: Dict
+    alerts: List
+    probablePitchers: Dict
+
+    def __init__(self,
+                game: Dict,
+                datetime: Dict,
+                status: Dict,
+                teams: Dict,
+                players: Dict,
+                venue: Dict,
+                officialVenue: Dict,
+                weather: Dict,
+                gameInfo: Dict,
+                review: Dict,
+                flags: Dict,
+                alerts: List,
+                probablePitchers: Dict,
+                **kwargs) -> None:
+        self.game = game
+        self.datetime = datetime
+        self.status = status
+        self.teams = teams
+        self.players = players
+        self.venue = venue
+        self.officialVenue = officialVenue
+        self.weather = weather
+        self.gameInfo = gameInfo
+        self.review = review
+        self.flags = flags
+        self.alerts = alerts
+        self.probablePitchers = probablePitchers
+
+
+class GameLiveData():
+    plays: Dict
+    linescore: Dict
+    boxscore: Dict
+    decisions: Dict
+    leaders: Dict
+
+    def __init__(self,
+                plays: Dict,
+                linescore: Dict,
+                boxscore: Dict,
+                leaders: Dict,
+                decisions: Dict = None,
+                **kwargs) -> None:
+        self.plays = plays
+        self.linescore = linescore
+        self.boxscore = boxscore
+        self.decisions = decisions
+        self.leaders = leaders
+
 class Game():
     id: int
 
-    metaData: dict
-    gameData: dict
-    liveData: dict
+    metaData: Game_MetaData
+    gameData: Game_GameData
+    liveData: Game_LiveData
 
-    def __init__(self, id: int, **kwargs) -> None:
+    def __init__(self, id: int,
+                    metaData: Dict,
+                    gameData: Dict,
+                    liveData: Dict,
+                    **kwargs) -> None:
         self.id = id
-
-        self.metaData = kwargs.get('metaData', {})
-        self.gameData = kwargs.get('gameData', {})
-        self.liveData = kwargs.get('liveData', {})
+        self.metaData = Game_MetaData(**metaData)
+        self.gameData = Game_GameData(**gameData)
+        self.liveData = Game_LiveData(**liveData)
 
 class Stats():
     group: str
