@@ -1,4 +1,5 @@
 ﻿from mlbstatsapi.mlbdataadapter import MlbDataAdapter, MlbResult
+from .exceptions import TheMlbStatsApiException
 import logging
 from typing import List, Dict
 from .mlb import *
@@ -58,5 +59,8 @@ class Mlb:
 
     def get_game(self, gameId) -> Game:
         mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'/game/{gameId}/feed/live') # Get all Teams
+        if (mlbdata.data['gamePk'] != gameId): # If game id eccepted but not valid
+            raise TheMlbStatsApiException("Bad JSON in response")
+
         game = Game(gameId, **mlbdata.data)
         return game
