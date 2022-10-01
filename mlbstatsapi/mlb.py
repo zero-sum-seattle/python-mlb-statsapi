@@ -318,6 +318,7 @@ class GameGameDataTeams():
 # class GameGameDataPlayers():
 #
 #     def __init__(self, **kwargs) -> None:
+
 class GameGameDataVenueLocationCoordinates:
     latitude: float
     longitude: float
@@ -521,7 +522,7 @@ class GameGameData():
     datetime: GameGameDataDatetime
     status: GameGameDataStatus
     teams: GameGameDataTeams
-    players: Dict
+    players: List[Person]
     venue: GameGameDataVenue
     officialVenue: Venue
     weather: GameGameDataWeather
@@ -550,7 +551,8 @@ class GameGameData():
         self.datetime = GameGameDataDatetime(**datetime)
         self.status = GameGameDataStatus(**status)
         self.teams = GameGameDataTeams(**teams)
-        self.players = players
+        # self.players = players
+        self.players = []
         self.venue = GameGameDataVenue(**venue)
         self.officialVenue = Venue(**officialVenue)
         self.weather = GameGameDataWeather(**weather)
@@ -560,9 +562,461 @@ class GameGameData():
         self.alerts = alerts
         self.probablePitchers = GameGameDataProbablePitchers(**probablePitchers)
 
+        for key, value in players.items():
+            self.players.append(Person(**value))
+
+class GameLiveDataPlaysPlayCount():
+    balls: int
+    strikes: int
+    outs: int
+
+    def __init__(self, balls: int, strikes: int, outs: int) -> None:
+        self.balls = balls
+        self.strikes = strikes
+        self.outs = outs
+
+class GameLiveDataPlaysPlayResult():
+    type: str
+    event: str
+    eventType: str
+    description: str
+    rbi: int
+    awayScore: int
+    homeScore: int
+
+    def __init__(self,
+                type: str,
+                event: str,
+                eventType: str,
+                description: str,
+                rbi: int,
+                awayScore: int,
+                homeScore: int,
+                **kwargs) -> None:
+        self.type = type
+        self.event = event
+        self.eventType = eventType
+        self.description = description
+        self.rbi = rbi
+        self.awayScore = awayScore
+        self.homeScore = homeScore
+
+class GameLiveDataPlaysPlayAbout():
+    atBatIndex: int
+    halfInning: str
+    isTopInning: bool
+    inning: int
+    startTime: str
+    endTime: str
+    isComplete: bool
+    isScoringPlay: bool
+    hasReview: bool
+    hasOut: bool
+    captivatingIndex: int
+
+    def __init__(self,
+                atBatIndex: int,
+                halfInning: str,
+                isTopInning: bool,
+                inning: int,
+                startTime: str,
+                endTime: str,
+                isComplete: bool,
+                isScoringPlay: bool,
+                hasReview: bool,
+                hasOut: bool,
+                captivatingIndex: int,
+                **kwargs) -> None:
+        self.atBatIndex = atBatIndex
+        self.halfInning = halfInning
+        self.isTopInning = isTopInning
+        self.inning = inning
+        self.startTime = startTime
+        self.endTime = endTime
+        self.isComplete = isComplete
+        self.isScoringPlay = isScoringPlay
+        self.hasReview = hasReview
+        self.hasOut = hasOut
+        self.captivatingIndex = captivatingIndex
+
+class GameLiveDataPlaysPlayMatchupSide():
+    code: str
+    description: str
+
+    def __init__(self,
+                code: str,
+                description: str,
+                **kwargs) -> None:
+        self.code = code
+        self.description = description
+
+class GameLiveDataPlaysPlayMatchupSplits():
+    batter: str
+    pitcher: str
+    menOnBase: str
+
+    def __init__(self,
+                batter: str,
+                pitcher: str,
+                menOnBase: str,
+                **kwargs) -> None:
+        self.batter = batter
+        self.pitcher = pitcher
+        self.menOnBase = menOnBase
+
+
+class GameLiveDataPlaysPlayMatchup():
+    batter: Person
+    batSide: GameLiveDataPlaysPlayMatchupSide
+    pitcher: Person
+    pitchHand: GameLiveDataPlaysPlayMatchupSide
+    batterHotColdZones: List
+    pitcherHotColdZones: List
+    splits: GameLiveDataPlaysPlayMatchupSplits
+
+    def __init__(self,
+                batter: Dict,
+                batSide: Dict,
+                pitcher: Dict,
+                pitchHand: Dict,
+                batterHotColdZones: List,
+                pitcherHotColdZones: List,
+                splits: Dict,
+                **kwargs) -> None:
+        self.batter = Person(**batter)
+        self.batSide = GameLiveDataPlaysPlayMatchupSide(**batSide)
+        self.pitcher = Person(**pitcher)
+        self.pitchHand = GameLiveDataPlaysPlayMatchupSide(**pitchHand)
+        self.batterHotColdZones = batterHotColdZones
+        self.pitcherHotColdZones = pitcherHotColdZones
+        self.splits = GameLiveDataPlaysPlayMatchupSplits(**splits)
+
+class GameLiveDataPlaysPlayRunnersMovement():
+    originBase: str
+    start: str
+    end: str
+    outBase: str
+    isOut: bool
+    outNumber: int
+
+    def __init__(self,
+                isOut: bool,
+                outNumber: int,
+                originBase: str = None,
+                start: str = None,
+                end: str = None,
+                outBase: str = None,
+                **kwargs) -> None:
+
+        self.originBase = originBase
+        self.start = start
+        self.end = end
+        self.outBase = outBase
+        self.isOut = isOut
+        self.outNumber = outNumber
+
+class GameLiveDataPlaysPlayRunnersDetails():
+    event: str
+    eventType: str
+    movementReason: str
+    runner: Person
+    responsiblePitcher: Person
+    isScoringEvent: bool
+    rbi: bool
+    earned: bool
+    teamUnearned: bool
+    playIndex: int
+
+    def __init__(self,
+                event: str,
+                eventType: str,
+                runner: dict,
+                isScoringEvent: bool,
+                rbi: bool,
+                earned: bool,
+                teamUnearned: bool,
+                playIndex: int,
+                movementReason: str = None,
+                responsiblePitcher: dict = None,
+                **kwargs) -> None:
+
+        self.event = event
+        self.eventType = eventType
+        self.movementReason = movementReason
+        self.runner = Person(**runner)
+        self.responsiblePitcher = Person(**responsiblePitcher) if responsiblePitcher else responsiblePitcher
+        self.isScoringEvent = isScoringEvent
+        self.rbi = rbi
+        self.earned = earned
+        self.teamUnearned = teamUnearned
+        self.playIndex = playIndex
+
+class GameLiveDataPlaysPlayRunnersCreditsPosition():
+    code: str
+    name: str
+    type: str
+    abbreviation: str
+
+    def __init__(self,
+                code: str,
+                name: str,
+                type: str,
+                abbreviation: str,
+                **kwargs) -> None:
+        self.code = code
+        self.name = name
+        self.type = type
+        self.abbreviation = abbreviation
+
+class GameLiveDataPlaysPlayRunnersCredits():
+    player: Person
+    position: GameLiveDataPlaysPlayRunnersCreditsPosition
+    credit: str
+
+    def __init__(self,
+                player: Dict,
+                position: Dict,
+                credit: str,
+                **kwargs) -> None:
+        self.player = Person(**player)
+        self.position = GameLiveDataPlaysPlayRunnersCreditsPosition(**position)
+        self.credit = credit
+
+class GameLiveDataPlaysPlayRunners():
+    movement: GameLiveDataPlaysPlayRunnersMovement
+    details: GameLiveDataPlaysPlayRunnersDetails
+    credits: List[GameLiveDataPlaysPlayRunnersCredits]
+
+    def __init__(self,
+                movement: Dict,
+                details: Dict,
+                credits: List,
+                **kwargs) -> None:
+        self.movement = GameLiveDataPlaysPlayRunnersMovement(**movement)
+        self.details = GameLiveDataPlaysPlayRunnersDetails(**details)
+        self.credits = [GameLiveDataPlaysPlayRunnersCredits(**credit) for credit in credits]
+
+class GameLiveDataPlaysPlayPlayEventsDetailsCallType():
+    code: str
+    description: str
+
+    def __init__(self, code: str, description: str) -> None:
+        self.code = code
+        self.description = description
+
+class GameLiveDataPlaysPlayPlayEventsDetails():
+    call: GameLiveDataPlaysPlayPlayEventsDetailsCallType
+    description: str
+    event: str
+    eventType: str
+    code: str
+    ballColor: str
+    trailColor: str
+    awayScore: int
+    homeScore: int
+    isInPlay: bool
+    isStrike: bool
+    isBall: bool
+    isScoringPlay: bool
+    type: GameLiveDataPlaysPlayPlayEventsDetailsCallType
+    hasReview: bool
+    fromCatcher: bool
+    runnerGoing: bool
+
+    def __init__(self,
+                description: str,
+                hasReview: bool,
+
+                call: Dict = None,
+                event: str = None,
+                eventType: str = None,
+                code: str = None,
+                ballColor: str = None,
+                trailColor: str = None,
+                awayScore: int = None,
+                homeScore: int = None,
+                isInPlay: bool = None,
+                isStrike: bool = None,
+                isBall: bool = None,
+                isScoringPlay: bool = None,
+                type: Dict = None,
+                fromCatcher: bool = None,
+                runnerGoing: bool = None,
+                **kwargs) -> None:
+        self.call = GameLiveDataPlaysPlayPlayEventsDetailsCallType(**call) if call else call
+        self.description = description
+        self.event = event
+        self.eventType = eventType
+        self.code = code
+        self.ballColor = ballColor
+        self.trailColor = trailColor
+        self.awayScore = awayScore
+        self.homeScore = homeScore
+        self.isInPlay = isInPlay
+        self.isStrike = isStrike
+        self.isBall = isBall
+        self.isScoringPlay = isScoringPlay
+        self.type = GameLiveDataPlaysPlayPlayEventsDetailsCallType(**type) if type else type
+        self.hasReview = hasReview
+        self.fromCatcher = fromCatcher
+        self.runnerGoing = runnerGoing
+
+class GameLiveDataPlaysPlayPlayEvents():
+    details: GameLiveDataPlaysPlayPlayEventsDetails
+    count: GameLiveDataPlaysPlayCount
+    index: int
+    startTime: str
+    endTime: str
+    isPitch: bool
+    type: str
+    player: Person
+
+    def __init__(self,
+                details: dict,
+                index: int,
+                startTime: str,
+                endTime: str,
+                isPitch: bool,
+                type: str,
+                count: dict = None,
+                player: dict = None,
+                **kwargs) -> None:
+        self.details = GameLiveDataPlaysPlayPlayEventsDetails(**details)
+        self.count = GameLiveDataPlaysPlayCount(**count) if count else count
+        self.index = index
+        self.startTime = startTime
+        self.endTime = endTime
+        self.isPitch = isPitch
+        self.type = type
+        self.player = Person(**player) if player else player
+
+
+class GameLiveDataPlaysPlay():
+    result: GameLiveDataPlaysPlayResult
+    about: GameLiveDataPlaysPlayAbout
+    count: GameLiveDataPlaysPlayCount
+    matchup: GameLiveDataPlaysPlayMatchup
+    pitchIndex: List[int]
+    actionIndex: List[int]
+    runnerIndex: List[int]
+    runners: List[GameLiveDataPlaysPlayRunners]
+    playEvents: List[GameLiveDataPlaysPlayPlayEvents]
+    playEndTime: str
+    atBatIndex: int
+
+    def __init__(self,
+                result: Dict,
+                about: Dict,
+                count: Dict,
+                matchup: Dict,
+                pitchIndex: List,
+                actionIndex: List,
+                runnerIndex: List,
+                runners: List,
+                playEvents: List,
+                playEndTime: str,
+                atBatIndex: int,
+                **kwargs) -> None:
+        self.result = GameLiveDataPlaysPlayResult(**result)
+        self.about = GameLiveDataPlaysPlayAbout(**about)
+        self.count = GameLiveDataPlaysPlayCount(**count)
+        self.matchup = GameLiveDataPlaysPlayMatchup(**matchup)
+        self.pitchIndex = pitchIndex
+        self.actionIndex = actionIndex
+        self.runnerIndex = runnerIndex
+        self.runners = [GameLiveDataPlaysPlayRunners(**runner) for runner in runners]
+        self.playEvents = [GameLiveDataPlaysPlayPlayEvents(**playEvent) for playEvent in playEvents]
+        self.playEndTime = playEndTime
+        self.atBatIndex = atBatIndex
+
+class GameLiveDataPlaysPlayByInningHitsByTeamHitCoordinates():
+    x: float
+    y: float
+
+    def __init__(self, x: float, y: float, **kwargs) -> None:
+        self.x = x
+        self.y = y
+
+
+class GameLiveDataPlaysPlayByInningHitsByTeam():
+    team: Team
+    inning: int
+    pitcher: Person
+    batter: Person
+    coordinates: GameLiveDataPlaysPlayByInningHitsByTeamHitCoordinates
+    type: str
+    description: str
+
+    def __init__(self,
+                team: Dict,
+                inning: int,
+                pitcher: Dict,
+                batter: Dict,
+                coordinates: Dict,
+                type: str,
+                description: str,
+                **kwargs) -> None:
+        self.team = Team(**team)
+        self.inning = inning
+        self.pitcher = Person(**pitcher)
+        self.batter = Person(**batter)
+        self.coordinates = GameLiveDataPlaysPlayByInningHitsByTeamHitCoordinates(**coordinates)
+        self.type = type
+        self.description = description
+
+
+class GameLiveDataPlaysPlayByInningHits():
+    home: List[GameLiveDataPlaysPlayByInningHitsByTeam]
+    away: List[GameLiveDataPlaysPlayByInningHitsByTeam]
+
+    def __init__(self,
+                home: List,
+                away: List,
+                **kwargs) -> None:
+        self.home = [GameLiveDataPlaysPlayByInningHitsByTeam(**home_hit) for home_hit in home]
+        self.away = [GameLiveDataPlaysPlayByInningHitsByTeam(**away_hit) for away_hit in away]
+
+class GameLiveDataPlaysPlayByInning():
+    startIndex: int
+    endIndex: int
+    top: List[int]
+    bottom: List[int]
+    hits: GameLiveDataPlaysPlayByInningHits
+
+    def __init__(self,
+                startIndex: int,
+                endIndex: int,
+                top: List,
+                bottom: List,
+                hits: Dict,
+                **kwargs) -> None:
+        self.startIndex = startIndex
+        self.endIndex = endIndex
+        self.top = top
+        self.bottom = bottom
+        self.hits = GameLiveDataPlaysPlayByInningHits(**hits)
+
+
+class GameLiveDataPlays():
+    allPlays: List[GameLiveDataPlaysPlay]
+    currentPlay: GameLiveDataPlaysPlay
+    scoringPlays: List[int]
+    playsByInning: List[GameLiveDataPlaysPlayByInning]
+
+    def __init__(self,
+                currentPlay: Dict,
+                scoringPlays: List,
+                playsByInning: List,
+                allPlays: List = None,
+                **kwargs) -> None:
+        self.allPlays = [GameLiveDataPlaysPlay(**play) for play in allPlays if play]
+        self.currentPlay = GameLiveDataPlaysPlay(**currentPlay)
+        self.scoringPlays = scoringPlays
+        self.playsByInning = [GameLiveDataPlaysPlayByInning(**inning) for inning in playsByInning if inning]
+
 
 class GameLiveData():
-    plays: Dict
+    plays: GameLiveDataPlays
     linescore: Dict
     boxscore: Dict
     decisions: Dict
@@ -575,7 +1029,7 @@ class GameLiveData():
                 leaders: Dict,
                 decisions: Dict = None,
                 **kwargs) -> None:
-        self.plays = plays
+        self.plays = GameLiveDataPlays(**plays)
         self.linescore = linescore
         self.boxscore = boxscore
         self.decisions = decisions

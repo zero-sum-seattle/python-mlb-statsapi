@@ -87,7 +87,6 @@ class TestGame(unittest.TestCase):
         self.assertTrue(hasattr(gameData_game, "season"))
         self.assertTrue(hasattr(gameData_game, "seasonDisplay"))
 
-
     def test_game_gameData_datetime_attributes(self):
         gameData_datetime = self.game.gameData.datetime
         self.assertIsInstance(gameData_datetime, GameGameDataDatetime)
@@ -196,10 +195,14 @@ class TestGame(unittest.TestCase):
         self.assertTrue(hasattr(away_Record, "winningPercentage"))
         self.assertTrue(hasattr(home_Record, "winningPercentage"))
 
+    def test_game_gameData_players_attributes(self):
+        gameData_players = self.game.gameData.players
+        self.assertIsInstance(gameData_players, List)
 
+        for player in gameData_players:
+            self.assertIsInstance(player, Person)
 
-
-    def test_game_gameData_venue(self):
+    def test_game_gameData_venue_attributes(self):
         gameData_venue = self.game.gameData.venue
         self.assertIsInstance(gameData_venue, GameGameDataVenue)
         self.assertTrue(hasattr(gameData_venue, "id"))
@@ -210,7 +213,7 @@ class TestGame(unittest.TestCase):
         self.assertTrue(hasattr(gameData_venue, "fieldInfo"))
         self.assertTrue(hasattr(gameData_venue, "active"))
 
-    def test_game_gameData_venue_fieldInfo(self):
+    def test_game_gameData_venue_fieldInfo_attributes(self):
         venue_fieldInfo = self.game.gameData.venue.fieldInfo
         self.assertIsInstance(venue_fieldInfo, GameGameDataVenueFieldInfo)
         self.assertTrue(hasattr(venue_fieldInfo, "capacity"))
@@ -223,14 +226,14 @@ class TestGame(unittest.TestCase):
         self.assertTrue(hasattr(venue_fieldInfo, "rightCenter"))
         self.assertTrue(hasattr(venue_fieldInfo, "rightLine"))
 
-    def test_game_gameData_venue_timeZone(self):
+    def test_game_gameData_venue_timeZone_attributes(self):
         venue_timeZone = self.game.gameData.venue.timeZone
         self.assertIsInstance(venue_timeZone, GameGameDataVenueTimeZone)
         self.assertTrue(hasattr(venue_timeZone, "id"))
         self.assertTrue(hasattr(venue_timeZone, "offset"))
         self.assertTrue(hasattr(venue_timeZone, "tz"))
 
-    def test_game_gameData_venue_location(self):
+    def test_game_gameData_venue_location_attributes(self):
         venue_location = self.game.gameData.venue.location
         self.assertIsInstance(venue_location, GameGameDataVenueLocation)
         self.assertTrue(hasattr(venue_location, "address1"))
@@ -242,26 +245,20 @@ class TestGame(unittest.TestCase):
         self.assertTrue(hasattr(venue_location, "country"))
         self.assertTrue(hasattr(venue_location, "phone"))
 
-    def test_game_gameData_venue_location_coordinates(self):
+    def test_game_gameData_venue_location_coordinates_attributes(self):
         location_coordinates = self.game.gameData.venue.location.defaultCoordinates
         self.assertIsInstance(location_coordinates, GameGameDataVenueLocationCoordinates)
         self.assertTrue(hasattr(location_coordinates, "latitude"))
         self.assertTrue(hasattr(location_coordinates, "longitude"))
 
-
-
-
-    def test_game_gameData_weather(self):
+    def test_game_gameData_weather_attributes(self):
         gameData_weather = self.game.gameData.weather
         self.assertIsInstance(gameData_weather, GameGameDataWeather)
         self.assertTrue(hasattr(gameData_weather, "condition"))
         self.assertTrue(hasattr(gameData_weather, "temp"))
         self.assertTrue(hasattr(gameData_weather, "wind"))
 
-
-
-
-    def test_game_gameData_gameInfo(self):
+    def test_game_gameData_gameInfo_attributes(self):
         gameData_gameInfo = self.game.gameData.gameInfo
         self.assertIsInstance(gameData_gameInfo, GameGameDataGameInfo)
         self.assertTrue(hasattr(gameData_gameInfo, "attendance"))
@@ -269,17 +266,14 @@ class TestGame(unittest.TestCase):
         self.assertTrue(hasattr(gameData_gameInfo, "gameDurationMinutes"))
         self.assertTrue(hasattr(gameData_gameInfo, "delayDurationMinutes"))
 
-
-
-
-    def test_game_gameData_review(self):
+    def test_game_gameData_review_attributes(self):
         gameData_review = self.game.gameData.review
         self.assertIsInstance(gameData_review, GameGameDataReview)
         self.assertTrue(hasattr(gameData_review, "hasChallenges"))
         self.assertTrue(hasattr(gameData_review, "away"))
         self.assertTrue(hasattr(gameData_review, "home"))
 
-    def test_game_gameData_review_team(self):
+    def test_game_gameData_review_team_attributes(self):
         review_home = self.game.gameData.review.home
         review_away = self.game.gameData.review.away
         self.assertIsInstance(review_home, GameGameDataReviewTeam)
@@ -289,10 +283,7 @@ class TestGame(unittest.TestCase):
         self.assertTrue(hasattr(review_home, "remaining"))
         self.assertTrue(hasattr(review_away, "remaining"))
 
-
-
-
-    def test_game_gameData_flags(self):
+    def test_game_gameData_flags_attributes(self):
         gameData_flags = self.game.gameData.flags
         self.assertIsInstance(gameData_flags, GameGameDataFlags)
         self.assertTrue(hasattr(gameData_flags, "noHitter"))
@@ -302,9 +293,263 @@ class TestGame(unittest.TestCase):
         self.assertTrue(hasattr(gameData_flags, "homeTeamNoHitter"))
         self.assertTrue(hasattr(gameData_flags, "homeTeamPerfectGame"))
 
-
-    def test_game_gameData_probablePitchers(self):
+    def test_game_gameData_probablePitchers_attributes(self):
         gameData_probablePitchers = self.game.gameData.probablePitchers
         self.assertIsInstance(gameData_probablePitchers, GameGameDataProbablePitchers)
         self.assertTrue(hasattr(gameData_probablePitchers, "away"))
         self.assertTrue(hasattr(gameData_probablePitchers, "home"))
+        self.assertIsInstance(gameData_probablePitchers.away, Person)
+        self.assertIsInstance(gameData_probablePitchers.home, Person)
+
+
+
+    def test_Game_LiveData_Plays_attributes(self):
+        LiveData_plays = self.game.liveData.plays
+        self.assertIsInstance(LiveData_plays, GameLiveDataPlays)
+        self.assertTrue(hasattr(LiveData_plays, "allPlays"))
+        self.assertTrue(hasattr(LiveData_plays, "currentPlay"))
+        self.assertTrue(hasattr(LiveData_plays, "scoringPlays"))
+        self.assertTrue(hasattr(LiveData_plays, "playsByInning"))
+        self.assertIsInstance(LiveData_plays.currentPlay, GameLiveDataPlaysPlay)
+        for play in LiveData_plays.allPlays:
+            self.assertIsInstance(play, GameLiveDataPlaysPlay)
+
+    def test_Game_LiveData_Plays_Play_attributes(self):
+        LiveData_Play = self.game.liveData.plays.currentPlay
+        self.assertIsInstance(LiveData_Play, GameLiveDataPlaysPlay)
+        self.assertTrue(hasattr(LiveData_Play, "result"))
+        self.assertTrue(hasattr(LiveData_Play, "about"))
+        self.assertTrue(hasattr(LiveData_Play, "count"))
+        self.assertTrue(hasattr(LiveData_Play, "matchup"))
+        self.assertTrue(hasattr(LiveData_Play, "pitchIndex"))
+        self.assertTrue(hasattr(LiveData_Play, "actionIndex"))
+        self.assertTrue(hasattr(LiveData_Play, "runnerIndex"))
+        self.assertTrue(hasattr(LiveData_Play, "runners"))
+        self.assertTrue(hasattr(LiveData_Play, "playEvents"))
+        self.assertTrue(hasattr(LiveData_Play, "playEndTime"))
+        self.assertTrue(hasattr(LiveData_Play, "atBatIndex"))
+
+    def test_Game_LiveData_Plays_Play_PlayEvents_attributes(self):
+        Play_PlayEvents = self.game.liveData.plays.currentPlay.playEvents
+        for play_event in Play_PlayEvents:
+            self.assertIsInstance(play_event, GameLiveDataPlaysPlayPlayEvents)
+            self.assertTrue(hasattr(play_event, "details"))
+            self.assertTrue(hasattr(play_event, "count"))
+            self.assertTrue(hasattr(play_event, "index"))
+            self.assertTrue(hasattr(play_event, "startTime"))
+            self.assertTrue(hasattr(play_event, "endTime"))
+            self.assertTrue(hasattr(play_event, "isPitch"))
+            self.assertTrue(hasattr(play_event, "type"))
+            self.assertTrue(hasattr(play_event, "player"))
+            self.assertIsInstance(play_event.count, GameLiveDataPlaysPlayCount)
+            if play_event.player:
+                self.assertIsInstance(play_event.player, Person)
+
+    def test_Game_LiveData_Plays_Play_PlayEvents_Details_attributes(self):
+        Play_PlayEvents = self.game.liveData.plays.currentPlay.playEvents
+        for play_event in Play_PlayEvents:
+            event_details = play_event.details
+            self.assertIsInstance(event_details, GameLiveDataPlaysPlayPlayEventsDetails)
+            self.assertTrue(hasattr(event_details, "description"))
+            self.assertTrue(hasattr(event_details, "event"))
+            self.assertTrue(hasattr(event_details, "eventType"))
+            self.assertTrue(hasattr(event_details, "awayScore"))
+            self.assertTrue(hasattr(event_details, "homeScore"))
+            self.assertTrue(hasattr(event_details, "isScoringPlay"))
+            self.assertTrue(hasattr(event_details, "hasReview"))
+
+    def test_Game_LiveData_Plays_Play_Runners_attributes(self):
+        play_runners = self.game.liveData.plays.currentPlay.runners
+        for runner in play_runners:
+            self.assertIsInstance(runner, GameLiveDataPlaysPlayRunners)
+            self.assertTrue(hasattr(runner, "movement"))
+            self.assertTrue(hasattr(runner, "details"))
+            self.assertTrue(hasattr(runner, "credits"))
+
+    def test_Game_LiveData_Plays_Play_Runners_Credits_attributes(self):
+        play_runners = self.game.liveData.plays.currentPlay.runners
+        for runner in play_runners:
+            for credit in runner.credits:
+                self.assertIsInstance(credit, GameLiveDataPlaysPlayRunnersCredits)
+                self.assertTrue(hasattr(credit, "player"))
+                self.assertTrue(hasattr(credit, "position"))
+                self.assertTrue(hasattr(credit, "credit"))
+                self.assertIsInstance(credit.player, Person)
+
+    def test_Game_LiveData_Plays_Play_Runners_Credits_Position_attributes(self):
+        play_runners = self.game.liveData.plays.currentPlay.runners
+        for runner in play_runners:
+            for credit in runner.credits:
+                position = credit.position
+                self.assertIsInstance(position, GameLiveDataPlaysPlayRunnersCreditsPosition)
+                self.assertTrue(hasattr(position, "code"))
+                self.assertTrue(hasattr(position, "name"))
+                self.assertTrue(hasattr(position, "type"))
+                self.assertTrue(hasattr(position, "abbreviation"))
+
+    def test_Game_LiveData_Plays_Play_Runners_Details_attributes(self):
+        play_runners = self.game.liveData.plays.currentPlay.runners
+        for runner in play_runners:
+            details = runner.details
+            self.assertIsInstance(details, GameLiveDataPlaysPlayRunnersDetails)
+            self.assertTrue(hasattr(details, "event"))
+            self.assertTrue(hasattr(details, "eventType"))
+            self.assertTrue(hasattr(details, "movementReason"))
+            self.assertTrue(hasattr(details, "runner"))
+            self.assertTrue(hasattr(details, "responsiblePitcher"))
+            self.assertTrue(hasattr(details, "isScoringEvent"))
+            self.assertTrue(hasattr(details, "rbi"))
+            self.assertTrue(hasattr(details, "earned"))
+            self.assertTrue(hasattr(details, "teamUnearned"))
+            self.assertTrue(hasattr(details, "playIndex"))
+            self.assertIsInstance(details.runner, Person)
+            if details.responsiblePitcher:
+                self.assertIsInstance(details.responsiblePitcher, Person)
+
+    def test_Game_LiveData_Plays_Play_Runners_Movement_attributes(self):
+        play_runners = self.game.liveData.plays.currentPlay.runners
+        for runner in play_runners:
+            movement = runner.movement
+            self.assertIsInstance(movement, GameLiveDataPlaysPlayRunnersMovement)
+            self.assertTrue(hasattr(movement, "originBase"))
+            self.assertTrue(hasattr(movement, "start"))
+            self.assertTrue(hasattr(movement, "end"))
+            self.assertTrue(hasattr(movement, "outBase"))
+            self.assertTrue(hasattr(movement, "isOut"))
+            self.assertTrue(hasattr(movement, "outNumber"))
+
+    def test_Game_LiveData_Plays_Play_Matchup_attributes(self):
+        play_matchup = self.game.liveData.plays.currentPlay.matchup
+        self.assertIsInstance(play_matchup, GameLiveDataPlaysPlayMatchup)
+        self.assertTrue(hasattr(play_matchup, "batter"))
+        self.assertTrue(hasattr(play_matchup, "batSide"))
+        self.assertTrue(hasattr(play_matchup, "pitcher"))
+        self.assertTrue(hasattr(play_matchup, "pitchHand"))
+        self.assertTrue(hasattr(play_matchup, "batterHotColdZones"))
+        self.assertTrue(hasattr(play_matchup, "pitcherHotColdZones"))
+        self.assertTrue(hasattr(play_matchup, "splits"))
+        self.assertIsInstance(play_matchup.batter, Person)
+        self.assertIsInstance(play_matchup.pitcher, Person)
+
+    def test_Game_LiveData_Plays_Play_MatchupSplits_attributes(self):
+        matchup_splits = self.game.liveData.plays.currentPlay.matchup.splits
+        self.assertIsInstance(matchup_splits, GameLiveDataPlaysPlayMatchupSplits)
+        self.assertTrue(hasattr(matchup_splits, "batter"))
+        self.assertTrue(hasattr(matchup_splits, "pitcher"))
+        self.assertTrue(hasattr(matchup_splits, "menOnBase"))
+
+    def test_Game_LiveData_Plays_Play_Matchup_Side_attributes(self):
+        matchup_sides_batSide = self.game.liveData.plays.currentPlay.matchup.batSide
+        matchup_sides_pitchHand = self.game.liveData.plays.currentPlay.matchup.pitchHand
+        self.assertIsInstance(matchup_sides_batSide, GameLiveDataPlaysPlayMatchupSide)
+        self.assertIsInstance(matchup_sides_pitchHand, GameLiveDataPlaysPlayMatchupSide)
+        self.assertTrue(hasattr(matchup_sides_batSide, "code"))
+        self.assertTrue(hasattr(matchup_sides_pitchHand, "code"))
+        self.assertTrue(hasattr(matchup_sides_batSide, "description"))
+        self.assertTrue(hasattr(matchup_sides_pitchHand, "description"))
+
+    def test_Game_LiveData_Plays_Play_Count_attributes(self):
+        playEvents = self.game.liveData.plays.currentPlay.playEvents
+        play = self.game.liveData.plays.currentPlay
+        self.assertIsInstance(play.count, GameLiveDataPlaysPlayCount)
+        self.assertTrue(hasattr(play.count, "balls"))
+        self.assertTrue(hasattr(play.count, "strikes"))
+        self.assertTrue(hasattr(play.count, "outs"))
+        for playEvent in playEvents:
+            self.assertIsInstance(playEvent.count, GameLiveDataPlaysPlayCount)
+            self.assertTrue(hasattr(playEvent.count, "balls"))
+            self.assertTrue(hasattr(playEvent.count, "strikes"))
+            self.assertTrue(hasattr(playEvent.count, "outs"))
+
+    def test_Game_LiveData_Plays_Play_About_attributes(self):
+        play_about = self.game.liveData.plays.currentPlay.about
+        self.assertIsInstance(play_about, GameLiveDataPlaysPlayAbout)
+        self.assertTrue(hasattr(play_about, "atBatIndex"))
+        self.assertTrue(hasattr(play_about, "halfInning"))
+        self.assertTrue(hasattr(play_about, "isTopInning"))
+        self.assertTrue(hasattr(play_about, "inning"))
+        self.assertTrue(hasattr(play_about, "startTime"))
+        self.assertTrue(hasattr(play_about, "endTime"))
+        self.assertTrue(hasattr(play_about, "isComplete"))
+        self.assertTrue(hasattr(play_about, "isScoringPlay"))
+        self.assertTrue(hasattr(play_about, "hasReview"))
+        self.assertTrue(hasattr(play_about, "hasOut"))
+        self.assertTrue(hasattr(play_about, "captivatingIndex"))
+
+    def test_Game_LiveData_Plays_Play_Result_attributes(self):
+        play_result = self.game.liveData.plays.currentPlay.result
+        self.assertIsInstance(play_result, GameLiveDataPlaysPlayResult)
+        self.assertTrue(hasattr(play_result, "type"))
+        self.assertTrue(hasattr(play_result, "event"))
+        self.assertTrue(hasattr(play_result, "eventType"))
+        self.assertTrue(hasattr(play_result, "description"))
+        self.assertTrue(hasattr(play_result, "rbi"))
+        self.assertTrue(hasattr(play_result, "awayScore"))
+        self.assertTrue(hasattr(play_result, "homeScore"))
+
+    def test_Game_LiveData_Plays_Play_ByInning_attributes(self):
+        Play_ByInning = self.game.liveData.plays.playsByInning
+        for inning in Play_ByInning:
+            self.assertIsInstance(inning, GameLiveDataPlaysPlayByInning)
+            self.assertTrue(hasattr(inning, "startIndex"))
+            self.assertTrue(hasattr(inning, "endIndex"))
+            self.assertTrue(hasattr(inning, "top"))
+            self.assertTrue(hasattr(inning, "bottom"))
+            self.assertTrue(hasattr(inning, "hits"))
+
+    def test_Game_LiveData_Plays_Play_ByInning_Hits_attributes(self):
+        Play_ByInning = self.game.liveData.plays.playsByInning
+        for inning in Play_ByInning:
+            inning_hits = inning.hits
+            self.assertIsInstance(inning_hits, GameLiveDataPlaysPlayByInningHits)
+            self.assertTrue(hasattr(inning_hits, "home"))
+            self.assertTrue(hasattr(inning_hits, "away"))
+
+    def test_Game_LiveData_Plays_Play_ByInning_HitsByTeam_attributes(self):
+        Play_ByInning = self.game.liveData.plays.playsByInning
+        for inning in Play_ByInning:
+            inning_hits_home = inning.hits.home
+            inning_hits_away = inning.hits.away
+            for home_hit in inning_hits_home:
+                self.assertIsInstance(home_hit, GameLiveDataPlaysPlayByInningHitsByTeam)
+                self.assertTrue(hasattr(home_hit, "team"))
+                self.assertTrue(hasattr(home_hit, "inning"))
+                self.assertTrue(hasattr(home_hit, "pitcher"))
+                self.assertTrue(hasattr(home_hit, "batter"))
+                self.assertTrue(hasattr(home_hit, "coordinates"))
+                self.assertTrue(hasattr(home_hit, "type"))
+                self.assertTrue(hasattr(home_hit, "description"))
+                self.assertIsInstance(home_hit.team, Team)
+                self.assertIsInstance(home_hit.pitcher, Person)
+                self.assertIsInstance(home_hit.batter, Person)
+            for away_hit in inning_hits_away:
+                self.assertIsInstance(away_hit, GameLiveDataPlaysPlayByInningHitsByTeam)
+                self.assertTrue(hasattr(away_hit, "team"))
+                self.assertTrue(hasattr(away_hit, "inning"))
+                self.assertTrue(hasattr(away_hit, "pitcher"))
+                self.assertTrue(hasattr(away_hit, "batter"))
+                self.assertTrue(hasattr(away_hit, "coordinates"))
+                self.assertTrue(hasattr(away_hit, "type"))
+                self.assertTrue(hasattr(away_hit, "description"))
+                self.assertIsInstance(away_hit.team, Team)
+                self.assertIsInstance(away_hit.pitcher, Person)
+                self.assertIsInstance(away_hit.batter, Person)
+
+    def test_Game_LiveData_Plays_Play_ByInning_HitsByTeam_HitCoordinates_attributes(self):
+        Play_ByInning = self.game.liveData.plays.playsByInning
+        for inning in Play_ByInning:
+            inning_hits_home = inning.hits.home
+            inning_hits_away = inning.hits.away
+            for home_hit in inning_hits_home:
+                hit_coord = home_hit.coordinates
+                self.assertIsInstance(hit_coord, GameLiveDataPlaysPlayByInningHitsByTeamHitCoordinates)
+                self.assertTrue(hasattr(hit_coord, "x"))
+                self.assertTrue(hasattr(hit_coord, "y"))
+            for away_hit in inning_hits_away:
+                hit_coord = away_hit.coordinates
+                self.assertIsInstance(hit_coord, GameLiveDataPlaysPlayByInningHitsByTeamHitCoordinates)
+                self.assertTrue(hasattr(hit_coord, "x"))
+                self.assertTrue(hasattr(hit_coord, "y"))
+
+
+    # def test_game_liveData_attributes(self);
