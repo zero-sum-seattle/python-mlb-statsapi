@@ -551,12 +551,7 @@ class TestGame(unittest.TestCase):
                 self.assertTrue(hasattr(hit_coord, "x"))
                 self.assertTrue(hasattr(hit_coord, "y"))
 
-
-
-
-
-    # GameLiveDataLinescore
-    def test_Game_LiveData_Linescore(self):
+    def test_Game_LiveData_Linescore_attributes(self):
         linescore = self.game.liveData.linescore
         self.assertIsInstance(linescore, GameLiveDataLinescore)
         self.assertTrue(hasattr(linescore, "currentInning"))
@@ -573,18 +568,16 @@ class TestGame(unittest.TestCase):
         self.assertTrue(hasattr(linescore, "strikes"))
         self.assertTrue(hasattr(linescore, "outs"))
 
-    # GameLiveDataLinescoreInning():
-    def test_Game_LiveData_Linescore_Innings(self):
+    def test_Game_LiveData_Linescore_Innings_attributes(self):
         linescore_Innings = self.game.liveData.linescore.innings
         for inning in linescore_Innings:
-            self.assertIsInstance(inning, GameLiveDataLinescoreInnings)
+            self.assertIsInstance(inning, GameLiveDataLinescoreInning)
             self.assertTrue(hasattr(inning, "num"))
             self.assertTrue(hasattr(inning, "ordinalNum"))
             self.assertTrue(hasattr(inning, "home"))
             self.assertTrue(hasattr(inning, "away"))
 
-    # class GameLiveDataLinescoreTeamScoreInfo():
-    def test_Game_LiveData_Linescore_TeamScoreInfo(self):
+    def test_Game_LiveData_Linescore_TeamScoreInfo_attributes(self):
         linescore_Innings = self.game.liveData.linescore.innings
         for inning in linescore_Innings:
             home = inning.home
@@ -600,15 +593,13 @@ class TestGame(unittest.TestCase):
             self.assertTrue(hasattr(away, "errors"))
             self.assertTrue(hasattr(away, "leftOnBase"))
 
-    # class GameLiveDataLinescoreTeams():
-    def test_Game_LiveData_Linescore_Teams(self):
+    def test_Game_LiveData_Linescore_Teams_attributes(self):
         linescore_Innings = self.game.liveData.linescore.teams
         self.assertIsInstance(linescore_Innings, GameLiveDataLinescoreTeams)
         self.assertTrue(hasattr(linescore_Innings, "home"))
         self.assertTrue(hasattr(linescore_Innings, "away"))
 
-    # class GameLiveDataLinescoreDefense():
-    def test_Game_LiveData_Linescore_Defense(self):
+    def test_Game_LiveData_Linescore_Defense_attributes(self):
         linescore_Defense = self.game.liveData.linescore.defense
         self.assertIsInstance(linescore_Defense, GameLiveDataLinescoreDefense)
         self.assertTrue(hasattr(linescore_Defense, "pitcher"))
@@ -639,8 +630,7 @@ class TestGame(unittest.TestCase):
         self.assertIsInstance(linescore_Defense.inHole, Person)
         self.assertIsInstance(linescore_Defense.team, Team)
 
-    # class GameLiveDataLinescoreOffense():
-    def test_Game_LiveData_Linescore_Offense(self):
+    def test_Game_LiveData_Linescore_Offense_attributes(self):
         linescore_Offense = self.game.liveData.linescore.offense
         self.assertIsInstance(linescore_Offense, GameLiveDataLinescoreOffense)
         self.assertTrue(hasattr(linescore_Offense, "batter"))
@@ -656,23 +646,119 @@ class TestGame(unittest.TestCase):
         self.assertIsInstance(linescore_Offense.pitcher, Person)
         self.assertIsInstance(linescore_Offense.team, Team)
 
-    # class GameLiveDataLinescoreOffenseOnBase():
-    def test_Game_LiveData_Linescore_Offense_OnBase(self):
-        Offense_Onbase = self.game.liveData.linescore.offense.onBase
-        self.assertIsInstance(Offense_Onbase, GameLiveDataLinescoreOffenseOnBase)
-        self.assertTrue(hasattr(Offense_Onbase, "first"))
-        self.assertTrue(hasattr(Offense_Onbase, "second"))
-        self.assertTrue(hasattr(Offense_Onbase, "third"))
-        if Offense_Onbase.first:
-            self.assertIsInstance(Offense_Onbase.first, Person)
-        if Offense_Onbase.second:
-            self.assertIsInstance(Offense_Onbase.second, Person)
-        if Offense_Onbase.third:
-            self.assertIsInstance(Offense_Onbase.third, Person)
+    def test_Game_LiveData_Linescore_Offense_OnBase_attributes(self):
+        if self.game.liveData.linescore.offense.onBase:
+            Offense_Onbase = self.game.liveData.linescore.offense.onBase
+            self.assertIsInstance(Offense_Onbase, GameLiveDataLinescoreOffenseOnBase)
+            self.assertTrue(hasattr(Offense_Onbase, "first"))
+            self.assertTrue(hasattr(Offense_Onbase, "second"))
+            self.assertTrue(hasattr(Offense_Onbase, "third"))
+            if Offense_Onbase.first:
+                self.assertIsInstance(Offense_Onbase.first, Person)
+            if Offense_Onbase.second:
+                self.assertIsInstance(Offense_Onbase.second, Person)
+            if Offense_Onbase.third:
+                self.assertIsInstance(Offense_Onbase.third, Person)
 
+    def test_Game_LiveData_BoxScore_attributes(self):
+        BoxScore = self.game.liveData.boxscore
+        self.assertIsInstance(BoxScore, GameLiveDataBoxScore)
+        self.assertTrue(hasattr(BoxScore, "teams"))
+        self.assertTrue(hasattr(BoxScore, "officials"))
+        self.assertTrue(hasattr(BoxScore, "info"))
+        self.assertTrue(hasattr(BoxScore, "pitchingNotes"))
 
+    def test_Game_LiveData_BoxScore_Teams_attributes(self):
+        BoxScore_Teams = self.game.liveData.boxscore.teams
+        self.assertIsInstance(BoxScore_Teams, GameLiveDataBoxScoreTeams)
+        self.assertTrue(hasattr(BoxScore_Teams, "home"))
+        self.assertTrue(hasattr(BoxScore_Teams, "away"))
+        self.assertIsInstance(BoxScore_Teams.home, GameLiveDataBoxScoreTeamsTeam)
+        self.assertIsInstance(BoxScore_Teams.away, GameLiveDataBoxScoreTeamsTeam)
 
+    def test_Game_LiveData_BoxScore_Teams_Team_attributes(self):
+        Teams_home = self.game.liveData.boxscore.teams.home
+        Teams_away = self.game.liveData.boxscore.teams.away
+        self.assertIsInstance(Teams_home, GameLiveDataBoxScoreTeamsTeam)
+        self.assertIsInstance(Teams_away, GameLiveDataBoxScoreTeamsTeam)
+        self.assertTrue(hasattr(Teams_home, "team"))
+        self.assertTrue(hasattr(Teams_home, "teamStats"))
+        self.assertTrue(hasattr(Teams_home, "players"))
+        self.assertTrue(hasattr(Teams_home, "batters"))
+        self.assertTrue(hasattr(Teams_home, "pitchers"))
+        self.assertTrue(hasattr(Teams_home, "bench"))
+        self.assertTrue(hasattr(Teams_home, "bullpen"))
+        self.assertTrue(hasattr(Teams_home, "battingOrder"))
+        self.assertTrue(hasattr(Teams_home, "info"))
+        self.assertTrue(hasattr(Teams_home, "note"))
+        self.assertTrue(hasattr(Teams_away, "team"))
+        self.assertTrue(hasattr(Teams_away, "teamStats"))
+        self.assertTrue(hasattr(Teams_away, "players"))
+        self.assertTrue(hasattr(Teams_away, "batters"))
+        self.assertTrue(hasattr(Teams_away, "pitchers"))
+        self.assertTrue(hasattr(Teams_away, "bench"))
+        self.assertTrue(hasattr(Teams_away, "bullpen"))
+        self.assertTrue(hasattr(Teams_away, "battingOrder"))
+        self.assertTrue(hasattr(Teams_away, "info"))
+        self.assertTrue(hasattr(Teams_away, "note"))
+        self.assertIsInstance(Teams_home.team, Team)
+        self.assertIsInstance(Teams_away.team, Team)
 
+    def test_Game_LiveData_BoxScore_Teams_Team_Info_attributes(self):
+        Teams_home = self.game.liveData.boxscore.teams.home.info
+        Teams_away = self.game.liveData.boxscore.teams.away.info
+        for info in Teams_home:
+            self.assertIsInstance(info, GameLiveDataBoxScoreTeamsTeamInfoGroup)
+            self.assertTrue(hasattr(info, "title"))
+            self.assertTrue(hasattr(info, "fieldList"))
+            for fieldList in info.fieldList:
+                self.assertIsInstance(fieldList, GameLiveDataBoxScoreVL)
+                self.assertTrue(hasattr(fieldList, "label"))
+                self.assertTrue(hasattr(fieldList, "value"))
+        for info in Teams_away:
+            self.assertIsInstance(info, GameLiveDataBoxScoreTeamsTeamInfoGroup)
+            self.assertTrue(hasattr(info, "title"))
+            self.assertTrue(hasattr(info, "fieldList"))
+            for fieldList in info.fieldList:
+                self.assertIsInstance(fieldList, GameLiveDataBoxScoreVL)
+                self.assertTrue(hasattr(fieldList, "label"))
+                self.assertTrue(hasattr(fieldList, "value"))
 
+    def test_Game_LiveData_BoxScore_Official_attributes(self):
+        BoxScore_Officials = self.game.liveData.boxscore.officials
+        for official in BoxScore_Officials:
+            self.assertIsInstance(official, GameLiveDataBoxScoreOffical)
+            self.assertTrue(hasattr(official, "official"))
+            self.assertTrue(hasattr(official, "officialType"))
+            self.assertIsInstance(official.official, Person)
 
-    # def test_game_liveData_attributes(self);
+    def test_Game_LiveData_BoxScore_Info_attributes(self):
+        BoxScore_Info = self.game.liveData.boxscore.info
+        for info in BoxScore_Info:
+            self.assertIsInstance(info, GameLiveDataBoxScoreVL)
+            self.assertTrue(hasattr(info, "label"))
+            self.assertTrue(hasattr(info, "value"))
+
+    def test_Game_LiveData_Decisions_attributes(self):
+        liveData_decisions = self.game.liveData.decisions
+        self.assertIsInstance(liveData_decisions, GameLiveDataDecisions)
+        self.assertTrue(hasattr(liveData_decisions, "winner"))
+        self.assertTrue(hasattr(liveData_decisions, "loser"))
+        self.assertIsInstance(liveData_decisions.winner, Person)
+        self.assertIsInstance(liveData_decisions.loser, Person)
+
+    def test_Game_LiveData_Leaders_attributes(self):
+        liveData_leaders = self.game.liveData.leaders
+        self.assertIsInstance(liveData_leaders, GameLiveDataLeaders)
+        self.assertTrue(hasattr(liveData_leaders, "hitDistance"))
+        self.assertTrue(hasattr(liveData_leaders, "hitSpeed"))
+        self.assertTrue(hasattr(liveData_leaders, "pitchSpeed"))
+
+    def test_game_liveData_attributes(self):
+        LiveData = self.game.liveData
+        self.assertIsInstance(LiveData, GameLiveData)
+        self.assertTrue(hasattr(LiveData, "plays"))
+        self.assertTrue(hasattr(LiveData, "linescore"))
+        self.assertTrue(hasattr(LiveData, "boxscore"))
+        self.assertTrue(hasattr(LiveData, "decisions"))
+        self.assertTrue(hasattr(LiveData, "leaders"))

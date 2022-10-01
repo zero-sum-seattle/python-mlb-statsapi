@@ -1080,20 +1080,20 @@ class GameLiveDataLinescoreDefense():
     team: Team
 
     def __init__(self,
-                pitcher: Person,
-                catcher: Person,
-                first: Person,
-                second: Person,
-                third: Person,
-                shortstop: Person,
-                left: Person,
-                center: Person,
-                right: Person,
-                batter: Person,
-                onDeck: Person,
-                inHole: Person,
+                pitcher: Dict,
+                catcher: Dict,
+                first: Dict,
+                second: Dict,
+                third: Dict,
+                shortstop: Dict,
+                left: Dict,
+                center: Dict,
+                right: Dict,
+                batter: Dict,
+                onDeck: Dict,
+                inHole: Dict,
                 battingOrder: int,
-                team: Team,
+                team: Dict,
                 **kwargs) -> None:
         self.pitcher = Person(**pitcher)
         self.catcher = Person(**catcher)
@@ -1115,9 +1115,9 @@ class GameLiveDataLinescoreOffenseOnBase():
     second: Person
     third: Person
     def __init__(self,
-                first: Person = None,
-                second: Person = None,
-                third: Person = None,
+                first: Dict = None,
+                second: Dict = None,
+                third: Dict = None,
                 **kwargs) -> None:
         self.first = Person(**first) if first else first
         self.second = Person(**second) if second else second
@@ -1129,18 +1129,18 @@ class GameLiveDataLinescoreOffense():
     onDeck: Person
     inHole: Person
     pitcher: Person
-    battingOrder: Int
+    battingOrder: int
     team: Team
-    onBase: OnBase
+    onBase: GameLiveDataLinescoreOffenseOnBase
 
     def __init__(self,
-                batter: Person,
-                onDeck: Person,
-                inHole: Person,
-                pitcher: Person,
-                battingOrder: Int,
-                team: Team,
-                onBase: OnBase = None,
+                batter: Dict,
+                onDeck: Dict,
+                inHole: Dict,
+                pitcher: Dict,
+                battingOrder: int,
+                team: Dict,
+                onBase: Dict = None,
                 **kwargs) -> None:
         self.batter = Person(**batter)
         self.onDeck = Person(**onDeck)
@@ -1194,12 +1194,121 @@ class GameLiveDataLinescore():
         self.strikes = strikes
         self.outs = outs
 
+class GameLiveDataBoxScoreVL():
+    label: str
+    value: str
+
+    def __init__(self, label: str, value: str = None, **kwargs) -> None:
+        self.label = label
+        self.value = value
+
+class GameLiveDataBoxScoreTeamsTeamInfoGroup():
+    title: str
+    fieldList: List[GameLiveDataBoxScoreVL]
+
+    def __init__(self, title: str, fieldList: List, **kwargs) -> None:
+        self.title = title
+        self.fieldList = [GameLiveDataBoxScoreVL(**fieldLists) for fieldLists in fieldList]
+
+class GameLiveDataBoxScoreTeamsTeam():
+    team: Team
+    teamStats: Dict
+    players: Dict
+    batters: List[int]
+    pitchers: List[int]
+    bench: List[int]
+    bullpen: List[int]
+    battingOrder: List[int]
+    info: List[GameLiveDataBoxScoreTeamsTeamInfoGroup]
+    note: List[str]
+
+    def __init__(self,
+                team: Dict,
+                teamStats: Dict,
+                players: Dict,
+                batters: List,
+                pitchers: List,
+                bench: List,
+                bullpen: List,
+                battingOrder: List,
+                info: List,
+                note: List,
+                **kwargs) -> None:
+        self.team = Team(**team)
+        self.teamStats = teamStats
+        self.players = players
+        self.batters = batters
+        self.pitchers = pitchers
+        self.bench = bench
+        self.bullpen = bullpen
+        self.battingOrder = battingOrder
+        self.info = [GameLiveDataBoxScoreTeamsTeamInfoGroup(**infos) for infos in info]
+        self.note = note
+
+class GameLiveDataBoxScoreTeams():
+    home: GameLiveDataBoxScoreTeamsTeam
+    away: GameLiveDataBoxScoreTeamsTeam
+
+    def __init__(self, home: Dict, away: Dict, **kwargs) -> None:
+        self.home = GameLiveDataBoxScoreTeamsTeam(**home)
+        self.away = GameLiveDataBoxScoreTeamsTeam(**away)
+
+class GameLiveDataBoxScoreOffical():
+    official: Person
+    officialType: str
+
+    def __init__(self, official: Dict, officialType: str, **kwargs) -> None:
+        self.official = Person(**official)
+        self.officialType = officialType
+
+class GameLiveDataBoxScore():
+    teams: GameLiveDataBoxScoreTeams
+    officials: List[GameLiveDataBoxScoreOffical]
+    info: List[GameLiveDataBoxScoreVL]
+    pitchingNotes: List[str]
+
+    def __init__(self,
+                teams: Dict,
+                officials: List,
+                info: List,
+                pitchingNotes: List,
+                **kwargs) -> None:
+        self.teams = GameLiveDataBoxScoreTeams(**teams)
+        self.officials = [GameLiveDataBoxScoreOffical(**official) for official in officials]
+        self.info = [GameLiveDataBoxScoreVL(**infos) for infos in info]
+        self.pitchingNotes = pitchingNotes
+
+class GameLiveDataDecisions():
+    winner: Person
+    loser: Person
+    def __init__(self,
+                winner: Dict,
+                loser: Dict,
+                **kwargs) -> None:
+        self.winner = Person(**winner)
+        self.loser = Person(**loser)
+
+class GameLiveDataLeaders():
+    # Dont know what this populated looks like. Every game ive seen its three empty dicts?
+    hitDistance: Dict
+    hitSpeed: Dict
+    pitchSpeed: Dict
+
+    def __init__(self,
+                hitDistance: Dict,
+                hitSpeed: Dict,
+                pitchSpeed: Dict,
+                **kwargs) -> None:
+        self.hitDistance = hitDistance
+        self.hitSpeed = hitSpeed
+        self.pitchSpeed = pitchSpeed
+
 class GameLiveData():
     plays: GameLiveDataPlays
-    linescore: Dict
-    boxscore: Dict
-    decisions: Dict
-    leaders: Dict
+    linescore: GameLiveDataLinescore
+    boxscore: GameLiveDataBoxScore
+    decisions: GameLiveDataDecisions
+    leaders: GameLiveDataLeaders
 
     def __init__(self,
                 plays: Dict,
@@ -1209,10 +1318,10 @@ class GameLiveData():
                 decisions: Dict = None,
                 **kwargs) -> None:
         self.plays = GameLiveDataPlays(**plays)
-        self.linescore = linescore
-        self.boxscore = boxscore
-        self.decisions = decisions
-        self.leaders = leaders
+        self.linescore = GameLiveDataLinescore(**linescore)
+        self.boxscore = GameLiveDataBoxScore(**boxscore)
+        self.decisions = GameLiveDataDecisions(**decisions) if decisions else decisions
+        self.leaders = GameLiveDataLeaders(**leaders)
 
 class Game():
     id: int
