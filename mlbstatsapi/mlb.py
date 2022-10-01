@@ -1015,6 +1015,185 @@ class GameLiveDataPlays():
         self.playsByInning = [GameLiveDataPlaysPlayByInning(**inning) for inning in playsByInning if inning]
 
 
+
+
+
+class GameLiveDataLinescoreTeamScoreInfo():
+    runs: int
+    hits: int
+    errors: int
+    leftOnBase: int
+
+    def __init__(self,
+                hits: int,
+                errors: int,
+                leftOnBase: int,
+                runs: int = None,
+                **kwargs) -> None:
+        self.runs = runs
+        self.hits = hits
+        self.errors = errors
+        self.leftOnBase = leftOnBase
+
+class GameLiveDataLinescoreInning():
+    num: int
+    ordinalNum: str
+    home: GameLiveDataLinescoreTeamScoreInfo
+    away: GameLiveDataLinescoreTeamScoreInfo
+
+    def __init__(self,
+                num: int,
+                ordinalNum: str,
+                home: Dict,
+                away: Dict,
+                **kwargs) -> None:
+        self.num = num
+        self.ordinalNum = ordinalNum
+        self.home = GameLiveDataLinescoreTeamScoreInfo(**home)
+        self.away = GameLiveDataLinescoreTeamScoreInfo(**away)
+
+class GameLiveDataLinescoreTeams():
+    home: GameLiveDataLinescoreTeamScoreInfo
+    away: GameLiveDataLinescoreTeamScoreInfo
+
+    def __init__(self,
+                home: Dict,
+                away: Dict,
+                **kwargs) -> None:
+        self.home = GameLiveDataLinescoreTeamScoreInfo(**home)
+        self.away = GameLiveDataLinescoreTeamScoreInfo(**away)
+
+class GameLiveDataLinescoreDefense():
+    pitcher: Person
+    catcher: Person
+    first: Person
+    second: Person
+    third: Person
+    shortstop: Person
+    left: Person
+    center: Person
+    right: Person
+    batter: Person
+    onDeck: Person
+    inHole: Person
+    battingOrder: int
+    team: Team
+
+    def __init__(self,
+                pitcher: Person,
+                catcher: Person,
+                first: Person,
+                second: Person,
+                third: Person,
+                shortstop: Person,
+                left: Person,
+                center: Person,
+                right: Person,
+                batter: Person,
+                onDeck: Person,
+                inHole: Person,
+                battingOrder: int,
+                team: Team,
+                **kwargs) -> None:
+        self.pitcher = Person(**pitcher)
+        self.catcher = Person(**catcher)
+        self.first = Person(**first)
+        self.second = Person(**second)
+        self.third = Person(**third)
+        self.shortstop = Person(**shortstop)
+        self.left = Person(**left)
+        self.center = Person(**center)
+        self.right = Person(**right)
+        self.batter = Person(**batter)
+        self.onDeck = Person(**onDeck)
+        self.inHole = Person(**inHole)
+        self.battingOrder = battingOrder
+        self.team = Team(**team)
+
+class GameLiveDataLinescoreOffenseOnBase():
+    first: Person
+    second: Person
+    third: Person
+    def __init__(self,
+                first: Person = None,
+                second: Person = None,
+                third: Person = None,
+                **kwargs) -> None:
+        self.first = Person(**first) if first else first
+        self.second = Person(**second) if second else second
+        self.third = Person(**third) if third else third
+
+
+class GameLiveDataLinescoreOffense():
+    batter: Person
+    onDeck: Person
+    inHole: Person
+    pitcher: Person
+    battingOrder: Int
+    team: Team
+    onBase: OnBase
+
+    def __init__(self,
+                batter: Person,
+                onDeck: Person,
+                inHole: Person,
+                pitcher: Person,
+                battingOrder: Int,
+                team: Team,
+                onBase: OnBase = None,
+                **kwargs) -> None:
+        self.batter = Person(**batter)
+        self.onDeck = Person(**onDeck)
+        self.inHole = Person(**inHole)
+        self.pitcher = Person(**pitcher)
+        self.battingOrder = battingOrder
+        self.team = Team(**team)
+        self.onBase = GameLiveDataLinescoreOffenseOnBase(**onBase) if onBase else onBase
+
+class GameLiveDataLinescore():
+    currentInning: int
+    currentInningOrdinal: str
+    inningState: str
+    inningHalf: str
+    isTopInning: bool
+    scheduledInnings: int
+    innings: List[GameLiveDataLinescoreInning]
+    teams: GameLiveDataLinescoreTeams
+    defense: GameLiveDataLinescoreDefense
+    offense: GameLiveDataLinescoreOffense
+    balls: int
+    strikes: int
+    outs: int
+
+    def __init__(self,
+                currentInning: int,
+                currentInningOrdinal: str,
+                inningState: str,
+                inningHalf: str,
+                isTopInning: bool,
+                scheduledInnings: int,
+                innings: List,
+                teams: Dict,
+                defense: Dict,
+                offense: Dict,
+                balls: int,
+                strikes: int,
+                outs: int,
+                **kwargs) -> None:
+        self.currentInning = currentInning
+        self.currentInningOrdinal = currentInningOrdinal
+        self.inningState = inningState
+        self.inningHalf = inningHalf
+        self.isTopInning = isTopInning
+        self.scheduledInnings = scheduledInnings
+        self.innings = [GameLiveDataLinescoreInning(**inning) for inning in innings]
+        self.teams = GameLiveDataLinescoreTeams(**teams)
+        self.defense = GameLiveDataLinescoreDefense(**defense)
+        self.offense = GameLiveDataLinescoreOffense(**offense)
+        self.balls = balls
+        self.strikes = strikes
+        self.outs = outs
+
 class GameLiveData():
     plays: GameLiveDataPlays
     linescore: Dict
