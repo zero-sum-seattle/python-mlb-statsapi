@@ -1,10 +1,13 @@
 ﻿from typing import Dict, List
 import unittest
-from mlbstatsapi.mlbapi import *
-from mlbstatsapi.mlb import *
-from mlbstatsapi.exceptions import TheMlbStatsApiException
-
-
+from mlbstatsapi import Mlb
+from mlbstatsapi import MlbResult
+from mlbstatsapi.models.stats import Stats
+from mlbstatsapi.models.person import Person
+from mlbstatsapi.models.team import Team
+from mlbstatsapi.models.game import Game
+from mlbstatsapi.models.league import League
+from mlbstatsapi.models.sport import Sport
 
 class TestMlbDataApi(unittest.TestCase):
 

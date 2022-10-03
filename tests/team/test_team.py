@@ -1,7 +1,6 @@
 ﻿import unittest
 from unittest.mock import Mock, patch
-from mlbstatsapi.mlb import *
-
+from mlbstatsapi.models.team import Team
 
 class TestTeam(unittest.TestCase):
     @classmethod

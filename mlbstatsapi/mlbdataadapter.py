@@ -1,15 +1,13 @@
-import requests
-from typing import List, Dict
+from typing import Dict
 from .exceptions import TheMlbStatsApiException
+import requests
 import logging
 
-
 class MlbResult:
-    def __init__(self, status_code: int, message: str, data: List[Dict] = []):
+    def __init__(self, status_code: int, message: str, data: Dict = {}):
         self.status_code = int(status_code)
         self.message = str(message)
-        self.data = data if data else []
-
+        self.data = data if data else {}
 
 class MlbDataAdapter:
     """Adapter for calling the mlb statsapi endpoint"""
@@ -17,7 +15,7 @@ class MlbDataAdapter:
     def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
         self.url = f"https://{hostname}/api/{ver}/" # we'll figure out the v1.1 endpoint later
         self._logger = logger or logging.getLogger(__name__)
-
+        self._logger.setLevel(logging.DEBUG)
 
     def get(self, endpoint: str, data: Dict = None) -> MlbResult:
         full_url = self.url + endpoint # pass endpoint from inhertited classes
@@ -45,7 +43,7 @@ class MlbDataAdapter:
 
         elif response.status_code >= 400 and response.status_code <= 499:  # catch HTTP error
             self._logger.error(msg=logline_post.format("Invalid Request", response.status_code, response.reason)) # log failure
-            return MlbResult(response.status_code, message=response.reason)
+            return MlbResult(response.status_code, message=response.reason, data={})
 
         elif response.status_code >= 500 and response.status_code <= 599:
             self._logger.error(msg=logline_post.format("Internal error occurred", response.status_code, response.reason))
@@ -53,5 +51,3 @@ class MlbDataAdapter:
 
         else:
             raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}") # raise exception 
-
-

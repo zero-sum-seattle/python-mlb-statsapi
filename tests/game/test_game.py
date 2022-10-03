@@ -1,7 +1,5 @@
 import unittest
-from unittest.mock import Mock, patch
-from mlbstatsapi.mlbapi import *
-from mlbstatsapi.mlb import *
+from mlbstatsapi.models.game import Game
 
 
 class TestGame(unittest.TestCase):
