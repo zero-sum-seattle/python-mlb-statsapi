@@ -1,8 +1,8 @@
 ﻿from typing import List, Dict, Union
-from mlbstatsapi import MlbObject
-from mlbstatsapi.stats import Stats
+from mlbstatsapi.models.stats import Stats
+from mlbstatsapi.models.league import League
 
-class Team(MlbObject):
+class Team():
     """
     A class to represent a Team.
 
