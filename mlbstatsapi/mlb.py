@@ -1,5 +1,5 @@
 from typing import List, Dict
-from mlbstatsapi.mlbdataadapter import MlbDataAdapter
+from .mlbdataadapter import MlbDataAdapter
 from .exceptions import TheMlbStatsApiException
 
 
@@ -19,32 +19,6 @@ class MlbObject:
             # implement other class stats for leagues, etc, also you shouldn't be able to call this on the MlbObject
             pass
 
-
-class Person(MlbObject):
-    # Basic Person Class
-    id: int
-    full_name: str
-    link: str
-    mlb_class = "people"
-    stats: List
-    
-    def __init__(self, id: int, fullName: str = None, link: str = None, reload: bool = False, **kwargs) -> None:
-        self.id = id # person id
-        self.full_name = fullName # person full_name
-        self.link = link# person link
-        self.__dict__.update(kwargs) # let's do this for a sloppy apply
-
-
-class Team(MlbObject):
-    id: int
-    name: str
-    link: str
-    mlb_class = "team"
-    def __init__(self, id: int, name: str, link: str, **kwargs) -> None:
-        self.id = id
-        self.name = name
-        self.link = link
-        self.__dict__.update(kwargs)
 
 class Sport():
     id: int
