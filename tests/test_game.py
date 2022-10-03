@@ -18,7 +18,6 @@ class TestGame(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
         cls.game = cls.mlb.get_game(662242)
-        pass
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -28,7 +27,7 @@ class TestGame(unittest.TestCase):
          with self.assertRaises(TypeError):
             game = Game()
 
-    def test_player_instance_position_arguments(self):
+    def test_game_instance_position_arguments(self):
         game = self.game
         self.assertEqual(game.id, 662242)
         self.assertIsInstance(game, Game)
@@ -50,7 +49,7 @@ class TestGame(unittest.TestCase):
 
     def test_game_metaData_attributes(self):
         metaData = self.game.metaData
-        self.assertIsInstance(metaData, GameMetaData)
+        self.assertIsInstance(metaData, MetaData)
         self.assertTrue(hasattr(metaData, "wait"))
         self.assertTrue(hasattr(metaData, "timeStamp"))
         self.assertTrue(hasattr(metaData, "gameEvents"))
@@ -58,7 +57,7 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_attributes(self):
         gameData = self.game.gameData
-        self.assertIsInstance(gameData, GameGameData)
+        self.assertIsInstance(gameData, GameData)
         self.assertTrue(hasattr(gameData, "game"))
         self.assertTrue(hasattr(gameData, "datetime"))
         self.assertTrue(hasattr(gameData, "status"))
@@ -75,7 +74,7 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_game_attributes(self):
         gameData_game = self.game.gameData.game
-        self.assertIsInstance(gameData_game, GameGameDataGame)
+        self.assertIsInstance(gameData_game, GameDataGame)
         self.assertTrue(hasattr(gameData_game, "pk"))
         self.assertTrue(hasattr(gameData_game, "type"))
         self.assertTrue(hasattr(gameData_game, "doubleHeader"))
@@ -89,7 +88,7 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_datetime_attributes(self):
         gameData_datetime = self.game.gameData.datetime
-        self.assertIsInstance(gameData_datetime, GameGameDataDatetime)
+        self.assertIsInstance(gameData_datetime, GameDataDatetime)
         self.assertTrue(hasattr(gameData_datetime, "dateTime"))
         self.assertTrue(hasattr(gameData_datetime, "originalDate"))
         self.assertTrue(hasattr(gameData_datetime, "officialDate"))
@@ -99,7 +98,7 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_status_attributes(self):
         gameData_status = self.game.gameData.status
-        self.assertIsInstance(gameData_status, GameGameDataStatus)
+        self.assertIsInstance(gameData_status, GameDataStatus)
         self.assertTrue(hasattr(gameData_status, "abstractGameState"))
         self.assertTrue(hasattr(gameData_status, "codedGameState"))
         self.assertTrue(hasattr(gameData_status, "detailedState"))
@@ -109,15 +108,15 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_teams_attributes(self):
         gameData_teams = self.game.gameData.teams
-        self.assertIsInstance(gameData_teams, GameGameDataTeams)
+        self.assertIsInstance(gameData_teams, GameDataTeams)
         self.assertTrue(hasattr(gameData_teams, "away"))
         self.assertTrue(hasattr(gameData_teams, "home"))
 
     def test_game_gameData_teams_team_attributes(self):
         teams_away = self.game.gameData.teams.away
         teams_home = self.game.gameData.teams.home
-        self.assertIsInstance(teams_away, GameGameDataTeamsTeam)
-        self.assertIsInstance(teams_home, GameGameDataTeamsTeam)
+        self.assertIsInstance(teams_away, GameDataTeamsTeam)
+        self.assertIsInstance(teams_home, GameDataTeamsTeam)
         self.assertTrue(hasattr(teams_away, "springLeague"))
         self.assertTrue(hasattr(teams_home, "springLeague"))
         self.assertTrue(hasattr(teams_away, "allStarStatus"))
@@ -166,8 +165,8 @@ class TestGame(unittest.TestCase):
     def test_game_gameData_teams_team_Record_attributes(self):
         away_Record = self.game.gameData.teams.away.record
         home_Record = self.game.gameData.teams.home.record
-        self.assertIsInstance(away_Record, GameGameDataTeamsTeamRecord)
-        self.assertIsInstance(home_Record, GameGameDataTeamsTeamRecord)
+        self.assertIsInstance(away_Record, GameDataTeamsTeamRecord)
+        self.assertIsInstance(home_Record, GameDataTeamsTeamRecord)
         self.assertTrue(hasattr(away_Record, "gamesPlayed"))
         self.assertTrue(hasattr(home_Record, "gamesPlayed"))
         self.assertTrue(hasattr(away_Record, "wildCardGamesBack"))
@@ -204,7 +203,7 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_venue_attributes(self):
         gameData_venue = self.game.gameData.venue
-        self.assertIsInstance(gameData_venue, GameGameDataVenue)
+        self.assertIsInstance(gameData_venue, GameDataVenue)
         self.assertTrue(hasattr(gameData_venue, "id"))
         self.assertTrue(hasattr(gameData_venue, "name"))
         self.assertTrue(hasattr(gameData_venue, "link"))
@@ -215,7 +214,7 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_venue_fieldInfo_attributes(self):
         venue_fieldInfo = self.game.gameData.venue.fieldInfo
-        self.assertIsInstance(venue_fieldInfo, GameGameDataVenueFieldInfo)
+        self.assertIsInstance(venue_fieldInfo, GameDataVenueFieldInfo)
         self.assertTrue(hasattr(venue_fieldInfo, "capacity"))
         self.assertTrue(hasattr(venue_fieldInfo, "turfType"))
         self.assertTrue(hasattr(venue_fieldInfo, "roofType"))
@@ -228,14 +227,14 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_venue_timeZone_attributes(self):
         venue_timeZone = self.game.gameData.venue.timeZone
-        self.assertIsInstance(venue_timeZone, GameGameDataVenueTimeZone)
+        self.assertIsInstance(venue_timeZone, GameDataVenueTimeZone)
         self.assertTrue(hasattr(venue_timeZone, "id"))
         self.assertTrue(hasattr(venue_timeZone, "offset"))
         self.assertTrue(hasattr(venue_timeZone, "tz"))
 
     def test_game_gameData_venue_location_attributes(self):
         venue_location = self.game.gameData.venue.location
-        self.assertIsInstance(venue_location, GameGameDataVenueLocation)
+        self.assertIsInstance(venue_location, GameDataVenueLocation)
         self.assertTrue(hasattr(venue_location, "address1"))
         self.assertTrue(hasattr(venue_location, "city"))
         self.assertTrue(hasattr(venue_location, "state"))
@@ -247,20 +246,20 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_venue_location_coordinates_attributes(self):
         location_coordinates = self.game.gameData.venue.location.defaultCoordinates
-        self.assertIsInstance(location_coordinates, GameGameDataVenueLocationCoordinates)
+        self.assertIsInstance(location_coordinates, GameDataVenueLocationCoordinates)
         self.assertTrue(hasattr(location_coordinates, "latitude"))
         self.assertTrue(hasattr(location_coordinates, "longitude"))
 
     def test_game_gameData_weather_attributes(self):
         gameData_weather = self.game.gameData.weather
-        self.assertIsInstance(gameData_weather, GameGameDataWeather)
+        self.assertIsInstance(gameData_weather, GameDataWeather)
         self.assertTrue(hasattr(gameData_weather, "condition"))
         self.assertTrue(hasattr(gameData_weather, "temp"))
         self.assertTrue(hasattr(gameData_weather, "wind"))
 
     def test_game_gameData_gameInfo_attributes(self):
         gameData_gameInfo = self.game.gameData.gameInfo
-        self.assertIsInstance(gameData_gameInfo, GameGameDataGameInfo)
+        self.assertIsInstance(gameData_gameInfo, GameDataGameInfo)
         self.assertTrue(hasattr(gameData_gameInfo, "attendance"))
         self.assertTrue(hasattr(gameData_gameInfo, "firstPitch"))
         self.assertTrue(hasattr(gameData_gameInfo, "gameDurationMinutes"))
@@ -268,7 +267,7 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_review_attributes(self):
         gameData_review = self.game.gameData.review
-        self.assertIsInstance(gameData_review, GameGameDataReview)
+        self.assertIsInstance(gameData_review, GameDataReview)
         self.assertTrue(hasattr(gameData_review, "hasChallenges"))
         self.assertTrue(hasattr(gameData_review, "away"))
         self.assertTrue(hasattr(gameData_review, "home"))
@@ -276,8 +275,8 @@ class TestGame(unittest.TestCase):
     def test_game_gameData_review_team_attributes(self):
         review_home = self.game.gameData.review.home
         review_away = self.game.gameData.review.away
-        self.assertIsInstance(review_home, GameGameDataReviewTeam)
-        self.assertIsInstance(review_away, GameGameDataReviewTeam)
+        self.assertIsInstance(review_home, GameDataReviewTeam)
+        self.assertIsInstance(review_away, GameDataReviewTeam)
         self.assertTrue(hasattr(review_home, "used"))
         self.assertTrue(hasattr(review_away, "used"))
         self.assertTrue(hasattr(review_home, "remaining"))
@@ -285,7 +284,7 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_flags_attributes(self):
         gameData_flags = self.game.gameData.flags
-        self.assertIsInstance(gameData_flags, GameGameDataFlags)
+        self.assertIsInstance(gameData_flags, GameDataFlags)
         self.assertTrue(hasattr(gameData_flags, "noHitter"))
         self.assertTrue(hasattr(gameData_flags, "perfectGame"))
         self.assertTrue(hasattr(gameData_flags, "awayTeamNoHitter"))
@@ -295,7 +294,7 @@ class TestGame(unittest.TestCase):
 
     def test_game_gameData_probablePitchers_attributes(self):
         gameData_probablePitchers = self.game.gameData.probablePitchers
-        self.assertIsInstance(gameData_probablePitchers, GameGameDataProbablePitchers)
+        self.assertIsInstance(gameData_probablePitchers, GameDataProbablePitchers)
         self.assertTrue(hasattr(gameData_probablePitchers, "away"))
         self.assertTrue(hasattr(gameData_probablePitchers, "home"))
         self.assertIsInstance(gameData_probablePitchers.away, Person)
