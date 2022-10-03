@@ -1,10 +1,13 @@
 ﻿import unittest
 from mlbstatsapi.models.person import Person
+from mlbstatsapi.models.person import PrimaryPosition
+from mlbstatsapi import Mlb
 
 class TestPerson(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        pass
+        cls.mlb = Mlb()
+        cls.player = cls.mlb.get_person(664034)[0]
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -26,3 +29,20 @@ class TestPerson(unittest.TestCase):
         self.assertTrue(hasattr(player, "_mlb_adapter"))
 
 
+class TestPersonPrimaryPosition(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.position_player = cls.mlb.get_person(664034)[0]
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
+
+    def test_player_position_player_position(self):
+
+        self.assertIsInstance(self.position_player.primary_position, PrimaryPosition)
+        self.assertTrue(hasattr(self.position_player.primary_position, "code"))
+        self.assertTrue(hasattr(self.position_player.primary_position, "name"))
+        self.assertTrue(hasattr(self.position_player.primary_position, "type"))
+        self.assertTrue(hasattr(self.position_player.primary_position, "abbreviation"))

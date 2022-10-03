@@ -1,11 +1,13 @@
 ﻿import unittest
 from unittest.mock import Mock, patch
 from mlbstatsapi.models.team import Team
+from mlbstatsapi import Mlb
 
 class TestTeam(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        pass
+        cls.mlb = Mlb()
+        cls.team = cls.mlb.get_team(133)[0]
 
     @classmethod
     def tearDownClass(cls) -> None:
