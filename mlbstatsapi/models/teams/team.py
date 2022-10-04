@@ -1,13 +1,13 @@
 ﻿from typing import List, Dict, Union
 from dataclasses import dataclass
-from mlbstatsapi.models.stats.stats import Stats
-from mlbstatsapi.models.league import League
-from mlbstatsapi.models.venue import Venue
-from mlbstatsapi.models.division import Division
-from mlbstatsapi.models.sport import Sport
+from mlbstatsapi.models.stats import Stats
+from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.venues import Venue
+from mlbstatsapi.models.divisions import Division
+from mlbstatsapi.models.sports import Sport
 from mlbstatsapi import MlbObject
 
-
+@dataclass
 class Team(MlbObject):
     """
     A class to represent a Team.

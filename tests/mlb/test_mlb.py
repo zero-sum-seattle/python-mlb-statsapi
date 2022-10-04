@@ -1,9 +1,10 @@
 ﻿from typing import Dict, List
 import unittest
-from mlbstatsapi.mlbapi import Mlb
+from mlbstatsapi.models.people import Person
+from mlbstatsapi.models.teams import Team
+from mlbstatsapi import Mlb
 from mlbstatsapi import MlbResult
-from mlbstatsapi.models.person import Person
-from mlbstatsapi.models.team import Team
+
 
 
 class TestMlbDataApi(unittest.TestCase):
