@@ -6,6 +6,20 @@ from mlbstatsapi.models.game.livedata.plays.playbyinning import PlayByInning
 
 @dataclass
 class Plays:
+    """
+    A class to represent the plays in this game.
+
+    Attributes
+    ----------
+    allPlays : List[Play]
+        All the plays in this game
+    currentPlay : Play
+        The current play in this game
+    scoringPlays : List[int]
+        Which plays are scoring plays, indexed with allPlays
+    playsByInning : List[PlayByInning]
+        Plays by inning
+    """
     allPlays:       Union[List[Play], List[Dict[str, Any]]]
     currentPlay:    Union[Play, Dict[str, Any]]
     scoringPlays:   List[int]

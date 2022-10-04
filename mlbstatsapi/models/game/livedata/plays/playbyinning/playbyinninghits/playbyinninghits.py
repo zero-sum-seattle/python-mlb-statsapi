@@ -5,6 +5,16 @@ from mlbstatsapi.models.game.livedata.plays.playbyinning.playbyinninghits.hitsby
 
 @dataclass
 class PlayByInningHits():
+    """
+    A class to represent a play by inning in this game.
+
+    Attributes
+    ----------
+    home : List[HitsByTeam]
+        Home team hits
+    away : List[HitsByTeam]
+        Away team hits
+    """
     home: Union[List[HitsByTeam], List[Dict[str, Any]]]
     away: Union[List[HitsByTeam], List[Dict[str, Any]]]
 

@@ -3,6 +3,42 @@ from dataclasses import dataclass
 
 @dataclass
 class PitchCoordinates:
+    """
+    A class to represent a play events pitch data.
+
+    Attributes
+    ----------
+    aY : float = None
+        Pitch coordinate aY
+    aZ : float = None
+        Pitch coordinate aZ
+    pfxX : float = None
+        Pitch coordinate pfxX
+    pfxZ : float = None
+        Pitch coordinate pfxZ
+    pX : float = None
+        Pitch coordinate pX
+    pZ : float = None
+        Pitch coordinate pZ
+    vX0 : float = None
+        Pitch coordinate vX0
+    vY0 : float = None
+        Pitch coordinate vY0
+    vZ0 : float = None
+        Pitch coordinate vZ0
+    x0 : float = None
+        Pitch coordinate x0
+    y0 : float = None
+        Pitch coordinate y0
+    z0 : float = None
+        Pitch coordinate z0
+    aX : float = None
+        Pitch coordinate aX
+    x : float = None
+        Pitch coordinate x
+    y : float = None
+        Pitch coordinate y
+    """
     aY:     float = None
     aZ:     float = None
     pfxX:   float = None
@@ -21,6 +57,22 @@ class PitchCoordinates:
 
 @dataclass
 class PitchBreaks:
+    """
+    A class to represent a play events pitch data.
+
+    Attributes
+    ----------
+    breakAngle : float
+        Pitch break angle
+    breakLength : float
+        Pitch break length
+    breakY : int
+        Pitch break Y
+    spinRate : int
+        Pitch spinRate
+    spinDirection : int
+        Pitch spinDirection
+    """
     breakAngle:     float
     breakLength:    float
     breakY:         int
@@ -29,6 +81,32 @@ class PitchBreaks:
 
 @dataclass
 class PitchData:
+    """
+    A class to represent a play events pitch data.
+
+    Attributes
+    ----------
+    startSpeed : float
+        Pitch start speed
+    endSpeed : float
+        Pitch end speed
+    strikeZoneTop : float
+        Batters strike zone top
+    strikeZoneBottom : float
+        Batters strike zone bottom
+    coordinates : Dict
+        Pitch coordinates
+    breaks : Dict
+        Pitch breaks
+    zone : int
+        Pitch zone
+    typeConfidence : float
+        Type confidence
+    plateTime : float
+        Pitch platetime
+    extension : float
+        Pitch extension
+    """
     startSpeed:         float
     endSpeed:           float
     strikeZoneTop:      float

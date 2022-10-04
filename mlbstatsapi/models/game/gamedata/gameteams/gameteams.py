@@ -5,6 +5,16 @@ from mlbstatsapi.models.game.gamedata.gameteams.gameteam import GameTeam
 
 @dataclass
 class GameTeams:
+    """
+    A class to represent the home and away teams.
+
+    Attributes
+    ----------
+    away : GameTeam
+        Away team
+    home : GameTeam
+        Home team
+    """
     away: Union[GameTeam, Dict[str, Any]]
     home: Union[GameTeam, Dict[str, Any]]
 

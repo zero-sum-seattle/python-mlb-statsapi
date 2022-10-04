@@ -7,6 +7,16 @@ from mlbstatsapi.models.game.livedata.boxscore.boxscoreteams.boxscoreteaminfo im
 
 @dataclass
 class BoxScoreOffical:
+    """
+    A class to represent an official for this game
+
+    Attributes
+    ----------
+    official : Person
+        The official person
+    officialType : str
+        What type of official this person is
+    """
     official:       Union[Person, Dict[str, Any]]
     officialType:   str
 
@@ -15,6 +25,20 @@ class BoxScoreOffical:
 
 @dataclass
 class BoxScore:
+    """
+    A class to represent this games boxscore
+
+    Attributes
+    ----------
+    teams : BoxScoreTeams
+        Box score data for each team
+    officials : List[BoxScoreOffical]
+        The officials for this game
+    info : List[BoxScoreVL]
+        Box score information
+    pitchingNotes : List[str]
+        Pitching notes for this game
+    """
     teams:          Union[BoxScoreTeams, Dict[str, Any]]
     officials:      Union[List[BoxScoreOffical], List[Dict[str, Any]]]
     info:           Union[List[BoxScoreVL], List[Dict[str, Any]]]

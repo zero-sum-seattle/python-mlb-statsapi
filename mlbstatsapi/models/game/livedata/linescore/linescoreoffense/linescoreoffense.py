@@ -16,6 +16,24 @@ from mlbstatsapi.models.teams import Team
 
 @dataclass
 class LinescoreOffense:
+    """
+    A class to represent a games current offense
+
+    Attributes
+    ----------
+    batter : Person
+        Current batter
+    onDeck : Person
+        Current on deck batter
+    inHole : Person
+        Current in the hole batter
+    pitcher : Person
+        Who is this teams pitcher
+    battingOrder : int
+        Number in the batting order
+    team : Team
+        The team currently on offense
+    """
     batter:         Union[Person, Dict[str, Any]]
     onDeck:         Union[Person, Dict[str, Any]]
     inHole:         Union[Person, Dict[str, Any]]
