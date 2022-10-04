@@ -1,10 +1,13 @@
-﻿import logging
+import logging
 from typing import List
 from mlbstatsapi.models.person import Person
 from mlbstatsapi.models.team import Team
 from mlbstatsapi.models.sport import Sport
 from mlbstatsapi.models.league import League
+from mlbstatsapi.models.game import Game
+from .mlbdataadapter import TheMlbStatsApiException
 from .mlbdataadapter import MlbDataAdapter, MlbResult
+
 
 class Mlb:
     def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
@@ -61,6 +64,14 @@ class Mlb:
 
         return teamIds
 
+    def get_game(self, gameId) -> Game:
+        mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'/game/{gameId}/feed/live') # Get all Teams
+        if (mlbdata.data['gamePk'] != gameId): # If game id eccepted but not valid
+            raise TheMlbStatsApiException("Bad JSON in response")
+
+        game = Game(gameId, **mlbdata.data)
+        return game
+
     def get_sport(self) -> List[Sport]:
         pass
 
@@ -72,3 +83,6 @@ class Mlb:
 
     def get_leagues(self) -> List[League]:
         pass
+
+
+
