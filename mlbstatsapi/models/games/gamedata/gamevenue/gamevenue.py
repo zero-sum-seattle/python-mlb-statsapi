@@ -1,26 +1,25 @@
 from typing import Union, Dict, Any
 from dataclasses import dataclass
 
-from gameVenue_modules.gameVenueLocation import GameVenueLocation
+from mlbstatsapi.models.game.gamedata.gamevenue.gamevenuelocation import GameVenueLocation
 
 @dataclass
 class GameVenueTimeZone:
-    id: str
+    id:     str
     offset: int
-    tz: str
+    tz:     str
 
 @dataclass
 class GameVenueFieldInfo:
-    capacity: int
-    turfType: str
-    roofType: str
-    leftLine: int
-    left: int
-    leftCenter: int
-    center: int
-    rightCenter: int
-    rightLine: int
-
+    capacity:       int
+    turfType:       str
+    roofType:       str
+    leftLine:       int
+    left:           int
+    leftCenter:     int
+    center:         int
+    rightCenter:    int
+    rightLine:      int
 
 @dataclass
 class GameVenue:

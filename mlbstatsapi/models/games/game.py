@@ -1,9 +1,14 @@
 from typing import Union, List, Dict, Any
 from dataclasses import dataclass, field
-from mlbstatsapi.models.game import MetaData
 from mlbstatsapi.models.game.gamedata import GameData # Import would be consistent through the project
 from mlbstatsapi.models.game.livedata import LiveData
 
+@dataclass
+class MetaData:
+    wait:           int
+    timeStamp:      str
+    gameEvents:     List[str]
+    logicalEvents:  List[str]
 
 @dataclass
 class Game:

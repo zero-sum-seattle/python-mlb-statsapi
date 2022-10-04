@@ -3,17 +3,75 @@ from dataclasses import dataclass
 from mlbstatsapi.models.venue import Venue
 from mlbstatsapi.models.person import Person
 
-from gameData_modules.gameDataGame import GameDataGame
-from gameData_modules.gameDatetime import GameDatetime
-from gameData_modules.gameStatus import GameStatus
-from gameData_modules.gameTeams import GameTeams
-from gameData_modules.gameVenue import GameVenue
-from gameData_modules.gameWeather import GameWeather
-from gameData_modules.gameInfo import GameInfo
-from gameData_modules.gameReview import GameReview
-from gameData_modules.gameFlags import GameFlags
-from gameData_modules.gameProbablePitchers import GameProbablePitchers
+from mlbstatsapi.models.game.gamedata.gameteams import GameTeams
+from mlbstatsapi.models.game.gamedata.gamevenue import GameVenue
+from mlbstatsapi.models.game.gamedata.gamereview import GameReview
 
+@dataclass
+class GameDataGame:
+    pk: int
+    type: str
+    doubleHeader: str
+    id: str
+    gamedayType: str
+    tiebreaker: str
+    gameNumber: int
+    calendarEventID: str
+    season: str
+    seasonDisplay: str
+
+    @property
+    def id(self):
+        return self.pk
+
+@dataclass
+class GameDatetime:
+    dateTime: str
+    originalDate: str
+    officialDate: str
+    dayNight: str
+    time: str
+    ampm: str
+
+@dataclass
+class GameStatus:
+    abstractGameState: str
+    codedGameState: str
+    detailedState: str
+    statusCode: str
+    startTimeTBD: bool
+    abstractGameCode: str
+
+@dataclass
+class GameWeather:
+    condition: str
+    temp: str
+    wind: str
+
+@dataclass
+class GameInfo:
+    attendance: int
+    firstPitch: str
+    gameDurationMinutes: int
+    delayDurationMinutes: int
+
+@dataclass
+class GameFlags:
+    noHitter:               bool
+    perfectGame:            bool
+    awayTeamNoHitter:       bool
+    awayTeamPerfectGame:    bool
+    homeTeamNoHitter:       bool
+    homeTeamPerfectGame:    bool
+
+@dataclass
+class GameProbablePitchers:
+    away: Union[Person, Dict[str, Any]]
+    home: Union[Person, Dict[str, Any]]
+
+    def __post_init__(self):
+        self.away = Person(**away)
+        self.home = Person(**home)
 
 @dataclass
 class GameData:

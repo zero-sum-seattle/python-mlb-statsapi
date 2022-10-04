@@ -1,11 +1,25 @@
 from typing import Union, Dict, Any
 from dataclasses import dataclass
 
-# from gameData_modules.plays import Plays
-# from gameData_modules.linescore import Linescore
-# from gameData_modules.boxScore import BoxScore
-# from gameData_modules.liveDataDecisions import LiveDataDecisions
-# from gameData_modules.liveDataLeaders import LiveDataLeaders
+from mlbstatsapi.models.game.livedata.plays import Plays
+from mlbstatsapi.models.game.livedata.linescore import Linescore
+from mlbstatsapi.models.game.livedata.boxscore import BoxScore
+
+@dataclass
+class LiveDataDecisions:
+    winner: Union[Person, Dict[str, Any]]
+    loser:  Union[Person, Dict[str, Any]]
+
+    def __post_init__(self):
+        self.winner = Person(**winner)
+        self.loser = Person(**loser)
+
+@dataclass
+class LiveDataLeaders:
+    # Dont know what this populated looks like. Every game ive seen its three empty dicts?
+    hitDistance: Dict
+    hitSpeed: Dict
+    pitchSpeed: Dict
 
 class LiveData:
     plays:      Union[Plays, Dict[str, Any]]
