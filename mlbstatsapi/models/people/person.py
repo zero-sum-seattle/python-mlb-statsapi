@@ -1,53 +1,9 @@
-﻿from typing import List, Dict, Union, Any
+﻿from typing import List, Dict, Union, Any, Optional
+from .attributes import PitchHand, PrimaryPosition, BatSide
 from mlbstatsapi import MlbObject
 from mlbstatsapi.models.stats import Stats
 from dataclasses import dataclass, field
 
-@dataclass
-class BatSide:
-    """
-    A class to represent a batside.
-
-    Attributes
-    ----------
-    code : str
-        code number of the batside
-    descritpion: str
-        description of the batside
-    """
-    code: str
-    description: str
-
-@dataclass
-class PitchHand:
-    """
-    A class to represent a batside.
-
-    Attributes
-    ----------
-    code : str
-        code number of the batside
-    descritpion: str
-        description of the batside
-    """
-    code: str
-    description: str
-
-
-@dataclass
-class PrimaryPosition:
-    """
-    A class to represent a batside.
-
-    Attributes
-    ----------
-    code : str
-        code number of the batside
-    """
-    code: str
-    name: str
-    type: str
-    abbreviation: str
 
 @dataclass
 class Person(MlbObject):
@@ -66,10 +22,10 @@ class Person(MlbObject):
     link: str
     fullName: str
     stats: List[Stats]
-    primaryPosition: Union[PrimaryPosition, dict] = field(default_factory=dict)
+    primaryPosition: Optional[Union[PrimaryPosition, dict]] = field(default_factory=dict)
     pitchHand: Union[PitchHand,dict] = field(default_factory=dict)
     batSide: Union[BatSide,dict] = field(default_factory=dict)
-    stats: Union[Stats, dict] = field(default_factory=dict)
+    stats: Union[Stats, list] = field(default_factory=list)
     firstName: str = None
     lastName: str = None
     primaryNumber: str = None
@@ -110,7 +66,16 @@ class Person(MlbObject):
     mlb_class: str = "people"
 
     def __post_init__(self):
-        self.primaryPosition = PrimaryPosition(**self.primaryPosition)
+        if self.primaryPosition:
+            self.primaryPosition = PrimaryPosition(**self.primaryPosition)
 
+        if self.pitchHand:
+            self.pitchHand = PitchHand(**self.pitchHand)
+
+        if self.batSide:
+            self.batSide = BatSide(**self.batSide)
+
+        if self.stats:
+            self.stats = [ Stats(**stat) for stat in self.stats]
 
      

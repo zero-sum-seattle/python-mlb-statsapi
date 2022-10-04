@@ -1,7 +1,7 @@
 import logging
 from typing import List
 from mlbstatsapi.models.people import Person
-from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.teams import Team, Roster
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 # from mlbstatsapi.models.game import Game
@@ -63,6 +63,12 @@ class Mlb:
                 teamIds.append(team['id']) # append match id
 
         return teamIds
+
+    def get_team_roster(self, teamId) -> List[Roster]:
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"teams/{teamId}/roster")
+        if 'roster' in mlbdata.data:
+            roster = Roster(**mlbdata.data)
+        return roster
 
     # def get_game(self, gameId) -> Game:
     #     mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'/game/{gameId}/feed/live') # Get all Teams

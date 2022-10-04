@@ -1,5 +1,5 @@
 ﻿from typing import List, Dict, Union
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from mlbstatsapi.models.stats import Stats
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.venues import Venue
@@ -22,57 +22,34 @@ class Team(MlbObject):
     id: int
     name: str
     link: str
-    stats: List[Stats]
-    springleague: Union[League,dict]
-    allstarstatus: str
-    id: int
-    name: str
-    link: str
+    springLeague: Union[League,dict]
+    allStarStatus: str
     season: int
     venue:  Union[Venue,dict]
-    springvenue:  Union[Venue,dict]
-    teamcode: str
-    filecode: str
+    springVenue:  Union[Venue,dict]
+    teamCode: str
+    fileCode: str
     abbreviation: str
-    teamname: str
-    locationname: str
-    firstyearofplay: str
+    teamName: str
+    locationName: str
+    firstYearOfPlay: str
     league: Union[League,dict]
     division: Union[Division,dict]
     sport: Union[Sport,dict]
-    shortname: str
+    shortName: str
 #    record: Union[LeagueRecord, dict]
-    franchisename: str
-    clubname: str
+    franchiseName: str
+    clubName: str
     active: bool
     mlb_class = "teams"
+    stats: Union[Stats, dict] = field(default_factory=dict)
 
 
-    def __init__(self,
-                id: int,
-                name: str,
-                link: str,
-                season: int = None,
-                teamCode: str = None,
-                sport: Union[Sport,dict] = None,
-                venue: Union[Venue,dict] = None,
-                league: Union[League,dict] = None,
-                division: Union[Division,dict] = None,
-                springVenue: Union[Venue,dict] = None,
-                springLeague: Union[League,dict] = None,
-                stats: List[Stats] = None, 
-                 **kwargs) -> None:
-
-        self.id = id
-        self.name = name
-        self.link = link
-        self.season = season
-        self.teamcode = teamCode
-        self.league = League(**league) if isinstance(league, dict) else league 
-        self.sport = Sport(**sport) if isinstance(sport, dict) else sport
-        self.venue = Venue(**venue) if isinstance(venue, dict) else venue
-        self.springVenue = Venue(**springVenue) if isinstance(springVenue, dict) else springVenue
-        self.spring_league = League(**springLeague) if isinstance(springLeague, dict) else springLeague
-        self.division = Division(**division) if isinstance(division, dict) else division
-        self.stats = [ Stats(**stat) for stat in stats ] if isinstance(stats, dict) else []
-        self.__dict__.update(kwargs)
+    def __post_init__(self):
+        self.league = League(**self.league)
+        self.sport = Sport(**self.sport)
+        self.venue = Venue(**self.venue)
+        self.springVenue = Venue(**self.springVenue)
+        self.spring_league = League(**self.springLeague)
+        self.division = Division(**self.division)
+        self.stats = [ Stats(**stat) for stat in self.stats ] 

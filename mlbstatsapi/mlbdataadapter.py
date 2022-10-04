@@ -7,7 +7,8 @@ class MlbResult:
     def __init__(self, status_code: int, message: str, data: Dict = {}):
         self.status_code = int(status_code)
         self.message = str(message)
-        self.data = data if data else {}
+        self.data = data if data.pop('copyright') else {} 
+
 
 class MlbDataAdapter:
     """Adapter for calling the mlb statsapi endpoint"""
