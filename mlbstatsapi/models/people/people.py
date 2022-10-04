@@ -39,6 +39,6 @@ class Player:
     person: Union[Person, dict] = field(default_factory=dict)
     status: Union[Status, dict] = field(default_factory=dict)
     def __post_init__(self):
-        self.position = PrimaryPosition(**self.position)
-        self.person = Person(**self.person)
-        self.status = Status(**self.status)
+        self.position = PrimaryPosition(**self.position) if self.position else self.position
+        self.person = Person(**self.person) if self.person else self.person
+        self.status = Status(**self.status) if self.status else self.status 

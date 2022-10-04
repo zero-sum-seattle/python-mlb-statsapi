@@ -1,4 +1,5 @@
-﻿import unittest
+﻿from logging import exception
+import unittest
 from mlbstatsapi.models.people import Person, PrimaryPosition
 from mlbstatsapi import Mlb
 

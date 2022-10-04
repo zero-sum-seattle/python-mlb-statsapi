@@ -1,5 +1,5 @@
 from typing import List, Union, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from mlbstatsapi.models.people import Player
 
 @dataclass
@@ -17,11 +17,15 @@ class Roster:
         The team id of the roster
     rosterType: str
         the roster type
+    season: str
+        the season of the roster
+    date: str
+        the date of the roster
     """
-    roster: List[Player]
     link: str
     teamId: int
     rosterType: str
+    roster: List[Union[Player, dict]] = field(default_factory=dict)
     season: Optional[str] = None
     date: Optional[str] = None
 

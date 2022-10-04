@@ -2,6 +2,7 @@
 from unittest.mock import Mock, patch
 from mlbstatsapi.models.people import Player
 from mlbstatsapi import Mlb
+from mlbstatsapi.models.people.attributes import PrimaryPosition
 
 
 class TestTeamRoster(unittest.TestCase):
@@ -31,3 +32,5 @@ class TestTeamRoster(unittest.TestCase):
 
             # every active_player should have a jersey number
             self.assertTrue(hasattr(active_player, 'jerseyNumber'))
+
+            self.assertIsInstance(active_player.position, PrimaryPosition)
