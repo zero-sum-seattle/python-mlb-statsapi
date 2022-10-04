@@ -64,12 +64,12 @@ class Person(MlbObject):
 
     id: int
     link: str
-    fullName: str
-    stats: List[Stats]
     primaryPosition: Union[PrimaryPosition, dict] = field(default_factory=dict)
-    pitchHand: Union[PitchHand,dict] = field(default_factory=dict)
-    batSide: Union[BatSide,dict] = field(default_factory=dict)
+    pitchHand: Union[PitchHand, dict] = field(default_factory=dict)
+    batSide: Union[BatSide, dict] = field(default_factory=dict)
     stats: Union[Stats, dict] = field(default_factory=dict)
+    stats: List[Stats] = None
+    fullName: str = None
     firstName: str = None
     lastName: str = None
     primaryNumber: str = None
@@ -110,7 +110,4 @@ class Person(MlbObject):
     mlb_class: str = "people"
 
     def __post_init__(self):
-        self.primaryPosition = PrimaryPosition(**self.primaryPosition)
-
-
-     
+        self.primaryPosition = PrimaryPosition(**self.primaryPosition) if self.primaryPosition else self.primaryPosition

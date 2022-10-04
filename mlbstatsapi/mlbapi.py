@@ -4,7 +4,7 @@ from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
-# from mlbstatsapi.models.game import Game
+from mlbstatsapi.models.game import Game
 from .mlbdataadapter import TheMlbStatsApiException
 from .mlbdataadapter import MlbDataAdapter, MlbResult
 
@@ -64,13 +64,14 @@ class Mlb:
 
         return teamIds
 
-    # def get_game(self, gameId) -> Game:
-    #     mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'/game/{gameId}/feed/live') # Get all Teams
-    #     if (mlbdata.data['gamePk'] != gameId): # If game id eccepted but not valid
-    #         raise TheMlbStatsApiException("Bad JSON in response")
+    def get_game(self, gameId) -> Game:
+        mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'/game/{gameId}/feed/live') # Get all Teams
+        if (mlbdata.data['gamePk'] != gameId): # If game id eccepted but not valid
+            raise TheMlbStatsApiException("Bad JSON in response")
 
-    #     game = Game(gameId, **mlbdata.data)
-    #     return game
+        # del mlbdata.data['copyright']
+        game = Game(**mlbdata.data)
+        return game
 
     def get_sport(self) -> List[Sport]:
         pass
@@ -83,6 +84,3 @@ class Mlb:
 
     def get_leagues(self) -> List[League]:
         pass
-
-
-
