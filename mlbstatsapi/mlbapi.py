@@ -87,7 +87,7 @@ class Mlb:
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"/venues") # Get All People: players
         venueIds = [] # create empty list
         for venue in mlbdata.data['venues']:
-            if venue['venueName'].lower() == name.lower(): # Match person fullName
+            if venue['name'].lower() == venueName.lower(): # Match person fullName
                 venueIds.append(venue['id']) # add to list
 
         return venueIds
