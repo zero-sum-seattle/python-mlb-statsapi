@@ -2,6 +2,8 @@
 import unittest
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.game import Game
+from mlbstatsapi.models.venues import Venue
 from mlbstatsapi import Mlb
 from mlbstatsapi import MlbResult
 
@@ -59,3 +61,19 @@ class TestMlbDataApi(unittest.TestCase):
         self.assertIsInstance(team[0], Team)
         self.assertEqual(team[0].id, 133)
 
+    def test_mlb_get_game(self):
+        mlb = Mlb()
+        game = mlb.get_game(662242)
+        self.assertIsInstance(game, Game)
+        self.assertEqual(game.id, 662242)
+
+    def test_mlb_get_venue(self):
+        mlb = Mlb()
+        venue = mlb.get_venue(31)
+        self.assertIsInstance(venue, Venue)
+        self.assertEqual(venue.id, 31)
+
+    def test_mlb_get_venue_id(self):
+        mlb = Mlb()
+        id = mlb.get_venue_id('PNC Park')
+        self.assertEqual(id, [31])
