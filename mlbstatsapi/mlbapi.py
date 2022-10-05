@@ -5,6 +5,7 @@ from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.game import Game
+from mlbstatsapi.models.venues import Venue
 from .mlbdataadapter import TheMlbStatsApiException
 from .mlbdataadapter import MlbDataAdapter, MlbResult
 
@@ -65,6 +66,7 @@ class Mlb:
         return teamIds
 
     def get_game(self, gameId) -> Game:
+        # TODO Doc string
         mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'/game/{gameId}/feed/live') # Get all Teams
         if (mlbdata.data['gamePk'] != gameId): # If game id eccepted but not valid
             raise TheMlbStatsApiException("Bad JSON in response")
@@ -72,6 +74,23 @@ class Mlb:
         # del mlbdata.data['copyright']
         game = Game(**mlbdata.data)
         return game
+
+    def get_venue(self, venueId) -> Venue:
+        # TODO Doc string
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'/venues/{venueId}?hydrate=location,fieldInfo,timezone')
+        if (mlbdata.data['venues'][0]['id'] != venueId):
+            raise TheMlbStatsApiException("Bad JSON in response")
+        return Venue(**mlbdata.data['venues'][0])
+
+    def get_venue_id(self, venueName) -> List[int]:
+        # TODO Doc string
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"/venues") # Get All People: players
+        venueIds = [] # create empty list
+        for venue in mlbdata.data['venues']:
+            if venue['venueName'].lower() == name.lower(): # Match person fullName
+                venueIds.append(venue['id']) # add to list
+
+        return venueIds
 
     def get_sport(self) -> List[Sport]:
         pass

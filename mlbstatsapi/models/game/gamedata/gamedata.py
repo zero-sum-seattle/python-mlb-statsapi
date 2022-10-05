@@ -4,7 +4,6 @@ from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.people import Person
 
 from mlbstatsapi.models.game.gamedata.gameteams import GameTeams
-from mlbstatsapi.models.game.gamedata.gamevenue import GameVenue
 from mlbstatsapi.models.game.gamedata.gamereview import GameReview
 
 @dataclass
@@ -33,7 +32,7 @@ class GameDataGame:
     season : str
         This game's season year
     seasonDisplay : str
-        This game's displayed season 
+        This game's displayed season
     """
     pk:                 int
     type:               str
@@ -228,7 +227,7 @@ class GameData:
     status:             Union[GameStatus, Dict[str, Any]]
     teams:              Union[GameTeams, Dict[str, Any]]
     players:            Union[List[Person], Dict]
-    venue:              Union[GameVenue, Dict[str, Any]]
+    venue:              Union[Venue, Dict[str, Any]]
     officialVenue:      Union[Venue, Dict[str, Any]]
     weather:            Union[GameWeather, Dict[str, Any]]
     gameInfo:           Union[GameInfo, Dict[str, Any]]
@@ -247,7 +246,7 @@ class GameData:
         # self.players
         # tempPlayers = self.players
         self.players = [Person(**(self.players[key])) for key in self.players]
-        self.venue = GameVenue(**self.venue)
+        self.venue = Venue(**self.venue)
         self.officialVenue = Venue(**self.officialVenue)
         self.weather = GameWeather(**self.weather)
         self.gameInfo = GameInfo(**self.gameInfo)
