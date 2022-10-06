@@ -14,7 +14,19 @@ class Sport:
         link of the sport
     name : str
         name the sport
+    code : str = None
+        Sport code
+    abbreviation : str = None
+        Abbreviation for the sport
+    sortOrder : int = None
+        Some sort of sorting order
+    activeStatus : bool = None
+        Is the sport active
     """
-    id: int
-    link: str
-    name: str
+    id:             int
+    link:           str
+    name:           str
+    code:           str = None
+    abbreviation:   str = None
+    sortOrder:      int = None
+    activeStatus:   bool = None
