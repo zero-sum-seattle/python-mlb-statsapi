@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi import Mlb
 
-class TestTeam(unittest.TestCase):
+class TestSport(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
@@ -13,16 +13,16 @@ class TestTeam(unittest.TestCase):
     def tearDownClass(cls) -> None:
         pass
 
-    def test_venue_instance_type_error(self):
+    def test_sport_instance_type_error(self):
         with self.assertRaises(TypeError):
             sport = Sport()
 
-    def test_venuer_instance_position_arguments(self):
+    def test_sport_instance_position_arguments(self):
         self.assertEqual(self.sport.id, 1)
         self.assertEqual(self.sport.link, "/api/v1/sports/1")
         self.assertEqual(self.sport.name, "Major League Baseball")
 
-    def test_venue_attributes(self):
+    def test_sport_attributes(self):
         self.assertIsInstance(self.sport, Sport)
         self.assertTrue(hasattr(self.sport, "id"))
         self.assertTrue(hasattr(self.sport, "link"))

@@ -12,7 +12,7 @@ class Sport:
         id number of the sport
     link : str
         link of the sport
-    name : str
+    name : str = None
         name the sport
     code : str = None
         Sport code
@@ -25,7 +25,7 @@ class Sport:
     """
     id:             int
     link:           str
-    name:           str
+    name:           str = None
     code:           str = None
     abbreviation:   str = None
     sortOrder:      int = None

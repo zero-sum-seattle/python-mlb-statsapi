@@ -92,6 +92,7 @@ class Mlb:
         return venueIds
 
     def get_sport(self, sportId) -> Sport:
+        # TODO Doc string
         mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports/{sportId}')
         if (mlbdata.data['sports'][0]['id'] != sportId):
             raise TheMlbStatsApiException("Bad JSON in response")
@@ -115,12 +116,17 @@ class Mlb:
 
         return sportIds
 
+    def get_league(self, leagueId) -> League:
+        # TODO Doc string
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'league/{leagueId}')
+        if (mlbdata.data['leagues'][0]['id'] != leagueId):
+            raise TheMlbStatsApiException("Bad JSON in response")
 
-    def get_league(self) -> List[League]:
-        pass
-
-    # def get_sports(self) -> List[Sport]:
-    #     pass
+        return League(**mlbdata.data['leagues'][0])
 
     def get_leagues(self) -> List[League]:
-        pass
+        # TODO Doc string
+        mlbdata = self._mlb_adapter_v1.get(endpoint="league") # Get All sports
+        if 'leagues' in mlbdata.data:
+            leagues = [ League(**league) for league in mlbdata.data['leagues']]
+        return leagues # return list of all Sport objects
