@@ -119,8 +119,5 @@ class Mlb:
     def get_league(self) -> List[League]:
         pass
 
-    # def get_sports(self) -> List[Sport]:
-    #     pass
-
     def get_leagues(self) -> List[League]:
         pass
