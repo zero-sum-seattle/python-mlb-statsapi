@@ -67,38 +67,56 @@ class Mlb:
 
     def get_game(self, gameId) -> Game:
         # TODO Doc string
-        mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'/game/{gameId}/feed/live') # Get all Teams
+        mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'game/{gameId}/feed/live') # Get game
         if (mlbdata.data['gamePk'] != gameId): # If game id eccepted but not valid
             raise TheMlbStatsApiException("Bad JSON in response")
 
-        # del mlbdata.data['copyright']
-        game = Game(**mlbdata.data)
-        return game
+        return Game(**mlbdata.data)
 
     def get_venue(self, venueId) -> Venue:
         # TODO Doc string
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'/venues/{venueId}?hydrate=location,fieldInfo,timezone')
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'venues/{venueId}?hydrate=location,fieldInfo,timezone')
         if (mlbdata.data['venues'][0]['id'] != venueId):
             raise TheMlbStatsApiException("Bad JSON in response")
+
         return Venue(**mlbdata.data['venues'][0])
 
     def get_venue_id(self, venueName) -> List[int]:
         # TODO Doc string
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"/venues") # Get All People: players
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"venues") # Get All Venues
         venueIds = [] # create empty list
         for venue in mlbdata.data['venues']:
-            if venue['name'].lower() == venueName.lower(): # Match person fullName
+            if venue['name'].lower() == venueName.lower(): # Match venue name
                 venueIds.append(venue['id']) # add to list
 
         return venueIds
 
-    def get_sport(self) -> List[Sport]:
-        pass
+    def get_sport(self, sportId) -> Sport:
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports/{sportId}')
+        if (mlbdata.data['sports'][0]['id'] != sportId):
+            raise TheMlbStatsApiException("Bad JSON in response")
 
-    def get_league(self) -> List[League]:
-        pass
+        return Sport(**mlbdata.data['sports'][0])
 
     def get_sports(self) -> List[Sport]:
+        # TODO Doc string
+        mlbdata = self._mlb_adapter_v1.get(endpoint="sports") # Get All sports
+        if 'sports' in mlbdata.data:
+            sports = [ Sport(**sport) for sport in mlbdata.data['sports']]
+        return sports # return list of all Sport objects
+
+    def get_sport_id(self, sportName) -> List[int]:
+        # TODO Doc string
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports") # Get All Sports
+        sportIds = [] # create empty list
+        for sport in mlbdata.data['sports']:
+            if sport['name'].lower() == sportName.lower(): # Match sport name
+                sportIds.append(sport['id']) # add to list
+
+        return sportIds
+
+
+    def get_league(self) -> List[League]:
         pass
 
     def get_leagues(self) -> List[League]:
