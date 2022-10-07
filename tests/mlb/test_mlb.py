@@ -6,6 +6,7 @@ from mlbstatsapi.models.game import Game
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.divisions import Division
 from mlbstatsapi import Mlb
 from mlbstatsapi import MlbResult
 
@@ -94,3 +95,17 @@ class TestMlbDataApi(unittest.TestCase):
         leagues = self.mlb.get_leagues()
         self.assertIsInstance(leagues, List) # Test result is List
         self.assertIsInstance(leagues[0], League) # Lazy Test to check the list contains instances of League
+
+    def test_get_division(self):
+        division = self.mlb.get_division(200) # Return MLB division instance
+        self.assertIsInstance(division, Division) # Confirms that a division instance is returned
+        self.assertEqual(division.id, 200) # Confirm the ID is correct
+
+    def test_get_divisions(self):
+        divisions = self.mlb.get_divisions() # Get all divisions as a list[Division]
+        self.assertIsInstance(divisions, List) # Test result is List
+        self.assertIsInstance(divisions[0], Division) # Lazy Test to check the list contains instances of Division
+
+    def test_get_division_id(self):
+        id = self.mlb.get_division_id('American League West') # Get the id for American League West
+        self.assertEqual(id, [200]) # Confirm the ID is correct

@@ -73,8 +73,8 @@ class League:
         Status on the activity of the league
     """
     id:                 int
-    name:               str
     link:               str
+    name:               str = None
     abbreviation:       str = None
     nameShort:          str = None
     seasonState:        str = None

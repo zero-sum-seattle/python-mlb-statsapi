@@ -6,6 +6,7 @@ from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.game import Game
 from mlbstatsapi.models.venues import Venue
+from mlbstatsapi.models.divisions import Division
 from .mlbdataadapter import TheMlbStatsApiException
 from .mlbdataadapter import MlbDataAdapter, MlbResult
 
@@ -130,3 +131,27 @@ class Mlb:
         if 'leagues' in mlbdata.data:
             leagues = [ League(**league) for league in mlbdata.data['leagues']]
         return leagues # return list of all Sport objects
+
+    def get_division(self, divisionId) -> Division:
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'divisions/{divisionId}')
+        if (mlbdata.data['divisions'][0]['id'] != divisionId):
+            raise TheMlbStatsApiException("Bad JSON in response")
+
+        return Division(**mlbdata.data['divisions'][0])
+
+    def get_divisions(self) -> List[Division]:
+        mlbdata = self._mlb_adapter_v1.get(endpoint="divisions") # Get All divisions
+        if 'divisions' in mlbdata.data:
+            divisions = [ Division(**division) for division in mlbdata.data['divisions']]
+        return divisions # return list of all Division objects
+
+
+    def get_division_id(self, divisionName) -> List[Division]:
+        # TODO Doc string
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"divisions") # Get All divisions
+        divisionIds = [] # create empty list
+        for division in mlbdata.data['divisions']:
+            if division['name'].lower() == divisionName.lower(): # Match division name
+                divisionIds.append(division['id']) # add to list
+
+        return divisionIds
