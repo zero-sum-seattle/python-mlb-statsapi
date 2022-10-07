@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import Mock, patch
-from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.leagues import League, LeagueSeasonDateInfo
 from mlbstatsapi import Mlb
 
 class TestLeague(unittest.TestCase):
@@ -22,7 +22,7 @@ class TestLeague(unittest.TestCase):
         self.assertEqual(self.league.link, "/api/v1/league/103")
         self.assertEqual(self.league.name, "American League")
 
-    def test_league_attributes(self):
+    def test_league_has_attributes(self):
         self.assertIsInstance(self.league, League)
         self.assertTrue(hasattr(self.league, "id"))
         self.assertTrue(hasattr(self.league, "name"))
@@ -44,3 +44,27 @@ class TestLeague(unittest.TestCase):
         self.assertTrue(hasattr(self.league, "sport"))
         self.assertTrue(hasattr(self.league, "sortOrder"))
         self.assertTrue(hasattr(self.league, "active"))
+
+    def test_league_seasonDateInfo_has_attributes(self):
+        seasonDateInfo = self.league.seasonDateInfo
+        self.assertIsInstance(seasonDateInfo, LeagueSeasonDateInfo)
+        self.assertTrue(hasattr(seasonDateInfo, "seasonId"))
+        self.assertTrue(hasattr(seasonDateInfo, "preSeasonStartDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "preSeasonEndDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "seasonStartDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "springStartDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "springEndDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "regularSeasonStartDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "lastDate1stHalf"))
+        self.assertTrue(hasattr(seasonDateInfo, "allStarDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "firstDate2ndHalf"))
+        self.assertTrue(hasattr(seasonDateInfo, "regularSeasonEndDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "postSeasonStartDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "postSeasonEndDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "seasonEndDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "offseasonStartDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "offSeasonEndDate"))
+        self.assertTrue(hasattr(seasonDateInfo, "seasonLevelGamedayType"))
+        self.assertTrue(hasattr(seasonDateInfo, "gameLevelGamedayType"))
+        self.assertTrue(hasattr(seasonDateInfo, "qualifierPlateAppearances"))
+        self.assertTrue(hasattr(seasonDateInfo, "qualifierOutsPitched"))
