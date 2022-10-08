@@ -1,4 +1,5 @@
 import logging
+import datetime 
 from typing import List
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
@@ -7,6 +8,7 @@ from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.game import Game
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
+from mlbstatsapi.models.schedules import Schedule
 from .mlbdataadapter import TheMlbStatsApiException
 from .mlbdataadapter import MlbDataAdapter, MlbResult
 
@@ -64,12 +66,36 @@ class Mlb:
                 teamIds.append(team['id']) # append match id
         return teamIds
 
+    def get_schedule(self, startDate = datetime.date.today().strftime("%Y-%m-%d"), 
+                           endDate = datetime.date.today().strftime("%Y-%m-%d")) -> Schedule:
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"schedule?sportId=1&startDate={startDate}&endDate={endDate}") # Get schedule
+        return Schedule(**mlbdata.data)
+
+    def get_schedule_today(self) -> Schedule:
+        return self.get_schedule()
+
+    def get_schedule_date(self, date) -> Schedule:
+        return self.get_schedule(startDate = date, endDate = date)
+
+    def get_schedule_date_range(self, startDate, endDate) -> Schedule: 
+        return self.get_schedule(startDate = startDate, endDate = endDate)
+
     def get_game(self, gameId) -> Game:
         # TODO Doc string
         mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'game/{gameId}/feed/live') # Get game
         if (mlbdata.data['gamePk'] != gameId): # If game id eccepted but not valid
             raise TheMlbStatsApiException("Bad JSON in response")
         return Game(**mlbdata.data)
+
+    def get_todays_games(self) -> list[int]:
+        todaysGames = self.get_schedule_today()
+        todaysGamesIds = []
+        if todaysGames.dates and len(todaysGames.dates) == 1:
+            if todaysGames.dates[0].date == datetime.date.today().strftime("%Y-%m-%d"):
+                if todaysGames.dates[0].games:
+                    for game in todaysGames.dates[0].games:
+                        todaysGamesIds.append(game.gamePk) # Append game Ids
+        return todaysGamesIds
 
     def get_venue(self, venueId) -> Venue:
         # TODO Doc string

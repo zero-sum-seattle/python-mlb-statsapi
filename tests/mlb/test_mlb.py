@@ -7,6 +7,7 @@ from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.divisions import Division
+from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi import Mlb
 from mlbstatsapi import MlbResult
 
@@ -58,10 +59,18 @@ class TestMlbDataApi(unittest.TestCase):
         self.assertIsInstance(team[0], Team)
         self.assertEqual(team[0].id, 133) # Confirm the ID is correct
 
+    def test_get_schedule(self):
+        schedule = self.mlb.get_schedule() # Get all divisions as a list[Division]
+        self.assertIsInstance(schedule, Schedule) # Test result is List
+
     def test_mlb_get_game(self):
         game = self.mlb.get_game(662242) # Return a game instance of gaem 662242
         self.assertIsInstance(game, Game) # Confirms that a Game instance is returned
         self.assertEqual(game.id, 662242) # Confirm the ID is correct
+
+    def test_get_todays_games(self):
+        todaysGames = self.mlb.get_todays_games() # Get all divisions as a list[Division]
+        self.assertIsInstance(todaysGames, List) # Test result is List       
 
     def test_mlb_get_venue(self):
         venue = self.mlb.get_venue(31) # Return PNC Park venue instance
