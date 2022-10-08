@@ -44,7 +44,7 @@ class Schedule:
                                     detailedState = None,
                                     statusCode = None,
                                     reason = None,
-                                    abstractGameCode = None) -> list[int]:
+                                    abstractGameCode = None):
         gameStatuses = {'abstractGameState':abstractGameState,
                         'codedGameState':codedGameState,
                         'detailedState':detailedState,
@@ -62,8 +62,8 @@ class Schedule:
                         gameIds.append(game.gamePk)
             return gameIds
 
-    def get_games_inProgress(self) -> list[int]:
+    def get_games_inProgress(self):
         return self.get_games_with_status(abstractGameState='Live')
 
-    def get_games_finnished(self) -> list[int]:
+    def get_games_finnished(self):
         return self.get_games_with_status(abstractGameState='Final')
