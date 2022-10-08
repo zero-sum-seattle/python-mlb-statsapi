@@ -123,6 +123,7 @@ class Mlb:
         if (mlbdata.data['leagues'][0]['id'] != leagueId):
             raise TheMlbStatsApiException("Bad JSON in response")
 
+
         return League(**mlbdata.data['leagues'][0])
 
     def get_leagues(self) -> List[League]:
