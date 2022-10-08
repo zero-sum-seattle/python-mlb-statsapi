@@ -5,6 +5,8 @@ from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.sports import Sport
+from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.divisions import Division
 from mlbstatsapi import Mlb
 from mlbstatsapi import MlbResult
 
@@ -57,7 +59,7 @@ class TestMlbDataApi(unittest.TestCase):
         self.assertEqual(team[0].id, 133) # Confirm the ID is correct
 
     def test_mlb_get_game(self):
-        game = self.mlb.get_game(662242) # Return a game instance of gaem 662242 
+        game = self.mlb.get_game(662242) # Return a game instance of gaem 662242
         self.assertIsInstance(game, Game) # Confirms that a Game instance is returned
         self.assertEqual(game.id, 662242) # Confirm the ID is correct
 
@@ -83,3 +85,27 @@ class TestMlbDataApi(unittest.TestCase):
     def test_get_sport_id(self):
         id = self.mlb.get_sport_id('Major League Baseball') # Get the id for MLB
         self.assertEqual(id, [1]) # Confirm the ID is correct
+
+    def test_get_league(self):
+        league = self.mlb.get_league(103) # Return American League League instance
+        self.assertIsInstance(league, League) # Confirms that a League instance is returned
+        self.assertEqual(league.id, 103) # Confirm the ID is correct
+
+    def test_get_leagues(self):
+        leagues = self.mlb.get_leagues()
+        self.assertIsInstance(leagues, List) # Test result is List
+        self.assertIsInstance(leagues[0], League) # Lazy Test to check the list contains instances of League
+
+    def test_get_division(self):
+        division = self.mlb.get_division(200) # Return MLB division instance
+        self.assertIsInstance(division, Division) # Confirms that a division instance is returned
+        self.assertEqual(division.id, 200) # Confirm the ID is correct
+
+    def test_get_divisions(self):
+        divisions = self.mlb.get_divisions() # Get all divisions as a list[Division]
+        self.assertIsInstance(divisions, List) # Test result is List
+        self.assertIsInstance(divisions[0], Division) # Lazy Test to check the list contains instances of Division
+
+    def test_get_division_id(self):
+        id = self.mlb.get_division_id('American League West') # Get the id for American League West
+        self.assertEqual(id, [200]) # Confirm the ID is correct

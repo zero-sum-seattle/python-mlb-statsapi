@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi import Mlb
 
-class TestTeam(unittest.TestCase):
+class TestVenue(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
@@ -17,7 +17,7 @@ class TestTeam(unittest.TestCase):
         with self.assertRaises(TypeError):
             venue = Venue()
 
-    def test_venuer_instance_position_arguments(self):
+    def test_venue_instance_position_arguments(self):
         self.assertEqual(self.venue.id, 31)
         self.assertEqual(self.venue.link, "/api/v1/venues/31")
         self.assertEqual(self.venue.name, "PNC Park")

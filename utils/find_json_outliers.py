@@ -60,9 +60,7 @@ def get_reps(r):
 
 def main():
 
-    list_of_endpoints = ["/api/v1/people/664034",
-                         "/api/v1/people/668881",
-                         "/api/v1/people/668804"
+    list_of_endpoints = ["/api/v1/divisions"
                          ]
 
     fp = "json_counting.json"
