@@ -68,6 +68,11 @@ class TestMlbDataApi(unittest.TestCase):
         self.assertIsInstance(venue, Venue) # Confirms that a venue instance is returned
         self.assertEqual(venue.id, 31) # Confirm the ID is correct
 
+    def test_get_venues(self):
+        venues = self.mlb.get_venues() # Get all venues as a list[Venue]
+        self.assertIsInstance(venues, List) # Test result is List
+        self.assertIsInstance(venues[0], Venue) # Lazy Test to check the list contains instances of Venue
+
     def test_mlb_get_venue_id(self):
         id = self.mlb.get_venue_id('PNC Park') # Get the id for PNC Park
         self.assertEqual(id, [31]) # Confirm the ID is correct
@@ -95,6 +100,10 @@ class TestMlbDataApi(unittest.TestCase):
         leagues = self.mlb.get_leagues()
         self.assertIsInstance(leagues, List) # Test result is List
         self.assertIsInstance(leagues[0], League) # Lazy Test to check the list contains instances of League
+
+    def test_get_league_id(self):
+        id = self.mlb.get_league_id('American League') # Get the id for American League West
+        self.assertEqual(id, [103]) # Confirm the ID is correct
 
     def test_get_division(self):
         division = self.mlb.get_division(200) # Return MLB division instance
