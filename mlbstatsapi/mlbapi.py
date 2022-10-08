@@ -87,7 +87,7 @@ class Mlb:
             raise TheMlbStatsApiException("Bad JSON in response")
         return Game(**mlbdata.data)
 
-    def get_todays_games(self) -> list[int]:
+    def get_todays_games(self) -> List[int]:
         todaysGames = self.get_schedule_today()
         todaysGamesIds = []
         if todaysGames.dates and len(todaysGames.dates) == 1:
