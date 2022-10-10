@@ -1,4 +1,5 @@
-﻿import unittest
+﻿from logging import exception
+import unittest
 from mlbstatsapi.models.people import Person, PrimaryPosition
 from mlbstatsapi import Mlb
 
@@ -6,7 +7,7 @@ class TestPerson(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.player = cls.mlb.get_person(664034)[0]
+        cls.player = cls.mlb.get_person(664034)
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -22,15 +23,11 @@ class TestPerson(unittest.TestCase):
         self.assertEqual(self.player.fullName, "Ty France")
         self.assertEqual(self.player.link, "/api/v1/people/664034")
 
-    def test_player_base_class_attributes(self):
-        self.assertTrue(hasattr(self.player, "_mlb_adapter"))
-
-
 class TestPersonPrimaryPosition(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.position_player = cls.mlb.get_person(664034)[0]
+        cls.position_player = cls.mlb.get_person(664034)
 
     @classmethod
     def tearDownClass(cls) -> None:

@@ -7,7 +7,10 @@ class MlbResult:
     def __init__(self, status_code: int, message: str, data: Dict = {}):
         self.status_code = int(status_code)
         self.message = str(message)
-        self.data = data if data else {}
+        if 'copyright' in data:
+            self.data = data if data.pop('copyright') else {}  # this can be refactored
+        else:
+            self.data = {}
 
 class MlbDataAdapter:
     """Adapter for calling the mlb statsapi endpoint"""
@@ -43,11 +46,11 @@ class MlbDataAdapter:
 
         elif response.status_code >= 400 and response.status_code <= 499:  # catch HTTP error
             self._logger.error(msg=logline_post.format("Invalid Request", response.status_code, response.reason)) # log failure
-            return MlbResult(response.status_code, message=response.reason, data={})
+            return None
 
         elif response.status_code >= 500 and response.status_code <= 599:
             self._logger.error(msg=logline_post.format("Internal error occurred", response.status_code, response.reason))
-            return MlbResult(response.status_code, message=response.reason)
+            raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}") # raise exception 
 
         else:
             raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}") # raise exception 

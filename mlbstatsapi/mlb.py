@@ -1,6 +1,4 @@
 from typing import List
-from mlbstatsapi.models.stats import Stats
-from .mlbdataadapter import MlbDataAdapter
 
 
 
@@ -15,19 +13,19 @@ class MlbObject:
     generate_stats(stat_types=[], stat_groups=[]):
         Populate Stat objects for the MlbObject
     """
-    _mlb_adapter = MlbDataAdapter()
+    # _mlb_adapter = MlbDataAdapter()
 
-    def get_stats(self, stat_types: List[str] = ["season"], stat_groups: List[str] = ["hitting"]):
-        statList = [] # Empty List to hold Stats while they are created 
-        for stat_group in stat_groups:
+    # def get_stats(self, stat_types: List[str] = ["season"], stat_groups: List[str] = ["hitting"]):
+    #     statList = [] # Empty List to hold Stats while they are created 
+    #     for stat_group in stat_groups:
 
-            stat_type_url = ",".join(stat_types)
+    #         stat_type_url = ",".join(stat_types)
 
-            statdata = self._mlb_adapter.get(endpoint=f"{self.mlb_class}/{self.id}/stats?stats={stat_type_url}&group={stat_group}") # get stats
-            if "stats" in statdata.data:
-                statList += [ Stats(**stat) for stat in statdata.data['stats'] ] # Add Stat to List[statList]
+    #         statdata = self._mlb_adapter.get(endpoint=f"{self.mlb_class}/{self.id}/stats?stats={stat_type_url}&group={stat_group}") # get stats
+    #         if "stats" in statdata.data:
+    #             statList += [ Stats(**stat) for stat in statdata.data['stats'] ] # Add Stat to List[statList]
         
-        return statList # Return list of Stat Objects
+    #     return statList # Return list of Stat Objects
 
 
 

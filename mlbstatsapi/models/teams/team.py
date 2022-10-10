@@ -1,14 +1,13 @@
-﻿from typing import List, Dict, Union
-from dataclasses import dataclass
+﻿from typing import List, Dict, Union, Optional
+from dataclasses import dataclass, field
 from mlbstatsapi.models.stats import Stats
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.sports import Sport
-from mlbstatsapi import MlbObject
 
 @dataclass
-class Team(MlbObject):
+class Team:
     """
     A class to represent a Team.
 
@@ -22,57 +21,35 @@ class Team(MlbObject):
     id: int
     name: str
     link: str
-    stats: List[Stats]
-    springleague: Union[League,dict]
-    allstarstatus: str
-    id: int
-    name: str
-    link: str
-    season: int
-    venue:  Union[Venue,dict]
-    springvenue:  Union[Venue,dict]
-    teamcode: str
-    filecode: str
-    abbreviation: str
-    teamname: str
-    locationname: str
-    firstyearofplay: str
-    league: Union[League,dict]
-    division: Union[Division,dict]
-    sport: Union[Sport,dict]
-    shortname: str
-#    record: Union[LeagueRecord, dict]
-    franchisename: str
-    clubname: str
-    active: bool
     mlb_class = "teams"
+    springLeague: Union[League,dict] = field(default_factory=dict)
+    allStarStatus: Optional[str]  = None
+    season: Optional[str]  = None
+    venue:  Union[Venue,dict] = field(default_factory=dict)
+    springVenue:  Union[Venue,dict] = field(default_factory=dict)
+    teamCode: Optional[str] = None
+    fileCode: Optional[str] = None
+    abbreviation: Optional[str]  = None
+    teamName: Optional[str]  = None
+    locationName: Optional[str]  = None
+    firstYearOfPlay: Optional[str]  = None
+    league: Union[League,dict] = field(default_factory=dict)
+    division: Union[Division,dict] = field(default_factory=dict)
+    sport: Union[Sport,dict] = field(default_factory=dict)
+    shortName: Optional[str]  = None
+#    record: Union[LeagueRecord, dict]
+    franchiseName: Optional[str]  = None
+    clubName: Optional[str]  = None
+    active: Optional[str]  = None
+    stats: Union[Stats, dict] = field(default_factory=dict)
+    parentOrgName: str = None
+    parentOrgId: str = None
 
-
-    def __init__(self,
-                id: int,
-                name: str,
-                link: str,
-                season: int = None,
-                teamCode: str = None,
-                sport: Union[Sport,dict] = None,
-                venue: Union[Venue,dict] = None,
-                league: Union[League,dict] = None,
-                division: Union[Division,dict] = None,
-                springVenue: Union[Venue,dict] = None,
-                springLeague: Union[League,dict] = None,
-                stats: List[Stats] = None, 
-                 **kwargs) -> None:
-
-        self.id = id
-        self.name = name
-        self.link = link
-        self.season = season
-        self.teamcode = teamCode
-        self.league = League(**league) if isinstance(league, dict) else league 
-        self.sport = Sport(**sport) if isinstance(sport, dict) else sport
-        self.venue = Venue(**venue) if isinstance(venue, dict) else venue
-        self.springVenue = Venue(**springVenue) if isinstance(springVenue, dict) else springVenue
-        self.spring_league = League(**springLeague) if isinstance(springLeague, dict) else springLeague
-        self.division = Division(**division) if isinstance(division, dict) else division
-        self.stats = [ Stats(**stat) for stat in stats ] if isinstance(stats, dict) else []
-        self.__dict__.update(kwargs)
+    def __post_init__(self):
+        self.league = League(**self.league) if self.league else self.league
+        self.sport = Sport(**self.sport) if self.sport else self.sport
+        self.venue = Venue(**self.venue) if self.venue else self.venue
+        self.springVenue = Venue(**self.springVenue) if self.springVenue else self.springVenue
+        self.springLeague = League(**self.springLeague) if self.springLeague else self.springLeague
+        self.division = Division(**self.division) if self.division else self.division
+        self.stats = [ Stats(**stat) for stat in self.stats ] if self.stats else self.stats
