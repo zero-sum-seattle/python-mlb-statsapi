@@ -5,10 +5,9 @@ from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.sports import Sport
-from mlbstatsapi import MlbObject
 
 @dataclass
-class Team(MlbObject):
+class Team:
     """
     A class to represent a Team.
 

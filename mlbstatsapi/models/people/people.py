@@ -1,6 +1,5 @@
 ﻿from typing import List, Dict, Union, Any, Optional
 from .attributes import PitchHand, PrimaryPosition, BatSide, Status
-from mlbstatsapi import MlbObject
 from mlbstatsapi.models.stats import Stats
 from dataclasses import dataclass, field, InitVar
 
