@@ -9,6 +9,7 @@ from mlbstatsapi.models.game import Game
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule
+from mlbstatsapi.models.attendances import Attendance
 from .mlbdataadapter import TheMlbStatsApiException
 from .mlbdataadapter import MlbDataAdapter, MlbResult
 
@@ -168,12 +169,14 @@ class Mlb:
         return leagueIds
 
     def get_division(self, divisionId) -> Division:
+        # TODO Doc string
         mlbdata = self._mlb_adapter_v1.get(endpoint=f'divisions/{divisionId}')
         if (mlbdata.data['divisions'][0]['id'] != divisionId):
             raise TheMlbStatsApiException("Bad JSON in response")
         return Division(**mlbdata.data['divisions'][0])
 
     def get_divisions(self) -> List[Division]:
+        # TODO Doc string
         mlbdata = self._mlb_adapter_v1.get(endpoint="divisions") # Get All divisions
         if 'divisions' in mlbdata.data:
             divisions = [ Division(**division) for division in mlbdata.data['divisions']]
@@ -187,3 +190,25 @@ class Mlb:
             if division['name'].lower() == divisionName.lower(): # Match division name
                 divisionIds.append(division['id']) # add to list
         return divisionIds
+
+    def get_attendance(self, teamId=None, leagueId=None, season=None, date=None,
+                            leagueListId=None, gameType=None, fields=None) -> Attendance:
+        # TODO Doc string
+        if not any([teamId, leagueId, leagueListId]):
+            raise TheMlbStatsApiException("""Need at least one of the following while
+                                            calling get_attendance: teamId, leagueId, 
+                                            leagueListId""")
+
+        endpoint = f'attendance?'
+        if teamId: endpoint += f'teamId={teamId}'
+        if leagueId: endpoint += f'{leagueId}' if endpoint==f'attendance?' else f'&leagueId={leagueId}'
+        if leagueListId: endpoint += f'{leagueListId}' if endpoint==f'attendance?' else f'&leagueListId={leagueListId}'
+        if season: endpoint += f'&season={season}' 
+        if date: endpoint += f'&date={date}'
+        if gameType: endpoint += f'&gameType={gameType}'
+        if fields: endpoint += f'&fields={fields}'
+        
+        mlbdata = self._mlb_adapter_v1.get(endpoint)
+        if not mlbdata.data['records']:
+            raise TheMlbStatsApiException("Bad JSON in response")
+        return Attendance(**mlbdata.data)
