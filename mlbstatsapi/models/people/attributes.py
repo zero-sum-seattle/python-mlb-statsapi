@@ -45,3 +45,18 @@ class PrimaryPosition:
     name: str
     type: str
     abbreviation: str
+
+@dataclass
+class Status:
+    """
+    A dataclass to hold player status
+
+    Attributes
+    ----------
+    code : str
+        code of the player
+    description : str
+        description of the status
+    """
+    code: str
+    description: str

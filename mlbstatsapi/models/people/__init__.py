@@ -1,3 +1,2 @@
-from .person import Person
-from .attributes import BatSide, PrimaryPosition, PitchHand
-from .people import Status, Player
+from .attributes import BatSide, PrimaryPosition, PitchHand, Status
+from .people import Player, Coach, Person

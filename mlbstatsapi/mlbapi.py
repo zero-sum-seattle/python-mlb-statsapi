@@ -70,6 +70,7 @@ class Mlb:
             roster = Roster(**mlbdata.data)
         return roster
 
+
     # def get_game(self, gameId) -> Game:
     #     mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'/game/{gameId}/feed/live') # Get all Teams
     #     if (mlbdata.data['gamePk'] != gameId): # If game id eccepted but not valid
