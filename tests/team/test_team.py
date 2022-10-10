@@ -7,7 +7,7 @@ class TestTeam(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.team = cls.mlb.get_team(133)[0]
+        cls.team = cls.mlb.get_team(133)
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -24,7 +24,4 @@ class TestTeam(unittest.TestCase):
         self.assertEqual(team.name, "Oakland Athletics")
         self.assertEqual(team.link, "/api/v1/teams/133")
 
-    def test_team_base_class_attributes(self):
-        team = Team(133, "Oakland Athletrics", "/api/v1/teams/133")
-        self.assertTrue(hasattr(team, "_mlb_adapter"))
 

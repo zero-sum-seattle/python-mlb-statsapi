@@ -43,7 +43,8 @@ class Team(MlbObject):
     clubName: Optional[str]  = None
     active: Optional[str]  = None
     stats: Union[Stats, dict] = field(default_factory=dict)
-
+    parentOrgName: str = None
+    parentOrgId: str = None
 
     def __post_init__(self):
         self.league = League(**self.league) if self.league else self.league
