@@ -21,8 +21,8 @@ class LeagueRecord:
     """
     wins: int
     losses: int
-    ties: int
     pct: str
+    ties: int = None
 
 @dataclass
 class League:

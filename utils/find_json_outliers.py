@@ -60,7 +60,7 @@ def get_reps(r):
 
 def main():
 
-    list_of_endpoints = ["/api/v1/divisions"
+    list_of_endpoints = ["/api/v1/schedule?sportId=1&startDate=2022-05-19&endDate=2022-06-10"
                          ]
 
     fp = "json_counting.json"
