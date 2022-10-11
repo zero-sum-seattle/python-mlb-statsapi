@@ -72,8 +72,8 @@ class TestMlbDataApi(unittest.TestCase):
         self.assertIsInstance(game, Game) # Confirms that a Game instance is returned
         self.assertEqual(game.id, 662242) # Confirm the ID is correct
 
-    def test_get_todays_games(self):
-        todaysGames = self.mlb.get_todays_games() # Get all divisions as a list[Division]
+    def test_get_todays_games_id(self):
+        todaysGames = self.mlb.get_todays_game_ids() # Get all divisions as a list[Division]
         self.assertIsInstance(todaysGames, List) # Test result is List       
 
     def test_mlb_get_venue(self):

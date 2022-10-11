@@ -29,7 +29,8 @@ class Mlb:
         """       
         mlbdata = self._mlb_adapter_v1.get(endpoint="sports/1/players") # get all people
         
-        if mlbdata and mlbdata.data['people']:
+        # if mlbdata is not empty, and 'people' key is in mlbdata.data and mlbdata.data['people'] is not empty list
+        if mlbdata and ('people' in mlbdata.data and mlbdata.data['people']): 
             people = [ Person(**person) for person in mlbdata.data['people'] ]
         
         return people # return list of people objects
@@ -49,7 +50,8 @@ class Mlb:
         """       
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"people/{playerId}") # Get player
         
-        if mlbdata and mlbdata.data['people']:
+        # if mlbdata is not empty, and 'people' key is in mlbdata.data and mlbdata.data['people'] is not empty list
+        if mlbdata and ('people' in mlbdata.data and mlbdata.data['people']): 
             for person in mlbdata.data['people']:
                 return Person(**person)
 
@@ -69,9 +71,11 @@ class Mlb:
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports/1/players") # Get All People: players
         playerIds = [] # create empty list
 
-        for person in mlbdata.data['people']:
-            if person['fullName'] == fullName: # Match person fullName
-                playerIds.append(person['id']) # add to list
+        # if mlbdata is not empty, and 'people' key is in mlbdata.data and mlbdata.data['people'] is not empty list
+        if mlbdata and ('people' in mlbdata.data and mlbdata.data['people']): 
+            for person in mlbdata.data['people']:
+                if person['fullName'] == fullName: # Match person fullName
+                    playerIds.append(person['id']) # add to list
 
         return playerIds
 
@@ -85,7 +89,8 @@ class Mlb:
         """         
         mlbdata = self._mlb_adapter_v1.get(endpoint="teams?sportId=1") # Get all major league teams
         
-        if mlbdata and mlbdata.data['teams']:
+        # if mlbdata is not empty, and 'teams' key is in mlbdata.data and mlbdata.data['teams'] is not empty list
+        if mlbdata and ('teams' in mlbdata.data and mlbdata.data['teams']): 
             teams = [ Team(**team) for team in mlbdata.data['teams']]
 
         return teams # return list of all Team objects
@@ -105,7 +110,8 @@ class Mlb:
         """       
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"teams/{teamId}")
         
-        if mlbdata and mlbdata.data['teams']:
+        # if mlbdata is not empty, and 'teams' key is in mlbdata.data and mlbdata.data['teams'] is not empty list
+        if mlbdata and ('teams' in mlbdata.data and mlbdata.data['teams']): 
             for team in mlbdata.data['teams']:
                 return Team(**team) 
 
@@ -125,9 +131,11 @@ class Mlb:
         mlbdata = self._mlb_adapter_v1.get(endpoint="teams") # Get all Teams
         teamIds = [] # create empty list
         
-        for team in mlbdata.data['teams']:
-            if team['teamName'] == teamName: # find matching Team Name
-                teamIds.append(team['id']) # append match id
+        # if mlbdata is not empty, and 'teams' key is in mlbdata.data and mlbdata.data['teams'] is not empty list
+        if mlbdata and ('teams' in mlbdata.data and mlbdata.data['teams']): 
+            for team in mlbdata.data['teams']:
+                if team['teamName'] == teamName: # find matching Team Name
+                    teamIds.append(team['id']) # append match id
         
         return teamIds
 
@@ -185,48 +193,175 @@ class Mlb:
             return coaches
 
     def get_schedule(self, startDate = datetime.date.today().strftime("%Y-%m-%d"), 
-                     endDate = datetime.date.today().strftime("%Y-%m-%d")) -> Schedule:
-        # TODO Doc string
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"schedule?sportId=1&startDate={startDate}&endDate={endDate}") # Get schedule
-        return Schedule(**mlbdata.data)
+                     endDate = datetime.date.today().strftime("%Y-%m-%d")) -> Union[Schedule, None]:
+        """
+        return the schedule created from the included params.
 
-    def get_schedule_today(self) -> Schedule:
-        # TODO Doc string
+        Calling get_schedule without startDate or endDate results in a schedule returned
+        for todays date. Calling with startDate and endDate as the same date returns a
+        schedule for just that desired date. Different results in the schedule for multiple
+        days.
+
+        Parameters
+        ----------
+        startDate : str "yyyy-mm-dd"
+            Start date
+        endDate : str "yyyy-mm-dd"
+            End date
+
+        Returns
+        -------
+        Schedule
+        """     
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"schedule?sportId=1&startDate={startDate}&endDate={endDate}") # Get schedule
+
+        # if mlbdata is not empty, and 'dates' key is in mlbdata.data and mlbdata.data['dates] is not empty list
+        if mlbdata and ('dates' in mlbdata.data and mlbdata.data['dates']):
+            return Schedule(**mlbdata.data)
+
+    def get_schedule_today(self) -> Union[Schedule, None]:        
+        """
+        return the schedule for today
+
+        Returns
+        -------
+        Schedule
+        """    
         return self.get_schedule()
 
-    def get_schedule_date(self, date) -> Schedule:
-        # TODO Doc string
+    def get_schedule_date(self, date) -> Union[Schedule, None]:
+        """
+        return the schedule for a specific date
+
+        Parameters
+        ----------
+        date : str "yyyy-mm-dd"
+            Date
+
+        Returns
+        -------
+        Schedule
+        """  
         return self.get_schedule(startDate = date, endDate = date)
 
-    def get_schedule_date_range(self, startDate, endDate) -> Schedule: 
-        # TODO Doc string
+    def get_schedule_date_range(self, startDate, endDate) -> Union[Schedule, None]: 
+        """
+        return the schedule for a range of dates
+
+        Parameters
+        ----------
+        startDate : str "yyyy-mm-dd"
+            Start date
+        endDate : str "yyyy-mm-dd"
+            End date
+
+        Returns
+        -------
+        Schedule
+        """  
         return self.get_schedule(startDate = startDate, endDate = endDate)
 
-    def get_game(self, gameId) -> Game:
-        # TODO Doc string
-        mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'game/{gameId}/feed/live') # Get game
-        
-        if (mlbdata.data['gamePk'] != gameId): # If game id eccepted but not valid
-            raise TheMlbStatsApiException("Bad JSON in response")
-        
-        return Game(**mlbdata.data)
+    def get_game(self, gameId) -> Union[Game, None]:
+        """
+        return the game for a specific game id
 
-    def get_todays_games(self) -> List[int]:
-        # TODO Doc string
-        todaysGames = self.get_schedule_today()
-        todaysGamesIds = []
+        Parameters
+        ----------
+        gameId : int
+            Game id number
+
+        Returns
+        -------
+        Game
+        """  
+        mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'game/{gameId}/feed/live') # Get game
+
+        # if mlbdata is not empty, and 'gamePk' key is in mlbdata.data and mlbdata.data['gamePk] is equal to requested gameId
+        if mlbdata and ('gamePk' in mlbdata.data and mlbdata.data['gamePk'] == gameId):     
+            return Game(**mlbdata.data)
+
+    def get_game_ids(self, date, abstractGameState=None) -> List[int]:
+        """
+        return game ids for a specific date and game status
+
+        Parameters
+        ----------
+        date : str 'yyyy-mm-dd'
+            Date
+        abstractGameState : str
+            Game status type to search for, abstractGameState
+
+        Returns
+        -------
+        List[int]
+        """  
+        scheduledGames = self.get_schedule(date, date)
+        gamesIds = []
         
-        if todaysGames.dates and len(todaysGames.dates) == 1:
-            if todaysGames.dates[0].date == datetime.date.today().strftime("%Y-%m-%d"):
-                if todaysGames.dates[0].games:
-                    for game in todaysGames.dates[0].games:
-                        todaysGamesIds.append(game.gamePk) # Append game Ids
-        
-        return todaysGamesIds
+        # If get_schedule_today is successful and returns a schedule object
+        if scheduledGames:
+            # If only one date is in dates. Zero would mean no games today. 
+            if scheduledGames.dates and len(scheduledGames.dates) == 1:
+                # If the single date is todays date
+                if scheduledGames.dates[0].date == date:
+                    # If todays date has games. A date could have no games and events.
+                    if scheduledGames.dates[0].games:
+                        # Collect all the game Id's for todays games
+                        for game in scheduledGames.dates[0].games:
+                            # If abstractGameState param provided only get games that match
+                            if not abstractGameState or (game.status.abstractGameState == abstractGameState):
+                                gamesIds.append(game.gamePk) # Append game Ids
+            
+            return gamesIds
+
+    def get_todays_game_ids(self, abstractGameState=None) -> List[int]:
+        """
+        return game ids for todays date
+
+        Parameters
+        ----------
+        abstractGameState : str
+            Game status type to search for, abstractGameState
+
+        Returns
+        -------
+        List[int]
+        """  
+        todaysdate = datetime.date.today()
+        todaysgames = self.get_game_ids(todaysdate.strftime("%Y-%m-%d"), abstractGameState)
+        return todaysgames
+
+    def get_tomorrows_game_ids(self) -> List[int]:
+        """
+        return game ids for tomorrows date
+
+        Returns
+        -------
+        List[int]
+        """  
+        tomorrowsdate = datetime.date.today() + datetime.timedelta(days=1)
+        tomorrowsgames = self.get_game_ids(tomorrowsdate.strftime("%Y-%m-%d"))
+        return tomorrowsgames
+
+    def get_yesterdays_game_ids(self) -> List[int]:
+        """
+        return game ids for yesterdays date
+
+        Returns
+        -------
+        List[int]
+        """  
+        yesterdaysdate = datetime.date.today() - datetime.timedelta(days=1)
+        yesterdaysgames = self.get_game_ids(yesterdaysdate.strftime("%Y-%m-%d"))
+        return yesterdaysgames
 
     def get_venue(self, venueId) -> Union[Venue, None]:
         """
         return venue
+
+        Parameters
+        ----------
+        venueId : int
 
         Returns
         -------
@@ -234,7 +369,8 @@ class Mlb:
         """             
         mlbdata = self._mlb_adapter_v1.get(endpoint=f'venues/{venueId}?hydrate=location,fieldInfo,timezone')
         
-        if mlbdata and mlbdata.data['venues']:
+        # if mlbdata is not empty, and 'venues' key is in mlbdata.data and mlbdata.data['venues] is not empty list
+        if mlbdata and ('venues' in mlbdata.data and mlbdata.data['venues']):
             for venue in mlbdata.data['venues']:
                 return Venue(**venue)
 
@@ -247,10 +383,13 @@ class Mlb:
         List[Venue]
         """             
         mlbdata = self._mlb_adapter_v1.get(endpoint="venues") # Get All venuess
+        venues = []
         
-        if mlbdata and mlbdata.data['venues']:
-            venues = [ Venue(**venue) for venue in mlbdata.data['venues']]
-        
+        # if mlbdata is not empty, and 'venues' key is in mlbdata.data and mlbdata.data['venues] is not empty list
+        if mlbdata and ('venues' in mlbdata.data and mlbdata.data['venues']):
+            for venue in mlbdata.data['venues']:
+                venues.append(Venue(**venue))
+
         return venues # return list of all Venue objects
 
     def get_venue_id(self, venueName) -> List[int]:
@@ -267,18 +406,25 @@ class Mlb:
         List[int]
         """        
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"venues") # Get All Venues
-        venueIds = [] # create empty list
+        venueIds = [] 
         
-        if 'venues' in mlbdata.data:
+        # if mlbdata is not empty, and 'venues' key is in mlbdata.data and mlbdata.data['venues] is not empty list
+        if mlbdata and ('venues' in mlbdata.data and mlbdata.data['venues']):            
             for venue in mlbdata.data['venues']:
-                if venue['name'].lower() == venueName.lower(): # Match venue name
+                # Match venue name
+                if venue['name'].lower() == venueName.lower():
                     venueIds.append(venue['id']) # add to list
-        
+
         return venueIds
 
     def get_sport(self, sportId) -> Union[Sport, None]:
         """
         return sport
+
+        Parameters
+        ----------
+        sportId : int 
+
 
         Returns
         -------
@@ -286,7 +432,8 @@ class Mlb:
         """             
         mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports/{sportId}')
         
-        if mlbdata and mlbdata.data['sports']:
+        # if mlbdata is not empty, and 'sports' key is in mlbdata.data and mlbdata.data['sports'] is not empty list
+        if mlbdata and ('sports' in mlbdata.data and mlbdata.data['sports']):        
             for sport in mlbdata.data['sports']:
                 return Sport(**sport)
 
@@ -299,9 +446,12 @@ class Mlb:
         List[Sport]
         """          
         mlbdata = self._mlb_adapter_v1.get(endpoint="sports") # Get All sports
-        
-        if mlbdata and mlbdata.data['sports']:
-            sports = [ Sport(**sport) for sport in mlbdata.data['sports']]
+        sports = []
+
+        # if mlbdata is not empty, and 'sports' key is in mlbdata.data and mlbdata.data['sports'] is not empty list
+        if mlbdata and ('sports' in mlbdata.data and mlbdata.data['sports']): 
+            for sport in mlbdata.data['sports']:
+                sports.append(Sport(**sport))
         
         return sports # return list of all Sport objects
 
@@ -321,15 +471,17 @@ class Mlb:
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports") # Get All Sports
         sportIds = [] # create empty list
         
-        for sport in mlbdata.data['sports']:
-            if sport['name'].lower() == sportName.lower(): # Match sport name
-                sportIds.append(sport['id']) # add to list
+        # if mlbdata is not empty, and 'sports' key is in mlbdata.data and mlbdata.data['sports'] is not empty list
+        if mlbdata and ('sports' in mlbdata.data and mlbdata.data['sports']): 
+            for sport in mlbdata.data['sports']:
+                if sport['name'].lower() == sportName.lower(): # Match sport name
+                    sportIds.append(sport['id']) # add to list
 
         return sportIds
 
     def get_league(self, leagueId) -> Union[League, None]:
         """
-        return divison
+        return league
 
         Returns
         -------
@@ -337,7 +489,8 @@ class Mlb:
         """   
         mlbdata = self._mlb_adapter_v1.get(endpoint=f'league/{leagueId}')
 
-        if mlbdata and mlbdata.data['leagues']:
+        # if mlbdata is not empty, and 'leagues' key is in mlbdata.data and mlbdata.data['leagues'] is not empty list
+        if mlbdata and ('leagues' in mlbdata.data and mlbdata.data['leagues']):         
             for league in mlbdata.data['leagues']:
                 return League(**league)
 
@@ -350,9 +503,12 @@ class Mlb:
         List[League]
         """           
         mlbdata = self._mlb_adapter_v1.get(endpoint="league") # Get All sports
+        leagues = []
         
-        if mlbdata and mlbdata.data['leagues']:
-            leagues = [ League(**league) for league in mlbdata.data['leagues']]
+        # if mlbdata is not empty, and 'leagues' key is in mlbdata.data and mlbdata.data['leagues'] is not empty list
+        if mlbdata and ('leagues' in mlbdata.data and mlbdata.data['leagues']):     
+            for league in mlbdata.data['leagues']:
+                leagues.append(League(**league))            
         
         return leagues # return list of all Sport objects
 
@@ -372,9 +528,11 @@ class Mlb:
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"league") # Get All divisions
         leagueIds = [] # create empty list
         
-        for league in mlbdata.data['leagues']:
-            if league['name'].lower() == leagueName.lower(): # Match division name
-                leagueIds.append(league['id']) # add to list
+        # if mlbdata is not empty, and 'leagues' key is in mlbdata.data and mlbdata.data['leagues'] is not empty list
+        if mlbdata and ('leagues' in mlbdata.data and mlbdata.data['leagues']):     
+            for league in mlbdata.data['leagues']:
+                if league['name'].lower() == leagueName.lower(): # Match division name
+                    leagueIds.append(league['id']) # add to list
         
         return leagueIds
 
@@ -392,8 +550,9 @@ class Mlb:
         Division
         """   
         mlbdata = self._mlb_adapter_v1.get(endpoint=f'divisions/{divisionId}')
-        
-        if mlbdata and mlbdata.data['divisions']:
+
+        # if mlbdata is not empty, and 'divisions' key is in mlbdata.data and mlbdata.data['divisions'] is not empty list
+        if mlbdata and ('divisions' in mlbdata.data and mlbdata.data['divisions']):     
             for division in mlbdata.data['divisions']:
                 return Division(**division)
 
@@ -406,9 +565,12 @@ class Mlb:
         List[Division]
         """   
         mlbdata = self._mlb_adapter_v1.get(endpoint="divisions") # Get All divisions
+        divisions = []
         
-        if mlbdata and mlbdata.data['divisions']:
-            divisions = [ Division(**division) for division in mlbdata.data['divisions']]
+        # if mlbdata is not empty, and 'divisions' key is in mlbdata.data and mlbdata.data['divisions'] is not empty list
+        if mlbdata and ('divisions' in mlbdata.data and mlbdata.data['divisions']):   
+            for division in mlbdata.data['divisions']:
+                divisions.append(Division(**division))
         
         return divisions # return list of all Division objects
 
@@ -428,19 +590,44 @@ class Mlb:
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"divisions") # Get All divisions
         divisionIds = [] # create empty list
         
-        for division in mlbdata.data['divisions']:
-            if division['name'].lower() == divisionName.lower(): # Match division name
-                divisionIds.append(division['id']) # add to list
+        # if mlbdata is not empty, and 'divisions' key is in mlbdata.data and mlbdata.data['divisions'] is not empty list
+        if mlbdata and ('divisions' in mlbdata.data and mlbdata.data['divisions']):   
+            for division in mlbdata.data['divisions']:
+                if division['name'].lower() == divisionName.lower(): # Match division name
+                    divisionIds.append(division['id']) # add to list
         
         return divisionIds
 
     def get_attendance(self, teamId=None, leagueId=None, season=None, date=None,
-                            leagueListId=None, gameType=None, fields=None) -> Attendance:
-        # TODO Doc string
+                            leagueListId=None, gameType=None, fields=None) -> Union[Attendance, None]:
+        """
+        return attendance
+
+        Required Parameters (atleast one)
+        ----------
+        teamId : int
+            Team id number
+        leagueId : int
+            League id number
+        leagueListId : int
+            Not sure 
+
+        Parameters
+        ----------
+        season : int
+            Season year number format yyyy
+        date : str 'yyyy-mm-dd'
+            Date
+        gameType : str
+            Game type
+        fields : ?
+
+        Returns
+        -------
+        Attendance
+        """   
         if not any([teamId, leagueId, leagueListId]):
-            raise TheMlbStatsApiException("""Need at least one of the following while
-                                            calling get_attendance: teamId, leagueId, 
-                                            leagueListId""")
+            return
 
         endpoint = f'attendance?'
         if teamId: endpoint += f'teamId={teamId}'
@@ -452,11 +639,24 @@ class Mlb:
         if fields: endpoint += f'&fields={fields}'
         
         mlbdata = self._mlb_adapter_v1.get(endpoint)
-        if not mlbdata.data['records']:
-            raise TheMlbStatsApiException("Bad JSON in response")
-        return Attendance(**mlbdata.data)
+
+        # if mlbdata is not empty, and 'records' key is in mlbdata.data and mlbdata.data['records'] is not empty list
+        if mlbdata and ('records' in mlbdata.data and mlbdata.data['records']):   
+            return Attendance(**mlbdata.data)
 
     def get_object(self, object):
-        # TODO Doc string
+        """
+        return a hydrated object
+
+        Parameters
+        ----------
+        object : class
+            Object to be hydrated. Can by dry or one that just needs updating
+        Returns
+        -------
+        object
+        """   
         get_func = getattr(self, 'get_'+str(object.__class__.__name__).lower())
-        return get_func(object.id)
+        hydratedobject = get_func(object.id)
+        # If problem with hydrating object, return the old dry object
+        return hydratedobject if hydratedobject else object
