@@ -20,14 +20,30 @@ class MlbDataAdapter:
         self._logger = logger or logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
 
-    def get(self, endpoint: str, data: Dict = None) -> MlbResult:
+    def get(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> MlbResult:
+        """
+        return a MlbResult from endpoint
+
+        Parameters
+        ----------
+        endpoint : str
+            rest api endpoint
+        ep_params : dict
+            params
+        data : dict
+            data to send with requests (we aren't using this)
+
+        Returns
+        -------
+        MlbResult or None
+        """     
         full_url = self.url + endpoint # pass endpoint from inhertited classes
         logline_pre = f"url={full_url}"
         logline_post = f" ,".join((logline_pre, "success={}, status_code={}, message={}"))
 
         try:
             self._logger.debug(logline_post)
-            response = requests.get(url=full_url) # mlbstats API only uses get calls
+            response = requests.get(url=full_url, params=ep_params) # mlbstats API only uses get calls
 
         except requests.exceptions.RequestException as e: # catch a response error
             self._logger.error(msg=(str(e))) # log error
