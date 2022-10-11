@@ -179,8 +179,6 @@ class Mlb:
                 # remove person key and return value to person
                 person = coach.pop('person')
                 # create Player, and unpack player and person
-                print(person)
-                print(coach)
                 coaches.append(Coach(**{**coach, **person}))
 
             return coaches
