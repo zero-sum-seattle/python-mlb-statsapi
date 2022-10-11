@@ -1,7 +1,6 @@
-﻿from ast import List
-import unittest
+﻿import unittest
 from unittest.mock import Mock, patch
-from mlbstatsapi.models.people import Player, Coach, Person, PrimaryPosition
+from mlbstatsapi.models.people import Player, Coach
 from mlbstatsapi import Mlb
 
 
@@ -47,5 +46,5 @@ class TestCoachRoster(unittest.TestCase):
 
     def test_team_roster_fail_list_of_player_objects(self):
         """This should return None"""
-        roster = self.mlb.get_team_roster('1333')
+        roster = self.mlb.get_team_coaches('1333')
         self.assertIsNone(roster)

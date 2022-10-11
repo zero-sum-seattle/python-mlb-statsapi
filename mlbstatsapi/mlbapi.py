@@ -11,7 +11,7 @@ from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi.models.attendances import Attendance
 from .mlbdataadapter import TheMlbStatsApiException
-from .mlbdataadapter import MlbDataAdapter, MlbResult
+from .mlbdataadapter import MlbDataAdapter
 
 
 class Mlb:
