@@ -111,14 +111,11 @@ class Coach(Person):
         title of the coach
     parentTeamId : int
     """
-    person: InitVar[Union[Person, dict]]
     jerseyNumber: str
     job: str
     jobId: str
     title: str
 
-    def __post_init__(self, person: dict):
-        self.status = Status(**self.status)
 
     
 
