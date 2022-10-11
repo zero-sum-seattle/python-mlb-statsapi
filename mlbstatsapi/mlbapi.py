@@ -145,10 +145,13 @@ class Mlb:
         """
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"teams/{teamId}/roster")
         players = []
-
+        # if mlbdata is not empty, and 'roster' key is in mlbdata.data and mlbdata.data['roster] is not empty list
         if mlbdata and ('roster' in mlbdata.data and mlbdata.data['roster']):
+            # for player in mlbdata.data['roster']
             for player in mlbdata.data['roster']:
+                # remove person key and return value to person
                 person = player.pop('person')
+                # create Player, and unpack player and person
                 players.append(Player(**{**player, **person}))
 
             return players
@@ -169,9 +172,13 @@ class Mlb:
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"teams/{teamId}/coaches")
         coaches = []
 
+        # if mlbdata is not empty, and 'roster' key is in mlbdata.data and mlbdata.data['roster] is not empty list
         if mlbdata and ('roster' in mlbdata.data and mlbdata.data['roster']):
+            # for player in mlbdata.data['roster']
             for coach in mlbdata.data['roster']:
+                # remove person key and return value to person
                 person = coach.pop('person')
+                # create Player, and unpack player and person
                 coaches.append(Coach({**{**coach, **person}}))
 
             return coaches
