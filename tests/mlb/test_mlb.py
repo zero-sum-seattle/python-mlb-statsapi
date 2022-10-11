@@ -1,7 +1,7 @@
 ﻿from typing import Dict, List
 import unittest
 from mlbstatsapi.models.people import Person
-from mlbstatsapi.models.teams import Team, Roster
+from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.sports import Sport
