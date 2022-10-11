@@ -131,3 +131,23 @@ class TestMlbDataApi(unittest.TestCase):
     def test_get_division_id(self):
         id = self.mlb.get_division_id('American League West') # Get the id for American League West
         self.assertEqual(id, [200]) # Confirm the ID is correct
+
+    def test_get_attendance(self):
+        attendance_team_away = self.mlb.get_attendance(teamId=113) # Cincinati Reds 134
+        attendance_team_home = self.mlb.get_attendance(teamId=134)
+        attendance_season = self.mlb.get_attendance(teamId=113, season=2022)
+        self.assertEqual(attendance_team_away.records[0].team.id, 113)
+        self.assertEqual(attendance_team_home.records[0].team.id, 134)
+        self.assertEqual(attendance_season.records[0].team.id, 113)
+
+    def test_get_object(self):
+        test_sport = Sport(id=1,link="/api/v1/sports/1")
+        poopulated_sport = self.mlb.get_object(test_sport)
+        self.assertIsInstance(poopulated_sport, Sport) # Test result is List    
+        self.assertEqual(poopulated_sport.id, 1)
+        self.assertEqual(poopulated_sport.link, "/api/v1/sports/1")
+        self.assertEqual(poopulated_sport.name, 'Major League Baseball')
+        self.assertEqual(poopulated_sport.code, 'mlb')
+        self.assertEqual(poopulated_sport.abbreviation, 'MLB')
+        self.assertEqual(poopulated_sport.sortOrder, 11)
+        self.assertEqual(poopulated_sport.activeStatus, True)
