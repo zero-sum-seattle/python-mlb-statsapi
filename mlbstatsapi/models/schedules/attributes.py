@@ -43,10 +43,10 @@ class ScheduleGameTeam:
         Series number 
     """
     leagueRecord: Union[LeagueRecord, Dict[str, Any]]
-    score: int
     team: Union[ScheduleGameTeamInfo, Dict[str, Any]]
     splitSquad: bool
     seriesNumber: int
+    score: int = False
     isWinner: bool = False
 
     def __post_init__(self):

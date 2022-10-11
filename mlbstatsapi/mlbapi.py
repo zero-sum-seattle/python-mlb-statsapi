@@ -9,6 +9,7 @@ from mlbstatsapi.models.game import Game
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule
+from mlbstatsapi.models.attendances import Attendance
 from .mlbdataadapter import TheMlbStatsApiException
 from .mlbdataadapter import MlbDataAdapter, MlbResult
 
@@ -185,16 +186,20 @@ class Mlb:
 
     def get_schedule(self, startDate = datetime.date.today().strftime("%Y-%m-%d"), 
                      endDate = datetime.date.today().strftime("%Y-%m-%d")) -> Schedule:
+        # TODO Doc string
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"schedule?sportId=1&startDate={startDate}&endDate={endDate}") # Get schedule
         return Schedule(**mlbdata.data)
 
     def get_schedule_today(self) -> Schedule:
+        # TODO Doc string
         return self.get_schedule()
 
     def get_schedule_date(self, date) -> Schedule:
+        # TODO Doc string
         return self.get_schedule(startDate = date, endDate = date)
 
     def get_schedule_date_range(self, startDate, endDate) -> Schedule: 
+        # TODO Doc string
         return self.get_schedule(startDate = startDate, endDate = endDate)
 
     def get_game(self, gameId) -> Game:
@@ -207,6 +212,7 @@ class Mlb:
         return Game(**mlbdata.data)
 
     def get_todays_games(self) -> List[int]:
+        # TODO Doc string
         todaysGames = self.get_schedule_today()
         todaysGamesIds = []
         
@@ -427,3 +433,30 @@ class Mlb:
                 divisionIds.append(division['id']) # add to list
         
         return divisionIds
+
+    def get_attendance(self, teamId=None, leagueId=None, season=None, date=None,
+                            leagueListId=None, gameType=None, fields=None) -> Attendance:
+        # TODO Doc string
+        if not any([teamId, leagueId, leagueListId]):
+            raise TheMlbStatsApiException("""Need at least one of the following while
+                                            calling get_attendance: teamId, leagueId, 
+                                            leagueListId""")
+
+        endpoint = f'attendance?'
+        if teamId: endpoint += f'teamId={teamId}'
+        if leagueId: endpoint += f'{leagueId}' if endpoint==f'attendance?' else f'&leagueId={leagueId}'
+        if leagueListId: endpoint += f'{leagueListId}' if endpoint==f'attendance?' else f'&leagueListId={leagueListId}'
+        if season: endpoint += f'&season={season}' 
+        if date: endpoint += f'&date={date}'
+        if gameType: endpoint += f'&gameType={gameType}'
+        if fields: endpoint += f'&fields={fields}'
+        
+        mlbdata = self._mlb_adapter_v1.get(endpoint)
+        if not mlbdata.data['records']:
+            raise TheMlbStatsApiException("Bad JSON in response")
+        return Attendance(**mlbdata.data)
+
+    def get_object(self, object):
+        # TODO Doc string
+        get_func = getattr(self, 'get_'+str(object.__class__.__name__).lower())
+        return get_func(object.id)
