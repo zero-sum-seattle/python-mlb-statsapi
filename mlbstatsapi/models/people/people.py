@@ -70,9 +70,6 @@ class Person:
         self.stats = [ Stats(**stat) for stat in self.stats ] if self.stats else self.stats
 
 
-
-
-
 @dataclass(kw_only=True)
 class Player(Person):
     """
@@ -90,22 +87,12 @@ class Player(Person):
     """
     jerseyNumber: str
     parentTeamId: int
-    position: Union[PrimaryPosition, dict] = field(default_factory=dict)
-    status: Union[Status, dict] = field(default_factory=dict)
+    position: InitVar[Union[PrimaryPosition, dict]]
+    status: Union[Status, dict]
 
-    def __post_init__(self):
-        self.position = PrimaryPosition(**self.position) if self.position else self.position
-        self.status = Status(**self.status) if self.status else self.status 
-
-    @classmethod
-    def from_json(cls, data):
-        items = {}
-        for k, v in data.items():
-            if k == 'person': 
-                items.update(v)
-            else:
-                items.update({k:v})
-        return cls(**items)
+    def __post_init__(self, position: dict):
+        self.primaryPosition = PrimaryPosition(**position)
+        self.status = Status(**self.status)
 
 @dataclass(kw_only=True)
 class Coach(Person):
@@ -129,16 +116,6 @@ class Coach(Person):
     jobId: str
     title: str
 
-    def __post_init__(self):
-        self.position = PrimaryPosition(**self.position) if self.position else self.position
-        self.status = Status(**self.status) if self.status else self.status 
+
     
-    @classmethod
-    def from_json(cls, **data):
-        items = {}
-        for k, v in data.items():
-            if k == 'person': 
-                items.update(v)
-            else:
-                items.update({k:v})
-        return cls(**items)
+
