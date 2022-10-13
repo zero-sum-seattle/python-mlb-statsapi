@@ -37,7 +37,6 @@ class TestMlbAdapter(unittest.TestCase):
         # result.data should be None
         self.assertEqual(result.data, {})
 
-
     def test_mlbadapter_get_500(self):
         """mlbadapter should raise TheMlbStatsApiException for 500"""
 
@@ -61,25 +60,68 @@ class TestMlbAdapter(unittest.TestCase):
         self.assertTrue(result.data)
 
 
-    # def test_mlbadapter_bad_json(self):
-    #     """mlbadapter should raise TheMlbStatsApiException"""
+class MlbAdapterMockTesting(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb_adapter = MlbDataAdapter()
+        cls.response = requests.Response()
 
-    #     self.mock_get_patcher = patch('mlbstatsapi.mlbdataadapter.requests.get')
-    #     self.mock_get = self.mock_get_patcher.start()
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass   
 
-    #     # This test requires bad JSON, and a mock
-    #     self.response._content = '{"some bad json": '
-    #     self.response.status_code = 200
-    #     self.params = { "stats": "season", "group": "hitting" }
+    def test_mlbadapter_mock_bad_json(self):
+        """mlbadapter should raise TheMlbStatsApiException"""
+        # setting up mock
+        self.response.status_code = 200 # let's use 200 since this REST API is a little wonked
+        self.response._content = '{"some bad json": sdfsd'.encode()
 
-    #     # mock patch requests and set return_value as mock response
- 
-    #         # mlbdataadapter should raise exception
-    #     with self.assertRaises(TheMlbStatsApiException):
-    #         result = self.mlb_adapter.get(endpoint="teams/133/stats", ep_params=self.params)
+        # params to pass
+        self.params = { "stats": "season", "group": "hitting" }
+
+        # patch mlbdataadapter to return bad JSON
+        with patch("mlbstatsapi.mlbdataadapter.requests.get", return_value=self.response):
+
+            # mlb_adapter should raise exception due to bad JSON
+            with self.assertRaises(TheMlbStatsApiException):
+                result = self.mlb_adapter.get(endpoint="teams/133/stats", ep_params=self.params)
         
-    #     # stop mock
-    #     self.mock_get_patcher.stop()
+    def test_mlbadapter_mock_404_json(self):
+        """mlbadapter should raise TheMlbStatsApiException"""
+        # setting up mock
+        self.response.status_code = 404
+        self.response._content = '{ "messageNumber": 10, "message": "Object not found", "timestamp": "2022-10-13T18:16:41.886604Z", "traceId": null }'.encode()
+
+        # params to pass
+        self.params = { "stats": "standard", "group": "hitting" }
+
+        # patch mlbdataadapter to return 404 response
+        with patch("mlbstatsapi.mlbdataadapter.requests.get", return_value=self.response):
+
+            # mlb_adapter should raise exception due to bad JSON
+            result = self.mlb_adapter.get(endpoint="teams/133/stats", ep_params=self.params)
+            
+            # result.status_code should be 404
+            self.assertEqual(result.status_code, 404)
+     
+            # result.data should be None
+            self.assertEqual(result.data, {})
 
 
+    def test_mlbadapter_mock_500_json(self):
+        """mlbadapter should raise TheMlbStatsApiException"""
+        # setting up mock
+        self.response.status_code = 500
+        self.response._content = '{ "messageNumber" : 1, "message" : "Internal error occurred", "timestamp" : "2022-10-13T18:37:47.600274Z", "traceId" : "9318607c0b50f493e9056648614a5cea" }'.encode()
 
+        # params to pass
+        self.params = { "stats": "standard", "group": "hitting" }
+
+        # patch mlbdataadapter to return mocked response
+        with patch("mlbstatsapi.mlbdataadapter.requests.get", return_value=self.response):
+
+            # mlb_adapter should raise exception due to 500 status code
+            with self.assertRaises(TheMlbStatsApiException):
+                result = self.mlb_adapter.get(endpoint="teams/133/stats", ep_params=self.params)
+
+            
