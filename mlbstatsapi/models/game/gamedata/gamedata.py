@@ -91,6 +91,8 @@ class GameStatus:
         If the start time is TBD
     abstractGameCode : str
         The abstract game code
+    reason : str
+        reason for game reschedule
     """
     abstractGameState:  str
     codedGameState:     str
@@ -98,6 +100,7 @@ class GameStatus:
     statusCode:         str
     startTimeTBD:       bool
     abstractGameCode:   str
+    reason: str = None
 
 @dataclass
 class GameWeather:

@@ -135,6 +135,10 @@ class ScheduleGames:
         If necessary
     ifNecessaryDescription : str
         If necessary description
+    rescheduleDate : str 
+        rescheduled date
+    rescheduleGameDate : str
+        rescheduled game date
     """
     gamePk: int
     link: str
@@ -165,6 +169,8 @@ class ScheduleGames:
     ifNecessary: str
     ifNecessaryDescription: str
     isTie: bool = None
+    rescheduleDate: str = None
+    rescheduleGameDate: str = None
 
     def __post_init__(self):
         self.status = GameStatus(**self.status)

@@ -7,10 +7,13 @@ class MlbResult:
     def __init__(self, status_code: int, message: str, data: Dict = {}):
         self.status_code = int(status_code)
         self.message = str(message)
+
+        # if data is not NoneType and if copyright key is in data
+        # then if copyright key revemoved set data
+        self.data = data
         if 'copyright' in data:
-            self.data = data if data.pop('copyright') else {}  # this can be refactored
-        else:
-            self.data = {}
+            del data['copyright']
+
 
 class MlbDataAdapter:
     """Adapter for calling the mlb statsapi endpoint"""
@@ -20,14 +23,30 @@ class MlbDataAdapter:
         self._logger = logger or logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
 
-    def get(self, endpoint: str, data: Dict = None) -> MlbResult:
+    def get(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> MlbResult:
+        """
+        return a MlbResult from endpoint
+
+        Parameters
+        ----------
+        endpoint : str
+            rest api endpoint
+        ep_params : dict
+            params
+        data : dict
+            data to send with requests (we aren't using this)
+
+        Returns
+        -------
+        MlbResult or None
+        """     
         full_url = self.url + endpoint # pass endpoint from inhertited classes
         logline_pre = f"url={full_url}"
         logline_post = f" ,".join((logline_pre, "success={}, status_code={}, message={}"))
 
         try:
             self._logger.debug(logline_post)
-            response = requests.get(url=full_url) # mlbstats API only uses get calls
+            response = requests.get(url=full_url, params=ep_params) # mlbstats API only uses get calls
 
         except requests.exceptions.RequestException as e: # catch a response error
             self._logger.error(msg=(str(e))) # log error
@@ -46,7 +65,7 @@ class MlbDataAdapter:
 
         elif response.status_code >= 400 and response.status_code <= 499:  # catch HTTP error
             self._logger.error(msg=logline_post.format("Invalid Request", response.status_code, response.reason)) # log failure
-            return None
+            return MlbResult(response.status_code, message=response.reason, data={})
 
         elif response.status_code >= 500 and response.status_code <= 599:
             self._logger.error(msg=logline_post.format("Internal error occurred", response.status_code, response.reason))
