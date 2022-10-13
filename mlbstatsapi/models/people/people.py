@@ -79,20 +79,18 @@ class Player(Person):
     ----------
     jerseyNumber : str
         id number of the person
-    position : PrimaryPosition
-        PrimaryPosition of the player
     status : 
         Status of the player
     parentTeamId : int
+        parent team id
     """
     jerseyNumber: str
     parentTeamId: int
-    position: InitVar[Union[PrimaryPosition, dict]]
+    position: InitVar[dict]
     status: Union[Status, dict]
 
     def __post_init__(self, position: dict):
         self.primaryPosition = PrimaryPosition(**position)
-        self.status = Status(**self.status)
 
 @dataclass(kw_only=True)
 class Coach(Person):
