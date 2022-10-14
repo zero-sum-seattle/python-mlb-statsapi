@@ -77,5 +77,5 @@ class Schedule:
     def get_games_inProgress(self) -> List[int]:
         return self.get_games_with_status(abstractGameState='Live')
 
-    def get_games_finnished(self) -> List[int]:
+    def get_games_finished(self) -> List[int]:
         return self.get_games_with_status(abstractGameState='Final')

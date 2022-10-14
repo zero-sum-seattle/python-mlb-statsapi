@@ -1,28 +1,7 @@
 from typing import Union, Optional
 from dataclasses import dataclass
 
-from mlbstatsapi.models.people import Person
-
-@dataclass
-class RunnerCreditsPosition:
-    """
-    A class to represent a runners credit position.
-
-    Attributes
-    ----------
-    code : str
-        code
-    name : str
-        name
-    type : str
-        type
-    abbreviation : str
-        abbreviation
-    """
-    code: str
-    name: str
-    type: str
-    abbreviation: str
+from mlbstatsapi.models.people import Person, Position
 
 @dataclass
 class RunnerCredits:
@@ -39,12 +18,12 @@ class RunnerCredits:
         The credit
     """
     player: Union[Person, dict]
-    position: Union[RunnerCreditsPosition, dict]
+    position: Union[Position, dict]
     credit: str
 
     def __post_init__(self):
         self.player = Person(**self.player)
-        self.position = RunnerCreditsPosition(**self.position)
+        self.position = Position(**self.position)
 
 @dataclass
 class RunnerMovement:

@@ -1,6 +1,6 @@
 from typing import Union, Optional
 from dataclasses import dataclass
-from mlbstatsapi.models.people import Person, PrimaryPosition
+from mlbstatsapi.models.people import Person, Position
 
 from mlbstatsapi.models.game.livedata.plays.play.playevent.pitchdata import PitchData
 
@@ -66,7 +66,7 @@ class PlayEvent:
     pitchData: Optional[Union[PitchData, dict]] = None
     hitData: Optional[Union[HitData, dict]] = None
     player: Optional[Union[Person, dict]] = None
-    position: Optional[Union[PrimaryPosition, dict]] = None
+    position: Optional[Union[Position, dict]] = None
     replacedPlayer: Optional[Union[Person, dict]] = None
 
     def __post_init__(self):
@@ -75,4 +75,5 @@ class PlayEvent:
         self.pitchData = PitchData(**self.pitchData) if self.pitchData else self.pitchData
         self.hitData = HitData(**self.hitData) if self.hitData else self.hitData
         self.player = Person(**self.player) if self.player else self.player
+        self.position = Position(**self.position) if self.position else self.position
         self.replacedPlayer = Person(**self.replacedPlayer) if self.replacedPlayer else self.replacedPlayer
