@@ -1,6 +1,7 @@
 from typing import List
 
-
+# We need figure out where to put this funtion and any others like it going forward
+# It should be somewhere that all objects can call on it.
 
 class MlbObject:
     """

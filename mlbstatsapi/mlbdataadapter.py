@@ -1,4 +1,5 @@
 from typing import Dict
+from urllib import response
 from .exceptions import TheMlbStatsApiException
 import requests
 import logging
@@ -61,6 +62,7 @@ class MlbDataAdapter:
 
         if response.status_code <= 200 and response.status_code <= 299: # catch HTTP errors
             self._logger.debug(msg=logline_post.format("success", response.status_code, response.reason)) # log success
+            data = _transform_keys_in_response()
             return MlbResult(response.status_code, message=response.reason, data=data) # return result
 
         elif response.status_code >= 400 and response.status_code <= 499:  # catch HTTP error
@@ -73,3 +75,4 @@ class MlbDataAdapter:
 
         else:
             raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}") # raise exception 
+
