@@ -122,6 +122,10 @@ class ScheduleGames:
         If game is rescheduled, this is the rescheduled date
     rescheduleGameDate : str = None
         rescheduled game date
+    rescheduledFrom : str = None
+        rescheduled from
+    rescheduledFromDate : str = None
+        rescheduled from date
     isTie : bool = None
         Is tie
     """
@@ -156,6 +160,7 @@ class ScheduleGames:
     rescheduleDate: Optional[str] = None
     rescheduleGameDate: Optional[str] = None
     rescheduledFrom: Optional[str] = None
+    rescheduledFromDate: Optional[str] = None
     isTie: Optional[bool] = None
 
     def __post_init__(self):
