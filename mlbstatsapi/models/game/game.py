@@ -1,10 +1,10 @@
-from typing import Union, List, Dict, Any
-from dataclasses import dataclass, field
-from mlbstatsapi.models.game import MetaData
-from mlbstatsapi.models.game.gamedata import GameData # Import would be consistent through the project
+from typing import Union
+from dataclasses import dataclass
+
+from mlbstatsapi.models.game.gamedata import GameData
 from mlbstatsapi.models.game.livedata import LiveData
 
-
+from .attributes import MetaData
 
 @dataclass
 class Game:
@@ -31,11 +31,11 @@ class Game:
     id():
         returns this games id
     """
-    gamePk:     int
-    link:       str
-    metaData:   Union[MetaData, Dict[str, Any]]
-    gameData:   Union[GameData, Dict[str, Any]]
-    liveData:   Union[LiveData, Dict[str, Any]]
+    gamePk: int
+    link: str
+    metaData: Union[MetaData, dict]
+    gameData: Union[GameData, dict]
+    liveData: Union[LiveData, dict]
 
     def __post_init__(self):
         self.metaData = MetaData(**self.metaData)

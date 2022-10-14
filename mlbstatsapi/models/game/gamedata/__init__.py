@@ -1,2 +1,2 @@
 from .gamedata import GameData
-from .gamedata import GameStatus
+from .attributes import GameStatus

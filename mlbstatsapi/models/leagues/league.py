@@ -1,7 +1,7 @@
 ﻿from dataclasses import dataclass
-from typing import Dict, Union, Any
+from typing import Optional, Union
 from mlbstatsapi.models.sports import Sport
-from .attributes import LeagueSeasonDateInfo
+from .attributes import SeasonDateInfo
 
 @dataclass
 class LeagueRecord:
@@ -22,7 +22,7 @@ class LeagueRecord:
     wins: int
     losses: int
     pct: str
-    ties: int = None
+    ties: Optional[int] = None
 
 @dataclass
 class League:
@@ -74,25 +74,25 @@ class League:
     """
     id:                 int
     link:               str
-    name:               str = None
-    abbreviation:       str = None
-    nameShort:          str = None
-    seasonState:        str = None
-    hasWildCard:        bool = None
-    hasSplitSeason:     bool = None
-    numGames:           int = None
-    hasPlayoffPoints:   bool = None
-    numTeams:           int = None
-    numWildcardTeams:   int = None
-    seasonDateInfo:     Union[LeagueSeasonDateInfo, Dict[str, Any]] = None
-    season:             str = None
-    orgCode:            str = None
-    conferencesInUse:   bool = None
-    divisionsInUse:     bool = None
-    sport:              Union[Sport, Dict[str, Any]] = None
-    sortOrder:          int = None
-    active:             bool = None
+    name:               Optional[str] = None
+    abbreviation:       Optional[str] = None
+    nameShort:          Optional[str] = None
+    seasonState:        Optional[str] = None
+    hasWildCard:        Optional[bool] = None
+    hasSplitSeason:     Optional[bool] = None
+    numGames:           Optional[int] = None
+    hasPlayoffPoints:   Optional[bool] = None
+    numTeams:           Optional[int] = None
+    numWildcardTeams:   Optional[int] = None
+    seasonDateInfo:     Optional[Union[SeasonDateInfo, dict]] = None
+    season:             Optional[str] = None
+    orgCode:            Optional[str] = None
+    conferencesInUse:   Optional[bool] = None
+    divisionsInUse:     Optional[bool] = None
+    sport:              Optional[Union[Sport, dict]] = None
+    sortOrder:          Optional[int] = None
+    active:             Optional[bool] = None
 
     def __post_init__(self):
-        self.seasonDateInfo = LeagueSeasonDateInfo(**self.seasonDateInfo) if self.seasonDateInfo else self.seasonDateInfo
+        self.seasonDateInfo = SeasonDateInfo(**self.seasonDateInfo) if self.seasonDateInfo else self.seasonDateInfo
         self.sport = Sport(**self.sport) if self.sport else self.sport

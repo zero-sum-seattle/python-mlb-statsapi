@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, Union, Any
+from typing import Optional, Union
 from mlbstatsapi.models.teams import Team
 
 @dataclass
@@ -30,7 +30,7 @@ class AttendanceHighLowGame:
     """
     gamePk: int
     link: str
-    content: Union[AttendanceHighLowGameContent, Dict[str, Any]]
+    content: Union[AttendanceHighLowGameContent, dict]
     dayNight: str
 
     def __post_init__(self):
@@ -113,19 +113,19 @@ class AttendanceRecords:
     year: str
     attendanceAverageYtd: int
     attendanceTotal: int
-    gameType: Union[AttendenceGameType, Dict[str, Any]]
-    team: Union[Team, Dict[str, Any]]
-    attendanceAverageAway: int = None
-    attendanceAverageHome: int = None
-    attendanceHigh: int = None
-    attendanceHighDate: str  = None
-    attendanceHighGame: Union[AttendanceHighLowGame, Dict[str, Any]] = None
-    attendanceLow: int = None
-    attendanceLowDate: str  = None
-    attendanceLowGame: Union[AttendanceHighLowGame, Dict[str, Any]] = None
-    attendanceTotalAway: int = None
-    attendanceTotalHome: int = None
-    attendanceOpeningAverage: int = None
+    gameType: Union[AttendenceGameType, dict]
+    team: Union[Team, dict]
+    attendanceAverageAway: Optional[int] = None
+    attendanceAverageHome: Optional[int] = None
+    attendanceHigh: Optional[int] = None
+    attendanceHighDate: Optional[str ] = None
+    attendanceHighGame: Optional[Union[AttendanceHighLowGame, dict]] = None
+    attendanceLow: Optional[int] = None
+    attendanceLowDate: Optional[str] = None
+    attendanceLowGame: Optional[Union[AttendanceHighLowGame, dict]] = None
+    attendanceTotalAway: Optional[int] = None
+    attendanceTotalHome: Optional[int] = None
+    attendanceOpeningAverage: Optional[int] = None
 
     def __post_init__(self):
         self.attendanceHighGame = AttendanceHighLowGame(**self.attendanceHighGame) if self.attendanceHighGame else self.attendanceHighGame
@@ -134,7 +134,7 @@ class AttendanceRecords:
         self.team = Team(**self.team)
 
 @dataclass
-class AttendanceAggregateTotals:
+class AttendanceTotals:
     """
     A class to represent attendance aggregate toatls.
     Attributes
@@ -174,5 +174,5 @@ class AttendanceAggregateTotals:
     attendanceTotal: int
     attendanceTotalAway: int
     attendanceTotalHome: int
-    attendanceAverageAway: int = None
-    attendanceAverageHome: int = None
+    attendanceAverageAway: Optional[int] = None
+    attendanceAverageHome: Optional[int] = None
