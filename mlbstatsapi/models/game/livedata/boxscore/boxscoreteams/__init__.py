@@ -1,1 +1,0 @@
-from .boxscoreteams import BoxScoreTeams

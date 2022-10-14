@@ -6,6 +6,8 @@ from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.sports import Sport
 
+from .attributes import TeamRecord
+
 @dataclass
 class Team:
     """
@@ -37,7 +39,7 @@ class Team:
     division: Union[Division,dict] = field(default_factory=dict)
     sport: Union[Sport,dict] = field(default_factory=dict)
     shortName: Optional[str]  = None
-#    record: Union[LeagueRecord, dict]
+    record: Union[TeamRecord, dict] = None
     franchiseName: Optional[str]  = None
     clubName: Optional[str]  = None
     active: Optional[str]  = None
@@ -46,10 +48,11 @@ class Team:
     parentOrgId: str = None
 
     def __post_init__(self):
-        self.league = League(**self.league) if self.league else self.league
-        self.sport = Sport(**self.sport) if self.sport else self.sport
-        self.venue = Venue(**self.venue) if self.venue else self.venue
-        self.springVenue = Venue(**self.springVenue) if self.springVenue else self.springVenue
         self.springLeague = League(**self.springLeague) if self.springLeague else self.springLeague
+        self.venue = Venue(**self.venue) if self.venue else self.venue        
+        self.springVenue = Venue(**self.springVenue) if self.springVenue else self.springVenue        
+        self.league = League(**self.league) if self.league else self.league
         self.division = Division(**self.division) if self.division else self.division
+        self.sport = Sport(**self.sport) if self.sport else self.sport
+        self.record = TeamRecord(**self.record) if self.record else self.record
         self.stats = [ Stats(**stat) for stat in self.stats ] if self.stats else self.stats

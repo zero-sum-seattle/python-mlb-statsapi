@@ -1,6 +1,6 @@
 ﻿from logging import exception
 import unittest
-from mlbstatsapi.models.people import Person, PrimaryPosition
+from mlbstatsapi.models.people import Person, Position
 from mlbstatsapi import Mlb
 
 class TestPerson(unittest.TestCase):
@@ -34,5 +34,5 @@ class TestPersonPrimaryPosition(unittest.TestCase):
         pass
 
     def test_player_position_player_position(self):
-        self.assertIsInstance(self.position_player.primaryPosition, PrimaryPosition)
+        self.assertIsInstance(self.position_player.primaryPosition, Position)
         self.assertTrue(hasattr(self.position_player.primaryPosition, "code"))

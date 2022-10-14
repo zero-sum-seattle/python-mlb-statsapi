@@ -1,26 +1,9 @@
 from dataclasses import dataclass, field
-from typing import Dict, List, Union, Any
+from typing import Optional, Union, List
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.game.gamedata import GameStatus
+from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.leagues import LeagueRecord
-
-@dataclass
-class ScheduleGameTeamInfo:
-    """
-    A class to represent a team in a Scheduled Dates game.
-
-    Attributes
-    ----------
-    id : int
-        Team id number
-    name : str
-        Team nmae
-    link : str
-        Link to team
-    """
-    id: int
-    name: str
-    link: str
 
 @dataclass
 class ScheduleGameTeam:
@@ -42,19 +25,19 @@ class ScheduleGameTeam:
     seriesNumber : int
         Series number 
     """
-    leagueRecord: Union[LeagueRecord, Dict[str, Any]]
-    team: Union[ScheduleGameTeamInfo, Dict[str, Any]]
+    leagueRecord: Union[LeagueRecord, dict]
+    team: Union[Team, dict]
     splitSquad: bool
     seriesNumber: int
-    score: int = False
-    isWinner: bool = False
+    score: Optional[int] = False
+    isWinner: Optional[bool] = False
 
     def __post_init__(self):
         self.leagueRecord = LeagueRecord(**self.leagueRecord)
-        self.team = ScheduleGameTeamInfo(**self.team)
+        self.team = Team(**self.team)
 
 @dataclass
-class ScheduleGameTeams:
+class ScheduleHomeAndAway:
     """
     A class to represent both away and home teams in a Schedules Dates game.
 
@@ -65,8 +48,8 @@ class ScheduleGameTeams:
     away : ScheduleGameTeam
         Away team info for this game
     """
-    home: Union[ScheduleGameTeam, Dict[str, Any]]
-    away: Union[ScheduleGameTeam, Dict[str, Any]]
+    home: Union[ScheduleGameTeam, dict]
+    away: Union[ScheduleGameTeam, dict]
 
     def __post_init__(self):
         self.home = ScheduleGameTeam(**self.home)
@@ -135,10 +118,16 @@ class ScheduleGames:
         If necessary
     ifNecessaryDescription : str
         If necessary description
-    rescheduleDate : str 
-        rescheduled date
-    rescheduleGameDate : str
+    rescheduleDate : str = None
+        If game is rescheduled, this is the rescheduled date
+    rescheduleGameDate : str = None
         rescheduled game date
+    rescheduledFrom : str = None
+        rescheduled from
+    rescheduledFromDate : str = None
+        rescheduled from date
+    isTie : bool = None
+        Is tie
     """
     gamePk: int
     link: str
@@ -146,8 +135,8 @@ class ScheduleGames:
     season: str
     gameDate: str
     officialDate: str
-    status: Union[GameStatus, Dict[str, Any]]
-    teams: Union[ScheduleGameTeams, Dict[str, Any]]
+    status: Union[GameStatus, dict]
+    teams: Union[ScheduleHomeAndAway, dict]
     venue: Venue
     content: dict
     gameNumber: int
@@ -168,13 +157,15 @@ class ScheduleGames:
     recordSource: str
     ifNecessary: str
     ifNecessaryDescription: str
-    isTie: bool = None
-    rescheduleDate: str = None
-    rescheduleGameDate: str = None
+    rescheduleDate: Optional[str] = None
+    rescheduleGameDate: Optional[str] = None
+    rescheduledFrom: Optional[str] = None
+    rescheduledFromDate: Optional[str] = None
+    isTie: Optional[bool] = None
 
     def __post_init__(self):
         self.status = GameStatus(**self.status)
-        self.teams = ScheduleGameTeams(**self.teams)
+        self.teams = ScheduleHomeAndAway(**self.teams)
 
 
 @dataclass

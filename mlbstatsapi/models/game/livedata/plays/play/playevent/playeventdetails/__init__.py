@@ -1,1 +1,0 @@
-from .playeventdetails import PlayEventDetails

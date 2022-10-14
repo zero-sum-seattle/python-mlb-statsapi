@@ -1,5 +1,5 @@
 ﻿from dataclasses import dataclass
-from typing import Dict, Union, Any
+from typing import Optional, Union
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.sports import Sport
 
@@ -39,15 +39,15 @@ class Division:
     id: int
     name: str
     link: str
-    season: str = None
-    nameShort: str = None
-    abbreviation: str = None
-    league: Union[League, Dict[str, Any]] = None
-    sport: Union[Sport, Dict[str, Any]] = None
-    hasWildcard: bool = None
-    sortOrder: int = None
-    numPlayoffTeams: int = None
-    active: bool = None
+    season: Optional[str] = None
+    nameShort: Optional[str] = None
+    abbreviation: Optional[str] = None
+    league: Optional[Union[League, dict]] = None
+    sport: Optional[Union[Sport, dict]] = None
+    hasWildcard: Optional[bool] = None
+    sortOrder: Optional[int] = None
+    numPlayoffTeams: Optional[int] = None
+    active: Optional[bool] = None
 
     def __post_init__(self):
         self.league = League(**self.league) if self.league else self.league

@@ -1,4 +1,4 @@
-from typing import Union, Dict, List, Any
+from typing import Union, List
 from dataclasses import dataclass
 
 from mlbstatsapi.models.game.livedata.plays.play import Play
@@ -20,10 +20,10 @@ class Plays:
     playsByInning : List[PlayByInning]
         Plays by inning
     """
-    allPlays:       Union[List[Play], List[Dict[str, Any]]]
-    currentPlay:    Union[Play, Dict[str, Any]]
-    scoringPlays:   List[int]
-    playsByInning:  Union[List[PlayByInning], List[Dict[str, Any]]]
+    allPlays: Union[List[Play], List[dict]]
+    currentPlay: Union[Play, dict]
+    scoringPlays: List[int]
+    playsByInning: Union[List[PlayByInning], List[dict]]
 
     def __post_init__(self):
         self.allPlays = [Play(**play) for play in self.allPlays if play]

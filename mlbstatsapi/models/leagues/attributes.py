@@ -1,8 +1,8 @@
-from typing import Dict, Union, Any
-from dataclasses import dataclass, field
+from typing import Optional
+from dataclasses import dataclass
 
 @dataclass
-class LeagueSeasonDateInfo:
+class SeasonDateInfo:
     """
     A class to represent a LeagueSeasonDateInfo.
 
@@ -49,23 +49,23 @@ class LeagueSeasonDateInfo:
     qualifierOutsPitched : str = None
 
     """
-    seasonId:                   str = None
-    preSeasonStartDate:         str = None
-    preSeasonEndDate:           str = None
-    seasonStartDate:            str = None
-    springStartDate:            str = None
-    springEndDate:              str = None
-    regularSeasonStartDate:     str = None
-    lastDate1stHalf:            str = None
-    allStarDate:                str = None
-    firstDate2ndHalf:           str = None
-    regularSeasonEndDate:       str = None
-    postSeasonStartDate:        str = None
-    postSeasonEndDate:          str = None
-    seasonEndDate:              str = None
-    offseasonStartDate:         str = None
-    offSeasonEndDate:           str = None
-    seasonLevelGamedayType:     str = None
-    gameLevelGamedayType:       str = None
-    qualifierPlateAppearances:  str = None
-    qualifierOutsPitched:       str = None
+    seasonId:                   Optional[str] = None
+    preSeasonStartDate:         Optional[str] = None
+    preSeasonEndDate:           Optional[str] = None
+    seasonStartDate:            Optional[str] = None
+    springStartDate:            Optional[str] = None
+    springEndDate:              Optional[str] = None
+    regularSeasonStartDate:     Optional[str] = None
+    lastDate1stHalf:            Optional[str] = None
+    allStarDate:                Optional[str] = None
+    firstDate2ndHalf:           Optional[str] = None
+    regularSeasonEndDate:       Optional[str] = None
+    postSeasonStartDate:        Optional[str] = None
+    postSeasonEndDate:          Optional[str] = None
+    seasonEndDate:              Optional[str] = None
+    offseasonStartDate:         Optional[str] = None
+    offSeasonEndDate:           Optional[str] = None
+    seasonLevelGamedayType:     Optional[str] = None
+    gameLevelGamedayType:       Optional[str] = None
+    qualifierPlateAppearances:  Optional[str] = None
+    qualifierOutsPitched:       Optional[str] = None

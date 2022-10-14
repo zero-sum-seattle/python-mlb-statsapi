@@ -1,5 +1,5 @@
-﻿from dataclasses import dataclass
-
+﻿from typing import Optional
+from dataclasses import dataclass
 
 @dataclass
 class Sport:
@@ -23,10 +23,10 @@ class Sport:
     activeStatus : bool = None
         Is the sport active
     """
-    id:             int
-    link:           str
-    name:           str = None
-    code:           str = None
-    abbreviation:   str = None
-    sortOrder:      int = None
-    activeStatus:   bool = None
+    id: int
+    link: str
+    name: Optional[str] = None
+    code: Optional[str] = None
+    abbreviation: Optional[str] = None
+    sortOrder: Optional[int] = None
+    activeStatus: Optional[bool] = None

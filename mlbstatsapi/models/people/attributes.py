@@ -32,7 +32,7 @@ class PitchHand:
 
 
 @dataclass
-class PrimaryPosition:
+class Position:
     """
     A class to represent a batside.
 

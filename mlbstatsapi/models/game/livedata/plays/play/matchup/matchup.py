@@ -1,39 +1,9 @@
-from typing import Union, Dict, List, Any
+from typing import Union, Optional, List
 from dataclasses import dataclass
+
 from mlbstatsapi.models.people import Person
 
-@dataclass
-class PlayMatchupSide:
-    """
-    A class to represent a play Matchup Side.
-
-    Attributes
-    ----------
-    code : str
-
-    description : str
-
-    """
-    code:           str
-    description:    str
-
-@dataclass
-class PlayMatchupSplits:
-    """
-    A class to represent a playMatchup Split.
-
-    Attributes
-    ----------
-    batter : str
-
-    pitcher : str
-
-    menOnBase : str
-
-    """
-    batter:     str
-    pitcher:    str
-    menOnBase:  str
+from .attributes import PlayMatchupSide, PlayMatchupSplits
 
 @dataclass
 class PlayMatchup:
@@ -65,17 +35,17 @@ class PlayMatchup:
     postOnThird : Person = None
         Runner on third
     """
-    batter:                 Union[Person, Dict[str, Any]]
-    batSide:                Union[PlayMatchupSide, Dict[str, Any]]
-    pitcher:                Union[Person, Dict[str, Any]]
-    pitchHand:              Union[PlayMatchupSide, Dict[str, Any]]
-    batterHotColdZones:     List
-    pitcherHotColdZones:    List
-    splits:                 Union[PlayMatchupSplits, Dict[str, Any]]
-    batterHotColdZoneStats: List = None
-    postOnFirst:            Union[Person, Dict[str, Any]] = None
-    postOnSecond:           Union[Person, Dict[str, Any]] = None
-    postOnThird:            Union[Person, Dict[str, Any]] = None
+    batter: Union[Person, dict]
+    batSide: Union[PlayMatchupSide, dict]
+    pitcher: Union[Person, dict]
+    pitchHand: Union[PlayMatchupSide, dict]
+    batterHotColdZones: List
+    pitcherHotColdZones: List
+    splits: Union[PlayMatchupSplits, dict]
+    batterHotColdZoneStats: Optional[List] = None
+    postOnFirst: Optional[Union[Person, dict]] = None
+    postOnSecond: Optional[Union[Person, dict]] = None
+    postOnThird: Optional[Union[Person, dict]] = None
 
     def __post_init__(self):
         self.batter = Person(**self.batter)

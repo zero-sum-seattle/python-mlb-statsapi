@@ -1,1 +1,0 @@
-from .hitdata import HitData

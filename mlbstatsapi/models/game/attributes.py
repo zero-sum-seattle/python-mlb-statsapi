@@ -1,5 +1,5 @@
 from typing import List
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 @dataclass
 class MetaData:
@@ -17,7 +17,7 @@ class MetaData:
     logicalEvents : List[str]
         Current logical events for this game
     """
-    wait:           int
-    timeStamp:      str
-    gameEvents:     List[str]
-    logicalEvents:  List[str]
+    wait: int
+    timeStamp: str
+    gameEvents: List[str]
+    logicalEvents: List[str]
