@@ -23,6 +23,7 @@ class LinescoreTeamScoreing:
     errors: int
     leftOnBase: int
     runs: Optional[int] = None
+    isWinner: Optional[bool] = None
 
 @dataclass
 class LinescoreInning:

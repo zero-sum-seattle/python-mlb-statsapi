@@ -5,13 +5,15 @@ from mlbstatsapi.models.people import Person, Player, Coach
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
-from mlbstatsapi.models.game import Game
+from mlbstatsapi.models.game import Game, Plays, Linescore, BoxScore
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi.models.attendances import Attendance
 from .mlbdataadapter import TheMlbStatsApiException
 from .mlbdataadapter import MlbDataAdapter
+
+from .mlb import _transform_mlbdata
 
 
 class Mlb:
@@ -153,9 +155,8 @@ class Mlb:
 
         if ('roster' in mlbdata.data and mlbdata.data['roster']):
             for player in mlbdata.data['roster']:
-                person = player.pop('person')
-                players.append(Player(**{**player, **person}))
-    
+                players.append(Player(**_transform_mlbdata(player, ['person'])))
+
         return players
 
     def get_team_coaches(self, teamId) -> List[Coach]:
@@ -175,9 +176,8 @@ class Mlb:
         coaches = []
 
         if ('roster' in mlbdata.data and mlbdata.data['roster']):
-            for coach in mlbdata.data['roster']:
-                person = coach.pop('person')
-                coaches.append(Coach(**{**coach, **person}))
+            for coach in mlbdata.data['roster']:               
+                coaches.append(Coach(**_transform_mlbdata(coach, ['person'])))
 
         return coaches
 
@@ -265,11 +265,59 @@ class Mlb:
         """  
         mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'game/{gameId}/feed/live') # Get game
         
-        if ('gamePk' in mlbdata.data and mlbdata.data['gamePk'] != gameId): # If game id eccepted but not valid
-            raise TheMlbStatsApiException("Bad JSON in response")
-        
-        return Game(**mlbdata.data)
+        if ('gamePk' in mlbdata.data and mlbdata.data['gamePk'] == gameId):
+            return Game(**mlbdata.data)
 
+    def get_game_playByPlay(self, gameId) -> Union[Plays, None]:
+        """
+        return the playbyplay of a game for a specific game id
+
+        Parameters
+        ----------
+        gameId : int
+            Game id number
+
+        Returns
+        -------
+        Plays
+        """  
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameId}/playByPlay') # Get games boxscore
+        if ('allPlays' in mlbdata.data and mlbdata.data['allPlays']): # if teams in mlbdata
+            return Plays(**mlbdata.data)
+
+    def get_game_linescore(self, gameId) -> Union[Linescore, None]:
+        """
+        return the Linescore of a game for a specific game id
+
+        Parameters
+        ----------
+        gameId : int
+            Game id number
+
+        Returns
+        -------
+        Linescore
+        """  
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameId}/linescore') # Get games boxscore
+        if ('teams' in mlbdata.data and mlbdata.data['teams']): # if teams in mlbdata
+            return Linescore(**mlbdata.data)
+
+    def get_game_boxscore(self, gameId) -> Union[BoxScore, None]:
+        """
+        return the boxscore of a game for a specific game id
+
+        Parameters
+        ----------
+        gameId : int
+            Game id number
+
+        Returns
+        -------
+        BoxScore
+        """  
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameId}/boxscore') # Get games boxscore
+        if ('teams' in mlbdata.data and mlbdata.data['teams']): # if teams in mlbdata
+            return BoxScore(**mlbdata.data)
 
     def get_game_ids(self, date, abstractGameState=None) -> List[int]:
         """
