@@ -153,8 +153,9 @@ class ScheduleGames:
     recordSource: str
     ifNecessary: str
     ifNecessaryDescription: str
-    rescheduleDate: str = None
-    rescheduleGameDate: str = None
+    rescheduleDate: Optional[str] = None
+    rescheduleGameDate: Optional[str] = None
+    rescheduledFrom: Optional[str] = None
     isTie: Optional[bool] = None
 
     def __post_init__(self):
