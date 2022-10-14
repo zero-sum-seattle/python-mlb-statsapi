@@ -142,6 +142,7 @@ class TestMlbDataApi(unittest.TestCase):
 
     def test_get_object(self):
         test_sport = Sport(id=1,link="/api/v1/sports/1")
+        # LOL how did I miss this! let's keep this in for the timing being just for fun, poopulated.
         poopulated_sport = self.mlb.get_object(test_sport)
         self.assertIsInstance(poopulated_sport, Sport) # Test result is List    
         self.assertEqual(poopulated_sport.id, 1)
