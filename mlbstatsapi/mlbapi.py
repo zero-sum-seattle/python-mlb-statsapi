@@ -153,8 +153,7 @@ class Mlb:
 
         if ('roster' in mlbdata.data and mlbdata.data['roster']):
             for player in mlbdata.data['roster']:
-                person = player.pop('person')
-                players.append(Player(**{**player, **person}))
+                players.append(Player.from_mlb_response(player))
     
         return players
 
@@ -176,8 +175,7 @@ class Mlb:
 
         if ('roster' in mlbdata.data and mlbdata.data['roster']):
             for coach in mlbdata.data['roster']:
-                person = coach.pop('person')
-                coaches.append(Coach(**{**coach, **person}))
+                coaches.append(Coach.from_mlb_response(coach))
 
         return coaches
 
@@ -633,3 +631,20 @@ class Mlb:
         hydratedobject = get_func(object.id)
         # If problem with hydrating object, return the old dry object
         return hydratedobject if hydratedobject else object
+
+
+    def _transform_mlbdata(self, MlbData, keys: List[str] = None):
+        """
+        change keys to all lowercase, and merge requested dictionarys return MlbResult
+
+        Parameters
+        ----------
+        MlbResult : class
+            Object to be hydrated. Can by dry or one that just needs updating
+
+        Returns
+        -------
+
+        MlbResult
+        """ 
+        pass
