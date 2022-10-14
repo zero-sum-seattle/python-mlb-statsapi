@@ -1,28 +1,10 @@
-from typing import Union, Dict, Any
+from typing import Union, Optional
 from dataclasses import dataclass
-from mlbstatsapi.models.people import Person, PrimaryPosition
+from mlbstatsapi.models.people import Person, Position
 
-from mlbstatsapi.models.game.livedata.plays.play.playevent.playeventdetails import PlayEventDetails
 from mlbstatsapi.models.game.livedata.plays.play.playevent.pitchdata import PitchData
-from mlbstatsapi.models.game.livedata.plays.play.playevent.hitdata import HitData
 
-@dataclass
-class PlayCount:
-    """
-    A class to represent a play count.
-
-    Attributes
-    ----------
-    balls : int
-        Balls
-    strikes : int
-        strikes
-    outs : int
-        Outs
-    """
-    balls:      int
-    strikes:    int
-    outs:       int
+from .attributes import PlayEventDetails, PlayCount, HitData
 
 @dataclass
 class PlayEvent:
@@ -68,24 +50,24 @@ class PlayEvent:
     replacedPlayer : Person  = None
         Replaced player
     """
-    details:            Union[PlayEventDetails, Dict[str, Any]]
-    index:              int
-    startTime:          str
-    endTime:            str
-    isPitch:            bool
-    type:               str
-    playId:             str = None
-    pitchNumber:        int = None
-    actionPlayId:       str = None
-    isBaseRunningPlay:  bool = None
-    isSubstitution:     bool = None
-    battingOrder:       str = None
-    count:              Union[PlayCount, Dict[str, Any]] = None
-    pitchData:          Union[PitchData, Dict[str, Any]] = None
-    hitData:            Union[HitData, Dict[str, Any]] = None
-    player:             Union[Person, Dict[str, Any]] = None
-    position:           Union[PrimaryPosition, Dict[str, Any]] = None
-    replacedPlayer:     Union[Person, Dict[str, Any]] = None
+    details: Union[PlayEventDetails, dict]
+    index: int
+    startTime: str
+    endTime: str
+    isPitch: bool
+    type: str
+    playId: Optional[str] = None
+    pitchNumber: Optional[int] = None
+    actionPlayId: Optional[str] = None
+    isBaseRunningPlay: Optional[bool] = None
+    isSubstitution: Optional[bool] = None
+    battingOrder: Optional[str] = None
+    count: Optional[Union[PlayCount, dict]] = None
+    pitchData: Optional[Union[PitchData, dict]] = None
+    hitData: Optional[Union[HitData, dict]] = None
+    player: Optional[Union[Person, dict]] = None
+    position: Optional[Union[Position, dict]] = None
+    replacedPlayer: Optional[Union[Person, dict]] = None
 
     def __post_init__(self):
         self.details = PlayEventDetails(**self.details)
@@ -93,4 +75,5 @@ class PlayEvent:
         self.pitchData = PitchData(**self.pitchData) if self.pitchData else self.pitchData
         self.hitData = HitData(**self.hitData) if self.hitData else self.hitData
         self.player = Person(**self.player) if self.player else self.player
+        self.position = Position(**self.position) if self.position else self.position
         self.replacedPlayer = Person(**self.replacedPlayer) if self.replacedPlayer else self.replacedPlayer

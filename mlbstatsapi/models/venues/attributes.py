@@ -1,5 +1,5 @@
-from typing import Dict, Union, Any
-from dataclasses import dataclass, field
+from typing import Optional, Union
+from dataclasses import dataclass
 
 @dataclass
 class VenueDefaultCoordinates:
@@ -13,13 +13,13 @@ class VenueDefaultCoordinates:
     longitude : float
         The longitude coordinate for this venue
     """
-    latitude:   float
-    longitude:  float
+    latitude: float
+    longitude: float
 
 @dataclass
-class VenueLocation:
+class Location:
     """
-    A class to represent a venue.
+    A class to represent a Location used by venue.
 
     Attributes
     ----------
@@ -42,23 +42,23 @@ class VenueLocation:
     phone : str
         Phone number for this venue
     """
-    address1:           str
-    city:               str
-    state:              str
-    stateAbbrev:        str
-    postalCode:         str
-    defaultCoordinates: Union[VenueDefaultCoordinates, Dict[str, Any]]
-    country:            str
-    phone:              str
-    address2:           str = None
+    address1: str
+    city: str
+    state: str
+    stateAbbrev: str
+    postalCode: str
+    defaultCoordinates: Union[VenueDefaultCoordinates, dict]
+    country: str
+    phone: str
+    address2: Optional[str] = None
 
     def __post_init__(self):
         self.defaultCoordinates = VenueDefaultCoordinates(**self.defaultCoordinates)
 
 @dataclass
-class VenueTimeZone:
+class TimeZone:
     """
-    A class to represent a venue.
+    A class to represent a TimeZone Used by venue.
 
     Attributes
     ----------
@@ -69,14 +69,14 @@ class VenueTimeZone:
     tz : str
         Timezone string
     """
-    id:     str
+    id: str
     offset: int
-    tz:     str
+    tz: str
 
 @dataclass
-class VenueFieldInfo:
+class FieldInfo:
     """
-    A class to represent a venue.
+    A class to represent a venue Field info.
 
     Attributes
     ----------
@@ -101,13 +101,13 @@ class VenueFieldInfo:
     rightLine : int = None
         Distance to right line
     """
-    capacity:       int
-    turfType:       str
-    roofType:       str
-    leftLine:       int = None
-    left:           int = None
-    leftCenter:     int = None
-    center:         int = None
-    rightCenter:    int = None
-    right:          int = None
-    rightLine:      int = None
+    capacity: Optional[int] = None
+    turfType: Optional[str] = None
+    roofType: Optional[str] = None
+    leftLine: Optional[int] = None
+    left: Optional[int] = None
+    leftCenter: Optional[int] = None
+    center: Optional[int] = None
+    rightCenter: Optional[int] = None
+    right: Optional[int] = None
+    rightLine: Optional[int] = None

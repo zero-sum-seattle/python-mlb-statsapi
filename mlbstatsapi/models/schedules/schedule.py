@@ -1,12 +1,7 @@
-from dataclasses import dataclass, field, fields
-from typing import Dict, List, Union, Any
+from typing import List
+from dataclasses import dataclass, field
+
 from .attributes import ScheduleDates
-
-from mlbstatsapi.exceptions import TheMlbStatsApiException
-
-from mlbstatsapi.models.game.gamedata import GameStatus
-
-# https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2022-05-19
 
 @dataclass
 class Schedule:
@@ -33,24 +28,42 @@ class Schedule:
     totalGames: int
     totalGamesInProgress: int
     dates: List[ScheduleDates] = field(default_factory=list)
-    __statusTypes = []
 
     def __post_init__(self):
         self.dates = [ScheduleDates(**date) for date in self.dates if self.dates]
 
-    def get_games_with_status(self, abstractGameState = None,
-                                    codedGameState = None,
-                                    detailedState = None,
-                                    statusCode = None,
-                                    reason = None,
-                                    abstractGameCode = None):
+    def get_games_with_status(self, abstractGameState: str = None, codedGameState: str = None,
+                                    detailedState: str = None, statusCode: str = None,
+                                    reason: str = None, abstractGameCode: str = None) -> List[int]:
+        """
+        returns a list of game ids.
+
+        Parameters
+        ----------
+        abstractGameState : str = None
+
+        codedGameState : str = None
+
+        detailedState : str = None
+
+        statusCode : str = None
+
+        reason : str = None
+
+        abstractGameCode : str = None
+
+        Returns
+        -------
+        List[int]
+        """       
         gameStatuses = {'abstractGameState':abstractGameState,
                         'codedGameState':codedGameState,
                         'detailedState':detailedState,
                         'statusCode':statusCode,
                         'reason':reason,
-                        'abstractGameCode':abstractGameCode,}
+                        'abstractGameCode':abstractGameCode}
         gameIds = []
+
         if all(gameStatuses[status] == None for status in gameStatuses):
             return gameIds 
         else:
@@ -61,8 +74,8 @@ class Schedule:
                         gameIds.append(game.gamePk)
             return gameIds
 
-    def get_games_inProgress(self):
+    def get_games_inProgress(self) -> List[int]:
         return self.get_games_with_status(abstractGameState='Live')
 
-    def get_games_finnished(self):
+    def get_games_finished(self) -> List[int]:
         return self.get_games_with_status(abstractGameState='Final')

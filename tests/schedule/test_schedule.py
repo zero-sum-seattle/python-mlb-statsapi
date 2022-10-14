@@ -37,5 +37,5 @@ class TestSchedule(unittest.TestCase):
 
     # def test_schedule_get_games_inProgress(self):
 
-    def test_schedule_get_games_finnished(self):
-        self.assertEqual(self.schedule.get_games_finnished(), [715770, 715764, 715767, 715761])
+    def test_schedule_get_games_finished(self):
+        self.assertEqual(self.schedule.get_games_finished(), [715770, 715764, 715767, 715761])

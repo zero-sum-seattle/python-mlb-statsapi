@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from typing import Union, Dict, List, Any
-from .attributes import AttendanceAggregateTotals, AttendanceRecords
+from typing import Union, List
+from .attributes import AttendanceTotals, AttendanceRecords
 
 @dataclass
 class Attendance:
@@ -15,10 +15,10 @@ class Attendance:
     aggregateTotals : AttendanceAggregateTotals
         Attendence aggregate total numbers for query
     """
-    aggregateTotals: Union[AttendanceAggregateTotals, Dict[str, Any]]
-    records: Union[List[AttendanceRecords], List[Dict[str, Any]]] = field(default_factory=list)
+    aggregateTotals: Union[AttendanceTotals, dict]
+    records: Union[List[AttendanceRecords], List[dict]] = field(default_factory=list)
 
 
     def __post_init__(self):
         self.records = [AttendanceRecords(**record) for record in self.records if self.records]
-        self.aggregateTotals = AttendanceAggregateTotals(**self.aggregateTotals)
+        self.aggregateTotals = AttendanceTotals(**self.aggregateTotals)

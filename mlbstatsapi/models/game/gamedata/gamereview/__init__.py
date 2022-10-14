@@ -1,1 +1,0 @@
-from .gamereview import GameReview

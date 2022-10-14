@@ -1,6 +1,6 @@
-from typing import Dict, Union, Any
-from dataclasses import dataclass, field
-from .attributes import VenueLocation, VenueTimeZone, VenueFieldInfo
+from typing import Optional, Union
+from dataclasses import dataclass
+from .attributes import Location, TimeZone, FieldInfo
 
 @dataclass
 class Venue:
@@ -26,13 +26,13 @@ class Venue:
     """
     id:         int
     link:       str
-    name:       str = None
-    location:   Union[VenueLocation, Dict[str, Any]] = None
-    timeZone:   Union[VenueTimeZone, Dict[str, Any]] = None
-    fieldInfo:  Union[VenueFieldInfo, Dict[str, Any]] = None
-    active:     bool = None
+    name:       Optional[str] = None
+    location:   Optional[Union[Location, dict]] = None
+    timeZone:   Optional[Union[TimeZone, dict]] = None
+    fieldInfo:  Optional[Union[FieldInfo, dict]] = None
+    active:     Optional[bool] = None
 
     def __post_init__(self):
-        self.location = VenueLocation(**self.location) if self.location else self.location
-        self.timeZone = VenueTimeZone(**self.timeZone) if self.timeZone else self.timeZone
-        self.fieldInfo = VenueFieldInfo(**self.fieldInfo) if self.fieldInfo else self.fieldInfo
+        self.location = Location(**self.location) if self.location else self.location
+        self.timeZone = TimeZone(**self.timeZone) if self.timeZone else self.timeZone
+        self.fieldInfo = FieldInfo(**self.fieldInfo) if self.fieldInfo else self.fieldInfo

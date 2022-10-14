@@ -1,5 +1,5 @@
 ﻿from typing import List, Dict, Union, Any, Optional
-from .attributes import PitchHand, PrimaryPosition, BatSide, Status
+from .attributes import PitchHand, Position, BatSide, Status
 from mlbstatsapi.models.stats import Stats
 from dataclasses import dataclass, field, InitVar
 
@@ -20,7 +20,7 @@ class Person:
     id: int
     link: str
     mlb_class: str = "people"
-    primaryposition: Union[PrimaryPosition, Dict[str, Any]] = field(default_factory=dict)
+    primaryposition: Union[Position, Dict[str, Any]] = field(default_factory=dict)
     pitchhand: Union[PitchHand, Dict[str, Any]] = field(default_factory=dict)
     batside: Union[BatSide, Dict[str, Any]] = field(default_factory=dict)
     stats: Union[Stats, list] = field(default_factory=list)
@@ -64,7 +64,7 @@ class Person:
     deathcountry: Optional[str] = None
 
     def __post_init__(self):
-        self.primaryposition = PrimaryPosition(**self.primaryposition) if self.primaryposition else self.primaryposition
+        self.primaryposition = Position(**self.primaryposition) if self.primaryposition else self.primaryposition
         self.pitchhand = PitchHand(**self.pitchhand) if self.pitchhand else self.pitchhand
         self.batside = BatSide(**self.batside) if self.batside else self.batside
         self.stats = [ Stats(**stat) for stat in self.stats ] if self.stats else self.stats
@@ -95,7 +95,7 @@ class Player(Person):
     status: Union[Status, dict]
 
     def __post_init__(self, position: dict):
-        self.primaryposition = PrimaryPosition(**position)
+        self.primaryposition = Position(**position)
 
     @staticmethod
     def from_mlb_response(mlbdata: dict) -> "Player":
