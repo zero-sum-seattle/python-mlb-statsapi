@@ -265,7 +265,7 @@ class Mlb:
         """  
         mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'game/{gameId}/feed/live') # Get game
         
-        if ('gamePk' in mlbdata.data and mlbdata.data['gamePk'] == gameId):
+        if ('gamepk' in mlbdata.data and mlbdata.data['gamepk'] == gameId):
             return Game(**mlbdata.data)
 
     def get_game_playByPlay(self, gameId) -> Union[Plays, None]:
@@ -282,7 +282,7 @@ class Mlb:
         Plays
         """  
         mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameId}/playByPlay') # Get games boxscore
-        if ('allPlays' in mlbdata.data and mlbdata.data['allPlays']): # if teams in mlbdata
+        if ('allplays' in mlbdata.data and mlbdata.data['allplays']): # if teams in mlbdata
             return Plays(**mlbdata.data)
 
     def get_game_linescore(self, gameId) -> Union[Linescore, None]:
@@ -348,8 +348,8 @@ class Mlb:
                         # Collect all the game Id's for todays games
                         for game in scheduledGames.dates[0].games:
                             # If abstractGameState param provided only get games that match
-                            if not abstractGameState or (game.status.abstractGameState == abstractGameState):
-                                gamesIds.append(game.gamePk) # Append game Ids
+                            if not abstractGameState or (game.status.abstractgamestate == abstractGameState):
+                                gamesIds.append(game.gamepk) # Append game Ids
             
             return gamesIds
 

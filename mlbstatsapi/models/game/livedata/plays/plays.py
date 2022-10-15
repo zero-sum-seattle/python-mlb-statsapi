@@ -11,21 +11,21 @@ class Plays:
 
     Attributes
     ----------
-    allPlays : List[Play]
+    allplays : List[Play]
         All the plays in this game
-    currentPlay : Play
+    currentplay : Play
         The current play in this game
-    scoringPlays : List[int]
+    scoringplays : List[int]
         Which plays are scoring plays, indexed with allPlays
-    playsByInning : List[PlayByInning]
+    playsbyinning : List[PlayByInning]
         Plays by inning
     """
-    allPlays: Union[List[Play], List[dict]]
-    currentPlay: Union[Play, dict]
-    scoringPlays: List[int]
-    playsByInning: Union[List[PlayByInning], List[dict]]
+    allplays: Union[List[Play], List[dict]]
+    currentplay: Union[Play, dict]
+    scoringplays: List[int]
+    playsbyinning: Union[List[PlayByInning], List[dict]]
 
     def __post_init__(self):
-        self.allPlays = [Play(**play) for play in self.allPlays if play]
-        self.currentPlay = Play(**self.currentPlay)
-        self.playsByInning = [PlayByInning(**inning) for inning in self.playsByInning if inning]
+        self.allplays = [Play(**play) for play in self.allplays if play]
+        self.currentplay = Play(**self.currentplay)
+        self.playsbyinning = [PlayByInning(**inning) for inning in self.playsbyinning if inning]

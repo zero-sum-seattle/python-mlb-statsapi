@@ -31,14 +31,14 @@ class GameLeaders:
 
     Attributes
     ----------
-    hitDistance : Dict
+    hitdistance : Dict
 
-    hitSpeed : Dict
+    hitspeed : Dict
 
-    pitchSpeed : Dict
+    pitchspeed : Dict
 
     """
     # Dont know what this populated looks like. Every game ive seen its three empty dicts?
-    hitDistance: dict
-    hitSpeed: dict
-    pitchSpeed: dict
+    hitdistance: dict
+    hitspeed: dict
+    pitchspeed: dict

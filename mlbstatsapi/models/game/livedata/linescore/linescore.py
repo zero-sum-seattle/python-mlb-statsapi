@@ -1,10 +1,6 @@
 from typing import Union, List
 from dataclasses import dataclass
 
-# from mlbstatsapi.models.game.livedata.linescore.linescoreinning import LinescoreInning
-# from mlbstatsapi.models.game.livedata.linescore.linescoreteams import LinescoreTeams
-# from mlbstatsapi.models.game.livedata.linescore.linescoreoffense import LinescoreOffense
-
 from .attributes import LinescoreInning
 from .attributes import LinescoreTeams
 from .attributes import LinescoreDefense
@@ -17,17 +13,17 @@ class Linescore:
 
     Attributes
     ----------
-    currentInning : int
+    currentinning : int
         The games current inning
-    currentInningOrdinal : str
+    currentinningordinal : str
         This innings ordinal
-    inningState : str
+    inningstate : str
         What state this inning is in
-    inningHalf : str
+    inninghalf : str
         WHich half of the inning are we in
-    isTopInning : bool
+    istopinning : bool
         Is this the top of the inning
-    scheduledInnings : int
+    scheduledinnings : int
         How many innings are scheduled for this game
     innings : List[LinescoreInning]
         Data on each inning
@@ -44,12 +40,12 @@ class Linescore:
     outs : int
         current count outs
     """
-    currentInning: int
-    currentInningOrdinal: str
-    inningState: str
-    inningHalf: str
-    isTopInning: bool
-    scheduledInnings: int
+    currentinning: int
+    currentinningordinal: str
+    inningstate: str
+    inninghalf: str
+    istopinning: bool
+    scheduledinnings: int
     innings: Union[List[LinescoreInning], List[dict]]
     teams: Union[LinescoreTeams, dict]
     defense: Union[LinescoreDefense, dict]

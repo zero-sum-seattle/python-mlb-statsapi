@@ -8,21 +8,21 @@ class HitCoordinate:
 
     Attributes
     ----------
-    coordX : int
+    coordx : int
         X coordinate for hit
-    coordY : int
+    coordy : int
         Y coordinate for hit
     """
-    coordX: int
-    coordY: int
+    coordx: int
+    coordy: int
 
     @property
     def x(self):
-        return self.coordX
+        return self.coordx
 
     @property
     def y(self):
-        return self.coordY
+        return self.coordy
 
 @dataclass
 class HitData:
@@ -31,11 +31,11 @@ class HitData:
 
     Attributes
     ----------
-    launchSpeed : float
+    launchspeed : float
         Hit launch speed
-    launchAngle : int
+    launchangle : int
         Hit launch angle
-    totalDistance : int
+    totaldistance : int
         Hits total distance
     trajectory : str
         Hit trajectory
@@ -46,9 +46,9 @@ class HitData:
     coordinates : HitCoordinate
         Hit coordinates
     """
-    launchSpeed: float
-    launchAngle: int
-    totalDistance: int
+    launchspeed: float
+    launchangle: int
+    totaldistance: int
     trajectory: str
     hardness: str
     location: str
@@ -81,56 +81,56 @@ class PlayEventDetails:
     ----------
     description : str
         Play event descripton
-    hasReview : bool
+    hasreview : bool
         Play event has review
     call : PlayEventDetailsCallType
         Play event call
     event : str = None
         Play event
-    eventType : str = None
+    eventtype : str = None
         Play event type
     code : str = None
         Play event Code
-    ballColor : str = None
+    ballcolor : str = None
         ballColor
-    trailColor : str = None
+    trailcolor : str = None
         trailColor
-    awayScore : int = None
+    awayscore : int = None
         awayScore
-    homeScore : int = None
+    homescore : int = None
         homeScore
-    isInPlay : bool = None
+    isinplay : bool = None
         If it is in play
-    isStrike : bool = None
+    isstrike : bool = None
         If it is a strike
-    isBall : bool = None
+    isball : bool = None
         If it is a ball
-    isScoringPlay : bool = None
+    isscoringplay : bool = None
         If it is a scoring play
     type : PlayEventDetailsCallType
         Play type
-    fromCatcher : bool = None
+    fromcatcher : bool = None
         If from the catcher
-    runnerGoing : bool = None
+    runnergoing : bool = None
         If a runner is going
     """
     description: str
-    hasReview: bool
+    hasreview: bool
     call: Union[PlayEventCallType, dict] = None
     event: str = None
-    eventType: str = None
+    eventtype: str = None
     code: str = None
-    ballColor: str = None
-    trailColor: str = None
-    awayScore: int = None
-    homeScore: int = None
-    isInPlay: bool = None
-    isStrike: bool = None
-    isBall: bool = None
-    isScoringPlay: bool = None
+    ballcolor: str = None
+    trailcolor: str = None
+    awayscore: int = None
+    homescore: int = None
+    isinplay: bool = None
+    isstrike: bool = None
+    isball: bool = None
+    isscoringplay: bool = None
     type: Union[PlayEventCallType, dict] = None
-    fromCatcher: bool = None
-    runnerGoing: bool = None
+    fromcatcher: bool = None
+    runnergoing: bool = None
 
     def __post_init__(self):
         self.call = PlayEventCallType(**self.call) if self.call else self.call

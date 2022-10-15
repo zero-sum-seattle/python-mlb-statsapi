@@ -7,40 +7,40 @@ class PlayAbout:
 
     Attributes
     ----------
-    atBatIndex : int
+    atbatindex : int
         Current at bat index
-    halfInning : str
+    halfinning : str
         What side of the inning
-    isTopInning : bool
+    istopinning : bool
         Is this inning the top of the inning
     inning : int
         What number of inning we are in
-    startTime : str
+    starttime : str
         The start time for this play
-    endTime : str
+    endtime : str
         The end time for this play
-    isComplete : bool
+    iscomplete : bool
         Is this play complete
-    isScoringPlay : bool
+    isscoringplay : bool
         is this play a scoring play
-    hasReview : bool
+    hasreview : bool
         Dose this play have a review
-    hasOut : bool
+    hasout : bool
         Does this play have a out
-    captivatingIndex : int
+    captivatingindex : int
         What is the captivating index for this play
     """
-    atBatIndex: int
-    halfInning: str
-    isTopInning: bool
+    atbatindex: int
+    halfinning: str
+    istopinning: bool
     inning: int
-    startTime: str
-    endTime: str
-    isComplete: bool
-    isScoringPlay: bool
-    hasReview: bool
-    hasOut: bool
-    captivatingIndex: int
+    starttime: str
+    endtime: str
+    iscomplete: bool
+    isscoringplay: bool
+    hasreview: bool
+    hasout: bool
+    captivatingindex: int
 
 @dataclass
 class PlayResult:
@@ -53,24 +53,24 @@ class PlayResult:
         Play result type
     event : str
         Play event
-    eventType : str
+    eventtype : str
         Event type
     description : str
         Event description
     rbi : int
         Number of RBI's
-    awayScore : int
+    awayscore : int
         Score for away team
-    homeScore : int
+    homescore : int
         Score for home team
     """
     type: str
     event: str
-    eventType: str
+    eventtype: str
     description: str
     rbi: int
-    awayScore: int
-    homeScore: int
+    awayscore: int
+    homescore: int
 
 @dataclass
 class PlayReviewDetails:
@@ -79,16 +79,16 @@ class PlayReviewDetails:
 
     Attributes
     ----------
-    isOverturned : bool
+    isoverturned : bool
         Was it overturned
-    inProgress : bool
+    inprogress : bool
         Is it in progress
-    reviewType : str
+    reviewtype : str
         What type of review
-    challengeTeamId : int
+    challengeteamid : int
         The team issuing the challenge review
     """
-    isOverturned: bool
-    inProgress: bool
-    reviewType: str
-    challengeTeamId: int
+    isoverturned: bool
+    inprogress: bool
+    reviewtype: str
+    challengeteamid: int

@@ -19,11 +19,11 @@ class Game:
         link to the api address for this game
     copyright : str
         MLB AM copyright information
-    metaData : MetaData
+    metadata : MetaData
         metaData of this game
-    gameData : GameData
+    gamedata : GameData
         gameData of this game
-    liveData : LiveData
+    livedata : LiveData
         liveData of this game
 
     Methods
@@ -31,17 +31,17 @@ class Game:
     id():
         returns this games id
     """
-    gamePk: int
+    gamepk: int
     link: str
-    metaData: Union[MetaData, dict]
-    gameData: Union[GameData, dict]
-    liveData: Union[LiveData, dict]
+    metadata: Union[MetaData, dict]
+    gamedata: Union[GameData, dict]
+    livedata: Union[LiveData, dict]
 
     def __post_init__(self):
-        self.metaData = MetaData(**self.metaData)
-        self.gameData = GameData(**self.gameData)
-        self.liveData = LiveData(**self.liveData)
+        self.metadata = MetaData(**self.metadata)
+        self.gamedata = GameData(**self.gamedata)
+        self.livedata = LiveData(**self.livedata)
 
     @property
     def id(self):
-        return self.gamePk
+        return self.gamepk

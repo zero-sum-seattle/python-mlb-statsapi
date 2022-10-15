@@ -14,33 +14,33 @@ class GameDataGame:
         This game's game id
     type : str
         This game's game type code
-    doubleHeader : str
+    doubleheader : str
         Represents if this game is a double header or not
     id : str
         An unknown Id
-    gamedayType : str
+    gamedaytype : str
         This game's gameday type code
     tiebreaker : str
         Is this game a tie breaker
-    gameNumber : int
+    gamenumber : int
         The game number for this game. If double header will be 2.
-    calendarEventID : str
+    calendareventid : str
         The id for this calendar event
     season : str
         This game's season year
-    seasonDisplay : str
+    seasondisplay : str
         This game's displayed season
     """
     pk: int
     type: str
-    doubleHeader: str
+    doubleheader: str
     id: str
-    gamedayType: str
+    gamedaytype: str
     tiebreaker: str
-    gameNumber: int
-    calendarEventID: str
+    gamenumber: int
+    calendareventid: str
     season: str
-    seasonDisplay: str
+    seasondisplay: str
 
 @dataclass
 class GameDatetime:
@@ -49,23 +49,23 @@ class GameDatetime:
 
     Attributes
     ----------
-    dateTime : str
+    datetime : str
         Date time for this game
-    originalDate : str
+    originaldate : str
         The original scheduled date for this game
-    officialDate : str
+    officialdate : str
         The current scheduled date for this game
-    dayNight : str
+    daynight : str
         The current lighting condition game type
     time : str
         The time
     ampm : str
         The games am or pm code
     """
-    dateTime: str
-    originalDate: str
-    officialDate: str
-    dayNight: str
+    datetime: str
+    originaldate: str
+    officialdate: str
+    daynight: str
     time: str
     ampm: str
 
@@ -76,27 +76,27 @@ class GameStatus:
 
     Attributes
     ----------
-    abstractGameState : str
+    abstractgamestate : str
         The abstract game state
-    codedGameState : str
+    codedgamestate : str
         The coded game state
-    detailedState : str
+    detailedstate : str
         The detailed game state
-    statusCode : str
+    statuscode : str
         Status code for this game
-    startTimeTBD : bool
+    starttimetbd : bool
         If the start time is TBD
-    abstractGameCode : str
+    abstractgamecode : str
         The abstract game code
     reason : str
         reason for a state. Usually used for delays or cancellations
     """
-    abstractGameState: str
-    codedGameState: str
-    detailedState: str
-    statusCode: str
-    startTimeTBD: bool
-    abstractGameCode: str
+    abstractgamestate: str
+    codedgamestate: str
+    detailedstate: str
+    statuscode: str
+    starttimetbd: bool
+    abstractgamecode: str
     reason: Optional[str] = None
 
 @dataclass
@@ -145,17 +145,17 @@ class GameInfo:
     ----------
     attendance : int
         The attendance for this game
-    firstPitch : str
+    firstpitch : str
         The time of the first pitch
-    gameDurationMinutes : int
+    gamedurationminutes : int
         The duration of the game in minutes
-    delayDurationMinutes : int
+    delaydurationminutes : int
         The length of delay for the game in minutes
     """
     attendance: int
-    firstPitch: str
-    gameDurationMinutes: int
-    delayDurationMinutes: int
+    firstpitch: str
+    gamedurationminutes: int
+    delaydurationminutes: int
 
 @dataclass
 class ReviewInfo:
@@ -179,14 +179,14 @@ class GameReview:
 
     Attributes
     ----------
-    hasChallenges : bool
+    haschallenges : bool
         If their are challenges
     away : ReviewInfo
         Away team review info
     home : ReviewInfo
         Home team review info
     """
-    hasChallenges:  bool
+    haschallenges:  bool
     away:           Union[ReviewInfo, dict]
     home:           Union[ReviewInfo, dict]
 
@@ -201,25 +201,25 @@ class GameFlags:
 
     Attributes
     ----------
-    noHitter : bool
+    nohitter : bool
         If there is a no hitter in this game
-    perfectGame :  bool
+    perfectgame :  bool
         If there this game is a perfect game
-    awayTeamNoHitter : bool
+    awayteamnohitter : bool
         If the away team has a no hitter
-    awayTeamPerfectGame : bool
+    awayteamperfectgame : bool
         If the away team has a perfect game
-    homeTeamNoHitter : bool
+    hometeamnohitter : bool
         If the home team has a no hitter
-    homeTeamPerfectGame : bool
+    hometeamperfectgame : bool
         If the home team has a perfect game
     """
-    noHitter: bool
-    perfectGame: bool
-    awayTeamNoHitter: bool
-    awayTeamPerfectGame: bool
-    homeTeamNoHitter: bool
-    homeTeamPerfectGame: bool
+    nohitter: bool
+    perfectgame: bool
+    awayteamnohitter: bool
+    awayteamperfectgame: bool
+    hometeamnohitter: bool
+    hometeamperfectgame: bool
 
 @dataclass
 class GameProbablePitchers:

@@ -7,43 +7,43 @@ class TeamRecord:
 
     Attributes 
     ----------
-    gamesPlayed : int
+    gamesplayed : int
         Number of game played by team
-    wildCardGamesBack : str
+    wildcardgamesback : str
         Number of game back from wildcard
-    leagueGamesBack : str
+    leaguegamesback : str
         Number of league games back
-    springLeagueGamesBack : str
+    springleaguegamesback : str
         Number of game back in spring league
-    sportGamesBack : str
+    sportgamesback : str
         Number of games back in sport
-    divisionGamesBack : str
+    divisiongamesback : str
         Number of games back in division
-    conferenceGamesBack : str
+    conferencegamesback : str
         Number of games back in conference
-    leagueRecord : Dict
+    leaguerecord : Dict
         Record in league
     records : Dict
         Records
-    divisionLeader : bool
+    divisionleader : bool
         Is this team a divison leader
     wins : int
         Number of wins
     losses : int
         Number of losses
-    winningPercentage : str
+    winningpercentage : str
         Winning percentage
     """
-    gamesPlayed:            int
-    wildCardGamesBack:      str
-    leagueGamesBack:        str
-    springLeagueGamesBack:  str
-    sportGamesBack:         str
-    divisionGamesBack:      str
-    conferenceGamesBack:    str
-    leagueRecord:           dict
+    gamesplayed:            int
+    wildcardgamesback:      str
+    leaguegamesback:        str
+    springleaguegamesback:  str
+    sportgamesback:         str
+    divisiongamesback:      str
+    conferencegamesback:    str
+    leaguerecord:           dict
     records:                dict
-    divisionLeader:         bool
+    divisionleader:         bool
     wins:                   int
     losses:                 int
-    winningPercentage:      str
+    winningpercentage:      str

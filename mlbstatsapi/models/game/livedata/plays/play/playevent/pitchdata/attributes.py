@@ -8,23 +8,23 @@ class PitchCoordinates:
 
     Attributes
     ----------
-    aY : float = None
+    ay : float = None
         Pitch coordinate aY
-    aZ : float = None
+    az : float = None
         Pitch coordinate aZ
-    pfxX : float = None
+    pfxx : float = None
         Pitch coordinate pfxX
-    pfxZ : float = None
+    pfxz : float = None
         Pitch coordinate pfxZ
-    pX : float = None
+    px : float = None
         Pitch coordinate pX
-    pZ : float = None
+    pz : float = None
         Pitch coordinate pZ
-    vX0 : float = None
+    vx0 : float = None
         Pitch coordinate vX0
-    vY0 : float = None
+    vy0 : float = None
         Pitch coordinate vY0
-    vZ0 : float = None
+    vz0 : float = None
         Pitch coordinate vZ0
     x0 : float = None
         Pitch coordinate x0
@@ -32,26 +32,26 @@ class PitchCoordinates:
         Pitch coordinate y0
     z0 : float = None
         Pitch coordinate z0
-    aX : float = None
+    ax : float = None
         Pitch coordinate aX
     x : float = None
         Pitch coordinate x
     y : float = None
         Pitch coordinate y
     """
-    aY: Optional[float] = None
-    aZ: Optional[float] = None
-    pfxX: Optional[float] = None
-    pfxZ: Optional[float] = None
-    pX: Optional[float] = None
-    pZ: Optional[float] = None
-    vX0: Optional[float] = None
-    vY0: Optional[float] = None
-    vZ0: Optional[float] = None
+    ay: Optional[float] = None
+    az: Optional[float] = None
+    pfxx: Optional[float] = None
+    pfxz: Optional[float] = None
+    px: Optional[float] = None
+    pz: Optional[float] = None
+    vx0: Optional[float] = None
+    vy0: Optional[float] = None
+    vz0: Optional[float] = None
     x0: Optional[float] = None
     y0: Optional[float] = None
     z0: Optional[float] = None
-    aX: Optional[float] = None
+    ax: Optional[float] = None
     x: Optional[float] = None
     y: Optional[float] = None
 
@@ -62,19 +62,19 @@ class PitchBreaks:
 
     Attributes
     ----------
-    breakAngle : float
+    breakangle : float
         Pitch break angle
-    breakLength : float
+    breaklength : float
         Pitch break length
-    breakY : int
+    breaky : int
         Pitch break Y
-    spinRate : int
+    spinrate : int
         Pitch spinRate
-    spinDirection : int
+    spindirection : int
         Pitch spinDirection
     """
-    breakAngle: float
-    breakLength: float
-    breakY: int
-    spinRate: int
-    spinDirection: int
+    breakangle: float
+    breaklength: float
+    breaky: int
+    spinrate: int
+    spindirection: int
