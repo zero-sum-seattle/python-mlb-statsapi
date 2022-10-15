@@ -23,10 +23,10 @@ class Schedule:
     dates : ScheduleDates
         List of dates with games in schedule
     """
-    totalItems: int 
-    totalEvents: int
-    totalGames: int
-    totalGamesInProgress: int
+    totalitems: int 
+    totalevents: int
+    totalgames: int
+    totalgamesinprogress: int
     dates: List[ScheduleDates] = field(default_factory=list)
 
     def __post_init__(self):

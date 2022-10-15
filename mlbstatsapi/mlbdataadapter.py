@@ -51,7 +51,7 @@ class MlbDataAdapter:
                 lowered_list.append(self._transform_keys_in_data(item))
 
             return lowered_list
-            
+
         else:
             return data
 
@@ -94,7 +94,7 @@ class MlbDataAdapter:
         if response.status_code <= 200 and response.status_code <= 299: # catch HTTP errors
             self._logger.debug(msg=logline_post.format("success", response.status_code, response.reason)) # log success
 
-            # data = self._transform_keys_in_data(data) # transform keys
+            data = self._transform_keys_in_data(data) # transform keys
             return MlbResult(response.status_code, message=response.reason, data=data) # return result
 
         elif response.status_code >= 400 and response.status_code <= 499:  # catch HTTP error

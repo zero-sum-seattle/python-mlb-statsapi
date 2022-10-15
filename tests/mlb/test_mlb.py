@@ -162,5 +162,5 @@ class TestMlbDataApi(unittest.TestCase):
         self.assertEqual(poopulated_sport.name, 'Major League Baseball')
         self.assertEqual(poopulated_sport.code, 'mlb')
         self.assertEqual(poopulated_sport.abbreviation, 'MLB')
-        self.assertEqual(poopulated_sport.sortOrder, 11)
-        self.assertEqual(poopulated_sport.activeStatus, True)
+        self.assertEqual(poopulated_sport.sortorder, 11)
+        self.assertEqual(poopulated_sport.activestatus, True)

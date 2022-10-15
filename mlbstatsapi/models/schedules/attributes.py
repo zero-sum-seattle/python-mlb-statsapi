@@ -25,15 +25,15 @@ class ScheduleGameTeam:
     seriesNumber : int
         Series number 
     """
-    leagueRecord: Union[LeagueRecord, dict]
+    leaguerecord: Union[LeagueRecord, dict]
     team: Union[Team, dict]
-    splitSquad: bool
-    seriesNumber: int
+    splitsquad: bool
+    seriesnumber: int
     score: Optional[int] = False
-    isWinner: Optional[bool] = False
+    iswinner: Optional[bool] = False
 
     def __post_init__(self):
-        self.leagueRecord = LeagueRecord(**self.leagueRecord)
+        self.leaguerecord = LeagueRecord(**self.leaguerecord)
         self.team = Team(**self.team)
 
 @dataclass
@@ -129,39 +129,39 @@ class ScheduleGames:
     isTie : bool = None
         Is tie
     """
-    gamePk: int
+    gamepk: int
     link: str
-    gameType: str
+    gametype: str
     season: str
-    gameDate: str
-    officialDate: str
+    gamedate: str
+    officialdate: str
     status: Union[GameStatus, dict]
     teams: Union[ScheduleHomeAndAway, dict]
     venue: Venue
     content: dict
-    gameNumber: int
-    publicFacing: bool
-    doubleHeader: str
-    gamedayType: str
+    gamenumber: int
+    publicfacing: bool
+    doubleheader: str
+    gamedaytype: str
     tiebreaker: str
-    calendarEventID: str
-    seasonDisplay: str
-    dayNight: str
+    calendareventid: str
+    seasondisplay: str
+    daynight: str
     description: str
-    scheduledInnings: int
-    reverseHomeAwayStatus: bool
-    inningBreakLength: int
-    gamesInSeries: int
-    seriesGameNumber: int
-    seriesDescription: str
-    recordSource: str
-    ifNecessary: str
-    ifNecessaryDescription: str
-    rescheduleDate: Optional[str] = None
-    rescheduleGameDate: Optional[str] = None
-    rescheduledFrom: Optional[str] = None
-    rescheduledFromDate: Optional[str] = None
-    isTie: Optional[bool] = None
+    scheduledinnings: int
+    reversehomeawaystatus: bool
+    inningbreaklength: int
+    gamesinseries: int
+    seriesgamenumber: int
+    seriesdescription: str
+    recordsource: str
+    ifnecessary: str
+    ifnecessarydescription: str
+    rescheduledate: Optional[str] = None
+    reschedulegamedate: Optional[str] = None
+    rescheduledfrom: Optional[str] = None
+    rescheduledfromdate: Optional[str] = None
+    istie: Optional[bool] = None
 
     def __post_init__(self):
         self.status = GameStatus(**self.status)
@@ -192,10 +192,10 @@ class ScheduleDates:
         reference for this object. It stays as a list for now.
     """
     date: str
-    totalItems: int
-    totalEvents: int
-    totalGames: int
-    totalGamesInProgress: int
+    totalitems: int
+    totalevents: int
+    totalgames: int
+    totalgamesinprogress: int
     events: List
     games: List[ScheduleGames] = field(default_factory=list)
 

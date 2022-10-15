@@ -69,12 +69,6 @@ class Person:
         self.batside = BatSide(**self.batside) if self.batside else self.batside
         self.stats = [ Stats(**stat) for stat in self.stats ] if self.stats else self.stats
 
-    @staticmethod
-    def from_mlb_response(mlbdata: dict) -> "Person":        
-        # maybe create a function that does this in mlbdata?
-        mlbdata = {k.lower(): v for k, v in mlbdata.items()}
-        return Person(**mlbdata)
-
 @dataclass(kw_only=True)
 class Player(Person):
     """
@@ -96,17 +90,6 @@ class Player(Person):
 
     def __post_init__(self, position: dict):
         self.primaryposition = Position(**position)
-
-    @staticmethod
-    def from_mlb_response(mlbdata: dict) -> "Player":
-        
-        # maybe create a function that does this in mlbdata?
-        person = mlbdata.pop('person')
-        mlbdata = {**mlbdata, **person}
-        mlbdata = {k.lower(): v for k, v in mlbdata.items()}
-
-        return Player(**mlbdata)
-
 
 @dataclass(kw_only=True)
 class Coach(Person):
@@ -130,12 +113,5 @@ class Coach(Person):
     jobid: str
     title: str
 
-    @staticmethod
-    def from_mlb_response(mlbdata: dict) -> "Coach":
-    # maybe create a function that does this in mlbdata?
-        person = mlbdata.pop('person')
-        mlbdata = {**mlbdata, **person}
-        mlbdata = {k.lower(): v for k, v in mlbdata.items()}
 
-        return Coach(**mlbdata)
 

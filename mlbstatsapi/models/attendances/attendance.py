@@ -15,10 +15,9 @@ class Attendance:
     aggregateTotals : AttendanceAggregateTotals
         Attendence aggregate total numbers for query
     """
-    aggregateTotals: Union[AttendanceTotals, dict]
+    aggregatetotals: Union[AttendanceTotals, dict]
     records: Union[List[AttendanceRecords], List[dict]] = field(default_factory=list)
-
 
     def __post_init__(self):
         self.records = [AttendanceRecords(**record) for record in self.records if self.records]
-        self.aggregateTotals = AttendanceTotals(**self.aggregateTotals)
+        self.aggregatetotals = AttendanceTotals(**self.aggregatetotals)

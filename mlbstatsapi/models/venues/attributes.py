@@ -45,15 +45,15 @@ class Location:
     address1: str
     city: str
     state: str
-    stateAbbrev: str
-    postalCode: str
-    defaultCoordinates: Union[VenueDefaultCoordinates, dict]
+    stateabbrev: str
+    postalcode: str
+    defaultcoordinates: Union[VenueDefaultCoordinates, dict]
     country: str
     phone: str
     address2: Optional[str] = None
 
     def __post_init__(self):
-        self.defaultCoordinates = VenueDefaultCoordinates(**self.defaultCoordinates)
+        self.defaultcoordinates = VenueDefaultCoordinates(**self.defaultcoordinates)
 
 @dataclass
 class TimeZone:
@@ -102,12 +102,12 @@ class FieldInfo:
         Distance to right line
     """
     capacity: Optional[int] = None
-    turfType: Optional[str] = None
-    roofType: Optional[str] = None
-    leftLine: Optional[int] = None
+    turftype: Optional[str] = None
+    rooftype: Optional[str] = None
+    leftline: Optional[int] = None
     left: Optional[int] = None
-    leftCenter: Optional[int] = None
+    leftcenter: Optional[int] = None
     center: Optional[int] = None
-    rightCenter: Optional[int] = None
+    rightcenter: Optional[int] = None
     right: Optional[int] = None
-    rightLine: Optional[int] = None
+    rightline: Optional[int] = None

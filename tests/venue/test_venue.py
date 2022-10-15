@@ -29,6 +29,6 @@ class TestVenue(unittest.TestCase):
         self.assertTrue(hasattr(self.venue, "link"))
         self.assertTrue(hasattr(self.venue, "name"))
         self.assertTrue(hasattr(self.venue, "location"))
-        self.assertTrue(hasattr(self.venue, "timeZone"))
-        self.assertTrue(hasattr(self.venue, "fieldInfo"))
+        self.assertTrue(hasattr(self.venue, "timezone"))
+        self.assertTrue(hasattr(self.venue, "fieldinfo"))
         self.assertTrue(hasattr(self.venue, "active"))
