@@ -18,9 +18,9 @@ class Sport:
         Sport code
     abbreviation : str = None
         Abbreviation for the sport
-    sortOrder : int = None
+    sortorder : int = None
         Some sort of sorting order
-    activeStatus : bool = None
+    activestatus : bool = None
         Is the sport active
     """
     id: int
@@ -28,5 +28,5 @@ class Sport:
     name: Optional[str] = None
     code: Optional[str] = None
     abbreviation: Optional[str] = None
-    sortOrder: Optional[int] = None
-    activeStatus: Optional[bool] = None
+    sortorder: Optional[int] = None
+    activestatus: Optional[bool] = None

@@ -1,5 +1,6 @@
 from typing import List
 
+
 def _transform_mlbdata(mlb_dict, mlb_keys: List[str]):
     """
     change keys to all lowercase, and merge requested dictionarys return MlbResult
@@ -21,7 +22,6 @@ def _transform_mlbdata(mlb_dict, mlb_keys: List[str]):
 
     return mlb_dict
     
-
 class MlbObject:
     """
     A class to represent a base Mlboject.

@@ -26,9 +26,9 @@ class PlayMatchupSplits:
 
     pitcher : str
 
-    menOnBase : str
+    menonbase : str
 
     """
     batter: str
     pitcher: str
-    menOnBase: str
+    menonbase: str

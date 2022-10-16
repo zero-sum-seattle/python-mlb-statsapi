@@ -32,11 +32,11 @@ class GameData:
         A list of all the players for this game
     venue : GameVenue
         Venue information for this game
-    officialVenue : Venue
+    officialvenue : Venue
         The official venue for this game
     weather : GameWeather
         The weather for this game.
-    gameInfo : GameInfo
+    gameinfo : GameInfo
         information on this game
     review : GameReview
         Game review info and team challenges
@@ -44,11 +44,11 @@ class GameData:
         Flag bools for this game
     alerts : List[]
         Alerts
-    probablePitchers : GameProbablePitchers
+    probablepitchers : GameProbablePitchers
         Home and away probable pitchers for this game
-    officialScorer : Person
+    officialscorer : Person
         The official scorer for this game
-    primaryDatacaster : Person
+    primarydatacaster : Person
         The official dataCaster for this game
     """
 
@@ -58,15 +58,15 @@ class GameData:
     teams: Union[GameTeams, dict]
     players: Union[List[Person], dict]
     venue: Union[Venue, dict]
-    officialVenue: Union[Venue, dict]
+    officialvenue: Union[Venue, dict]
     weather: Union[GameWeather, dict]
-    gameInfo: Union[GameInfo, dict]
+    gameinfo: Union[GameInfo, dict]
     review: Union[GameReview, dict]
     flags: Union[GameFlags, dict]
     alerts: List
-    probablePitchers: Union[GameProbablePitchers, dict]
-    officialScorer: Union[Person, dict]
-    primaryDatacaster: Union[Person, dict]
+    probablepitchers: Union[GameProbablePitchers, dict]
+    officialscorer: Union[Person, dict]
+    primarydatacaster: Union[Person, dict]
 
     def __post_init__(self):
         self.game = GameDataGame(**self.game)
@@ -75,11 +75,11 @@ class GameData:
         self.teams = GameTeams(**self.teams)
         self.players = [Person(**(self.players[key])) for key in self.players]
         self.venue = Venue(**self.venue)
-        self.officialVenue = Venue(**self.officialVenue)
+        self.officialvenue = Venue(**self.officialvenue)
         self.weather = GameWeather(**self.weather)
-        self.gameInfo = GameInfo(**self.gameInfo)
+        self.gameinfo = GameInfo(**self.gameinfo)
         self.review = GameReview(**self.review)
         self.flags = GameFlags(**self.flags)
-        self.probablePitchers = GameProbablePitchers(**self.probablePitchers)
-        self.officialScorer = Person(**self.officialScorer)
-        self.primaryDatacaster = Person(**self.primaryDatacaster)
+        self.probablepitchers = GameProbablePitchers(**self.probablepitchers)
+        self.officialscorer = Person(**self.officialscorer)
+        self.primarydatacaster = Person(**self.primarydatacaster)

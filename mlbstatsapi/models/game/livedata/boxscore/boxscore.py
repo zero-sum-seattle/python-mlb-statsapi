@@ -16,13 +16,13 @@ class BoxScore:
         The officials for this game
     info : List[BoxScoreVL]
         Box score information
-    pitchingNotes : List[str]
+    pitchingnotes : List[str]
         Pitching notes for this game
     """
     teams: Union[BoxScoreTeams, dict]
     officials: Union[List[BoxScoreOffical], List[dict]]
     info: Union[List[BoxScoreVL], List[dict]]
-    pitchingNotes: List[str]
+    pitchingnotes: List[str]
 
     def __post_init__(self):
         self.teams = BoxScoreTeams(**self.teams)

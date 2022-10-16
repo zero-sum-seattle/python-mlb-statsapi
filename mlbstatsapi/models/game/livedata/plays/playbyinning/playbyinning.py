@@ -10,9 +10,9 @@ class PlayByInning():
 
     Attributes
     ----------
-    startIndex : int
+    startindex : int
         Starting play index number, indexed with Plays.allPlays
-    endIndex : int
+    endindex : int
         End play index number, indexed with Plays.allPlays
     top : List[int]
         Play indexes for top of the inning
@@ -21,8 +21,8 @@ class PlayByInning():
     hits : PlayByInningHits
         Hits for the inning by home and away
     """
-    startIndex: int
-    endIndex: int
+    startindex: int
+    endindex: int
     top: List[int]
     bottom: List[int]
     hits: Union[PlayByInningHits, dict]

@@ -32,25 +32,25 @@ class RunnerMovement:
 
     Attributes
     ----------
-    isOut : bool
+    isout : bool
         Was the running movement an out
-    outNumber : int
+    outnumber : int
         What is the outnumber
-    originBase : str = None
+    originbase : str = None
         Original base
     start : str = None
         What base the runner started from
     end : str = None
         What base the runner ended at
-    outBase : str = None
+    outbase : str = None
         Base runner was made out
     """
-    isOut: bool
-    outNumber: int
-    originBase: Optional[str] = None
+    isout: bool
+    outnumber: int
+    originbase: Optional[str] = None
     start: Optional[str] = None
     end: Optional[str] = None
-    outBase: Optional[str] = None
+    outbase: Optional[str] = None
 
 @dataclass
 class RunnerDetails:
@@ -61,36 +61,36 @@ class RunnerDetails:
     ----------
     event : str
         Runner event
-    eventType : str
+    eventtype : str
         Runner event type
     runner : Person
         Who the runner is
-    isScoringEvent :  bool
+    isscoringevent :  bool
         Was this a scoring events
     rbi : bool
         Was this a rbi
     earned : bool
         Was it earned
-    teamUnearned : bool
+    teamunearned : bool
         Was it unearned
-    playIndex : int
+    playindex : int
         Play index
-    movementReason : str = None
+    movementreason : str = None
         Reason for the movement
-    responsiblePitcher : Person = None
+    responsiblepitcher : Person = None
         WHo was the responsible pitcher
     """
     event: str
-    eventType: str
+    eventtype: str
     runner: Union[Person, dict]
-    isScoringEvent: bool
+    isscoringevent: bool
     rbi: bool
     earned: bool
-    teamUnearned: bool
-    playIndex: int
-    movementReason: Optional[str] = None
-    responsiblePitcher: Optional[Union[Person, dict]] = None
+    teamunearned: bool
+    playindex: int
+    movementreason: Optional[str] = None
+    responsiblepitcher: Optional[Union[Person, dict]] = None
 
     def __post_init__(self):
         self.runner = Person(**self.runner)
-        self.responsiblePitcher = Person(**self.responsiblePitcher) if self.responsiblePitcher else self.responsiblePitcher
+        self.responsiblepitcher = Person(**self.responsiblepitcher) if self.responsiblepitcher else self.responsiblepitcher

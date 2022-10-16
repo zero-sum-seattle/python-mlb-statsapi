@@ -76,23 +76,23 @@ class League:
     link:               str
     name:               Optional[str] = None
     abbreviation:       Optional[str] = None
-    nameShort:          Optional[str] = None
-    seasonState:        Optional[str] = None
-    hasWildCard:        Optional[bool] = None
-    hasSplitSeason:     Optional[bool] = None
-    numGames:           Optional[int] = None
-    hasPlayoffPoints:   Optional[bool] = None
-    numTeams:           Optional[int] = None
-    numWildcardTeams:   Optional[int] = None
-    seasonDateInfo:     Optional[Union[SeasonDateInfo, dict]] = None
+    nameshort:          Optional[str] = None
+    seasonstate:        Optional[str] = None
+    haswildcard:        Optional[bool] = None
+    hassplitseason:     Optional[bool] = None
+    numgames:           Optional[int] = None
+    hasplayoffpoints:   Optional[bool] = None
+    numteams:           Optional[int] = None
+    numwildcardteams:   Optional[int] = None
+    seasondateinfo:     Optional[Union[SeasonDateInfo, dict]] = None
     season:             Optional[str] = None
-    orgCode:            Optional[str] = None
-    conferencesInUse:   Optional[bool] = None
-    divisionsInUse:     Optional[bool] = None
+    orgcode:            Optional[str] = None
+    conferencesinuse:   Optional[bool] = None
+    divisionsinuse:     Optional[bool] = None
     sport:              Optional[Union[Sport, dict]] = None
-    sortOrder:          Optional[int] = None
+    sortorder:          Optional[int] = None
     active:             Optional[bool] = None
 
     def __post_init__(self):
-        self.seasonDateInfo = SeasonDateInfo(**self.seasonDateInfo) if self.seasonDateInfo else self.seasonDateInfo
+        self.seasondateinfo = SeasonDateInfo(**self.seasondateinfo) if self.seasondateinfo else self.seasondateinfo
         self.sport = Sport(**self.sport) if self.sport else self.sport

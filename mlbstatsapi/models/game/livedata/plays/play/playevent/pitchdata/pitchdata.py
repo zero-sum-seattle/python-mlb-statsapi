@@ -10,13 +10,13 @@ class PitchData:
 
     Attributes
     ----------
-    startSpeed : float
+    startspeed : float
         Pitch start speed
-    endSpeed : float
+    endspeed : float
         Pitch end speed
-    strikeZoneTop : float
+    strikezonetop : float
         Batters strike zone top
-    strikeZoneBottom : float
+    strikezonebottom : float
         Batters strike zone bottom
     coordinates : Dict
         Pitch coordinates
@@ -24,22 +24,22 @@ class PitchData:
         Pitch breaks
     zone : int
         Pitch zone
-    typeConfidence : float
+    typeconfidence : float
         Type confidence
-    plateTime : float
+    platetime : float
         Pitch platetime
     extension : float
         Pitch extension
     """
-    startSpeed: float
-    endSpeed: float
-    strikeZoneTop: float
-    strikeZoneBottom: float
+    startspeed: float
+    endspeed: float
+    strikezonetop: float
+    strikezonebottom: float
     coordinates: Union[PitchCoordinates, dict]
     breaks: Union[PitchBreaks, dict]
     zone: int
-    typeConfidence: float
-    plateTime: float
+    typeconfidence: float
+    platetime: float
     extension: float
 
     def __post_init__(self):

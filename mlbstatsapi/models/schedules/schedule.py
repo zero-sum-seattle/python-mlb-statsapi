@@ -23,18 +23,18 @@ class Schedule:
     dates : ScheduleDates
         List of dates with games in schedule
     """
-    totalItems: int 
-    totalEvents: int
-    totalGames: int
-    totalGamesInProgress: int
+    totalitems: int 
+    totalevents: int
+    totalgames: int
+    totalgamesinprogress: int
     dates: List[ScheduleDates] = field(default_factory=list)
 
     def __post_init__(self):
         self.dates = [ScheduleDates(**date) for date in self.dates if self.dates]
 
-    def get_games_with_status(self, abstractGameState: str = None, codedGameState: str = None,
-                                    detailedState: str = None, statusCode: str = None,
-                                    reason: str = None, abstractGameCode: str = None) -> List[int]:
+    def get_games_with_status(self, abstractgamestate: str = None, codedgamestate: str = None,
+                                    detailedstate: str = None, statuscode: str = None,
+                                    reason: str = None, abstractgamecode: str = None) -> List[int]:
         """
         returns a list of game ids.
 
@@ -56,12 +56,12 @@ class Schedule:
         -------
         List[int]
         """       
-        gameStatuses = {'abstractGameState':abstractGameState,
-                        'codedGameState':codedGameState,
-                        'detailedState':detailedState,
-                        'statusCode':statusCode,
+        gameStatuses = {'abstractgamestate':abstractgamestate,
+                        'codedgamestate':codedgamestate,
+                        'detailedstate':detailedstate,
+                        'statuscode':statuscode,
                         'reason':reason,
-                        'abstractGameCode':abstractGameCode}
+                        'abstractgamecode':abstractgamecode}
         gameIds = []
 
         if all(gameStatuses[status] == None for status in gameStatuses):
@@ -71,11 +71,11 @@ class Schedule:
                 for game in date.games:
                     gameStatus = game.status                    
                     if all(gameStatuses[status] == getattr(gameStatus,f'{status}') for status in gameStatuses if gameStatuses[status]):
-                        gameIds.append(game.gamePk)
+                        gameIds.append(game.gamepk)
             return gameIds
 
     def get_games_inProgress(self) -> List[int]:
-        return self.get_games_with_status(abstractGameState='Live')
+        return self.get_games_with_status(abstractgamestate='Live')
 
     def get_games_finished(self) -> List[int]:
-        return self.get_games_with_status(abstractGameState='Final')
+        return self.get_games_with_status(abstractgamestate='Final')

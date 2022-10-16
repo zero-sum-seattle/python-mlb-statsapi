@@ -17,9 +17,9 @@ class Venue:
         Link to venues endpoint
     location : VenueLocation = None
         Location for this venue
-    timeZone : VenueTimeZone = None
+    timezone : VenueTimeZone = None
         Timezone for this venue
-    fieldInfo :  VenueFieldInfo = None
+    fieldinfo :  VenueFieldInfo = None
         Info on this venue's field
     active : bool = None
         Is this field currently active
@@ -28,11 +28,11 @@ class Venue:
     link:       str
     name:       Optional[str] = None
     location:   Optional[Union[Location, dict]] = None
-    timeZone:   Optional[Union[TimeZone, dict]] = None
-    fieldInfo:  Optional[Union[FieldInfo, dict]] = None
+    timezone:   Optional[Union[TimeZone, dict]] = None
+    fieldinfo:  Optional[Union[FieldInfo, dict]] = None
     active:     Optional[bool] = None
 
     def __post_init__(self):
         self.location = Location(**self.location) if self.location else self.location
-        self.timeZone = TimeZone(**self.timeZone) if self.timeZone else self.timeZone
-        self.fieldInfo = FieldInfo(**self.fieldInfo) if self.fieldInfo else self.fieldInfo
+        self.timezone = TimeZone(**self.timezone) if self.timezone else self.timezone
+        self.fieldinfo = FieldInfo(**self.fieldinfo) if self.fieldinfo else self.fieldinfo

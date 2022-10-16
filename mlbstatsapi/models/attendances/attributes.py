@@ -28,10 +28,10 @@ class AttendanceHighLowGame:
     dayNight : str
         Type of time of day for game
     """
-    gamePk: int
+    gamepk: int
     link: str
     content: Union[AttendanceHighLowGameContent, dict]
-    dayNight: str
+    daynight: str
 
     def __post_init__(self):
         self.content = AttendanceHighLowGameContent(**self.content)
@@ -103,34 +103,34 @@ class AttendanceRecords:
     team : Team
         Team
     """
-    openingsTotal: int
-    openingsTotalAway: int 
-    openingsTotalHome: int
-    openingsTotalLost: int
-    gamesTotal: int
-    gamesAwayTotal: int
-    gamesHomeTotal: int
+    openingstotal: int
+    openingstotalaway: int 
+    openingstotalhome: int
+    openingstotallost: int
+    gamestotal: int
+    gamesawaytotal: int
+    gameshometotal: int
     year: str
-    attendanceAverageYtd: int
-    attendanceTotal: int
-    gameType: Union[AttendenceGameType, dict]
+    attendanceaverageytd: int
+    attendancetotal: int
+    gametype: Union[AttendenceGameType, dict]
     team: Union[Team, dict]
-    attendanceAverageAway: Optional[int] = None
-    attendanceAverageHome: Optional[int] = None
-    attendanceHigh: Optional[int] = None
-    attendanceHighDate: Optional[str ] = None
-    attendanceHighGame: Optional[Union[AttendanceHighLowGame, dict]] = None
-    attendanceLow: Optional[int] = None
-    attendanceLowDate: Optional[str] = None
-    attendanceLowGame: Optional[Union[AttendanceHighLowGame, dict]] = None
-    attendanceTotalAway: Optional[int] = None
-    attendanceTotalHome: Optional[int] = None
-    attendanceOpeningAverage: Optional[int] = None
+    attendanceaverageaway: Optional[int] = None
+    attendanceaveragehome: Optional[int] = None
+    attendancehigh: Optional[int] = None
+    attendancehighdate: Optional[str ] = None
+    attendancehighgame: Optional[Union[AttendanceHighLowGame, dict]] = None
+    attendancelow: Optional[int] = None
+    attendancelowdate: Optional[str] = None
+    attendancelowgame: Optional[Union[AttendanceHighLowGame, dict]] = None
+    attendancetotalaway: Optional[int] = None
+    attendancetotalhome: Optional[int] = None
+    attendanceopeningaverage: Optional[int] = None
 
     def __post_init__(self):
-        self.attendanceHighGame = AttendanceHighLowGame(**self.attendanceHighGame) if self.attendanceHighGame else self.attendanceHighGame
-        self.attendanceLowGame = AttendanceHighLowGame(**self.attendanceLowGame) if self.attendanceLowGame else self.attendanceLowGame
-        self.gameType = AttendenceGameType(**self.gameType)
+        self.attendancehighgame = AttendanceHighLowGame(**self.attendancehighgame) if self.attendancehighgame else self.attendancehighgame
+        self.attendancelowgame = AttendanceHighLowGame(**self.attendancelowgame) if self.attendancelowgame else self.attendancelowgame
+        self.gameType = AttendenceGameType(**self.gametype)
         self.team = Team(**self.team)
 
 @dataclass
@@ -164,15 +164,15 @@ class AttendanceTotals:
     attendanceTotalHome : int
         Attendance total home
     """
-    openingsTotalAway: int
-    openingsTotalHome: int
-    openingsTotalLost: int
-    openingsTotalYtd: int
-    attendanceAverageYtd: int
-    attendanceHigh: int
-    attendanceHighDate: str
-    attendanceTotal: int
-    attendanceTotalAway: int
-    attendanceTotalHome: int
-    attendanceAverageAway: Optional[int] = None
-    attendanceAverageHome: Optional[int] = None
+    openingstotalaway: int
+    openingstotalhome: int
+    openingstotallost: int
+    openingstotalytd: int
+    attendanceaverageytd: int
+    attendancehigh: int
+    attendancehighdate: str
+    attendancetotal: int
+    attendancetotalaway: int
+    attendancetotalhome: int
+    attendanceaverageaway: Optional[int] = None
+    attendanceaveragehome: Optional[int] = None

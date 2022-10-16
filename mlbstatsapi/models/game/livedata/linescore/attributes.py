@@ -14,16 +14,18 @@ class LinescoreTeamScoreing:
         Team hits for this inning
     errors : int
         Team errors for this inning
-    leftOnBase : int
+    leftonbase : int
         Player left on base for this inning
     runs : int = None
         Team runs for this inning
+    iswinner : bool = None
+        If team is winner
     """
     hits: int
     errors: int
-    leftOnBase: int
+    leftonbase: int
     runs: Optional[int] = None
-    isWinner: Optional[bool] = None
+    iswinner: Optional[bool] = None
 
 @dataclass
 class LinescoreInning:
@@ -34,7 +36,7 @@ class LinescoreInning:
     ----------
     num : int
         Inning number
-    ordinalNum : str
+    ordinalnum : str
         Inning ordinal
     home : LinescoreTeamScoreing
         Home team inning info
@@ -42,7 +44,7 @@ class LinescoreInning:
         Away team inning info
     """
     num: int
-    ordinalNum: str
+    ordinalnum: str
     home: Union[LinescoreTeamScoreing, dict]
     away: Union[LinescoreTeamScoreing, dict]
 
@@ -78,28 +80,28 @@ class LinescoreOffense:
     ----------
     batter : Person
         Current batter
-    onDeck : Person
+    ondeck : Person
         Current on deck batter
-    inHole : Person
+    inhole : Person
         Current in the hole batter
     pitcher : Person
         Who is this teams pitcher
-    battingOrder : int
+    battingorder : int
         Number in the batting order
     team : Team
         The team currently on offense
     """
     batter: Union[Person, dict]
-    onDeck: Union[Person, dict]
-    inHole: Union[Person, dict]
+    ondeck: Union[Person, dict]
+    inhole: Union[Person, dict]
     pitcher: Union[Person, dict]
-    battingOrder: int
+    battingorder: int
     team: Union[Team, dict]
 
     def __post_init__(self):
         self.batter = Person(**self.batter)
-        self.onDeck = Person(**self.onDeck)
-        self.inHole = Person(**self.inHole)
+        self.ondeck = Person(**self.ondeck)
+        self.inhole = Person(**self.inhole)
         self.pitcher = Person(**self.pitcher)
         self.team = Team(**self.team)
 
@@ -130,11 +132,11 @@ class LinescoreDefense:
         Current right
     batter : Person
         The next batter when this team switches to offense
-    onDeck : Person
+    ondeck : Person
         The next ondeck batter when this team switches to offense
-    inHole : Person
+    inhole : Person
         The next inHole batter when this team switches to offense
-    battingOrder : int
+    battingorder : int
         Number this team is in the batting order
     team : Team
         The team that is playing defense currently
@@ -149,9 +151,9 @@ class LinescoreDefense:
     center: Union[Person, dict]
     right: Union[Person, dict]
     batter: Union[Person, dict]
-    onDeck: Union[Person, dict]
-    inHole: Union[Person, dict]
-    battingOrder: int
+    ondeck: Union[Person, dict]
+    inhole: Union[Person, dict]
+    battingorder: int
     team: Union[Team, dict]
 
     def __post_init__(self):
@@ -165,6 +167,6 @@ class LinescoreDefense:
         self.center = Person(**self.center)
         self.right = Person(**self.right)
         self.batter = Person(**self.batter)
-        self.onDeck = Person(**self.onDeck)
-        self.inHole = Person(**self.inHole)
+        self.ondeck = Person(**self.ondeck)
+        self.inhole = Person(**self.inhole)
         self.team = Team(**self.team)

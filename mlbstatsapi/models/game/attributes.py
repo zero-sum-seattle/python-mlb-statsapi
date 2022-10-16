@@ -18,6 +18,6 @@ class MetaData:
         Current logical events for this game
     """
     wait: int
-    timeStamp: str
-    gameEvents: List[str]
-    logicalEvents: List[str]
+    timestamp: str
+    gameevents: List[str]
+    logicalevents: List[str]

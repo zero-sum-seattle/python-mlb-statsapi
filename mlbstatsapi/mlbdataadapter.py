@@ -38,14 +38,20 @@ class MlbDataAdapter:
         """ 
         if isinstance(data, Dict):
             lowered_dict = {}
+
             for key, value in data.items():
                 lowered_dict[key.lower()] = self._transform_keys_in_data(value)
+            
             return lowered_dict
+
         elif isinstance(data, List):
             lowered_list = []
+
             for item in data:
                 lowered_list.append(self._transform_keys_in_data(item))
+
             return lowered_list
+
         else:
             return data
 
@@ -87,7 +93,8 @@ class MlbDataAdapter:
 
         if response.status_code <= 200 and response.status_code <= 299: # catch HTTP errors
             self._logger.debug(msg=logline_post.format("success", response.status_code, response.reason)) # log success
-            # data = self._transform_keys_in_data(data) # transform keys
+
+            data = self._transform_keys_in_data(data) # transform keys
             return MlbResult(response.status_code, message=response.reason, data=data) # return result
 
         elif response.status_code >= 400 and response.status_code <= 499:  # catch HTTP error
@@ -99,4 +106,6 @@ class MlbDataAdapter:
             raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}") # raise exception 
 
         else:
-            raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}") # raise exception
+            raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}") # raise exception 
+
+

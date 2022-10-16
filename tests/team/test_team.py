@@ -1,6 +1,10 @@
 ﻿import unittest
 from unittest.mock import Mock, patch
 from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.venues import Venue
+from mlbstatsapi.models.divisions import Division
+from mlbstatsapi.models.sports import Sport
 from mlbstatsapi import Mlb
 
 class TestTeam(unittest.TestCase):
@@ -13,15 +17,20 @@ class TestTeam(unittest.TestCase):
     def tearDownClass(cls) -> None:
         pass
 
-    def test_player_instance_type_error(self):
+    def test_team_instance_type_error(self):
         with self.assertRaises(TypeError):
             team = Team()
 
-    def test_player_instance_id_instance_success(self):
-        team = Team(133, "Oakland Athletics", "/api/v1/teams/133")
-        self.assertEqual(team.id, 133)
-        self.assertIsInstance(team, Team)
-        self.assertEqual(team.name, "Oakland Athletics")
-        self.assertEqual(team.link, "/api/v1/teams/133")
+    def test_team_instance_id_instance_success(self):
+        self.assertEqual(self.team.id, 133)
+        self.assertIsInstance(self.team, Team)
+        self.assertEqual(self.team.name, "Oakland Athletics")
+        self.assertEqual(self.team.link, "/api/v1/teams/133")
 
+    def test_team_instances_attribute_classes(self):
+        """Team should return attributes as instances of Classes"""
 
+        # test team attributes classes
+        self.assertIsInstance(self.team.sport, Sport)
+        self.assertIsInstance(self.team.venue, Venue)
+        self.assertIsInstance(self.team.division, Division)

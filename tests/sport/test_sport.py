@@ -29,5 +29,5 @@ class TestSport(unittest.TestCase):
         self.assertTrue(hasattr(self.sport, "name"))
         self.assertTrue(hasattr(self.sport, "code"))
         self.assertTrue(hasattr(self.sport, "abbreviation"))
-        self.assertTrue(hasattr(self.sport, "sortOrder"))
-        self.assertTrue(hasattr(self.sport, "activeStatus"))
+        self.assertTrue(hasattr(self.sport, "sortorder"))
+        self.assertTrue(hasattr(self.sport, "activestatus"))

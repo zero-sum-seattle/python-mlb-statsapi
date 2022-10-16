@@ -14,46 +14,46 @@ class PlayMatchup:
     ----------
     batter : Person
         Matchup batter
-    batSide : PlayMatchupSide
+    batside : PlayMatchupSide
         batters batside
     pitcher : Person
         Matchup pitcher
-    pitchHand : PlayMatchupSide
+    pitchhand : PlayMatchupSide
         Pitchers side
-    batterHotColdZones : List
+    batterhotcoldzones : List
 
-    pitcherHotColdZones : List
+    pitcherhotcoldzones : List
 
     splits : PlayMatchupSplits
         PlayMatchupSplits
-    batterHotColdZoneStats : List = None
+    batterhotcoldzonestats : List = None
 
-    postOnFirst : Person = None
+    postonfirst : Person = None
         Runner on first
-    postOnSecond : Person = None
+    postonsecond : Person = None
         Runner on second
-    postOnThird : Person = None
+    postonthird : Person = None
         Runner on third
     """
     batter: Union[Person, dict]
-    batSide: Union[PlayMatchupSide, dict]
+    batside: Union[PlayMatchupSide, dict]
     pitcher: Union[Person, dict]
-    pitchHand: Union[PlayMatchupSide, dict]
-    batterHotColdZones: List
-    pitcherHotColdZones: List
+    pitchhand: Union[PlayMatchupSide, dict]
+    batterhotcoldzones: List
+    pitcherhotcoldzones: List
     splits: Union[PlayMatchupSplits, dict]
-    batterHotColdZoneStats: Optional[List] = None
-    postOnFirst: Optional[Union[Person, dict]] = None
-    postOnSecond: Optional[Union[Person, dict]] = None
-    postOnThird: Optional[Union[Person, dict]] = None
+    batterhotcoldzonestats: Optional[List] = None
+    postonfirst: Optional[Union[Person, dict]] = None
+    postonsecond: Optional[Union[Person, dict]] = None
+    postonthird: Optional[Union[Person, dict]] = None
 
     def __post_init__(self):
         self.batter = Person(**self.batter)
-        self.batSide = PlayMatchupSide(**self.batSide)
+        self.batside = PlayMatchupSide(**self.batside)
         self.pitcher = Person(**self.pitcher)
-        self.pitchHand = PlayMatchupSide(**self.pitchHand)
+        self.pitchhand = PlayMatchupSide(**self.pitchhand)
         self.splits = PlayMatchupSplits(**self.splits)
-        self.batterHotColdZoneStats = self.batterHotColdZoneStats['stats'] if self.batterHotColdZoneStats else self.batterHotColdZoneStats
-        self.postOnFirst = Person(**self.postOnFirst) if self.postOnFirst else self.postOnFirst
-        self.postOnSecond = Person(**self.postOnSecond) if self.postOnSecond else self.postOnSecond
-        self.postOnThird = Person(**self.postOnThird) if self.postOnThird else self.postOnThird
+        self.batterhotcoldzonestats = self.batterhotcoldzonestats['stats'] if self.batterhotcoldzonestats else self.batterhotcoldzonestats
+        self.postonfirst = Person(**self.postonfirst) if self.postonfirst else self.postonfirst
+        self.postonsecond = Person(**self.postonsecond) if self.postonsecond else self.postonsecond
+        self.postonthird = Person(**self.postonthird) if self.postonthird else self.postonthird

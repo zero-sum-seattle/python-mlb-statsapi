@@ -27,14 +27,14 @@ class BoxScoreTeamInfo:
     ----------
     title : str
         Type of information
-    fieldList : List[BoxScoreVL]
+    fieldlist : List[BoxScoreVL]
         List holding the info for this info type
     """
     title: str
-    fieldList: Union[List[BoxScoreVL], List[dict]]
+    fieldlist: Union[List[BoxScoreVL], List[dict]]
 
     def __post_init__(self):
-        self.fieldList = [BoxScoreVL(**fieldLists) for fieldLists in self.fieldList]
+        self.fieldlist = [BoxScoreVL(**fieldlists) for fieldlists in self.fieldlist]
 
 @dataclass
 class BoxScoreTeam:
@@ -45,7 +45,7 @@ class BoxScoreTeam:
     ----------
     team : Team
         This team
-    teamStats : Dict
+    teamstats : Dict
         Team stats
     players : Dict
         Players on team
@@ -57,7 +57,7 @@ class BoxScoreTeam:
         List of bench playerid for this team
     bullpen : List[int]
         Bullpen list of playerid
-    battingOrder : List[int]
+    battingorder : List[int]
         Batting order for this team as a list of playerid
     info : List[BoxScoreTeamInfo]
         Batting and fielding info for team
@@ -65,13 +65,13 @@ class BoxScoreTeam:
         Team notes
     """
     team: Union[Team, dict]
-    teamStats: dict
+    teamstats: dict
     players: dict
     batters: List[int]
     pitchers: List[int]
     bench: List[int]
     bullpen: List[int]
-    battingOrder: List[int]
+    battingorder: List[int]
     info: Union[List[BoxScoreTeamInfo], List[dict]]
     note: List[str]
 
@@ -107,11 +107,11 @@ class BoxScoreOffical:
     ----------
     official : Person
         The official person
-    officialType : str
+    officialtype : str
         What type of official this person is
     """
     official: Union[Person, dict]
-    officialType: str
+    officialtype: str
 
     def __post_init__(self):
         self.official = Person(**self.official)
