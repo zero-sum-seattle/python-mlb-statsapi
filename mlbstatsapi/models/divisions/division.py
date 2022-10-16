@@ -1,6 +1,5 @@
 ﻿from dataclasses import dataclass
 from typing import Optional, Union
-from mlbstatsapi.models import divisions
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.sports import Sport
 
