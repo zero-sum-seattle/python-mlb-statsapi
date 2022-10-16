@@ -26,6 +26,7 @@ class TestGame(unittest.TestCase):
         self.assertIsInstance(self.game, Game)
 
     def test_game_attrs(self):
-        self.assertTrue(hasattr(self.game, "metaData"))
-        self.assertTrue(hasattr(self.game, "gameData"))
-        self.assertTrue(hasattr(self.game, "liveData"))
+        self.assertTrue(hasattr(self.game, "metadata"))
+        self.assertTrue(hasattr(self.game, "gamedata"))
+        self.assertTrue(hasattr(self.game, "livedata"))
+ 

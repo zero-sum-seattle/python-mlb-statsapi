@@ -2,7 +2,7 @@
 import unittest
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
-from mlbstatsapi.models.game import Game
+from mlbstatsapi.models.game import Game, Plays, Linescore, BoxScore
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
@@ -71,6 +71,18 @@ class TestMlbDataApi(unittest.TestCase):
         game = self.mlb.get_game(662242) # Return a game instance of gaem 662242
         self.assertIsInstance(game, Game) # Confirms that a Game instance is returned
         self.assertEqual(game.id, 662242) # Confirm the ID is correct
+    
+    def test_get_game_playByPlay(self):
+        playByPlay = self.mlb.get_game_playByPlay(662242) # Return a game instance of gaem 662242
+        self.assertIsInstance(playByPlay, Plays) # Confirms that a Game instance is returned        
+    
+    def test_get_game_linescore(self):
+        linescore = self.mlb.get_game_linescore(662242) # Return a game instance of gaem 662242
+        self.assertIsInstance(linescore, Linescore) # Confirms that a Game instance is returned 
+    
+    def test_get_game_boxscore(self):
+        boxscore = self.mlb.get_game_boxscore(662242) # Return a game instance of gaem 662242
+        self.assertIsInstance(boxscore, BoxScore) # Confirms that a Game instance is returned 
 
     def test_get_todays_games_id(self):
         todaysGames = self.mlb.get_todays_game_ids() # Get all divisions as a list[Division]
@@ -133,9 +145,9 @@ class TestMlbDataApi(unittest.TestCase):
         self.assertEqual(id, [200]) # Confirm the ID is correct
 
     def test_get_attendance(self):
-        attendance_team_away = self.mlb.get_attendance(teamId=113) # Cincinati Reds 134
-        attendance_team_home = self.mlb.get_attendance(teamId=134)
-        attendance_season = self.mlb.get_attendance(teamId=113, season=2022)
+        attendance_team_away = self.mlb.get_attendance(teamid=113) # Cincinati Reds 134
+        attendance_team_home = self.mlb.get_attendance(teamid=134)
+        attendance_season = self.mlb.get_attendance(teamid=113, season=2022)
         self.assertEqual(attendance_team_away.records[0].team.id, 113)
         self.assertEqual(attendance_team_home.records[0].team.id, 134)
         self.assertEqual(attendance_season.records[0].team.id, 113)
@@ -150,5 +162,5 @@ class TestMlbDataApi(unittest.TestCase):
         self.assertEqual(poopulated_sport.name, 'Major League Baseball')
         self.assertEqual(poopulated_sport.code, 'mlb')
         self.assertEqual(poopulated_sport.abbreviation, 'MLB')
-        self.assertEqual(poopulated_sport.sortOrder, 11)
-        self.assertEqual(poopulated_sport.activeStatus, True)
+        self.assertEqual(poopulated_sport.sortorder, 11)
+        self.assertEqual(poopulated_sport.activestatus, True)

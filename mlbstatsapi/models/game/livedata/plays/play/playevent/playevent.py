@@ -1,28 +1,10 @@
-from typing import Union, Dict, Any
+from typing import Union, Optional
 from dataclasses import dataclass
-from mlbstatsapi.models.people import Person, PrimaryPosition
+from mlbstatsapi.models.people import Person, Position
 
-from mlbstatsapi.models.game.livedata.plays.play.playevent.playeventdetails import PlayEventDetails
 from mlbstatsapi.models.game.livedata.plays.play.playevent.pitchdata import PitchData
-from mlbstatsapi.models.game.livedata.plays.play.playevent.hitdata import HitData
 
-@dataclass
-class PlayCount:
-    """
-    A class to represent a play count.
-
-    Attributes
-    ----------
-    balls : int
-        Balls
-    strikes : int
-        strikes
-    outs : int
-        Outs
-    """
-    balls:      int
-    strikes:    int
-    outs:       int
+from .attributes import PlayEventDetails, PlayCount, HitData
 
 @dataclass
 class PlayEvent:
@@ -35,62 +17,63 @@ class PlayEvent:
         Event details
     index : int
         Event index
-    startTime : str
+    starttime : str
         Event start time
-    endTime : str
+    endtime : str
         Event end time
-    isPitch : bool
+    ispitch : bool
         Is this event a pitch
     type : str
         Type
-    playId : str = None
+    playid : str = None
         Unique play id ?
-    pitchNumber : int = None
+    pitchnumber : int = None
         Pitch number
-    actionPlayId : str = None
+    actionplayid : str = None
         Unique action play id ?
-    isBaseRunningPlay : bool = None
+    isbaserunningplay : bool = None
         Is there base running this play
-    isSubstitution : bool = None
+    issubstitution : bool = None
         Is this a substitution
-    battingOrder : str = None
+    battingorder : str = None
         A weird batting order string that only has appeared once
     count : PlayCount  = None
         Count
-    pitchData : PitchData  = None
+    pitchdata : PitchData  = None
         Pitch data
-    hitData : HitData  = None
+    hitdata : HitData  = None
         Hit data
     player : Person  = None
         Player
     position : PrimaryPosition  = None
         Position
-    replacedPlayer : Person  = None
+    replacedplayer : Person  = None
         Replaced player
     """
-    details:            Union[PlayEventDetails, Dict[str, Any]]
-    index:              int
-    startTime:          str
-    endTime:            str
-    isPitch:            bool
-    type:               str
-    playId:             str = None
-    pitchNumber:        int = None
-    actionPlayId:       str = None
-    isBaseRunningPlay:  bool = None
-    isSubstitution:     bool = None
-    battingOrder:       str = None
-    count:              Union[PlayCount, Dict[str, Any]] = None
-    pitchData:          Union[PitchData, Dict[str, Any]] = None
-    hitData:            Union[HitData, Dict[str, Any]] = None
-    player:             Union[Person, Dict[str, Any]] = None
-    position:           Union[PrimaryPosition, Dict[str, Any]] = None
-    replacedPlayer:     Union[Person, Dict[str, Any]] = None
+    details: Union[PlayEventDetails, dict]
+    index: int
+    starttime: str
+    endtime: str
+    ispitch: bool
+    type: str
+    playid: Optional[str] = None
+    pitchnumber: Optional[int] = None
+    actionplayid: Optional[str] = None
+    isbaserunningplay: Optional[bool] = None
+    issubstitution: Optional[bool] = None
+    battingorder: Optional[str] = None
+    count: Optional[Union[PlayCount, dict]] = None
+    pitchdata: Optional[Union[PitchData, dict]] = None
+    hitdata: Optional[Union[HitData, dict]] = None
+    player: Optional[Union[Person, dict]] = None
+    position: Optional[Union[Position, dict]] = None
+    replacedplayer: Optional[Union[Person, dict]] = None
 
     def __post_init__(self):
         self.details = PlayEventDetails(**self.details)
         self.count = PlayCount(**self.count) if self.count else self.count
-        self.pitchData = PitchData(**self.pitchData) if self.pitchData else self.pitchData
-        self.hitData = HitData(**self.hitData) if self.hitData else self.hitData
+        self.pitchdata = PitchData(**self.pitchdata) if self.pitchdata else self.pitchdata
+        self.hitdata = HitData(**self.hitdata) if self.hitdata else self.hitdata
         self.player = Person(**self.player) if self.player else self.player
-        self.replacedPlayer = Person(**self.replacedPlayer) if self.replacedPlayer else self.replacedPlayer
+        self.position = Position(**self.position) if self.position else self.position
+        self.replacedplayer = Person(**self.replacedplayer) if self.replacedplayer else self.replacedplayer

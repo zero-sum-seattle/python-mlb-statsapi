@@ -1,7 +1,7 @@
-from typing import Union, Dict, List, Any
+from typing import Union, List
 from dataclasses import dataclass
 
-from mlbstatsapi.models.game.livedata.plays.playbyinning.playbyinninghits import PlayByInningHits
+from .attributes import PlayByInningHits
 
 @dataclass
 class PlayByInning():
@@ -10,9 +10,9 @@ class PlayByInning():
 
     Attributes
     ----------
-    startIndex : int
+    startindex : int
         Starting play index number, indexed with Plays.allPlays
-    endIndex : int
+    endindex : int
         End play index number, indexed with Plays.allPlays
     top : List[int]
         Play indexes for top of the inning
@@ -21,11 +21,11 @@ class PlayByInning():
     hits : PlayByInningHits
         Hits for the inning by home and away
     """
-    startIndex: int
-    endIndex:   int
-    top:        List[int]
-    bottom:     List[int]
-    hits:       Union[PlayByInningHits, Dict[str, Any]]
+    startindex: int
+    endindex: int
+    top: List[int]
+    bottom: List[int]
+    hits: Union[PlayByInningHits, dict]
 
     def __post_init__(self):
         self.hits = PlayByInningHits(**self.hits)

@@ -1,26 +1,9 @@
 from dataclasses import dataclass, field
-from typing import Dict, List, Union, Any
+from typing import Optional, Union, List
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.game.gamedata import GameStatus
+from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.leagues import LeagueRecord
-
-@dataclass
-class ScheduleGameTeamInfo:
-    """
-    A class to represent a team in a Scheduled Dates game.
-
-    Attributes
-    ----------
-    id : int
-        Team id number
-    name : str
-        Team nmae
-    link : str
-        Link to team
-    """
-    id: int
-    name: str
-    link: str
 
 @dataclass
 class ScheduleGameTeam:
@@ -42,19 +25,19 @@ class ScheduleGameTeam:
     seriesNumber : int
         Series number 
     """
-    leagueRecord: Union[LeagueRecord, Dict[str, Any]]
-    team: Union[ScheduleGameTeamInfo, Dict[str, Any]]
-    splitSquad: bool
-    seriesNumber: int
-    score: int = False
-    isWinner: bool = False
+    leaguerecord: Union[LeagueRecord, dict]
+    team: Union[Team, dict]
+    splitsquad: bool
+    seriesnumber: int
+    score: Optional[int] = False
+    iswinner: Optional[bool] = False
 
     def __post_init__(self):
-        self.leagueRecord = LeagueRecord(**self.leagueRecord)
-        self.team = ScheduleGameTeamInfo(**self.team)
+        self.leaguerecord = LeagueRecord(**self.leaguerecord)
+        self.team = Team(**self.team)
 
 @dataclass
-class ScheduleGameTeams:
+class ScheduleHomeAndAway:
     """
     A class to represent both away and home teams in a Schedules Dates game.
 
@@ -65,8 +48,8 @@ class ScheduleGameTeams:
     away : ScheduleGameTeam
         Away team info for this game
     """
-    home: Union[ScheduleGameTeam, Dict[str, Any]]
-    away: Union[ScheduleGameTeam, Dict[str, Any]]
+    home: Union[ScheduleGameTeam, dict]
+    away: Union[ScheduleGameTeam, dict]
 
     def __post_init__(self):
         self.home = ScheduleGameTeam(**self.home)
@@ -135,46 +118,54 @@ class ScheduleGames:
         If necessary
     ifNecessaryDescription : str
         If necessary description
-    rescheduleDate : str 
-        rescheduled date
-    rescheduleGameDate : str
+    rescheduleDate : str = None
+        If game is rescheduled, this is the rescheduled date
+    rescheduleGameDate : str = None
         rescheduled game date
+    rescheduledFrom : str = None
+        rescheduled from
+    rescheduledFromDate : str = None
+        rescheduled from date
+    isTie : bool = None
+        Is tie
     """
-    gamePk: int
+    gamepk: int
     link: str
-    gameType: str
+    gametype: str
     season: str
-    gameDate: str
-    officialDate: str
-    status: Union[GameStatus, Dict[str, Any]]
-    teams: Union[ScheduleGameTeams, Dict[str, Any]]
+    gamedate: str
+    officialdate: str
+    status: Union[GameStatus, dict]
+    teams: Union[ScheduleHomeAndAway, dict]
     venue: Venue
     content: dict
-    gameNumber: int
-    publicFacing: bool
-    doubleHeader: str
-    gamedayType: str
+    gamenumber: int
+    publicfacing: bool
+    doubleheader: str
+    gamedaytype: str
     tiebreaker: str
-    calendarEventID: str
-    seasonDisplay: str
-    dayNight: str
+    calendareventid: str
+    seasondisplay: str
+    daynight: str
     description: str
-    scheduledInnings: int
-    reverseHomeAwayStatus: bool
-    inningBreakLength: int
-    gamesInSeries: int
-    seriesGameNumber: int
-    seriesDescription: str
-    recordSource: str
-    ifNecessary: str
-    ifNecessaryDescription: str
-    isTie: bool = None
-    rescheduleDate: str = None
-    rescheduleGameDate: str = None
+    scheduledinnings: int
+    reversehomeawaystatus: bool
+    inningbreaklength: int
+    gamesinseries: int
+    seriesgamenumber: int
+    seriesdescription: str
+    recordsource: str
+    ifnecessary: str
+    ifnecessarydescription: str
+    rescheduledate: Optional[str] = None
+    reschedulegamedate: Optional[str] = None
+    rescheduledfrom: Optional[str] = None
+    rescheduledfromdate: Optional[str] = None
+    istie: Optional[bool] = None
 
     def __post_init__(self):
         self.status = GameStatus(**self.status)
-        self.teams = ScheduleGameTeams(**self.teams)
+        self.teams = ScheduleHomeAndAway(**self.teams)
 
 
 @dataclass
@@ -201,10 +192,10 @@ class ScheduleDates:
         reference for this object. It stays as a list for now.
     """
     date: str
-    totalItems: int
-    totalEvents: int
-    totalGames: int
-    totalGamesInProgress: int
+    totalitems: int
+    totalevents: int
+    totalgames: int
+    totalgamesinprogress: int
     events: List
     games: List[ScheduleGames] = field(default_factory=list)
 

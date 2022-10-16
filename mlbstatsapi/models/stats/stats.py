@@ -1,37 +1,16 @@
-﻿from .splits import HittingSplits, PitchingSplits
-from typing import List, Union
+﻿from dataclasses import dataclass, field
+from typing import Optional, Union
 
+from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.people import Person
+from mlbstatsapi.models.sports import Sport
+from mlbstatsapi.models.leagues import League
+
+@dataclass(kw_only=True)
 class Stats:
-    """
-    A class to represent a Stat.
-
-    Attributes
-    ----------
-    """
-    stat_group: str 
-    stat_type: str  
-    splits: List[Union[HittingSplits, PitchingSplits]]
-
-    def __init__(self, group: str, type: str, splits: list, **kwargs) -> None:
-        self.stat_group = group['displayName']
-        self.stat_type = type['displayName']
-
-        if splits:
-            self.splits = self._build_splits(splits)
-
-        self.__dict__.update(**kwargs) # assign kwargs
-
-    def _build_splits(self, splits: list) -> None:
-        splitList = []
-
-        if self.stat_group == "hitting":
-            for split in splits:
-                splitList.append(HittingSplits(**split) if isinstance(split, dict) else None)
-        elif self.stat_group == "pitching":
-            for split in splits:
-                splitList.append(PitchingSplits(**split) if isinstance(split, dict) else None)
-
-        return splitList
- 
-    def __len__(self):
-        return len(self.splits)
+    team : Optional[Union[Team, dict]] = field(default_factory=dict)
+    player : Optional[Union[Person, dict]] = field(default_factory=dict)
+    league : Optional[Union[League, dict]] = field(default_factory=dict)
+    sport : Optional[Union[Sport, dict]] = field(default_factory=dict)
+    
+    

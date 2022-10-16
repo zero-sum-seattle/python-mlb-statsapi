@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, Union, Any
+from typing import Optional, Union
 from mlbstatsapi.models.teams import Team
 
 @dataclass
@@ -19,19 +19,19 @@ class AttendanceHighLowGame:
     A class to represent attendance High and Low games.
     Attributes
     ----------
-    gamePk : int
+    gamepk : int
         Games Id number
     link : str
         games endpoint link
     content : AttendanceHighLowGameContent
         Content for this game
-    dayNight : str
+    daynight : str
         Type of time of day for game
     """
-    gamePk: int
+    gamepk: int
     link: str
-    content: Union[AttendanceHighLowGameContent, Dict[str, Any]]
-    dayNight: str
+    content: Union[AttendanceHighLowGameContent, dict]
+    daynight: str
 
     def __post_init__(self):
         self.content = AttendanceHighLowGameContent(**self.content)
@@ -56,123 +56,123 @@ class AttendanceRecords:
     A class to represent attendance records.
     Attributes
     ----------
-    openingsTotal : int
+    openingstotal : int
         Total amount of openings
-    openingsTotalAway : int 
+    openingstotalaway : int 
         Total amount of opening away games
-    openingsTotalHome : int
+    openingstotalhome : int
         Total amount of opening home games
-    openingsTotalLost : int
+    openingstotallost : int
         Total amount of openings lost
-    gamesTotal : int
+    gamestotal : int
         Total amount of games
-    gamesAwayTotal : int
+    gamesawaytotal : int
         Total amount of away games
-    gamesHomeTotal : int
+    gameshometotal : int
         Total amount of home games
     year : str
         Year as a string
-    attendanceAverageAway : int = None
+    attendanceaverageaway : int = None
         Average attendance for away games
-    attendanceAverageHome : int = None
+    attendanceaveragehome : int = None
         Average attendance for home games
-    attendanceAverageYtd : int
+    attendanceaverageytd : int
         Average attendance year to date
-    attendanceHigh : int = None
+    attendancehigh : int = None
         Attendance High number
-    attendanceHighDate : str = None 
+    attendancehighdate : str = None 
         Attendance high date
-    attendanceHighGame : AttendanceHighLowGame = None
+    attendancehighgame : AttendanceHighLowGame = None
         Attendance high game
-    attendanceLow : int = None
+    attendancelow : int = None
         Attendance low number
-    attendanceLowDate : str = None 
+    attendancelowdate : str = None 
          Attendance low date
-    attendanceLowGame : AttendanceHighLowGame = None
+    attendancelowgame : AttendanceHighLowGame = None
          Attendance low game
-    attendanceOpeningAverage : int = None
+    attendanceopeningaverage : int = None
          Attendance opening average
-    attendanceTotal : int
+    attendancetotal : int
         Attendance total
-    attendanceTotalAway : int = None
+    attendancetotalaway : int = None
         Attendance total away
-    attendanceTotalHome : int = None
+    attendancetotalhome : int = None
         Attendance total home
-    gameType : AttendenceGameType
+    gametype : AttendenceGameType
         Game type
     team : Team
         Team
     """
-    openingsTotal: int
-    openingsTotalAway: int 
-    openingsTotalHome: int
-    openingsTotalLost: int
-    gamesTotal: int
-    gamesAwayTotal: int
-    gamesHomeTotal: int
+    openingstotal: int
+    openingstotalaway: int 
+    openingstotalhome: int
+    openingstotallost: int
+    gamestotal: int
+    gamesawaytotal: int
+    gameshometotal: int
     year: str
-    attendanceAverageYtd: int
-    attendanceTotal: int
-    gameType: Union[AttendenceGameType, Dict[str, Any]]
-    team: Union[Team, Dict[str, Any]]
-    attendanceAverageAway: int = None
-    attendanceAverageHome: int = None
-    attendanceHigh: int = None
-    attendanceHighDate: str  = None
-    attendanceHighGame: Union[AttendanceHighLowGame, Dict[str, Any]] = None
-    attendanceLow: int = None
-    attendanceLowDate: str  = None
-    attendanceLowGame: Union[AttendanceHighLowGame, Dict[str, Any]] = None
-    attendanceTotalAway: int = None
-    attendanceTotalHome: int = None
-    attendanceOpeningAverage: int = None
+    attendanceaverageytd: int
+    attendancetotal: int
+    gametype: Union[AttendenceGameType, dict]
+    team: Union[Team, dict]
+    attendanceaverageaway: Optional[int] = None
+    attendanceaveragehome: Optional[int] = None
+    attendancehigh: Optional[int] = None
+    attendancehighdate: Optional[str ] = None
+    attendancehighgame: Optional[Union[AttendanceHighLowGame, dict]] = None
+    attendancelow: Optional[int] = None
+    attendancelowdate: Optional[str] = None
+    attendancelowgame: Optional[Union[AttendanceHighLowGame, dict]] = None
+    attendancetotalaway: Optional[int] = None
+    attendancetotalhome: Optional[int] = None
+    attendanceopeningaverage: Optional[int] = None
 
     def __post_init__(self):
-        self.attendanceHighGame = AttendanceHighLowGame(**self.attendanceHighGame) if self.attendanceHighGame else self.attendanceHighGame
-        self.attendanceLowGame = AttendanceHighLowGame(**self.attendanceLowGame) if self.attendanceLowGame else self.attendanceLowGame
-        self.gameType = AttendenceGameType(**self.gameType)
+        self.attendancehighgame = AttendanceHighLowGame(**self.attendancehighgame) if self.attendancehighgame else self.attendancehighgame
+        self.attendancelowgame = AttendanceHighLowGame(**self.attendancelowgame) if self.attendancelowgame else self.attendancelowgame
+        self.gameType = AttendenceGameType(**self.gametype)
         self.team = Team(**self.team)
 
 @dataclass
-class AttendanceAggregateTotals:
+class AttendanceTotals:
     """
     A class to represent attendance aggregate toatls.
     Attributes
     ----------
-    openingsTotalAway : int
+    openingstotalaway : int
         Total amount of opening game attendance number
-    openingsTotalHome : int
+    openingstotalhome : int
         Total amount of opening home game attendance number
-    openingsTotalLost : int
+    openingstotallost : int
         Total amount of opening games lost
-    openingsTotalYtd : int
+    openingstotalytd : int
         Total amount of opening games year to date
-    attendanceAverageAway : int = None
+    attendanceaverageaway : int = None
         Average away game attendance
-    attendanceAverageHome : int = None
+    attendanceaveragehome : int = None
         Average home game attendance
-    attendanceAverageYtd : int
+    attendanceaverageytd : int
         Average attendance year to date
-    attendanceHigh : int
+    attendancehigh : int
         Attendance high
-    attendanceHighDate : str
+    attendancehighdate : str
         Attendance high date
-    attendanceTotal : int
+    attendancetotal : int
         Attendance total
-    attendanceTotalAway : int
+    attendancetotalaway : int
         Attendace total away
-    attendanceTotalHome : int
+    attendancetotalhome : int
         Attendance total home
     """
-    openingsTotalAway: int
-    openingsTotalHome: int
-    openingsTotalLost: int
-    openingsTotalYtd: int
-    attendanceAverageYtd: int
-    attendanceHigh: int
-    attendanceHighDate: str
-    attendanceTotal: int
-    attendanceTotalAway: int
-    attendanceTotalHome: int
-    attendanceAverageAway: int = None
-    attendanceAverageHome: int = None
+    openingstotalaway: int
+    openingstotalhome: int
+    openingstotallost: int
+    openingstotalytd: int
+    attendanceaverageytd: int
+    attendancehigh: int
+    attendancehighdate: str
+    attendancetotal: int
+    attendancetotalaway: int
+    attendancetotalhome: int
+    attendanceaverageaway: Optional[int] = None
+    attendanceaveragehome: Optional[int] = None

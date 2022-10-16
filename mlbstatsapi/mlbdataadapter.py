@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from .exceptions import TheMlbStatsApiException
 import requests
 import logging
@@ -22,6 +22,38 @@ class MlbDataAdapter:
         self.url = f"https://{hostname}/api/{ver}/" # we'll figure out the v1.1 endpoint later
         self._logger = logger or logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
+
+    def _transform_keys_in_data(self, data) -> dict:
+        """
+        Recursivly transform all the keys in a dictionary to lowercase
+
+        Parameters
+        ----------
+        data : dict
+            MlbResult data dictionary
+
+        Returns
+        -------
+        dict
+        """ 
+        if isinstance(data, Dict):
+            lowered_dict = {}
+
+            for key, value in data.items():
+                lowered_dict[key.lower()] = self._transform_keys_in_data(value)
+            
+            return lowered_dict
+
+        elif isinstance(data, List):
+            lowered_list = []
+
+            for item in data:
+                lowered_list.append(self._transform_keys_in_data(item))
+
+            return lowered_list
+
+        else:
+            return data
 
     def get(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> MlbResult:
         """
@@ -61,6 +93,8 @@ class MlbDataAdapter:
 
         if response.status_code <= 200 and response.status_code <= 299: # catch HTTP errors
             self._logger.debug(msg=logline_post.format("success", response.status_code, response.reason)) # log success
+
+            data = self._transform_keys_in_data(data) # transform keys
             return MlbResult(response.status_code, message=response.reason, data=data) # return result
 
         elif response.status_code >= 400 and response.status_code <= 499:  # catch HTTP error
@@ -73,3 +107,5 @@ class MlbDataAdapter:
 
         else:
             raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}") # raise exception 
+
+
