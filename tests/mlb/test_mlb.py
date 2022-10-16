@@ -145,9 +145,9 @@ class TestMlbDataApi(unittest.TestCase):
         self.assertEqual(id, [200]) # Confirm the ID is correct
 
     def test_get_attendance(self):
-        attendance_team_away = self.mlb.get_attendance(teamId=113) # Cincinati Reds 134
-        attendance_team_home = self.mlb.get_attendance(teamId=134)
-        attendance_season = self.mlb.get_attendance(teamId=113, season=2022)
+        attendance_team_away = self.mlb.get_attendance(teamid=113) # Cincinati Reds 134
+        attendance_team_home = self.mlb.get_attendance(teamid=134)
+        attendance_season = self.mlb.get_attendance(teamid=113, season=2022)
         self.assertEqual(attendance_team_away.records[0].team.id, 113)
         self.assertEqual(attendance_team_home.records[0].team.id, 134)
         self.assertEqual(attendance_season.records[0].team.id, 113)
