@@ -75,7 +75,7 @@ class Mlb:
         # if mlbdata is not empty, and 'people' key is in mlbdata.data and mlbdata.data['people'] is not empty list
         if ('people' in mlbdata.data and mlbdata.data['people']): 
             for person in mlbdata.data['people']:
-                if person['fullname'] == fullname: # Match person fullName
+                if person['fullname'].lower() == fullname.lower(): # Match person fullName
                     playerIds.append(person['id']) # add to list
 
         return playerIds
@@ -132,7 +132,7 @@ class Mlb:
         
         if ('teams' in mlbdata.data and mlbdata.data['teams']):
             for team in mlbdata.data['teams']:
-                if team['teamname'] == teamname: # find matching Team Name
+                if team['teamname'].lower() == teamname.lower(): # find matching Team Name
                     teamIds.append(team['id']) # append match id
         
         return teamIds
