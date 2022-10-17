@@ -160,7 +160,7 @@ class TestPlayerStatCreation(unittest.TestCase):
             self.assertIsInstance(stat, SimpleFielding)
 
             # stat should have attr set
-            self.assertTrue(hasattr(stat, 'errors'))
+            self.assertTrue(hasattr(stat, 'chances'))
             self.assertTrue(hasattr(stat, 'gamesplayed'))
 
         self.params = { "stats": ["season"], "group": "fielding" }
@@ -179,8 +179,8 @@ class TestPlayerStatCreation(unittest.TestCase):
             self.assertIsInstance(stat, SimpleFielding)
 
             # stat should have attr set
-            self.assertTrue(hasattr(stat, 'errors'))
-            self.assertTrue(hasattr(stat, 'gamesplayed'))
+            self.assertTrue(hasattr(stat, 'doubleplays'))
+            self.assertTrue(hasattr(stat, 'fielding'))
 
     def test_get_multiple_stats_for_player(self):
         """mlb get stats should return two hitting stats"""
