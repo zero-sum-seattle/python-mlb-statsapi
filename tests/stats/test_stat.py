@@ -1,10 +1,10 @@
 ﻿from dataclasses import field
 import unittest
 
-from mlbstatsapi.models.stats import SimpleHitting, AdvancedHitting, SimpleCatching, SimplePitching, AdvancedPitching
+from mlbstatsapi.models.stats import SimpleHitting, AdvancedHitting, SimpleCatching, SimplePitching, AdvancedPitching, SimpleFielding, OpponentsFacedHitting
+from mlbstatsapi.models.people import Person
+from mlbstatsapi.models.teams import Team
 from mlbstatsapi.mlbapi import Mlb
-from mlbstatsapi.models.stats import fielding
-from mlbstatsapi.models.stats.fielding import SimpleFielding
 
 
 class TestPlayerStatCreation(unittest.TestCase):
@@ -289,7 +289,39 @@ class TestTeamStatCreation(unittest.TestCase):
             self.assertTrue(hasattr(stat, 'errors'))
             self.assertTrue(hasattr(stat, 'gamesplayed'))
 
+class TestOpponentsFacedHitting(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.position_player = cls.mlb.get_person(665742) # Juan Soto
+        cls.pitching_player = cls.mlb.get_person(592662) # Robbie Ray
+        cls.catching_player = cls.mlb.get_person(663728) # Cal Raleigh
 
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
 
+    def test_opponents_faced_position(self):
+        """mlb get stats should return hitting stats"""
+        self.params = { "stats": [ "opponentsFaced" ], "group": "hitting" }
+        opponents_faced = self.mlb.get_stats(self.position_player, self.params)
 
+        # check for None, or NoneType
+        self.assertIsNotNone(opponents_faced)
+
+        self.assertTrue(len(opponents_faced) > 10)
+
+        for stat in opponents_faced:
+            # test that stat is not NoneType
+            self.assertTrue(stat)
+
+            # stat should be SimpleCatching
+            self.assertIsInstance(stat, OpponentsFacedHitting)
+
+            # stat should have attr set
+            self.assertTrue(hasattr(stat, 'fieldingteam'))
+            self.assertTrue(hasattr(stat, 'batter'))
+
+            self.assertIsInstance(stat.batter, Person)
+            self.assertIsInstance(stat.fieldingteam, Team)
 

@@ -130,6 +130,7 @@ class AdvancedPitching(Stats):
     bequeathedrunners : Optional[int] = None
     bequeathedrunnersscored : Optional[int] = None
 
+@dataclass
 class PitchingSaberMetrics(Stats):
     """
     A class to represent a pitching sabermetric statistics

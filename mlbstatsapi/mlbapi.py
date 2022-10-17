@@ -731,7 +731,8 @@ class Mlb:
 
                             # loop through json in splits
                             for stat in stats['splits']:
-                                stat = _transform_mlbdata(stat, ['stat'])
+                                if 'stat' in stat:
+                                    stat = _transform_mlbdata(stat, ['stat'])
                                 
                                 # create object from split
                                 splits.append(obj(**stat))

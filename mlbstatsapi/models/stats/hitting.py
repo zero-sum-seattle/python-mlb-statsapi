@@ -91,6 +91,7 @@ class SimpleHitting(Stats):
     catchersinterference : Optional[int] = None
     atbatsperhomerun : Optional[int] = None
 
+@dataclass
 class HittingSabermetrics(Stats):
     """
     A class to represent a hitting sabermetric statistic
@@ -105,6 +106,7 @@ class HittingSabermetrics(Stats):
     rar : float
     war : float
 
+@dataclass
 class OpponentsFacedHitting(Stats):
     """
     A class to represent a hitting sabermetric statistic
@@ -124,11 +126,11 @@ class OpponentsFacedHitting(Stats):
         the pitcher of that stat object
     """
     type_ = [ 'opponentsFaced' ]
+    pitcher : Union[Person, dict]
     batter : Union[Person, dict]
     fieldingteam : Union[Team, dict]
     group : str
-    pitcher : Union[Person, dict]
-
+    
     def __post_init__(self):
         self.fieldingteam = Team(**self.fieldingteam) if self.fieldingteam else self.fieldingteam
         self.batter = Person(**self.batter) if self.batter else self.batter

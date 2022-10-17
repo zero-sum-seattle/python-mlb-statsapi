@@ -28,6 +28,8 @@ class Stats:
         bool to hold if stat is at home
     date : str
         date of game
+    group : str 
+        type of stat group
     """
     team : Optional[Union[Team, dict]] = field(default_factory=dict)
     player : Optional[Union[Person, dict]] = field(default_factory=dict)
@@ -43,6 +45,7 @@ class Stats:
     iswin : Optional[bool] = None
     ishome : Optional[bool] = None
     date : Optional[str] = None
+    group : Optional[str] = None
 
     def __post_init__(self):
         self.team = Team(**self.team) if self.team else self.team
@@ -52,13 +55,14 @@ class Stats:
         self.sport = Sport(**self.sport) if self.sport else self.sport
         self.opponent = Team(**self.opponent) if self.opponent else self.opponent
 
+@dataclass
 class ExpectedStatistics(Stats):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
     """
     type_ = [ 'expectedStatistics' ]
-    avg : Optional[str] = None
-    slg : Optional[str] = None
-    woba : Optional[str] = None
-    wobaCon : Optional[str] = None
-    rank : Optional[int] = None
+    avg : Optional[str]
+    slg : Optional[str]
+    woba : Optional[str]
+    wobaCon : Optional[str]
+    rank : Optional[int]
