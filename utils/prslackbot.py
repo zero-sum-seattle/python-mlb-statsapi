@@ -9,7 +9,7 @@ def reportpullrequesturl(slack_webclient_token, url):
     client = WebClient(token=slack_webclient_token)
 
     # ID of channel you want to post message to
-    channel_id = "C0469FU130F"
+    channel_id = "C0420GC831N"
 
     try:
         # Call the conversations.list method using the WebClient
