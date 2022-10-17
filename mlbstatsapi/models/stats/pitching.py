@@ -69,7 +69,7 @@ class SimplePitching(Stats):
 
 @dataclass
 class AdvancedPitching(Stats):
-    type_ = [ "seasonAdvanced" ]
+    type_ = [ "seasonAdvanced", "careerAdvanced" ]
     winningpercentage : Optional[str] = None
     runsscoredper9 : Optional[str] = None
     battersfaced : Optional[int] = None

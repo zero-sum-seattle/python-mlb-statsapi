@@ -697,10 +697,12 @@ class Mlb:
         ----------
         object : mlb object
             mlb object e.g Team, Player, Person
+        params : dict
+            dict of params to pass e.g { 'stats': [ "seasonAdvanced", "season" ], 'group': 'hitting' }
 
         Returns
         -------
-        Splits
+        Stats
         """  
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"{object.mlb_class}/{object.id}/stats", ep_params=params) # Get All divisions        
         splits = [] 

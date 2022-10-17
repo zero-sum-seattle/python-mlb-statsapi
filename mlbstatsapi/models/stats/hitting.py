@@ -5,7 +5,7 @@ from .stats import Stats
  
 @dataclass
 class AdvancedHitting(Stats):
-    type_ = [ "seasonAdvanced" ]
+    type_ = [ 'seasonAdvanced', 'careerAdvanced' ]
     plateappearances : Optional[int] = None
     totalbases : Optional[int] = None
     leftonbase : Optional[int] = None
