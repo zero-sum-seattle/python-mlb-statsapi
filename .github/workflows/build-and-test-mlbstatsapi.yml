@@ -22,8 +22,18 @@ jobs:
           python3 -m pip install --upgrade pytest
           python3 -m pip install --upgrade build
           python3 -m pip install --upgrade requests
-          python3 -m build
-          python3 -m pip install .
+          python3 -m pip install --upgrade twine
       - name: Test with pytest
         run: |
           python3 -m pytest tests/*
+      - name: build and install
+        run: |
+          python3 -m build
+          python3 -m pip install .
+      - name: Publish a Python distribution to PyPI
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+
