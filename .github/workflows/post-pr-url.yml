@@ -24,4 +24,4 @@ jobs:
         env: # Or as an environment variable
           credentials: ${{ secrets.SLACK_WEBCLIENT_TOKEN }}
         run: |
-          python3 utils/prslackbot.py "$SLACK_WEBCLIENT_TOKEN" "$PR_CHANNEL" github.event.pull_request.html_url
+          python3 ./.github/scripts/prslackbot.py "$SLACK_WEBCLIENT_TOKEN" "$PR_CHANNEL" github.event.pull_request.html_url
