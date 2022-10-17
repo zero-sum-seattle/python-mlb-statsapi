@@ -3,7 +3,6 @@ from typing import List
 def _transform_mlbdata(mlb_dict, mlb_keys: List[str]):
     """
     change keys to all lowercase, and merge requested dictionarys return MlbResult
-
     Parameters
     ----------
     mlb_dict : dict
@@ -21,6 +20,8 @@ def _transform_mlbdata(mlb_dict, mlb_keys: List[str]):
         mlb_dict.update(**mlbmergeitem)
 
     return mlb_dict
+
+
 
 
 
