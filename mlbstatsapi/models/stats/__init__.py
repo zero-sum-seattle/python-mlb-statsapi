@@ -1,3 +1,3 @@
 from .stats import Stats
-from .hitting import SeasonAdvancedHitting, SeasonHitting
-from .pitching import SeasonPitching
+from .hitting import SimpleHitting, AdvancedHitting
+from .pitching import SimplePitching, AdvancedPitching

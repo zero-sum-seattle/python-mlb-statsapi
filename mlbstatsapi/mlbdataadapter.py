@@ -74,7 +74,7 @@ class MlbDataAdapter:
         """     
         full_url = self.url + endpoint # pass endpoint from inhertited classes
         logline_pre = f"url={full_url}"
-        logline_post = f" ,".join((logline_pre, "success={}, status_code={}, message={}"))
+        logline_post = f" ,".join((logline_pre, "success={}, status_code={}, message={}, url={}"))
 
         try:
             self._logger.debug(logline_post)
@@ -92,17 +92,17 @@ class MlbDataAdapter:
             raise TheMlbStatsApiException("Bad JSON in response") from e
 
         if response.status_code <= 200 and response.status_code <= 299: # catch HTTP errors
-            self._logger.debug(msg=logline_post.format("success", response.status_code, response.reason)) # log success
+            self._logger.debug(msg=logline_post.format("success", response.status_code, response.reason, response.url)) # log success
 
             data = self._transform_keys_in_data(data) # transform keys
             return MlbResult(response.status_code, message=response.reason, data=data) # return result
 
         elif response.status_code >= 400 and response.status_code <= 499:  # catch HTTP error
-            self._logger.error(msg=logline_post.format("Invalid Request", response.status_code, response.reason)) # log failure
+            self._logger.error(msg=logline_post.format("Invalid Request", response.status_code, response.reason, response.url)) # log failure
             return MlbResult(response.status_code, message=response.reason, data={})
 
         elif response.status_code >= 500 and response.status_code <= 599:
-            self._logger.error(msg=logline_post.format("Internal error occurred", response.status_code, response.reason))
+            self._logger.error(msg=logline_post.format("Internal error occurred", response.status_code, response.reason, response.url))
             raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}") # raise exception 
 
         else:

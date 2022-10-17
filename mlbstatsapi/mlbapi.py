@@ -705,8 +705,6 @@ class Mlb:
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"{object.mlb_class}/{object.id}/stats", ep_params=params) # Get All divisions        
         splits = [] 
 
-        self._logger.debug(msg=(str(mlbdata.data)))
-
         if ('stats' in mlbdata.data and mlbdata.data['stats']):
             for stats in mlbdata.data['stats']:
                 self._logger.debug(msg=(str(splits))) # log error
@@ -721,21 +719,19 @@ class Mlb:
 
                 # if splits is is in stats and splits not empty
                 if ('splits' in stats and stats['splits']):
-                    self._logger.debug(msg=(str(inspect.getmembers(stat_module))))
 
                     # loop through classes found in stat_module 
                     for name, obj in inspect.getmembers(stat_module):
-                        self._logger.debug(msg=(str(obj)))
                         self._logger.debug(msg=(str(name)))
                                                     
                         # if obj has _type attr and stat_type matches class var
-                        if inspect.isclass(obj) and (hasattr(obj, '_type') and stat_type == obj.type_):
+                        if inspect.isclass(obj) and (hasattr(obj, 'type_') and stat_type in obj.type_):
 
                             # loop through json in splits
-                            for split in stats['splits']:
-                                split = _transform_mlbdata(split, ['stat'])
+                            for stat in stats['splits']:
+                                stat = _transform_mlbdata(stat, ['stat'])
                                 
                                 # create object from split
-                                splits.append(obj(**split))
+                                splits.append(obj(**stat))
             # return splits
             return splits 

@@ -12,5 +12,7 @@ class Stats:
     player : Optional[Union[Person, dict]] = field(default_factory=dict)
     league : Optional[Union[League, dict]] = field(default_factory=dict)
     sport : Optional[Union[Sport, dict]] = field(default_factory=dict)
-    
+    gametype : Optional[str] = None
+    numteams : Optional[str] = None
+    season : Optional[str] = None
     
