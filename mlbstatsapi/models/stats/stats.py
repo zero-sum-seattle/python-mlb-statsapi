@@ -30,6 +30,10 @@ class Stats:
         date of game
     group : str 
         type of stat group
+    stat_group : str
+        type of the stat group
+    stat_type : str
+        type of the stat 
     """
     team: Optional[Union[Team, dict]] = field(default_factory=dict)
     player: Optional[Union[Person, dict]] = field(default_factory=dict)
@@ -61,10 +65,18 @@ class Stats:
 class ExpectedStatistics(Stats):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
+
+    Attributes
+    ----------
+    avg : str
+    slg : str
+    woba : str
+    wobaCon : str
+    rank : int
     """
     type_ = [ 'expectedStatistics' ]
     avg: str
     slg: str
     woba: str
-    wobaCon: str
+    wobacon: str
     rank: int
