@@ -689,14 +689,14 @@ class Mlb:
         # If problem with hydrating object, return the old dry object
         return hydratedobject if hydratedobject else object
 
-    def get_stats(self, object : object, params : dict) -> List[Stats]:
+    def get_stats(self, object : Union[object, dict], params : dict) -> List[Stats]:
         """
         return a split object 
 
         Parameters
         ----------
         object : mlb object
-            mlb object e.g Team, Player, Person
+            mlb object or dict e.g Team, Player, Person
         params : dict
             dict of params to pass e.g { 'stats': [ "seasonAdvanced", "season" ], 'group': 'hitting' }
 
@@ -709,8 +709,6 @@ class Mlb:
 
         if ('stats' in mlbdata.data and mlbdata.data['stats']):
             for stats in mlbdata.data['stats']:
-                self._logger.debug(msg=(str(splits))) # log error
-
                 # set stat_group and stat_type
                 stat_group = stats['group']['displayname'] if 'group' in stats else None
                 stat_type = stats['type']['displayname'] if 'type' in stats else None
@@ -723,9 +721,7 @@ class Mlb:
                 if ('splits' in stats and stats['splits']):
 
                     # loop through classes found in stat_module 
-                    for name, obj in inspect.getmembers(stat_module):
-                        self._logger.debug(msg=(str(name)))
-                                                    
+                    for name, obj in inspect.getmembers(stat_module):                                                    
                         # if obj has _type attr and stat_type matches class var
                         if inspect.isclass(obj) and (hasattr(obj, 'type_') and stat_type in obj.type_):
 
@@ -733,8 +729,8 @@ class Mlb:
                             for stat in stats['splits']:
                                 if 'stat' in stat:
                                     stat = _transform_mlbdata(stat, ['stat'])
-                                
-                                # create object from split
-                                splits.append(obj(**stat))
+
+                                # create object from stat
+                                splits.append(obj(stat_type=stat_type, stat_group=stat_group, **stat))
             # return splits
             return splits 

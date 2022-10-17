@@ -82,53 +82,53 @@ class AdvancedPitching(Stats):
     seasonAdvanced, careerAdvanced
     """
     type_ = [ "seasonAdvanced", "careerAdvanced" ]
-    winningpercentage : Optional[str] = None
-    runsscoredper9 : Optional[str] = None
-    battersfaced : Optional[int] = None
-    babip : Optional[str] = None
-    obp : Optional[str] = None
-    slg : Optional[str] = None
-    ops : Optional[str] = None
-    strikeoutsper9 : Optional[str] = None
-    baseonballsper9 : Optional[str] = None
-    homerunsper9 : Optional[str] = None
-    hitsper9 : Optional[str] = None
-    strikesoutstowalks : Optional[str] = None
-    stolenbases : Optional[int] = None
-    caughtstealing : Optional[int] = None
-    qualitystarts : Optional[int] = None
-    gamesfinished : Optional[int] = None
-    doubles : Optional[int] = None
-    triples : Optional[int] = None
-    gidp : Optional[int] = None
-    gidpopp : Optional[int] = None
-    wildpitches : Optional[int] = None
-    balks : Optional[int] = None
-    pickoffs : Optional[int] = None
-    totalswings : Optional[int] = None
-    swingandmisses : Optional[int] = None
-    ballsinplay : Optional[int] = None
-    runsupport : Optional[int] = None
-    strikepercentage : Optional[str] = None
-    pitchesperinning : Optional[str] = None
-    pitchesperplateappearance : Optional[str] = None
-    walksperplateappearance : Optional[str] = None
-    strikeoutsperplateappearance : Optional[str] = None
-    homerunsperplateappearance : Optional[str] = None
-    walksperstrikeout : Optional[str] = None
-    iso : Optional[str] = None
-    flyouts : Optional[int] = None
-    popouts : Optional[int] = None
-    lineouts : Optional[int] = None
-    groundouts : Optional[int] = None
-    flyhits : Optional[int] = None
-    pophits : Optional[int] = None
-    linehits : Optional[int] = None
-    groundhits : Optional[int] = None
-    inheritedrunners : Optional[int] = None
-    inheritedrunnersscored : Optional[int] = None
-    bequeathedrunners : Optional[int] = None
-    bequeathedrunnersscored : Optional[int] = None
+    winningpercentage: Optional[str] = None
+    runsscoredper9: Optional[str] = None
+    battersfaced: Optional[int] = None
+    babip: Optional[str] = None
+    obp: Optional[str] = None
+    slg: Optional[str] = None
+    ops: Optional[str] = None
+    strikeoutsper9: Optional[str] = None
+    baseonballsper9: Optional[str] = None
+    homerunsper9: Optional[str] = None
+    hitsper9: Optional[str] = None
+    strikesoutstowalks: Optional[str] = None
+    stolenbases: Optional[int] = None
+    caughtstealing: Optional[int] = None
+    qualitystarts: Optional[int] = None
+    gamesfinished: Optional[int] = None
+    doubles: Optional[int] = None
+    triples: Optional[int] = None
+    gidp: Optional[int] = None
+    gidpopp: Optional[int] = None
+    wildpitches: Optional[int] = None
+    balks: Optional[int] = None
+    pickoffs: Optional[int] = None
+    totalswings: Optional[int] = None
+    swingandmisses: Optional[int] = None
+    ballsinplay: Optional[int] = None
+    runsupport: Optional[int] = None
+    strikepercentage: Optional[str] = None
+    pitchesperinning: Optional[str] = None
+    pitchesperplateappearance: Optional[str] = None
+    walksperplateappearance: Optional[str] = None
+    strikeoutsperplateappearance: Optional[str] = None
+    homerunsperplateappearance: Optional[str] = None
+    walksperstrikeout: Optional[str] = None
+    iso: Optional[str] = None
+    flyouts: Optional[int] = None
+    popouts: Optional[int] = None
+    lineouts: Optional[int] = None
+    groundouts: Optional[int] = None
+    flyhits: Optional[int] = None
+    pophits: Optional[int] = None
+    linehits: Optional[int] = None
+    groundhits: Optional[int] = None
+    inheritedrunners: Optional[int] = None
+    inheritedrunnersscored: Optional[int] = None
+    bequeathedrunners: Optional[int] = None
+    bequeathedrunnersscored: Optional[int] = None
 
 @dataclass
 class PitchingSaberMetrics(Stats):
@@ -139,8 +139,8 @@ class PitchingSaberMetrics(Stats):
     seasonAdvanced, careerAdvanced
     """
     type_ = ['sabermetrics']
-    fip : float
-    fipminus : float
-    ra9war : float
-    rar : float
-    war : float
+    fip: float
+    fipminus: float
+    ra9war: float
+    rar: float
+    war: float

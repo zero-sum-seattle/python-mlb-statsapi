@@ -31,21 +31,23 @@ class Stats:
     group : str 
         type of stat group
     """
-    team : Optional[Union[Team, dict]] = field(default_factory=dict)
-    player : Optional[Union[Person, dict]] = field(default_factory=dict)
-    league : Optional[Union[League, dict]] = field(default_factory=dict)
-    sport : Optional[Union[Sport, dict]] = field(default_factory=dict)
-    position : Optional[Union[Position, dict]] = field(default_factory=dict)
-    game : Optional[Union[Game, dict]] = field(default_factory=dict)
-    opponent : Optional[Union[Team, dict]] = field(default_factory=dict)
-    gametype : Optional[str] = None
-    numteams : Optional[str] = None
-    season : Optional[str] = None
-    dayofweek : Optional[str] = None
-    iswin : Optional[bool] = None
-    ishome : Optional[bool] = None
-    date : Optional[str] = None
-    group : Optional[str] = None
+    team: Optional[Union[Team, dict]] = field(default_factory=dict)
+    player: Optional[Union[Person, dict]] = field(default_factory=dict)
+    league: Optional[Union[League, dict]] = field(default_factory=dict)
+    sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
+    position: Optional[Union[Position, dict]] = field(default_factory=dict)
+    game: Optional[Union[Game, dict]] = field(default_factory=dict)
+    opponent: Optional[Union[Team, dict]] = field(default_factory=dict)
+    gametype: Optional[str] = None
+    numteams: Optional[str] = None
+    season: Optional[str] = None
+    dayofweek: Optional[str] = None
+    iswin: Optional[bool] = None
+    ishome: Optional[bool] = None
+    date: Optional[str] = None
+    group: Optional[str] = None
+    stat_group: str
+    stat_type: str
 
     def __post_init__(self):
         self.team = Team(**self.team) if self.team else self.team
@@ -61,8 +63,8 @@ class ExpectedStatistics(Stats):
     A class to represent a excepted statistics statType: expectedStatistics.
     """
     type_ = [ 'expectedStatistics' ]
-    avg : Optional[str]
-    slg : Optional[str]
-    woba : Optional[str]
-    wobaCon : Optional[str]
-    rank : Optional[int]
+    avg: str
+    slg: str
+    woba: str
+    wobaCon: str
+    rank: int

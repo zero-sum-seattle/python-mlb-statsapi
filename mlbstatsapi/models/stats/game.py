@@ -22,7 +22,7 @@ class SimpleGame(Stats):
         last date of the game played
     """
     type_ = [ 'season', 'career', 'careerRegularSeason', 'careerPlayoffs', 'statsSingleSeason' ]
-    firstdateplayed : str
-    gamesplayed : int
-    gamesstarted : int
-    lastdateplayed : str 
+    firstdateplayed: str
+    gamesplayed: int
+    gamesstarted: int
+    lastdateplayed: str 

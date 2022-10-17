@@ -1,10 +1,19 @@
 ﻿from dataclasses import field
 import unittest
 
-from mlbstatsapi.models.stats import SimpleHitting, AdvancedHitting, SimpleCatching, SimplePitching, AdvancedPitching, SimpleFielding, OpponentsFacedHitting
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.mlbapi import Mlb
+
+from mlbstatsapi.models.stats import (
+    SimpleHitting,
+    AdvancedHitting,
+    SimpleCatching,
+    SimplePitching,
+    AdvancedPitching,
+    SimpleFielding,
+    OpponentsFacedHitting,
+)
 
 
 class TestPlayerStatCreation(unittest.TestCase):
@@ -308,8 +317,9 @@ class TestOpponentsFacedHitting(unittest.TestCase):
 
         # check for None, or NoneType
         self.assertIsNotNone(opponents_faced)
-
-        self.assertTrue(len(opponents_faced) > 10)
+        print(opponents_faced)
+        # we should have a ton of objects
+        self.assertTrue(len(opponents_faced) == 234)
 
         for stat in opponents_faced:
             # test that stat is not NoneType
