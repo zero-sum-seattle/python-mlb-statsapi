@@ -733,4 +733,4 @@ class Mlb:
                                 # create object from stat
                                 splits.append(obj(stat_type=stat_type, stat_group=stat_group, **stat))
             # return splits
-            return splits 
+            return splits
