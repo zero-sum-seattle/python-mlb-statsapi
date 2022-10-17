@@ -15,7 +15,7 @@ def data_http_return():
     short_url = f"https://{hostname}/api/{ver}/"
 
     # pitcher? 
-    type_object = { "position": "664034", "pitcher": "660271", "catcher": "663728", "al_team":"133", "nl_team": "109", "sports":"1", "leagues":"3"} # need to check if sports, league etc have stats
+    type_object = { "position": "664034", "pitcher": "660271", "catcher": "663728", "al_team":"133" } # need to check if sports, league etc have stats
     groups = [ "hitting",
     "pitching",
     "fielding",
@@ -120,14 +120,6 @@ def data_http_return():
                         if response.status_code <= 200 and response.status_code <= 299:
                             data = response.json()
                             statusdict.update({'data': response.json()})
-                            if mlb_class == "people":
-                                with open(f"../statsapi_json/player_json/stats_json_{position}_{group}_{stat_type}.json", "w") as js:
-                                    json.dump(data, js, indent=4, sort_keys=True)
-
-                            elif mlb_class == "team":
-                                with open(f"../statsapi_json/team_json/stats_json_{position}_{group}_{stat_type}.json", "w") as js:
-                                    json.dump(data, js, indent=4, sort_keys=True)
-
                             statusdict.update({'reason': "success"})
                         time.sleep(.2)
 
@@ -158,17 +150,8 @@ def parse_data_function(http_error):
                 print("--------------------")
 
 
-
-
 def main():
-    parser = ArgumentParser()
-    parser.add_argument('--http_error', type=int, help="The players first name", nargs='?')
-    args = parser.parse_args()
-
-
-    if args.http_error:
-        error = args.http_error
-        parse_data_function(error)
+    data_http_return()
 
 if __name__ == '__main__':
     main()

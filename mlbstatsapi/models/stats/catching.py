@@ -5,7 +5,13 @@ from .stats import Stats
 
 @dataclass
 class SimpleCatching(Stats):
-    type_ = [ 'season' ]
+    """
+    A class to represent a simple catching statistics
+
+    Used for the following stat types:
+    season
+    """
+    type_ = [ 'season', 'yearByYearPlayoffs' ]
     gamesplayed : Optional[int] = None
     runs : Optional[int] = None
     homeruns : Optional[int] = None

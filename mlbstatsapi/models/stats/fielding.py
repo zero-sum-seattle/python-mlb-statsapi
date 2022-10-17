@@ -5,7 +5,14 @@ from .stats import Stats
 
 @dataclass
 class SimpleFielding(Stats):
-    type_ = [ 'season', 'seasonAdvanced' ]
+    """
+    A class to represent a simple fielding statistics
+
+    Used for the following stat types:
+    season, seasonAdvanced, statsSingleSeason, homeAndAway, byDayOfWeek, byDateRange
+    """
+    type_ = [ 'season', 'seasonAdvanced', 'statsSingleSeason', 'homeAndAway', 'byDayOfWeek', 'byDateRange',
+    'lastXGames', 'gameLog' ]
     gamesplayed : Optional[int] = None
     gamesstarted : Optional[int] = None
     caughtstealing : Optional[int] = None

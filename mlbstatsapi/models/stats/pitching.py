@@ -5,7 +5,13 @@ from .stats import Stats
 
 @dataclass
 class SimplePitching(Stats):
-    type_ = [ "season" ]
+    """
+    A class to represent a advanced pitching statistics
+
+    Used for the following stat types:
+    season, yearByYearPlayoffs, careerRegularSeason, byDayOfWeek
+    """
+    type_ = [ "season", 'yearByYearPlayoffs', 'careerRegularSeason', 'byDayOfWeek']
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
     groundouts: Optional[int] = None
@@ -69,6 +75,12 @@ class SimplePitching(Stats):
 
 @dataclass
 class AdvancedPitching(Stats):
+    """
+    A class to represent a advanced pitching statistics
+
+    Used for the following stat types:
+    seasonAdvanced, careerAdvanced
+    """
     type_ = [ "seasonAdvanced", "careerAdvanced" ]
     winningpercentage : Optional[str] = None
     runsscoredper9 : Optional[str] = None
@@ -118,3 +130,16 @@ class AdvancedPitching(Stats):
     bequeathedrunners : Optional[int] = None
     bequeathedrunnersscored : Optional[int] = None
 
+class PitchingSaberMetrics(Stats):
+    """
+    A class to represent a pitching sabermetric statistics
+
+    Used for the following stat types:
+    seasonAdvanced, careerAdvanced
+    """
+    type_ = ['sabermetrics']
+    fip : float
+    fipminus : float
+    ra9war : float
+    rar : float
+    war : float
