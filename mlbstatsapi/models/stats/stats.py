@@ -17,3 +17,9 @@ class Stats:
     numteams : Optional[str] = None
     season : Optional[str] = None
     
+    def __post_init__(self):
+        self.team = Team(**self.team) if self.team else self.team
+        self.player = Person(**self.player) if self.player else self.player
+        self.league = League(**self.league) if self.league else self.league
+        self.position = Position(**self.position) if self.position else self.position
+        self.sport = Sport(**self.sport) if self.sport else self.sport

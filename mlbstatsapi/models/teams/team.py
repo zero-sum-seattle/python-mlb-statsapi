@@ -21,9 +21,9 @@ class Team:
         name of the person
     """
     id: int
-    name: str
     link: str
     mlb_class = "teams"
+    name: Optional[str] = field(default_factory=dict)
     springleague: Union[League,dict] = field(default_factory=dict)
     allstarstatus: Optional[str]  = None
     season: Optional[str]  = None
