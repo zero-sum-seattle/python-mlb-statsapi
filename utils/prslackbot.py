@@ -3,13 +3,13 @@ import sys
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
-def reportpullrequesturl(slack_webclient_token, url):
+def reportpullrequesturl(slack_webclient_token, slack_channel_id, url):
 
     # WebClient instantiates a client that can call API methods
     client = WebClient(token=slack_webclient_token)
 
     # ID of channel you want to post message to
-    channel_id = "C0420GC831N"
+    channel_id = slack_channel_id
 
     try:
         # Call the conversations.list method using the WebClient
@@ -24,18 +24,14 @@ def reportpullrequesturl(slack_webclient_token, url):
                     }
                 }
             ]
-        )
-        # Print result, which includes information about the message (like TS)
-        # print(result)
+        )        
 
     except SlackApiError as e:
-        # print(f"Error: {e}")
-        pass
+        print(f"Error: {e}")        
 
 
 def main(args):
-    print (args[1], args[2])
-    reportpullrequesturl(args[1], args[2])
+    reportpullrequesturl(args[1], args[2], args[2])
 
 if __name__ == '__main__':
     main(sys.argv)
