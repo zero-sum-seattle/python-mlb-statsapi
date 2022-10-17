@@ -1,0 +1,830 @@
+[ {
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=projected&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "projected"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=projectedRos&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "projectedRos"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYear&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "yearByYear"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYearAdvanced&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "yearByYearAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYearPlayoffs&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "yearByYearPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=season&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "season"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=career&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "career"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerRegularSeason&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "careerRegularSeason"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerAdvanced&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "careerAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=seasonAdvanced&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "seasonAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerPlayoffs&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "careerPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=gameLog&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "gameLog"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=expectedStatistics&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=lastXGames&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "lastXGames"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=byDateRange&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "byDateRange"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=byDayOfWeek&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "byDayOfWeek"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=statSplits&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=atGameStart&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "atGameStart"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=vsOpponents&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=projected&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "projected"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=projectedRos&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "projectedRos"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYear&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "yearByYear"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYearAdvanced&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "yearByYearAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYearPlayoffs&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "yearByYearPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=season&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "season"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=career&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "career"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerRegularSeason&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "careerRegularSeason"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerAdvanced&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "careerAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=seasonAdvanced&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "seasonAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerPlayoffs&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "careerPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=gameLog&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "gameLog"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=expectedStatistics&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=lastXGames&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "lastXGames"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=byDateRange&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "byDateRange"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=byDayOfWeek&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "byDayOfWeek"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=statSplits&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=atGameStart&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "atGameStart"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=vsOpponents&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYear&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "yearByYear"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYearAdvanced&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "yearByYearAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYearPlayoffs&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "yearByYearPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=season&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "season"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=career&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "career"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerRegularSeason&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "careerRegularSeason"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerAdvanced&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "careerAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=seasonAdvanced&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "seasonAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerPlayoffs&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "careerPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=gameLog&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "gameLog"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=expectedStatistics&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=lastXGames&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "lastXGames"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=byDateRange&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "byDateRange"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=byDayOfWeek&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "byDayOfWeek"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=statSplits&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=atGameStart&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "atGameStart"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=vsOpponents&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYear&group=catching",
+    "stat_group": "catching",
+    "stat_type": "yearByYear"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYearAdvanced&group=catching",
+    "stat_group": "catching",
+    "stat_type": "yearByYearAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=yearByYearPlayoffs&group=catching",
+    "stat_group": "catching",
+    "stat_type": "yearByYearPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=season&group=catching",
+    "stat_group": "catching",
+    "stat_type": "season"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=career&group=catching",
+    "stat_group": "catching",
+    "stat_type": "career"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerRegularSeason&group=catching",
+    "stat_group": "catching",
+    "stat_type": "careerRegularSeason"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerAdvanced&group=catching",
+    "stat_group": "catching",
+    "stat_type": "careerAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=seasonAdvanced&group=catching",
+    "stat_group": "catching",
+    "stat_type": "seasonAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=careerPlayoffs&group=catching",
+    "stat_group": "catching",
+    "stat_type": "careerPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=gameLog&group=catching",
+    "stat_group": "catching",
+    "stat_type": "gameLog"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=expectedStatistics&group=catching",
+    "stat_group": "catching",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=lastXGames&group=catching",
+    "stat_group": "catching",
+    "stat_type": "lastXGames"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=byDateRange&group=catching",
+    "stat_group": "catching",
+    "stat_type": "byDateRange"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=byDayOfWeek&group=catching",
+    "stat_group": "catching",
+    "stat_type": "byDayOfWeek"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=statSplits&group=catching",
+    "stat_group": "catching",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=atGameStart&group=catching",
+    "stat_group": "catching",
+    "stat_type": "atGameStart"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=expectedStatistics&group=running",
+    "stat_group": "running",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=statSplits&group=running",
+    "stat_group": "running",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=vsOpponents&group=running",
+    "stat_group": "running",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=expectedStatistics&group=game",
+    "stat_group": "game",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=statSplits&group=game",
+    "stat_group": "game",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=vsOpponents&group=game",
+    "stat_group": "game",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=expectedStatistics&group=team",
+    "stat_group": "team",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=statSplits&group=team",
+    "stat_group": "team",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=vsOpponents&group=team",
+    "stat_group": "team",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=expectedStatistics&group=streak",
+    "stat_group": "streak",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=statSplits&group=streak",
+    "stat_group": "streak",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/133/stats?stats=vsOpponents&group=streak",
+    "stat_group": "streak",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=projected&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "projected"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=projectedRos&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "projectedRos"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYear&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "yearByYear"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYearAdvanced&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "yearByYearAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYearPlayoffs&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "yearByYearPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=season&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "season"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=career&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "career"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerRegularSeason&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "careerRegularSeason"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerAdvanced&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "careerAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=seasonAdvanced&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "seasonAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerPlayoffs&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "careerPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=gameLog&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "gameLog"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=expectedStatistics&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=lastXGames&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "lastXGames"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=byDateRange&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "byDateRange"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=byDayOfWeek&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "byDayOfWeek"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=statSplits&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=atGameStart&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "atGameStart"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=vsOpponents&group=hitting",
+    "stat_group": "hitting",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=projected&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "projected"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=projectedRos&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "projectedRos"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYear&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "yearByYear"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYearAdvanced&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "yearByYearAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYearPlayoffs&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "yearByYearPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=season&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "season"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=career&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "career"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerRegularSeason&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "careerRegularSeason"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerAdvanced&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "careerAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=seasonAdvanced&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "seasonAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerPlayoffs&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "careerPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=gameLog&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "gameLog"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=expectedStatistics&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=lastXGames&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "lastXGames"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=byDateRange&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "byDateRange"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=byDayOfWeek&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "byDayOfWeek"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=statSplits&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=atGameStart&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "atGameStart"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=vsOpponents&group=pitching",
+    "stat_group": "pitching",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYear&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "yearByYear"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYearAdvanced&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "yearByYearAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYearPlayoffs&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "yearByYearPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=season&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "season"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=career&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "career"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerRegularSeason&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "careerRegularSeason"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerAdvanced&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "careerAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=seasonAdvanced&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "seasonAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerPlayoffs&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "careerPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=gameLog&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "gameLog"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=expectedStatistics&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=lastXGames&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "lastXGames"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=byDateRange&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "byDateRange"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=byDayOfWeek&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "byDayOfWeek"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=statSplits&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=atGameStart&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "atGameStart"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=vsOpponents&group=fielding",
+    "stat_group": "fielding",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYear&group=catching",
+    "stat_group": "catching",
+    "stat_type": "yearByYear"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYearAdvanced&group=catching",
+    "stat_group": "catching",
+    "stat_type": "yearByYearAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=yearByYearPlayoffs&group=catching",
+    "stat_group": "catching",
+    "stat_type": "yearByYearPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=season&group=catching",
+    "stat_group": "catching",
+    "stat_type": "season"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=career&group=catching",
+    "stat_group": "catching",
+    "stat_type": "career"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerRegularSeason&group=catching",
+    "stat_group": "catching",
+    "stat_type": "careerRegularSeason"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerAdvanced&group=catching",
+    "stat_group": "catching",
+    "stat_type": "careerAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=seasonAdvanced&group=catching",
+    "stat_group": "catching",
+    "stat_type": "seasonAdvanced"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=careerPlayoffs&group=catching",
+    "stat_group": "catching",
+    "stat_type": "careerPlayoffs"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=gameLog&group=catching",
+    "stat_group": "catching",
+    "stat_type": "gameLog"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=expectedStatistics&group=catching",
+    "stat_group": "catching",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=lastXGames&group=catching",
+    "stat_group": "catching",
+    "stat_type": "lastXGames"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=byDateRange&group=catching",
+    "stat_group": "catching",
+    "stat_type": "byDateRange"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=byDayOfWeek&group=catching",
+    "stat_group": "catching",
+    "stat_type": "byDayOfWeek"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=statSplits&group=catching",
+    "stat_group": "catching",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=atGameStart&group=catching",
+    "stat_group": "catching",
+    "stat_type": "atGameStart"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=expectedStatistics&group=running",
+    "stat_group": "running",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=statSplits&group=running",
+    "stat_group": "running",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=vsOpponents&group=running",
+    "stat_group": "running",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=expectedStatistics&group=game",
+    "stat_group": "game",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=statSplits&group=game",
+    "stat_group": "game",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=vsOpponents&group=game",
+    "stat_group": "game",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=expectedStatistics&group=team",
+    "stat_group": "team",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=statSplits&group=team",
+    "stat_group": "team",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=vsOpponents&group=team",
+    "stat_group": "team",
+    "stat_type": "vsOpponents"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=expectedStatistics&group=streak",
+    "stat_group": "streak",
+    "stat_type": "expectedStatistics"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=statSplits&group=streak",
+    "stat_group": "streak",
+    "stat_type": "statSplits"
+},
+{
+    "endpoint": "https://statsapi.mlb.com/api/v1/teams/109/stats?stats=vsOpponents&group=streak",
+    "stat_group": "streak",
+    "stat_type": "vsOpponents"
+} ]
