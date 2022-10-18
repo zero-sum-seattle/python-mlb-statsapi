@@ -6,7 +6,7 @@ on:
     - cron:  '0 */6 * * *'
 
 jobs:
-  lookforunexpectedkeywordarguments:
+  catch_errors_and_report:
 
     runs-on: ubuntu-latest
     strategy:

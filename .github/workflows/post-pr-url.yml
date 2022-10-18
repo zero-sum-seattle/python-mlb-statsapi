@@ -1,9 +1,11 @@
 name: Report push request url
 
-on: pull_request:
+on:
+  pull_request:
+    types: [opened]
 
 jobs:
-  build:
+  reportPR:
 
     runs-on: ubuntu-latest
     strategy:
