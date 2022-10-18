@@ -3,7 +3,7 @@ import re
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
-def cronbot_post_testreport(slack_webclient_token, channel_id, message, status):
+def cronbot_post_uka(slack_webclient_token, channel_id, message):
 
     # WebClient instantiates a client that can call API methods
     client = WebClient(token=slack_webclient_token)
@@ -12,7 +12,7 @@ def cronbot_post_testreport(slack_webclient_token, channel_id, message, status):
         # Call the conversations.list method using the WebClient
         client.chat_postMessage(
             channel=channel_id,
-            text=f'{status} Build Test for mlbstatsapi',
+            text="Failed Build Test for mlbstatsapi",
             attachments=
             [
                 {
@@ -42,9 +42,6 @@ def escape_ansi(line):
 
 def generate_outputstring(from_list) -> str:
     testing_output = ""
-
-    short_test_summary_info_types = ["FAILED", "ERROR", "SKIPPED", 
-                                    "XFAILED", "XPASSED", "PASSED"]
 
     for output in from_list:
 
@@ -113,14 +110,11 @@ if __name__ == "__main__":
     
     output_list = []
 
+    short_test_summary_info_types = ["FAILED", "ERROR", "SKIPPED", 
+                                    "XFAILED", "XPASSED", "PASSED"]
+
     for line in sys.stdin:
         output_list.append(line)
 
-    error_types = ["failed", "error", "skipped", "xfailed"]
-
-    if any(error in line for error in error_types):
-        message_type = "Failed"
-    else:
-        message_type = "Successful"                                    
-
-    cronbot_post_testreport(token, channelid, generate_outputstring(output_list), message_type)
+    if "failed" in line or "errors" in line or "error" in line:
+        cronbot_post_uka(token, channelid, generate_outputstring(output_list))
