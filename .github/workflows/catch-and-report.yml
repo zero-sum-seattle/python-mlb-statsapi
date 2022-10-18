@@ -1,0 +1,34 @@
+name: Catch unexpected keyword arguments
+
+on:
+  schedule:
+    # Run every six hours
+    - cron:  '0 */6 * * *'
+
+jobs:
+  lookforunexpectedkeywordarguments:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+
+
+    steps:
+      - uses: actions/checkout@develop
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip          
+          python3 -m pip install --upgrade build
+          python3 -m pip install --upgrade slack_sdk
+          python3 -m build
+          python3 -m pip install .
+      - name: Test and report problems if they arise
+        run: |
+          script -q /dev/null python3 -m pytest --tb=no tests/* | python3 ./.github/scripts/pytest_report_issues.py
+
+          python3 utils/cronbot_test.py ${{ secrets.PR_CHANNEL }} ${{ secrets.SLACK_WEBCLIENT_TOKEN }}
