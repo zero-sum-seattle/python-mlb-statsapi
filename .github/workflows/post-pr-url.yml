@@ -21,7 +21,5 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install --upgrade slack_sdk          
       - name: Report PR url
-        env: # Or as an environment variable
-          credentials: ${{ secrets.SLACK_WEBCLIENT_TOKEN }}
         run: |
-          python3 ./.github/scripts/prslackbot.py "$SLACK_WEBCLIENT_TOKEN" "$PR_CHANNEL" github.event.pull_request.html_url
+          python3 ./.github/scripts/prslackbot.py ${{ secrets.SLACK_WEBCLIENT_TOKEN }} ${{ secrets.PR_CHANNEL }} github.event.pull_request.html_url
