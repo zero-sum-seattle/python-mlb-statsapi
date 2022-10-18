@@ -13,6 +13,9 @@ from mlbstatsapi.models.stats import (
     AdvancedPitching,
     SimpleFielding,
     OpponentsFacedHitting,
+    HotColdZones,
+    ZoneCodes,
+    PitchArsenal
 )
 
 
@@ -317,7 +320,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
 
         # check for None, or NoneType
         self.assertIsNotNone(opponents_faced)
-        print(opponents_faced)
+
         # we should have a ton of objects
         self.assertTrue(len(opponents_faced) == 234)
 
@@ -332,6 +335,95 @@ class TestOpponentsFacedHitting(unittest.TestCase):
             self.assertTrue(hasattr(stat, 'fieldingteam'))
             self.assertTrue(hasattr(stat, 'batter'))
 
+            # attr should be classes
             self.assertIsInstance(stat.batter, Person)
             self.assertIsInstance(stat.fieldingteam, Team)
 
+class TestHittingLogStatTypes(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.position_player = cls.mlb.get_person(665742) # Juan Soto
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
+
+    def test_pitch_arsenal_stat_on_position_player(self):
+        """mlb get stats should return PitchArsenal object"""
+        self.params = { 'stats': [ 'pitchArsenal' ], 'group': 'hitting' }
+    
+        pitch_arsenal_stats = self.mlb.get_stats(self.position_player, self.params)
+
+        # pitch_arsenal_stats should not be None or NoneType
+        self.assertIsNotNone(pitch_arsenal_stats)
+
+        # pitch_arsenal_stats should be greater than 1
+        self.assertTrue(len(pitch_arsenal_stats) > 1)
+
+        for stat in pitch_arsenal_stats:
+
+            # stat should be PitchArsenal
+            self.assertIsInstance(stat, PitchArsenal)
+
+            # stat should have attr set
+            self.assertTrue(hasattr(stat, 'totalpitches'))
+            self.assertTrue(hasattr(stat, 'percentage'))
+
+class TestHittingLogStatTypes(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.position_player = cls.mlb.get_person(665742) # Juan Soto
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
+
+    def test_pitch_arsenal_stat_on_position_player(self):
+        """mlb get stats should return PitchArsenal object"""
+        self.params = { 'stats': [ 'expectedStatistics' ], 'group': 'hitting' }
+    
+        expected_stats = self.mlb.get_stats(self.position_player, self.params)
+
+        # pitch_arsenal_stats should not be None or NoneType
+        self.assertIsNotNone(expected_stats)
+
+        for stat in expected_stats:
+
+            # stat should be PitchArsenal
+            self.assertIsInstance(stat, )
+
+            # stat should have attr set
+            self.assertTrue(hasattr(stat, 'wobacon'))
+            self.assertTrue(hasattr(stat, 'woba'))
+
+class TestHotCodeZones(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.position_player = cls.mlb.get_person(665742) # Juan Soto
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
+
+    def test_pitch_arsenal_stat_on_position_player(self):
+        """mlb get stats should return PitchArsenal object"""
+        self.params = { 'stats': [ 'hotColdZones' ], 'group': 'hitting' }
+    
+        hot_code_zone = self.mlb.get_stats(self.position_player, self.params)
+
+        # hot_code_zone should not be None or NoneType
+        self.assertIsNotNone(hot_code_zone)
+
+
+        for stat in hot_code_zone:
+            self.assertIsInstance(stat, HotColdZones)
+            for zone in stat.zones:
+            # stat should be ZoneCodes
+                self.assertIsInstance(zone, ZoneCodes)
+
+                # stat should have attr set
+                self.assertTrue(hasattr(zone, 'zone'))
+                self.assertTrue(hasattr(zone, 'value'))

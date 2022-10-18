@@ -1,6 +1,6 @@
 from typing import List
 
-def _transform_mlbdata(mlb_dict, mlb_keys: List[str]):
+def _transform_mlbdata(mlb_dict, mlb_keys: List[str], nested_keys : dict = None):
     """
     change keys to all lowercase, and merge requested dictionarys return MlbResult
     Parameters

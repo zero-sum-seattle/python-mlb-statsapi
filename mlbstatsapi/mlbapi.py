@@ -710,7 +710,15 @@ class Mlb:
         if ('stats' in mlbdata.data and mlbdata.data['stats']):
             for stats in mlbdata.data['stats']:
                 # set stat_group and stat_type
-                stat_group = stats['group']['displayname'] if 'group' in stats else None
+
+                
+                if 'group' in stats:
+                    stat_group = stats['group']['displayname']
+                else:
+                    # this is hacky a temp solution
+                    # this obviously won't work if more than one group is passed
+                    stat_group = params['group'] if 'group' in params else None  
+
                 stat_type = stats['type']['displayname'] if 'type' in stats else None
 
                 # convert string base on stat_group to module name
@@ -732,5 +740,6 @@ class Mlb:
 
                                 # create object from stat
                                 splits.append(obj(stat_type=stat_type, stat_group=stat_group, **stat))
+                        
             # return splits
             return splits 
