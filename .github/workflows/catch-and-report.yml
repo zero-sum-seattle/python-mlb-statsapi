@@ -2,8 +2,8 @@ name: Catch unexpected keyword arguments
 
 on:
   schedule:
-    # Run at 4pm pst
-    - cron:  '0 23 * * *'
+    # Run every six hours
+    - cron:  '0 */6 * * *'
 
 jobs:
   catch_errors_and_report:
@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.10"]
+
 
     steps:
       - uses: actions/checkout@develop
