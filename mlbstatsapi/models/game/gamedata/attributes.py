@@ -216,7 +216,7 @@ class GameFlags:
     """
     nohitter: bool
     perfectgame: bool
-    # awayteamnohitter: bool
+    awayteamnohitter: bool
     awayteamperfectgame: bool
     hometeamnohitter: bool
     hometeamperfectgame: bool
