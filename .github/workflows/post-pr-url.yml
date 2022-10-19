@@ -42,4 +42,4 @@ jobs:
           BASE_REPO_URL: ${{ github.event.pull_request.base.repo.html_url }}
 
         run: |
-          python3 ./.github/scripts/prslackbot.py
+          python3 ./.github/scripts/prslackbot.py ${{ secrets.PR_CHANNEL }} ${{ secrets.SLACK_WEBCLIENT_TOKEN }}
