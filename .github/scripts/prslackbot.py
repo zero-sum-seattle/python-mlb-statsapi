@@ -13,7 +13,7 @@ PR_USER                 = os.environ.get("PR_USER")
 PR_USER_IMAGE           = os.environ.get("PR_USER_IMAGE")
 PR_NUMBER               = os.environ.get("PR_NUMBER")
 PR_TITLE                = os.environ.get("PR_TITLE")
-PR_TIME                 = datetime.datetime.timestamp(datetime.datetime.strptime(os.environ.get("PR_TIME"), "%Y-%m-%dT%H:%M:%SZ"))
+PR_TIME                 = int(datetime.datetime.timestamp(datetime.datetime.strptime(os.environ.get("PR_TIME"), "%Y-%m-%dT%H:%M:%SZ")))
 PR_BODY                 = os.environ.get("PR_BODY")
 PR_REPO                 = os.environ.get("PR_REPO")
 PR_REPO_URL             = os.environ.get("PR_REPO_URL")
@@ -45,7 +45,7 @@ def reportpullrequesturl(channel, slacktoken):
                         },                      
                         {
                             "type": "mrkdwn",
-                            "text": f'{PR_USER} wants to merge {NUM_COMMIT} commits into <{PR_REPO_URL}'+f'/tree/'+'{BASE_REPO_NAME}|{BASE_REPO_NAME}> from <{HEAD_REPO_URL}'+f'/tree/'+'{HEAD_REPO_NAME}|{HEAD_REPO_NAME}> \n{PR_URL}'
+                            "text": f'{PR_USER} wants to merge {NUM_COMMIT} commits into <{PR_REPO_URL}'+f'/tree/'+f'{BASE_REPO_NAME}|{BASE_REPO_NAME}> from <{PR_REPO_URL}'+f'/tree/'+f'{HEAD_REPO_NAME}|{HEAD_REPO_NAME}> \n{PR_URL}'
                         }
                     ]
                 },           
@@ -55,7 +55,7 @@ def reportpullrequesturl(channel, slacktoken):
             ],
             attachments= [
                 {
-                    "color": "#f2c744",
+                    "color": "#3ca553",
                     "blocks": [
                         {
                             "type": "section",
@@ -69,7 +69,7 @@ def reportpullrequesturl(channel, slacktoken):
                             "elements": [
                                 {
                                     "type": "image",
-                                    "image_url": f'{PR_USER_IMAGE}',
+                                    "image_url": 'https://slack-imgs.com/?c=1&o1=wi32.he32.si&url=https%3A%2F%2Fslack.github.com%2Fstatic%2Fimg%2Ffavicon-neutral.png',
                                     "alt_text": "github logo"
                                 },
                                 {
