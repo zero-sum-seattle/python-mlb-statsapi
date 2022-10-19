@@ -1,25 +1,32 @@
 from .stats import (
     Stats, 
-    ExpectedStatistics,
+    HittingExpected,
     PitchArsenal,
     CodeDesc,
-    Count
-)
-from .hitting import (
-    SimpleHitting, 
-    AdvancedHitting,
-    HittingSabermetrics,
-    OpponentsFacedHitting, 
-    HittingLog,
-    PlayLog,
+    Count,
     HotColdZones,
     ZoneCodes
 )
-
+from .hitting import (
+    SimpleHittingStat, 
+    AdvancedHittingStat,
+    HittingSabermetrics,
+    OpponentsFacedHitting, 
+    HittingLog,
+    HittingSeason,
+    HittingCareer,
+    HittingHAA,
+    HittingWL,
+    HittingYBY
+)
 from .pitching import (
     SimplePitching,
     AdvancedPitching, 
-    PitchingSaberMetrics
+    PitchingAdvanced,
+    PitchingDBD,
+    PitchingYBY,
+    PitchingSeason,
+    PitchingSabermetrics
 )
 
 from .catching import (

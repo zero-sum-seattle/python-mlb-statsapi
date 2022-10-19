@@ -3,15 +3,19 @@ from typing import Optional, Union
 
 from .stats import Stats
 
+from mlbstatsapi.models.people import Person
+from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.sports import Sport
+from mlbstatsapi.models.leagues import League
+
 @dataclass
-class SimpleCatching(Stats):
+class SimpleCatching:
     """
     A class to represent a simple catching statistics
 
     Used for the following stat types:
     season
     """
-    type_ = [ 'season', 'yearByYearPlayoffs' ]
     gamesplayed: Optional[int] = None
     runs: Optional[int] = None
     homeruns: Optional[int] = None
@@ -40,3 +44,13 @@ class SimpleCatching(Stats):
     sacbunts: Optional[int] = None
     sacflies: Optional[int] = None
     passedball: Optional[int] = None
+
+@dataclass(kw_only=True)
+class SeasonCatching(Stats, SimpleCatching):
+    type_ = [ 'season', 'yearByYearPlayoffs' ]
+    season: str
+    team: str
+    player: Union[Person, dict]
+    league: Union[League, dict]
+    sport: Union[Sport, dict]
+    gametype: str

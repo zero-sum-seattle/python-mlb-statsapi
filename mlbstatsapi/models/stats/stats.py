@@ -1,5 +1,5 @@
 ﻿from dataclasses import dataclass, field
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.people import Person, Position
@@ -87,38 +87,38 @@ class Stats:
     stat_type : str
         type of the stat 
     """
-    team: Optional[Union[Team, dict]] = field(default_factory=dict)
-    league: Optional[Union[League, dict]] = field(default_factory=dict)
-    sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
-    position: Optional[Union[Position, dict]] = field(default_factory=dict) 
-    game: Optional[Union[Game, dict]] = field(default_factory=dict)
-    gametype: Optional[str] = None
-    numteams: Optional[str] = None
-    season: Optional[str] = None
-    dayofweek: Optional[str] = None
-    iswin: Optional[bool] = None
-    ishome: Optional[bool] = None
-    date: Optional[str] = None
-    group: Optional[str] = None
-    player: Optional[Person] = None
-    opponent: Union[Team, dict] = None
+    # team: Optional[Union[Team, dict]] = field(default_factory=dict)
+    # league: Optional[Union[League, dict]] = field(default_factory=dict)
+    # sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
+    # position: Optional[Union[Position, dict]] = field(default_factory=dict) 
+    # game: Optional[Union[Game, dict]] = field(default_factory=dict)
+    # gametype: Optional[str] = None
+    # numteams: Optional[str] = None
+    # season: Optional[str] = None
+    # dayofweek: Optional[str] = None
+    # iswin: Optional[bool] = None
+    # ishome: Optional[bool] = None
+    # date: Optional[str] = None
+    # group: Optional[str] = None
+    # player: Optional[Person] = None
+    # opponent: Union[Team, dict] = None
     stat_group: str
     stat_type: str
 
-    def __post_init__(self):
-        self.team = Team(**self.team) if self.team else self.team
-        self.player = Person(**self.player) if self.player else self.player
-        self.league = League(**self.league) if self.league else self.league
-        self.position = Position(**self.position) if self.position else self.position
-        self.sport = Sport(**self.sport) if self.sport else self.sport
-        self.opponent = Team(**self.opponent) if self.opponent else self.opponent
-
-# I can probably move this to hitting
+    # def __post_init__(self):
+    #     self.team = Team(**self.team) if self.team else self.team
+    #     self.player = Person(**self.player) if self.player else self.player
+    #     self.league = League(**self.league) if self.league else self.league
+    #     self.position = Position(**self.position) if self.position else self.position
+    #     self.sport = Sport(**self.sport) if self.sport else self.sport
+    #     self.opponent = Team(**self.opponent) if self.opponent else self.opponent
+   
 @dataclass
-class ExpectedStatistics(Stats):
+class HittingExpected(Stats):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
-
+    """
+    """
     Attributes
     ----------
     avg : str
@@ -128,11 +128,16 @@ class ExpectedStatistics(Stats):
     rank : int
     """
     type_ = [ 'expectedStatistics' ]
-    avg: str
-    slg: str
-    woba: str
-    wobacon: str
-    rank: int
+    avg : str
+    slg : str
+    woba : str
+    wobaCon : str
+    season: str
+    player: Union[Person, dict]
+    sport: Union[Sport, dict]
+    gametype: str
+    rank : Optional[int] = None
+
 
 @dataclass
 class PitchArsenal(Stats):
@@ -147,7 +152,50 @@ class PitchArsenal(Stats):
     count:  int
     percentage: float
     totalpitches: int
-    type: CodeDesc
+    type: Union[CodeDesc, dict]
+
+@dataclass
+class ZoneCodes:
+    """
+    A class to represent a hitting sabermetric statistic
+
+    Used for the following stat types:
+    opponentsFaced
+
+    Attributes
+    ----------
+    zone : str
+        zone code location
+    color : str
+        rgba code for the color of zone
+    temp : str
+        temp description of the zone
+    value : str
+        batting percentage of the zone
+    """
+    zone: str
+    color: str
+    temp: str
+    value: str
+
+@dataclass
+class HotColdZones(Stats):
+    """
+    A class to represent a hot cold zone statistic
+
+    Used for the following stat types:
+    opponentsFaced
+
+    Attributes
+    ----------
+    name : str
+        name of the hot cold zone 
+    zones : List[ZoneCodes]
+        a list of zone codes to describe the zone
+    """
+    name: str 
+    zones: List[ZoneCodes]
+    type_ = [ 'hotColdZones' ]
 
     def __post_init__(self):
-        self.type = CodeDesc(**self.type) if self.type else self.type
+        self.zones = [ ZoneCodes(**zone) for zone in self.zones ]

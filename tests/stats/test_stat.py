@@ -6,8 +6,7 @@ from mlbstatsapi.models.teams import Team
 from mlbstatsapi.mlbapi import Mlb
 
 from mlbstatsapi.models.stats import (
-    SimpleHitting,
-    AdvancedHitting,
+    HittingSeason,
     SimpleCatching,
     SimplePitching,
     AdvancedPitching,
@@ -15,7 +14,8 @@ from mlbstatsapi.models.stats import (
     OpponentsFacedHitting,
     HotColdZones,
     ZoneCodes,
-    PitchArsenal
+    PitchArsenal,
+    HittingYBY
 )
 
 
@@ -45,7 +45,7 @@ class TestPlayerStatCreation(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimpleHitting
-            self.assertIsInstance(stat, SimpleHitting)
+            self.assertIsInstance(stat, HittingSeason)
 
         self.params = { "stats": ["seasonAdvanced"], "group": "hitting" }
 
@@ -59,7 +59,7 @@ class TestPlayerStatCreation(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be AdvancedHitting
-            self.assertIsInstance(stat, AdvancedHitting)
+            self.assertIsInstance(stat, HittingSeason)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'totalbases'))
@@ -113,7 +113,7 @@ class TestPlayerStatCreation(unittest.TestCase):
             self.assertTrue(stat)
 
             # split should be HittingSplits
-            self.assertIsInstance(stat, SimpleHitting)
+            self.assertIsInstance(stat, HittingYBY)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, "hits"))
@@ -237,7 +237,7 @@ class TestTeamStatCreation(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimpleHitting
-            self.assertIsInstance(stat, SimpleHitting)
+            self.assertIsInstance(stat, HittingSeason)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, "hits"))
@@ -257,7 +257,7 @@ class TestTeamStatCreation(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimpleHitting
-            self.assertIsInstance(stat, SimpleHitting)
+            self.assertIsInstance(stat, HittingYBY)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, "hits"))
@@ -408,18 +408,19 @@ class TestHotCodeZones(unittest.TestCase):
     def tearDownClass(cls) -> None:
         pass
 
-    def test_pitch_arsenal_stat_on_position_player(self):
+    def test_hot_cold_zone_on_position_player(self):
         """mlb get stats should return PitchArsenal object"""
         self.params = { 'stats': [ 'hotColdZones' ], 'group': 'hitting' }
     
-        hot_code_zone = self.mlb.get_stats(self.position_player, self.params)
+        hot_cold_zone = self.mlb.get_stats(self.position_player, self.params)
 
-        # hot_code_zone should not be None or NoneType
-        self.assertIsNotNone(hot_code_zone)
+        # hot_cold_zone should not be empty
+        self.assertTrue(len(hot_cold_zone))
 
-
-        for stat in hot_code_zone:
+        for stat in hot_cold_zone:
+            # stat should be a HotColdZones
             self.assertIsInstance(stat, HotColdZones)
+
             for zone in stat.zones:
             # stat should be ZoneCodes
                 self.assertIsInstance(zone, ZoneCodes)

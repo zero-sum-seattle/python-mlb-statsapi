@@ -1,18 +1,19 @@
 ﻿from dataclasses import dataclass, field
 from typing import Optional, Union
 
+from mlbstatsapi.models.people import Person, Position
+from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.sports import Sport
+
 from .stats import Stats
 
 @dataclass
-class SimpleFielding(Stats):
+class SimpleFielding:
     """
     A class to represent a simple fielding statistics
 
-    Used for the following stat types:
-    season, seasonAdvanced, statsSingleSeason, homeAndAway, byDayOfWeek, byDateRange, lastXGames, gameLog
     """
-    type_ = [ 'season', 'seasonAdvanced', 'statsSingleSeason', 'homeAndAway', 'byDayOfWeek', 'byDateRange',
-    'lastXGames', 'gameLog' ]
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
     caughtstealing: Optional[int] = None
@@ -35,3 +36,16 @@ class SimpleFielding(Stats):
     wildpitches: Optional[int] = None
     throwingerrors: Optional[int] = None
     pickoffs: Optional[int] = None
+
+@dataclass(kw_only=True)
+class SeasonFielding(Stats, SimpleFielding):
+    type_ = [ 'season', 'seasonAdvanced', 'statsSingleSeason', 'homeAndAway', 'byDayOfWeek', 'byDateRange',
+    'lastXGames', 'gameLog' ]
+    season: str
+    gametype: Optional[str] = None
+    position: Optional[Union[Position, dict]] = None
+    numteams: Optional[str] = None
+    team: Optional[Union[Team, dict]] = None
+    player: Optional[Union[Person, dict]] = None
+    league: Optional[Union[League, dict]] = None
+    sport: Optional[Union[Sport, dict]] = None

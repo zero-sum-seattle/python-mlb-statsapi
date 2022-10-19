@@ -1,17 +1,19 @@
 ﻿from dataclasses import dataclass, field
 from typing import Optional, Union
 
+from mlbstatsapi.models.people import Person, Position
+from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.sports import Sport
+from mlbstatsapi.models.game import Game
+
 from .stats import Stats
 
 @dataclass
-class SimplePitching(Stats):
+class SimplePitching:
     """
     A class to represent a advanced pitching statistics
-
-    Used for the following stat types:
-    season, yearByYearPlayoffs, careerRegularSeason, byDayOfWeek
     """
-    type_ = [ "season", 'yearByYearPlayoffs', 'careerRegularSeason', 'byDayOfWeek']
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
     groundouts: Optional[int] = None
@@ -74,14 +76,13 @@ class SimplePitching(Stats):
     inheritedrunnersscored: Optional[int] = None
 
 @dataclass
-class AdvancedPitching(Stats):
+class AdvancedPitching:
     """
     A class to represent a advanced pitching statistics
 
     Used for the following stat types:
     seasonAdvanced, careerAdvanced
     """
-    type_ = [ "seasonAdvanced", "careerAdvanced" ]
     winningpercentage: Optional[str] = None
     runsscoredper9: Optional[str] = None
     battersfaced: Optional[int] = None
@@ -131,16 +132,164 @@ class AdvancedPitching(Stats):
     bequeathedrunnersscored: Optional[int] = None
 
 @dataclass
-class PitchingSaberMetrics(Stats):
+class PitchingSabermetrics(Stats):
     """
     A class to represent a pitching sabermetric statistics
 
-    Used for the following stat types:
-    seasonAdvanced, careerAdvanced
+    Attributes
+    ----------
+    season : str
+        the batter of the pitching season
+    gametype : Team
+        the gametype code of the pitching season 
+    player : Person
+        the player of the pitching season
+    sport : Sport
+        the sport of the pitching season 
+    league : League
+        the league of the pitching season
+    team : Team
+        the team of the pitching season
+    numteams : str
+        the number of teams for the pitching season
     """
     type_ = ['sabermetrics']
+    season: str
+    gametype: str
+    player: Union[Person, dict]
+    sport: Union[Sport, dict]
     fip: float
     fipminus: float
     ra9war: float
     rar: float
     war: float
+    league: Optional[Union[League, dict]] = None
+    team: Optional[Union[Team, dict]] = None
+    numteams: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingSeason(Stats, SimplePitching):
+    """
+    A class to represent a pitching season statistic
+
+    Attributes
+    ----------
+    season : str
+        the batter of the pitching season
+    gametype : Team
+        the gametype code of the pitching season 
+    player : Person
+        the player of the pitching season
+    sport : Sport
+        the sport of the pitching season 
+    league : League
+        the league of the pitching season
+    team : Team
+        the team of the pitching season
+    numteams : str
+        the number of teams for the pitching season
+    """
+    type_ = [ 'season', 'statsSingleSeason' ]
+    season: str
+    gametype: Optional[str] = None
+    player: Optional[Union[Person, dict]] = None
+    sport: Optional[Union[Sport, dict]] = None
+    league: Optional[Union[League, dict]] = None
+    team: Optional[Union[Team, dict]] = None
+    numteams: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingYBY(Stats, SimplePitching):
+    """
+    A class to represent a yearByYear season statistic
+
+    Attributes
+    ----------
+    season : str
+        the batter of the pitching yearByYear
+    gametype : Team
+        the gametype code of the pitching yearByYear 
+    player : Person
+        the player of the pitching yearByYear
+    sport : Sport
+        the sport of the pitching yearByYear 
+    league : League
+        the league of the pitching yearByYear
+    team : Team
+        the team of the pitching yearByYear
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
+    type_ = [ 'yearByYear', 'yearByYearPlayoffs' ]
+    season: str
+    gametype: str
+    player: Union[Person, dict]
+    sport: Union[Sport, dict]
+    league: Optional[Union[League, dict]] = None
+    team: Optional[Union[Team, dict]] = None
+    numteams: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingDBD(Stats, SimplePitching):
+    """
+    A class to represent a yearByYear season statistic
+
+    Attributes
+    ----------
+    season : str
+        the batter of the pitching byDayOfWeek
+    gametype : Team
+        the gametype code of the pitching byDayOfWeek 
+    player : Person
+        the player of the pitching byDayOfWeek
+    sport : Sport
+        the sport of the pitching byDayOfWeek 
+    league : League
+        the league of the pitching byDayOfWeek
+    team : Team
+        the team of the pitching byDayOfWeek
+    numteams : str
+        the number of teams for the pitching byDayOfWeek
+    dayofweek : int
+        the day of the week
+    """
+    type_ = [ 'byDayOfWeek' ]
+    season: str
+    gametype: str
+    dayofweek: int
+    player: Union[Person, dict]
+    sport: Union[Sport, dict]
+    league: Optional[Union[League, dict]] = None
+    team: Optional[Union[Team, dict]] = None
+    numteams: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingAdvanced(Stats, AdvancedPitching):
+    """
+    A class to represent a pitching seasonAdvanced statistic
+
+    Attributes
+    ----------
+    season : str
+        the batter of the pitching season
+    gametype : Team
+        the gametype code of the pitching season 
+    player : Person
+        the player of the pitching season
+    sport : Sport
+        the sport of the pitching season 
+    league : League
+        the league of the pitching season
+    team : Team
+        the team of the pitching season
+    numteams : str
+        the number of teams for the pitching season
+    """
+    type_ = [ "seasonAdvanced", "careerAdvanced", 'yearByYearAdvanced']
+    season: str
+    gametype: str
+    player: Union[Person, dict]
+    sport: Union[Sport, dict]
+    league: Optional[Union[League, dict]] = None
+    team: Optional[Union[Team, dict]] = None
+    numteams: Optional[str] = None
