@@ -22,11 +22,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python3 -m pip install --upgrade pip          
-          python3 -m pip install --upgrade build
-          python3 -m pip install --upgrade slack_sdk
-          python3 -m build
-          python3 -m pip install .
+          python3 -m pip install --upgrade pip                    
+          python3 -m pip install --upgrade slack_sdk          
       - name: Test and report
         run: |
           script -q /dev/null python3 -m pytest --tb=no tests/* | python3 ./.github/scripts/pytest_report_issues.py ${{ secrets.PR_CHANNEL }} ${{ secrets.SLACK_WEBCLIENT_TOKEN }}
