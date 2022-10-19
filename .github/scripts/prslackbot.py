@@ -19,9 +19,7 @@ PR_REPO                 = os.environ.get("PR_REPO")
 PR_REPO_URL             = os.environ.get("PR_REPO_URL")
 NUM_COMMIT              = os.environ.get("NUM_COMMIT")
 HEAD_REPO_NAME          = os.environ.get("HEAD_REPO_NAME")
-HEAD_REPO_URL           = os.environ.get("HEAD_REPO_URL")
 BASE_REPO_NAME          = os.environ.get("BASE_REPO_NAME")
-BASE_REPO_URL           = os.environ.get("BASE_REPO_URL")
 
 def reportpullrequesturl(channel, slacktoken):
 
@@ -47,7 +45,7 @@ def reportpullrequesturl(channel, slacktoken):
                         },                      
                         {
                             "type": "mrkdwn",
-                            "text": f'{PR_USER} wants to merge {NUM_COMMIT} commits into <{BASE_REPO_URL}|{BASE_REPO_NAME}> from <{HEAD_REPO_URL}|{HEAD_REPO_NAME}> \n{PR_URL}'
+                            "text": f'{PR_USER} wants to merge {NUM_COMMIT} commits into <{PR_REPO_URL}'+f'/tree/'+'{BASE_REPO_NAME}|{BASE_REPO_NAME}> from <{HEAD_REPO_URL}'+f'/tree/'+'{HEAD_REPO_NAME}|{HEAD_REPO_NAME}> \n{PR_URL}'
                         }
                     ]
                 },           
@@ -71,7 +69,7 @@ def reportpullrequesturl(channel, slacktoken):
                             "elements": [
                                 {
                                     "type": "image",
-                                    "image_url": "{PR_USER_IMAGE}",
+                                    "image_url": f'{PR_USER_IMAGE}',
                                     "alt_text": "github logo"
                                 },
                                 {

@@ -24,8 +24,6 @@ jobs:
           python3 -m pip install --upgrade slack_sdk          
       - name: Report PR url
         env: 
-          SLACK_WEBCLIENT_TOKEN: ${{ secrets.SLACK_WEBCLIENT_TOKEN }}
-          CHANNEL: ${{ secrets.PR_CHANNEL }}
           PR_URL: ${{ github.event.pull_request.html_url }}
           PR_USER: ${{ github.event.pull_request.user.login }}
           PR_USER_IMAGE: ${{ github.event.pull_request.user.avatar_url }}
@@ -36,10 +34,8 @@ jobs:
           PR_REPO: ${{ github.event.repository.full_name }}
           PR_REPO_URL: ${{ github.event.repository.html_url }}
           NUM_COMMIT: ${{ github.event.pull_request.commits }}
-          HEAD_REPO_NAME: ${{ github.event.pull_request.head.repo.name }}
-          HEAD_REPO_URL: ${{ github.event.pull_request.head.repo.html_url }}
-          BASE_REPO_NAME: ${{ github.event.pull_request.base.repo.name }}
-          BASE_REPO_URL: ${{ github.event.pull_request.base.repo.html_url }}
+          HEAD_REPO_NAME: ${{ github.event.pull_request.head.ref }}
+          BASE_REPO_NAME: ${{ github.event.pull_request.base.ref }}
 
         run: |
           python3 ./.github/scripts/prslackbot.py ${{ secrets.PR_CHANNEL }} ${{ secrets.SLACK_WEBCLIENT_TOKEN }}
