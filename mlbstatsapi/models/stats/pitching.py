@@ -1,5 +1,5 @@
 ﻿from dataclasses import dataclass, field
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 from mlbstatsapi.models.people import Person, Position
 from mlbstatsapi.models.teams import Team
@@ -7,7 +7,7 @@ from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.game import Game
 
-from .stats import Stats
+from .stats import Stats, CodeDesc, Count
 
 @dataclass
 class SimplePitching:
@@ -138,20 +138,16 @@ class PitchingSabermetrics(Stats):
 
     Attributes
     ----------
-    season : str
-        the batter of the pitching season
-    gametype : Team
-        the gametype code of the pitching season 
-    player : Person
-        the player of the pitching season
-    sport : Sport
-        the sport of the pitching season 
-    league : League
-        the league of the pitching season
-    team : Team
-        the team of the pitching season
-    numteams : str
-        the number of teams for the pitching season
+    fip : float
+        Fielding Independent Pitching
+    fipminus : float
+        Fielding Independent Pitching Minus
+    ra9war : float
+        Runs Allowed 9 innings Wins Above Replacement
+    rar : float 
+        Runs Above Replacement
+    war : float
+        Wins Above Replacement
     """
     type_ = ['sabermetrics']
     season: str
@@ -285,7 +281,7 @@ class PitchingAdvanced(Stats, AdvancedPitching):
     numteams : str
         the number of teams for the pitching season
     """
-    type_ = [ "seasonAdvanced", "careerAdvanced", 'yearByYearAdvanced']
+    type_ = [ "seasonAdvanced", "careerAdvanced", 'yearByYearAdvanced', 'statsSingleSeasonAdvanced' ]
     season: str
     gametype: str
     player: Union[Person, dict]
@@ -293,3 +289,205 @@ class PitchingAdvanced(Stats, AdvancedPitching):
     league: Optional[Union[League, dict]] = None
     team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingLog(Stats, SimplePitching):
+    """
+    A class to represent a gamelog stat for a pitcher
+
+    Attributes
+    ----------
+    ishome : bool
+        bool to hold ishome
+    iswin : bool
+        bool to hold iswin
+    game : Game
+        Game of the log
+    date : str
+        date of the log
+    gametype : str
+        type of game
+    opponent : Team
+        Team of the opponent
+    sport : Sport
+        Sport of the stat
+    league : League
+        League of the stat
+    player : Person
+        Player of the stat
+    """
+    ishome: bool
+    iswin: bool
+    game: Union[Game, dict]
+    date: str
+    gametype: str
+    opponent: Union[Team, dict]
+    sport: Union[Sport, dict]
+    league: Union[League, dict]
+    player: Union[Person, dict]
+    type_ = [ 'gameLog' ]
+
+@dataclass
+class PlayDetails:
+    """
+    A class to represent a gamelog stat for a hitter
+
+    Attributes
+    ----------
+    call : dict
+        play call code and description
+    description : str
+        description of the play
+    event : str
+        type of event
+    eventtype : str
+        type of event
+    isinplay : bool
+        is the ball in play true or false
+    isstrike : bool
+        is the ball a strike true or false
+    isball : bool
+        is it a ball true or false
+    isbasehit : bool
+        is the event a base hit true or false
+    isatbat : bool
+        is the event at bat true or false
+    isplateappearance : bool
+        is the event a at play appears true or false
+    type : dict
+        type of pitch code and description
+    batside : dict
+        bat side code and description
+    pitchhand : dict
+        pitch hand code and description
+    """
+    call: Union[CodeDesc, dict]
+    description: str
+    event: str
+    eventtype: str
+    isinplay: bool
+    isstrike: bool
+    isball: bool
+    isbasehit: bool
+    isatbat: bool
+    isplateappearance: bool
+    type: Union[CodeDesc, dict]
+    batside: Union[CodeDesc, dict]
+    pitchhand: Union[CodeDesc, dict]
+
+@dataclass
+class PitchingLog(Stats):
+    """
+    A class to represent a gamelog stat for a hitter
+
+    Attributes
+    ----------
+    season : str
+        season for the stat
+    stat : PlayLog
+        information regarding the play for the stat
+    team : Team
+        team of the stat
+    player : Person
+        player of the stat
+    opponent : Team
+        opponent
+    date : str
+        date of log
+    gametype : str
+        game type code
+    ishome : bool
+        is the game at home bool
+    pitcher : Person
+        pitcher of the log
+    batter : Person
+        batter of the log
+    game : Game
+        the game of the log
+
+    """
+    type_ = [ 'playLog', 'pitchLog' ]
+    season: str
+    team: Union[Team, dict]
+    player: Union[Person, dict]
+    opponent: Union[Team, dict]
+    date: str
+    gametype: str
+    ishome: bool
+    pitcher: Union[Person, dict]
+    batter: Union[Person, dict]
+    game: Union[Game, dict]
+    details: Union[PlayDetails, dict]
+    count: Union[Count, dict]
+    playid: str
+    pitchnumber: int
+    atbatnumber: int
+    ispitch: bool
+
+    def __post_init__(self):
+        self.details = PlayDetails(**self.details)
+        self.count = Count(**self.count)
+
+
+@dataclass(kw_only=True)
+class PitchingByDateRange(Stats, SimplePitching):
+    type_ = [ 'byDateRange' ]
+    team: Union[Team, dict]
+    sport: Union[Sport, dict]
+    numteams: int
+
+@dataclass(kw_only=True)
+class PitchingByDateRangeAdvanced(Stats, AdvancedPitching):
+    type_ = [ 'byDateRangeAdvanced' ]
+    team: Union[Team, dict]
+    sport: Union[Sport, dict]
+    numteams: int
+
+@dataclass(kw_only=True)
+class PitchingByMonth(Stats, SimplePitching):
+    type_ = [ 'byMonth', 'byMonthPlayoffs' ]
+    team: Union[Team, dict]
+    sport: Union[Sport, dict]
+    month: int
+    numteams: int
+
+@dataclass(kw_only=True)
+class PitchingByDayOfWeek(Stats, SimplePitching):
+    type_ = [ 'byDayOfWeek', 'byDayOfWeekPlayoffs' ]
+    team: Union[Team, dict]
+    sport: Union[Sport, dict]
+    daysofweek: int
+    numteams: int
+
+@dataclass(kw_only=True)
+class PitchingHAA(Stats, SimplePitching):
+    type_ = [ 'homeAndAway', 'homeAndAwayPlayoffs' ]
+    season: str
+    ishome: bool
+
+@dataclass(kw_only=True)
+class PitchingWL(Stats, SimplePitching):
+    type_ = [ 'winLoss', 'winLossPlayoffs' ]
+    season: str
+    iswin: bool
+
+@dataclass(kw_only=True)
+class PitchingRankings(Stats, SimplePitching):
+    type_ = ['rankings', 'rankingsByYear']
+    season: str
+    team: Union[Team, dict]
+    player: Union[Person, dict]
+    league: Union[League, dict]
+    gametype: str
+
+@dataclass(kw_only=True)
+class PitchingOpponentsFaced(Stats):
+    type = [ 'opponentsFaced' ]
+    gametype: str
+    group: str
+    pitcher: Union[Person, dict]
+    batter: Union[Person, dict]
+    battingteam: Union[Team, dict]
+
+
+

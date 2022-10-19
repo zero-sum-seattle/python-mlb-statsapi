@@ -4,7 +4,6 @@ from typing import Optional, Union
 from .stats import Stats
 
 from mlbstatsapi.models.people import Person
-from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 

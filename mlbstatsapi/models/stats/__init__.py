@@ -1,12 +1,13 @@
 from .stats import (
     Stats, 
-    HittingExpected,
+    ExpectedStatistics,
     PitchArsenal,
     CodeDesc,
     Count,
     HotColdZones,
     ZoneCodes
 )
+
 from .hitting import (
     SimpleHittingStat, 
     AdvancedHittingStat,
@@ -17,8 +18,14 @@ from .hitting import (
     HittingCareer,
     HittingHAA,
     HittingWL,
-    HittingYBY
+    HittingYBY,
+    HittingDayOfWeek,
+    HittingByMonth,
+    HittingDateRangeAdvanced,
+    HittingDateRange,
+    HittingLastXGames
 )
+
 from .pitching import (
     SimplePitching,
     AdvancedPitching, 

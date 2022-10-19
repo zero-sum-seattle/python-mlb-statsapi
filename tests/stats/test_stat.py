@@ -26,6 +26,7 @@ class TestPlayerStatCreation(unittest.TestCase):
         cls.position_player = cls.mlb.get_person(665742) # Juan Soto
         cls.pitching_player = cls.mlb.get_person(592662) # Robbie Ray
         cls.catching_player = cls.mlb.get_person(663728) # Cal Raleigh
+        cls.utility_player = cls.mlb.get_person(647351) # Abraham Toro
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -334,10 +335,6 @@ class TestOpponentsFacedHitting(unittest.TestCase):
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'fieldingteam'))
             self.assertTrue(hasattr(stat, 'batter'))
-
-            # attr should be classes
-            self.assertIsInstance(stat.batter, Person)
-            self.assertIsInstance(stat.fieldingteam, Team)
 
 class TestHittingLogStatTypes(unittest.TestCase):
     @classmethod

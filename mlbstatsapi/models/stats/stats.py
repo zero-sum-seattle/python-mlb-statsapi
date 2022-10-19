@@ -87,34 +87,11 @@ class Stats:
     stat_type : str
         type of the stat 
     """
-    # team: Optional[Union[Team, dict]] = field(default_factory=dict)
-    # league: Optional[Union[League, dict]] = field(default_factory=dict)
-    # sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
-    # position: Optional[Union[Position, dict]] = field(default_factory=dict) 
-    # game: Optional[Union[Game, dict]] = field(default_factory=dict)
-    # gametype: Optional[str] = None
-    # numteams: Optional[str] = None
-    # season: Optional[str] = None
-    # dayofweek: Optional[str] = None
-    # iswin: Optional[bool] = None
-    # ishome: Optional[bool] = None
-    # date: Optional[str] = None
-    # group: Optional[str] = None
-    # player: Optional[Person] = None
-    # opponent: Union[Team, dict] = None
     stat_group: str
     stat_type: str
-
-    # def __post_init__(self):
-    #     self.team = Team(**self.team) if self.team else self.team
-    #     self.player = Person(**self.player) if self.player else self.player
-    #     self.league = League(**self.league) if self.league else self.league
-    #     self.position = Position(**self.position) if self.position else self.position
-    #     self.sport = Sport(**self.sport) if self.sport else self.sport
-    #     self.opponent = Team(**self.opponent) if self.opponent else self.opponent
    
 @dataclass
-class HittingExpected(Stats):
+class ExpectedStatistics(Stats):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
     """
@@ -157,10 +134,7 @@ class PitchArsenal(Stats):
 @dataclass
 class ZoneCodes:
     """
-    A class to represent a hitting sabermetric statistic
-
-    Used for the following stat types:
-    opponentsFaced
+    A class to represent a zone code statistic used in hot cold zones
 
     Attributes
     ----------
@@ -183,9 +157,6 @@ class HotColdZones(Stats):
     """
     A class to represent a hot cold zone statistic
 
-    Used for the following stat types:
-    opponentsFaced
-
     Attributes
     ----------
     name : str
@@ -199,3 +170,31 @@ class HotColdZones(Stats):
 
     def __post_init__(self):
         self.zones = [ ZoneCodes(**zone) for zone in self.zones ]
+
+@dataclass
+class OutsAboveAverage(Stats):
+    """
+    A class to represent a outs above average statistic
+
+    NOTE: This stat type returns a empty list, or keys with with the value 0
+    """
+    type_ = [ 'outsAboveAverage' ]
+    attempts: int
+    totaloutsaboveaverageback: int
+    totaloutsaboveaveragebackunrounded: int
+    outsaboveaveragebackstraight: int
+    outsaboveaveragebackstraightunrounded: int
+    outsaboveaveragebackleft: int
+    outsaboveaveragebackleftunrounded: int
+    outsaboveaveragebackright: int
+    outsaboveaveragebackrightunrounded: int
+    totaloutsaboveaveragein: int
+    totaloutsaboveaverageinunrounded: int
+    outsaboveaverageinstraight: int
+    outsaboveaverageinstraightunrounded: int
+    outsaboveaverageinleft: int
+    outsaboveaverageinleftunrounded: int
+    outsaboveaverageinright: int
+    outsaboveaverageinrightunrounded: int
+    player: Union[Person, dict]
+    gametype: str

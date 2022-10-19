@@ -50,15 +50,10 @@ class AdvancedHittingStat:
     groundhits: Optional[int] = None
     linehits: Optional[int] = None
 
-
-
 @dataclass
 class SimpleHittingStat:
     """
     A class to represent a simple hitting statistics
-
-    Used for the following stat types:
-    yearByYear, projectedros, season, projectedros, projected, career, careerPlayoffs, yearByYearPlayoffs
     """
     gamesplayed: Optional[int] = None
     groundouts: Optional[int] = None
@@ -98,9 +93,6 @@ class HittingWL(Stats, SimpleHittingStat):
     """
     A class to represent a hitting winLoss or statistic
 
-    Used for the following stat types:
-    career
-
     Attributes
     ----------
     season : str
@@ -117,9 +109,6 @@ class HittingHAA(Stats, SimpleHittingStat):
     """
     A class to represent a hitting homeAndAway or statistic
 
-    Used for the following stat types:
-    career
-
     Attributes
     ----------
     season : str
@@ -135,9 +124,6 @@ class HittingHAA(Stats, SimpleHittingStat):
 class HittingCareer(Stats, SimpleHittingStat):
     """
     A class to represent a hitting career or careerPlayoffs statistic
-
-    Used for the following stat types:
-    career
 
     Attributes
     ----------
@@ -170,9 +156,6 @@ class HittingSeason(Stats, SimpleHittingStat):
     """
     A class to represent a hitting season statistic
 
-    Used for the following stat types:
-    opponentsFaced
-
     Attributes
     ----------
     season : str
@@ -203,9 +186,6 @@ class HittingSeason(Stats, SimpleHittingStat):
 class HittingYBY(Stats, SimpleHittingStat):
     """
     A class to represent a hitting yearbyyear or yearByYearPlayoffs statistic
-
-    Used for the following stat types:
-    yearByYear
 
     Attributes
     ----------
@@ -238,9 +218,6 @@ class OpponentsFacedHitting(Stats):
     """
     A class to represent a hitting opponentsFaced statistic
 
-    Used for the following stat types:
-    opponentsFaced
-
     Attributes
     ----------
     batter : Person
@@ -259,18 +236,11 @@ class OpponentsFacedHitting(Stats):
     gametype: Optional[str]
     type_ = [ 'opponentsFaced' ]
 
-    def __post_init__(self):
-        self.batter = Person(**self.batter) if self.batter else self.batter
-        self.pitcher = Person(**self.pitcher) if self.pitcher else self.pitcher
-        self.fieldingteam = Team(**self.fieldingteam) if self.fieldingteam else self.fieldingteam
-
 @dataclass
 class HittingSabermetrics(Stats):
     """
     A class to represent a hitting sabermetric statistic
 
-    Used for the following stat types:
-    sabermetrics
     """
     type_ = [ 'sabermetrics' ]
     season: str
@@ -314,8 +284,8 @@ class HittingLog(Stats, SimpleHittingStat):
     player : Person
         Player of the stat
     """
+    type_ = [ 'gameLog' ]
     positionsplayed: List[Position]
-    #stat: Union[SimpleHittingStat, dict]
     ishome: bool
     iswin: bool
     game: Union[Game, dict]
@@ -325,12 +295,10 @@ class HittingLog(Stats, SimpleHittingStat):
     sport: Union[Sport, dict]
     league: Union[League, dict]
     player: Union[Person, dict]
-    type_ = [ 'gameLog' ]
-
 
     def __post_init__(self):
-        self.positionsplayed = [ Position(**position) for position in self.positionsplayed if self.position]
-        #self.stat = SimpleHittingStat(**self.stat)
+        if self.positionsplayed:
+            self.positionsplayed = [ Position(**position) for position in self.positionsplayed ]
         
 @dataclass
 class PlayDetails:
@@ -436,10 +404,10 @@ class HittingLog(Stats):
 @dataclass
 class SprayChart(Stats):
     """
-    centerfield
-    leftcenterfield
-    leftfield
-    rightcenterfield
+    centerfield : float
+    leftcenterfield : float 
+    leftfield : float
+    rightcenterfield : float
     rightfield
     batter
     
@@ -451,47 +419,43 @@ class SprayChart(Stats):
     rightcenterfield: float
     rightfield: float
 
-    # "standard", # doesnt work
-    # "advanced", # doesnt work
-    # "careerStatSplits", returns 500
-    # "gameLog", # started TODO 
-    # "playLog", # this is a tough one
-    # "pitchLog", # similiar to playlog
-    # "metricLog", # returns 500
-    # "metricAverages", # returns 500
-    # "pitchArsenal", # works
-    # "outsAboveAverage", # returns nothing
-    # "expectedStatistics", # done
-    # "sprayChart", # easy 
-    # "tracking", # returns 200 but nothing
-    # "vsPlayer", # these must need a param passed with them
-    # "vsPlayerTotal", # these must need a param passed with them
-    # "vsPlayer5Y", # these must need a param passed with them
-    # "vsTeam", # these must need a param passed with them
-    # "vsTeam5Y", # these must need a param passed with them
-    # "vsTeamTotal", # these must need a param passed with them
-    # "lastXGames", # TODO
-    # "byDateRange", # TODO
-    # "byDateRangeAdvanced" # TODO
-    # "byMonth", # TODO 
-    # "byMonthPlayoffs", # TODO
-    # "byDayOfWeek", # TODO
-    # "byDayOfWeekPlayoffs", # TODO
-    # "homeAndAway",
-    # "homeAndAwayPlayoffs", 
-    # "winLoss", # simple
-    # "winLossPlayoffs" # simple
-    # "rankings", # need to look?
-    # "rankingsByYear", # need to look?
-    # "statsSingleSeason", # simple
-    # "statsSingleSeasonAdvanced", # advanced
-    # "hotColdZones", # zones
-    # "availableStats", # TODO I think this will help?
-    # "opponentsFaced", # done
-    # "gameTypeStats", # null
-    # "firstYearStats", # null
-    # "lastYearStats", # null
-    # "statSplits", # null
-    # "statSplitsAdvanced" # null,
-    # "atGameStart",# null
-    # "vsOpponents" # null ]
+@dataclass(kw_only=True)
+class HittingLastXGames(Stats, SimpleHittingStat):
+    type_ = [ 'playLog', 'pitchLog' ]
+    team: Union[Team, dict]
+    sport: Union[Sport, dict]
+    numteams: int
+
+@dataclass(kw_only=True)
+class HittingDateRange(Stats, SimpleHittingStat):
+    type_ = [ 'byDateRange' ]
+    team: Union[Team, dict]
+    sport: Union[Sport, dict]
+    numteams: int
+
+@dataclass(kw_only=True)
+class HittingDateRangeAdvanced(Stats, AdvancedHittingStat):
+    type_ = [ 'byDateRangeAdvanced' ]
+    team: Union[Team, dict]
+    sport: Union[Sport, dict]
+    numteams: int
+
+@dataclass(kw_only=True)
+class HittingByMonth(Stats, AdvancedHittingStat):
+    type_ = [ 'byMonthPlayoffs', 'byMonth' ]
+    season: str
+    team: Union[Team, dict]
+    sport: Union[Sport, dict]
+    month: int
+    numteams: int
+
+@dataclass(kw_only=True)
+class HittingDayOfWeek(Stats, SimpleHittingStat):
+    type_ = [ 'byDayOfWeek', 'byDayOfWeekPlayoffs' ]
+    season: str
+    team: Union[Team, dict]
+    sport: Union[Sport, dict]
+    month: int
+    numteams: int
+
+
