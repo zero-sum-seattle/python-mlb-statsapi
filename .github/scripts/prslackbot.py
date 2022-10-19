@@ -17,22 +17,19 @@ PR_TIME                 = datetime.datetime.timestamp(datetime.datetime.strptime
 PR_BODY                 = os.environ.get("PR_BODY")
 PR_REPO                 = os.environ.get("PR_REPO")
 PR_REPO_URL             = os.environ.get("PR_REPO_URL")
-
 NUM_COMMIT              = os.environ.get("NUM_COMMIT")
-
 HEAD_REPO_NAME          = os.environ.get("HEAD_REPO_NAME")
 HEAD_REPO_URL           = os.environ.get("HEAD_REPO_URL")
-
 BASE_REPO_NAME          = os.environ.get("BASE_REPO_NAME")
 BASE_REPO_URL           = os.environ.get("BASE_REPO_URL")
 
-def reportpullrequesturl():
+def reportpullrequesturl(channel, slacktoken):
 
     # WebClient instantiates a client that can call API methods
-    client = WebClient(token=SLACK_WEBCLIENT_TOKEN)
+    client = WebClient(token=slacktoken)
 
     # ID of channel you want to post message to
-    channel_id = CHANNEL
+    channel_id = channel
 
     try:
         # Call the conversations.list method using the WebClient
@@ -92,8 +89,8 @@ def reportpullrequesturl():
         print(f"Error: {e}")        
 
 
-def main():
-    reportpullrequesturl()
+def main(args):
+    reportpullrequesturl(args[1], args[2])
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
