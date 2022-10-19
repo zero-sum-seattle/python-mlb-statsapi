@@ -13,7 +13,7 @@ def reportpullrequesturl(slack_webclient_token, slack_channel_id, url):
 
     try:
         # Call the conversations.list method using the WebClient
-        result = client.chat_postMessage(
+        client.chat_postMessage(
             channel=channel_id,
             blocks= [               
                 {
@@ -31,7 +31,7 @@ def reportpullrequesturl(slack_webclient_token, slack_channel_id, url):
 
 
 def main(args):
-    reportpullrequesturl(args[1], args[2], args[2])
+    reportpullrequesturl(args[1], args[2], args[3])
 
 if __name__ == '__main__':
     main(sys.argv)
