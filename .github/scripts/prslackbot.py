@@ -6,8 +6,6 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
 # get from environment variables
-SLACK_WEBCLIENT_TOKEN   = os.environ.get("SLACK_WEBCLIENT_TOKEN")
-CHANNEL                 = os.environ.get("CHANNEL")
 PR_URL                  = os.environ.get("PR_URL")
 PR_USER                 = os.environ.get("PR_USER")
 PR_USER_IMAGE           = os.environ.get("PR_USER_IMAGE")
@@ -28,6 +26,15 @@ def reportpullrequesturl(channel, slacktoken):
 
     # ID of channel you want to post message to
     channel_id = channel
+    
+    msg = []
+
+    for line in PR_BODY.splitlines():        
+        if line[:4] == "### ":
+            line = '*' + line[4:] + '*'
+        msg.append(line)
+    
+    msg = "\n".join(msg)
 
     try:
         # Call the conversations.list method using the WebClient
@@ -61,7 +68,7 @@ def reportpullrequesturl(channel, slacktoken):
                             "type": "section",
                             "text": {
                                 "type": "mrkdwn",
-                                "text": f'*<{PR_URL}|#{PR_NUMBER} {PR_TITLE}>* \n{PR_BODY}'
+                                "text": f'*<{PR_URL}|#{PR_NUMBER} {PR_TITLE}>* \n{msg}'
                             }
                         },                        
                         {
