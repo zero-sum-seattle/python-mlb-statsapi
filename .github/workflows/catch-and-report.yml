@@ -1,9 +1,9 @@
-name: Catch unexpected keyword arguments
+name: Report mlbstatsapi tests periodically
 
 on:
   schedule:
-    # Run every six hours
-    - cron:  '0 17,23 * * *'
+    # Run every day at 10:25 am and 4:25 pm PST
+    - cron:  '25 17,23 * * *'
 
 jobs:
   catch_errors_and_report:
@@ -15,14 +15,16 @@ jobs:
 
 
     steps:
-      - uses: actions/checkout@develop
+      - uses: actions/checkout@development
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python3 -m pip install --upgrade pip                    
+          python3 -m pip install --upgrade pip       
+          python3 -m pip install --upgrade pytest       
+          python3 -m pip install --upgrade requests      
           python3 -m pip install --upgrade slack_sdk          
       - name: Test and report
         run: |
