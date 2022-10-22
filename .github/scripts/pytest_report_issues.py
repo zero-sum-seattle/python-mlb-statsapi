@@ -123,4 +123,4 @@ if __name__ == "__main__":
     else:
         statusmessage = "Successful"
 
-    cronbot_post_uka(token, channelid, generate_outputstring(output_list))
+    cronbot_post_uka(token, channelid, generate_outputstring(output_list), statusmessage)
