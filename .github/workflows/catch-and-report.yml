@@ -3,7 +3,7 @@ name: Report mlbstatsapi tests periodically
 on:
   schedule:
     # Run every day at 10:25 am and 4:25 pm PST
-    - cron:  '*/6 * * * *'
+    - cron:  '25 17,23 * * *'
 
 jobs:
   catch_errors_and_report:
@@ -28,4 +28,4 @@ jobs:
           python3 -m pip install --upgrade slack_sdk          
       - name: Test and report
         run: |
-          script -q /dev/null 'python3 -m pytest --tb=no tests/*' | python3 ./.github/scripts/pytest_report_issues.py ${{ secrets.PR_CHANNEL }} ${{ secrets.SLACK_WEBCLIENT_TOKEN }}
+          script -q -c 'python3 -m pytest --tb=no tests/*' /dev/null | python3 ./.github/scripts/pytest_report_issues.py ${{ secrets.BOT_CHANNEL }} ${{ secrets.SLACK_WEBCLIENT_TOKEN }}

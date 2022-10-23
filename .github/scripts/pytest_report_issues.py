@@ -3,7 +3,7 @@ import re
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
-def cronbot_post_uka(slack_webclient_token, channel_id, message, status):
+def cronbot_post_uka(slack_webclient_token, channel_id, message, status, linecolor):
 
     # WebClient instantiates a client that can call API methods
     client = WebClient(token=slack_webclient_token)
@@ -16,7 +16,7 @@ def cronbot_post_uka(slack_webclient_token, channel_id, message, status):
             attachments=
             [
                 {
-                    "color": "#9733EE",
+                    "color": f'{linecolor}',
                     "blocks": [                       
                         {
                             "type": "context",
@@ -117,10 +117,14 @@ if __name__ == "__main__":
     for line in sys.stdin:
         output_list.append(line)
 
-    if ("failed" in line or "errors" in line or "error" in line
-        or "xfailed" in line or "SKIPPED" in line):
-        statusmessage = "Failed"
+    if ("failed" in line or "xfailed" in line):
+        statusmessage   = "Failed"
+        statuscolor     = "#3ca553"
+    elif ("errors" in line or "error" in line or "SKIPPED" in line):
+        statusmessage   = "Error with"
+        statuscolor     = "#f2a029"
     else:
-        statusmessage = "Successful"
+        statusmessage   = "Successful"
+        statuscolor     = "#cd3920"
 
-    cronbot_post_uka(token, channelid, generate_outputstring(output_list), statusmessage)
+    cronbot_post_uka(token, channelid, generate_outputstring(output_list), statusmessage, statuscolor)
