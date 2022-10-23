@@ -30,5 +30,5 @@ jobs:
           python3 -m pip install --upgrade slack_sdk          
       - name: Test and report
         run: |
-          script -q /dev/null 'python3 -m pytest --tb=no tests/*'
+          script -q -c 'python3 -m pytest --tb=no tests/*' /dev/null
 # script -q /dev/null 'python3 -m pytest --tb=no tests/*' | python3 ./.github/scripts/pytest_report_issues.py ${{ secrets.BOT_CHANNEL }} ${{ secrets.SLACK_WEBCLIENT_TOKEN }}
