@@ -119,12 +119,12 @@ if __name__ == "__main__":
 
     if ("failed" in line or "xfailed" in line):
         statusmessage   = "Failed"
-        statuscolor     = "#3ca553"
+        statuscolor     = "#cd3920"
     elif ("errors" in line or "error" in line or "SKIPPED" in line):
         statusmessage   = "Error with"
         statuscolor     = "#f2a029"
     else:
         statusmessage   = "Successful"
-        statuscolor     = "#cd3920"
+        statuscolor     = "#3ca553"
 
     cronbot_post_uka(token, channelid, generate_outputstring(output_list), statusmessage, statuscolor)
