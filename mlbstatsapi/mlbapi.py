@@ -210,8 +210,9 @@ class Mlb:
         """     
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"schedule?sportId=1&startDate={startdate}&endDate={enddate}") # Get schedule
 
-        # if mlbdata is not empty, and 'dates' key is in mlbdata.data and mlbdata.data['dates] is not empty list
-        if ('dates' in mlbdata.data and mlbdata.data['dates']):
+        # if mlbdata is not empty, and 'dates' key is in mlbdata.data and mlbdata.data['dates] can sometimes be an empty list
+        # when there are no scheduled game for the date(s). Only check for existance 'dates' key for this reason.
+        if ('dates' in mlbdata.data):
             return Schedule(**mlbdata.data)
 
     def get_schedule_today(self) -> Union[Schedule, None]:        
