@@ -1,4 +1,4 @@
-﻿from dataclasses import dataclass, field
+﻿from dataclasses import InitVar, dataclass, field
 from typing import Optional, Union, List
 
 from mlbstatsapi.models.people import Person, Position
@@ -204,6 +204,10 @@ class PitchingCareer(Stats, SimplePitching):
         the number of teams for the pitching season
     """
     type_ = [ 'career']
+    sport: Optional[Union[Sport, dict]]
+    gametype: str
+    sport: Optional[Union[Sport, dict]] = None
+    numteams: Optional[int] = None
     team: Optional[Union[Team, dict]] = None
     player: Optional[Union[Person, dict]] = None
 
@@ -220,8 +224,11 @@ class PitchingCareerAdvanced(Stats, AdvancedPitching):
         the number of teams for the pitching season
     """
     type_ = [ 'careerAdvanced' ]
+    gametype: str
+    numteams: Optional[int] = None
     team: Optional[Union[Team, dict]] = None
     player: Optional[Union[Person, dict]] = None
+    sport: Optional[Union[Sport, dict]] = None
 
 @dataclass(kw_only=True)
 class PitchingYBY(Stats, SimplePitching):
@@ -250,40 +257,7 @@ class PitchingYBY(Stats, SimplePitching):
     gametype: str
     player: Union[Person, dict]
     sport: Union[Sport, dict]
-    league: Optional[Union[League, dict]] = None
-    team: Optional[Union[Team, dict]] = None
-    numteams: Optional[str] = None
-
-@dataclass(kw_only=True)
-class PitchingDBD(Stats, SimplePitching):
-    """
-    A class to represent a yearByYear season statistic
-
-    Attributes
-    ----------
-    season : str
-        the batter of the pitching byDayOfWeek
-    gametype : Team
-        the gametype code of the pitching byDayOfWeek 
-    player : Person
-        the player of the pitching byDayOfWeek
-    sport : Sport
-        the sport of the pitching byDayOfWeek 
-    league : League
-        the league of the pitching byDayOfWeek
-    team : Team
-        the team of the pitching byDayOfWeek
-    numteams : str
-        the number of teams for the pitching byDayOfWeek
-    dayofweek : int
-        the day of the week
-    """
-    type_ = [ 'byDayOfWeek' ]
-    season: str
-    gametype: str
-    dayofweek: int
-    player: Union[Person, dict]
-    sport: Union[Sport, dict]
+    season: Optional[str] = None
     league: Optional[Union[League, dict]] = None
     team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
@@ -350,7 +324,9 @@ class PitchingGameLog(Stats, SimplePitching):
     game: Union[Game, dict]
     date: str
     gametype: str
+    season: str
     opponent: Union[Team, dict]
+    team: Union[Team, dict]
     sport: Union[Sport, dict]
     league: Union[League, dict]
     player: Union[Person, dict]
@@ -436,6 +412,7 @@ class PitchingLog(Stats):
 
     """
     type_ = [ 'playLog', 'pitchLog' ]
+    play: InitVar[dict] 
     season: str
     team: Union[Team, dict]
     player: Union[Person, dict]
@@ -461,9 +438,11 @@ class PitchingLog(Stats):
 @dataclass(kw_only=True)
 class PitchingByDateRange(Stats, SimplePitching):
     type_ = [ 'byDateRange' ]
+    daysofweek: int
     team: Union[Team, dict]
     sport: Union[Sport, dict]
     numteams: int
+    daysofweek: Optional[int] = None
 
 @dataclass(kw_only=True)
 class PitchingByDateRangeAdvanced(Stats, AdvancedPitching):
@@ -471,10 +450,14 @@ class PitchingByDateRangeAdvanced(Stats, AdvancedPitching):
     team: Union[Team, dict]
     sport: Union[Sport, dict]
     numteams: int
+    season: Optional[str] = None
+    daysofweek: Optional[int] = None
+
 
 @dataclass(kw_only=True)
 class PitchingByMonth(Stats, SimplePitching):
     type_ = [ 'byMonth', 'byMonthPlayoffs' ]
+    season: str
     team: Union[Team, dict]
     sport: Union[Sport, dict]
     month: int
@@ -483,9 +466,11 @@ class PitchingByMonth(Stats, SimplePitching):
 @dataclass(kw_only=True)
 class PitchingByDayOfWeek(Stats, SimplePitching):
     type_ = [ 'byDayOfWeek', 'byDayOfWeekPlayoffs' ]
+    dayofweek: int
+    season: str
     team: Union[Team, dict]
     sport: Union[Sport, dict]
-    daysofweek: int
+    daysofweek: Optional[int] = None
     numteams: int
 
 @dataclass(kw_only=True)
@@ -502,7 +487,7 @@ class PitchingWL(Stats, SimplePitching):
 
 @dataclass(kw_only=True)
 class PitchingRankings(Stats, SimplePitching):
-    type_ = ['rankings', 'rankingsByYear']
+    type_ = [ 'rankings', 'rankingsByYear' ]
     season: str
     team: Union[Team, dict]
     player: Union[Person, dict]
@@ -511,7 +496,7 @@ class PitchingRankings(Stats, SimplePitching):
 
 @dataclass(kw_only=True)
 class PitchingOpponentsFaced(Stats):
-    type = [ 'opponentsFaced' ]
+    type_ = [ 'opponentsFaced' ]
     gametype: str
     group: str
     pitcher: Union[Person, dict]

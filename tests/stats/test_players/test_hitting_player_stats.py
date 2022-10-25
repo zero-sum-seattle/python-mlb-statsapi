@@ -116,7 +116,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
 
         self.assertIsNotNone(stats)
 
-        self.assertTrue(len(stats) < 4)
+        self.assertTrue(len(stats) > 4)
 
     def test_hitting_pitch_arsenal_stat_on_position_player(self):
         """mlb get stats should return PitchArsenal object"""

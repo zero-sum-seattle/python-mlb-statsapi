@@ -710,6 +710,7 @@ class Mlb:
         if ('stats' in mlbdata.data and mlbdata.data['stats']):
             for stats in mlbdata.data['stats']:
                 # set stat_group and stat_type
+                # default to stats if no group present
                 stat_group = stats['group']['displayname'] if 'group' in stats else "stats"
                 stat_type = stats['type']['displayname'] if 'type' in stats else None
 
@@ -730,9 +731,6 @@ class Mlb:
                             for stat in stats['splits']:
                                 if 'stat' in stat:
                                     stat = _transform_mlbdata(stat, ['stat'])
-
-                                # log entry
-                                self._logger.debug(msg=(str(stat), stat_type, stat_group)) # log error JSON
 
                                 # create object from stat
                                 splits.append(obj(stat_type=stat_type, stat_group=stat_group, **stat))

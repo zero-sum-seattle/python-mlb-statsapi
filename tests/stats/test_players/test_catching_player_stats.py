@@ -17,6 +17,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         pass
+    
     def test_catching_season_stats_for_catcher(self):
         self.params = { "stats": ["season"], "group": "catching" }
 

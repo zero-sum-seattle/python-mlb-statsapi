@@ -76,6 +76,7 @@ class SimpleHittingStat:
     stolenbases: Optional[int] = None
     stolenbasepercentage: Optional[int] = None
     groundintodoubleplay: Optional[int] = None
+    groundintotripleplay: Optional[int] = None
     numberofpitches: Optional[int] = None
     plateappearances: Optional[int] = None
     totalbases: Optional[int] = None

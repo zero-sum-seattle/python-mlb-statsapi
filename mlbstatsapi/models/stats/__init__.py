@@ -30,7 +30,6 @@ from .pitching import (
     SimplePitching,
     AdvancedPitching, 
     PitchingSeasonAdvanced,
-    PitchingDBD,
     PitchingYBY,
     PitchingSeason,
     PitchingSabermetrics,
@@ -38,7 +37,10 @@ from .pitching import (
     PitchingCareerAdvanced,
     PitchingLog,
     PitchingGameLog,
-    PitchingHAA
+    PitchingHAA,
+    PitchingOpponentsFaced,
+    PitchingByDayOfWeek,
+    PitchingWL
 )
 
 from .catching import (

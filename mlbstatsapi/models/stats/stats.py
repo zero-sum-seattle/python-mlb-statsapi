@@ -43,7 +43,6 @@ class Count:
     runneron3b: bool
     strikes: int
 
-
 @dataclass
 class CodeDesc:
     """
@@ -114,7 +113,6 @@ class ExpectedStatistics(Stats):
     sport: Union[Sport, dict]
     gametype: str
     rank : Optional[int] = None
-
 
 @dataclass
 class PitchArsenal(Stats):
