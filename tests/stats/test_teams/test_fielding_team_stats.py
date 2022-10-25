@@ -18,7 +18,7 @@ class TestTeamStatCreation(unittest.TestCase):
         pass
 
     def test_fielding_season_stats_for_team(self):
-        self.params = { 'stats': [ 'season' ], 'group': 'fielding' }
+        self.params = { 'stats': [ 'seasonAdvanced' ], 'group': 'fielding' }
 
         # catching_player
         fielding = self.mlb.get_stats(self.team, self.params)

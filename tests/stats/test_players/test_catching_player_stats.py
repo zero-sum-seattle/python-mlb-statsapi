@@ -24,7 +24,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         catching = self.mlb.get_stats(self.catching_player, self.params)
 
         # check for None, or NoneType
-        self.assertIsNotNone(catching)
+        self.assertTrue(len(catching))
 
         for stat in catching:
             # test that stat is not NoneType

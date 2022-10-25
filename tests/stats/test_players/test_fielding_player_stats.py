@@ -23,13 +23,13 @@ class TestPlayerStatCreation(unittest.TestCase):
 
 
     def test_fielding_season_stats_for_players(self):
-        self.params = { "stats": [ "season" ], "group": "fielding" }
+        self.params = { 'stats': [ 'season' ], 'group': 'fielding' }
 
         # catching_player
         fielding = self.mlb.get_stats(self.catching_player, self.params)
 
         # check for None, or NoneType
-        self.assertTrue(fielding, [])
+        self.assertTrue(len(fielding))
 
         for stat in fielding:
             # test that stat is not NoneType
@@ -42,13 +42,13 @@ class TestPlayerStatCreation(unittest.TestCase):
             self.assertTrue(hasattr(stat, 'errors'))
             self.assertTrue(hasattr(stat, 'gamesplayed'))
 
-        self.params = { "stats": [ "season" ], "group": "fielding" }
+        self.params = { 'stats': [ 'season' ], 'group': 'fielding' }
 
         # pitching_player
         fielding = self.mlb.get_stats(self.pitching_player, self.params)
 
         # check for None, or NoneType
-        self.assertTrue(fielding, [])
+        self.assertTrue(len(fielding))
 
         for stat in fielding:
             # test that stat is not NoneType
@@ -61,12 +61,30 @@ class TestPlayerStatCreation(unittest.TestCase):
             self.assertTrue(hasattr(stat, 'chances'))
             self.assertTrue(hasattr(stat, 'gamesplayed'))
 
-        self.params = { "stats": [ "season" ], "group": "fielding" }
+        self.params = { 'stats': [ 'season' ], 'group': 'fielding' }
 
         # position_player
         fielding = self.mlb.get_stats(self.position_player, self.params)
 
-        self.assertTrue(fielding, [])
+        self.assertTrue(len(fielding))
+
+        for stat in fielding:
+            # test that stat is not NoneType
+            self.assertTrue(stat)
+
+            # stat should be SimpleCatching
+            self.assertIsInstance(stat, SimpleFielding)
+
+            # stat should have attr set
+            self.assertTrue(hasattr(stat, 'doubleplays'))
+            self.assertTrue(hasattr(stat, 'fielding'))
+            
+        self.params = { 'stats': [ 'season' ], 'group': 'fielding' }
+
+        # position_player
+        fielding = self.mlb.get_stats(self.utility_player, self.params)
+
+        self.assertTrue(len(fielding))
 
         for stat in fielding:
             # test that stat is not NoneType
@@ -79,6 +97,7 @@ class TestPlayerStatCreation(unittest.TestCase):
             self.assertTrue(hasattr(stat, 'doubleplays'))
             self.assertTrue(hasattr(stat, 'fielding'))
 
+        self.assertFalse
     def test_fielding_gamelog_stats_for_player(self):
         """get stats should return game logs for players"""
         self.params = { 'stats': [ 'gameLog' ], 'group': 'fielding' }
@@ -87,8 +106,7 @@ class TestPlayerStatCreation(unittest.TestCase):
         fielding_gamelogs = self.mlb.get_stats(self.catching_player, self.params)
 
         # make sure game log is not empty
-        self.assertTrue(fielding_gamelogs, [])
-
+        self.assertTrue(len(fielding_gamelogs))
 
         for gamelog in fielding_gamelogs:
             # test that stat is not NoneType

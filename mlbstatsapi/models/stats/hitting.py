@@ -184,6 +184,37 @@ class HittingSeason(Stats, SimpleHittingStat):
     numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
+class HittingAdvancedSeason(Stats, AdvancedHittingStat):
+    """
+    A class to represent a hitting season statistic
+
+    Attributes
+    ----------
+    season : str
+        the batter of the hitting season
+    gametype : Team
+        the gametype code of the hitting season 
+    player : Person
+        the player of the hitting season
+    sport : Sport
+        the sport of the hitting season 
+    league : League
+        the league of the hitting season
+    team : Team
+        the team of the hitting season
+    numteams : str
+        the number of teams for the hitting season
+    """
+    type_ = [ 'careerAdvanced', 'seasonAdvanced' ]
+    season: Optional[str] = None
+    gametype: Optional[str] = None
+    player: Optional[Union[Person, dict]] = None
+    sport: Optional[Union[Sport, dict]] = None
+    league: Optional[Union[League, dict]] = None
+    team: Optional[Union[Team, dict]] = None
+    numteams: Optional[str] = None
+
+@dataclass(kw_only=True)
 class HittingYBY(Stats, SimpleHittingStat):
     """
     A class to represent a hitting yearbyyear or yearByYearPlayoffs statistic

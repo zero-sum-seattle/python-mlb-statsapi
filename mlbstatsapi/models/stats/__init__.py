@@ -23,7 +23,8 @@ from .hitting import (
     HittingByMonth,
     HittingDateRangeAdvanced,
     HittingDateRange,
-    HittingLastXGames
+    HittingLastXGames,
+    HittingAdvancedSeason
 )
 
 from .pitching import (

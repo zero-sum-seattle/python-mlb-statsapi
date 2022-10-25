@@ -165,7 +165,6 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         self.params = { 'stats': [ 'byDateRange', 'byDateRangeAdvanced', 'byMonth', 'byMonthPlayoffs', 
         'byDayOfWeek', 'byDayOfWeekPlayoffs' ], 'group': 'pitching' }
         stats = self.mlb.get_stats(self.pitching_player, self.params)
-        print(len(stats))
         self.assertTrue(len(stats) == 18)
 
     def test_get_homeandaway_pitching_stats_for_player(self):
