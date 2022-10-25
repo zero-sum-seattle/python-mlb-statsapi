@@ -29,11 +29,16 @@ from .hitting import (
 from .pitching import (
     SimplePitching,
     AdvancedPitching, 
-    PitchingAdvanced,
+    PitchingSeasonAdvanced,
     PitchingDBD,
     PitchingYBY,
     PitchingSeason,
-    PitchingSabermetrics
+    PitchingSabermetrics,
+    PitchingCareer,
+    PitchingCareerAdvanced,
+    PitchingLog,
+    PitchingGameLog,
+    PitchingHAA
 )
 
 from .catching import (
@@ -41,7 +46,8 @@ from .catching import (
 )
 
 from .fielding import (
-    SimpleFielding
+    SimpleFielding,
+    FieldingGameLog
 )
 
 from .game import (

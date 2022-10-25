@@ -119,5 +119,6 @@ class FieldingGameLog(Stats, SimpleFielding):
     iswin: bool
     position: Union[Position, dict]
     game: Union[Game, dict]
+    player: Union[Person, dict]    
 
 

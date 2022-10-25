@@ -229,12 +229,12 @@ class OpponentsFacedHitting(Stats):
     group : str
         stat group
     """
+    type_ = [ 'opponentsFaced' ]
     group: str
     batter: Union[Person, dict]
     fieldingteam: Union[Team, dict]
     pitcher: Union[Person, dict]
     gametype: Optional[str]
-    type_ = [ 'opponentsFaced' ]
 
 @dataclass
 class HittingSabermetrics(Stats):
@@ -412,6 +412,7 @@ class SprayChart(Stats):
     batter
     
     """
+    type_ = [ 'sprayChart' ]
     batter: Union[Person, dict]
     centerfield: float
     leftcenterfield: float
@@ -421,7 +422,7 @@ class SprayChart(Stats):
 
 @dataclass(kw_only=True)
 class HittingLastXGames(Stats, SimpleHittingStat):
-    type_ = [ 'playLog', 'pitchLog' ]
+    type_ = [ 'lastXGames' ]
     team: Union[Team, dict]
     sport: Union[Sport, dict]
     numteams: int

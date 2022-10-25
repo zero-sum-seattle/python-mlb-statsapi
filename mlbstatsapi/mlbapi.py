@@ -717,7 +717,7 @@ class Mlb:
                 stat_module = f"mlbstatsapi.models.stats.{stat_group}"
                 stat_module = importlib.import_module(stat_module)
 
-                # if splits is is in stats and splits not empty
+                # if splits is in stats and splits not empty
                 if ('splits' in stats and stats['splits']):
 
                     # loop through classes found in stat_module 
@@ -730,6 +730,9 @@ class Mlb:
                             for stat in stats['splits']:
                                 if 'stat' in stat:
                                     stat = _transform_mlbdata(stat, ['stat'])
+
+                                # log entry
+                                self._logger.debug(msg=(str(stat), stat_type, stat_group)) # log error JSON
 
                                 # create object from stat
                                 splits.append(obj(stat_type=stat_type, stat_group=stat_group, **stat))

@@ -79,9 +79,6 @@ class SimplePitching:
 class AdvancedPitching:
     """
     A class to represent a advanced pitching statistics
-
-    Used for the following stat types:
-    seasonAdvanced, careerAdvanced
     """
     winningpercentage: Optional[str] = None
     runsscoredper9: Optional[str] = None
@@ -195,6 +192,38 @@ class PitchingSeason(Stats, SimplePitching):
     numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
+class PitchingCareer(Stats, SimplePitching):
+    """
+    A class to represent a pitching season statistic
+
+    Attributes
+    ----------
+    team : Team
+        the team of the pitching season
+    numteams : str
+        the number of teams for the pitching season
+    """
+    type_ = [ 'career']
+    team: Optional[Union[Team, dict]] = None
+    player: Optional[Union[Person, dict]] = None
+
+@dataclass(kw_only=True)
+class PitchingCareerAdvanced(Stats, AdvancedPitching):
+    """
+    A class to represent a pitching season statistic
+
+    Attributes
+    ----------
+    team : Team
+        the team of the pitching season
+    numteams : str
+        the number of teams for the pitching season
+    """
+    type_ = [ 'careerAdvanced' ]
+    team: Optional[Union[Team, dict]] = None
+    player: Optional[Union[Person, dict]] = None
+
+@dataclass(kw_only=True)
 class PitchingYBY(Stats, SimplePitching):
     """
     A class to represent a yearByYear season statistic
@@ -260,7 +289,7 @@ class PitchingDBD(Stats, SimplePitching):
     numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
-class PitchingAdvanced(Stats, AdvancedPitching):
+class PitchingSeasonAdvanced(Stats, AdvancedPitching):
     """
     A class to represent a pitching seasonAdvanced statistic
 
@@ -281,17 +310,17 @@ class PitchingAdvanced(Stats, AdvancedPitching):
     numteams : str
         the number of teams for the pitching season
     """
-    type_ = [ "seasonAdvanced", "careerAdvanced", 'yearByYearAdvanced', 'statsSingleSeasonAdvanced' ]
+    type_ = [ "seasonAdvanced", 'yearByYearAdvanced', 'statsSingleSeasonAdvanced' ]
     season: str
-    gametype: str
-    player: Union[Person, dict]
-    sport: Union[Sport, dict]
+    gametype: Optional[str] = None
+    player: Optional[Union[Person, dict]] = None
+    sport: Optional[Union[Sport, dict]] = None
     league: Optional[Union[League, dict]] = None
     team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
-class PitchingLog(Stats, SimplePitching):
+class PitchingGameLog(Stats, SimplePitching):
     """
     A class to represent a gamelog stat for a pitcher
 
