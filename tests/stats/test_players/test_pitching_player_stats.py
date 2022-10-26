@@ -15,7 +15,8 @@ from mlbstatsapi.models.stats import (
     PitchingHAA,
     PitchingOpponentsFaced,
     PitchingByDayOfWeek,
-    PitchingWL
+    PitchingWL,
+    PitchingYBYAdvanced
 )
 class TestOpponentsFacedHitting(unittest.TestCase):
     @classmethod
@@ -43,7 +44,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'season'))
 
-        self.params = { 'stats': [ 'seasonAdvanced', 'yearByYearAdvanced', 'statsSingleSeasonAdvanced' ], 'group': 'pitching' }
+        self.params = { 'stats': [ 'seasonAdvanced', 'statsSingleSeasonAdvanced' ], 'group': 'pitching' }
         stats = self.mlb.get_stats(self.pitching_player, self.params)
 
         for stat in stats:
@@ -105,12 +106,32 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         self.params = { 'stats': ['yearByYear', 'yearByYearPlayoffs'], 'group': 'pitching' }
         stats = self.mlb.get_stats(self.pitching_player, self.params)
 
+        # test that stat is not NoneType
+        self.assertTrue(len(stats))
+
         for stat in stats:
             # test that stat is not NoneType
             self.assertTrue(stat)
 
             # stat should be SimplePitching
             self.assertIsInstance(stat, PitchingYBY)
+
+            # stat should have a attr set
+            self.assertTrue(hasattr(stat, 'season'))
+
+        self.params = { 'stats': ['yearByYearAdvanced' ], 'group': 'pitching' }
+        stats = self.mlb.get_stats(self.pitching_player, self.params)
+        
+        # test that stat is not NoneType
+        self.assertTrue(len(stats))
+
+
+        for stat in stats:
+            # test that stat is not NoneType
+            self.assertTrue(stat)
+
+            # stat should be SimplePitching
+            self.assertIsInstance(stat, PitchingYBYAdvanced)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'season'))
@@ -150,9 +171,11 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         self.params = { 'stats': [ 'playLog' ], 'group': 'pitching' }
         stats = self.mlb.get_stats(self.pitching_player, self.params)
 
+
+        self.assertTrue(len(stat))
+
         for stat in stats:
             # test that stat in not NoneType
-            self.assertTrue(len(stat))
 
             # stat should be SimplePitching
             self.assertIsInstance(stat, PitchingLog)

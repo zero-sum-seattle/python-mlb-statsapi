@@ -7,6 +7,23 @@ from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.game import Game
 
+
+
+@dataclass
+class CodeDesc:
+    """
+    a class to hold a code and a description
+
+    Attributes
+    ----------
+    code : str
+        the pitch code to reference the pitch
+    description : str
+        the description of the pitch
+    """
+    code: str
+    description: str
+
 @dataclass
 class Count:
     """
@@ -33,7 +50,6 @@ class Count:
     strikes : int
         strike count
     """
-    code: str
     balls: int
     inning: int
     istopinning: bool
@@ -42,21 +58,6 @@ class Count:
     runneron2b: bool
     runneron3b: bool
     strikes: int
-
-@dataclass
-class CodeDesc:
-    """
-    a class to hold a code and a description
-
-    Attributes
-    ----------
-    code : str
-        the pitch code to reference the pitch
-    description : str
-        the description of the pitch
-    """
-    code: str
-    description: str
 
 @dataclass(kw_only=True)
 class Stats:
@@ -92,9 +93,8 @@ class Stats:
     player: Optional[Union[Person, dict]] = None
     sport: Optional[Union[Sport, dict]] = None
     league: Optional[Union[League, dict]] = None
+    season: Optional[str] = None
 
-
-   
 @dataclass(kw_only=True)
 class ExpectedStatistics(Stats):
     """
@@ -132,7 +132,6 @@ class PitchArsenal(Stats):
     percentage: float
     totalpitches: int
     type: Union[CodeDesc, dict]
-
 
 @dataclass(kw_only=True)
 class ZoneCodes:

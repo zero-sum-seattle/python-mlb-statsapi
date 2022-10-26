@@ -345,7 +345,6 @@ class PlayDetails:
         pitch hand code and description
     """
     call: Union[CodeDesc, dict]
-    description: str
     event: str
     eventtype: str
     isinplay: bool
@@ -357,6 +356,8 @@ class PlayDetails:
     type: Union[CodeDesc, dict]
     batside: Union[CodeDesc, dict]
     pitchhand: Union[CodeDesc, dict]
+    description: Optional[str] = None
+
 
 @dataclass(kw_only=True)
 class HittingLog(Stats):

@@ -39,15 +39,11 @@ class SimpleFielding:
     pickoffs: Optional[int] = None
 
 @dataclass(kw_only=True)
-class SeasonFielding(Stats, SimpleFielding):
-    type_ = [ 'season', 'seasonAdvanced', 'statsSingleSeason', 
-    'statsSingleSeasonAdvanced', 'careerRegularSeason', 'careerPlayoffs' ]
-    season: str
+class SeasonFieldingAdvanced(Stats, SimpleFielding):
+    type_ = ['seasonAdvanced', 'statsSingleSeasonAdvanced' ]
     gametype: Optional[str] = None
     position: Optional[Union[Position, dict]] = None
     numteams: Optional[str] = None
-    team: Optional[Union[Team, dict]] = None
-    player: Optional[Union[Person, dict]] = None
     league: Optional[Union[League, dict]] = None
     sport: Optional[Union[Sport, dict]] = None
 
@@ -55,21 +51,72 @@ class SeasonFielding(Stats, SimpleFielding):
         self.position = Position(**self.position) if self.position else self.position
 
 @dataclass(kw_only=True)
+class SeasonFielding(Stats, SimpleFielding):
+    type_ = [ 'season', 'statsSingleSeason' ]
+    gametype: Optional[str] = None
+    position: Optional[Union[Position, dict]] = None
+    numteams: Optional[str] = None
+    league: Optional[Union[League, dict]] = None
+    sport: Optional[Union[Sport, dict]] = None
+
+    def __post_init__(self):
+        self.position = Position(**self.position) if self.position else self.position
+
+@dataclass(kw_only=True)
+class FieldingCareer(Stats, SimpleFielding):
+    type_ = [ 'careerRegularSeason', 'careerPlayoffs' ]
+    gametype: Optional[str] = None
+    position: Optional[Union[Position, dict]] = None
+    numteams: Optional[str] = None
+    league: Optional[Union[League, dict]] = None
+
+    def __post_init__(self):
+        self.position = Position(**self.position) if self.position else self.position    
+
+@dataclass(kw_only=True)
+class FieldingCareerPlayoffs(Stats, SimpleFielding):
+    type_ = [ 'careerPlayoffs' ]
+    gametype: Optional[str] = None
+    position: Optional[Union[Position, dict]] = None
+    numteams: Optional[str] = None
+    league: Optional[Union[League, dict]] = None
+
+    def __post_init__(self):
+        self.position = Position(**self.position) if self.position else self.position
+
+@dataclass(kw_only=True)
 class FieldingHAA(Stats, SimpleFielding):
-    type_ = [ 'homeAndAway', 'homeAndAwayPlayoffs' ]
-    season: str
+    type_ = [ 'homeAndAway' ]
+    ishome: bool
+
+@dataclass(kw_only=True)
+class FieldingHAAPlayoffs(Stats, SimpleFielding):
+    type_ = [ 'homeAndAwayPlayoffs' ]
     ishome: bool
 
 @dataclass(kw_only=True)
 class FieldingYBY(Stats, SimpleFielding):
-    type_ = [ 'yearByYear', 'yearByYearAdvanced', 'yearByYearPlayoffs' ]
-    season: str
+    type_ = [ 'yearByYear' ]
+    team: Union[Team, dict]
+
+@dataclass(kw_only=True)
+class FieldingYBYAdvanced(Stats, SimpleFielding):
+    type_ = [ 'yearByYearAdvanced']
+    team: Union[Team, dict]
+
+@dataclass(kw_only=True)
+class FieldingYBYPlayoffs(Stats, SimpleFielding):
+    type_ = [ 'yearByYearPlayoffs' ]
     team: Union[Team, dict]
 
 @dataclass(kw_only=True)
 class FieldingWL(Stats, SimpleFielding):
-    type_ = ['winLoss', 'winLossPlayoffs' ]
-    season: str
+    type_ = ['winLoss' ]
+    iswin: bool
+
+@dataclass(kw_only=True)
+class FieldingWLPlayoffs(Stats, SimpleFielding):
+    type_ = [ 'winLossPlayoffs' ]
     iswin: bool
 
 @dataclass(kw_only=True)
@@ -77,16 +124,12 @@ class FieldingByDayOfWeek(Stats, SimpleFielding):
     type_ = [ 'byDayOfWeek' ]
     dayofweek: str
     numteams: str
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
 
 @dataclass(kw_only=True)
 class FieldingByDateRangeAdvanced(Stats, SimpleFielding):
     type_ = [ 'byDateRangeAdvanced' ]
     dayofweek: str
     numteams: str
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
     position: Union[Position, dict]
 
     def __post_init__(self):
@@ -94,7 +137,19 @@ class FieldingByDateRangeAdvanced(Stats, SimpleFielding):
 
 @dataclass(kw_only=True)
 class FieldingByMonth(Stats, SimpleFielding):
-    type_ = [ 'byMonth', 'byMonthPlayoffs' ]
+    type_ = [ 'byMonth' ]
+    month: int
+    numteams: int
+
+@dataclass(kw_only=True)
+class FieldingByMonthPlayoffs(Stats, SimpleFielding):
+    type_ = [ 'byMonthPlayoffs' ]
+    month: int
+    numteams: int
+
+@dataclass(kw_only=True)
+class FieldingByMonthPlayoffs(Stats, SimpleFielding):
+    type_ = [ 'byMonthPlayoffs' ]
     month: int
     numteams: int
 
@@ -102,15 +157,10 @@ class FieldingByMonth(Stats, SimpleFielding):
 class FieldingLastXGames(Stats, SimpleFielding):
     type_ = [ 'lastXGames' ]
     numteams: int
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
 
 @dataclass(kw_only=True)
 class FieldingGameLog(Stats, SimpleFielding):
     type_ = [ 'gameLog' ]
-    season: str
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
     league: Union[League, dict]
     opponent: Union[Team, dict]
     date: str
@@ -119,6 +169,5 @@ class FieldingGameLog(Stats, SimpleFielding):
     iswin: bool
     position: Union[Position, dict]
     game: Union[Game, dict]
-    player: Union[Person, dict]    
 
 

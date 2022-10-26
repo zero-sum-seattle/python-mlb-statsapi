@@ -13,7 +13,8 @@ from mlbstatsapi.models.stats import (
     ExpectedStatistics,
     HittingLog,
     HittingWL,
-    HittingHAA
+    HittingHAA,
+    HittingAdvancedSeason
 )
 
 class TestOpponentsFacedHitting(unittest.TestCase):
@@ -82,7 +83,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be AdvancedHitting
-            self.assertIsInstance(stat, HittingSeason)
+            self.assertIsInstance(stat, HittingAdvancedSeason)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'totalbases'))

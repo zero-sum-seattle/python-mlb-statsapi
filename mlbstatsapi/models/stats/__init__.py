@@ -41,7 +41,8 @@ from .pitching import (
     PitchingHAA,
     PitchingOpponentsFaced,
     PitchingByDayOfWeek,
-    PitchingWL
+    PitchingWL,
+    PitchingYBYAdvanced
 )
 
 from .catching import (

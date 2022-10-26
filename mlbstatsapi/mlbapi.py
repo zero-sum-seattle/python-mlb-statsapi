@@ -708,6 +708,8 @@ class Mlb:
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"{object.mlb_class}/{object.id}/stats", ep_params=params) # Get All divisions        
         splits = [] 
         stat_log_type = [ 'playLog', 'pitchLog' ]
+
+
         if ('stats' in mlbdata.data and mlbdata.data['stats']):
             for stats in mlbdata.data['stats']:
                 # set stat_group and stat_type
@@ -731,11 +733,16 @@ class Mlb:
                             # loop through json in splits
                             for stat in stats['splits']:
                                 if 'stat' in stat:
-                                    if stat_type in stat_log_type:
+                                    if stat_type in stat_log_type: # check for log stat type
                                         stat = _transform_mlbdata(stat, [{'stat':'play'}])
+                                        #self._logger.error(msg=(stat)) # log error JSON
 
-                                    stat = _transform_mlbdata(stat, 'stat')
+                                    else:
 
+                                        stat = _transform_mlbdata(stat, 'stat')
+                                
+                                # log error JSON
+                                #self._logger.error(msg=(stat_type, stat_group, obj, name)) 
                                 # create object from stat
                                 splits.append(obj(stat_type=stat_type, stat_group=stat_group, **stat))
 
