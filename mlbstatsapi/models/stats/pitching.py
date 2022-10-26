@@ -205,7 +205,7 @@ class PitchingCareer(Stats, SimplePitching):
     """
     type_ = [ 'career']
     sport: Optional[Union[Sport, dict]]
-    gametype: str
+    gametype: Optional[str] = None
     sport: Optional[Union[Sport, dict]] = None
     numteams: Optional[int] = None
     team: Optional[Union[Team, dict]] = None
@@ -253,14 +253,48 @@ class PitchingYBY(Stats, SimplePitching):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'yearByYear', 'yearByYearPlayoffs' ]
-    season: str
-    gametype: str
-    player: Union[Person, dict]
-    sport: Union[Sport, dict]
+    player: Optional[Union[Person, dict]] = None
     season: Optional[str] = None
     league: Optional[Union[League, dict]] = None
     team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
+    gametype: Optional[str] = None
+    sport: Optional[Union[Sport, dict]] = None
+
+
+@dataclass(kw_only=True)
+class PitchingYBYAdvanced(Stats, AdvancedPitching):
+    """
+    A class to represent a yearByYear season statistic
+
+    Attributes
+    ----------
+    season : str
+        the batter of the pitching yearByYear
+    gametype : Team
+        the gametype code of the pitching yearByYear 
+    player : Person
+        the player of the pitching yearByYear
+    sport : Sport
+        the sport of the pitching yearByYear 
+    league : League
+        the league of the pitching yearByYear
+    team : Team
+        the team of the pitching yearByYear
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
+    type_ = [ 'yearByYearAdvanced' ]
+    player: Optional[Union[Person, dict]] = None
+    season: Optional[str] = None
+    league: Optional[Union[League, dict]] = None
+    team: Optional[Union[Team, dict]] = None
+    numteams: Optional[str] = None
+    gametype: Optional[str] = None
+    sport: Optional[Union[Sport, dict]] = None
+
+
+
 
 @dataclass(kw_only=True)
 class PitchingSeasonAdvanced(Stats, AdvancedPitching):
@@ -284,7 +318,7 @@ class PitchingSeasonAdvanced(Stats, AdvancedPitching):
     numteams : str
         the number of teams for the pitching season
     """
-    type_ = [ "seasonAdvanced", 'yearByYearAdvanced', 'statsSingleSeasonAdvanced' ]
+    type_ = [ "seasonAdvanced", 'statsSingleSeasonAdvanced' ]
     season: str
     gametype: Optional[str] = None
     player: Optional[Union[Person, dict]] = None

@@ -3,7 +3,7 @@ import re
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
-def cronbot_post_uka(slack_webclient_token, channel_id, message):
+def cronbot_post_uka(slack_webclient_token, channel_id, message, status, linecolor):
 
     # WebClient instantiates a client that can call API methods
     client = WebClient(token=slack_webclient_token)
@@ -12,11 +12,11 @@ def cronbot_post_uka(slack_webclient_token, channel_id, message):
         # Call the conversations.list method using the WebClient
         client.chat_postMessage(
             channel=channel_id,
-            text="Failed Build Test for mlbstatsapi",
+            text=f'{status} Test for mlbstatsapi',
             attachments=
             [
                 {
-                    "color": "#9733EE",
+                    "color": f'{linecolor}',
                     "blocks": [                       
                         {
                             "type": "context",
@@ -41,6 +41,10 @@ def escape_ansi(line):
     return ansi_escape.sub('', line)
 
 def generate_outputstring(from_list) -> str:
+
+    short_test_summary_info_types = ["FAILED", "ERROR", "SKIPPED", 
+                                    "XFAILED", "XPASSED", "PASSED"]
+
     testing_output = ""
 
     for output in from_list:
@@ -110,11 +114,17 @@ if __name__ == "__main__":
     
     output_list = []
 
-    short_test_summary_info_types = ["FAILED", "ERROR", "SKIPPED", 
-                                    "XFAILED", "XPASSED", "PASSED"]
-
     for line in sys.stdin:
         output_list.append(line)
 
-    if "failed" in line or "errors" in line or "error" in line:
-        cronbot_post_uka(token, channelid, generate_outputstring(output_list))
+    if ("failed" in line or "xfailed" in line):
+        statusmessage   = "Failed"
+        statuscolor     = "#cd3920"
+    elif ("errors" in line or "error" in line or "SKIPPED" in line):
+        statusmessage   = "Error with"
+        statuscolor     = "#f2a029"
+    else:
+        statusmessage   = "Successful"
+        statuscolor     = "#3ca553"
+
+    cronbot_post_uka(token, channelid, generate_outputstring(output_list), statusmessage, statuscolor)

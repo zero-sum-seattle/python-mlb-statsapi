@@ -21,7 +21,7 @@ class TestTeamStatCreation(unittest.TestCase):
 
     def test_yearbyyear_hitting_stats_for_team(self):
         """mlb get stats should return hitting stats"""
-        self.params = { 'stats': [ 'yearByYear' ], 'group': 'hitting' }
+        self.params = { 'stats': [ 'yearByYear' ], 'group': 'pitching' }
 
         # let's get some stats
         al_yearbyyear_stats = self.mlb.get_stats(self.al_team, self.params)
