@@ -147,7 +147,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
 
     def test_get_playlog_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'playLog', 'pitchLog' ], 'group': 'pitching' }
+        self.params = { 'stats': [ 'playLog' ], 'group': 'pitching' }
         stats = self.mlb.get_stats(self.pitching_player, self.params)
 
         for stat in stats:

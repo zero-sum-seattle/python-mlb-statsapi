@@ -128,7 +128,7 @@ class AdvancedPitching:
     bequeathedrunners: Optional[int] = None
     bequeathedrunnersscored: Optional[int] = None
 
-@dataclass
+@dataclass(kw_only=True)
 class PitchingSabermetrics(Stats):
     """
     A class to represent a pitching sabermetric statistics
@@ -149,15 +149,11 @@ class PitchingSabermetrics(Stats):
     type_ = ['sabermetrics']
     season: str
     gametype: str
-    player: Union[Person, dict]
-    sport: Union[Sport, dict]
     fip: float
     fipminus: float
     ra9war: float
     rar: float
     war: float
-    league: Optional[Union[League, dict]] = None
-    team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
@@ -173,7 +169,7 @@ class PitchingSeason(Stats, SimplePitching):
         the gametype code of the pitching season 
     player : Person
         the player of the pitching season
-    sport : Sport
+     : Sport
         the sport of the pitching season 
     league : League
         the league of the pitching season
@@ -185,10 +181,6 @@ class PitchingSeason(Stats, SimplePitching):
     type_ = [ 'season', 'statsSingleSeason' ]
     season: str
     gametype: Optional[str] = None
-    player: Optional[Union[Person, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
-    league: Optional[Union[League, dict]] = None
-    team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
@@ -204,12 +196,8 @@ class PitchingCareer(Stats, SimplePitching):
         the number of teams for the pitching season
     """
     type_ = [ 'career']
-    sport: Optional[Union[Sport, dict]]
     gametype: Optional[str] = None
-    sport: Optional[Union[Sport, dict]] = None
     numteams: Optional[int] = None
-    team: Optional[Union[Team, dict]] = None
-    player: Optional[Union[Person, dict]] = None
 
 @dataclass(kw_only=True)
 class PitchingCareerAdvanced(Stats, AdvancedPitching):
@@ -224,11 +212,8 @@ class PitchingCareerAdvanced(Stats, AdvancedPitching):
         the number of teams for the pitching season
     """
     type_ = [ 'careerAdvanced' ]
-    gametype: str
+    gametype: Optional[str] = None
     numteams: Optional[int] = None
-    team: Optional[Union[Team, dict]] = None
-    player: Optional[Union[Person, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
 
 @dataclass(kw_only=True)
 class PitchingYBY(Stats, SimplePitching):
@@ -253,13 +238,9 @@ class PitchingYBY(Stats, SimplePitching):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'yearByYear', 'yearByYearPlayoffs' ]
-    player: Optional[Union[Person, dict]] = None
     season: Optional[str] = None
-    league: Optional[Union[League, dict]] = None
-    team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
     gametype: Optional[str] = None
-    sport: Optional[Union[Sport, dict]] = None
 
 
 @dataclass(kw_only=True)
@@ -285,14 +266,9 @@ class PitchingYBYAdvanced(Stats, AdvancedPitching):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'yearByYearAdvanced' ]
-    player: Optional[Union[Person, dict]] = None
     season: Optional[str] = None
-    league: Optional[Union[League, dict]] = None
-    team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
     gametype: Optional[str] = None
-    sport: Optional[Union[Sport, dict]] = None
-
 
 
 
@@ -321,10 +297,6 @@ class PitchingSeasonAdvanced(Stats, AdvancedPitching):
     type_ = [ "seasonAdvanced", 'statsSingleSeasonAdvanced' ]
     season: str
     gametype: Optional[str] = None
-    player: Optional[Union[Person, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
-    league: Optional[Union[League, dict]] = None
-    team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
@@ -360,10 +332,6 @@ class PitchingGameLog(Stats, SimplePitching):
     gametype: str
     season: str
     opponent: Union[Team, dict]
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
-    league: Union[League, dict]
-    player: Union[Person, dict]
     type_ = [ 'gameLog' ]
 
 @dataclass
@@ -414,7 +382,7 @@ class PlayDetails:
     batside: Union[CodeDesc, dict]
     pitchhand: Union[CodeDesc, dict]
 
-@dataclass
+@dataclass(kw_only=True)
 class PitchingLog(Stats):
     """
     A class to represent a gamelog stat for a hitter
@@ -448,8 +416,6 @@ class PitchingLog(Stats):
     type_ = [ 'playLog', 'pitchLog' ]
     play: InitVar[dict] 
     season: str
-    team: Union[Team, dict]
-    player: Union[Person, dict]
     opponent: Union[Team, dict]
     date: str
     gametype: str
@@ -473,16 +439,12 @@ class PitchingLog(Stats):
 class PitchingByDateRange(Stats, SimplePitching):
     type_ = [ 'byDateRange' ]
     daysofweek: int
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
     numteams: int
     daysofweek: Optional[int] = None
 
 @dataclass(kw_only=True)
 class PitchingByDateRangeAdvanced(Stats, AdvancedPitching):
     type_ = [ 'byDateRangeAdvanced' ]
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
     numteams: int
     season: Optional[str] = None
     daysofweek: Optional[int] = None
@@ -492,8 +454,6 @@ class PitchingByDateRangeAdvanced(Stats, AdvancedPitching):
 class PitchingByMonth(Stats, SimplePitching):
     type_ = [ 'byMonth', 'byMonthPlayoffs' ]
     season: str
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
     month: int
     numteams: int
 
@@ -502,8 +462,6 @@ class PitchingByDayOfWeek(Stats, SimplePitching):
     type_ = [ 'byDayOfWeek', 'byDayOfWeekPlayoffs' ]
     dayofweek: int
     season: str
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
     daysofweek: Optional[int] = None
     numteams: int
 
@@ -523,9 +481,6 @@ class PitchingWL(Stats, SimplePitching):
 class PitchingRankings(Stats, SimplePitching):
     type_ = [ 'rankings', 'rankingsByYear' ]
     season: str
-    team: Union[Team, dict]
-    player: Union[Person, dict]
-    league: Union[League, dict]
     gametype: str
 
 @dataclass(kw_only=True)
@@ -536,6 +491,5 @@ class PitchingOpponentsFaced(Stats):
     pitcher: Union[Person, dict]
     batter: Union[Person, dict]
     battingteam: Union[Team, dict]
-
 
 

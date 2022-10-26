@@ -88,8 +88,14 @@ class Stats:
     """
     stat_group: str
     stat_type: str
+    team: Optional[Union[Team, dict]] = None
+    player: Optional[Union[Person, dict]] = None
+    sport: Optional[Union[Sport, dict]] = None
+    league: Optional[Union[League, dict]] = None
+
+
    
-@dataclass
+@dataclass(kw_only=True)
 class ExpectedStatistics(Stats):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
@@ -109,12 +115,10 @@ class ExpectedStatistics(Stats):
     woba : str
     wobaCon : str
     season: str
-    player: Union[Person, dict]
-    sport: Union[Sport, dict]
     gametype: str
     rank : Optional[int] = None
 
-@dataclass
+@dataclass(kw_only=True)
 class PitchArsenal(Stats):
     """
     A class to represent a pitcharsenal stat for a hitter
@@ -129,7 +133,8 @@ class PitchArsenal(Stats):
     totalpitches: int
     type: Union[CodeDesc, dict]
 
-@dataclass
+
+@dataclass(kw_only=True)
 class ZoneCodes:
     """
     A class to represent a zone code statistic used in hot cold zones
@@ -150,7 +155,7 @@ class ZoneCodes:
     temp: str
     value: str
 
-@dataclass
+@dataclass(kw_only=True)
 class HotColdZones(Stats):
     """
     A class to represent a hot cold zone statistic
@@ -169,7 +174,7 @@ class HotColdZones(Stats):
     def __post_init__(self):
         self.zones = [ ZoneCodes(**zone) for zone in self.zones ]
 
-@dataclass
+@dataclass(kw_only=True)
 class OutsAboveAverage(Stats):
     """
     A class to represent a outs above average statistic

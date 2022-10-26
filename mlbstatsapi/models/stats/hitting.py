@@ -146,10 +146,6 @@ class HittingCareer(Stats, SimpleHittingStat):
     type_ = [ 'career', 'careerPlayoffs', 'careerRegularSeason' ]
     season: str
     gametype: str
-    player: Union[Person, dict]
-    sport: Union[Sport, dict]
-    league: Optional[Union[League, dict]] = None
-    team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
@@ -177,11 +173,8 @@ class HittingSeason(Stats, SimpleHittingStat):
     type_ = [ 'season', 'statsSingleSeason' ]
     season: str
     gametype: Optional[str] = None
-    player: Optional[Union[Person, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
-    league: Optional[Union[League, dict]] = None
-    team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
+
 
 @dataclass(kw_only=True)
 class HittingAdvancedSeason(Stats, AdvancedHittingStat):
@@ -208,10 +201,6 @@ class HittingAdvancedSeason(Stats, AdvancedHittingStat):
     type_ = [ 'careerAdvanced', 'seasonAdvanced' ]
     season: Optional[str] = None
     gametype: Optional[str] = None
-    player: Optional[Union[Person, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
-    league: Optional[Union[League, dict]] = None
-    team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
@@ -239,10 +228,6 @@ class HittingYBY(Stats, SimpleHittingStat):
     type_ = [ 'yearByYear', 'yearByYearPlayoffs' ]
     season: str
     gametype: Optional[str] = None
-    player: Optional[Union[Person, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
-    league: Optional[Union[League, dict]] = None
-    team: Optional[Union[Team, dict]] = None
     numteams: Optional[str] = None
 
 @dataclass
@@ -282,10 +267,6 @@ class HittingSabermetrics(Stats):
     wrcplus: float
     rar: float
     war: float
-    player: Optional[Union[Person, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
-    league: Optional[Union[League, dict]] = None
-    team: Optional[Union[Team, dict]] = None
     numteams: Optional[int] = None
 
 @dataclass(kw_only=True)
@@ -324,9 +305,6 @@ class HittingLog(Stats, SimpleHittingStat):
     date: str
     gametype: str
     opponent: Union[Team, dict]
-    sport: Union[Sport, dict]
-    league: Union[League, dict]
-    player: Union[Person, dict]
 
     def __post_init__(self):
         if self.positionsplayed:
@@ -380,7 +358,7 @@ class PlayDetails:
     batside: Union[CodeDesc, dict]
     pitchhand: Union[CodeDesc, dict]
 
-@dataclass
+@dataclass(kw_only=True)
 class HittingLog(Stats):
     """
     A class to represent a gamelog stat for a hitter
@@ -413,8 +391,6 @@ class HittingLog(Stats):
     """
     type_ = [ 'playLog', 'pitchLog' ]
     season: str
-    team: Union[Team, dict]
-    player: Union[Person, dict]
     opponent: Union[Team, dict]
     date: str
     gametype: str
@@ -455,30 +431,22 @@ class SprayChart(Stats):
 @dataclass(kw_only=True)
 class HittingLastXGames(Stats, SimpleHittingStat):
     type_ = [ 'lastXGames' ]
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
     numteams: int
 
 @dataclass(kw_only=True)
 class HittingDateRange(Stats, SimpleHittingStat):
     type_ = [ 'byDateRange' ]
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
     numteams: int
 
 @dataclass(kw_only=True)
 class HittingDateRangeAdvanced(Stats, AdvancedHittingStat):
     type_ = [ 'byDateRangeAdvanced' ]
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
     numteams: int
 
 @dataclass(kw_only=True)
 class HittingByMonth(Stats, AdvancedHittingStat):
     type_ = [ 'byMonthPlayoffs', 'byMonth' ]
     season: str
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
     month: int
     numteams: int
 
@@ -486,8 +454,6 @@ class HittingByMonth(Stats, AdvancedHittingStat):
 class HittingDayOfWeek(Stats, SimpleHittingStat):
     type_ = [ 'byDayOfWeek', 'byDayOfWeekPlayoffs' ]
     season: str
-    team: Union[Team, dict]
-    sport: Union[Sport, dict]
     month: int
     numteams: int
 
