@@ -15,9 +15,6 @@ from .stats import Stats, CodeDesc, Count
 class AdvancedHittingStat:
     """
     A class to represent a advanced hitting statistics
-
-    Used for the following stat types:
-    seasonAdvanced, careerAdvanced
     """
     plateappearances: Optional[int] = None
     totalbases: Optional[int] = None
@@ -92,12 +89,10 @@ class SimpleHittingStat:
 @dataclass(kw_only=True)
 class HittingWL(Stats, SimpleHittingStat):
     """
-    A class to represent a hitting winLoss or statistic
+    A class to represent a hitting winLoss statistic
 
     Attributes
     ----------
-    season : str
-        the batter of the hitting winLoss
     iswin : bool
         the bool to hold if a win or not for hitting winLoss
     """
@@ -107,12 +102,10 @@ class HittingWL(Stats, SimpleHittingStat):
 @dataclass(kw_only=True)
 class HittingWLPlayoffs(Stats, SimpleHittingStat):
     """
-    A class to represent a hitting winLoss or statistic
+    A class to represent a hitting winLoss statistic
 
     Attributes
     ----------
-    season : str
-        the batter of the hitting winLoss
     iswin : bool
         the bool to hold if a win or not for hitting winLoss
     """
@@ -122,12 +115,10 @@ class HittingWLPlayoffs(Stats, SimpleHittingStat):
 @dataclass(kw_only=True)
 class HittingHAA(Stats, SimpleHittingStat):
     """
-    A class to represent a hitting homeAndAway or statistic
+    A class to represent a hitting homeAndAway statistic
 
     Attributes
     ----------
-    season : str
-        the batter of the hitting homeAndAway
     ishome : bool
         the bool to hold if it ishome hitting homeAndAway
     """
@@ -137,12 +128,10 @@ class HittingHAA(Stats, SimpleHittingStat):
 @dataclass(kw_only=True)
 class HittingHAAPlayoffs(Stats, SimpleHittingStat):
     """
-    A class to represent a hitting homeAndAway or statistic
+    A class to represent a hitting homeAndAway statistic
 
     Attributes
     ----------
-    season : str
-        the batter of the hitting homeAndAway
     ishome : bool
         the bool to hold if it ishome hitting homeAndAway
     """
@@ -156,18 +145,8 @@ class HittingCareer(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    season : str
-        the batter of the hitting career
     gametype : Team
         the gametype code of the hitting career 
-    player : Person
-        the player of the hitting career
-    sport : Sport
-        the sport of the hitting career 
-    league : League
-        the league of the hitting career
-    team : Team
-        the team of the hitting career
     numteams : str
         the number of teams for the hitting career
     """
@@ -178,22 +157,12 @@ class HittingCareer(Stats, SimpleHittingStat):
 @dataclass(kw_only=True)
 class HittingCareerPlayoffs(Stats, SimpleHittingStat):
     """
-    A class to represent a hitting career or careerPlayoffs statistic
+    A class to represent a hitting careerPlayoffs statistic
 
     Attributes
     ----------
-    season : str
-        the batter of the hitting career
     gametype : Team
         the gametype code of the hitting career 
-    player : Person
-        the player of the hitting career
-    sport : Sport
-        the sport of the hitting career 
-    league : League
-        the league of the hitting career
-    team : Team
-        the team of the hitting career
     numteams : str
         the number of teams for the hitting career
     """
@@ -208,18 +177,8 @@ class HittingSeason(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    season : str
-        the batter of the hitting season
-    gametype : Team
+    gametype : str
         the gametype code of the hitting season 
-    player : Person
-        the player of the hitting season
-    sport : Sport
-        the sport of the hitting season 
-    league : League
-        the league of the hitting season
-    team : Team
-        the team of the hitting season
     numteams : str
         the number of teams for the hitting season
     """
@@ -235,18 +194,8 @@ class HittingAdvancedSeason(Stats, AdvancedHittingStat):
 
     Attributes
     ----------
-    season : str
-        the batter of the hitting season
     gametype : Team
         the gametype code of the hitting season 
-    player : Person
-        the player of the hitting season
-    sport : Sport
-        the sport of the hitting season 
-    league : League
-        the league of the hitting season
-    team : Team
-        the team of the hitting season
     numteams : str
         the number of teams for the hitting season
     """
@@ -261,18 +210,8 @@ class HittingYBY(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    season : Person
-        the batter of the hitting yearbyyear
     gametype : Team
         the gametype code of the hitting yearbyyear 
-    player : Person
-        the player of the hitting seayearbyyearson
-    sport : Sport
-        the sport of the hitting yearbyyear 
-    league : League
-        the league of the hitting yearbyyear
-    team : Team
-        the team of the hitting yearbyyear
     numteams : str
         the number of teams for the hitting yearbyyear
     """
@@ -283,22 +222,12 @@ class HittingYBY(Stats, SimpleHittingStat):
 @dataclass(kw_only=True)
 class HittingYBYPlayoffs(Stats, SimpleHittingStat):
     """
-    A class to represent a hitting yearbyyear or yearByYearPlayoffs statistic
+    A class to represent a hitting yearByYearPlayoffs statistic
 
     Attributes
     ----------
-    season : Person
-        the batter of the hitting yearbyyear
     gametype : Team
         the gametype code of the hitting yearbyyear 
-    player : Person
-        the player of the hitting seayearbyyearson
-    sport : Sport
-        the sport of the hitting yearbyyear 
-    league : League
-        the league of the hitting yearbyyear
-    team : Team
-        the team of the hitting yearbyyear
     numteams : str
         the number of teams for the hitting yearbyyear
     """
@@ -443,12 +372,6 @@ class HittingLog(Stats):
     ----------
     season : str
         season for the stat
-    stat : PlayLog
-        information regarding the play for the stat
-    team : Team
-        team of the stat
-    player : Person
-        player of the stat
     opponent : Team
         opponent
     date : str
@@ -495,10 +418,6 @@ class HittingPitchLog(Stats):
         season for the stat
     stat : PlayLog
         information regarding the play for the stat
-    team : Team
-        team of the stat
-    player : Person
-        player of the stat
     opponent : Team
         opponent
     date : str
@@ -529,8 +448,7 @@ class HittingPitchLog(Stats):
     atbatnumber: int
     ispitch: bool
     playid: Optional[str] = None 
-
-
+    
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
@@ -556,39 +474,109 @@ class SprayChart(Stats):
 
 @dataclass(kw_only=True)
 class HittingLastXGames(Stats, SimpleHittingStat):
+    """
+    A class to represent a lastXGames statistic
+
+    Attributes
+    ----------
+    gametype : Team
+        the gametype code of the pitching yearByYear 
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
     type_ = [ 'lastXGames' ]
     numteams: int
 
 @dataclass(kw_only=True)
 class HittingDateRange(Stats, SimpleHittingStat):
+    """
+    A class to represent a byDateRange statistic
+
+    Attributes
+    ----------
+    gametype : Team
+        the gametype code of the pitching yearByYear 
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
     type_ = [ 'byDateRange' ]
     numteams: int
 
 @dataclass(kw_only=True)
 class HittingDateRangeAdvanced(Stats, AdvancedHittingStat):
+    """
+    A class to represent a byDateRangeAdvanced statistic
+
+    Attributes
+    ----------
+    gametype : Team
+        the gametype code of the pitching yearByYear 
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
     type_ = [ 'byDateRangeAdvanced' ]
     numteams: int
 
 @dataclass(kw_only=True)
 class HittingByMonth(Stats, AdvancedHittingStat):
+    """
+    A class to represent a byMonth hitting statistic
+
+    Attributes
+    ----------
+    gametype : Team
+        the gametype code of the pitching yearByYear 
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
     type_ = [ 'byMonth' ]
     month: int
     numteams: int
 
 @dataclass(kw_only=True)
 class HittingByMonthPlayoffs(Stats, AdvancedHittingStat):
+    """
+    A class to represent a yearByYear hitting statistic
+
+    Attributes
+    ----------
+    month : str
+        the month of the stat
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
     type_ = [ 'byMonthPlayoffs' ]
     month: int
     numteams: int
 
 @dataclass(kw_only=True)
 class HittingDayOfWeek(Stats, SimpleHittingStat):
+    """
+    A class to represent a yearByYear hitting statistic
+
+    Attributes
+    ----------
+    month : str
+        the month of the stat
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
     type_ = [ 'byDayOfWeek' ]
     month: int
     numteams: int
 
 @dataclass(kw_only=True)
 class HittingDayOfWeekPlayoffs(Stats, SimpleHittingStat):
+    """
+    A class to represent a yearByYear hitting statistic
+
+    Attributes
+    ----------
+    month : str
+        the month of the stat
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
     type_ = [ 'byDayOfWeekPlayoffs' ]
     month: int
     numteams: int

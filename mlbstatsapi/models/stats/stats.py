@@ -121,10 +121,10 @@ class ExpectedStatistics(Stats):
 @dataclass(kw_only=True)
 class PitchArsenal(Stats):
     """
-    A class to represent a pitcharsenal stat for a hitter
+    A class to represent a pitcharsenal stat for a hitter and pitcher
 
-    Used for the following stat types:
-    pitchArsenal
+    Attributes
+    ----------
     """
     type_ = [ 'pitchArsenal' ]
     averagespeed: float
