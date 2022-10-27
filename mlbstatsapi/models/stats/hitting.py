@@ -398,10 +398,10 @@ class HittingLog(Stats):
     game: Union[Game, dict]
     details: Union[PlayDetails, dict]
     count: Union[Count, dict]
-    playid: Optional[str]
     pitchnumber: int
     atbatnumber: int
     ispitch: bool
+    playid: Optional[str] = None
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
@@ -518,7 +518,7 @@ class HittingDateRangeAdvanced(Stats, AdvancedHittingStat):
     numteams: int
 
 @dataclass(kw_only=True)
-class HittingByMonth(Stats, AdvancedHittingStat):
+class HittingByMonth(Stats, SimpleHittingStat):
     """
     A class to represent a byMonth hitting statistic
 
@@ -532,9 +532,10 @@ class HittingByMonth(Stats, AdvancedHittingStat):
     type_ = [ 'byMonth' ]
     month: int
     numteams: int
+    gamesplayed: int
 
 @dataclass(kw_only=True)
-class HittingByMonthPlayoffs(Stats, AdvancedHittingStat):
+class HittingByMonthPlayoffs(Stats, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
@@ -548,6 +549,7 @@ class HittingByMonthPlayoffs(Stats, AdvancedHittingStat):
     type_ = [ 'byMonthPlayoffs' ]
     month: int
     numteams: int
+    gamesplayed: int
 
 @dataclass(kw_only=True)
 class HittingDayOfWeek(Stats, SimpleHittingStat):
@@ -562,8 +564,8 @@ class HittingDayOfWeek(Stats, SimpleHittingStat):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'byDayOfWeek' ]
-    month: int
     numteams: int
+    dayofweek: int
 
 @dataclass(kw_only=True)
 class HittingDayOfWeekPlayoffs(Stats, SimpleHittingStat):
@@ -578,8 +580,7 @@ class HittingDayOfWeekPlayoffs(Stats, SimpleHittingStat):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'byDayOfWeekPlayoffs' ]
-    month: int
     numteams: int
-
+    dayofweek: int
 
 

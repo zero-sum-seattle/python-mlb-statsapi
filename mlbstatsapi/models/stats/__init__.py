@@ -62,7 +62,9 @@ from .pitching import (
 )
 
 from .catching import (
-    SimpleCatching
+    CatchingYearByYear,
+    SimpleCatching,
+    CatchingYearByYearPlayoffs
 )
 
 from .fielding import (

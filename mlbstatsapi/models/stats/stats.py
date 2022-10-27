@@ -173,6 +173,25 @@ class HotColdZones(Stats):
     def __post_init__(self):
         self.zones = [ ZoneCodes(**zone) for zone in self.zones ]
 
+@dataclass
+class SprayChart(Stats):
+    """
+    centerfield : float
+    leftcenterfield : float 
+    leftfield : float
+    rightcenterfield : float
+    rightfield
+    batter
+    
+    """
+    type_ = [ 'sprayChart' ]
+    batter: Union[Person, dict]
+    centerfield: float
+    leftcenterfield: float
+    leftfield: float
+    rightcenterfield: float
+    rightfield: float
+
 @dataclass(kw_only=True)
 class OutsAboveAverage(Stats):
     """

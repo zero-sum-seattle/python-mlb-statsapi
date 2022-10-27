@@ -5,6 +5,7 @@ from mlbstatsapi.mlbapi import Mlb
 
 from mlbstatsapi.models.stats import (
     SimpleCatching,
+    CatchingYearByYear
 )
 
 class TestOpponentsFacedHitting(unittest.TestCase):
@@ -19,7 +20,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         pass
     
     def test_catching_season_stats_for_catcher(self):
-        self.params = { "stats": ["season"], "group": "catching" }
+        self.params = { 'stats': [ 'season' ], 'group': 'catching' }
 
         catching = self.mlb.get_stats(self.catching_player, self.params)
 
@@ -32,6 +33,24 @@ class TestOpponentsFacedHitting(unittest.TestCase):
 
             # stat should be SimpleCatching
             self.assertIsInstance(stat, SimpleCatching)
+
+            # stat should have attr set
+            self.assertTrue(hasattr(stat, 'passedball'))
+
+    def test_catching_yearbyyear_stats_for_catcher(self):
+        self.params = { 'stats': [ 'yearByYear' ], 'group': 'catching' }
+
+        catching = self.mlb.get_stats(self.catching_player, self.params)
+
+        # check for None, or NoneType
+        self.assertTrue(len(catching))
+
+        for stat in catching:
+            # test that stat is not NoneType
+            self.assertTrue(stat)
+
+            # stat should be SimpleCatching
+            self.assertIsInstance(stat, CatchingYearByYear)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'passedball'))

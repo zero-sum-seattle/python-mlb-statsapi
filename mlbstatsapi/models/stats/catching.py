@@ -50,6 +50,11 @@ class SeasonCatching(Stats, SimpleCatching):
     gametype: str
 
 @dataclass(kw_only=True)
-class SeasonYearByYearPlayoffs(Stats, SimpleCatching):
+class CatchingYearByYearPlayoffs(Stats, SimpleCatching):
     type_ = [ 'yearByYearPlayoffs' ]
+    gametype: str
+
+@dataclass(kw_only=True)
+class CatchingYearByYear(Stats, SimpleCatching):
+    type_ = [ 'yearByYear' ]
     gametype: str
