@@ -1,17 +1,19 @@
-﻿from dataclasses import dataclass, field
-from typing import Optional, Union
+﻿from dataclasses import InitVar, dataclass, field
+from typing import Optional, Union, List
 
-from .stats import Stats
+from mlbstatsapi.models.people import Person, Position
+from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.sports import Sport
+from mlbstatsapi.models.game import Game
+
+from .stats import Stats, CodeDesc, Count
 
 @dataclass
-class SimplePitching(Stats):
+class SimplePitching:
     """
     A class to represent a advanced pitching statistics
-
-    Used for the following stat types:
-    season, yearByYearPlayoffs, careerRegularSeason, byDayOfWeek
     """
-    type_ = [ "season", 'yearByYearPlayoffs', 'careerRegularSeason', 'byDayOfWeek']
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
     groundouts: Optional[int] = None
@@ -74,14 +76,10 @@ class SimplePitching(Stats):
     inheritedrunnersscored: Optional[int] = None
 
 @dataclass
-class AdvancedPitching(Stats):
+class AdvancedPitching:
     """
     A class to represent a advanced pitching statistics
-
-    Used for the following stat types:
-    seasonAdvanced, careerAdvanced
     """
-    type_ = [ "seasonAdvanced", "careerAdvanced" ]
     winningpercentage: Optional[str] = None
     runsscoredper9: Optional[str] = None
     battersfaced: Optional[int] = None
@@ -130,17 +128,501 @@ class AdvancedPitching(Stats):
     bequeathedrunners: Optional[int] = None
     bequeathedrunnersscored: Optional[int] = None
 
-@dataclass
-class PitchingSaberMetrics(Stats):
+@dataclass(kw_only=True)
+class PitchingSabermetrics(Stats):
     """
     A class to represent a pitching sabermetric statistics
 
-    Used for the following stat types:
-    seasonAdvanced, careerAdvanced
+    Attributes
+    ----------
+    fip : float
+        Fielding Independent Pitching
+    fipminus : float
+        Fielding Independent Pitching Minus
+    ra9war : float
+        Runs Allowed 9 innings Wins Above Replacement
+    rar : float 
+        Runs Above Replacement
+    war : float
+        Wins Above Replacement
+    gametype : str
+        the gametype code of the pitching season 
+    numteams : str
+        the number of teams for the pitching season
     """
     type_ = ['sabermetrics']
+    gametype: str
     fip: float
     fipminus: float
     ra9war: float
     rar: float
     war: float
+    numteams: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingSeason(Stats, SimplePitching):
+    """
+    A class to represent a pitching season statistic
+
+    Attributes
+    ----------
+    gametype : str
+        the gametype code of the pitching season 
+    numteams : str
+        the number of teams for the pitching season
+    """
+    type_ = [ 'season', 'statsSingleSeason' ]
+    gametype: Optional[str] = None
+    numteams: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingCareer(Stats, SimplePitching):
+    """
+    A class to represent a pitching season statistic
+
+    Attributes
+    ----------
+    gametype : Team
+        the gametype code of the pitching yearByYear 
+    numteams : str
+        the number of teams for the pitching season
+    """
+    type_ = [ 'career']
+    gametype: Optional[str] = None
+    numteams: Optional[int] = None
+
+@dataclass(kw_only=True)
+class PitchingCareerAdvanced(Stats, AdvancedPitching):
+    """
+    A class to represent a pitching season statistic
+
+    Attributes
+    ----------
+    gametype : Team
+        the gametype code of the pitching yearByYear 
+    numteams : str
+        the number of teams for the pitching season
+    """
+    type_ = [ 'careerAdvanced' ]
+    gametype: Optional[str] = None
+    numteams: Optional[int] = None
+
+@dataclass(kw_only=True)
+class PitchingYBY(Stats, SimplePitching):
+    """
+    A class to represent a yearByYear season statistic
+
+    Attributes
+    ----------
+    gametype : Team
+        the gametype code of the pitching yearByYear 
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
+    type_ = [ 'yearByYear' ]
+    numteams: Optional[str] = None
+    gametype: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingYBYPlayoffs(Stats, SimplePitching):
+    """
+    A class to represent a yearByYear season statistic
+
+    Attributes
+    ----------
+    gametype : Team
+        the gametype code of the pitching yearByYear 
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
+    type_ = [ 'yearByYearPlayoffs' ]
+    numteams: Optional[str] = None
+    gametype: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingYBYAdvanced(Stats, AdvancedPitching):
+    """
+    A class to represent a pitching yearByYear statistic
+
+    Attributes
+    ----------
+    gametype : Team
+        the gametype code of the pitching yearByYear 
+    numteams : str
+        the number of teams for the pitching yearByYear
+    """
+    type_ = [ 'yearByYearAdvanced' ]
+    numteams: Optional[str] = None
+    gametype: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingSeasonAdvanced(Stats, AdvancedPitching):
+    """
+    A class to represent a pitching seasonAdvanced statistic
+
+    Attributes
+    ----------
+    gametype : Team
+        the gametype code of the pitching season 
+    numteams : str
+        the number of teams for the pitching season
+    """
+    type_ = [ "seasonAdvanced", 'statsSingleSeasonAdvanced' ]
+    gametype: Optional[str] = None
+    numteams: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingGameLog(Stats, SimplePitching):
+    """
+    A class to represent a gamelog stat for a pitcher
+
+    Attributes
+    ----------
+    ishome : bool
+        bool to hold ishome
+    iswin : bool
+        bool to hold iswin
+    game : Game
+        Game of the log
+    date : str
+        date of the log
+    gametype : str
+        type of game
+    opponent : Team
+        Team of the opponent
+    """
+    ishome: bool
+    iswin: bool
+    game: Union[Game, dict]
+    date: str
+    gametype: str
+    opponent: Union[Team, dict]
+    type_ = [ 'gameLog' ]
+
+@dataclass
+class PlayDetails:
+    """
+    A class to represent a gamelog stat for a hitter
+
+    Attributes
+    ----------
+    call : dict
+        play call code and description
+    description : str
+        description of the play
+    event : str
+        type of event
+    eventtype : str
+        type of event
+    isinplay : bool
+        is the ball in play true or false
+    isstrike : bool
+        is the ball a strike true or false
+    isball : bool
+        is it a ball true or false
+    isbasehit : bool
+        is the event a base hit true or false
+    isatbat : bool
+        is the event at bat true or false
+    isplateappearance : bool
+        is the event a at play appears true or false
+    type : dict
+        type of pitch code and description
+    batside : dict
+        bat side code and description
+    pitchhand : dict
+        pitch hand code and description
+    """
+    call: Union[CodeDesc, dict]
+    event: str
+    eventtype: str
+    isinplay: bool
+    isstrike: bool
+    isball: bool
+    isbasehit: bool
+    isatbat: bool
+    isplateappearance: bool
+    type: Union[CodeDesc, dict]
+    batside: Union[CodeDesc, dict]
+    pitchhand: Union[CodeDesc, dict]
+    description: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingLog(Stats):
+    """
+    A class to represent a gamelog stat for a pitcher
+
+    Attributes
+    ----------
+    season : str
+        season for the stat
+    stat : PlayLog
+        information regarding the play for the stat
+    team : Team
+        team of the stat
+    player : Person
+        player of the stat
+    opponent : Team
+        opponent
+    date : str
+        date of log
+    gametype : str
+        game type code
+    ishome : bool
+        is the game at home bool
+    pitcher : Person
+        pitcher of the log
+    batter : Person
+        batter of the log
+    game : Game
+        the game of the log
+
+    """
+    type_ = [ 'pitchLog' ]
+    season: str
+    opponent: Union[Team, dict]
+    date: str
+    gametype: str
+    ishome: bool
+    pitcher: Union[Person, dict]
+    batter: Union[Person, dict]
+    game: Union[Game, dict]
+    details: Union[PlayDetails, dict]
+    count: Union[Count, dict]
+    playid: str
+    pitchnumber: int
+    atbatnumber: int
+    ispitch: bool
+
+    def __post_init__(self):
+        self.details = PlayDetails(**self.details)
+        self.count = Count(**self.count)
+
+@dataclass(kw_only=True)
+class PitchingPlayLog(Stats):
+    """
+    A class to represent a gamelog stat for a pitcher
+
+    Attributes
+    ----------
+    season : str
+        season for the stat
+    stat : PlayLog
+        information regarding the play for the stat
+    team : Team
+        team of the stat
+    player : Person
+        player of the stat
+    opponent : Team
+        opponent
+    date : str
+        date of log
+    gametype : str
+        game type code
+    ishome : bool
+        is the game at home bool
+    pitcher : Person
+        pitcher of the log
+    batter : Person
+        batter of the log
+    game : Game
+        the game of the log
+
+    """
+    type_ = [ 'playLog' ]
+    season: str
+    opponent: Union[Team, dict]
+    date: str
+    gametype: str
+    ishome: bool
+    pitcher: Union[Person, dict]
+    batter: Union[Person, dict]
+    game: Union[Game, dict]
+    details: Union[PlayDetails, dict]
+    count: Union[Count, dict]
+    playid: str
+    pitchnumber: int
+    atbatnumber: int
+    ispitch: bool
+
+    def __post_init__(self):
+        self.details = PlayDetails(**self.details)
+        self.count = Count(**self.count)
+
+
+@dataclass(kw_only=True)
+class PitchingByDateRange(Stats, SimplePitching):
+    """
+    A class to represent a byDateRange stat for a pitcher
+
+    Attributes
+    ----------
+    daysofweek : int
+    numteams : int
+    daysofweek : int
+
+    """
+    type_ = [ 'byDateRange' ]
+    daysofweek: int
+    numteams: int
+    daysofweek: Optional[int] = None
+
+@dataclass(kw_only=True)
+class PitchingByDateRangeAdvanced(Stats, AdvancedPitching):
+    """
+    A class to represent a byDateRangeAdvanced stat for a pitcher
+
+    Attributes
+    ----------
+    numteams : int
+    daysofweek : int
+    """
+    type_ = [ 'byDateRangeAdvanced' ]
+    numteams: int
+    daysofweek: Optional[int] = None
+
+@dataclass(kw_only=True)
+class PitchingByMonth(Stats, SimplePitching):
+    """
+    A class to represent a byMonthPlayoffs stat for a pitcher
+
+    Attributes
+    ----------
+    month : int
+    numteams : int
+
+    """
+    type_ = [ 'byMonth', 'byMonthPlayoffs' ]
+    month: int
+    numteams: int
+
+@dataclass(kw_only=True)
+class PitchingByMonthPlayoffs(Stats, SimplePitching):
+    """
+    A class to represent a byMonthPlayoffs stat for a pitcher
+
+    Attributes
+    ----------
+    month : int
+    numteams : int
+    """
+    type_ = [ 'byMonthPlayoffs' ]
+    month: int
+    numteams: int
+
+@dataclass(kw_only=True)
+class PitchingByDayOfWeek(Stats, SimplePitching):
+    """
+    A class to represent a byDayOfWeek stat for a pitcher
+
+    Attributes
+    ----------
+    dayofweek : int
+    daysofweek : int
+    numteams: int
+
+    """
+    type_ = [ 'byDayOfWeek' ]
+    dayofweek: int
+    daysofweek: Optional[int] = None
+    numteams: int
+
+@dataclass(kw_only=True)
+class PitchingByDayOfWeekPlayOffs(Stats, SimplePitching):
+    """
+    A class to represent a byDayOfWeekPlayoffs stat for a pitcher
+
+    Attributes
+    ----------
+    daysofweek : int
+    daysofweek : int
+    numteams : int
+
+    """
+    type_ = [ 'byDayOfWeekPlayoffs' ]
+    dayofweek: int
+    daysofweek: Optional[int] = None
+    numteams: int
+
+@dataclass(kw_only=True)
+class PitchingHAA(Stats, SimplePitching):
+    """
+    A class to represent a homeAndAway stat for a pitcher
+
+    Attributes
+    ----------
+    ishome : bool
+
+    """
+    type_ = [ 'homeAndAway' ]
+    ishome: bool
+
+@dataclass(kw_only=True)
+class PitchingHAAPlayoffs(Stats, SimplePitching):
+    """
+    A class to represent a homeAndAwayPlayoffs stat for a pitcher
+
+    Attributes
+    ----------
+    ishome : bool
+    """
+    type_ = [ 'homeAndAwayPlayoffs' ]
+    ishome: bool
+
+@dataclass(kw_only=True)
+class PitchingWL(Stats, SimplePitching):
+    """
+    A class to represent a winLoss stat for a pitcher
+
+    Attributes
+    ----------
+    iswin : bool
+    """
+    type_ = [ 'winLoss' ]
+    iswin: bool
+
+@dataclass(kw_only=True)
+class PitchingWLPlayoffs(Stats, SimplePitching):
+    """
+    A class to represent a winLossPlayoffs stat for a pitcher
+
+    Attributes
+    ----------
+    iswin : bool
+    """
+    type_ = [ 'winLossPlayoffs' ]
+    iswin: bool
+
+@dataclass(kw_only=True)
+class PitchingRankings(Stats, SimplePitching):
+    """
+    A class to represent a rankings stat for a pitcher
+
+    Attributes
+    ----------
+    gametype : str
+    """
+    type_ = [ 'rankings', 'rankingsByYear' ]
+    gametype: str
+
+@dataclass(kw_only=True)
+class PitchingOpponentsFaced(Stats):
+    """
+    A class to represent a opponentsFaced stat for a pitcher
+
+    Attributes
+    ----------
+    gametype : str
+    group : str
+    pitch : Person
+    batter : Person
+    battingteam : Team
+    """
+    type_ = [ 'opponentsFaced' ]
+    gametype: str
+    group: str
+    pitcher: Union[Person, dict]
+    batter: Union[Person, dict]
+    battingteam: Union[Team, dict]
+
+
