@@ -14,7 +14,8 @@ from mlbstatsapi.models.stats import (
     HittingLog,
     HittingWL,
     HittingHAA,
-    HittingAdvancedSeason
+    HittingAdvancedSeason,
+    HittingPitchLog
 )
 
 class TestOpponentsFacedHitting(unittest.TestCase):
@@ -181,7 +182,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
 
     def test_pitch_arsenal_stat_on_position_player(self):
         """mlb get stats should return two hittinglog objects object"""
-        self.params = { 'stats': [ 'playLog', 'pitchLog' ], 'group': 'hitting' }
+        self.params = { 'stats': [ 'playLog' ], 'group': 'hitting' }
     
         log_stats = self.mlb.get_stats(self.position_player, self.params)
 
@@ -189,12 +190,33 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         self.assertIsNotNone(log_stats)
 
         # pitch_arsenal_stats should be greater than 1
-        self.assertTrue(len(log_stats) == 2)
+        self.assertTrue(len(log_stats) == 1)
 
         for stat in log_stats:
 
             # stat should be PitchArsenal
             self.assertIsInstance(stat, HittingLog)
+
+            # stat should have attr set
+            self.assertTrue(hasattr(stat, 'pitchnumber'))
+            self.assertTrue(hasattr(stat, 'atbatnumber'))
+
+    def test_pitch_arsenal_stat_on_position_player(self):
+        """mlb get stats should return two hittinglog objects object"""
+        self.params = { 'stats': [ 'pitchLog' ], 'group': 'hitting' }
+    
+        log_stats = self.mlb.get_stats(self.position_player, self.params)
+
+        # pitch_arsenal_stats should not be None or NoneType
+        self.assertIsNotNone(log_stats)
+
+        # pitch_arsenal_stats should be greater than 1
+        self.assertTrue(len(log_stats) > 1)
+
+        for stat in log_stats:
+
+            # stat should be PitchArsenal
+            self.assertIsInstance(stat, HittingPitchLog)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'pitchnumber'))

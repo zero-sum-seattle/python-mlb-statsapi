@@ -46,7 +46,10 @@ class SimpleCatching:
 
 @dataclass(kw_only=True)
 class SeasonCatching(Stats, SimpleCatching):
-    type_ = [ 'season', 'yearByYearPlayoffs' ]
-    league: Union[League, dict]
-    sport: Union[Sport, dict]
+    type_ = [ 'season' ]
+    gametype: str
+
+@dataclass(kw_only=True)
+class SeasonYearByYearPlayoffs(Stats, SimpleCatching):
+    type_ = [ 'yearByYearPlayoffs' ]
     gametype: str

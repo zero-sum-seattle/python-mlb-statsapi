@@ -16,7 +16,10 @@ from mlbstatsapi.models.stats import (
     PitchingOpponentsFaced,
     PitchingByDayOfWeek,
     PitchingWL,
-    PitchingYBYAdvanced
+    PitchingYBYAdvanced,
+    PitchingPlayLog,
+    PitchingYBYPlayoffs,
+    PitchingWLPlayoffs
 )
 class TestOpponentsFacedHitting(unittest.TestCase):
     @classmethod
@@ -103,7 +106,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
 
     def test_get_yearbyyear_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': ['yearByYear', 'yearByYearPlayoffs'], 'group': 'pitching' }
+        self.params = { 'stats': ['yearByYear'], 'group': 'pitching' }
         stats = self.mlb.get_stats(self.pitching_player, self.params)
 
         # test that stat is not NoneType
@@ -132,6 +135,22 @@ class TestOpponentsFacedHitting(unittest.TestCase):
 
             # stat should be SimplePitching
             self.assertIsInstance(stat, PitchingYBYAdvanced)
+
+            # stat should have a attr set
+            self.assertTrue(hasattr(stat, 'season'))
+
+        self.params = { 'stats': [ 'yearByYearPlayoffs' ], 'group': 'pitching' }
+        stats = self.mlb.get_stats(self.pitching_player, self.params)
+
+        # test that stat is not NoneType
+        self.assertTrue(len(stats))
+
+        for stat in stats:
+            # test that stat is not NoneType
+            self.assertTrue(stat)
+
+            # stat should be SimplePitching
+            self.assertIsInstance(stat, PitchingYBYPlayoffs)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'season'))
@@ -172,13 +191,13 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         stats = self.mlb.get_stats(self.pitching_player, self.params)
 
 
-        self.assertTrue(len(stat))
+        self.assertTrue(len(stats))
 
         for stat in stats:
             # test that stat in not NoneType
 
             # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingLog)
+            self.assertIsInstance(stat, PitchingPlayLog)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'ishome'))
@@ -209,7 +228,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
 
     def test_get_winloss_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'winLoss', 'winLossPlayoffs' ], 'group': 'pitching' }
+        self.params = { 'stats': [ 'winLoss' ], 'group': 'pitching' }
         stats = self.mlb.get_stats(self.pitching_player, self.params)
 
         self.assertTrue(len(stats) > 1)
@@ -223,6 +242,23 @@ class TestOpponentsFacedHitting(unittest.TestCase):
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'iswin'))
+
+    # def test_get_winloss_pitching_stats_for_player(self):
+    #     """mlb get stats should return pitching stats"""
+    #     self.params = { 'stats': [ 'winLossPlayoffs' ], 'group': 'pitching' }
+    #     stats = self.mlb.get_stats(self.pitching_player, self.params)
+
+    #     self.assertTrue(len(stats) == 1)
+
+    #     for stat in stats:
+    #         # test that stat is not NoneType
+    #         self.assertTrue(stat)
+
+    #         # stat should be SimplePitching
+    #         self.assertIsInstance(stat, PitchingWLPlayoffs)
+
+    #         # stat should have a attr set
+    #         self.assertTrue(hasattr(stat, 'iswin'))
 
     def test_get_opponentfaced_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""

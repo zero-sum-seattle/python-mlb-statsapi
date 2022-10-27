@@ -44,8 +44,6 @@ class SeasonFieldingAdvanced(Stats, SimpleFielding):
     gametype: Optional[str] = None
     position: Optional[Union[Position, dict]] = None
     numteams: Optional[str] = None
-    league: Optional[Union[League, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
@@ -56,19 +54,16 @@ class SeasonFielding(Stats, SimpleFielding):
     gametype: Optional[str] = None
     position: Optional[Union[Position, dict]] = None
     numteams: Optional[str] = None
-    league: Optional[Union[League, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
 @dataclass(kw_only=True)
 class FieldingCareer(Stats, SimpleFielding):
-    type_ = [ 'careerRegularSeason', 'careerPlayoffs' ]
+    type_ = [ 'careerRegularSeason' ]
     gametype: Optional[str] = None
     position: Optional[Union[Position, dict]] = None
     numteams: Optional[str] = None
-    league: Optional[Union[League, dict]] = None
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position    
@@ -79,7 +74,6 @@ class FieldingCareerPlayoffs(Stats, SimpleFielding):
     gametype: Optional[str] = None
     position: Optional[Union[Position, dict]] = None
     numteams: Optional[str] = None
-    league: Optional[Union[League, dict]] = None
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
@@ -161,7 +155,6 @@ class FieldingLastXGames(Stats, SimpleFielding):
 @dataclass(kw_only=True)
 class FieldingGameLog(Stats, SimpleFielding):
     type_ = [ 'gameLog' ]
-    league: Union[League, dict]
     opponent: Union[Team, dict]
     date: str
     gametype: str

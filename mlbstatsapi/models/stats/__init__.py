@@ -24,7 +24,12 @@ from .hitting import (
     HittingDateRangeAdvanced,
     HittingDateRange,
     HittingLastXGames,
-    HittingAdvancedSeason
+    HittingAdvancedSeason,
+    HittingPitchLog,
+    HittingDayOfWeekPlayoffs,
+    HittingByMonthPlayoffs,
+    HittingHAAPlayoffs,
+    HittingWLPlayoffs
 )
 
 from .pitching import (
@@ -32,6 +37,7 @@ from .pitching import (
     AdvancedPitching, 
     PitchingSeasonAdvanced,
     PitchingYBY,
+    PitchingYBYAdvanced,
     PitchingSeason,
     PitchingSabermetrics,
     PitchingCareer,
@@ -42,7 +48,17 @@ from .pitching import (
     PitchingOpponentsFaced,
     PitchingByDayOfWeek,
     PitchingWL,
-    PitchingYBYAdvanced
+    PitchingYBYAdvanced,
+    PitchingYBYPlayoffs,
+    PitchingByDateRangeAdvanced,
+    PitchingByMonth,
+    PitchingByMonthPlayoffs,
+    PitchingByDayOfWeek,
+    PitchingByDayOfWeekPlayOffs,
+    PitchingHAAPlayoffs,
+    PitchingWLPlayoffs,
+    PitchingRankings,
+    PitchingPlayLog,
 )
 
 from .catching import (
@@ -51,7 +67,24 @@ from .catching import (
 
 from .fielding import (
     SimpleFielding,
-    FieldingGameLog
+    FieldingGameLog,
+    FieldingLastXGames,
+    FieldingByMonthPlayoffs,
+    FieldingByMonth,
+    FieldingByDateRangeAdvanced,
+    FieldingByDayOfWeek,
+    FieldingWLPlayoffs,
+    FieldingWL,
+    FieldingYBYPlayoffs,
+    FieldingYBYAdvanced,
+    FieldingYBY,
+    FieldingHAAPlayoffs,
+    FieldingHAA,
+    FieldingCareerPlayoffs,
+    FieldingCareer,
+    SeasonFielding,
+    SeasonFieldingAdvanced
+
 )
 
 from .game import (

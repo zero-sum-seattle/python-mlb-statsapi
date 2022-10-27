@@ -101,8 +101,22 @@ class HittingWL(Stats, SimpleHittingStat):
     iswin : bool
         the bool to hold if a win or not for hitting winLoss
     """
-    type_ = [ 'winLoss', 'winLossPlayoffs' ]
-    season: str
+    type_ = [ 'winLoss' ]
+    iswin: bool
+
+@dataclass(kw_only=True)
+class HittingWLPlayoffs(Stats, SimpleHittingStat):
+    """
+    A class to represent a hitting winLoss or statistic
+
+    Attributes
+    ----------
+    season : str
+        the batter of the hitting winLoss
+    iswin : bool
+        the bool to hold if a win or not for hitting winLoss
+    """
+    type_ = [ 'winLossPlayoffs' ]
     iswin: bool
 
 @dataclass(kw_only=True)
@@ -117,8 +131,22 @@ class HittingHAA(Stats, SimpleHittingStat):
     ishome : bool
         the bool to hold if it ishome hitting homeAndAway
     """
-    type_ = [ 'homeAndAway', 'homeAndAwayPlayoffs' ]
-    season: str
+    type_ = [ 'homeAndAway' ]
+    ishome: bool
+
+@dataclass(kw_only=True)
+class HittingHAAPlayoffs(Stats, SimpleHittingStat):
+    """
+    A class to represent a hitting homeAndAway or statistic
+
+    Attributes
+    ----------
+    season : str
+        the batter of the hitting homeAndAway
+    ishome : bool
+        the bool to hold if it ishome hitting homeAndAway
+    """
+    type_ = [ 'homeAndAwayPlayoffs' ]
     ishome: bool
 
 @dataclass(kw_only=True)
@@ -143,8 +171,33 @@ class HittingCareer(Stats, SimpleHittingStat):
     numteams : str
         the number of teams for the hitting career
     """
-    type_ = [ 'career', 'careerPlayoffs', 'careerRegularSeason' ]
-    season: str
+    type_ = [ 'career', 'careerRegularSeason' ]
+    gametype: str
+    numteams: Optional[str] = None
+
+@dataclass(kw_only=True)
+class HittingCareerPlayoffs(Stats, SimpleHittingStat):
+    """
+    A class to represent a hitting career or careerPlayoffs statistic
+
+    Attributes
+    ----------
+    season : str
+        the batter of the hitting career
+    gametype : Team
+        the gametype code of the hitting career 
+    player : Person
+        the player of the hitting career
+    sport : Sport
+        the sport of the hitting career 
+    league : League
+        the league of the hitting career
+    team : Team
+        the team of the hitting career
+    numteams : str
+        the number of teams for the hitting career
+    """
+    type_ = [ 'careerPlayoffs' ]
     gametype: str
     numteams: Optional[str] = None
 
@@ -171,7 +224,6 @@ class HittingSeason(Stats, SimpleHittingStat):
         the number of teams for the hitting season
     """
     type_ = [ 'season', 'statsSingleSeason' ]
-    season: str
     gametype: Optional[str] = None
     numteams: Optional[str] = None
 
@@ -199,7 +251,6 @@ class HittingAdvancedSeason(Stats, AdvancedHittingStat):
         the number of teams for the hitting season
     """
     type_ = [ 'careerAdvanced', 'seasonAdvanced' ]
-    season: Optional[str] = None
     gametype: Optional[str] = None
     numteams: Optional[str] = None
 
@@ -225,8 +276,33 @@ class HittingYBY(Stats, SimpleHittingStat):
     numteams : str
         the number of teams for the hitting yearbyyear
     """
-    type_ = [ 'yearByYear', 'yearByYearPlayoffs' ]
-    season: str
+    type_ = [ 'yearByYear' ]
+    gametype: Optional[str] = None
+    numteams: Optional[str] = None
+
+@dataclass(kw_only=True)
+class HittingYBYPlayoffs(Stats, SimpleHittingStat):
+    """
+    A class to represent a hitting yearbyyear or yearByYearPlayoffs statistic
+
+    Attributes
+    ----------
+    season : Person
+        the batter of the hitting yearbyyear
+    gametype : Team
+        the gametype code of the hitting yearbyyear 
+    player : Person
+        the player of the hitting seayearbyyearson
+    sport : Sport
+        the sport of the hitting yearbyyear 
+    league : League
+        the league of the hitting yearbyyear
+    team : Team
+        the team of the hitting yearbyyear
+    numteams : str
+        the number of teams for the hitting yearbyyear
+    """
+    type_ = [ 'yearByYearPlayoffs' ]
     gametype: Optional[str] = None
     numteams: Optional[str] = None
 
@@ -260,7 +336,6 @@ class HittingSabermetrics(Stats):
 
     """
     type_ = [ 'sabermetrics' ]
-    season: str
     gametype: str
     woba: float
     wrc: float
@@ -353,10 +428,10 @@ class PlayDetails:
     isbasehit: bool
     isatbat: bool
     isplateappearance: bool
-    type: Union[CodeDesc, dict]
     batside: Union[CodeDesc, dict]
     pitchhand: Union[CodeDesc, dict]
     description: Optional[str] = None
+    type: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
 
 
 @dataclass(kw_only=True)
@@ -390,8 +465,7 @@ class HittingLog(Stats):
         the game of the log
 
     """
-    type_ = [ 'playLog', 'pitchLog' ]
-    season: str
+    type_ = [ 'playLog' ]
     opponent: Union[Team, dict]
     date: str
     gametype: str
@@ -401,10 +475,61 @@ class HittingLog(Stats):
     game: Union[Game, dict]
     details: Union[PlayDetails, dict]
     count: Union[Count, dict]
-    playid: str
+    playid: Optional[str]
     pitchnumber: int
     atbatnumber: int
     ispitch: bool
+
+    def __post_init__(self):
+        self.details = PlayDetails(**self.details)
+        self.count = Count(**self.count)
+
+@dataclass(kw_only=True)
+class HittingPitchLog(Stats):
+    """
+    A class to represent a gamelog stat for a hitter
+
+    Attributes
+    ----------
+    season : str
+        season for the stat
+    stat : PlayLog
+        information regarding the play for the stat
+    team : Team
+        team of the stat
+    player : Person
+        player of the stat
+    opponent : Team
+        opponent
+    date : str
+        date of log
+    gametype : str
+        game type code
+    ishome : bool
+        is the game at home bool
+    pitcher : Person
+        pitcher of the log
+    batter : Person
+        batter of the log
+    game : Game
+        the game of the log
+
+    """
+    type_ = [ 'pitchLog' ]
+    opponent: Union[Team, dict]
+    date: str
+    gametype: str
+    ishome: bool
+    pitcher: Union[Person, dict]
+    batter: Union[Person, dict]
+    game: Union[Game, dict]
+    details: Union[PlayDetails, dict]
+    count: Union[Count, dict]
+    pitchnumber: int
+    atbatnumber: int
+    ispitch: bool
+    playid: Optional[str] = None 
+
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
@@ -446,16 +571,27 @@ class HittingDateRangeAdvanced(Stats, AdvancedHittingStat):
 
 @dataclass(kw_only=True)
 class HittingByMonth(Stats, AdvancedHittingStat):
-    type_ = [ 'byMonthPlayoffs', 'byMonth' ]
-    season: str
+    type_ = [ 'byMonth' ]
+    month: int
+    numteams: int
+
+@dataclass(kw_only=True)
+class HittingByMonthPlayoffs(Stats, AdvancedHittingStat):
+    type_ = [ 'byMonthPlayoffs' ]
     month: int
     numteams: int
 
 @dataclass(kw_only=True)
 class HittingDayOfWeek(Stats, SimpleHittingStat):
-    type_ = [ 'byDayOfWeek', 'byDayOfWeekPlayoffs' ]
-    season: str
+    type_ = [ 'byDayOfWeek' ]
     month: int
     numteams: int
+
+@dataclass(kw_only=True)
+class HittingDayOfWeekPlayoffs(Stats, SimpleHittingStat):
+    type_ = [ 'byDayOfWeekPlayoffs' ]
+    month: int
+    numteams: int
+
 
 
