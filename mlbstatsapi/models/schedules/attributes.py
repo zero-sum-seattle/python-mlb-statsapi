@@ -150,13 +150,13 @@ class ScheduleGames:
     description: str
     scheduledinnings: int
     reversehomeawaystatus: bool
-    inningbreaklength: int
     gamesinseries: int
     seriesgamenumber: int
     seriesdescription: str
     recordsource: str
     ifnecessary: str
     ifnecessarydescription: str
+    inningbreaklength: Optional[int] = None
     rescheduledate: Optional[str] = None
     reschedulegamedate: Optional[str] = None
     rescheduledfrom: Optional[str] = None
