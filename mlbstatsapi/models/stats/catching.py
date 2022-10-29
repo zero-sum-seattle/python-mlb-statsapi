@@ -3,9 +3,8 @@ from typing import Optional, Union
 
 from .stats import Stats
 
-from mlbstatsapi.models.people import Person
-from mlbstatsapi.models.sports import Sport
-from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.game import Game
 
 @dataclass
 class SimpleCatching:
@@ -46,7 +45,7 @@ class SimpleCatching:
 
 @dataclass(kw_only=True)
 class SeasonCatching(Stats, SimpleCatching):
-    type_ = [ 'season' ]
+    type_ = [ 'season', 'statsSingleSeason' ]
     gametype: str
 
 @dataclass(kw_only=True)
@@ -58,3 +57,48 @@ class CatchingYearByYearPlayoffs(Stats, SimpleCatching):
 class CatchingYearByYear(Stats, SimpleCatching):
     type_ = [ 'yearByYear' ]
     gametype: str
+
+@dataclass(kw_only=True)
+class CatchingProjected(Stats, SimpleCatching):
+    type_ = [ 'projectedRos' ]
+
+@dataclass(kw_only=True)
+class CatchingCareer(Stats, SimpleCatching):
+    type_ = [ 'career', 'careerRegularSeason' ]
+    gametype: str
+    
+@dataclass(kw_only=True)
+class CatchingGameLog(Stats, SimpleCatching):
+    type_ = [ 'gameLog' ]
+    gametype: str
+    ishome: bool
+    iswin: bool
+    date: str
+    game: Union[Game, dict]
+    opponent: Union[Team, dict]
+
+@dataclass(kw_only=True)
+class CatchingLastXGames(Stats, SimpleCatching):
+    type_ = [ 'lastXGames' ]
+    numteams: int
+
+@dataclass(kw_only=True)
+class CatchingByDateRange(Stats, SimpleCatching):
+    type_ = [ 'byDateRange' ]
+    numteams: int
+
+@dataclass(kw_only=True)
+class CatchingByDayOfWeek(Stats, SimpleCatching):
+    type_ = [ 'byDayOfWeek' ]
+    dayofweek: int
+    numteams: int
+
+@dataclass(kw_only=True)
+class CatchingHomeAndAway(Stats, SimpleCatching):
+    type_ = [ 'homeAndAway' ]
+    ishome: bool
+
+@dataclass(kw_only=True)
+class CatchingWinLoss(Stats, SimpleCatching):
+    type_ = [ 'winLoss' ]
+    iswin: bool
