@@ -350,7 +350,7 @@ class PlayDetails:
 @dataclass(kw_only=True)
 class PitchingLog(Stats):
     """
-    A class to represent a gamelog stat for a pitcher
+    A class to represent a pitchLog stat for a pitcher
 
     Attributes
     ----------
@@ -401,7 +401,7 @@ class PitchingLog(Stats):
 @dataclass(kw_only=True)
 class PitchingPlayLog(Stats):
     """
-    A class to represent a gamelog stat for a pitcher
+    A class to represent a playLog stat for a pitcher
 
     Attributes
     ----------
@@ -625,4 +625,24 @@ class PitchingOpponentsFaced(Stats):
     batter: Union[Person, dict]
     battingteam: Union[Team, dict]
 
-
+@dataclass(kw_only=True)
+class PitchingExpectedStatistics(Stats):
+    """
+    A class to represent a excepted statistics statType: expectedStatistics.
+    """
+    """
+    Attributes
+    ----------
+    avg : str
+    slg : str
+    woba : str
+    wobaCon : str
+    rank : int
+    """
+    type_ = [ 'expectedStatistics' ]
+    avg : str
+    slg : str
+    woba : str
+    wobacon : str
+    gametype: str
+    rank : Optional[int] = None

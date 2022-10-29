@@ -89,34 +89,11 @@ class Stats:
     """
     stat_group: str
     stat_type: str
-    team: Optional[Union[Team, dict]] = None
-    player: Optional[Union[Person, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
-    league: Optional[Union[League, dict]] = None
+    team: Optional[Union[Team, dict]] = field(default_factory=dict)
+    player: Optional[Union[Person, dict]] = field(default_factory=dict)
+    sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
+    league: Optional[Union[League, dict]] = field(default_factory=dict)
     season: Optional[str] = None
-
-@dataclass(kw_only=True)
-class ExpectedStatistics(Stats):
-    """
-    A class to represent a excepted statistics statType: expectedStatistics.
-    """
-    """
-    Attributes
-    ----------
-    avg : str
-    slg : str
-    woba : str
-    wobaCon : str
-    rank : int
-    """
-    type_ = [ 'expectedStatistics' ]
-    avg : str
-    slg : str
-    woba : str
-    wobaCon : str
-    season: str
-    gametype: str
-    rank : Optional[int] = None
 
 @dataclass(kw_only=True)
 class PitchArsenal(Stats):
@@ -150,9 +127,9 @@ class ZoneCodes:
         batting percentage of the zone
     """
     zone: str
-    color: str
-    temp: str
     value: str
+    color: Optional[str] = None
+    temp: Optional[str] = None
 
 @dataclass(kw_only=True)
 class HotColdZones(Stats):
@@ -185,12 +162,13 @@ class SprayChart(Stats):
     
     """
     type_ = [ 'sprayChart' ]
-    batter: Union[Person, dict]
     centerfield: float
     leftcenterfield: float
     leftfield: float
     rightcenterfield: float
     rightfield: float
+    gametype: str
+    batter: Union[Person, dict] = field(default_factory=dict)
 
 @dataclass(kw_only=True)
 class OutsAboveAverage(Stats):

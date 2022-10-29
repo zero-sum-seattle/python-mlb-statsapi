@@ -10,7 +10,7 @@ from mlbstatsapi.models.stats import (
     ZoneCodes,
     HittingYBY,
     PitchArsenal,
-    ExpectedStatistics,
+    HittingExpectedStatistics,
     HittingLog,
     HittingWL,
     HittingHAA,
@@ -132,7 +132,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         for stat in expected_stats:
 
             # stat should be PitchArsenal
-            self.assertIsInstance(stat, ExpectedStatistics)
+            self.assertIsInstance(stat, HittingExpectedStatistics)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'wobacon'))
@@ -332,8 +332,9 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         # the list should not be empty
         self.assertTrue(len(stat_group_five))
 
+        print(len(stat_group_five))
         # stat_group_five 
-        self.assertTrue(len(stat_group_five) > 6)
+        self.assertTrue(len(stat_group_five) == 2)
 
         self.params_six = { 'stats': [ 'seasonAdvanced', 'season', 'careerAdvanced' ], 'group': 'hitting' }
 
@@ -344,7 +345,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         self.assertTrue(len(stat_group_six))
 
         # stat_group_six should be 3  
-        self.assertTrue(len(stat_group_six) == 3)
+        self.assertTrue(len(stat_group_six) > 3)
 
         
 

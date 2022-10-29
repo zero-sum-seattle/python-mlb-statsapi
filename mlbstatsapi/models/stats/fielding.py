@@ -1,4 +1,5 @@
 ﻿from dataclasses import dataclass, field
+from pdb import post_mortem
 from typing import Optional, Union
 
 from mlbstatsapi.models.people import Person, Position
@@ -15,6 +16,7 @@ class SimpleFielding:
     A class to represent a simple fielding statistics
 
     """
+    position: Optional[Union[Position, dict]] = field(default_factory=dict)
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
     caughtstealing: Optional[int] = None
@@ -38,6 +40,7 @@ class SimpleFielding:
     throwingerrors: Optional[int] = None
     pickoffs: Optional[int] = None
 
+
 @dataclass(kw_only=True)
 class SeasonFieldingAdvanced(Stats, SimpleFielding):
     """
@@ -52,8 +55,8 @@ class SeasonFieldingAdvanced(Stats, SimpleFielding):
     """
     type_ = ['seasonAdvanced', 'statsSingleSeasonAdvanced' ]
     gametype: Optional[str] = None
-    position: Optional[Union[Position, dict]] = None
     numteams: Optional[str] = None
+    position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
@@ -72,8 +75,8 @@ class SeasonFielding(Stats, SimpleFielding):
     """
     type_ = [ 'season', 'statsSingleSeason' ]
     gametype: Optional[str] = None
-    position: Optional[Union[Position, dict]] = None
     numteams: Optional[str] = None
+    position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
@@ -90,10 +93,10 @@ class FieldingCareer(Stats, SimpleFielding):
     numteams : str
         the number of teams for the fielding season
     """
-    type_ = [ 'careerRegularSeason' ]
+    type_ = [ 'careerRegularSeason', 'career' ]
     gametype: Optional[str] = None
-    position: Optional[Union[Position, dict]] = None
     numteams: Optional[str] = None
+    position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position    
@@ -106,14 +109,14 @@ class FieldingCareerPlayoffs(Stats, SimpleFielding):
     Attributes
     ----------
     gametype : Team
-        the gametype code of the fielding yearByYear 
+        the gametype code of the fielding careerPlayoffs 
     numteams : str
-        the number of teams for the fielding season
+        the number of teams for the fielding careerPlayoffs
     """
     type_ = [ 'careerPlayoffs' ]
     gametype: Optional[str] = None
-    position: Optional[Union[Position, dict]] = None
     numteams: Optional[str] = None
+    position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
@@ -126,9 +129,9 @@ class FieldingHAA(Stats, SimpleFielding):
     Attributes
     ----------
     gametype : Team
-        the gametype code of the fielding yearByYear 
+        the gametype code of the fielding homeAndAway 
     numteams : str
-        the number of teams for the fielding season
+        the number of teams for the fielding homeAndAway
     """
     type_ = [ 'homeAndAway' ]
     ishome: bool
@@ -143,7 +146,7 @@ class FieldingHAAPlayoffs(Stats, SimpleFielding):
     gametype : Team
         the gametype code of the pitching yearByYear 
     numteams : str
-        the number of teams for the pitching season
+        the number of teams for the pitching yearByYear
     """
     type_ = [ 'homeAndAwayPlayoffs' ]
     ishome: bool
@@ -161,7 +164,8 @@ class FieldingYBY(Stats, SimpleFielding):
         the number of teams for the pitching season
     """
     type_ = [ 'yearByYear' ]
-    team: Union[Team, dict]
+    gametype: str 
+    numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
 class FieldingYBYAdvanced(Stats, SimpleFielding):
@@ -176,7 +180,6 @@ class FieldingYBYAdvanced(Stats, SimpleFielding):
         the number of teams for the fielding season
     """
     type_ = [ 'yearByYearAdvanced']
-    team: Union[Team, dict]
 
 @dataclass(kw_only=True)
 class FieldingYBYPlayoffs(Stats, SimpleFielding):
@@ -188,10 +191,9 @@ class FieldingYBYPlayoffs(Stats, SimpleFielding):
     gametype : Team
         the gametype code of the fielding yearByYearPlayoffs 
     numteams : str
-        the number of teams for the fielding season
+        the number of teams for the fielding yearByYearPlayoffs
     """
     type_ = [ 'yearByYearPlayoffs' ]
-    team: Union[Team, dict]
 
 @dataclass(kw_only=True)
 class FieldingWL(Stats, SimpleFielding):
@@ -203,7 +205,7 @@ class FieldingWL(Stats, SimpleFielding):
     gametype : Team
         the gametype code of the fielding winLoss 
     numteams : str
-        the number of teams for the fielding season
+        the number of teams for the fielding winLoss
     """
     type_ = ['winLoss' ]
     iswin: bool
@@ -242,9 +244,8 @@ class FieldingByDayOfWeek(Stats, SimpleFielding):
 @dataclass(kw_only=True)
 class FieldingByDateRangeAdvanced(Stats, SimpleFielding):
     type_ = [ 'byDateRangeAdvanced' ]
-    dayofweek: str
     numteams: str
-    position: Union[Position, dict]
+    position: Union[Position, dict] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
@@ -309,12 +310,12 @@ class FieldingGameLog(Stats, SimpleFielding):
         the number of teams for the fielding gameLog
     """
     type_ = [ 'gameLog' ]
-    opponent: Union[Team, dict]
+    opponent: Union[Team, dict] = field(default_factory=dict)
     date: str
     gametype: str
     ishome: bool
     iswin: bool
-    position: Union[Position, dict]
-    game: Union[Game, dict]
+    position: Union[Position, dict] = field(default_factory=dict)
+    game: Union[Game, dict] = field(default_factory=dict)
 
 

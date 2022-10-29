@@ -1,6 +1,5 @@
 from .stats import (
     Stats, 
-    ExpectedStatistics,
     PitchArsenal,
     CodeDesc,
     Count,
@@ -29,7 +28,8 @@ from .hitting import (
     HittingDayOfWeekPlayoffs,
     HittingByMonthPlayoffs,
     HittingHAAPlayoffs,
-    HittingWLPlayoffs
+    HittingWLPlayoffs,
+    HittingExpectedStatistics
 )
 
 from .pitching import (

@@ -453,25 +453,6 @@ class HittingPitchLog(Stats):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
 
-@dataclass
-class SprayChart(Stats):
-    """
-    centerfield : float
-    leftcenterfield : float 
-    leftfield : float
-    rightcenterfield : float
-    rightfield
-    batter
-    
-    """
-    type_ = [ 'sprayChart' ]
-    batter: Union[Person, dict]
-    centerfield: float
-    leftcenterfield: float
-    leftfield: float
-    rightcenterfield: float
-    rightfield: float
-
 @dataclass(kw_only=True)
 class HittingLastXGames(Stats, SimpleHittingStat):
     """
@@ -583,4 +564,24 @@ class HittingDayOfWeekPlayoffs(Stats, SimpleHittingStat):
     numteams: int
     dayofweek: int
 
-
+@dataclass(kw_only=True)
+class HittingExpectedStatistics(Stats):
+    """
+    A class to represent a excepted statistics statType: expectedStatistics.
+    """
+    """
+    Attributes
+    ----------
+    avg : str
+    slg : str
+    woba : str
+    wobaCon : str
+    rank : int
+    """
+    type_ = [ 'expectedStatistics' ]
+    avg : str
+    slg : str
+    woba : str
+    wobacon : str
+    gametype: str
+    rank : Optional[int] = None
