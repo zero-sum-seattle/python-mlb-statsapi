@@ -10,7 +10,7 @@ from mlbstatsapi.models.stats import (
 )
 
 
-class TestTeamStatCreation(unittest.TestCase):
+class TestPitchingTeamStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()

@@ -9,19 +9,12 @@ from mlbstatsapi.models.stats import (
     PitchingSabermetrics,
     PitchingCareer,
     PitchingCareerAdvanced,
-    PitchingYBY,
-    PitchingLog,
     PitchingGameLog,
-    PitchingHAA,
     PitchingOpponentsFaced,
     PitchingByDayOfWeek,
-    PitchingWL,
-    PitchingYBYAdvanced,
     PitchingPlayLog,
-    PitchingYBYPlayoffs,
-    PitchingWLPlayoffs
 )
-class TestOpponentsFacedHitting(unittest.TestCase):
+class TestPlayerPitchingStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()

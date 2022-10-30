@@ -6,12 +6,11 @@ from mlbstatsapi import TheMlbStatsApiException
 
 from mlbstatsapi.models.stats import (
     HittingSeason,
-    HittingYBY,
     HittingExpectedStatistics,
     HittingAdvancedSeason 
 )
 
-class TestOpponentsFacedHitting(unittest.TestCase):
+class TestTeamHitting(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()

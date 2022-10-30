@@ -8,7 +8,7 @@ from mlbstatsapi.models.stats import (
     CatchingYearByYear
 )
 
-class TestOpponentsFacedHitting(unittest.TestCase):
+class TestCatchingPlayerStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()

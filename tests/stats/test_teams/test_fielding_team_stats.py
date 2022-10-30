@@ -7,7 +7,7 @@ from mlbstatsapi.models.stats import (
     SimpleFielding
 )
 
-class TestTeamStatCreation(unittest.TestCase):
+class TestTeamFieldingStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
