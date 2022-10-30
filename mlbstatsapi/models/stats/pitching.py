@@ -151,13 +151,11 @@ class PitchingSabermetrics(Stats):
         the number of teams for the pitching season
     """
     type_ = ['sabermetrics']
-    gametype: str
     fip: float
     fipminus: float
     ra9war: float
     rar: float
     war: float
-    numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
 class PitchingSeason(Stats, SimplePitching):
@@ -172,8 +170,6 @@ class PitchingSeason(Stats, SimplePitching):
         the number of teams for the pitching season
     """
     type_ = [ 'season', 'statsSingleSeason' ]
-    gametype: Optional[str] = None
-    numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
 class PitchingCareer(Stats, SimplePitching):
@@ -188,8 +184,6 @@ class PitchingCareer(Stats, SimplePitching):
         the number of teams for the pitching season
     """
     type_ = [ 'career']
-    gametype: Optional[str] = None
-    numteams: Optional[int] = None
 
 @dataclass(kw_only=True)
 class PitchingCareerAdvanced(Stats, AdvancedPitching):
@@ -204,8 +198,6 @@ class PitchingCareerAdvanced(Stats, AdvancedPitching):
         the number of teams for the pitching season
     """
     type_ = [ 'careerAdvanced' ]
-    gametype: Optional[str] = None
-    numteams: Optional[int] = None
 
 @dataclass(kw_only=True)
 class PitchingYBY(Stats, SimplePitching):
@@ -220,8 +212,6 @@ class PitchingYBY(Stats, SimplePitching):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'yearByYear' ]
-    numteams: Optional[str] = None
-    gametype: Optional[str] = None
 
 @dataclass(kw_only=True)
 class PitchingYBYPlayoffs(Stats, SimplePitching):
@@ -236,8 +226,6 @@ class PitchingYBYPlayoffs(Stats, SimplePitching):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'yearByYearPlayoffs' ]
-    numteams: Optional[str] = None
-    gametype: Optional[str] = None
 
 @dataclass(kw_only=True)
 class PitchingYBYAdvanced(Stats, AdvancedPitching):
@@ -252,8 +240,6 @@ class PitchingYBYAdvanced(Stats, AdvancedPitching):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'yearByYearAdvanced' ]
-    numteams: Optional[str] = None
-    gametype: Optional[str] = None
 
 @dataclass(kw_only=True)
 class PitchingSeasonAdvanced(Stats, AdvancedPitching):
@@ -268,8 +254,6 @@ class PitchingSeasonAdvanced(Stats, AdvancedPitching):
         the number of teams for the pitching season
     """
     type_ = [ "seasonAdvanced", 'statsSingleSeasonAdvanced' ]
-    gametype: Optional[str] = None
-    numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
 class PitchingGameLog(Stats, SimplePitching):
@@ -295,7 +279,6 @@ class PitchingGameLog(Stats, SimplePitching):
     iswin: bool
     game: Union[Game, dict]
     date: str
-    gametype: str
     opponent: Union[Team, dict]
     type_ = [ 'gameLog' ]
 
@@ -382,7 +365,6 @@ class PitchingLog(Stats):
     season: str
     opponent: Union[Team, dict]
     date: str
-    gametype: str
     ishome: bool
     pitcher: Union[Person, dict]
     batter: Union[Person, dict]
@@ -433,7 +415,6 @@ class PitchingPlayLog(Stats):
     season: str
     opponent: Union[Team, dict]
     date: str
-    gametype: str
     ishome: bool
     pitcher: Union[Person, dict]
     batter: Union[Person, dict]
@@ -463,8 +444,6 @@ class PitchingByDateRange(Stats, SimplePitching):
 
     """
     type_ = [ 'byDateRange' ]
-    daysofweek: int
-    numteams: int
     daysofweek: Optional[int] = None
 
 @dataclass(kw_only=True)
@@ -478,7 +457,6 @@ class PitchingByDateRangeAdvanced(Stats, AdvancedPitching):
     daysofweek : int
     """
     type_ = [ 'byDateRangeAdvanced' ]
-    numteams: int
     daysofweek: Optional[int] = None
 
 @dataclass(kw_only=True)
@@ -494,7 +472,6 @@ class PitchingByMonth(Stats, SimplePitching):
     """
     type_ = [ 'byMonth', 'byMonthPlayoffs' ]
     month: int
-    numteams: int
 
 @dataclass(kw_only=True)
 class PitchingByMonthPlayoffs(Stats, SimplePitching):
@@ -508,7 +485,6 @@ class PitchingByMonthPlayoffs(Stats, SimplePitching):
     """
     type_ = [ 'byMonthPlayoffs' ]
     month: int
-    numteams: int
 
 @dataclass(kw_only=True)
 class PitchingByDayOfWeek(Stats, SimplePitching):
@@ -523,9 +499,7 @@ class PitchingByDayOfWeek(Stats, SimplePitching):
 
     """
     type_ = [ 'byDayOfWeek' ]
-    dayofweek: int
     daysofweek: Optional[int] = None
-    numteams: int
 
 @dataclass(kw_only=True)
 class PitchingByDayOfWeekPlayOffs(Stats, SimplePitching):
@@ -540,9 +514,7 @@ class PitchingByDayOfWeekPlayOffs(Stats, SimplePitching):
 
     """
     type_ = [ 'byDayOfWeekPlayoffs' ]
-    dayofweek: int
     daysofweek: Optional[int] = None
-    numteams: int
 
 @dataclass(kw_only=True)
 class PitchingHAA(Stats, SimplePitching):
@@ -603,7 +575,6 @@ class PitchingRankings(Stats, SimplePitching):
     gametype : str
     """
     type_ = [ 'rankings', 'rankingsByYear' ]
-    gametype: str
 
 @dataclass(kw_only=True)
 class PitchingOpponentsFaced(Stats):
@@ -619,7 +590,6 @@ class PitchingOpponentsFaced(Stats):
     battingteam : Team
     """
     type_ = [ 'opponentsFaced' ]
-    gametype: str
     group: str
     pitcher: Union[Person, dict]
     batter: Union[Person, dict]
@@ -644,5 +614,4 @@ class PitchingExpectedStatistics(Stats):
     slg : str
     woba : str
     wobacon : str
-    gametype: str
     rank : Optional[int] = None

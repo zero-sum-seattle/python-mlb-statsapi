@@ -1,12 +1,8 @@
 ﻿from dataclasses import dataclass, field
 from typing import Optional, Union, List
 
-import mlbstatsapi
-
 from mlbstatsapi.models.people import Person, Position
 from mlbstatsapi.models.teams import Team
-from mlbstatsapi.models.leagues import League
-from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.game import Game
 
 from .stats import Stats, CodeDesc, Count
@@ -151,8 +147,6 @@ class HittingCareer(Stats, SimpleHittingStat):
         the number of teams for the hitting career
     """
     type_ = [ 'career', 'careerRegularSeason' ]
-    gametype: str
-    numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
 class HittingCareerPlayoffs(Stats, SimpleHittingStat):
@@ -167,8 +161,6 @@ class HittingCareerPlayoffs(Stats, SimpleHittingStat):
         the number of teams for the hitting career
     """
     type_ = [ 'careerPlayoffs' ]
-    gametype: str
-    numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
 class HittingSeason(Stats, SimpleHittingStat):
@@ -183,8 +175,6 @@ class HittingSeason(Stats, SimpleHittingStat):
         the number of teams for the hitting season
     """
     type_ = [ 'season', 'statsSingleSeason' ]
-    gametype: Optional[str] = None
-    numteams: Optional[str] = None
 
 
 @dataclass(kw_only=True)
@@ -200,8 +190,6 @@ class HittingAdvancedSeason(Stats, AdvancedHittingStat):
         the number of teams for the hitting season
     """
     type_ = [ 'careerAdvanced', 'seasonAdvanced' ]
-    gametype: Optional[str] = None
-    numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
 class HittingYBY(Stats, SimpleHittingStat):
@@ -216,8 +204,6 @@ class HittingYBY(Stats, SimpleHittingStat):
         the number of teams for the hitting yearbyyear
     """
     type_ = [ 'yearByYear' ]
-    gametype: Optional[str] = None
-    numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
 class HittingYBYPlayoffs(Stats, SimpleHittingStat):
@@ -232,8 +218,6 @@ class HittingYBYPlayoffs(Stats, SimpleHittingStat):
         the number of teams for the hitting yearbyyear
     """
     type_ = [ 'yearByYearPlayoffs' ]
-    gametype: Optional[str] = None
-    numteams: Optional[str] = None
 
 @dataclass
 class OpponentsFacedHitting(Stats):
@@ -256,7 +240,6 @@ class OpponentsFacedHitting(Stats):
     batter: Union[Person, dict]
     fieldingteam: Union[Team, dict]
     pitcher: Union[Person, dict]
-    gametype: Optional[str]
 
 @dataclass
 class HittingSabermetrics(Stats):
@@ -265,16 +248,14 @@ class HittingSabermetrics(Stats):
 
     """
     type_ = [ 'sabermetrics' ]
-    gametype: str
     woba: float
     wrc: float
     wrcplus: float
     rar: float
     war: float
-    numteams: Optional[int] = None
 
 @dataclass(kw_only=True)
-class HittingLog(Stats, SimpleHittingStat):
+class HittingGameLog(Stats, SimpleHittingStat):
     """
     A class to represent a gamelog stat for a hitter
 
@@ -301,14 +282,13 @@ class HittingLog(Stats, SimpleHittingStat):
     player : Person
         Player of the stat
     """
-    type_ = [ 'gameLog' ]
-    positionsplayed: List[Position]
     ishome: bool
     iswin: bool
     game: Union[Game, dict]
     date: str
-    gametype: str
     opponent: Union[Team, dict]
+    type_ = [ 'gameLog' ]
+    positionsplayed: Optional[List[Position]] = field(default_factory=list)
 
     def __post_init__(self):
         if self.positionsplayed:
@@ -364,7 +344,7 @@ class PlayDetails:
 
 
 @dataclass(kw_only=True)
-class HittingLog(Stats):
+class HittingPlayLog(Stats):
     """
     A class to represent a gamelog stat for a hitter
 
@@ -388,10 +368,8 @@ class HittingLog(Stats):
         the game of the log
 
     """
-    type_ = [ 'playLog' ]
     opponent: Union[Team, dict]
     date: str
-    gametype: str
     ishome: bool
     pitcher: Union[Person, dict]
     batter: Union[Person, dict]
@@ -402,6 +380,8 @@ class HittingLog(Stats):
     atbatnumber: int
     ispitch: bool
     playid: Optional[str] = None
+    type_ = [ 'playLog' ]
+
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
@@ -437,7 +417,6 @@ class HittingPitchLog(Stats):
     type_ = [ 'pitchLog' ]
     opponent: Union[Team, dict]
     date: str
-    gametype: str
     ishome: bool
     pitcher: Union[Person, dict]
     batter: Union[Person, dict]
@@ -466,7 +445,6 @@ class HittingLastXGames(Stats, SimpleHittingStat):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'lastXGames' ]
-    numteams: int
 
 @dataclass(kw_only=True)
 class HittingDateRange(Stats, SimpleHittingStat):
@@ -481,7 +459,6 @@ class HittingDateRange(Stats, SimpleHittingStat):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'byDateRange' ]
-    numteams: int
 
 @dataclass(kw_only=True)
 class HittingDateRangeAdvanced(Stats, AdvancedHittingStat):
@@ -496,7 +473,6 @@ class HittingDateRangeAdvanced(Stats, AdvancedHittingStat):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'byDateRangeAdvanced' ]
-    numteams: int
 
 @dataclass(kw_only=True)
 class HittingByMonth(Stats, SimpleHittingStat):
@@ -512,7 +488,6 @@ class HittingByMonth(Stats, SimpleHittingStat):
     """
     type_ = [ 'byMonth' ]
     month: int
-    numteams: int
     gamesplayed: int
 
 @dataclass(kw_only=True)
@@ -529,7 +504,6 @@ class HittingByMonthPlayoffs(Stats, SimpleHittingStat):
     """
     type_ = [ 'byMonthPlayoffs' ]
     month: int
-    numteams: int
     gamesplayed: int
 
 @dataclass(kw_only=True)
@@ -545,7 +519,6 @@ class HittingDayOfWeek(Stats, SimpleHittingStat):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'byDayOfWeek' ]
-    numteams: int
     dayofweek: int
 
 @dataclass(kw_only=True)
@@ -561,7 +534,6 @@ class HittingDayOfWeekPlayoffs(Stats, SimpleHittingStat):
         the number of teams for the pitching yearByYear
     """
     type_ = [ 'byDayOfWeekPlayoffs' ]
-    numteams: int
     dayofweek: int
 
 @dataclass(kw_only=True)

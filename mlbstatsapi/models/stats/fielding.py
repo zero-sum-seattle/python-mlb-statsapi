@@ -54,8 +54,6 @@ class SeasonFieldingAdvanced(Stats, SimpleFielding):
         the number of teams for the fielding season
     """
     type_ = ['seasonAdvanced', 'statsSingleSeasonAdvanced' ]
-    gametype: Optional[str] = None
-    numteams: Optional[str] = None
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
@@ -74,8 +72,6 @@ class SeasonFielding(Stats, SimpleFielding):
         the number of teams for the fielding season
     """
     type_ = [ 'season', 'statsSingleSeason' ]
-    gametype: Optional[str] = None
-    numteams: Optional[str] = None
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
@@ -94,8 +90,6 @@ class FieldingCareer(Stats, SimpleFielding):
         the number of teams for the fielding season
     """
     type_ = [ 'careerRegularSeason', 'career' ]
-    gametype: Optional[str] = None
-    numteams: Optional[str] = None
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
@@ -114,8 +108,6 @@ class FieldingCareerPlayoffs(Stats, SimpleFielding):
         the number of teams for the fielding careerPlayoffs
     """
     type_ = [ 'careerPlayoffs' ]
-    gametype: Optional[str] = None
-    numteams: Optional[str] = None
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
@@ -164,8 +156,6 @@ class FieldingYBY(Stats, SimpleFielding):
         the number of teams for the pitching season
     """
     type_ = [ 'yearByYear' ]
-    gametype: str 
-    numteams: Optional[str] = None
 
 @dataclass(kw_only=True)
 class FieldingYBYAdvanced(Stats, SimpleFielding):
@@ -239,12 +229,10 @@ class FieldingByDayOfWeek(Stats, SimpleFielding):
     """
     type_ = [ 'byDayOfWeek' ]
     dayofweek: str
-    numteams: str
 
 @dataclass(kw_only=True)
 class FieldingByDateRangeAdvanced(Stats, SimpleFielding):
     type_ = [ 'byDateRangeAdvanced' ]
-    numteams: str
     position: Union[Position, dict] = field(default_factory=dict)
 
     def __post_init__(self):
@@ -264,7 +252,6 @@ class FieldingByMonth(Stats, SimpleFielding):
     """
     type_ = [ 'byMonth' ]
     month: int
-    numteams: int
 
 @dataclass(kw_only=True)
 class FieldingByMonthPlayoffs(Stats, SimpleFielding):
@@ -280,7 +267,6 @@ class FieldingByMonthPlayoffs(Stats, SimpleFielding):
     """
     type_ = [ 'byMonthPlayoffs' ]
     month: int
-    numteams: int
 
 @dataclass(kw_only=True)
 class FieldingLastXGames(Stats, SimpleFielding):
@@ -295,7 +281,6 @@ class FieldingLastXGames(Stats, SimpleFielding):
         the number of teams for the fielding lastXGames
     """
     type_ = [ 'lastXGames' ]
-    numteams: int
 
 @dataclass(kw_only=True)
 class FieldingGameLog(Stats, SimpleFielding):
@@ -312,7 +297,6 @@ class FieldingGameLog(Stats, SimpleFielding):
     type_ = [ 'gameLog' ]
     opponent: Union[Team, dict] = field(default_factory=dict)
     date: str
-    gametype: str
     ishome: bool
     iswin: bool
     position: Union[Position, dict] = field(default_factory=dict)

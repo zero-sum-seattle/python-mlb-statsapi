@@ -2,10 +2,9 @@
 from typing import Optional, Union, List
 
 from mlbstatsapi.models.teams import Team
-from mlbstatsapi.models.people import Person, Position
+from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
-from mlbstatsapi.models.game import Game
 
 
 
@@ -94,6 +93,8 @@ class Stats:
     sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
     league: Optional[Union[League, dict]] = field(default_factory=dict)
     season: Optional[str] = None
+    numteams: Optional[int] = None
+    gametype: Optional[str] = None
 
 @dataclass(kw_only=True)
 class PitchArsenal(Stats):
@@ -167,7 +168,6 @@ class SprayChart(Stats):
     leftfield: float
     rightcenterfield: float
     rightfield: float
-    gametype: str
     batter: Union[Person, dict] = field(default_factory=dict)
 
 @dataclass(kw_only=True)

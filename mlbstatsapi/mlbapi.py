@@ -714,35 +714,26 @@ class Mlb:
             for stats in mlbdata.data['stats']:
                 # set stat_group and stat_type
                 # default to stats if no group present
-                stat_group = stats['group']['displayname'] if 'group' in stats else "stats"
-                stat_type = stats['type']['displayname'] if 'type' in stats else None
-
+                stat_group = stats['group']['displayname'] if 'group' in stats else "stats" # default to stats if no group present
+                stat_type = stats['type']['displayname'] if 'type' in stats else None # default to None if no type present
                 # convert string base on stat_group to module name
                 stat_module = f"mlbstatsapi.models.stats.{stat_group}"
                 stat_module = importlib.import_module(stat_module)
 
                 # if splits is in stats and splits not empty
                 if ('splits' in stats and stats['splits']):
-
                     # loop through classes found in stat_module 
                     for name, obj in inspect.getmembers(stat_module):
-
                         # if obj has _type attr and stat_type matches class var
                         if inspect.isclass(obj) and (hasattr(obj, 'type_') and stat_type in obj.type_):
-
                             # loop through json in splits
                             for stat in stats['splits']:
                                 if 'stat' in stat:
                                     if stat_type in stat_log_type: # check for log stat type
                                         stat = _transform_mlbdata(stat, [{'stat':'play'}])
-                                        #self._logger.error(msg=(stat)) # log error JSON
-
                                     else:
-
                                         stat = _transform_mlbdata(stat, 'stat')
                                 
-                                # log error JSON
-                                #self._logger.error(msg=(stat_type, stat_group, obj, name)) 
                                 # create object from stat
                                 splits.append(obj(stat_type=stat_type, stat_group=stat_group, **stat))
 
