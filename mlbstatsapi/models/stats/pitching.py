@@ -1,10 +1,8 @@
 ﻿from dataclasses import InitVar, dataclass, field
 from typing import Optional, Union, List
 
-from mlbstatsapi.models.people import Person, Position
+from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
-from mlbstatsapi.models.leagues import League
-from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.game import Game
 
 from .stats import Stats, CodeDesc, Count
@@ -13,6 +11,8 @@ from .stats import Stats, CodeDesc, Count
 class SimplePitching:
     """
     A class to represent a advanced pitching statistics
+
+    attributes are all optional as there is no documentation for the stats endpoint
     """
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
@@ -79,6 +79,8 @@ class SimplePitching:
 class AdvancedPitching:
     """
     A class to represent a advanced pitching statistics
+
+    attributes are all optional as there is no documentation for the stats endpoint
     """
     winningpercentage: Optional[str] = None
     runsscoredper9: Optional[str] = None
@@ -200,7 +202,7 @@ class PitchingCareerAdvanced(Stats, AdvancedPitching):
     type_ = [ 'careerAdvanced' ]
 
 @dataclass(kw_only=True)
-class PitchingYBY(Stats, SimplePitching):
+class PitchingYearByYear(Stats, SimplePitching):
     """
     A class to represent a yearByYear season statistic
 
@@ -214,7 +216,7 @@ class PitchingYBY(Stats, SimplePitching):
     type_ = [ 'yearByYear' ]
 
 @dataclass(kw_only=True)
-class PitchingYBYPlayoffs(Stats, SimplePitching):
+class PitchingYearByYearPlayoffs(Stats, SimplePitching):
     """
     A class to represent a yearByYear season statistic
 
@@ -228,7 +230,7 @@ class PitchingYBYPlayoffs(Stats, SimplePitching):
     type_ = [ 'yearByYearPlayoffs' ]
 
 @dataclass(kw_only=True)
-class PitchingYBYAdvanced(Stats, AdvancedPitching):
+class PitchingYearByYearAdvanced(Stats, AdvancedPitching):
     """
     A class to represent a pitching yearByYear statistic
 
@@ -517,7 +519,7 @@ class PitchingByDayOfWeekPlayOffs(Stats, SimplePitching):
     daysofweek: Optional[int] = None
 
 @dataclass(kw_only=True)
-class PitchingHAA(Stats, SimplePitching):
+class PitchingHomeAndAway(Stats, SimplePitching):
     """
     A class to represent a homeAndAway stat for a pitcher
 
@@ -530,7 +532,7 @@ class PitchingHAA(Stats, SimplePitching):
     ishome: bool
 
 @dataclass(kw_only=True)
-class PitchingHAAPlayoffs(Stats, SimplePitching):
+class PitchingHomeAndAwayPlayoffs(Stats, SimplePitching):
     """
     A class to represent a homeAndAwayPlayoffs stat for a pitcher
 
@@ -542,7 +544,7 @@ class PitchingHAAPlayoffs(Stats, SimplePitching):
     ishome: bool
 
 @dataclass(kw_only=True)
-class PitchingWL(Stats, SimplePitching):
+class PitchingWinLoss(Stats, SimplePitching):
     """
     A class to represent a winLoss stat for a pitcher
 
@@ -554,7 +556,7 @@ class PitchingWL(Stats, SimplePitching):
     iswin: bool
 
 @dataclass(kw_only=True)
-class PitchingWLPlayoffs(Stats, SimplePitching):
+class PitchingWinLossPlayoffs(Stats, SimplePitching):
     """
     A class to represent a winLossPlayoffs stat for a pitcher
 

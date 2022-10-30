@@ -2,11 +2,13 @@
 import unittest
 
 from mlbstatsapi.mlbapi import Mlb
+from mlbstatsapi import TheMlbStatsApiException
 
 from mlbstatsapi.models.stats import (
-    PitchingYBY,
+    PitchingYearByYear,
     PitchingSeason,
 )
+
 
 class TestTeamStatCreation(unittest.TestCase):
     @classmethod
@@ -36,7 +38,7 @@ class TestTeamStatCreation(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimpleHitting
-            self.assertIsInstance(stat, PitchingYBY)
+            self.assertIsInstance(stat, PitchingYearByYear)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, "hits"))
@@ -54,7 +56,7 @@ class TestTeamStatCreation(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimpleHitting
-            self.assertIsInstance(stat, PitchingYBY)
+            self.assertIsInstance(stat, PitchingYearByYear)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, "hits"))
@@ -107,3 +109,85 @@ class TestTeamStatCreation(unittest.TestCase):
         self.assertEqual(len(pitching_splits), 4)
             
 
+    def test_building_all_pitching_objects_for_teams(self):
+        """this test will build all what should be working stat objects"""
+        # Let's build this set of tests 
+        self.params_one = { 'stats': [ 'homeAndAway', 'winLoss', 'yearByYear', 'byDayOfWeek',
+        'byDateRange', 'byDateRangeAdvanced', 'byDayOfWeek', 'byMonth' ], 'group': 'hitting' }
+
+        # make the calls to return a list of objects
+        al_stat_group_one = self.mlb.get_stats(self.al_team, self.params_one)
+        nl_stat_group_one = self.mlb.get_stats(self.nl_team, self.params_one)
+
+        # the list should not be empty
+        self.assertTrue(len(al_stat_group_one))
+        self.assertTrue(len(nl_stat_group_one))
+
+        # stat_group_one should be greater than 8
+        self.assertTrue(len(al_stat_group_one) > 8)
+        self.assertTrue(len(nl_stat_group_one) > 8)
+
+        # let's now build play off stat types
+        self.params_two = { 'stats': [ 'homeAndAwayPlayoffs', 'winLossPlayoffs', 'yearByYearPlayoffs', 
+        'byMonthPlayoffs', 'byDayOfWeekPlayoffs' ], 'group': 'pitching' }
+
+        # make the calls to return a list of objects
+        al_stat_group_two = self.mlb.get_stats(self.al_team, self.params_two)
+        nl_stat_group_two = self.mlb.get_stats(self.nl_team, self.params_two)
+
+        # the list should not be empty
+        self.assertTrue(len(al_stat_group_two))
+        self.assertTrue(len(nl_stat_group_two))
+
+        # stat_group_one should be greater than 8
+        self.assertTrue(len(al_stat_group_two) > 8)
+        self.assertTrue(len(nl_stat_group_two) > 8)
+
+        self.params_three = { 'stats': [  'gameLog' ], 'group': 'hitting' }
+
+        # make the calls to return a list of objects
+        al_stat_group_three = self.mlb.get_stats(self.al_team, self.params_three)
+        nl_stat_group_three = self.mlb.get_stats(self.nl_team, self.params_three)
+
+        # the list should not be empty
+        self.assertTrue(len(al_stat_group_three))
+        self.assertTrue(len(nl_stat_group_three))
+
+        # stat_group_one should be greater than 8
+        self.assertTrue(len(al_stat_group_three) > 8)
+        self.assertTrue(len(nl_stat_group_three) > 8)
+
+        self.params_four = { 'stats': [ 'expectedStatistics', 'sprayChart' ], 'group': 'hitting' }
+        
+        # make the calls to return a list of objects
+        al_stat_group_four = self.mlb.get_stats(self.al_team, self.params_four)
+        nl_stat_group_four = self.mlb.get_stats(self.nl_team, self.params_four)
+
+        # the list should not be empty
+        self.assertTrue(len(al_stat_group_four))
+        self.assertTrue(len(nl_stat_group_four))
+
+        # stat_group_one should be greater than 8
+        self.assertTrue(len(al_stat_group_four) > 8)
+        self.assertTrue(len(nl_stat_group_four) > 8)
+
+        self.params_five = { 'stats': [ 'seasonAdvanced', 'season', 'careerAdvanced' ], 'group': 'hitting' }
+
+        # make the calls to return a list of objects
+        al_stat_group_five = self.mlb.get_stats(self.al_team, self.params_five)
+        nl_stat_group_five = self.mlb.get_stats(self.nl_team, self.params_five)
+
+        # the list should not be empty
+        self.assertTrue(len(al_stat_group_five))
+        self.assertTrue(len(nl_stat_group_five))
+
+        # stat_group_one should be greater than 8
+        self.assertTrue(len(al_stat_group_five) == 3)
+        self.assertTrue(len(nl_stat_group_five) == 3)
+        
+    def test_building_playlog_500(self):
+        """playlog should return 500 error"""
+        self.params_four = { 'stats': [  'playLog' ], 'group': 'hitting' }
+
+        with self.assertRaises(TheMlbStatsApiException):
+            al_stat_group_six = self.mlb.get_stats(self.al_team, self.params_four)

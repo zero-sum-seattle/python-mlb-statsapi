@@ -45,32 +45,63 @@ class SimpleCatching:
 
 @dataclass(kw_only=True)
 class SeasonCatching(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
     type_ = [ 'season', 'statsSingleSeason' ]
-    gametype: str
 
 @dataclass(kw_only=True)
 class CatchingYearByYearPlayoffs(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
     type_ = [ 'yearByYearPlayoffs' ]
-    gametype: str
 
 @dataclass(kw_only=True)
 class CatchingYearByYear(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
     type_ = [ 'yearByYear' ]
-    gametype: str
 
 @dataclass(kw_only=True)
 class CatchingProjected(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
     type_ = [ 'projectedRos' ]
 
 @dataclass(kw_only=True)
 class CatchingCareer(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
     type_ = [ 'career', 'careerRegularSeason' ]
-    gametype: str
     
 @dataclass(kw_only=True)
 class CatchingGameLog(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
     type_ = [ 'gameLog' ]
-    gametype: str
     ishome: bool
     iswin: bool
     date: str
@@ -79,26 +110,53 @@ class CatchingGameLog(Stats, SimpleCatching):
 
 @dataclass(kw_only=True)
 class CatchingLastXGames(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
     type_ = [ 'lastXGames' ]
-    numteams: int
 
 @dataclass(kw_only=True)
 class CatchingByDateRange(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
     type_ = [ 'byDateRange' ]
-    numteams: int
 
 @dataclass(kw_only=True)
 class CatchingByDayOfWeek(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
     type_ = [ 'byDayOfWeek' ]
     dayofweek: int
-    numteams: int
 
 @dataclass(kw_only=True)
 class CatchingHomeAndAway(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
     type_ = [ 'homeAndAway' ]
     ishome: bool
 
 @dataclass(kw_only=True)
 class CatchingWinLoss(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
     type_ = [ 'winLoss' ]
     iswin: bool

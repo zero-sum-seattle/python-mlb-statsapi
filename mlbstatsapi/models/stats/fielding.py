@@ -1,11 +1,8 @@
 ﻿from dataclasses import dataclass, field
-from pdb import post_mortem
 from typing import Optional, Union
 
-from mlbstatsapi.models.people import Person, Position
+from mlbstatsapi.models.people import Position
 from mlbstatsapi.models.teams import Team
-from mlbstatsapi.models.leagues import League
-from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.game import Game
 
 from .stats import Stats
@@ -114,7 +111,7 @@ class FieldingCareerPlayoffs(Stats, SimpleFielding):
         self.position = Position(**self.position) if self.position else self.position
 
 @dataclass(kw_only=True)
-class FieldingHAA(Stats, SimpleFielding):
+class FieldingHomeAndAway(Stats, SimpleFielding):
     """
     A class to represent a fielding homeAndAway statistic
 
@@ -129,7 +126,7 @@ class FieldingHAA(Stats, SimpleFielding):
     ishome: bool
 
 @dataclass(kw_only=True)
-class FieldingHAAPlayoffs(Stats, SimpleFielding):
+class FieldingHomeAndAwayPlayoffs(Stats, SimpleFielding):
     """
     A class to represent a fielding homeAndAwayPlayoffs statistic
 
@@ -144,7 +141,7 @@ class FieldingHAAPlayoffs(Stats, SimpleFielding):
     ishome: bool
 
 @dataclass(kw_only=True)
-class FieldingYBY(Stats, SimpleFielding):
+class FieldingYearByYear(Stats, SimpleFielding):
     """
     A class to represent a fielding yearByYear statistic
 
@@ -158,7 +155,7 @@ class FieldingYBY(Stats, SimpleFielding):
     type_ = [ 'yearByYear' ]
 
 @dataclass(kw_only=True)
-class FieldingYBYAdvanced(Stats, SimpleFielding):
+class FieldingYearByYearAdvanced(Stats, SimpleFielding):
     """
     A class to represent a fielding yearByYearAdvanced statistic
 
@@ -172,7 +169,7 @@ class FieldingYBYAdvanced(Stats, SimpleFielding):
     type_ = [ 'yearByYearAdvanced']
 
 @dataclass(kw_only=True)
-class FieldingYBYPlayoffs(Stats, SimpleFielding):
+class FieldingYearByYearPlayoffs(Stats, SimpleFielding):
     """
     A class to represent a fielding season statistic
 
@@ -186,7 +183,7 @@ class FieldingYBYPlayoffs(Stats, SimpleFielding):
     type_ = [ 'yearByYearPlayoffs' ]
 
 @dataclass(kw_only=True)
-class FieldingWL(Stats, SimpleFielding):
+class FieldingWinLoss(Stats, SimpleFielding):
     """
     A class to represent a fielding winLoss statistic
 
@@ -201,7 +198,7 @@ class FieldingWL(Stats, SimpleFielding):
     iswin: bool
 
 @dataclass(kw_only=True)
-class FieldingWLPlayoffs(Stats, SimpleFielding):
+class FieldingWinLossPlayoffs(Stats, SimpleFielding):
     """
     A class to represent a fielding winLossPlayoffs statistic
 

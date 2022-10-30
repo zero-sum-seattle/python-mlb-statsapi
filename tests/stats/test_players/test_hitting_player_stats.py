@@ -8,14 +8,14 @@ from mlbstatsapi.models.stats import (
     OpponentsFacedHitting,
     HotColdZones,
     ZoneCodes,
-    HittingYBY,
+    HittingYearByYear,
     PitchArsenal,
     HittingExpectedStatistics,
-    HittingLog,
-    HittingWL,
-    HittingHAA,
     HittingAdvancedSeason,
-    HittingPitchLog
+    HittingPitchLog,
+    HittingPlayLog,
+    HittingWinLoss,
+    HittingHomeAndAway
 )
 
 class TestOpponentsFacedHitting(unittest.TestCase):
@@ -105,7 +105,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
             self.assertTrue(stat)
 
             # split should be HittingSplits
-            self.assertIsInstance(stat, HittingYBY)
+            self.assertIsInstance(stat, HittingYearByYear)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, "hits"))
@@ -195,7 +195,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         for stat in log_stats:
 
             # stat should be PitchArsenal
-            self.assertIsInstance(stat, HittingLog)
+            self.assertIsInstance(stat, HittingPlayLog)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'pitchnumber'))
@@ -255,7 +255,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         for stat in hitting_wl:
 
             # stat should be HittingWL
-            self.assertIsInstance(stat, HittingWL)
+            self.assertIsInstance(stat, HittingWinLoss)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'iswin'))
@@ -269,7 +269,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         for stat in hitting_wl:
 
             # stat should be HittingWL
-            self.assertIsInstance(stat, HittingHAA)
+            self.assertIsInstance(stat, HittingHomeAndAway)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'ishome'))

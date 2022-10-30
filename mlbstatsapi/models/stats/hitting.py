@@ -83,7 +83,7 @@ class SimpleHittingStat:
     atbatsperhomerun: Optional[int] = None
 
 @dataclass(kw_only=True)
-class HittingWL(Stats, SimpleHittingStat):
+class HittingWinLoss(Stats, SimpleHittingStat):
     """
     A class to represent a hitting winLoss statistic
 
@@ -96,7 +96,7 @@ class HittingWL(Stats, SimpleHittingStat):
     iswin: bool
 
 @dataclass(kw_only=True)
-class HittingWLPlayoffs(Stats, SimpleHittingStat):
+class HittingWinLossPlayoffs(Stats, SimpleHittingStat):
     """
     A class to represent a hitting winLoss statistic
 
@@ -109,7 +109,7 @@ class HittingWLPlayoffs(Stats, SimpleHittingStat):
     iswin: bool
 
 @dataclass(kw_only=True)
-class HittingHAA(Stats, SimpleHittingStat):
+class HittingHomeAndAway(Stats, SimpleHittingStat):
     """
     A class to represent a hitting homeAndAway statistic
 
@@ -122,7 +122,7 @@ class HittingHAA(Stats, SimpleHittingStat):
     ishome: bool
 
 @dataclass(kw_only=True)
-class HittingHAAPlayoffs(Stats, SimpleHittingStat):
+class HittingHomeAndAwayPlayoffs(Stats, SimpleHittingStat):
     """
     A class to represent a hitting homeAndAway statistic
 
@@ -192,7 +192,7 @@ class HittingAdvancedSeason(Stats, AdvancedHittingStat):
     type_ = [ 'careerAdvanced', 'seasonAdvanced' ]
 
 @dataclass(kw_only=True)
-class HittingYBY(Stats, SimpleHittingStat):
+class HittingYearByYear(Stats, SimpleHittingStat):
     """
     A class to represent a hitting yearbyyear or yearByYearPlayoffs statistic
 
@@ -206,7 +206,7 @@ class HittingYBY(Stats, SimpleHittingStat):
     type_ = [ 'yearByYear' ]
 
 @dataclass(kw_only=True)
-class HittingYBYPlayoffs(Stats, SimpleHittingStat):
+class HittingYearByYearPlayoffs(Stats, SimpleHittingStat):
     """
     A class to represent a hitting yearByYearPlayoffs statistic
 
