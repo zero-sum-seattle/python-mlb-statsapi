@@ -1,6 +1,9 @@
 name: Python Build MLBstats API 
 
-on: [push]
+on:
+  push:
+   branches:
+     - development
 
 jobs:
   build:
@@ -29,10 +32,11 @@ jobs:
         run: |
           python3 -m build
           python3 -m pip install .
-      - name: Publish a Python distribution to PyPI
-        #if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+      - name: Publish package to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+
 
 

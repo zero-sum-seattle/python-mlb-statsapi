@@ -1,0 +1,34 @@
+﻿name: Python Build MLBstats API 
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+      - 'development'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade pytest
+          python3 -m pip install --upgrade build
+          python3 -m pip install --upgrade requests
+      - name: Test with pytest
+        run: |
+          python3 -m pytest tests/*
+      - name: build and install
+        run: |
+          python3 -m build
+          python3 -m pip install .
