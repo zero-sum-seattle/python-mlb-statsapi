@@ -51,7 +51,17 @@ class SeasonCatching(Stats, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'season', 'statsSingleSeason' ]
+    type_ = [ 'season' ]
+
+@dataclass(kw_only=True)
+class SeasonSingleCatching(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'statsSingleSeason' ]
 
 @dataclass(kw_only=True)
 class CatchingYearByYearPlayoffs(Stats, SimpleCatching):
@@ -91,8 +101,19 @@ class CatchingCareer(Stats, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'career', 'careerRegularSeason' ]
-    
+    type_ = [ 'career' ]
+
+@dataclass(kw_only=True)
+class CatchingCareer(Stats, SimpleCatching):
+    """
+    A class to represent a catching winLoss statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'careerRegularSeason' ]
+
+
 @dataclass(kw_only=True)
 class CatchingGameLog(Stats, SimpleCatching):
     """

@@ -223,6 +223,12 @@ class FieldingByDayOfWeek(Stats, SimpleFielding):
 
 @dataclass(kw_only=True)
 class FieldingByDateRangeAdvanced(Stats, SimpleFielding):
+    """
+    A class to represent a fielding byMonth stat
+
+    Attributes
+    ----------
+    """
     type_ = [ 'byDateRangeAdvanced' ]
     position: Union[Position, dict] = field(default_factory=dict)
 

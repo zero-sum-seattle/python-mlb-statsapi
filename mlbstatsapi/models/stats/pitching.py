@@ -269,7 +269,7 @@ class PitchingSeasonAdvanced(Stats, AdvancedPitching):
     numteams : str
         the number of teams for the pitching season
     """
-    type_ = [ "seasonAdvanced" ]
+    type_ = [ 'seasonAdvanced' ]
 
 @dataclass(kw_only=True)
 class PitchingSingleSeasonAdvanced(Stats, AdvancedPitching):
