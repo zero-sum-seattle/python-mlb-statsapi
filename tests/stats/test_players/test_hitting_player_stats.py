@@ -15,7 +15,8 @@ from mlbstatsapi.models.stats import (
     HittingPitchLog,
     HittingPlayLog,
     HittingWinLoss,
-    HittingHomeAndAway
+    HittingHomeAndAway,
+    HittingVsTeam
 )
 
 class TestPlayerHittingStats(unittest.TestCase):
@@ -273,6 +274,17 @@ class TestPlayerHittingStats(unittest.TestCase):
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'ishome'))
+
+    def test_hitting_vs_team_stats_on_players(self):
+        self.params = { 'stats': [ 'vsTeam' ], 'group': 'hitting', 'opposingTeamId': '158' }
+    
+        vsteam_stats = self.mlb.get_stats(self.position_player, self.params)
+
+        # the list should not be empty
+        self.assertTrue(len(vsteam_stats))
+
+
+
 
     def test_building_all_hitting_objects(self):
         """this test will build all what should be working stat objects"""

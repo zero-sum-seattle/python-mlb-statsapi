@@ -729,7 +729,7 @@ class Mlb:
                 # set stat_group and stat_type
                 # default to stats if no group present
                 # stat_type is used to indentify the correct stat object
-                stat_group = stats['group']['displayname'] if 'group' in stats else "stats"
+                stat_group = stats['group']['displayname'] if 'group' in stats else 'stats'
                 stat_type = stats['type']['displayname'] if 'type' in stats else None
                 
                 # convert string base on stat_group to module name
