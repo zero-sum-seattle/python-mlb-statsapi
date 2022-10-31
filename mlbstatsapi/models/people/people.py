@@ -60,6 +60,7 @@ class Person:
     deathdate: Optional[str] = None
     deathcity: Optional[str] = None
     deathcountry: Optional[str] = None
+    lastplayeddate: Optional[str] = None
 
     def __post_init__(self):
         self.primaryposition = Position(**self.primaryposition) if self.primaryposition else self.primaryposition

@@ -27,15 +27,20 @@ class Mlb:
         self._logger = logger or logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG) 
 
-    def get_people(self) -> List[Person]:
+    def get_people(self, sportid: int = 1) -> List[Person]:
         """
-        return the all players 
+        return the all players for sportid
+
+        Parameters
+        ----------
+        sportid : int
+            sportid for players defaults to 1
 
         Returns
         -------
         List[Person]
         """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint="sports/1/players")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports/{sportid}/players")
         people = []
 
         if ('people' in mlbdata.data and mlbdata.data['people']):
@@ -62,7 +67,7 @@ class Mlb:
             for person in mlbdata.data['people']:
                 return Person(**person)
 
-    def get_people_id(self, fullname) -> List[int]:
+    def get_people_id(self, fullname, sportid: int = 1) -> List[int]:
         """
         return a person Id
 
@@ -70,12 +75,15 @@ class Mlb:
         ----------
         fullName : str
             Person full name
+        sportid : int
+            sportid for players defaults to 1
 
         Returns
         -------
         List[int]
-        """        
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports/1/players")
+        """
+
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports/{sportid}/players")
         playerIds = []
 
         # if mlbdata is not empty, and 'people' key is in mlbdata.data and mlbdata.data['people'] is not empty list
@@ -86,15 +94,20 @@ class Mlb:
 
         return playerIds
 
-    def get_teams(self) -> List[Team]:
+    def get_teams(self, sportid: int = 1) -> List[Team]:
         """
-        return the all Teams 
+        return the all Teams
+
+        Parameters
+        ----------
+        sportid : int
+            sportid for players defaults to 1
 
         Returns
         -------
         List[Team]
         """         
-        mlbdata = self._mlb_adapter_v1.get(endpoint="teams?sportId=1")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"teams?sportId={sportid}")
         teams = []
         
         if ('teams' in mlbdata.data and mlbdata.data['teams']):
@@ -486,7 +499,7 @@ class Mlb:
         -------
         List[Sport]
         """          
-        mlbdata = self._mlb_adapter_v1.get(endpoint="sports")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports')
         sports = []
 
         if ('sports' in mlbdata.data and mlbdata.data['sports']):
@@ -539,7 +552,7 @@ class Mlb:
         -------
         List[League]
         """           
-        mlbdata = self._mlb_adapter_v1.get(endpoint="league")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"league")
         leagues = []
         
         if ('leagues' in mlbdata.data and mlbdata.data['leagues']):
@@ -597,7 +610,7 @@ class Mlb:
         -------
         List[Division]
         """   
-        mlbdata = self._mlb_adapter_v1.get(endpoint="divisions")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"divisions")
         divisions = []
         
         if ('divisions' in mlbdata.data and mlbdata.data['divisions']):
@@ -741,3 +754,4 @@ class Mlb:
                                 splits.append(obj(stat_type=stat_type, stat_group=stat_group, **stat))
 
         return splits
+
