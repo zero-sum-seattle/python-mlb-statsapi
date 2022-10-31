@@ -102,7 +102,7 @@ class TestMlbGetPeople(unittest.TestCase):
     def test_mlb_get_person_id_with_sportid(self):
         """mlb get_person_id should return a person id"""
         id = self.mlb.get_people_id('Fernando Abad', sportid=11) # Return Ty France Person ID in a List
-        self.assertEqual(id, [664034]) # Confirm the ID is correct
+        self.assertEqual(id, [472551]) # Confirm the ID is correct
 
     def test_mlb_get_invalid_person_id(self):
         """mlb get_person_id should return empty list for invalid name"""
@@ -149,7 +149,7 @@ class TestMlbGetTeam(unittest.TestCase):
     def test_mlb_get_team_id(self):
         """mlb get_team_id should return a list of matching team id's"""
         id = self.mlb.get_team_id('DSL Brewers 2') # Return Mariners Team ID in a List
-        self.assertEqual(id, [136])
+        self.assertEqual(id, [2101])
 
     def test_mlb_get_bad_team_id(self):
         """mlb get_team_id should return a empty list for invalid team name"""

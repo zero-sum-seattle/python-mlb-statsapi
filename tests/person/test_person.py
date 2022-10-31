@@ -23,6 +23,16 @@ class TestPerson(unittest.TestCase):
         self.assertEqual(self.player.fullname, "Ty France")
         self.assertEqual(self.player.link, "/api/v1/people/664034")
 
+class TestPerson(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.player = cls.mlb.get_person(664034)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
+
 class TestPersonPrimaryPosition(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:

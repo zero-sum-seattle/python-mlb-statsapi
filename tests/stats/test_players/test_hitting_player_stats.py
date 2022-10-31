@@ -283,9 +283,6 @@ class TestPlayerHittingStats(unittest.TestCase):
         # the list should not be empty
         self.assertTrue(len(vsteam_stats))
 
-
-
-
     def test_building_all_hitting_objects(self):
         """this test will build all what should be working stat objects"""
         # Let's build this set of tests 
