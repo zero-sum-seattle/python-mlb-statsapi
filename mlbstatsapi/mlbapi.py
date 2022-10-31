@@ -15,7 +15,6 @@ from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi.models.attendances import Attendance
 from mlbstatsapi.models.stats import Stats
 
-from .mlbdataadapter import TheMlbStatsApiException
 from .mlbdataadapter import MlbDataAdapter
 
 from .mlb import _transform_mlbdata
@@ -36,12 +35,13 @@ class Mlb:
         -------
         List[Person]
         """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint="sports/1/players") # get all people
-        
+        mlbdata = self._mlb_adapter_v1.get(endpoint="sports/1/players")
+        people = []
+
         if ('people' in mlbdata.data and mlbdata.data['people']):
             people = [ Person(**person) for person in mlbdata.data['people'] ]
         
-        return people # return list of people objects
+        return people
 
     def get_person(self, playerid) -> Union[Person, None]:
         """
@@ -56,7 +56,7 @@ class Mlb:
         -------
         Person
         """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"people/{playerid}") # Get player
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"people/{playerid}")
         
         if ('people' in mlbdata.data and mlbdata.data['people']):
             for person in mlbdata.data['people']:
@@ -75,14 +75,14 @@ class Mlb:
         -------
         List[int]
         """        
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports/1/players") # Get All People: players
-        playerIds = [] # create empty list
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports/1/players")
+        playerIds = []
 
         # if mlbdata is not empty, and 'people' key is in mlbdata.data and mlbdata.data['people'] is not empty list
         if ('people' in mlbdata.data and mlbdata.data['people']): 
             for person in mlbdata.data['people']:
-                if person['fullname'].lower() == fullname.lower(): # Match person fullName
-                    playerIds.append(person['id']) # add to list
+                if person['fullname'].lower() == fullname.lower():
+                    playerIds.append(person['id'])
 
         return playerIds
 
@@ -94,12 +94,13 @@ class Mlb:
         -------
         List[Team]
         """         
-        mlbdata = self._mlb_adapter_v1.get(endpoint="teams?sportId=1") # Get all major league teams
+        mlbdata = self._mlb_adapter_v1.get(endpoint="teams?sportId=1")
+        teams = []
         
         if ('teams' in mlbdata.data and mlbdata.data['teams']):
             teams = [ Team(**team) for team in mlbdata.data['teams']]
 
-        return teams # return list of all Team objects
+        return teams
 
     def get_team(self, teamid) -> Union[Team, None]:
         """
@@ -133,13 +134,13 @@ class Mlb:
         -------
         List[ints]
         """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint="teams") # Get all Teams
-        teamIds = [] # create empty list
+        mlbdata = self._mlb_adapter_v1.get(endpoint="teams")
+        teamIds = []
         
         if ('teams' in mlbdata.data and mlbdata.data['teams']):
             for team in mlbdata.data['teams']:
-                if team['teamname'].lower() == teamname.lower(): # find matching Team Name
-                    teamIds.append(team['id']) # append match id
+                if team['teamname'].lower() == teamname.lower():
+                    teamIds.append(team['id'])
         
         return teamIds
 
@@ -208,7 +209,7 @@ class Mlb:
         -------
         Schedule
         """     
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"schedule?sportId=1&startDate={startdate}&endDate={enddate}") # Get schedule
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"schedule?sportId=1&startDate={startdate}&endDate={enddate}")
 
         # if mlbdata is not empty, and 'dates' key is in mlbdata.data and mlbdata.data['dates] can sometimes be an empty list
         # when there are no scheduled game for the date(s). Only check for existance 'dates' key for this reason.
@@ -270,7 +271,7 @@ class Mlb:
         -------
         Game
         """  
-        mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'game/{gameid}/feed/live') # Get game
+        mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'game/{gameid}/feed/live')
         
         if ('gamepk' in mlbdata.data and mlbdata.data['gamepk'] == gameid):
             return Game(**mlbdata.data)
@@ -288,8 +289,8 @@ class Mlb:
         -------
         Plays
         """  
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameid}/playByPlay') # Get games boxscore
-        if ('allplays' in mlbdata.data and mlbdata.data['allplays']): # if teams in mlbdata
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameid}/playByPlay') 
+        if ('allplays' in mlbdata.data and mlbdata.data['allplays']):
             return Plays(**mlbdata.data)
 
     def get_game_linescore(self, gameid) -> Union[Linescore, None]:
@@ -305,8 +306,8 @@ class Mlb:
         -------
         Linescore
         """  
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameid}/linescore') # Get games boxscore
-        if ('teams' in mlbdata.data and mlbdata.data['teams']): # if teams in mlbdata
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameid}/linescore')
+        if ('teams' in mlbdata.data and mlbdata.data['teams']):
             return Linescore(**mlbdata.data)
 
     def get_game_boxscore(self, gameid) -> Union[BoxScore, None]:
@@ -322,8 +323,8 @@ class Mlb:
         -------
         BoxScore
         """  
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameid}/boxscore') # Get games boxscore
-        if ('teams' in mlbdata.data and mlbdata.data['teams']): # if teams in mlbdata
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameid}/boxscore')
+        if ('teams' in mlbdata.data and mlbdata.data['teams']):
             return BoxScore(**mlbdata.data)
 
     def get_game_ids(self, date, abstractgamestate=None) -> List[int]:
@@ -358,7 +359,7 @@ class Mlb:
                             if not abstractgamestate or (game.status.abstractgamestate == abstractgamestate):
                                 gamesids.append(game.gamepk) # Append game Ids
             
-            return gamesids
+        return gamesids
 
     def get_todays_game_ids(self, abstractgamestate=None) -> List[int]:
         """
@@ -427,14 +428,13 @@ class Mlb:
         -------
         List[Venue]
         """             
-        mlbdata = self._mlb_adapter_v1.get(endpoint="venues") # Get All venuess
+        mlbdata = self._mlb_adapter_v1.get(endpoint="venues")
         venues = []
         
         if ('venues' in mlbdata.data and mlbdata.data['venues']):
             venues = [ Venue(**venue) for venue in mlbdata.data['venues']]
 
-        return venues # return list of all Venue objects
-
+        return venues 
     def get_venue_id(self, venuename) -> List[int]:
         """
         return venue id
@@ -448,14 +448,14 @@ class Mlb:
         -------
         List[int]
         """        
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"venues") # Get All Venues
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"venues")
         venueIds = [] 
         
         if ('venues' in mlbdata.data and mlbdata.data['venues']):
             for venue in mlbdata.data['venues']:
-                # Match venue name
+                
                 if venue['name'].lower() == venuename.lower():
-                    venueIds.append(venue['id']) # add to list
+                    venueIds.append(venue['id'])
 
         return venueIds
 
@@ -486,12 +486,13 @@ class Mlb:
         -------
         List[Sport]
         """          
-        mlbdata = self._mlb_adapter_v1.get(endpoint="sports") # Get All sports
-        
+        mlbdata = self._mlb_adapter_v1.get(endpoint="sports")
+        sports = []
+
         if ('sports' in mlbdata.data and mlbdata.data['sports']):
             sports = [ Sport(**sport) for sport in mlbdata.data['sports'] ]
 
-        return sports # return list of all Sport objects
+        return sports
 
     def get_sport_id(self, sportname) -> List[int]:
         """
@@ -506,13 +507,13 @@ class Mlb:
         -------
         List[int]
         """          
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports") # Get All Sports
-        sportIds = [] # create empty list
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports")
+        sportIds = []
 
         if ('sports' in mlbdata.data and mlbdata.data['sports']):
             for sport in mlbdata.data['sports']:
-                if sport['name'].lower() == sportname.lower(): # Match sport name
-                    sportIds.append(sport['id']) # add to list
+                if sport['name'].lower() == sportname.lower(): 
+                    sportIds.append(sport['id'])
 
         return sportIds
 
@@ -538,13 +539,13 @@ class Mlb:
         -------
         List[League]
         """           
-        mlbdata = self._mlb_adapter_v1.get(endpoint="league") # Get All sports
+        mlbdata = self._mlb_adapter_v1.get(endpoint="league")
         leagues = []
         
         if ('leagues' in mlbdata.data and mlbdata.data['leagues']):
             leagues = [ League(**league) for league in mlbdata.data['leagues']]
         
-        return leagues # return list of all Sport objects
+        return leagues
 
     def get_league_id(self, leaguename) -> List[League]:
         """
@@ -559,13 +560,13 @@ class Mlb:
         -------
         List[int]
         """            
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"league") # Get All divisions
-        leagueIds = [] # create empty list
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"league") 
+        leagueIds = []
 
         if ('leagues' in mlbdata.data and mlbdata.data['leagues']):
             for league in mlbdata.data['leagues']:
-                if league['name'].lower() == leaguename.lower(): # Match division name
-                    leagueIds.append(league['id']) # add to list
+                if league['name'].lower() == leaguename.lower():
+                    leagueIds.append(league['id'])
         
         return leagueIds
 
@@ -596,13 +597,13 @@ class Mlb:
         -------
         List[Division]
         """   
-        mlbdata = self._mlb_adapter_v1.get(endpoint="divisions") # Get All divisions
+        mlbdata = self._mlb_adapter_v1.get(endpoint="divisions")
         divisions = []
         
         if ('divisions' in mlbdata.data and mlbdata.data['divisions']):
             divisions = [ Division(**division) for division in mlbdata.data['divisions']]
         
-        return divisions # return list of all Division objects
+        return divisions
 
     def get_division_id(self, divisionname) -> List[Division]:
         """
@@ -617,13 +618,13 @@ class Mlb:
         -------
         List[int]
         """           
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"divisions") # Get All divisions
-        divisionIds = [] # create empty list
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f"divisions")
+        divisionIds = []
         
         if ('divisions' in mlbdata.data and mlbdata.data['divisions']):
             for division in mlbdata.data['divisions']:
-                if division['name'].lower() == divisionname.lower(): # Match division name
-                    divisionIds.append(division['id']) # add to list
+                if division['name'].lower() == divisionname.lower():
+                    divisionIds.append(division['id'])
 
         return divisionIds
 
@@ -706,36 +707,37 @@ class Mlb:
         Stats
         """  
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"{object.mlb_class}/{object.id}/stats", ep_params=params) # Get All divisions        
-        splits = [] 
+        splits = []
+        # these stat types require further dictionary transformation
         stat_log_type = [ 'playLog', 'pitchLog' ]
-
 
         if ('stats' in mlbdata.data and mlbdata.data['stats']):
             for stats in mlbdata.data['stats']:
                 # set stat_group and stat_type
                 # default to stats if no group present
-                stat_group = stats['group']['displayname'] if 'group' in stats else "stats" # default to stats if no group present
-                stat_type = stats['type']['displayname'] if 'type' in stats else None # default to None if no type present
+                # stat_type is used to indentify the correct stat object
+                stat_group = stats['group']['displayname'] if 'group' in stats else "stats"
+                stat_type = stats['type']['displayname'] if 'type' in stats else None
+                
                 # convert string base on stat_group to module name
+                # stat_group is used to find the correct python file
                 stat_module = f"mlbstatsapi.models.stats.{stat_group}"
                 stat_module = importlib.import_module(stat_module)
 
-                # if splits is in stats and splits not empty
                 if ('splits' in stats and stats['splits']):
                     # loop through classes found in stat_module 
                     for name, obj in inspect.getmembers(stat_module):
-                        # if obj has _type attr and stat_type matches class var
+                        # type_ attribute holds the stat_type of the class
                         if inspect.isclass(obj) and (hasattr(obj, 'type_') and stat_type in obj.type_):
-                            # loop through json in splits
+
                             for stat in stats['splits']:
+
                                 if 'stat' in stat:
-                                    if stat_type in stat_log_type: # check for log stat type
+                                    if stat_type in stat_log_type:
                                         stat = _transform_mlbdata(stat, [{'stat':'play'}])
                                     else:
                                         stat = _transform_mlbdata(stat, 'stat')
                                 
-                                # create object from stat
                                 splits.append(obj(stat_type=stat_type, stat_group=stat_group, **stat))
 
-            # return splits
-            return splits
+        return splits

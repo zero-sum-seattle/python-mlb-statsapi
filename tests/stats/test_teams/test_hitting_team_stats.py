@@ -29,7 +29,7 @@ class TestTeamHitting(unittest.TestCase):
         al_opponents_faced = self.mlb.get_stats(self.al_team, self.params)
 
         # check for None, or NoneType
-        self.assertIsNone(al_opponents_faced)
+        self.assertListEqual(al_opponents_faced, [])
 
 
     def test_get_one_hitting_stats_for_player(self):
@@ -39,7 +39,7 @@ class TestTeamHitting(unittest.TestCase):
         al_hitting_stats = self.mlb.get_stats(self.al_team, self.params)
 
         # check for None, or NoneType
-        self.assertIsNotNone(al_hitting_stats)
+        self.assertNotEqual(al_hitting_stats, [])
 
         for stat in al_hitting_stats:
             # test that stat is not NoneType
@@ -140,7 +140,6 @@ class TestTeamHitting(unittest.TestCase):
 
         self.assertIsNotNone(stats)
 
-        print(len(stats))
         self.assertTrue(len(stats) > 2)
 
         stats = self.mlb.get_stats(self.nl_team, self.params)
@@ -190,7 +189,7 @@ class TestTeamHitting(unittest.TestCase):
         al_hot_cold_zone = self.mlb.get_stats(self.al_team, self.params)
 
         # hot_cold_zone should be empty for teams
-        self.assertIsNone(al_hot_cold_zone)
+        self.assertListEqual(al_hot_cold_zone, [])
 
 
     def test_building_all_hitting_objects_for_teams(self):
