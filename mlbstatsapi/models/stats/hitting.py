@@ -566,8 +566,6 @@ class HittingVsTeamTotal(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    dayofweek : int
-        the day of the week
     """
     type_ = [ 'vsTeamTotal' ]
     opponent: Union[Person, dict]
@@ -582,11 +580,41 @@ class HittingVsTeam5Y(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    dayofweek : int
-        the day of the week
     """
     type_ = [ 'vsTeam5Y' ]
     opponent: Union[Person, dict]
     rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
+
+@dataclass(kw_only=True)
+class HittingVsPlayer(Stats, SimpleHittingStat):
+    """
+    A class to represent a yearByYear hitting statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'vsPlayer' ]
+
+@dataclass(kw_only=True)
+class HittingVsPlayerTotal(Stats, SimpleHittingStat):
+    """
+    A class to represent a yearByYear hitting statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'vsPlayerTotal' ]
+
+@dataclass(kw_only=True)
+class HittingVsPlayer5Y(Stats, SimpleHittingStat):
+    """
+    A class to represent a yearByYear hitting statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'vsPlayer5Y' ]
+
+
