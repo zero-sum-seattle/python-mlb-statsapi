@@ -8,17 +8,17 @@ from mlbstatsapi.models.stats import (
     OpponentsFacedHitting,
     HotColdZones,
     ZoneCodes,
-    HittingYBY,
+    HittingYearByYear,
     PitchArsenal,
-    ExpectedStatistics,
-    HittingLog,
-    HittingWL,
-    HittingHAA,
-    HittingAdvancedSeason,
-    HittingPitchLog
+    HittingExpectedStatistics,
+    HittingSeasonAdvanced,
+    HittingPitchLog,
+    HittingPlayLog,
+    HittingWinLoss,
+    HittingHomeAndAway
 )
 
-class TestOpponentsFacedHitting(unittest.TestCase):
+class TestPlayerHittingStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
@@ -84,7 +84,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be AdvancedHitting
-            self.assertIsInstance(stat, HittingAdvancedSeason)
+            self.assertIsInstance(stat, HittingSeasonAdvanced)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'totalbases'))
@@ -105,7 +105,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
             self.assertTrue(stat)
 
             # split should be HittingSplits
-            self.assertIsInstance(stat, HittingYBY)
+            self.assertIsInstance(stat, HittingYearByYear)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, "hits"))
@@ -132,7 +132,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         for stat in expected_stats:
 
             # stat should be PitchArsenal
-            self.assertIsInstance(stat, ExpectedStatistics)
+            self.assertIsInstance(stat, HittingExpectedStatistics)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'wobacon'))
@@ -195,7 +195,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         for stat in log_stats:
 
             # stat should be PitchArsenal
-            self.assertIsInstance(stat, HittingLog)
+            self.assertIsInstance(stat, HittingPlayLog)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'pitchnumber'))
@@ -255,7 +255,7 @@ class TestOpponentsFacedHitting(unittest.TestCase):
         for stat in hitting_wl:
 
             # stat should be HittingWL
-            self.assertIsInstance(stat, HittingWL)
+            self.assertIsInstance(stat, HittingWinLoss)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'iswin'))
@@ -266,16 +266,88 @@ class TestOpponentsFacedHitting(unittest.TestCase):
     
         hitting_wl = self.mlb.get_stats(self.position_player, self.params)
 
-        # hot_cold_zone should not be empty
-        self.assertTrue(len(hitting_wl))
-
-        # pitch_arsenal_stats should be greater than 1
-        self.assertTrue(len(hitting_wl) == 2)
-
         for stat in hitting_wl:
 
             # stat should be HittingWL
-            self.assertIsInstance(stat, HittingHAA)
+            self.assertIsInstance(stat, HittingHomeAndAway)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'ishome'))
+
+    def test_building_all_hitting_objects(self):
+        """this test will build all what should be working stat objects"""
+        # Let's build this set of tests 
+        self.params_one = { 'stats': [ 'homeAndAway', 'winLoss', 'yearByYear', 'byDayOfWeek',
+        'byDateRange', 'byDateRangeAdvanced', 'byDayOfWeek', 'byMonth' ], 'group': 'hitting' }
+
+        # make the calls to return a list of objects
+        stat_group_one = self.mlb.get_stats(self.position_player, self.params_one)
+
+        # the list should not be empty
+        self.assertTrue(len(stat_group_one))
+
+        # stat_group_one should be greater than 8
+        self.assertTrue(len(stat_group_one) > 8)
+
+        # let's now build play off stat types
+        self.params_two = { 'stats': [ 'homeAndAwayPlayoffs', 'winLossPlayoffs', 'yearByYearPlayoffs', 
+        'byMonthPlayoffs', 'byDayOfWeekPlayoffs' ], 'group': 'hitting' }
+
+        # Let's build this set of tests 
+        stat_group_two = self.mlb.get_stats(self.position_player, self.params_two)
+
+        # the list should not be empty
+        self.assertTrue(len(stat_group_two))
+
+        # stat_group_two 
+        self.assertTrue(len(stat_group_two) > 5)
+
+        self.params_three = { 'stats': [ 'pitchLog', 'playLog', 'gameLog' ], 'group': 'hitting' }
+
+        # Let's build this set of stat types log 
+        stat_group_three = self.mlb.get_stats(self.position_player, self.params_three)
+
+        # the list should not be empty
+        self.assertTrue(len(stat_group_three))
+
+        # stat_group_two 
+        self.assertTrue(len(stat_group_three) > 5)
+
+        self.params_four = { 'stats': [ 'hotColdZones', 'pitchArsenal', 'opponentsFaced' ], 'group': 'hitting' }
+
+        # Let's build this set of stat types log 
+        stat_group_four = self.mlb.get_stats(self.position_player, self.params_four)
+
+        # the list should not be empty
+        self.assertTrue(len(stat_group_four))
+
+        # stat_group_two 
+        self.assertTrue(len(stat_group_four) > 3)
+
+        self.params_five = { 'stats': [ 'expectedStatistics', 'sprayChart' ], 'group': 'hitting' }
+
+        # Let's build this set of stat types log 
+        stat_group_five = self.mlb.get_stats(self.position_player, self.params_five)
+
+        # the list should not be empty
+        self.assertTrue(len(stat_group_five))
+
+        print(len(stat_group_five))
+        # stat_group_five 
+        self.assertTrue(len(stat_group_five) == 2)
+
+        self.params_six = { 'stats': [ 'seasonAdvanced', 'season', 'careerAdvanced' ], 'group': 'hitting' }
+
+        # Let's build this set of stat types log 
+        stat_group_six = self.mlb.get_stats(self.position_player, self.params_six)
+
+        # the list should not be empty
+        self.assertTrue(len(stat_group_six))
+
+        # stat_group_six should be 3  
+        self.assertTrue(len(stat_group_six) > 3)
+
+        
+
+        
+

@@ -4,6 +4,18 @@ import requests
 import logging
 
 class MlbResult:
+    """
+    A class that holds data, status_code, and message returned from statsapi.mlb.com
+
+    Attributes
+    ----------
+    status_code : int
+        HTTP Return Code
+    message : str
+        Message returned from REST Endpoint
+    data : dict
+        JSON Data received from request
+    """
     def __init__(self, status_code: int, message: str, data: Dict = {}):
         self.status_code = int(status_code)
         self.message = str(message)
@@ -16,7 +28,18 @@ class MlbResult:
 
 
 class MlbDataAdapter:
-    """Adapter for calling the mlb statsapi endpoint"""
+    """
+    Adapter for calling the mlb statsapi endpoint
+
+    Attributes
+    ----------
+    hostname : str
+        rest endpoint for data
+    ver : str
+        api version
+    logger : logging.Logger
+        instance of logger class
+    """
 
     def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
         self.url = f"https://{hostname}/api/{ver}/" # we'll figure out the v1.1 endpoint later

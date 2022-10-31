@@ -1,6 +1,5 @@
 from .stats import (
     Stats, 
-    ExpectedStatistics,
     PitchArsenal,
     CodeDesc,
     Count,
@@ -13,56 +12,75 @@ from .hitting import (
     AdvancedHittingStat,
     HittingSabermetrics,
     OpponentsFacedHitting, 
-    HittingLog,
+    HittingGameLog,
+    HittingPlayLog,
     HittingSeason,
     HittingCareer,
-    HittingHAA,
-    HittingWL,
-    HittingYBY,
+    HittingHomeAndAway,
+    HittingWinLoss,
+    HittingYearByYear,
     HittingDayOfWeek,
     HittingByMonth,
     HittingDateRangeAdvanced,
     HittingDateRange,
     HittingLastXGames,
-    HittingAdvancedSeason,
+    HittingCareerAdvanced,
     HittingPitchLog,
     HittingDayOfWeekPlayoffs,
     HittingByMonthPlayoffs,
-    HittingHAAPlayoffs,
-    HittingWLPlayoffs
+    HittingHomeAndAwayPlayoffs,
+    HittingWinLossPlayoffs,
+    HittingExpectedStatistics,
+    HittingSeasonAdvanced,
+    HittingSingleSeason
 )
 
 from .pitching import (
     SimplePitching,
     AdvancedPitching, 
     PitchingSeasonAdvanced,
-    PitchingYBY,
-    PitchingYBYAdvanced,
+    PitchingYearByYear,
     PitchingSeason,
     PitchingSabermetrics,
     PitchingCareer,
     PitchingCareerAdvanced,
     PitchingLog,
     PitchingGameLog,
-    PitchingHAA,
+    PitchingHomeAndAway,
     PitchingOpponentsFaced,
     PitchingByDayOfWeek,
-    PitchingWL,
-    PitchingYBYAdvanced,
-    PitchingYBYPlayoffs,
+    PitchingWinLoss,
+    PitchingYearByYearAdvanced,
+    PitchingYearByYearPlayoffs,
     PitchingByDateRangeAdvanced,
     PitchingByMonth,
     PitchingByMonthPlayoffs,
     PitchingByDayOfWeek,
     PitchingByDayOfWeekPlayOffs,
-    PitchingHAAPlayoffs,
-    PitchingWLPlayoffs,
+    PitchingHomeAndAwayPlayoffs,
+    PitchingWinLossPlayoffs,
     PitchingRankings,
     PitchingPlayLog,
+    PitchingSingleSeason,
+    PitchingSingleSeasonAdvanced
 )
 
 from .catching import (
-    SimpleCatching
+    CatchingYearByYear,
+    CatchingSingleSeason,
+    CatchingYearByYearPlayoffs,
+    CatchingSeason,
+    CatchingYearByYearPlayoffs,
+    CatchingYearByYear,
+    CatchingProjected,
+    CatchingCareer,
+    CatchingCareerRegularSeason,
+    CatchingGameLog,
+    CatchingLastXGames,
+    CatchingByDateRange,
+    CatchingByDayOfWeek,
+    CatchingHomeAndAway,
+    CatchingWinLoss
 )
 
 from .fielding import (
@@ -73,20 +91,18 @@ from .fielding import (
     FieldingByMonth,
     FieldingByDateRangeAdvanced,
     FieldingByDayOfWeek,
-    FieldingWLPlayoffs,
-    FieldingWL,
-    FieldingYBYPlayoffs,
-    FieldingYBYAdvanced,
-    FieldingYBY,
-    FieldingHAAPlayoffs,
-    FieldingHAA,
+    FieldingWinLossPlayoffs,
+    FieldingWinLoss,
+    FieldingYearByYearPlayoffs,
+    FieldingYearByYearAdvanced,
+    FieldingYearByYear,
+    FieldingHomeAndAwayPlayoffs,
+    FieldingHomeAndAway,
     FieldingCareerPlayoffs,
     FieldingCareer,
-    SeasonFielding,
-    SeasonFieldingAdvanced
-
-)
-
-from .game import (
-    SimpleGame
+    FieldingSeason,
+    FieldingCareerRegularSeason,
+    FieldingSeasonAdvanced,
+    FieldingSingleSeasonAdvanced,
+    FieldingSingleSeason
 )

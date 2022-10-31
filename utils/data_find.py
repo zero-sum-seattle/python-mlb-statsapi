@@ -14,16 +14,18 @@ def data_http_return():
     hostname = f"statsapi.mlb.com"
     short_url = f"https://{hostname}/api/{ver}/"
 
-    # pitcher? 
-    type_object = { "position": "664034", "pitcher": "660271", "catcher": "663728", "al_team":"133" } # need to check if sports, league etc have stats
-    groups = [ "hitting",
-    "pitching",
-    "fielding",
+    # pitcher? "position": "664034", "pitcher": "660271", 
+    type_object = { "catcher": "663728", "al_team":"133" } # need to check if sports, league etc have stats
+    groups = [ 
+    # "hitting",
+    # "pitching",
+    # "fielding",
     "catching",
-    "running",
-    "game",
-    "team",
-    "streak" ]
+    # "running",
+    # "game",
+    # "team",
+    # "streak" 
+    ]
     stattypes = [ "projected",
     "projectedRos",
     "yearByYear",

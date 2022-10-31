@@ -2,10 +2,9 @@
 from typing import Optional, Union, List
 
 from mlbstatsapi.models.teams import Team
-from mlbstatsapi.models.people import Person, Position
+from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
-from mlbstatsapi.models.game import Game
 
 
 
@@ -89,34 +88,13 @@ class Stats:
     """
     stat_group: str
     stat_type: str
-    team: Optional[Union[Team, dict]] = None
-    player: Optional[Union[Person, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
-    league: Optional[Union[League, dict]] = None
+    team: Optional[Union[Team, dict]] = field(default_factory=dict)
+    player: Optional[Union[Person, dict]] = field(default_factory=dict)
+    sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
+    league: Optional[Union[League, dict]] = field(default_factory=dict)
     season: Optional[str] = None
-
-@dataclass(kw_only=True)
-class ExpectedStatistics(Stats):
-    """
-    A class to represent a excepted statistics statType: expectedStatistics.
-    """
-    """
-    Attributes
-    ----------
-    avg : str
-    slg : str
-    woba : str
-    wobaCon : str
-    rank : int
-    """
-    type_ = [ 'expectedStatistics' ]
-    avg : str
-    slg : str
-    woba : str
-    wobaCon : str
-    season: str
-    gametype: str
-    rank : Optional[int] = None
+    numteams: Optional[int] = None
+    gametype: Optional[str] = None
 
 @dataclass(kw_only=True)
 class PitchArsenal(Stats):
@@ -150,9 +128,9 @@ class ZoneCodes:
         batting percentage of the zone
     """
     zone: str
-    color: str
-    temp: str
     value: str
+    color: Optional[str] = None
+    temp: Optional[str] = None
 
 @dataclass(kw_only=True)
 class HotColdZones(Stats):
@@ -172,6 +150,25 @@ class HotColdZones(Stats):
 
     def __post_init__(self):
         self.zones = [ ZoneCodes(**zone) for zone in self.zones ]
+
+@dataclass
+class SprayChart(Stats):
+    """
+    centerfield : float
+    leftcenterfield : float 
+    leftfield : float
+    rightcenterfield : float
+    rightfield
+    batter
+    
+    """
+    type_ = [ 'sprayChart' ]
+    centerfield: float
+    leftcenterfield: float
+    leftfield: float
+    rightcenterfield: float
+    rightfield: float
+    batter: Union[Person, dict] = field(default_factory=dict)
 
 @dataclass(kw_only=True)
 class OutsAboveAverage(Stats):
