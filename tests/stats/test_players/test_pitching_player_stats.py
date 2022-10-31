@@ -13,7 +13,15 @@ from mlbstatsapi.models.stats import (
     PitchingOpponentsFaced,
     PitchingByDayOfWeek,
     PitchingPlayLog,
+    PitchingYearByYearAdvanced,
+    PitchingYearByYear,
+    PitchingYearByYearPlayoffs,
+    PitchingHomeAndAway,
+    PitchingWinLoss,
+    PitchingSingleSeason,
+    PitchingSingleSeasonAdvanced
 )
+
 class TestPlayerPitchingStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -35,7 +43,7 @@ class TestPlayerPitchingStats(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingSeason)
+            self.assertIsInstance(stat, (PitchingSeason, PitchingSingleSeason))
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'season'))
@@ -48,7 +56,7 @@ class TestPlayerPitchingStats(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingSeasonAdvanced)
+            self.assertIsInstance(stat, (PitchingSeasonAdvanced, PitchingSingleSeasonAdvanced))
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'season'))
@@ -110,7 +118,7 @@ class TestPlayerPitchingStats(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingYBY)
+            self.assertIsInstance(stat, PitchingYearByYear)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'season'))
@@ -127,7 +135,7 @@ class TestPlayerPitchingStats(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingYBYAdvanced)
+            self.assertIsInstance(stat, PitchingYearByYearAdvanced)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'season'))
@@ -143,7 +151,7 @@ class TestPlayerPitchingStats(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingYBYPlayoffs)
+            self.assertIsInstance(stat, PitchingYearByYearPlayoffs)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'season'))
@@ -214,7 +222,7 @@ class TestPlayerPitchingStats(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingHAA)
+            self.assertIsInstance(stat, PitchingHomeAndAway)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'ishome'))
@@ -231,7 +239,7 @@ class TestPlayerPitchingStats(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingWL)
+            self.assertIsInstance(stat, PitchingWinLoss)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'iswin'))

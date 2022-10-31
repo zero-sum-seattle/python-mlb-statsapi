@@ -7,8 +7,10 @@ from mlbstatsapi import TheMlbStatsApiException
 from mlbstatsapi.models.stats import (
     HittingSeason,
     HittingExpectedStatistics,
-    HittingAdvancedSeason 
+    HittingSeasonAdvanced,
+    HittingYearByYear
 )
+from mlbstatsapi.models.stats.hitting import HittingByMonth, HittingDateRange, HittingDateRangeAdvanced, HittingDayOfWeek, HittingHomeAndAway, HittingWinLoss
 
 class TestTeamHitting(unittest.TestCase):
     @classmethod
@@ -58,7 +60,7 @@ class TestTeamHitting(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be AdvancedHitting
-            self.assertIsInstance(stat, HittingAdvancedSeason)
+            self.assertIsInstance(stat, HittingSeasonAdvanced)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'totalbases'))
@@ -73,7 +75,7 @@ class TestTeamHitting(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimpleHitting
-            self.assertIsInstance(stat, HittingAdvancedSeason)
+            self.assertIsInstance(stat, HittingSeasonAdvanced)
 
         self.params = { 'stats': [ 'seasonAdvanced' ], 'group': 'hitting' }
 
@@ -87,7 +89,7 @@ class TestTeamHitting(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be AdvancedHitting
-            self.assertIsInstance(stat, HittingAdvancedSeason)
+            self.assertIsInstance(stat, HittingSeasonAdvanced)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'totalbases'))
@@ -107,7 +109,7 @@ class TestTeamHitting(unittest.TestCase):
             self.assertTrue(stat)
 
             # split should be HittingSplits
-            self.assertIsInstance(stat, HittingYBY)
+            self.assertIsInstance(stat, HittingYearByYear)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, "hits"))
@@ -125,7 +127,7 @@ class TestTeamHitting(unittest.TestCase):
             self.assertTrue(stat)
 
             # split should be HittingSplits
-            self.assertIsInstance(stat, HittingYBY)
+            self.assertIsInstance(stat, HittingYearByYear)
 
             # stat should have a attr set
             self.assertTrue(hasattr(stat, "hits"))
@@ -196,7 +198,9 @@ class TestTeamHitting(unittest.TestCase):
         # Let's build this set of tests 
         self.params_one = { 'stats': [ 'homeAndAway', 'winLoss', 'yearByYear', 'byDayOfWeek',
         'byDateRange', 'byDateRangeAdvanced', 'byDayOfWeek', 'byMonth' ], 'group': 'hitting' }
-
+        # hitting_instances = (HittingHomeAndAway, HittingWinLoss, HittingYearByYear, HittingDayOfWeek,
+        # HittingDateRange, HittingDateRangeAdvanced, HittingDayOfWeek, HittingByMonth)
+        
         # make the calls to return a list of objects
         al_stat_group_one = self.mlb.get_stats(self.al_team, self.params_one)
         nl_stat_group_one = self.mlb.get_stats(self.nl_team, self.params_one)

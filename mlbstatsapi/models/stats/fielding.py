@@ -39,36 +39,56 @@ class SimpleFielding:
 
 
 @dataclass(kw_only=True)
-class SeasonFieldingAdvanced(Stats, SimpleFielding):
+class FieldingSeasonAdvanced(Stats, SimpleFielding):
     """
     A class to represent a fielding season statistic
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding advanced season 
-    numteams : str
-        the number of teams for the fielding season
     """
-    type_ = ['seasonAdvanced', 'statsSingleSeasonAdvanced' ]
+    type_ = ['seasonAdvanced' ]
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
 @dataclass(kw_only=True)
-class SeasonFielding(Stats, SimpleFielding):
+class FieldingSingleSeasonAdvanced(Stats, SimpleFielding):
     """
     A class to represent a fielding season statistic
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding yearByYear 
-    numteams : str
-        the number of teams for the fielding season
     """
-    type_ = [ 'season', 'statsSingleSeason' ]
+    type_ = [ 'statsSingleSeasonAdvanced' ]
+    position: Optional[Union[Position, dict]] = field(default_factory=dict)
+
+    def __post_init__(self):
+        self.position = Position(**self.position) if self.position else self.position
+
+@dataclass(kw_only=True)
+class FieldingSeason(Stats, SimpleFielding):
+    """
+    A class to represent a fielding season statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'season' ]
+    position: Optional[Union[Position, dict]] = field(default_factory=dict)
+
+    def __post_init__(self):
+        self.position = Position(**self.position) if self.position else self.position
+
+@dataclass(kw_only=True)
+class FieldingSingleSeason(Stats, SimpleFielding):
+    """
+    A class to represent a fielding season statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'statsSingleSeason' ]
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
@@ -81,16 +101,26 @@ class FieldingCareer(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding yearByYear 
-    numteams : str
-        the number of teams for the fielding season
     """
-    type_ = [ 'careerRegularSeason', 'career' ]
+    type_ = [ 'career' ]
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position    
+
+@dataclass(kw_only=True)
+class FieldingCareerRegularSeason(Stats, SimpleFielding):
+    """
+    A class to represent a fielding career statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'careerRegularSeason' ]
+    position: Optional[Union[Position, dict]] = field(default_factory=dict)
+
+    def __post_init__(self):
+        self.position = Position(**self.position) if self.position else self.position 
 
 @dataclass(kw_only=True)
 class FieldingCareerPlayoffs(Stats, SimpleFielding):
@@ -99,10 +129,6 @@ class FieldingCareerPlayoffs(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding careerPlayoffs 
-    numteams : str
-        the number of teams for the fielding careerPlayoffs
     """
     type_ = [ 'careerPlayoffs' ]
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
@@ -117,10 +143,6 @@ class FieldingHomeAndAway(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding homeAndAway 
-    numteams : str
-        the number of teams for the fielding homeAndAway
     """
     type_ = [ 'homeAndAway' ]
     ishome: bool
@@ -132,10 +154,6 @@ class FieldingHomeAndAwayPlayoffs(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching yearByYear 
-    numteams : str
-        the number of teams for the pitching yearByYear
     """
     type_ = [ 'homeAndAwayPlayoffs' ]
     ishome: bool
@@ -147,10 +165,6 @@ class FieldingYearByYear(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching yearByYear 
-    numteams : str
-        the number of teams for the pitching season
     """
     type_ = [ 'yearByYear' ]
 
@@ -161,10 +175,6 @@ class FieldingYearByYearAdvanced(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding yearByYear 
-    numteams : str
-        the number of teams for the fielding season
     """
     type_ = [ 'yearByYearAdvanced']
 
@@ -175,10 +185,6 @@ class FieldingYearByYearPlayoffs(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding yearByYearPlayoffs 
-    numteams : str
-        the number of teams for the fielding yearByYearPlayoffs
     """
     type_ = [ 'yearByYearPlayoffs' ]
 
@@ -189,10 +195,6 @@ class FieldingWinLoss(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding winLoss 
-    numteams : str
-        the number of teams for the fielding winLoss
     """
     type_ = ['winLoss' ]
     iswin: bool
@@ -204,10 +206,6 @@ class FieldingWinLossPlayoffs(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding winLossPlayoffs 
-    numteams : str
-        the number of teams for the fielding winLossPlayoffs
     """
     type_ = [ 'winLossPlayoffs' ]
     iswin: bool
@@ -219,10 +217,6 @@ class FieldingByDayOfWeek(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding byDayOfWeek 
-    numteams : str
-        the number of teams for the fielding byDayOfWeek
     """
     type_ = [ 'byDayOfWeek' ]
     dayofweek: str
@@ -242,10 +236,6 @@ class FieldingByMonth(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding byMonth 
-    numteams : str
-        the number of teams for the fielding byMonth
     """
     type_ = [ 'byMonth' ]
     month: int
@@ -257,10 +247,6 @@ class FieldingByMonthPlayoffs(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding byMonthPlayoffs 
-    numteams : str
-        the number of teams for the fielding byMonthPlayoffs
     """
     type_ = [ 'byMonthPlayoffs' ]
     month: int
@@ -272,10 +258,6 @@ class FieldingLastXGames(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding lastXGames 
-    numteams : str
-        the number of teams for the fielding lastXGames
     """
     type_ = [ 'lastXGames' ]
 
@@ -286,10 +268,6 @@ class FieldingGameLog(Stats, SimpleFielding):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the fielding gameLog 
-    numteams : str
-        the number of teams for the fielding gameLog
     """
     type_ = [ 'gameLog' ]
     opponent: Union[Team, dict] = field(default_factory=dict)

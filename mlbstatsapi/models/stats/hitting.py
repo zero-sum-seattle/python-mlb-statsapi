@@ -141,12 +141,19 @@ class HittingCareer(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the hitting career 
-    numteams : str
-        the number of teams for the hitting career
     """
-    type_ = [ 'career', 'careerRegularSeason' ]
+    type_ = [ 'career' ]
+
+@dataclass(kw_only=True)
+class HittingCareerRegularSeason(Stats, SimpleHittingStat):
+    """
+    A class to represent a hitting career or careerPlayoffs statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'careerRegularSeason' ]
+
 
 @dataclass(kw_only=True)
 class HittingCareerPlayoffs(Stats, SimpleHittingStat):
@@ -155,10 +162,6 @@ class HittingCareerPlayoffs(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the hitting career 
-    numteams : str
-        the number of teams for the hitting career
     """
     type_ = [ 'careerPlayoffs' ]
 
@@ -169,27 +172,39 @@ class HittingSeason(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    gametype : str
-        the gametype code of the hitting season 
-    numteams : str
-        the number of teams for the hitting season
     """
-    type_ = [ 'season', 'statsSingleSeason' ]
-
+    type_ = [ 'season' ]
 
 @dataclass(kw_only=True)
-class HittingAdvancedSeason(Stats, AdvancedHittingStat):
+class HittingSingleSeason(Stats, SimpleHittingStat):
     """
     A class to represent a hitting season statistic
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the hitting season 
-    numteams : str
-        the number of teams for the hitting season
     """
-    type_ = [ 'careerAdvanced', 'seasonAdvanced' ]
+    type_ = [ 'statsSingleSeason' ]
+
+@dataclass(kw_only=True)
+class HittingSeasonAdvanced(Stats, AdvancedHittingStat):
+    """
+    A class to represent a hitting season statistic
+
+    Attributes
+    ----------
+    """
+    type_ = ['seasonAdvanced' ]
+
+@dataclass(kw_only=True)
+class HittingCareerAdvanced(Stats, AdvancedHittingStat):
+    """
+    A class to represent a hitting season statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'careerAdvanced' ]
+
 
 @dataclass(kw_only=True)
 class HittingYearByYear(Stats, SimpleHittingStat):
@@ -198,10 +213,6 @@ class HittingYearByYear(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the hitting yearbyyear 
-    numteams : str
-        the number of teams for the hitting yearbyyear
     """
     type_ = [ 'yearByYear' ]
 
@@ -212,10 +223,6 @@ class HittingYearByYearPlayoffs(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the hitting yearbyyear 
-    numteams : str
-        the number of teams for the hitting yearbyyear
     """
     type_ = [ 'yearByYearPlayoffs' ]
 
@@ -439,10 +446,6 @@ class HittingLastXGames(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching yearByYear 
-    numteams : str
-        the number of teams for the pitching yearByYear
     """
     type_ = [ 'lastXGames' ]
 
@@ -453,10 +456,6 @@ class HittingDateRange(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching yearByYear 
-    numteams : str
-        the number of teams for the pitching yearByYear
     """
     type_ = [ 'byDateRange' ]
 
@@ -467,10 +466,6 @@ class HittingDateRangeAdvanced(Stats, AdvancedHittingStat):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching yearByYear 
-    numteams : str
-        the number of teams for the pitching yearByYear
     """
     type_ = [ 'byDateRangeAdvanced' ]
 
@@ -481,10 +476,6 @@ class HittingByMonth(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching yearByYear 
-    numteams : str
-        the number of teams for the pitching yearByYear
     """
     type_ = [ 'byMonth' ]
     month: int
@@ -499,8 +490,6 @@ class HittingByMonthPlayoffs(Stats, SimpleHittingStat):
     ----------
     month : str
         the month of the stat
-    numteams : str
-        the number of teams for the pitching yearByYear
     """
     type_ = [ 'byMonthPlayoffs' ]
     month: int
@@ -513,10 +502,8 @@ class HittingDayOfWeek(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    month : str
-        the month of the stat
-    numteams : str
-        the number of teams for the pitching yearByYear
+    dayofweek : int
+        the day of the week
     """
     type_ = [ 'byDayOfWeek' ]
     dayofweek: int
@@ -528,10 +515,8 @@ class HittingDayOfWeekPlayoffs(Stats, SimpleHittingStat):
 
     Attributes
     ----------
-    month : str
-        the month of the stat
-    numteams : str
-        the number of teams for the pitching yearByYear
+    dayofweek : int
+        the day of the week
     """
     type_ = [ 'byDayOfWeekPlayoffs' ]
     dayofweek: int
