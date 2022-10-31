@@ -20,11 +20,9 @@ class MlbResult:
         self.status_code = int(status_code)
         self.message = str(message)
 
-        # if data is not NoneType and if copyright key is in data
-        # then if copyright key revemoved set data
         self.data = data
         if 'copyright' in data:
-            del data['copyright']
+            del data['copyright'] # remove copyright key it's useless
 
 
 class MlbDataAdapter:
@@ -42,7 +40,7 @@ class MlbDataAdapter:
     """
 
     def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
-        self.url = f"https://{hostname}/api/{ver}/" # we'll figure out the v1.1 endpoint later
+        self.url = f"https://{hostname}/api/{ver}/"
         self._logger = logger or logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
 
@@ -129,8 +127,10 @@ class MlbDataAdapter:
             return MlbResult(response.status_code, message=response.reason, data={})
 
         elif response.status_code >= 500 and response.status_code <= 599:
+
             self._logger.error(msg=logline_post.format("Internal error occurred", 
             response.status_code, response.reason, response.url))
+
             raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}")
 
         else:
