@@ -556,7 +556,8 @@ class HittingVsTeam(Stats, SimpleHittingStat):
     type_ = [ 'vsTeam' ]
     opponent: Union[Person, dict]
     rank: int
-    batter: Union[Person, dict]
+    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
 @dataclass(kw_only=True)
 class HittingVsTeamTotal(Stats, SimpleHittingStat):
@@ -571,7 +572,8 @@ class HittingVsTeamTotal(Stats, SimpleHittingStat):
     type_ = [ 'vsTeamTotal' ]
     opponent: Union[Person, dict]
     rank: int
-    batter: Union[Person, dict]
+    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
 @dataclass(kw_only=True)
 class HittingVsTeam5Y(Stats, SimpleHittingStat):
@@ -586,4 +588,5 @@ class HittingVsTeam5Y(Stats, SimpleHittingStat):
     type_ = [ 'vsTeam5Y' ]
     opponent: Union[Person, dict]
     rank: int
-    batter: Union[Person, dict]
+    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)

@@ -279,6 +279,19 @@ class TestPlayerPitchingStats(unittest.TestCase):
             # stat should have a attr set
             self.assertTrue(hasattr(stat, 'pitcher'))
 
+    def test_hitting_vs_team_stats_on_players(self):
+        self.params = { 'stats': [ 'vsTeam' ], 'group': 'pitching', 'opposingTeamId': '133' }
+    
+        pitching_vsteam_stats = self.mlb.get_stats(self.pitching_player, self.params)
+
+        # the list should not be empty
+        self.assertTrue(len(pitching_vsteam_stats))
+    
+        position_vsteam_stats = self.mlb.get_stats(self.position_player, self.params)
+
+        # the list should be empty
+        self.assertFalse(len(position_vsteam_stats))
+
     def test_building_all_hitting_objects(self):
         """this test will build all what should be working stat objects"""
         # Let's build this set of tests 

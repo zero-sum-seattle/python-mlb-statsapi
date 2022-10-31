@@ -6,6 +6,7 @@ from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 
 from .stats import Stats, CodeDesc, Count
+from .hitting import SimpleHittingStat
 
 @dataclass
 class SimplePitching:
@@ -657,8 +658,10 @@ class PitchingExpectedStatistics(Stats):
     wobacon : str
     rank : Optional[int] = None
 
+# These stat_types return a hitting stat for a pitching stat group
+# odd, but need to deal with it.
 @dataclass(kw_only=True)
-class PitchingVsTeam(Stats, SimplePitching):
+class PitchingVsTeam(Stats, SimpleHittingStat):
     """
     A class to represent a vsTeam pitching statistic
 
@@ -668,10 +671,11 @@ class PitchingVsTeam(Stats, SimplePitching):
     type_ = [ 'vsTeam' ]
     opponent: Union[Person, dict]
     rank: int
-    batter: Union[Person, dict]
+    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
 @dataclass(kw_only=True)
-class PitchingVsTeamTotal(Stats, SimplePitching):
+class PitchingVsTeamTotal(Stats, SimpleHittingStat):
     """
     A class to represent a vsTeamTotal pitching statistic
 
@@ -681,10 +685,11 @@ class PitchingVsTeamTotal(Stats, SimplePitching):
     type_ = [ 'vsTeamTotal' ]
     opponent: Union[Person, dict]
     rank: int
-    batter: Union[Person, dict]
+    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
 @dataclass(kw_only=True)
-class PitchingVsTeam5Y(Stats, SimplePitching):
+class PitchingVsTeam5Y(Stats, SimpleHittingStat):
     """
     A class to represent a vsTeam5Y pitching statistic
 
@@ -694,6 +699,6 @@ class PitchingVsTeam5Y(Stats, SimplePitching):
     type_ = [ 'vsTeam5Y' ]
     opponent: Union[Person, dict]
     rank: int
-    batter: Union[Person, dict]
-#https://statsapi.mlb.com/api/v1/people?personIds=543243,622608,594965,571927,548389,571945,656427,500779&season=2019&hydrate=stats(group=[pitching],type=[vsTeam],opposingTeamId=158,season=2019)
-#https://statsapi.mlb.com/api/v1/people?personIds=543243,622608,594965,571927,548389,571945,656427,500779&season=2019&hydrate=stats(group=[pitching],type=[vsTeamTotal],opposingTeamId=158,season=2019)
+    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
+
