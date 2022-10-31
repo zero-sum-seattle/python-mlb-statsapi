@@ -58,8 +58,8 @@ class TestTeamCatchingStats(unittest.TestCase):
         al_catching = self.mlb.get_stats(self.al_team, self.params)
         nl_catching = self.mlb.get_stats(self.nl_team, self.params)
 
-        self.assertIsNone(al_catching)
-        self.assertIsNone(nl_catching)
+        self.assertListEqual(al_catching, [])
+        self.assertListEqual(nl_catching, [])
 
     def test_catching_byDateRange_byDayOfWeek_stats_team(self):
         self.params = { 'stats': [ 'byDateRange', 'byDayOfWeek',  ], 'group': 'catching' }
