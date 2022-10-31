@@ -5,7 +5,7 @@ from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game, Plays, Linescore, BoxScore
 from mlbstatsapi.models.venues import Venue
-from mlbstatsapi.models.sports import Sport
+from mlbstatsapi.models.sports import Sport, sport
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule
@@ -77,6 +77,12 @@ class TestMlbGetPeople(unittest.TestCase):
         self.assertIsInstance(mlbdata, List) # Test result is List
         self.assertIsInstance(mlbdata[0], Person) # Lazy Test to check the list contains instances of Person
 
+    def test_mlbdataapi_get_people_with_sportid(self):
+        """mlb get_people should return a list of all sport 1 people"""
+        mlbdata = self.mlb.get_people(sportid=11)
+        self.assertIsInstance(mlbdata, List) # Test result is List
+        self.assertIsInstance(mlbdata[0], Person) # Lazy Test to check the list contains instances of Person
+
     def test_mlb_get_person(self):
         """mlb get_person should return a Person object"""
         person = self.mlb.get_person('664034')
@@ -92,6 +98,11 @@ class TestMlbGetPeople(unittest.TestCase):
         """mlb get_person_id should return a person id"""
         id = self.mlb.get_people_id('Ty France') # Return Ty France Person ID in a List
         self.assertEqual(id, [664034]) # Confirm the ID is correct
+
+    def test_mlb_get_person_id_with_sportid(self):
+        """mlb get_person_id should return a person id"""
+        id = self.mlb.get_people_id('Fernando Abad', sportid=11) # Return Ty France Person ID in a List
+        self.assertEqual(id, [472551]) # Confirm the ID is correct
 
     def test_mlb_get_invalid_person_id(self):
         """mlb get_person_id should return empty list for invalid name"""
@@ -120,6 +131,12 @@ class TestMlbGetTeam(unittest.TestCase):
         self.assertIsInstance(mlbdata, List) # Test result is List
         self.assertIsInstance(mlbdata[0], Team) # Lazy test to check the list contains instance of Team
 
+    def test_mlbdataapi_get_teams_with_sportid(self):
+        """mlb get_teams should return a list of Teams"""
+        mlbdata = self.mlb.get_teams(sportid=16)
+        self.assertIsInstance(mlbdata, List) # Test result is List
+        self.assertIsInstance(mlbdata[0], Team) # Lazy test to check the list contains instance of Team
+
     def test_mlb_failed_get_team(self):
         """mlb get_team should return None for invalid team id"""
         team = self.mlb.get_team('19999')
@@ -129,6 +146,11 @@ class TestMlbGetTeam(unittest.TestCase):
         """mlb get_team_id should return a list of matching team id's"""
         id = self.mlb.get_team_id('Mariners') # Return Mariners Team ID in a List
         self.assertEqual(id, [136])
+
+    def test_mlb_get_team_id(self):
+        """mlb get_team_id should return a list of matching team id's"""
+        id = self.mlb.get_team_id('DSL Brewers 2') # Return Mariners Team ID in a List
+        self.assertEqual(id, [2101])
 
     def test_mlb_get_bad_team_id(self):
         """mlb get_team_id should return a empty list for invalid team name"""

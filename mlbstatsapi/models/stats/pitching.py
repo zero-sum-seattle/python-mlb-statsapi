@@ -656,3 +656,6 @@ class PitchingExpectedStatistics(Stats):
     woba : str
     wobacon : str
     rank : Optional[int] = None
+
+#https://statsapi.mlb.com/api/v1/people?personIds=543243,622608,594965,571927,548389,571945,656427,500779&season=2019&hydrate=stats(group=[pitching],type=[vsTeam],opposingTeamId=158,season=2019)
+#https://statsapi.mlb.com/api/v1/people?personIds=543243,622608,594965,571927,548389,571945,656427,500779&season=2019&hydrate=stats(group=[pitching],type=[vsTeamTotal],opposingTeamId=158,season=2019)
