@@ -32,7 +32,10 @@ from .hitting import (
     HittingWinLossPlayoffs,
     HittingExpectedStatistics,
     HittingSeasonAdvanced,
-    HittingSingleSeason
+    HittingSingleSeason,
+    HittingVsTeam,
+    HittingVsTeam5Y,
+    HittingVsTeamTotal
 )
 
 from .pitching import (
@@ -62,7 +65,10 @@ from .pitching import (
     PitchingRankings,
     PitchingPlayLog,
     PitchingSingleSeason,
-    PitchingSingleSeasonAdvanced
+    PitchingSingleSeasonAdvanced,
+    PitchingVsTeam,
+    PitchingVsTeam5Y,
+    PitchingVsTeamTotal
 )
 
 from .catching import (

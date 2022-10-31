@@ -542,3 +542,48 @@ class HittingExpectedStatistics(Stats):
     wobacon : str
     gametype: str
     rank : Optional[int] = None
+
+@dataclass(kw_only=True)
+class HittingVsTeam(Stats, SimpleHittingStat):
+    """
+    A class to represent a yearByYear hitting statistic
+
+    Attributes
+    ----------
+    dayofweek : int
+        the day of the week
+    """
+    type_ = [ 'vsTeam' ]
+    opponent: Union[Person, dict]
+    rank: int
+    batter: Union[Person, dict]
+
+@dataclass(kw_only=True)
+class HittingVsTeamTotal(Stats, SimpleHittingStat):
+    """
+    A class to represent a yearByYear hitting statistic
+
+    Attributes
+    ----------
+    dayofweek : int
+        the day of the week
+    """
+    type_ = [ 'vsTeamTotal' ]
+    opponent: Union[Person, dict]
+    rank: int
+    batter: Union[Person, dict]
+
+@dataclass(kw_only=True)
+class HittingVsTeam5Y(Stats, SimpleHittingStat):
+    """
+    A class to represent a yearByYear hitting statistic
+
+    Attributes
+    ----------
+    dayofweek : int
+        the day of the week
+    """
+    type_ = [ 'vsTeam5Y' ]
+    opponent: Union[Person, dict]
+    rank: int
+    batter: Union[Person, dict]

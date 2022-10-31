@@ -657,5 +657,43 @@ class PitchingExpectedStatistics(Stats):
     wobacon : str
     rank : Optional[int] = None
 
+@dataclass(kw_only=True)
+class PitchingVsTeam(Stats, SimplePitching):
+    """
+    A class to represent a vsTeam pitching statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'vsTeam' ]
+    opponent: Union[Person, dict]
+    rank: int
+    batter: Union[Person, dict]
+
+@dataclass(kw_only=True)
+class PitchingVsTeamTotal(Stats, SimplePitching):
+    """
+    A class to represent a vsTeamTotal pitching statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'vsTeamTotal' ]
+    opponent: Union[Person, dict]
+    rank: int
+    batter: Union[Person, dict]
+
+@dataclass(kw_only=True)
+class PitchingVsTeam5Y(Stats, SimplePitching):
+    """
+    A class to represent a vsTeam5Y pitching statistic
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'vsTeam5Y' ]
+    opponent: Union[Person, dict]
+    rank: int
+    batter: Union[Person, dict]
 #https://statsapi.mlb.com/api/v1/people?personIds=543243,622608,594965,571927,548389,571945,656427,500779&season=2019&hydrate=stats(group=[pitching],type=[vsTeam],opposingTeamId=158,season=2019)
 #https://statsapi.mlb.com/api/v1/people?personIds=543243,622608,594965,571927,548389,571945,656427,500779&season=2019&hydrate=stats(group=[pitching],type=[vsTeamTotal],opposingTeamId=158,season=2019)
