@@ -37,7 +37,8 @@ class Mlb:
         List[Person]
         """       
         mlbdata = self._mlb_adapter_v1.get(endpoint="sports/1/players") # get all people
-        
+        people = []
+
         if ('people' in mlbdata.data and mlbdata.data['people']):
             people = [ Person(**person) for person in mlbdata.data['people'] ]
         
@@ -95,6 +96,7 @@ class Mlb:
         List[Team]
         """         
         mlbdata = self._mlb_adapter_v1.get(endpoint="teams?sportId=1") # Get all major league teams
+        teams = []
         
         if ('teams' in mlbdata.data and mlbdata.data['teams']):
             teams = [ Team(**team) for team in mlbdata.data['teams']]
@@ -358,7 +360,7 @@ class Mlb:
                             if not abstractgamestate or (game.status.abstractgamestate == abstractgamestate):
                                 gamesids.append(game.gamepk) # Append game Ids
             
-            return gamesids
+        return gamesids
 
     def get_todays_game_ids(self, abstractgamestate=None) -> List[int]:
         """
@@ -487,7 +489,8 @@ class Mlb:
         List[Sport]
         """          
         mlbdata = self._mlb_adapter_v1.get(endpoint="sports") # Get All sports
-        
+        sports = []
+
         if ('sports' in mlbdata.data and mlbdata.data['sports']):
             sports = [ Sport(**sport) for sport in mlbdata.data['sports'] ]
 

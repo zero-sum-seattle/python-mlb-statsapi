@@ -113,7 +113,6 @@ class CatchingCareer(Stats, SimpleCatching):
     """
     type_ = [ 'careerRegularSeason' ]
 
-
 @dataclass(kw_only=True)
 class CatchingGameLog(Stats, SimpleCatching):
     """

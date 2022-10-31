@@ -96,6 +96,3 @@ from .fielding import (
 
 )
 
-from .game import (
-    SimpleGame
-)
