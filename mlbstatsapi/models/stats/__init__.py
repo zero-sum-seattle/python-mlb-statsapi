@@ -67,8 +67,20 @@ from .pitching import (
 
 from .catching import (
     CatchingYearByYear,
-    SimpleCatching,
-    CatchingYearByYearPlayoffs
+    CatchingSingleSeason,
+    CatchingYearByYearPlayoffs,
+    CatchingSeason,
+    CatchingYearByYearPlayoffs,
+    CatchingYearByYear,
+    CatchingProjected,
+    CatchingCareer,
+    CatchingCareerRegularSeason,
+    CatchingGameLog,
+    CatchingLastXGames,
+    CatchingByDateRange,
+    CatchingByDayOfWeek,
+    CatchingHomeAndAway,
+    CatchingWinLoss
 )
 
 from .fielding import (
@@ -93,9 +105,4 @@ from .fielding import (
     FieldingSeasonAdvanced,
     FieldingSingleSeasonAdvanced,
     FieldingSingleSeason
-
-)
-
-from .game import (
-    SimpleGame
 )

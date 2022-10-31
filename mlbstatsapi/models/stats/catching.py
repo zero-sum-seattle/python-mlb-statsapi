@@ -44,7 +44,7 @@ class SimpleCatching:
     passedball: Optional[int] = None
 
 @dataclass(kw_only=True)
-class SeasonCatching(Stats, SimpleCatching):
+class CatchingSeason(Stats, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -54,7 +54,7 @@ class SeasonCatching(Stats, SimpleCatching):
     type_ = [ 'season' ]
 
 @dataclass(kw_only=True)
-class SeasonSingleCatching(Stats, SimpleCatching):
+class CatchingSingleSeason(Stats, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -104,7 +104,7 @@ class CatchingCareer(Stats, SimpleCatching):
     type_ = [ 'career' ]
 
 @dataclass(kw_only=True)
-class CatchingCareer(Stats, SimpleCatching):
+class CatchingCareerRegularSeason(Stats, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 

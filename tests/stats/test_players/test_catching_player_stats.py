@@ -4,8 +4,8 @@ import unittest
 from mlbstatsapi.mlbapi import Mlb
 
 from mlbstatsapi.models.stats import (
-    SimpleCatching,
-    CatchingYearByYear
+    CatchingYearByYear,
+    CatchingSeason
 )
 
 class TestCatchingPlayerStats(unittest.TestCase):
@@ -32,7 +32,7 @@ class TestCatchingPlayerStats(unittest.TestCase):
             self.assertTrue(stat)
 
             # stat should be SimpleCatching
-            self.assertIsInstance(stat, SimpleCatching)
+            self.assertIsInstance(stat, CatchingSeason)
 
             # stat should have attr set
             self.assertTrue(hasattr(stat, 'passedball'))
