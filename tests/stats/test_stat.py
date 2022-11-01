@@ -11,10 +11,7 @@ class TestCatchingPlayerStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.catching_player = cls.mlb.get_person(663728) # Cal Raleigh
-        cls.utility_player = cls.mlb.get_person(647351) # Abraham Toro
-        cls.al_team = cls.mlb.get_team(133) # Oakland
-        cls.nl_team = cls.mlb.get_team(143) # Philadelphia Phillies
+        cls.shoei_ohtani = cls.mlb.get_person(660271) # Cal Raleigh
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -23,25 +20,44 @@ class TestCatchingPlayerStats(unittest.TestCase):
 
     def test_multiple_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'season', 'career', 'seasonAdvanced', 'careerAdvanced' ], 'group': 'pitching' }
+        self.params = { 'stats': [ 'season', 'career', 'seasonAdvanced', 'careerAdvanced' ], 'group': [ 'pitching', 'hitting' ] }
 
         # let's get some stats
-        pitching_splits = self.mlb.get_stats(self.al_team, self.params)
+        hitting_pitching_stats = self.mlb.get_stats(self.shoei_ohtani, self.params)
 
         # check for empty list
-        self.assertNotEqual(pitching_splits, [])
+        self.assertNotEqual(hitting_pitching_stats, [])
 
-        # the end point should give us 4 objects back
-        self.assertEqual(len(pitching_splits), 4)
+        # the end point should give us 2 hitting and pitching stat objects back
+        self.assertEqual(len(hitting_pitching_stats), 2)
+        self.assertTrue('hitting' in hitting_pitching_stats)
+        self.assertTrue('pitching' in hitting_pitching_stats)
 
+        # let's check to make sure the two objects have four stat type classes and are populated lists
+        for stat in hitting_pitching_stats:
 
+            # check for split objects
+            self.assertTrue(stat['seasons'])
+            self.assertTrue(stat['careers'])
+            self.assertTrue(stat['seasonsadvanced'])
+            self.assertTrue(stat['careersadvanced'])
 
+            # let's make sure they aren't empty
+            self.assertNotEqual(stat['seasons'], [])
+            self.assertNotEqual(stat['careers'], [])
+            self.assertNotEqual(stat['seasonsadvanced'], [])
+            self.assertNotEqual(stat['careersadvanced'], [])
 
+            # let's pull out a object and test it
+            season = stat['seasons'][0]
+            career = stat['careers'][0]
+            season_advanced = stat['seasonsadvanced'][0]
+            career_advanced = stat['careersadvanced'][0]
 
-
-
-
-
-
+            # check that attrs exist and contain data
+            self.assertTrue(season.season)
+            self.assertTrue(career.player)
+            self.assertTrue(season_advanced.season)
+            self.assertTrue(career_advanced.player)
 
 

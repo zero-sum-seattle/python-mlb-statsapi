@@ -1,10 +1,11 @@
 ﻿from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from .stats import Stats
-
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
+
+from .stats import Splits
+
 
 @dataclass
 class SimpleCatching:
@@ -44,7 +45,7 @@ class SimpleCatching:
     passedball: Optional[int] = None
 
 @dataclass(kw_only=True)
-class CatchingSeason(Stats, SimpleCatching):
+class CatchingSeason(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -54,7 +55,7 @@ class CatchingSeason(Stats, SimpleCatching):
     type_ = [ 'season' ]
 
 @dataclass(kw_only=True)
-class CatchingSingleSeason(Stats, SimpleCatching):
+class CatchingSingleSeason(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -64,7 +65,7 @@ class CatchingSingleSeason(Stats, SimpleCatching):
     type_ = [ 'statsSingleSeason' ]
 
 @dataclass(kw_only=True)
-class CatchingYearByYearPlayoffs(Stats, SimpleCatching):
+class CatchingYearByYearPlayoffs(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -74,7 +75,7 @@ class CatchingYearByYearPlayoffs(Stats, SimpleCatching):
     type_ = [ 'yearByYearPlayoffs' ]
 
 @dataclass(kw_only=True)
-class CatchingYearByYear(Stats, SimpleCatching):
+class CatchingYearByYear(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -84,7 +85,7 @@ class CatchingYearByYear(Stats, SimpleCatching):
     type_ = [ 'yearByYear' ]
 
 @dataclass(kw_only=True)
-class CatchingProjected(Stats, SimpleCatching):
+class CatchingProjected(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -94,7 +95,7 @@ class CatchingProjected(Stats, SimpleCatching):
     type_ = [ 'projectedRos' ]
 
 @dataclass(kw_only=True)
-class CatchingCareer(Stats, SimpleCatching):
+class CatchingCareer(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -104,7 +105,7 @@ class CatchingCareer(Stats, SimpleCatching):
     type_ = [ 'career' ]
 
 @dataclass(kw_only=True)
-class CatchingCareerRegularSeason(Stats, SimpleCatching):
+class CatchingCareerRegularSeason(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -114,7 +115,7 @@ class CatchingCareerRegularSeason(Stats, SimpleCatching):
     type_ = [ 'careerRegularSeason' ]
 
 @dataclass(kw_only=True)
-class CatchingGameLog(Stats, SimpleCatching):
+class CatchingGameLog(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -129,7 +130,7 @@ class CatchingGameLog(Stats, SimpleCatching):
     opponent: Union[Team, dict]
 
 @dataclass(kw_only=True)
-class CatchingLastXGames(Stats, SimpleCatching):
+class CatchingLastXGames(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -139,7 +140,7 @@ class CatchingLastXGames(Stats, SimpleCatching):
     type_ = [ 'lastXGames' ]
 
 @dataclass(kw_only=True)
-class CatchingByDateRange(Stats, SimpleCatching):
+class CatchingByDateRange(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -149,7 +150,7 @@ class CatchingByDateRange(Stats, SimpleCatching):
     type_ = [ 'byDateRange' ]
 
 @dataclass(kw_only=True)
-class CatchingByDayOfWeek(Stats, SimpleCatching):
+class CatchingByDayOfWeek(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -160,7 +161,7 @@ class CatchingByDayOfWeek(Stats, SimpleCatching):
     dayofweek: int
 
 @dataclass(kw_only=True)
-class CatchingHomeAndAway(Stats, SimpleCatching):
+class CatchingHomeAndAway(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -171,7 +172,7 @@ class CatchingHomeAndAway(Stats, SimpleCatching):
     ishome: bool
 
 @dataclass(kw_only=True)
-class CatchingWinLoss(Stats, SimpleCatching):
+class CatchingWinLoss(Splits, SimpleCatching):
     """
     A class to represent a catching winLoss statistic
 
@@ -180,3 +181,4 @@ class CatchingWinLoss(Stats, SimpleCatching):
     """
     type_ = [ 'winLoss' ]
     iswin: bool
+

@@ -13,11 +13,11 @@ from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi.models.attendances import Attendance
-from mlbstatsapi.models.stats import Stats
+from mlbstatsapi.models.stats import Splits 
 
 from .mlbdataadapter import MlbDataAdapter
 
-from .mlb import _transform_mlbdata
+from .mlb import _transform_mlbdata, _return_splits
 
 
 class Mlb:
@@ -704,7 +704,7 @@ class Mlb:
         # If problem with hydrating object, return the old dry object
         return hydratedobject if hydratedobject else object
 
-    def get_stats(self, object : Union[object, dict], params : dict) -> List[Stats]:
+    def get_stats(self, object : Union[object, dict], params : dict) -> List['Splits']:
         """
         return a split object 
 
@@ -720,38 +720,33 @@ class Mlb:
         Stats
         """  
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"{object.mlb_class}/{object.id}/stats", ep_params=params) # Get All divisions        
-        splits = []
+        splits = {}
+        group_names = [ 'hitting', 'pitching', 'fielding', 'catching' ]
+        
+
         # these stat types require further dictionary transformation
-        stat_log_type = [ 'playLog', 'pitchLog' ]
 
         if ('stats' in mlbdata.data and mlbdata.data['stats']):
             for stats in mlbdata.data['stats']:
-                # set stat_group and stat_type
-                # default to stats if no group present
-                # stat_type is used to indentify the correct stat object
-                stat_group = stats['group']['displayname'] if 'group' in stats else 'stats'
-                stat_type = stats['type']['displayname'] if 'type' in stats else None
+
+                # set stat_group stat_type
+                _group = stats['group']['displayname'] if 'group' in stats else 'stats'
+                _type = stats['type']['displayname'] if 'type' in stats else None
                 
-                # convert string base on stat_group to module name
-                # stat_group is used to find the correct python file
-                stat_module = f"mlbstatsapi.models.stats.{stat_group}"
-                stat_module = importlib.import_module(stat_module)
+                for group in group_names:
+                    if _group == group:
+                        # checking if we need to init list
+                        if group not in splits:
+                            splits[_group] = []
 
-                if ('splits' in stats and stats['splits']):
-                    # loop through classes found in stat_module 
-                    for name, obj in inspect.getmembers(stat_module):
-                        # type_ attribute holds the stat_type of the class
-                        if inspect.isclass(obj) and (hasattr(obj, 'type_') and stat_type in obj.type_):
-
-                            for stat in stats['splits']:
-
-                                if 'stat' in stat:
-                                    if stat_type in stat_log_type:
-                                        stat = _transform_mlbdata(stat, [{'stat':'play'}])
-                                    else:
-                                        stat = _transform_mlbdata(stat, 'stat')
-                                
-                                splits.append(obj(stat_type=stat_type, stat_group=stat_group, **stat))
+                        # get splits from stats
+                        stat_type_object = _return_splits(stats, _type, _group)
+                        splits[_group].append(stat_type_object)
 
         return splits
+
+ 
+
+ 
+
 
