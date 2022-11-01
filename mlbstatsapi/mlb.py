@@ -58,6 +58,7 @@ def _return_splits(split_data : List, stat_type : str, stat_group : str) -> List
     stat_module = f"mlbstatsapi.models.stats.{stat_group}"
     stat_module = importlib.import_module(stat_module)
 
+    # if splits is empty let's jump out
     if not ('splits' in split_data and split_data['splits']):
          return splits 
 
@@ -65,10 +66,14 @@ def _return_splits(split_data : List, stat_type : str, stat_group : str) -> List
             # type_ attribute holds the stat_type of the class
         if inspect.isclass(obj) and (hasattr(obj, 'type_') and stat_type in obj.type_):
             for stat in split_data['splits']:
+
+                # if stat_type is in stat_log_type
+                # do required dictionary transformation
                 if ( 'stat' in stat ) and (stat_type in stat_log_type):
                     stat = _transform_mlbdata(stat, [{'stat':'play'}])
                 else:
                     stat = _transform_mlbdata(stat, 'stat')
+                    
                 splits.append(obj(_type=stat_type, _group=stat_group, **stat))
 
     return splits
