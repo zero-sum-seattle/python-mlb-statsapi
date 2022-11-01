@@ -23,41 +23,46 @@ class TestCatchingPlayerStats(unittest.TestCase):
         self.params = { 'stats': [ 'season', 'career', 'seasonAdvanced', 'careerAdvanced' ], 'group': [ 'pitching', 'hitting' ] }
 
         # let's get some stats
-        hitting_pitching_stats = self.mlb.get_stats(self.shoei_ohtani, self.params)
+
+        self.groups = self.params['group']
+
+        # let's get some stats
+        stats = self.mlb.get_stats(self.shoei_ohtani, self.params)
 
         # check for empty list
-        self.assertNotEqual(hitting_pitching_stats, [])
+        self.assertNotEqual(stats, [])
 
         # the end point should give us 2 hitting and pitching stat objects back
-        self.assertEqual(len(hitting_pitching_stats), 2)
-        self.assertTrue('hitting' in hitting_pitching_stats)
-        self.assertTrue('pitching' in hitting_pitching_stats)
+        self.assertEqual(len(stats), 2)
+        self.assertTrue('hitting' in stats)
+        self.assertTrue('pitching' in stats)
 
         # let's check to make sure the two objects have four stat type classes and are populated lists
-        for stat in hitting_pitching_stats:
+        for group in self.groups:
 
             # check for split objects
-            self.assertTrue(stat['seasons'])
-            self.assertTrue(stat['careers'])
-            self.assertTrue(stat['seasonsadvanced'])
-            self.assertTrue(stat['careersadvanced'])
+            self.assertTrue(stats[group]['season'])
+            self.assertTrue(stats[group]['career'])
+            self.assertTrue(stats[group]['seasonadvanced'])
+            self.assertTrue(stats[group]['careeradvanced'])
 
             # let's make sure they aren't empty
-            self.assertNotEqual(stat['seasons'], [])
-            self.assertNotEqual(stat['careers'], [])
-            self.assertNotEqual(stat['seasonsadvanced'], [])
-            self.assertNotEqual(stat['careersadvanced'], [])
+            self.assertNotEqual(stats[group]['season'], [])
+            self.assertNotEqual(stats[group]['career'], [])
+            self.assertNotEqual(stats[group]['seasonadvanced'], [])
+            self.assertNotEqual(stats[group]['careeradvanced'], [])
 
             # let's pull out a object and test it
-            season = stat['seasons'][0]
-            career = stat['careers'][0]
-            season_advanced = stat['seasonsadvanced'][0]
-            career_advanced = stat['careersadvanced'][0]
+            season = stats[group]['season'][0]
+            career = stats[group]['career'][0]
+            season_advanced = stats[group]['seasonadvanced'][0]
+            career_advanced = stats[group]['careeradvanced'][0]
 
             # check that attrs exist and contain data
             self.assertTrue(season.season)
             self.assertTrue(career.player)
             self.assertTrue(season_advanced.season)
             self.assertTrue(career_advanced.player)
+
 
 
