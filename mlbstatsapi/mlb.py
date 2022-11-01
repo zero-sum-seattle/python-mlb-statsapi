@@ -65,14 +65,14 @@ def _return_splits(split_data : List, stat_type : str, stat_group : str) -> List
     for name, obj in inspect.getmembers(stat_module):
             # type_ attribute holds the stat_type of the class
         if inspect.isclass(obj) and (hasattr(obj, 'type_') and stat_type in obj.type_):
-            for stat in split_data['splits']:
+            for split in split_data['splits']:
 
                 # if stat_type is in stat_log_type
                 # do required dictionary transformation
-                if ( 'stat' in stat ) and (stat_type in stat_log_type):
-                    stat = _transform_mlbdata(stat, [{'stat':'play'}])
+                if (stat_type in stat_log_type):
+                    split = _transform_mlbdata(split, [{'stat':'play'}])
                 else:
-                    stat = _transform_mlbdata(stat, 'stat')
+                    split = _transform_mlbdata(split, 'stat')
                     
                 splits.append(obj(_type=stat_type, _group=stat_group, **stat))
 
