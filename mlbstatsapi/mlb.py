@@ -64,7 +64,7 @@ def _return_splits(split_data : List, stat_type : str, stat_group : str) -> List
 
     for name, obj in inspect.getmembers(stat_module):
             # type_ attribute holds the stat_type of the class
-        if inspect.isclass(obj) and (hasattr(obj, 'type_') and stat_type in obj.type_):
+        if inspect.isclass(obj) and (hasattr(obj, '_stat') and stat_type in obj._stat):
             for split in split_data['splits']:
 
                 # if stat_type is in stat_log_type
@@ -74,6 +74,6 @@ def _return_splits(split_data : List, stat_type : str, stat_group : str) -> List
                 else:
                     split = _transform_mlbdata(split, 'stat')
                     
-                splits.append(obj(_type=stat_type, _group=stat_group, **stat))
+                splits.append(obj(_type=stat_type, _group=stat_group, **split))
 
     return splits

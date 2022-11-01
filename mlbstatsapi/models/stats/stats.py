@@ -102,7 +102,7 @@ class PitchArsenal(Splits):
     Attributes
     ----------
     """
-    type_ = [ 'pitchArsenal' ]
+    _stat = [ 'pitchArsenal' ]
     averagespeed: float
     count:  int
     percentage: float
@@ -144,7 +144,7 @@ class HotColdZones(Splits):
     """
     name: str 
     zones: List[ZoneCodes]
-    type_ = [ 'hotColdZones' ]
+    _stat = [ 'hotColdZones' ]
 
     def __post_init__(self):
         self.zones = [ ZoneCodes(**zone) for zone in self.zones ]
@@ -160,7 +160,7 @@ class SprayChart(Splits):
     batter
     
     """
-    type_ = [ 'sprayChart' ]
+    _stat = [ 'sprayChart' ]
     centerfield: float
     leftcenterfield: float
     leftfield: float
@@ -175,7 +175,7 @@ class OutsAboveAverage(Splits):
 
     NOTE: This stat type returns a empty list, or keys with with the value 0
     """
-    type_ = [ 'outsAboveAverage' ]
+    _stat = [ 'outsAboveAverage' ]
     attempts: int
     totaloutsaboveaverageback: int
     totaloutsaboveaveragebackunrounded: int

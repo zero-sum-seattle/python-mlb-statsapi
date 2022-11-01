@@ -52,7 +52,7 @@ class CatchingSeason(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'season' ]
+    _stat = [ 'season' ]
 
 @dataclass(kw_only=True)
 class CatchingSingleSeason(Splits, SimpleCatching):
@@ -62,7 +62,7 @@ class CatchingSingleSeason(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'statsSingleSeason' ]
+    _stat = [ 'statsSingleSeason' ]
 
 @dataclass(kw_only=True)
 class CatchingYearByYearPlayoffs(Splits, SimpleCatching):
@@ -72,7 +72,7 @@ class CatchingYearByYearPlayoffs(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'yearByYearPlayoffs' ]
+    _stat = [ 'yearByYearPlayoffs' ]
 
 @dataclass(kw_only=True)
 class CatchingYearByYear(Splits, SimpleCatching):
@@ -82,7 +82,7 @@ class CatchingYearByYear(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'yearByYear' ]
+    _stat = [ 'yearByYear' ]
 
 @dataclass(kw_only=True)
 class CatchingProjected(Splits, SimpleCatching):
@@ -92,7 +92,7 @@ class CatchingProjected(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'projectedRos' ]
+    _stat = [ 'projectedRos' ]
 
 @dataclass(kw_only=True)
 class CatchingCareer(Splits, SimpleCatching):
@@ -102,7 +102,7 @@ class CatchingCareer(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'career' ]
+    _stat = [ 'career' ]
 
 @dataclass(kw_only=True)
 class CatchingCareerRegularSeason(Splits, SimpleCatching):
@@ -112,7 +112,7 @@ class CatchingCareerRegularSeason(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'careerRegularSeason' ]
+    _stat = [ 'careerRegularSeason' ]
 
 @dataclass(kw_only=True)
 class CatchingGameLog(Splits, SimpleCatching):
@@ -122,7 +122,7 @@ class CatchingGameLog(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'gameLog' ]
+    _stat = [ 'gameLog' ]
     ishome: bool
     iswin: bool
     date: str
@@ -137,7 +137,7 @@ class CatchingLastXGames(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'lastXGames' ]
+    _stat = [ 'lastXGames' ]
 
 @dataclass(kw_only=True)
 class CatchingByDateRange(Splits, SimpleCatching):
@@ -147,7 +147,7 @@ class CatchingByDateRange(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'byDateRange' ]
+    _stat = [ 'byDateRange' ]
 
 @dataclass(kw_only=True)
 class CatchingByDayOfWeek(Splits, SimpleCatching):
@@ -157,7 +157,7 @@ class CatchingByDayOfWeek(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'byDayOfWeek' ]
+    _stat = [ 'byDayOfWeek' ]
     dayofweek: int
 
 @dataclass(kw_only=True)
@@ -168,7 +168,7 @@ class CatchingHomeAndAway(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'homeAndAway' ]
+    _stat = [ 'homeAndAway' ]
     ishome: bool
 
 @dataclass(kw_only=True)
@@ -179,6 +179,6 @@ class CatchingWinLoss(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    type_ = [ 'winLoss' ]
+    _stat = [ 'winLoss' ]
     iswin: bool
 
