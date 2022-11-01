@@ -35,8 +35,23 @@ def _transform_mlbdata(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -
     return mlb_dict
 
 def _return_splits(split_data : List, stat_type : str, stat_group : str) -> List['Splits']:
-    """Clean, Refactor, Finish"""
+    """
+    merge requested nested dicts inside mlb_dict into mlb_dict base. 
 
+    Parameters
+    ----------
+    split_data : dict
+        split data 
+
+    stat_type : str
+        type of stat
+    stat_group : str
+        group of stat
+
+    Returns
+    -------
+    splits
+    """
     stat_log_type = [ 'playLog', 'pitchLog' ]
     splits = []
 
