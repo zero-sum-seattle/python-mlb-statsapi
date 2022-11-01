@@ -2,6 +2,7 @@ import logging
 import datetime
 import inspect
 import importlib
+from os import stat
 from typing import List, Union
 
 from mlbstatsapi.models.people import Person, Player, Coach
@@ -709,6 +710,8 @@ class Mlb:
         """
         return a split object 
 
+
+
         Parameters
         ----------
         object : mlb object
@@ -730,18 +733,32 @@ class Mlb:
         """  
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"{object.mlb_class}/{object.id}/stats", ep_params=params) # Get All divisions        
         splits = {}
-        group_names = [ 'hitting', 'pitching', 'fielding', 'catching' ]
-        
+        group_names = params['group']
+        no_group_types = [ 'hotColdZones', 'sprayChart', 'pitchArsenal' ]
+        # catch 400's return splits
+        if mlbdata.status_code >= 400 and mlbdata.status_code <= 499:  
+            return splits
+
+        # create stat key if stat type is in no_group_types
+        # these stat types don't return a group
+        for _type in no_group_types:
+            if _type in params['stats']:
+                group_names.append('stats')
+                
+                # break out 
+                break
+
         # these stat types require further dictionary transformation
         if ('stats' in mlbdata.data and mlbdata.data['stats']):
             for stats in mlbdata.data['stats']:
 
-                # set stat_group stat_type
+                # if no group is present default to stats 
                 _group = stats['group']['displayname'] if 'group' in stats else 'stats'
                 _type = stats['type']['displayname'] if 'type' in stats else None
-                
+            
                 for group in group_names:
-                    if _group == group:
+
+                    if (_group == group):
                         # checking if we need to init list
                         if group not in splits:
                             splits[_group] = {}
@@ -754,7 +771,7 @@ class Mlb:
 
                         # add stat list of objects to stat type
                         splits[_group][_type] = stat_type_object
-
+                        
         return splits
 
  

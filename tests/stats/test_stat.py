@@ -30,7 +30,7 @@ class TestCatchingPlayerStats(unittest.TestCase):
         stats = self.mlb.get_stats(self.shoei_ohtani, self.params)
 
         # check for empty list
-        self.assertNotEqual(stats, [])
+        self.assertNotEqual(stats, {})
 
         # the end point should give us 2 hitting and pitching stat objects back
         self.assertEqual(len(stats), 2)
@@ -66,3 +66,40 @@ class TestCatchingPlayerStats(unittest.TestCase):
 
 
 
+    def test_hitting_pitch_arsenal_stat_on_position_player(self):
+        """mlb get stats should return pitcharsenal object"""
+        """some stat types are missing the group value, so they will be applied to the 'no_group' key"""
+        self.params = {  
+                        'stats': ['hotColdZones', 'sprayChart', 'pitchArsenal' ],
+                        'group': [ 'hitting', ]
+                    }
+
+        self.groups = 'no_group'
+
+
+        # let's get some stats
+        splits = self.mlb.get_stats(self.shoei_ohtani, self.params)
+    
+        # check for empty list
+        self.assertNotEqual(splits, {})
+        
+        
+            # the end point should give us 2 hitting and pitching stat objects back
+        self.assertTrue(splits['stats']['pitcharsenal'])
+        self.assertTrue(splits['stats']['spraychart'])
+        self.assertTrue(splits['stats']['hotcoldzones'])  
+             
+    def test_hitting_log_stats_stat_on_position_player(self):
+        """mlb get stats should return two hittinglog objects object"""
+        self.params = { 'stats': [ 'byDateRange', 'byDateRangeAdvanced', 'byMonthPlayoffs', 
+        'byMonth', 'byDayOfWeek', 'byDayOfWeekPlayoffs' ], 'group': [ 'hitting' ] }
+    
+        self.groups = self.params['group']
+
+        splits = self.mlb.get_stats(self.shoei_ohtani, self.params)
+        # check for empty list
+        self.assertNotEqual(splits, {})
+
+        for group in self.groups:
+            # the end point should give us 2 hitting and pitching stat objects back
+            self.assertTrue(len(splits[group]['bydayofweek']) > 2)

@@ -35,7 +35,7 @@ from .hitting import (
     HittingSingleSeason,
     HittingVsTeam,
     HittingVsTeam5Y,
-    HittingVsTeamTotal,
+    HittingVsTeamTotal
 )
 
 from .pitching import (

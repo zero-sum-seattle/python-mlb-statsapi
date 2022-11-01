@@ -701,3 +701,77 @@ class PitchingVsTeam5Y(Splits, SimpleHittingStat):
     rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
+
+@dataclass
+class PitchingSprayChart(Splits):
+    """
+    centerfield : float
+    leftcenterfield : float 
+    leftfield : float
+    rightcenterfield : float
+    rightfield
+    batter
+    
+    """
+    type_ = [ 'sprayChart' ]
+    centerfield: float
+    leftcenterfield: float
+    leftfield: float
+    rightcenterfield: float
+    rightfield: float
+    batter: Union[Person, dict] = field(default_factory=dict)
+
+@dataclass(kw_only=True)
+class PitchingZoneCodes:
+    """
+    A class to represent a zone code statistic used in hot cold zones
+
+    Attributes
+    ----------
+    zone : str
+        zone code location
+    color : str
+        rgba code for the color of zone
+    temp : str
+        temp description of the zone
+    value : str
+        batting percentage of the zone
+    """
+    zone: str
+    value: str
+    color: Optional[str] = None
+    temp: Optional[str] = None
+
+@dataclass(kw_only=True)
+class PitchingHotColdZones(Splits):
+    """
+    A class to represent a hot cold zone statistic
+
+    Attributes
+    ----------
+    name : str
+        name of the hot cold zone 
+    zones : List[ZoneCodes]
+        a list of zone codes to describe the zone
+    """
+    name: str 
+    zones: List[PitchingZoneCodes]
+    type_ = [ 'hotColdZones' ]
+
+    def __post_init__(self):
+        self.zones = [ PitchingZoneCodes(**zone) for zone in self.zones ]
+
+@dataclass(kw_only=True)
+class PitchingPitchArsenal(Splits):
+    """
+    A class to represent a pitcharsenal stat for a hitter and pitcher
+
+    Attributes
+    ----------
+    """
+    type_ = [ 'pitchArsenal' ]
+    averagespeed: float
+    count:  int
+    percentage: float
+    totalpitches: int
+    type: Union[CodeDesc, dict]
