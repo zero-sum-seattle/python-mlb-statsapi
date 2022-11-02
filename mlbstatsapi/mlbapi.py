@@ -719,14 +719,19 @@ class Mlb:
         Returns
         -------
         json 
+        { 
             hitting: { 
                 'season': [ HittingSeason ]
                 'seasonsAdvanced': [ HittingSeasonsAdvanced ]
             },
             pitching: {
                 'season': [ PitchingSeason ]
-                'seasonsAdvanced': [ HittingSeasonAdvanced ]
+                'seasonsAdvanced': [ PitchingSeasonAdvanced ]
+            },
+            stats: { 
+                'hotcoldzones': [ HotColdZones ]
             }
+        }
         """  
         mlbdata = self._mlb_adapter_v1.get(endpoint=f"{object.mlb_class}/{object.id}/stats", ep_params=params) # Get All divisions        
         splits = {}
@@ -754,21 +759,14 @@ class Mlb:
                 _type = stats['type']['displayname'] if 'type' in stats else None
             
                 for group in group_names:
-
                     if (_group == group):
                         # checking if we need to init list
                         if group not in splits:
                             splits[_group] = {}
 
                         # get splits from stats
-                        stat_type_object = _return_splits(stats, _type, _group)
+                        splits[_group][_type.lower()] = _return_splits(stats, _type, _group)
 
-                        # we might be able to remove this
-                        _type = _type.lower()   
-
-                        # add stat list of objects to stat type
-                        splits[_group][_type] = stat_type_object
-                        
         return splits
 
  
