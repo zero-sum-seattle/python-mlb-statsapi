@@ -27,7 +27,7 @@ class TestCatchingPlayerStats(unittest.TestCase):
         self.groups = self.params['group']
 
         # let's get some stats
-        stats = self.mlb.get_stats(self.shoei_ohtani, self.params)
+        stats = self.mlb.get_stats(self.params, self.shoei_ohtani)
 
         # check for empty list
         self.assertNotEqual(stats, {})
@@ -70,7 +70,7 @@ class TestCatchingPlayerStats(unittest.TestCase):
         """mlb get stats should return pitcharsenal object"""
         """some stat types are missing the group value, so they will be applied to the 'no_group' key"""
         self.params = {  
-                        'stats': ['hotColdZones', 'sprayChart', 'pitchArsenal' ],
+                        'stats': [ 'hotColdZones', 'sprayChart', 'pitchArsenal' ],
                         'group': [ 'hitting', ]
                     }
 
@@ -78,7 +78,7 @@ class TestCatchingPlayerStats(unittest.TestCase):
 
 
         # let's get some stats
-        splits = self.mlb.get_stats(self.shoei_ohtani, self.params)
+        splits = self.mlb.get_stats(self.params, self.shoei_ohtani)
     
         # check for empty list
         self.assertNotEqual(splits, {})
@@ -96,7 +96,7 @@ class TestCatchingPlayerStats(unittest.TestCase):
     
         self.groups = self.params['group']
 
-        splits = self.mlb.get_stats(self.shoei_ohtani, self.params)
+        splits = self.mlb.get_stats(self.params, self.shoei_ohtani)
         # check for empty list
         self.assertNotEqual(splits, {})
 

@@ -1,4 +1,5 @@
 ﻿from dataclasses import dataclass, field
+from types import NoneType
 from typing import Optional, Union, List
 
 from mlbstatsapi.models.teams import Team
@@ -86,13 +87,14 @@ class Splits:
     """
     _group: str
     _type: str
+    season: Optional[str] = None
+    numteams: Optional[int] = None
+    gametype: Optional[str] = None
+    rank: Optional[int] = None
     team: Optional[Union[Team, dict]] = field(default_factory=dict)
     player: Optional[Union[Person, dict]] = field(default_factory=dict)
     sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
     league: Optional[Union[League, dict]] = field(default_factory=dict)
-    season: Optional[str] = None
-    numteams: Optional[int] = None
-    gametype: Optional[str] = None
 
 @dataclass(kw_only=True)
 class PitchArsenal(Splits):
@@ -149,24 +151,32 @@ class HotColdZones(Splits):
     def __post_init__(self):
         self.zones = [ ZoneCodes(**zone) for zone in self.zones ]
 
-@dataclass
-class SprayChart(Splits):
+@dataclass(kw_only=True)
+class SprayCharts(Splits):
     """
-    centerfield : float
-    leftcenterfield : float 
-    leftfield : float
-    rightcenterfield : float
-    rightfield
-    batter
-    
+    A class to represent a spraychart statistic
+
+    Attributes
+    ----------
+    leftfield : int
+        percentage
+    leftcenterfield : int
+        percentage
+    centerfield : int
+        percentage
+    rightcenterfield : int
+        percentage
+    rightfield : int
+        percentage
     """
+    leftfield: int
+    leftcenterfield: int
+    centerfield: int
+    rightcenterfield: int
+    rightfield: int
     _stat = [ 'sprayChart' ]
-    centerfield: float
-    leftcenterfield: float
-    leftfield: float
-    rightcenterfield: float
-    rightfield: float
-    batter: Union[Person, dict] = field(default_factory=dict)
+    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
+
 
 @dataclass(kw_only=True)
 class OutsAboveAverage(Splits):

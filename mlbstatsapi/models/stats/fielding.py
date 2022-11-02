@@ -42,7 +42,7 @@ class SimpleFielding:
 class FieldingSeasonAdvanced(Splits, SimpleFielding):
     """
     A class to represent a fielding season statistic
-
+    # TODO Doesn't return anything
     Attributes
     ----------
     """
@@ -56,7 +56,7 @@ class FieldingSeasonAdvanced(Splits, SimpleFielding):
 class FieldingSingleSeasonAdvanced(Splits, SimpleFielding):
     """
     A class to represent a fielding season statistic
-
+    # TODO Probably doesn't work either
     Attributes
     ----------
     """
@@ -102,25 +102,11 @@ class FieldingCareer(Splits, SimpleFielding):
     Attributes
     ----------
     """
-    _stat = [ 'career' ]
+    _stat = [ 'career', 'careerRegularSeason' ]
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position    
-
-@dataclass(kw_only=True)
-class FieldingCareerRegularSeason(Splits, SimpleFielding):
-    """
-    A class to represent a fielding career statistic
-
-    Attributes
-    ----------
-    """
-    _stat = [ 'careerRegularSeason' ]
-    position: Optional[Union[Position, dict]] = field(default_factory=dict)
-
-    def __post_init__(self):
-        self.position = Position(**self.position) if self.position else self.position 
 
 @dataclass(kw_only=True)
 class FieldingCareerPlayoffs(Splits, SimpleFielding):

@@ -1,5 +1,6 @@
 import logging
 import datetime
+from types import NoneType
 from typing import List, Union
 
 from mlbstatsapi.models.people import Person, Player, Coach
@@ -703,7 +704,7 @@ class Mlb:
         # If problem with hydrating object, return the old dry object
         return hydratedobject if hydratedobject else object
 
-    def get_stats(self, object : Union[object, dict], params : dict) -> List['Splits']:
+    def get_stats(self, params : dict, mlb_object : Union[Union[Team, Person], dict] = NoneType) -> List['Splits']:
         """
         return a split object 
 
@@ -732,9 +733,17 @@ class Mlb:
                 'hotcoldzones': [ HotColdZones ]
             }
         }
-        """  
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"{object.mlb_class}/{object.id}/stats", ep_params=params) # Get All divisions        
+        """
+        if mlb_object is not NoneType:
+            mlbdata = self._mlb_adapter_v1.get(endpoint=f"{mlb_object.mlb_class}/{mlb_object.id}/stats", ep_params=params)
+        else:
+            mlbdata = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
+            
         splits = {}
+
+        # TODO convert group to list
+        # Fix bug that adds stats to params
+        # https://statsapi.mlb.com/api/v1/teams/143/stats?stats=expectedStatistics&stats=sprayChart&group=hitting&group=stats
         group_names = params['group']
         no_group_types = [ 'hotColdZones', 'sprayChart', 'pitchArsenal' ]
         # catch 400's return splits
@@ -759,11 +768,13 @@ class Mlb:
                 _type = stats['type']['displayname'] if 'type' in stats else None
             
                 for group in group_names:
+                    self._logger.debug(print(group))
                     if (_group == group):
                         # checking if we need to init list
                         if group not in splits:
                             splits[_group] = {}
-
+                        self._logger.debug(msg=(str(stats)))
+                        self._logger.debug(msg=(str(_type)))
                         # get splits from stats
                         splits[_group][_type.lower()] = _return_splits(stats, _type, _group)
 

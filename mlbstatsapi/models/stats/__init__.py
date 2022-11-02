@@ -4,7 +4,8 @@ from .stats import (
     CodeDesc,
     Count,
     HotColdZones,
-    ZoneCodes
+    ZoneCodes,
+    SprayCharts
 )
 
 from .hitting import (
@@ -107,7 +108,6 @@ from .fielding import (
     FieldingCareerPlayoffs,
     FieldingCareer,
     FieldingSeason,
-    FieldingCareerRegularSeason,
     FieldingSeasonAdvanced,
     FieldingSingleSeasonAdvanced,
     FieldingSingleSeason,

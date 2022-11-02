@@ -174,6 +174,7 @@ class HittingSeason(Splits, SimpleHittingStat):
     ----------
     """
     _stat = [ 'season' ]
+    rank: Optional[int] = None
 
 @dataclass(kw_only=True)
 class HittingSingleSeason(Splits, SimpleHittingStat):

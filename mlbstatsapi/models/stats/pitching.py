@@ -172,13 +172,13 @@ class PitchingSeason(Splits, SimplePitching):
     numteams : str
         the number of teams for the pitching season
     """
-    _stat = [ 'season' ]
+    _stat = [ 'season', 'statsSingleSeason' ]
 
 @dataclass(kw_only=True)
 class PitchingSingleSeason(Splits, SimplePitching):
     """
     A class to represent a pitching season statistic
-
+    statsSingleSeason returns as type season
     Attributes
     ----------
     gametype : str
@@ -186,7 +186,7 @@ class PitchingSingleSeason(Splits, SimplePitching):
     numteams : str
         the number of teams for the pitching season
     """
-    _stat = [ 'statsSingleSeason' ]
+    _stat = [ '' ]
 
 @dataclass(kw_only=True)
 class PitchingCareer(Splits, SimplePitching):
@@ -656,7 +656,6 @@ class PitchingExpectedStatistics(Splits):
     slg : str
     woba : str
     wobacon : str
-    rank : Optional[int] = None
 
 # These stat_types return a hitting stat for a pitching stat group
 # odd, but need to deal with it.
@@ -670,7 +669,6 @@ class PitchingVsTeam(Splits, SimpleHittingStat):
     """
     _stat = [ 'vsTeam' ]
     opponent: Union[Person, dict]
-    rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
@@ -684,7 +682,6 @@ class PitchingVsTeamTotal(Splits, SimpleHittingStat):
     """
     _stat = [ 'vsTeamTotal' ]
     opponent: Union[Person, dict]
-    rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
@@ -698,7 +695,6 @@ class PitchingVsTeam5Y(Splits, SimpleHittingStat):
     """
     _stat = [ 'vsTeam5Y' ]
     opponent: Union[Person, dict]
-    rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 

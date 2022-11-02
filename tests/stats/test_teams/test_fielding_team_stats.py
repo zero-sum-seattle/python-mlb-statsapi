@@ -18,21 +18,12 @@ class TestTeamFieldingStats(unittest.TestCase):
         pass
 
     def test_fielding_season_stats_for_team(self):
-        self.params = { 'stats': [ 'seasonAdvanced' ], 'group': 'fielding' }
+        self.params = { 'stats': [ 'season' ], 'group': [ 'fielding' ]}
 
         # catching_player
-        fielding = self.mlb.get_stats(self.team, self.params)
+        stats = self.mlb.get_stats(self.params, self.team)
 
-        # check for None, or NoneType
-        self.assertIsNotNone(fielding)
+        self.assertIsNotNone(stats)
+        self.assertNotEqual(stats, {})
 
-        for stat in fielding:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
-
-            # stat should be SimpleCatching
-            self.assertIsInstance(stat, SimpleFielding)
-
-            # stat should have attr set
-            self.assertTrue(hasattr(stat, 'errors'))
-            self.assertTrue(hasattr(stat, 'gamesplayed'))
+        self.assertTrue(stats['fielding']['season'])
