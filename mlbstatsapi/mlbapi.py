@@ -39,7 +39,7 @@ class Mlb:
         -------
         List[Person]
         """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports/{sportid}/players")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports/{sportid}/players')
         people = []
 
         if ('people' in mlbdata.data and mlbdata.data['people']):
@@ -60,7 +60,7 @@ class Mlb:
         -------
         Person
         """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"people/{playerid}")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'people/{playerid}')
         
         if ('people' in mlbdata.data and mlbdata.data['people']):
             for person in mlbdata.data['people']:
@@ -82,7 +82,7 @@ class Mlb:
         List[int]
         """
 
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports/{sportid}/players")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports/{sportid}/players')
         playerIds = []
 
         # if mlbdata is not empty, and 'people' key is in mlbdata.data and mlbdata.data['people'] is not empty list
@@ -105,8 +105,9 @@ class Mlb:
         Returns
         -------
         List[Team]
-        """         
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"teams?sportId={sportid}")
+        """
+        params = { 'sportId': sportid }
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'teams', ep_params=params)
         teams = []
         
         if ('teams' in mlbdata.data and mlbdata.data['teams']):
@@ -127,7 +128,7 @@ class Mlb:
         -------
         Team
         """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"teams/{teamid}")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'teams/{teamid}')
 
         if ('teams' in mlbdata.data and mlbdata.data['teams']):
             for team in mlbdata.data['teams']:
@@ -146,7 +147,7 @@ class Mlb:
         -------
         List[ints]
         """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint="teams")
+        mlbdata = self._mlb_adapter_v1.get(endpoint='teams')
         teamIds = []
         
         if ('teams' in mlbdata.data and mlbdata.data['teams']):
@@ -169,7 +170,7 @@ class Mlb:
         -------
         List[Player]
         """
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"teams/{teamid}/roster")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'teams/{teamid}/roster')
         players = []
 
         if ('roster' in mlbdata.data and mlbdata.data['roster']):
@@ -191,7 +192,7 @@ class Mlb:
         -------
         List[Coach]
         """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"teams/{teamid}/coaches")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'teams/{teamid}/coaches')
         coaches = []
 
         if ('roster' in mlbdata.data and mlbdata.data['roster']):
@@ -200,8 +201,7 @@ class Mlb:
 
         return coaches
 
-    def get_schedule(self, startdate = datetime.date.today().strftime("%Y-%m-%d"), 
-                     enddate = datetime.date.today().strftime("%Y-%m-%d")) -> Union[Schedule, None]:
+    def get_schedule(self, startdate = None, enddate = None) -> Union[Schedule, None]:
         """
         return the schedule created from the included params.
 
@@ -221,7 +221,13 @@ class Mlb:
         -------
         Schedule
         """     
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"schedule?sportId=1&startDate={startdate}&endDate={enddate}")
+        # default to today if not set
+        startdate = datetime.date.today().strftime("%Y-%m-%d") if startdate is None else startdate
+        enddate = datetime.date.today().strftime("%Y-%m-%d") if enddate is None else enddate
+        
+        params = {'sportId': '1', 'startDate': startdate, 'endDate': enddate}
+
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'schedule', ep_params=params)
 
         # if mlbdata is not empty, and 'dates' key is in mlbdata.data and mlbdata.data['dates] can sometimes be an empty list
         # when there are no scheduled game for the date(s). Only check for existance 'dates' key for this reason.
@@ -425,8 +431,9 @@ class Mlb:
         Returns
         -------
         Venue
-        """             
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'venues/{venueid}?hydrate=location,fieldInfo,timezone')
+        """
+        params = {'hydrate': ['location', 'fieldInfo', 'timezone'] }
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'venues/{venueid}', ep_params=params)
         
         if ('venues' in mlbdata.data and mlbdata.data['venues']):
             for venue in mlbdata.data['venues']:
@@ -461,7 +468,7 @@ class Mlb:
         -------
         List[int]
         """        
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"venues")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'venues')
         venueIds = [] 
         
         if ('venues' in mlbdata.data and mlbdata.data['venues']):
@@ -520,7 +527,7 @@ class Mlb:
         -------
         List[int]
         """          
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"sports")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports')
         sportIds = []
 
         if ('sports' in mlbdata.data and mlbdata.data['sports']):
@@ -552,7 +559,7 @@ class Mlb:
         -------
         List[League]
         """           
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"league")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'league')
         leagues = []
         
         if ('leagues' in mlbdata.data and mlbdata.data['leagues']):
@@ -573,7 +580,7 @@ class Mlb:
         -------
         List[int]
         """            
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"league") 
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'league') 
         leagueIds = []
 
         if ('leagues' in mlbdata.data and mlbdata.data['leagues']):
@@ -610,7 +617,7 @@ class Mlb:
         -------
         List[Division]
         """   
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"divisions")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'divisions')
         divisions = []
         
         if ('divisions' in mlbdata.data and mlbdata.data['divisions']):
@@ -631,7 +638,7 @@ class Mlb:
         -------
         List[int]
         """           
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"divisions")
+        mlbdata = self._mlb_adapter_v1.get(endpoint=f'divisions')
         divisionIds = []
         
         if ('divisions' in mlbdata.data and mlbdata.data['divisions']):
@@ -735,7 +742,7 @@ class Mlb:
         }
         """
         if mlb_object is not NoneType:
-            mlbdata = self._mlb_adapter_v1.get(endpoint=f"{mlb_object.mlb_class}/{mlb_object.id}/stats", ep_params=params)
+            mlbdata = self._mlb_adapter_v1.get(endpoint=f'{mlb_object.mlb_class}/{mlb_object.id}/stats', ep_params=params)
         else:
             mlbdata = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
             
