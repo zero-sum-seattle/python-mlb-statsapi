@@ -704,7 +704,7 @@ class Mlb:
         # If problem with hydrating object, return the old dry object
         return hydratedobject if hydratedobject else object
 
-    def get_stats(self, params : dict, mlb_object : Union[Union[Team, Person], dict] = NoneType) -> List['Splits']:
+    def get_stats(self, params : dict, mlb_object : Union[Union[Team, Person], dict] = NoneType) -> Union['Splits', dict]:
         """
         return a split object 
 
