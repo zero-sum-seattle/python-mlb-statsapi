@@ -5,7 +5,7 @@ from mlbstatsapi.models.people import Person, Position
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 
-from .stats import Stats, CodeDesc, Count
+from .stats import Splits, CodeDesc, Count
 
 @dataclass
 class AdvancedHittingStat:
@@ -83,7 +83,7 @@ class SimpleHittingStat:
     atbatsperhomerun: Optional[int] = None
 
 @dataclass(kw_only=True)
-class HittingWinLoss(Stats, SimpleHittingStat):
+class HittingWinLoss(Splits, SimpleHittingStat):
     """
     A class to represent a hitting winLoss statistic
 
@@ -92,11 +92,11 @@ class HittingWinLoss(Stats, SimpleHittingStat):
     iswin : bool
         the bool to hold if a win or not for hitting winLoss
     """
-    type_ = [ 'winLoss' ]
+    _stat = [ 'winLoss' ]
     iswin: bool
 
 @dataclass(kw_only=True)
-class HittingWinLossPlayoffs(Stats, SimpleHittingStat):
+class HittingWinLossPlayoffs(Splits, SimpleHittingStat):
     """
     A class to represent a hitting winLoss statistic
 
@@ -105,11 +105,11 @@ class HittingWinLossPlayoffs(Stats, SimpleHittingStat):
     iswin : bool
         the bool to hold if a win or not for hitting winLoss
     """
-    type_ = [ 'winLossPlayoffs' ]
+    _stat = [ 'winLossPlayoffs' ]
     iswin: bool
 
 @dataclass(kw_only=True)
-class HittingHomeAndAway(Stats, SimpleHittingStat):
+class HittingHomeAndAway(Splits, SimpleHittingStat):
     """
     A class to represent a hitting homeAndAway statistic
 
@@ -118,11 +118,11 @@ class HittingHomeAndAway(Stats, SimpleHittingStat):
     ishome : bool
         the bool to hold if it ishome hitting homeAndAway
     """
-    type_ = [ 'homeAndAway' ]
+    _stat = [ 'homeAndAway' ]
     ishome: bool
 
 @dataclass(kw_only=True)
-class HittingHomeAndAwayPlayoffs(Stats, SimpleHittingStat):
+class HittingHomeAndAwayPlayoffs(Splits, SimpleHittingStat):
     """
     A class to represent a hitting homeAndAway statistic
 
@@ -131,103 +131,104 @@ class HittingHomeAndAwayPlayoffs(Stats, SimpleHittingStat):
     ishome : bool
         the bool to hold if it ishome hitting homeAndAway
     """
-    type_ = [ 'homeAndAwayPlayoffs' ]
+    _stat = [ 'homeAndAwayPlayoffs' ]
     ishome: bool
 
 @dataclass(kw_only=True)
-class HittingCareer(Stats, SimpleHittingStat):
+class HittingCareer(Splits, SimpleHittingStat):
     """
     A class to represent a hitting career or careerPlayoffs statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'career' ]
+    _stat = [ 'career' ]
 
 @dataclass(kw_only=True)
-class HittingCareerRegularSeason(Stats, SimpleHittingStat):
+class HittingCareerRegularSeason(Splits, SimpleHittingStat):
     """
     A class to represent a hitting career or careerPlayoffs statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'careerRegularSeason' ]
+    _stat = [ 'careerRegularSeason' ]
 
 
 @dataclass(kw_only=True)
-class HittingCareerPlayoffs(Stats, SimpleHittingStat):
+class HittingCareerPlayoffs(Splits, SimpleHittingStat):
     """
     A class to represent a hitting careerPlayoffs statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'careerPlayoffs' ]
+    _stat = [ 'careerPlayoffs' ]
 
 @dataclass(kw_only=True)
-class HittingSeason(Stats, SimpleHittingStat):
+class HittingSeason(Splits, SimpleHittingStat):
     """
     A class to represent a hitting season statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'season' ]
+    _stat = [ 'season' ]
+
 
 @dataclass(kw_only=True)
-class HittingSingleSeason(Stats, SimpleHittingStat):
+class HittingSingleSeason(Splits, SimpleHittingStat):
     """
     A class to represent a hitting season statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'statsSingleSeason' ]
+    _stat = [ 'statsSingleSeason' ]
 
 @dataclass(kw_only=True)
-class HittingSeasonAdvanced(Stats, AdvancedHittingStat):
+class HittingSeasonAdvanced(Splits, AdvancedHittingStat):
     """
     A class to represent a hitting season statistic
 
     Attributes
     ----------
     """
-    type_ = ['seasonAdvanced' ]
+    _stat = ['seasonAdvanced' ]
 
 @dataclass(kw_only=True)
-class HittingCareerAdvanced(Stats, AdvancedHittingStat):
+class HittingCareerAdvanced(Splits, AdvancedHittingStat):
     """
     A class to represent a hitting season statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'careerAdvanced' ]
+    _stat = [ 'careerAdvanced' ]
 
 
 @dataclass(kw_only=True)
-class HittingYearByYear(Stats, SimpleHittingStat):
+class HittingYearByYear(Splits, SimpleHittingStat):
     """
     A class to represent a hitting yearbyyear or yearByYearPlayoffs statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'yearByYear' ]
+    _stat = [ 'yearByYear' ]
 
 @dataclass(kw_only=True)
-class HittingYearByYearPlayoffs(Stats, SimpleHittingStat):
+class HittingYearByYearPlayoffs(Splits, SimpleHittingStat):
     """
     A class to represent a hitting yearByYearPlayoffs statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'yearByYearPlayoffs' ]
+    _stat = [ 'yearByYearPlayoffs' ]
 
 @dataclass
-class OpponentsFacedHitting(Stats):
+class OpponentsFacedHitting(Splits):
     """
     A class to represent a hitting opponentsFaced statistic
 
@@ -242,19 +243,19 @@ class OpponentsFacedHitting(Stats):
     group : str
         stat group
     """
-    type_ = [ 'opponentsFaced' ]
+    _stat = [ 'opponentsFaced' ]
     group: str
     batter: Union[Person, dict]
     fieldingteam: Union[Team, dict]
     pitcher: Union[Person, dict]
 
 @dataclass
-class HittingSabermetrics(Stats):
+class HittingSabermetrics(Splits):
     """
     A class to represent a hitting sabermetric statistic
 
     """
-    type_ = [ 'sabermetrics' ]
+    _stat = [ 'sabermetrics' ]
     woba: float
     wrc: float
     wrcplus: float
@@ -262,7 +263,7 @@ class HittingSabermetrics(Stats):
     war: float
 
 @dataclass(kw_only=True)
-class HittingGameLog(Stats, SimpleHittingStat):
+class HittingGameLog(Splits, SimpleHittingStat):
     """
     A class to represent a gamelog stat for a hitter
 
@@ -294,7 +295,7 @@ class HittingGameLog(Stats, SimpleHittingStat):
     game: Union[Game, dict]
     date: str
     opponent: Union[Team, dict]
-    type_ = [ 'gameLog' ]
+    _stat = [ 'gameLog' ]
     positionsplayed: Optional[List[Position]] = field(default_factory=list)
 
     def __post_init__(self):
@@ -351,7 +352,7 @@ class PlayDetails:
 
 
 @dataclass(kw_only=True)
-class HittingPlayLog(Stats):
+class HittingPlayLog(Splits):
     """
     A class to represent a gamelog stat for a hitter
 
@@ -387,15 +388,14 @@ class HittingPlayLog(Stats):
     atbatnumber: int
     ispitch: bool
     playid: Optional[str] = None
-    type_ = [ 'playLog' ]
-
+    _stat = [ 'playLog' ]
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
 
 @dataclass(kw_only=True)
-class HittingPitchLog(Stats):
+class HittingPitchLog(Splits):
     """
     A class to represent a gamelog stat for a hitter
 
@@ -421,7 +421,7 @@ class HittingPitchLog(Stats):
         the game of the log
 
     """
-    type_ = [ 'pitchLog' ]
+    _stat = [ 'pitchLog' ]
     opponent: Union[Team, dict]
     date: str
     ishome: bool
@@ -440,49 +440,49 @@ class HittingPitchLog(Stats):
         self.count = Count(**self.count)
 
 @dataclass(kw_only=True)
-class HittingLastXGames(Stats, SimpleHittingStat):
+class HittingLastXGames(Splits, SimpleHittingStat):
     """
     A class to represent a lastXGames statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'lastXGames' ]
+    _stat = [ 'lastXGames' ]
 
 @dataclass(kw_only=True)
-class HittingDateRange(Stats, SimpleHittingStat):
+class HittingDateRange(Splits, SimpleHittingStat):
     """
     A class to represent a byDateRange statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'byDateRange' ]
+    _stat = [ 'byDateRange' ]
 
 @dataclass(kw_only=True)
-class HittingDateRangeAdvanced(Stats, AdvancedHittingStat):
+class HittingDateRangeAdvanced(Splits, AdvancedHittingStat):
     """
     A class to represent a byDateRangeAdvanced statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'byDateRangeAdvanced' ]
+    _stat = [ 'byDateRangeAdvanced' ]
 
 @dataclass(kw_only=True)
-class HittingByMonth(Stats, SimpleHittingStat):
+class HittingByMonth(Splits, SimpleHittingStat):
     """
     A class to represent a byMonth hitting statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'byMonth' ]
+    _stat = [ 'byMonth' ]
     month: int
     gamesplayed: int
 
 @dataclass(kw_only=True)
-class HittingByMonthPlayoffs(Stats, SimpleHittingStat):
+class HittingByMonthPlayoffs(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
@@ -491,12 +491,12 @@ class HittingByMonthPlayoffs(Stats, SimpleHittingStat):
     month : str
         the month of the stat
     """
-    type_ = [ 'byMonthPlayoffs' ]
+    _stat = [ 'byMonthPlayoffs' ]
     month: int
     gamesplayed: int
 
 @dataclass(kw_only=True)
-class HittingDayOfWeek(Stats, SimpleHittingStat):
+class HittingDayOfWeek(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
@@ -505,11 +505,11 @@ class HittingDayOfWeek(Stats, SimpleHittingStat):
     dayofweek : int
         the day of the week
     """
-    type_ = [ 'byDayOfWeek' ]
+    _stat = [ 'byDayOfWeek' ]
     dayofweek: int
 
 @dataclass(kw_only=True)
-class HittingDayOfWeekPlayoffs(Stats, SimpleHittingStat):
+class HittingDayOfWeekPlayoffs(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
@@ -518,11 +518,11 @@ class HittingDayOfWeekPlayoffs(Stats, SimpleHittingStat):
     dayofweek : int
         the day of the week
     """
-    type_ = [ 'byDayOfWeekPlayoffs' ]
+    _stat = [ 'byDayOfWeekPlayoffs' ]
     dayofweek: int
 
 @dataclass(kw_only=True)
-class HittingExpectedStatistics(Stats):
+class HittingExpectedStatistics(Splits):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
     """
@@ -535,7 +535,7 @@ class HittingExpectedStatistics(Stats):
     wobaCon : str
     rank : int
     """
-    type_ = [ 'expectedStatistics' ]
+    _stat = [ 'expectedStatistics' ]
     avg : str
     slg : str
     woba : str
@@ -544,7 +544,7 @@ class HittingExpectedStatistics(Stats):
     rank : Optional[int] = None
 
 @dataclass(kw_only=True)
-class HittingVsTeam(Stats, SimpleHittingStat):
+class HittingVsTeam(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
@@ -553,68 +553,119 @@ class HittingVsTeam(Stats, SimpleHittingStat):
     dayofweek : int
         the day of the week
     """
-    type_ = [ 'vsTeam' ]
+    _stat = [ 'vsTeam' ]
     opponent: Union[Person, dict]
     rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
 @dataclass(kw_only=True)
-class HittingVsTeamTotal(Stats, SimpleHittingStat):
+class HittingVsTeamTotal(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'vsTeamTotal' ]
+    _stat = [ 'vsTeamTotal' ]
     opponent: Union[Person, dict]
     rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
 @dataclass(kw_only=True)
-class HittingVsTeam5Y(Stats, SimpleHittingStat):
+class HittingVsTeam5Y(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'vsTeam5Y' ]
+    _stat = [ 'vsTeam5Y' ]
     opponent: Union[Person, dict]
     rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
 @dataclass(kw_only=True)
-class HittingVsPlayer(Stats, SimpleHittingStat):
+class HittingVsPlayer(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'vsPlayer' ]
+    _stat = [ 'vsPlayer' ]
 
 @dataclass(kw_only=True)
-class HittingVsPlayerTotal(Stats, SimpleHittingStat):
+class HittingVsPlayerTotal(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'vsPlayerTotal' ]
+    _stat = [ 'vsPlayerTotal' ]
 
 @dataclass(kw_only=True)
-class HittingVsPlayer5Y(Stats, SimpleHittingStat):
+class HittingVsPlayer5Y(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'vsPlayer5Y' ]
+    _stat = [ 'vsPlayer5Y' ]
 
 
+
+
+# class HittingStats:
+#     group: str
+#     vsplayer5y: list = []
+#     vsplayertotal: list = []
+#     vsplayer: list = []
+#     vsteam5y: list = []
+#     vsteamtotal: list = []
+#     vsteam: list = []
+#     expectedstatistics: list = []
+#     bydayofweekplayoffs: list = []
+#     bydayofweek: list = []
+#     bymonthplayoffs: list = []
+#     bymonth: list = []
+#     bydaterangeadvanced: list = []
+#     bydaterange: list = []
+#     lastxgames: list = []
+#     pitchlog: list = []
+#     playlog: list = []
+#     gamelog: list = []
+#     sabermetrics: list = []
+#     opponentsfaced: list = []
+#     yearbyyearplayoffs: list = []
+#     yearbyyear: list = []
+#     careeradvanced: list = []
+#     seasonadvanced: list = []
+#     statssingleseason: list = []
+#     season: list = []
+#     careerplayoffs: list = []
+#     careerregularseason: list = []
+#     career: list = []
+#     homeandawayplayoffs: list = []
+#     homeandaway: list = []
+#     winloss: list = []
+
+#     def __init__(self) -> None:
+#         self.group = 'hitting'
+
+#     def add_stats(self, stat_type, splits) -> None:
+
+#         # loop through splits
+#         for split in splits:
+            
+#             # there is a value so we need to append a new list item to it
+#             if getattr(self, stat_type):
+#                 # this is easy but we need the egg to make a chicken
+#                 pass
+#             else:
+#                 # now we need to set it, we will use setattr for that
+#                 setattr(self, stat_type, # TODO we need to build a object first)

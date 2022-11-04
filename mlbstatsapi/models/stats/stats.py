@@ -1,12 +1,11 @@
 ﻿from dataclasses import dataclass, field
+from types import NoneType
 from typing import Optional, Union, List
 
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
-
-
 
 @dataclass
 class CodeDesc:
@@ -59,7 +58,7 @@ class Count:
     strikes: int
 
 @dataclass(kw_only=True)
-class Stats:
+class Splits:
     """
     Base class for stats
 
@@ -86,25 +85,26 @@ class Stats:
     stat_type : str
         type of the stat 
     """
-    stat_group: str
-    stat_type: str
+    _group: str
+    _type: str
+    season: Optional[str] = None
+    numteams: Optional[int] = None
+    gametype: Optional[str] = None
+    rank: Optional[int] = None
     team: Optional[Union[Team, dict]] = field(default_factory=dict)
     player: Optional[Union[Person, dict]] = field(default_factory=dict)
     sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
     league: Optional[Union[League, dict]] = field(default_factory=dict)
-    season: Optional[str] = None
-    numteams: Optional[int] = None
-    gametype: Optional[str] = None
 
 @dataclass(kw_only=True)
-class PitchArsenal(Stats):
+class PitchArsenal(Splits):
     """
     A class to represent a pitcharsenal stat for a hitter and pitcher
 
     Attributes
     ----------
     """
-    type_ = [ 'pitchArsenal' ]
+    _stat = [ 'pitchArsenal' ]
     averagespeed: float
     count:  int
     percentage: float
@@ -133,7 +133,7 @@ class ZoneCodes:
     temp: Optional[str] = None
 
 @dataclass(kw_only=True)
-class HotColdZones(Stats):
+class HotColdZones(Splits):
     """
     A class to represent a hot cold zone statistic
 
@@ -146,38 +146,46 @@ class HotColdZones(Stats):
     """
     name: str 
     zones: List[ZoneCodes]
-    type_ = [ 'hotColdZones' ]
+    _stat = [ 'hotColdZones' ]
 
     def __post_init__(self):
         self.zones = [ ZoneCodes(**zone) for zone in self.zones ]
 
-@dataclass
-class SprayChart(Stats):
+@dataclass(kw_only=True)
+class SprayCharts(Splits):
     """
-    centerfield : float
-    leftcenterfield : float 
-    leftfield : float
-    rightcenterfield : float
-    rightfield
-    batter
-    
+    A class to represent a spraychart statistic
+
+    Attributes
+    ----------
+    leftfield : int
+        percentage
+    leftcenterfield : int
+        percentage
+    centerfield : int
+        percentage
+    rightcenterfield : int
+        percentage
+    rightfield : int
+        percentage
     """
-    type_ = [ 'sprayChart' ]
-    centerfield: float
-    leftcenterfield: float
-    leftfield: float
-    rightcenterfield: float
-    rightfield: float
-    batter: Union[Person, dict] = field(default_factory=dict)
+    leftfield: int
+    leftcenterfield: int
+    centerfield: int
+    rightcenterfield: int
+    rightfield: int
+    _stat = [ 'sprayChart' ]
+    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
+
 
 @dataclass(kw_only=True)
-class OutsAboveAverage(Stats):
+class OutsAboveAverage(Splits):
     """
     A class to represent a outs above average statistic
 
     NOTE: This stat type returns a empty list, or keys with with the value 0
     """
-    type_ = [ 'outsAboveAverage' ]
+    _stat = [ 'outsAboveAverage' ]
     attempts: int
     totaloutsaboveaverageback: int
     totaloutsaboveaveragebackunrounded: int

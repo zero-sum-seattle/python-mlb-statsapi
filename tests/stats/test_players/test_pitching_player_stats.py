@@ -3,30 +3,10 @@ import unittest
 
 from mlbstatsapi.mlbapi import Mlb
 
-from mlbstatsapi.models.stats import (
-    PitchingSeason,
-    PitchingSeasonAdvanced,
-    PitchingSabermetrics,
-    PitchingCareer,
-    PitchingCareerAdvanced,
-    PitchingGameLog,
-    PitchingOpponentsFaced,
-    PitchingByDayOfWeek,
-    PitchingPlayLog,
-    PitchingYearByYearAdvanced,
-    PitchingYearByYear,
-    PitchingYearByYearPlayoffs,
-    PitchingHomeAndAway,
-    PitchingWinLoss,
-    PitchingSingleSeason,
-    PitchingSingleSeasonAdvanced
-)
-
 class TestPlayerPitchingStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.position_player = cls.mlb.get_person(665742) # Juan Soto
         cls.pitching_player = cls.mlb.get_person(592662) # Robbie Ray
 
     @classmethod
@@ -35,332 +15,110 @@ class TestPlayerPitchingStats(unittest.TestCase):
 
     def test_get_one_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'season', 'statsSingleSeason' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
+        self.params = { 'stats': [ 'season', 'statsSingleSeason' ], 'group': ['pitching'] }
+        stats = self.mlb.get_stats(self.params, self.pitching_player)
 
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
+        self.assertTrue(stats['pitching']['season'])
+        self.assertTrue(stats['pitching']['statssingleseason'])
 
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, (PitchingSeason, PitchingSingleSeason))
+        self.params = { 'stats': [ 'seasonAdvanced', 'statsSingleSeasonAdvanced' ], 'group': ['pitching'] }
+        stats = self.mlb.get_stats(self.params, self.pitching_player)
 
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'season'))
-
-        self.params = { 'stats': [ 'seasonAdvanced', 'statsSingleSeasonAdvanced' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
-
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
-
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, (PitchingSeasonAdvanced, PitchingSingleSeasonAdvanced))
-
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'season'))
-
+        self.assertTrue(stats['pitching']['seasonadvanced'])
+        self.assertTrue(stats['pitching']['statssingleseasonadvanced'])
 
     def test_get_sabermetrics_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': ['sabermetrics'], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
+        self.params = { 'stats': ['sabermetrics'], 'group': ['pitching'] }
+        stats = self.mlb.get_stats(self.params, self.pitching_player)
 
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
-
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingSabermetrics)
-
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, "fipminus"))
+        self.assertTrue(stats['pitching']['sabermetrics'])
 
     def test_get_pitching_career_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'career' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
+        self.params = { 'stats': [ 'career', 'careerAdvanced' ], 'group': ['pitching'] }
+        stats = self.mlb.get_stats(self.params, self.pitching_player)
 
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
-
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingCareer)
-
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, "player"))
-
-        self.params = { 'stats': [ 'careerAdvanced' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
-
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
-
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingCareerAdvanced)
-
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'player'))
-
-    def test_get_yearbyyear_pitching_stats_for_player(self):
-        """mlb get stats should return pitching stats"""
-        self.params = { 'stats': ['yearByYear'], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
-
-        # test that stat is not NoneType
-        self.assertTrue(len(stats))
-
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
-
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingYearByYear)
-
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'season'))
-
-        self.params = { 'stats': ['yearByYearAdvanced' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
-        
-        # test that stat is not NoneType
-        self.assertTrue(len(stats))
+        self.assertTrue(stats['pitching']['career'])
+        self.assertTrue(stats['pitching']['careeradvanced'])
 
 
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
+    # def test_get_yearbyyear_pitching_stats_for_player(self):
+    #     """mlb get stats should return pitching stats"""
+    #     self.params = { 'stats': ['yearByYear'], 'group': 'pitching' }
+    #     stats = self.mlb.get_stats(self.pitching_player, self.params)
 
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingYearByYearAdvanced)
+    #     self.params = { 'stats': ['yearByYearAdvanced' ], 'group': 'pitching' }
+    #     stats = self.mlb.get_stats(self.pitching_player, self.params)
 
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'season'))
+    #     self.params = { 'stats': [ 'yearByYearPlayoffs' ], 'group': 'pitching' }
+    #     stats = self.mlb.get_stats(self.pitching_player, self.params)
 
-        self.params = { 'stats': [ 'yearByYearPlayoffs' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
+    # def test_get_dayofweek_pitching_stats_for_player(self):
+    #     """mlb get stats should return pitching stats"""
+    #     self.params = { 'stats': [ 'byDayOfWeek' ], 'group': 'pitching' }
+    #     stats = self.mlb.get_stats(self.pitching_player, self.params)
 
-        # test that stat is not NoneType
-        self.assertTrue(len(stats))
+    # def test_get_gamelog_pitching_stats_for_player(self):
+    #     """mlb get stats should return pitching stats"""
+    #     self.params = { 'stats': [ 'gameLog' ], 'group': 'pitching' }
+    #     stats = self.mlb.get_stats(self.pitching_player, self.params)
 
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
+    # def test_get_playlog_pitching_stats_for_player(self):
+    #     """mlb get stats should return pitching stats"""
+    #     self.params = { 'stats': [ 'playLog' ], 'group': 'pitching' }
+    #     stats = self.mlb.get_stats(self.pitching_player, self.params)
 
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingYearByYearPlayoffs)
+    # def test_get_bydate_pitching_stats_for_player(self):
+    #     """mlb get stats should return pitching stats"""
+    #     self.params = { 'stats': [ 'byDateRange', 'byDateRangeAdvanced', 'byMonth', 'byMonthPlayoffs', 
+    #     'byDayOfWeek', 'byDayOfWeekPlayoffs' ], 'group': 'pitching' }
+    #     stats = self.mlb.get_stats(self.pitching_player, self.params)
+    #     self.assertTrue(len(stats) == 18)
 
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'season'))
+    # def test_get_homeandaway_pitching_stats_for_player(self):
+    #     """mlb get stats should return pitching stats"""
+    #     self.params = { 'stats': [ 'homeAndAway', 'homeAndAwayPlayoffs' ], 'group': 'pitching' }
+    #     stats = self.mlb.get_stats(self.pitching_player, self.params)
 
-    def test_get_dayofweek_pitching_stats_for_player(self):
-        """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'byDayOfWeek' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
-
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
-
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingByDayOfWeek)
-
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'season'))
-
-    def test_get_gamelog_pitching_stats_for_player(self):
-        """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'gameLog' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
-
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
-
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingGameLog)
-
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'iswin'))
-
-    def test_get_playlog_pitching_stats_for_player(self):
-        """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'playLog' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
-
-
-        self.assertTrue(len(stats))
-
-        for stat in stats:
-            # test that stat in not NoneType
-
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingPlayLog)
-
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'ishome'))
-
-    def test_get_bydate_pitching_stats_for_player(self):
-        """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'byDateRange', 'byDateRangeAdvanced', 'byMonth', 'byMonthPlayoffs', 
-        'byDayOfWeek', 'byDayOfWeekPlayoffs' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
-        self.assertTrue(len(stats) == 18)
-
-    def test_get_homeandaway_pitching_stats_for_player(self):
-        """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'homeAndAway', 'homeAndAwayPlayoffs' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
-
-        self.assertTrue(len(stats) > 1)
-
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
-
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingHomeAndAway)
-
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'ishome'))
-
-    def test_get_winloss_pitching_stats_for_player(self):
-        """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'winLoss' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
-
-        self.assertTrue(len(stats) > 1)
-
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
-
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingWinLoss)
-
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'iswin'))
 
     # def test_get_winloss_pitching_stats_for_player(self):
     #     """mlb get stats should return pitching stats"""
-    #     self.params = { 'stats': [ 'winLossPlayoffs' ], 'group': 'pitching' }
+    #     self.params = { 'stats': [ 'winLoss' ], 'group': 'pitching' }
     #     stats = self.mlb.get_stats(self.pitching_player, self.params)
 
-    #     self.assertTrue(len(stats) == 1)
+    # def test_get_opponentfaced_pitching_stats_for_player(self):
+    #     """mlb get stats should return pitching stats"""
+    #     self.params = { 'stats': [ 'opponentsFaced' ], 'group': 'pitching' }
+    #     stats = self.mlb.get_stats(self.pitching_player, self.params)
 
-    #     for stat in stats:
-    #         # test that stat is not NoneType
-    #         self.assertTrue(stat)
 
-    #         # stat should be SimplePitching
-    #         self.assertIsInstance(stat, PitchingWLPlayoffs)
+    # def test_hitting_vs_team_stats_on_players(self):
+    #     self.params = { 'stats': [ 'vsTeam' ], 'group': 'pitching', 'opposingTeamId': '133' }
+    #     pitching_vsteam_stats = self.mlb.get_stats(self.pitching_player, self.params)
 
-    #         # stat should have a attr set
-    #         self.assertTrue(hasattr(stat, 'iswin'))
 
-    def test_get_opponentfaced_pitching_stats_for_player(self):
-        """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'opponentsFaced' ], 'group': 'pitching' }
-        stats = self.mlb.get_stats(self.pitching_player, self.params)
+    # def test_building_all_hitting_objects(self):
+    #     """this test will build all what should be working stat objects"""
+    #     self.params_one = { 'stats': [ 'homeAndAway', 'winLoss', 'yearByYear', 'byDayOfWeek',
+    #     'byDateRange', 'byDateRangeAdvanced', 'byDayOfWeek', 'byMonth' ], 'group': 'pitching' }
+    #     stat_group_one = self.mlb.get_stats(self.pitching_player, self.params_one)
 
-        # stats should not be empty
-        self.assertNotEqual(stats, [])
+    #     self.params_two = { 'stats': [ 'homeAndAwayPlayoffs', 'winLossPlayoffs', 'yearByYearPlayoffs', 
+    #     'byMonthPlayoffs', 'byDayOfWeekPlayoffs' ], 'group': 'pitching' }
 
-        for stat in stats:
-            # test that stat is not NoneType
-            self.assertTrue(stat)
+    #     self.params_three = { 'stats': [ 'pitchLog', 'playLog', 'gameLog' ], 'group': 'pitching' }
 
-            # stat should be SimplePitching
-            self.assertIsInstance(stat, PitchingOpponentsFaced)
+    #     stat_group_three = self.mlb.get_stats(self.pitching_player, self.params_three)
 
-            # stat should have a attr set
-            self.assertTrue(hasattr(stat, 'pitcher'))
+    #     self.params_four = { 'stats': [ 'hotColdZones', 'pitchArsenal', 'opponentsFaced' ], 'group': 'pitching' }
 
-    def test_hitting_vs_team_stats_on_players(self):
-        self.params = { 'stats': [ 'vsTeam' ], 'group': 'pitching', 'opposingTeamId': '133' }
-    
-        pitching_vsteam_stats = self.mlb.get_stats(self.pitching_player, self.params)
+    #     stat_group_four = self.mlb.get_stats(self.pitching_player, self.params_four)
 
-        # the list should not be empty
-        self.assertTrue(len(pitching_vsteam_stats))
-    
-        position_vsteam_stats = self.mlb.get_stats(self.position_player, self.params)
+    #     self.params_five = { 'stats': [ 'expectedStatistics', 'sprayChart' ], 'group': 'pitching' }
 
-        # the list should be empty
-        self.assertFalse(len(position_vsteam_stats))
+    #     stat_group_five = self.mlb.get_stats(self.pitching_player, self.params_five)
 
-    def test_building_all_hitting_objects(self):
-        """this test will build all what should be working stat objects"""
-        # Let's build this set of tests 
-        self.params_one = { 'stats': [ 'homeAndAway', 'winLoss', 'yearByYear', 'byDayOfWeek',
-        'byDateRange', 'byDateRangeAdvanced', 'byDayOfWeek', 'byMonth' ], 'group': 'pitching' }
+    #     self.params_six = { 'stats': [ 'seasonAdvanced', 'season', 'careerAdvanced' ], 'group': 'pitching' }
 
-        # make the calls to return a list of objects
-        stat_group_one = self.mlb.get_stats(self.pitching_player, self.params_one)
-
-        # the list should not be empty
-        self.assertTrue(len(stat_group_one))
-
-        # stat_group_one should be greater than 8
-        self.assertTrue(len(stat_group_one) > 8)
-
-        # let's now build play off stat types
-        self.params_two = { 'stats': [ 'homeAndAwayPlayoffs', 'winLossPlayoffs', 'yearByYearPlayoffs', 
-        'byMonthPlayoffs', 'byDayOfWeekPlayoffs' ], 'group': 'pitching' }
-
-        # Let's build this set of tests 
-        stat_group_two = self.mlb.get_stats(self.pitching_player, self.params_two)
-
-        # the list should not be empty
-        self.assertTrue(len(stat_group_two))
-
-        # stat_group_two 
-        self.assertTrue(len(stat_group_two) > 5)
-
-        self.params_three = { 'stats': [ 'pitchLog', 'playLog', 'gameLog' ], 'group': 'pitching' }
-
-        # Let's build this set of stat types log 
-        stat_group_three = self.mlb.get_stats(self.pitching_player, self.params_three)
-
-        # the list should not be empty
-        self.assertTrue(len(stat_group_three))
-
-        # stat_group_two 
-        self.assertTrue(len(stat_group_three) > 5)
-
-        self.params_four = { 'stats': [ 'hotColdZones', 'pitchArsenal', 'opponentsFaced' ], 'group': 'pitching' }
-
-        # Let's build this set of stat types log 
-        stat_group_four = self.mlb.get_stats(self.pitching_player, self.params_four)
-
-        # the list should not be empty
-        self.assertTrue(len(stat_group_four))
-
-        # stat_group_two 
-        self.assertTrue(len(stat_group_four) > 3)
-
-        self.params_five = { 'stats': [ 'expectedStatistics', 'sprayChart' ], 'group': 'pitching' }
-
-        # Let's build this set of stat types log 
-        stat_group_five = self.mlb.get_stats(self.pitching_player, self.params_five)
-
-        # the list should not be empty
-        self.assertTrue(len(stat_group_five))
-
-        print(len(stat_group_five))
-        # stat_group_five 
-        self.assertTrue(len(stat_group_five) == 2)
-
-        self.params_six = { 'stats': [ 'seasonAdvanced', 'season', 'careerAdvanced' ], 'group': 'pitching' }
-
-        # Let's build this set of stat types log 
-        stat_group_six = self.mlb.get_stats(self.pitching_player, self.params_six)
-
-        # the list should not be empty
-        self.assertTrue(len(stat_group_six))
-
-        # stat_group_six should be 3  
-        self.assertTrue(len(stat_group_six) == 3)
+    #     stat_group_six = self.mlb.get_stats(self.pitching_player, self.params_six)

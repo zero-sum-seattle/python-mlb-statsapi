@@ -1,7 +1,6 @@
 import logging
 import datetime
-import inspect
-import importlib
+from types import NoneType
 from typing import List, Union
 
 from mlbstatsapi.models.people import Person, Player, Coach
@@ -13,11 +12,11 @@ from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi.models.attendances import Attendance
-from mlbstatsapi.models.stats import Stats
+from mlbstatsapi.models.stats import Splits 
 
 from .mlbdataadapter import MlbDataAdapter
 
-from .mlb import _transform_mlbdata
+from .mlb import _transform_mlbdata, _return_splits
 
 
 class Mlb:
@@ -448,6 +447,7 @@ class Mlb:
             venues = [ Venue(**venue) for venue in mlbdata.data['venues']]
 
         return venues 
+
     def get_venue_id(self, venuename) -> List[int]:
         """
         return venue id
@@ -704,9 +704,11 @@ class Mlb:
         # If problem with hydrating object, return the old dry object
         return hydratedobject if hydratedobject else object
 
-    def get_stats(self, object : Union[object, dict], params : dict) -> List[Stats]:
+    def get_stats(self, params : dict, mlb_object : Union[Union[Team, Person], dict] = NoneType) -> Union['Splits', dict]:
         """
         return a split object 
+
+
 
         Parameters
         ----------
@@ -717,41 +719,69 @@ class Mlb:
 
         Returns
         -------
-        Stats
-        """  
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f"{object.mlb_class}/{object.id}/stats", ep_params=params) # Get All divisions        
-        splits = []
-        # these stat types require further dictionary transformation
-        stat_log_type = [ 'playLog', 'pitchLog' ]
+        json 
+        { 
+            hitting: { 
+                'season': [ HittingSeason ]
+                'seasonsAdvanced': [ HittingSeasonsAdvanced ]
+            },
+            pitching: {
+                'season': [ PitchingSeason ]
+                'seasonsAdvanced': [ PitchingSeasonAdvanced ]
+            },
+            stats: { 
+                'hotcoldzones': [ HotColdZones ]
+            }
+        }
+        """
+        if mlb_object is not NoneType:
+            mlbdata = self._mlb_adapter_v1.get(endpoint=f"{mlb_object.mlb_class}/{mlb_object.id}/stats", ep_params=params)
+        else:
+            mlbdata = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
+            
+        splits = {}
 
+        # TODO convert group to list
+        # Fix bug that adds stats to params
+        # https://statsapi.mlb.com/api/v1/teams/143/stats?stats=expectedStatistics&stats=sprayChart&group=hitting&group=stats
+        group_names = params['group']
+        no_group_types = [ 'hotColdZones', 'sprayChart', 'pitchArsenal' ]
+        # catch 400's return splits
+        if mlbdata.status_code >= 400 and mlbdata.status_code <= 499:  
+            return splits
+
+        # create stat key if stat type is in no_group_types
+        # these stat types don't return a group
+        for _type in no_group_types:
+            if _type in params['stats']:
+                group_names.append('stats')
+                
+                # break out 
+                break
+
+        # these stat types require further dictionary transformation
         if ('stats' in mlbdata.data and mlbdata.data['stats']):
             for stats in mlbdata.data['stats']:
-                # set stat_group and stat_type
-                # default to stats if no group present
-                # stat_type is used to indentify the correct stat object
-                stat_group = stats['group']['displayname'] if 'group' in stats else 'stats'
-                stat_type = stats['type']['displayname'] if 'type' in stats else None
-                
-                # convert string base on stat_group to module name
-                # stat_group is used to find the correct python file
-                stat_module = f"mlbstatsapi.models.stats.{stat_group}"
-                stat_module = importlib.import_module(stat_module)
 
-                if ('splits' in stats and stats['splits']):
-                    # loop through classes found in stat_module 
-                    for name, obj in inspect.getmembers(stat_module):
-                        # type_ attribute holds the stat_type of the class
-                        if inspect.isclass(obj) and (hasattr(obj, 'type_') and stat_type in obj.type_):
-
-                            for stat in stats['splits']:
-
-                                if 'stat' in stat:
-                                    if stat_type in stat_log_type:
-                                        stat = _transform_mlbdata(stat, [{'stat':'play'}])
-                                    else:
-                                        stat = _transform_mlbdata(stat, 'stat')
-                                
-                                splits.append(obj(stat_type=stat_type, stat_group=stat_group, **stat))
+                # if no group is present default to stats 
+                _group = stats['group']['displayname'] if 'group' in stats else 'stats'
+                _type = stats['type']['displayname'] if 'type' in stats else None
+            
+                for group in group_names:
+                    self._logger.debug(print(group))
+                    if (_group == group):
+                        # checking if we need to init list
+                        if group not in splits:
+                            splits[_group] = {}
+                        self._logger.debug(msg=(str(stats)))
+                        self._logger.debug(msg=(str(_type)))
+                        # get splits from stats
+                        splits[_group][_type.lower()] = _return_splits(stats, _type, _group)
 
         return splits
+
+ 
+
+ 
+
 

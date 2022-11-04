@@ -5,7 +5,7 @@ from mlbstatsapi.models.people import Position
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 
-from .stats import Stats
+from .stats import Splits
 
 @dataclass
 class SimpleFielding:
@@ -39,248 +39,232 @@ class SimpleFielding:
 
 
 @dataclass(kw_only=True)
-class FieldingSeasonAdvanced(Stats, SimpleFielding):
+class FieldingSeasonAdvanced(Splits, SimpleFielding):
     """
     A class to represent a fielding season statistic
-
+    # TODO Doesn't return anything
     Attributes
     ----------
     """
-    type_ = ['seasonAdvanced' ]
+    _stat = ['seasonAdvanced' ]
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
 @dataclass(kw_only=True)
-class FieldingSingleSeasonAdvanced(Stats, SimpleFielding):
+class FieldingSingleSeasonAdvanced(Splits, SimpleFielding):
     """
     A class to represent a fielding season statistic
-
+    # TODO Probably doesn't work either
     Attributes
     ----------
     """
-    type_ = [ 'statsSingleSeasonAdvanced' ]
+    _stat = [ 'statsSingleSeasonAdvanced' ]
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
 @dataclass(kw_only=True)
-class FieldingSeason(Stats, SimpleFielding):
+class FieldingSeason(Splits, SimpleFielding):
     """
     A class to represent a fielding season statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'season' ]
+    _stat = [ 'season' ]
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
 @dataclass(kw_only=True)
-class FieldingSingleSeason(Stats, SimpleFielding):
+class FieldingSingleSeason(Splits, SimpleFielding):
     """
     A class to represent a fielding season statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'statsSingleSeason' ]
+    _stat = [ 'statsSingleSeason' ]
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
 @dataclass(kw_only=True)
-class FieldingCareer(Stats, SimpleFielding):
+class FieldingCareer(Splits, SimpleFielding):
     """
     A class to represent a fielding career statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'career' ]
+    _stat = [ 'career', 'careerRegularSeason' ]
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position    
 
 @dataclass(kw_only=True)
-class FieldingCareerRegularSeason(Stats, SimpleFielding):
-    """
-    A class to represent a fielding career statistic
-
-    Attributes
-    ----------
-    """
-    type_ = [ 'careerRegularSeason' ]
-    position: Optional[Union[Position, dict]] = field(default_factory=dict)
-
-    def __post_init__(self):
-        self.position = Position(**self.position) if self.position else self.position 
-
-@dataclass(kw_only=True)
-class FieldingCareerPlayoffs(Stats, SimpleFielding):
+class FieldingCareerPlayoffs(Splits, SimpleFielding):
     """
     A class to represent a fielding career playoff statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'careerPlayoffs' ]
+    _stat = [ 'careerPlayoffs' ]
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
 @dataclass(kw_only=True)
-class FieldingHomeAndAway(Stats, SimpleFielding):
+class FieldingHomeAndAway(Splits, SimpleFielding):
     """
     A class to represent a fielding homeAndAway statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'homeAndAway' ]
+    _stat = [ 'homeAndAway' ]
     ishome: bool
 
 @dataclass(kw_only=True)
-class FieldingHomeAndAwayPlayoffs(Stats, SimpleFielding):
+class FieldingHomeAndAwayPlayoffs(Splits, SimpleFielding):
     """
     A class to represent a fielding homeAndAwayPlayoffs statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'homeAndAwayPlayoffs' ]
+    _stat = [ 'homeAndAwayPlayoffs' ]
     ishome: bool
 
 @dataclass(kw_only=True)
-class FieldingYearByYear(Stats, SimpleFielding):
+class FieldingYearByYear(Splits, SimpleFielding):
     """
     A class to represent a fielding yearByYear statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'yearByYear' ]
+    _stat = [ 'yearByYear' ]
 
 @dataclass(kw_only=True)
-class FieldingYearByYearAdvanced(Stats, SimpleFielding):
+class FieldingYearByYearAdvanced(Splits, SimpleFielding):
     """
     A class to represent a fielding yearByYearAdvanced statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'yearByYearAdvanced']
+    _stat = [ 'yearByYearAdvanced']
 
 @dataclass(kw_only=True)
-class FieldingYearByYearPlayoffs(Stats, SimpleFielding):
+class FieldingYearByYearPlayoffs(Splits, SimpleFielding):
     """
     A class to represent a fielding season statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'yearByYearPlayoffs' ]
+    _stat = [ 'yearByYearPlayoffs' ]
 
 @dataclass(kw_only=True)
-class FieldingWinLoss(Stats, SimpleFielding):
+class FieldingWinLoss(Splits, SimpleFielding):
     """
     A class to represent a fielding winLoss statistic
 
     Attributes
     ----------
     """
-    type_ = ['winLoss' ]
+    _stat = ['winLoss' ]
     iswin: bool
 
 @dataclass(kw_only=True)
-class FieldingWinLossPlayoffs(Stats, SimpleFielding):
+class FieldingWinLossPlayoffs(Splits, SimpleFielding):
     """
     A class to represent a fielding winLossPlayoffs statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'winLossPlayoffs' ]
+    _stat = [ 'winLossPlayoffs' ]
     iswin: bool
 
 @dataclass(kw_only=True)
-class FieldingByDayOfWeek(Stats, SimpleFielding):
+class FieldingByDayOfWeek(Splits, SimpleFielding):
     """
     A class to represent a fielding byDayOfWeek statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'byDayOfWeek' ]
+    _stat = [ 'byDayOfWeek' ]
     dayofweek: str
 
 @dataclass(kw_only=True)
-class FieldingByDateRangeAdvanced(Stats, SimpleFielding):
+class FieldingByDateRangeAdvanced(Splits, SimpleFielding):
     """
     A class to represent a fielding byMonth stat
 
     Attributes
     ----------
     """
-    type_ = [ 'byDateRangeAdvanced' ]
+    _stat = [ 'byDateRangeAdvanced' ]
     position: Union[Position, dict] = field(default_factory=dict)
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
 @dataclass(kw_only=True)
-class FieldingByMonth(Stats, SimpleFielding):
+class FieldingByMonth(Splits, SimpleFielding):
     """
     A class to represent a fielding byMonth stat
 
     Attributes
     ----------
     """
-    type_ = [ 'byMonth' ]
+    _stat = [ 'byMonth' ]
     month: int
 
 @dataclass(kw_only=True)
-class FieldingByMonthPlayoffs(Stats, SimpleFielding):
+class FieldingByMonthPlayoffs(Splits, SimpleFielding):
     """
     A class to represent a fielding byMonthPlayoffs stat
 
     Attributes
     ----------
     """
-    type_ = [ 'byMonthPlayoffs' ]
+    _stat = [ 'byMonthPlayoffs' ]
     month: int
 
 @dataclass(kw_only=True)
-class FieldingLastXGames(Stats, SimpleFielding):
+class FieldingLastXGames(Splits, SimpleFielding):
     """
     A class to represent a fielding lastXGames stat
 
     Attributes
     ----------
     """
-    type_ = [ 'lastXGames' ]
+    _stat = [ 'lastXGames' ]
 
 @dataclass(kw_only=True)
-class FieldingGameLog(Stats, SimpleFielding):
+class FieldingGameLog(Splits, SimpleFielding):
     """
     A class to represent a fielding gameLog stats
 
     Attributes
     ----------
     """
-    type_ = [ 'gameLog' ]
+    _stat = [ 'gameLog' ]
     opponent: Union[Team, dict] = field(default_factory=dict)
     date: str
     ishome: bool
     iswin: bool
     position: Union[Position, dict] = field(default_factory=dict)
     game: Union[Game, dict] = field(default_factory=dict)
-
-

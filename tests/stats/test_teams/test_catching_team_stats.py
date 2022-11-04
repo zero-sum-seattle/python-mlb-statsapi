@@ -16,96 +16,67 @@ class TestTeamCatchingStats(unittest.TestCase):
         pass
 
     def test_catching_season_stats_team(self):
-        self.params = { 'stats': [ 'season' ], 'group': 'catching' }
+        """get a basic season stat split"""
+        self.params = { 'stats': [ 'season' ], 'group': [ 'catching' ] }
 
-        al_catching = self.mlb.get_stats(self.al_team, self.params)
-        nl_catching = self.mlb.get_stats(self.nl_team, self.params)
+        al_catching = self.mlb.get_stats(self.params, self.al_team)
+        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
 
-        self.assertTrue(len(al_catching))
-        self.assertTrue(len(nl_catching))
-
-        self.assertTrue(len(al_catching) == 1)
-        self.assertTrue(len(nl_catching) == 1)
+        self.assertTrue(al_catching['catching']['season'])
+        self.assertTrue(nl_catching['catching']['season'])
 
     def test_catching_yearbyyear_stats_team(self):
         """yearbyyear stats should return list of yearbyyear stats"""
-        self.params = { 'stats': [ 'yearByYear', 'yearByYearPlayoffs' ], 'group': 'catching' }
+        self.params = { 'stats': [ 'yearByYear', 'yearByYearPlayoffs' ], 'group':[ 'catching' ]}
+        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
 
-        nl_catching = self.mlb.get_stats(self.nl_team, self.params)
-
-        self.assertTrue(len(nl_catching))
-
-        self.assertTrue(len(nl_catching) > 2)
+        self.assertTrue(nl_catching['catching']['yearbyyear'])
+        self.assertTrue(nl_catching['catching']['yearbyyearplayoffs'])
 
     def test_catching_career_stats_team(self):
         """career stats should return list of career stats"""
+        self.params = { 'stats': [ 'career', 'careerRegularSeason' ], 'group':[ 'catching' ]}
 
-        self.params = { 'stats': [ 'career', 'careerRegularSeason' ], 'group': 'catching' }
+        al_catching = self.mlb.get_stats(self.params, self.al_team)
+        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
 
-        al_catching = self.mlb.get_stats(self.al_team, self.params)
-        nl_catching = self.mlb.get_stats(self.nl_team, self.params)
-
-        self.assertTrue(len(al_catching))
-        self.assertTrue(len(nl_catching))
-
-        self.assertTrue(len(al_catching) > 1)
-        self.assertTrue(len(nl_catching) > 1)
+        # check if lists are not empty
+        self.assertTrue(al_catching['catching']['career'])
+        self.assertTrue(nl_catching['catching']['careerregularseason'])
 
     def test_catching_homeandaway_winloss_stats_team(self):
         """homeandaway and winloss stats should return 404"""
-        self.params = { 'stats': [ 'homeAndAway', 'winLoss',  ], 'group': 'catching' }
+        self.params = { 'stats': [ 'homeAndAway', 'winLoss',  ], 'group':[ 'catching' ]}
 
-        al_catching = self.mlb.get_stats(self.al_team, self.params)
-        nl_catching = self.mlb.get_stats(self.nl_team, self.params)
+        # check if lists are empty
+        al_catching = self.mlb.get_stats(self.params, self.al_team)
 
-        self.assertListEqual(al_catching, [])
-        self.assertListEqual(nl_catching, [])
+        self.assertEqual({}, al_catching)
 
     def test_catching_byDateRange_byDayOfWeek_stats_team(self):
-        self.params = { 'stats': [ 'byDateRange', 'byDayOfWeek',  ], 'group': 'catching' }
+        self.params = { 'stats': [ 'byDateRange', 'byDayOfWeek',  ], 'group':[ 'catching' ]}
 
-        al_catching = self.mlb.get_stats(self.al_team, self.params)
-        nl_catching = self.mlb.get_stats(self.nl_team, self.params)
-
-        self.assertTrue(len(al_catching))
-        self.assertTrue(len(nl_catching))
-
-        self.assertTrue(len(al_catching) > 2)
-        self.assertTrue(len(nl_catching) > 2)
+        # check if lists are not empty
+        al_catching = self.mlb.get_stats(self.params, self.al_team)
+        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
+        self.assertTrue(al_catching['catching']['bydaterange'])
+        self.assertTrue(nl_catching['catching']['bydayofweek'])
 
     def test_catching_gamelog_stats_team(self):
-        self.params = { 'stats': [ 'gameLog' ], 'group': 'catching' }
+        self.params = { 'stats': [ 'gameLog' ], 'group':[ 'catching' ]}
 
-        al_catching = self.mlb.get_stats(self.al_team, self.params)
-        nl_catching = self.mlb.get_stats(self.nl_team, self.params)
-
-        self.assertTrue(len(al_catching))
-        self.assertTrue(len(nl_catching))
-
-        self.assertTrue(len(al_catching) > 2)
-        self.assertTrue(len(nl_catching) > 2)
+        # check if lists are not empty
+        al_catching = self.mlb.get_stats(self.params, self.al_team)
+        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
+        self.assertTrue(al_catching['catching'][ 'gamelog' ])
+        self.assertTrue(nl_catching['catching'][ 'gamelog' ])
 
     def test_catching_lastXGames_stats_team(self):
-        self.params = { 'stats': [ 'lastXGames' ], 'group': 'catching' }
+        self.params = { 'stats': [ 'lastXGames' ], 'group': [ 'catching' ]}
 
-        al_catching = self.mlb.get_stats(self.al_team, self.params)
-        nl_catching = self.mlb.get_stats(self.nl_team, self.params)
-
-        self.assertTrue(len(al_catching))
-        self.assertTrue(len(nl_catching))
-
-        self.assertTrue(len(al_catching) == 1)
-        self.assertTrue(len(nl_catching) == 1)
-
-        # # check for None, or NoneType
-        # self.assertTrue(len(stat_group_six))
-
-        # # stat_group_two 
-        # self.assertTrue(len(stat_group_six) > 2)
-
-        # self.params_seven = { 'stats': [ 'lastXGames' ], 'group': 'catching' }
-
-        # stat_group_seven = self.mlb.get_stats(self.catching_player, self.params_seven)
-
-        # # check for None, or NoneType
-        # self.assertTrue(len(stat_group_seven))
+        # check if lists are not empty
+        al_catching = self.mlb.get_stats(self.params, self.al_team)
+        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
+        self.assertTrue(al_catching['catching']['lastxgames'])
+        self.assertTrue(nl_catching['catching']['lastxgames'])
+        

@@ -1,10 +1,11 @@
 from .stats import (
-    Stats, 
+    Splits, 
     PitchArsenal,
     CodeDesc,
     Count,
     HotColdZones,
-    ZoneCodes
+    ZoneCodes,
+    SprayCharts
 )
 
 from .hitting import (
@@ -68,7 +69,7 @@ from .pitching import (
     PitchingSingleSeasonAdvanced,
     PitchingVsTeam,
     PitchingVsTeam5Y,
-    PitchingVsTeamTotal
+    PitchingVsTeamTotal,
 )
 
 from .catching import (
@@ -86,7 +87,7 @@ from .catching import (
     CatchingByDateRange,
     CatchingByDayOfWeek,
     CatchingHomeAndAway,
-    CatchingWinLoss
+    CatchingWinLoss,
 )
 
 from .fielding import (
@@ -107,10 +108,9 @@ from .fielding import (
     FieldingCareerPlayoffs,
     FieldingCareer,
     FieldingSeason,
-    FieldingCareerRegularSeason,
     FieldingSeasonAdvanced,
     FieldingSingleSeasonAdvanced,
-    FieldingSingleSeason
+    FieldingSingleSeason,
 )
 
 

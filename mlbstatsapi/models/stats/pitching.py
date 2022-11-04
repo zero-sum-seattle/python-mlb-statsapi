@@ -5,7 +5,7 @@ from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 
-from .stats import Stats, CodeDesc, Count
+from .stats import Splits, CodeDesc, Count
 from .hitting import SimpleHittingStat
 
 @dataclass
@@ -132,7 +132,7 @@ class AdvancedPitching:
     bequeathedrunnersscored: Optional[int] = None
 
 @dataclass(kw_only=True)
-class PitchingSabermetrics(Stats):
+class PitchingSabermetrics(Splits):
     """
     A class to represent a pitching sabermetric statistics
 
@@ -153,7 +153,7 @@ class PitchingSabermetrics(Stats):
     numteams : str
         the number of teams for the pitching season
     """
-    type_ = ['sabermetrics']
+    _stat = ['sabermetrics']
     fip: float
     fipminus: float
     ra9war: float
@@ -161,7 +161,7 @@ class PitchingSabermetrics(Stats):
     war: float
 
 @dataclass(kw_only=True)
-class PitchingSeason(Stats, SimplePitching):
+class PitchingSeason(Splits, SimplePitching):
     """
     A class to represent a pitching season statistic
 
@@ -172,13 +172,13 @@ class PitchingSeason(Stats, SimplePitching):
     numteams : str
         the number of teams for the pitching season
     """
-    type_ = [ 'season' ]
+    _stat = [ 'season', 'statsSingleSeason' ]
 
 @dataclass(kw_only=True)
-class PitchingSingleSeason(Stats, SimplePitching):
+class PitchingSingleSeason(Splits, SimplePitching):
     """
     A class to represent a pitching season statistic
-
+    statsSingleSeason returns as type season
     Attributes
     ----------
     gametype : str
@@ -186,10 +186,10 @@ class PitchingSingleSeason(Stats, SimplePitching):
     numteams : str
         the number of teams for the pitching season
     """
-    type_ = [ 'statsSingleSeason' ]
+    _stat = [ '' ]
 
 @dataclass(kw_only=True)
-class PitchingCareer(Stats, SimplePitching):
+class PitchingCareer(Splits, SimplePitching):
     """
     A class to represent a pitching season statistic
 
@@ -200,10 +200,10 @@ class PitchingCareer(Stats, SimplePitching):
     numteams : str
         the number of teams for the pitching season
     """
-    type_ = [ 'career']
+    _stat = [ 'career']
 
 @dataclass(kw_only=True)
-class PitchingCareerAdvanced(Stats, AdvancedPitching):
+class PitchingCareerAdvanced(Splits, AdvancedPitching):
     """
     A class to represent a pitching season statistic
 
@@ -214,10 +214,10 @@ class PitchingCareerAdvanced(Stats, AdvancedPitching):
     numteams : str
         the number of teams for the pitching season
     """
-    type_ = [ 'careerAdvanced' ]
+    _stat = [ 'careerAdvanced' ]
 
 @dataclass(kw_only=True)
-class PitchingYearByYear(Stats, SimplePitching):
+class PitchingYearByYear(Splits, SimplePitching):
     """
     A class to represent a yearByYear season statistic
 
@@ -228,10 +228,10 @@ class PitchingYearByYear(Stats, SimplePitching):
     numteams : str
         the number of teams for the pitching yearByYear
     """
-    type_ = [ 'yearByYear' ]
+    _stat = [ 'yearByYear' ]
 
 @dataclass(kw_only=True)
-class PitchingYearByYearPlayoffs(Stats, SimplePitching):
+class PitchingYearByYearPlayoffs(Splits, SimplePitching):
     """
     A class to represent a yearByYear season statistic
 
@@ -242,10 +242,10 @@ class PitchingYearByYearPlayoffs(Stats, SimplePitching):
     numteams : str
         the number of teams for the pitching yearByYear
     """
-    type_ = [ 'yearByYearPlayoffs' ]
+    _stat = [ 'yearByYearPlayoffs' ]
 
 @dataclass(kw_only=True)
-class PitchingYearByYearAdvanced(Stats, AdvancedPitching):
+class PitchingYearByYearAdvanced(Splits, AdvancedPitching):
     """
     A class to represent a pitching yearByYear statistic
 
@@ -256,10 +256,10 @@ class PitchingYearByYearAdvanced(Stats, AdvancedPitching):
     numteams : str
         the number of teams for the pitching yearByYear
     """
-    type_ = [ 'yearByYearAdvanced' ]
+    _stat = [ 'yearByYearAdvanced' ]
 
 @dataclass(kw_only=True)
-class PitchingSeasonAdvanced(Stats, AdvancedPitching):
+class PitchingSeasonAdvanced(Splits, AdvancedPitching):
     """
     A class to represent a pitching seasonAdvanced statistic
 
@@ -270,10 +270,10 @@ class PitchingSeasonAdvanced(Stats, AdvancedPitching):
     numteams : str
         the number of teams for the pitching season
     """
-    type_ = [ 'seasonAdvanced' ]
+    _stat = [ 'seasonAdvanced' ]
 
 @dataclass(kw_only=True)
-class PitchingSingleSeasonAdvanced(Stats, AdvancedPitching):
+class PitchingSingleSeasonAdvanced(Splits, AdvancedPitching):
     """
     A class to represent a pitching seasonAdvanced statistic
 
@@ -284,10 +284,10 @@ class PitchingSingleSeasonAdvanced(Stats, AdvancedPitching):
     numteams : str
         the number of teams for the pitching season
     """
-    type_ = [ 'statsSingleSeasonAdvanced' ]
+    _stat = [ 'statsSingleSeasonAdvanced' ]
 
 @dataclass(kw_only=True)
-class PitchingGameLog(Stats, SimplePitching):
+class PitchingGameLog(Splits, SimplePitching):
     """
     A class to represent a gamelog stat for a pitcher
 
@@ -311,7 +311,7 @@ class PitchingGameLog(Stats, SimplePitching):
     game: Union[Game, dict]
     date: str
     opponent: Union[Team, dict]
-    type_ = [ 'gameLog' ]
+    _stat = [ 'gameLog' ]
 
 @dataclass
 class PlayDetails:
@@ -362,7 +362,7 @@ class PlayDetails:
     description: Optional[str] = None
 
 @dataclass(kw_only=True)
-class PitchingLog(Stats):
+class PitchingLog(Splits):
     """
     A class to represent a pitchLog stat for a pitcher
 
@@ -392,7 +392,7 @@ class PitchingLog(Stats):
         the game of the log
 
     """
-    type_ = [ 'pitchLog' ]
+    _stat = [ 'pitchLog' ]
     season: str
     opponent: Union[Team, dict]
     date: str
@@ -412,7 +412,7 @@ class PitchingLog(Stats):
         self.count = Count(**self.count)
 
 @dataclass(kw_only=True)
-class PitchingPlayLog(Stats):
+class PitchingPlayLog(Splits):
     """
     A class to represent a playLog stat for a pitcher
 
@@ -442,7 +442,7 @@ class PitchingPlayLog(Stats):
         the game of the log
 
     """
-    type_ = [ 'playLog' ]
+    _stat = [ 'playLog' ]
     season: str
     opponent: Union[Team, dict]
     date: str
@@ -463,7 +463,7 @@ class PitchingPlayLog(Stats):
 
 
 @dataclass(kw_only=True)
-class PitchingByDateRange(Stats, SimplePitching):
+class PitchingByDateRange(Splits, SimplePitching):
     """
     A class to represent a byDateRange stat for a pitcher
 
@@ -474,11 +474,11 @@ class PitchingByDateRange(Stats, SimplePitching):
     daysofweek : int
 
     """
-    type_ = [ 'byDateRange' ]
+    _stat = [ 'byDateRange' ]
     dayofweek: Optional[int] = None
 
 @dataclass(kw_only=True)
-class PitchingByDateRangeAdvanced(Stats, AdvancedPitching):
+class PitchingByDateRangeAdvanced(Splits, AdvancedPitching):
     """
     A class to represent a byDateRangeAdvanced stat for a pitcher
 
@@ -487,11 +487,11 @@ class PitchingByDateRangeAdvanced(Stats, AdvancedPitching):
     numteams : int
     daysofweek : int
     """
-    type_ = [ 'byDateRangeAdvanced' ]
+    _stat = [ 'byDateRangeAdvanced' ]
     dayofweek: Optional[int] = None
 
 @dataclass(kw_only=True)
-class PitchingByMonth(Stats, SimplePitching):
+class PitchingByMonth(Splits, SimplePitching):
     """
     A class to represent a byMonthPlayoffs stat for a pitcher
 
@@ -501,11 +501,11 @@ class PitchingByMonth(Stats, SimplePitching):
     numteams : int
 
     """
-    type_ = [ 'byMonth']
+    _stat = [ 'byMonth']
     month: int
 
 @dataclass(kw_only=True)
-class PitchingByMonthPlayoffs(Stats, SimplePitching):
+class PitchingByMonthPlayoffs(Splits, SimplePitching):
     """
     A class to represent a byMonthPlayoffs stat for a pitcher
 
@@ -514,11 +514,11 @@ class PitchingByMonthPlayoffs(Stats, SimplePitching):
     month : int
     numteams : int
     """
-    type_ = [ 'byMonthPlayoffs' ]
+    _stat = [ 'byMonthPlayoffs' ]
     month: int
 
 @dataclass(kw_only=True)
-class PitchingByDayOfWeek(Stats, SimplePitching):
+class PitchingByDayOfWeek(Splits, SimplePitching):
     """
     A class to represent a byDayOfWeek stat for a pitcher
 
@@ -529,11 +529,11 @@ class PitchingByDayOfWeek(Stats, SimplePitching):
     numteams: int
 
     """
-    type_ = [ 'byDayOfWeek' ]
+    _stat = [ 'byDayOfWeek' ]
     dayofweek: Optional[int] = None
 
 @dataclass(kw_only=True)
-class PitchingByDayOfWeekPlayOffs(Stats, SimplePitching):
+class PitchingByDayOfWeekPlayOffs(Splits, SimplePitching):
     """
     A class to represent a byDayOfWeekPlayoffs stat for a pitcher
 
@@ -544,11 +544,11 @@ class PitchingByDayOfWeekPlayOffs(Stats, SimplePitching):
     numteams : int
 
     """
-    type_ = [ 'byDayOfWeekPlayoffs' ]
+    _stat = [ 'byDayOfWeekPlayoffs' ]
     dayofweek: Optional[int] = None
 
 @dataclass(kw_only=True)
-class PitchingHomeAndAway(Stats, SimplePitching):
+class PitchingHomeAndAway(Splits, SimplePitching):
     """
     A class to represent a homeAndAway stat for a pitcher
 
@@ -557,11 +557,11 @@ class PitchingHomeAndAway(Stats, SimplePitching):
     ishome : bool
 
     """
-    type_ = [ 'homeAndAway' ]
+    _stat = [ 'homeAndAway' ]
     ishome: bool
 
 @dataclass(kw_only=True)
-class PitchingHomeAndAwayPlayoffs(Stats, SimplePitching):
+class PitchingHomeAndAwayPlayoffs(Splits, SimplePitching):
     """
     A class to represent a homeAndAwayPlayoffs stat for a pitcher
 
@@ -569,11 +569,11 @@ class PitchingHomeAndAwayPlayoffs(Stats, SimplePitching):
     ----------
     ishome : bool
     """
-    type_ = [ 'homeAndAwayPlayoffs' ]
+    _stat = [ 'homeAndAwayPlayoffs' ]
     ishome: bool
 
 @dataclass(kw_only=True)
-class PitchingWinLoss(Stats, SimplePitching):
+class PitchingWinLoss(Splits, SimplePitching):
     """
     A class to represent a winLoss stat for a pitcher
 
@@ -581,11 +581,11 @@ class PitchingWinLoss(Stats, SimplePitching):
     ----------
     iswin : bool
     """
-    type_ = [ 'winLoss' ]
+    _stat = [ 'winLoss' ]
     iswin: bool
 
 @dataclass(kw_only=True)
-class PitchingWinLossPlayoffs(Stats, SimplePitching):
+class PitchingWinLossPlayoffs(Splits, SimplePitching):
     """
     A class to represent a winLossPlayoffs stat for a pitcher
 
@@ -593,11 +593,11 @@ class PitchingWinLossPlayoffs(Stats, SimplePitching):
     ----------
     iswin : bool
     """
-    type_ = [ 'winLossPlayoffs' ]
+    _stat = [ 'winLossPlayoffs' ]
     iswin: bool
 
 @dataclass(kw_only=True)
-class PitchingRankings(Stats, SimplePitching):
+class PitchingRankings(Splits, SimplePitching):
     """
     A class to represent a rankings stat for a pitcher
 
@@ -605,10 +605,10 @@ class PitchingRankings(Stats, SimplePitching):
     ----------
     gametype : str
     """
-    type_ = [ 'rankings' ]
+    _stat = [ 'rankings' ]
 
 @dataclass(kw_only=True)
-class PitchingRankings(Stats, SimplePitching):
+class PitchingRankings(Splits, SimplePitching):
     """
     A class to represent a rankings stat for a pitcher
 
@@ -616,10 +616,10 @@ class PitchingRankings(Stats, SimplePitching):
     ----------
     gametype : str
     """
-    type_ = [ 'rankingsByYear' ]
+    _stat = [ 'rankingsByYear' ]
 
 @dataclass(kw_only=True)
-class PitchingOpponentsFaced(Stats):
+class PitchingOpponentsFaced(Splits):
     """
     A class to represent a opponentsFaced stat for a pitcher
 
@@ -631,14 +631,14 @@ class PitchingOpponentsFaced(Stats):
     batter : Person
     battingteam : Team
     """
-    type_ = [ 'opponentsFaced' ]
+    _stat = [ 'opponentsFaced' ]
     group: str
     pitcher: Union[Person, dict]
     batter: Union[Person, dict]
     battingteam: Union[Team, dict]
 
 @dataclass(kw_only=True)
-class PitchingExpectedStatistics(Stats):
+class PitchingExpectedStatistics(Splits):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
     """
@@ -651,54 +651,52 @@ class PitchingExpectedStatistics(Stats):
     wobaCon : str
     rank : int
     """
-    type_ = [ 'expectedStatistics' ]
+    _stat = [ 'expectedStatistics' ]
     avg : str
     slg : str
     woba : str
     wobacon : str
-    rank : Optional[int] = None
 
 # These stat_types return a hitting stat for a pitching stat group
 # odd, but need to deal with it.
 @dataclass(kw_only=True)
-class PitchingVsTeam(Stats, SimpleHittingStat):
+class PitchingVsTeam(Splits, SimpleHittingStat):
     """
     A class to represent a vsTeam pitching statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'vsTeam' ]
+    _stat = [ 'vsTeam' ]
     opponent: Union[Person, dict]
-    rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
 @dataclass(kw_only=True)
-class PitchingVsTeamTotal(Stats, SimpleHittingStat):
+class PitchingVsTeamTotal(Splits, SimpleHittingStat):
     """
     A class to represent a vsTeamTotal pitching statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'vsTeamTotal' ]
+    _stat = [ 'vsTeamTotal' ]
     opponent: Union[Person, dict]
-    rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
 @dataclass(kw_only=True)
-class PitchingVsTeam5Y(Stats, SimpleHittingStat):
+class PitchingVsTeam5Y(Splits, SimpleHittingStat):
     """
     A class to represent a vsTeam5Y pitching statistic
 
     Attributes
     ----------
     """
-    type_ = [ 'vsTeam5Y' ]
+    _stat = [ 'vsTeam5Y' ]
     opponent: Union[Person, dict]
-    rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
+
+
 
