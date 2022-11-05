@@ -715,7 +715,8 @@ class Mlb:
         """
         return a split object 
 
-
+        The stat group parameter is used to locate the correct class to build. The group is passed to _return_splits along with
+        stat data. 
 
         Parameters
         ----------
@@ -751,6 +752,7 @@ class Mlb:
         # TODO convert group to list
         # Fix bug that adds stats to params
         # https://statsapi.mlb.com/api/v1/teams/143/stats?stats=expectedStatistics&stats=sprayChart&group=hitting&group=stats
+        group_names = params['group'] if params['group'] is list else list(params['group'])
         group_names = params['group']
         no_group_types = [ 'hotColdZones', 'sprayChart', 'pitchArsenal' ]
         # catch 400's return splits
@@ -780,8 +782,6 @@ class Mlb:
                         # checking if we need to init list
                         if group not in splits:
                             splits[_group] = {}
-                        self._logger.debug(msg=(str(stats)))
-                        self._logger.debug(msg=(str(_type)))
                         # get splits from stats
                         splits[_group][_type.lower()] = _return_splits(stats, _type, _group)
 

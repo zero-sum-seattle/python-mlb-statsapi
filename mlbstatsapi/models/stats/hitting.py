@@ -525,8 +525,6 @@ class HittingDayOfWeekPlayoffs(Splits, SimpleHittingStat):
 class HittingExpectedStatistics(Splits):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
-    """
-    """
     Attributes
     ----------
     avg : str
@@ -582,7 +580,7 @@ class HittingVsTeam5Y(Splits, SimpleHittingStat):
     A class to represent a vsTeam5Y hitting statistic
 
     requires the use of the opposingTeamId parameter 
-    
+
     Attributes
     ----------
     """
@@ -608,7 +606,6 @@ class HittingVsPlayer(Splits, SimpleHittingStat):
     pitcher: Union[Person, dict]
     batter: Union[Person, dict]
     opponent: Optional[Union[Team, dict]] = None
-
 
 
 @dataclass(kw_only=True)
