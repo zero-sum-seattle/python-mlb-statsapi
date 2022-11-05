@@ -36,7 +36,10 @@ def _transform_mlbdata(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -
 
 def _return_splits(split_data : dict, stat_type : str, stat_group : str) -> List['Splits']:
     """
-    merge requested nested dicts inside mlb_dict into mlb_dict base. 
+    The split objects are built using the group name and split data. The stat group name is used to source the correct
+    stat group classes. 
+
+    stat group: hitting will load the classes in hitting.py and use the _type parameter to locate the correct class.
 
     Parameters
     ----------

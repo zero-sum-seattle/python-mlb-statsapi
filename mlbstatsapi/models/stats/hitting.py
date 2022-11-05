@@ -525,8 +525,6 @@ class HittingDayOfWeekPlayoffs(Splits, SimpleHittingStat):
 class HittingExpectedStatistics(Splits):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
-    """
-    """
     Attributes
     ----------
     avg : str
@@ -546,15 +544,16 @@ class HittingExpectedStatistics(Splits):
 @dataclass(kw_only=True)
 class HittingVsTeam(Splits, SimpleHittingStat):
     """
-    A class to represent a yearByYear hitting statistic
+    A class to represent a vsTeam hitting statistic
 
+    requires the use of the opposingTeamId parameter 
     Attributes
     ----------
     dayofweek : int
         the day of the week
     """
     _stat = [ 'vsTeam' ]
-    opponent: Union[Person, dict]
+    opponent: Union[Team, dict]
     rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
@@ -562,13 +561,15 @@ class HittingVsTeam(Splits, SimpleHittingStat):
 @dataclass(kw_only=True)
 class HittingVsTeamTotal(Splits, SimpleHittingStat):
     """
-    A class to represent a yearByYear hitting statistic
+    A class to represent a vsTeamTotal hitting statistic
+
+    requires the use of the opposingTeamId parameter 
 
     Attributes
     ----------
     """
     _stat = [ 'vsTeamTotal' ]
-    opponent: Union[Person, dict]
+    opponent: Union[Team, dict]
     rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
@@ -576,7 +577,9 @@ class HittingVsTeamTotal(Splits, SimpleHittingStat):
 @dataclass(kw_only=True)
 class HittingVsTeam5Y(Splits, SimpleHittingStat):
     """
-    A class to represent a yearByYear hitting statistic
+    A class to represent a vsTeam5Y hitting statistic
+
+    requires the use of the opposingTeamId parameter 
 
     Attributes
     ----------
@@ -592,30 +595,53 @@ class HittingVsPlayer(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
+    This class is for the stat type vsPlayer*
+    
+    Requires the param opposingPlayerId set 
+
     Attributes
     ----------
     """
     _stat = [ 'vsPlayer' ]
+    pitcher: Union[Person, dict]
+    batter: Union[Person, dict]
+    opponent: Optional[Union[Team, dict]] = None
+
 
 @dataclass(kw_only=True)
 class HittingVsPlayerTotal(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
+    This class is for the stat type vsPlayer*
+    
+    Requires the param opposingPlayerId set 
+
     Attributes
     ----------
     """
     _stat = [ 'vsPlayerTotal' ]
+    pitcher: Union[Person, dict]
+    batter: Union[Person, dict]
+    opponent: Optional[Union[Team, dict]] = None
+
+
 
 @dataclass(kw_only=True)
 class HittingVsPlayer5Y(Splits, SimpleHittingStat):
     """
     A class to represent a yearByYear hitting statistic
 
+    This class is for the stat type vsPlayer*
+
+    Requires the param opposingPlayerId set 
     Attributes
     ----------
     """
     _stat = [ 'vsPlayer5Y' ]
+    pitcher: Union[Person, dict]
+    batter: Union[Person, dict]
+    opponent: Optional[Union[Team, dict]] = None
 
 
 

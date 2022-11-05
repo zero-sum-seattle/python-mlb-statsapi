@@ -25,7 +25,3 @@ class TestCatchingPlayerStats(unittest.TestCase):
 
         self.assertTrue(splits['catching']['season'])
 
-
- 
-
-

@@ -100,52 +100,18 @@ class TestPlayerHittingStats(unittest.TestCase):
 
         self.assertTrue(vsteam_stats['hitting']['vsteam'])
 
-    # def test_hitting_log_stats_stat_on_position_player(self):
-    #     """mlb get stats should return two hittinglog objects object"""
-    #     self.params = { 'stats': [ 'byDateRange', 'byDateRangeAdvanced', 'byMonthPlayoffs', 
-    #     'byMonth', 'byDayOfWeek', 'byDayOfWeekPlayoffs' ], 'group': ['hitting'] }    
-    #     hitting_dates = self.mlb.get_stats(self.params, self.position_player)
+    def test_hitting_vs_team5y_stats_on_players(self):
+        self.params = { 'stats': [ 'vsTeam5Y', 'vsTeamTotal' ], 'group': ['hitting'], 'opposingTeamId': '158' }
+        vsteam_stats = self.mlb.get_stats(self.params, self.position_player)
 
-    #     self.assertTrue(hitting_dates['hitting']['bydaterange'])
-    #     self.assertTrue(hitting_dates['hitting']['bydaterangeadvanced'])
-    #     self.assertTrue(hitting_dates['hitting']['bymonthplayoffs'])
-    #     self.assertTrue(hitting_dates['hitting']['bymonth'])
-    #     self.assertTrue(hitting_dates['hitting']['bydayofweek'])
-    #     self.assertTrue(hitting_dates['hitting']['bydayofweekplayoffs'])
+        self.assertTrue(vsteam_stats['hitting']['vsteam5y'])
+        self.assertTrue(vsteam_stats['hitting']['vsteamtotal'])
 
-    # def test_hitting_winloss_on_position_player(self):
-    #     """mlb get stats should return two hittinglog objects object"""
-    #     self.params = { 'stats': [ 'winLoss', 'winLossPlayoffs' ], 'group': ['hitting'] }
-    #     hitting_wl = self.mlb.get_stats(self.params, self.position_player)
+    def test_hitting_vs_player_stats_on_players(self):
+        self.params = { 'stats': [ 'vsPlayer' ], 'group': ['hitting'], 'opposingPlayerId': '660271' }
+        vsteam_stats = self.mlb.get_stats(self.params, self.catching_player)
 
-    #     self.assertTrue(hitting_wl['hitting']['winloss'])
-    #     self.assertTrue(hitting_wl['hitting']['winlossplayoffs'])
-
-    # def test_hitting_log_stats_stat_on_position_player(self):
-    #     """mlb get stats should return two hittinglog objects object"""
-    #     self.params = { 'stats': [ 'homeAndAway', 'homeAndAwayPlayoffs' ], 'group': ['hitting'] }
-    #     hitting_wl = self.mlb.get_stats(self.params, self.position_player)
-
-    #     self.assertTrue(hitting_wl['hitting']['homeandaway'])
-    #     self.assertTrue(hitting_wl['hitting']['homeandawayplayoffs'])
-
-    # def test_building_all_hitting_objects(self):
-    #     """this test will build all what should be working stat objects"""
-    #     self.params_one = { 'stats': [ 'homeAndAway', 'winLoss', 'yearByYear', 'byDayOfWeek',
-    #     'byDateRange', 'byDateRangeAdvanced', 'byDayOfWeek', 'byMonth' ], 'group': ['hitting'] }
-    #     stat_group_one = self.mlb.get_stats(self.params_one, self.position_player)
-
-    #     self.assertTrue(stat_group_one['hitting']['homeandaway'])
-    #     self.assertTrue(stat_group_one['hitting']['winloss'])
-    #     self.assertTrue(stat_group_one['hitting']['yearbyyear'])
-    #     self.assertTrue(stat_group_one['hitting']['bydayofweek'])
-    #     self.assertTrue(stat_group_one['hitting']['bydaterange'])
-    #     self.assertTrue(stat_group_one['hitting']['bydaterangeadvanced'])
-    #     self.assertTrue(stat_group_one['hitting']['bydayofweek'])
-    #     self.assertTrue(stat_group_one['hitting']['bymonth'])
-
-
-      
+        self.assertTrue(vsteam_stats['hitting']['vsplayer'])
 
         
 
