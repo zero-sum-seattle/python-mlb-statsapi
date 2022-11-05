@@ -62,3 +62,15 @@ class TestTeamHitting(unittest.TestCase):
             stats = self.mlb.get_stats(self.params, self.al_team)
     
 
+    def test_hitting_vs_team_stats_on_players(self):
+        self.params = { 'stats': [ 'vsTeam' ], 'group': ['hitting'], 'opposingTeamId': '158' }
+        vsteam_stats = self.mlb.get_stats(self.params, self.nl_team)
+
+        self.assertTrue(vsteam_stats['hitting']['vsteam'])
+
+    def test_hitting_vs_team5y_stats_on_players(self):
+        self.params = { 'stats': [ 'vsTeam5Y', 'vsTeamTotal' ], 'group': ['hitting'], 'opposingTeamId': '158' }
+        vsteam_stats = self.mlb.get_stats(self.params, self.nl_team)
+
+        self.assertTrue(vsteam_stats['hitting']['vsteam5y'])
+        self.assertTrue(vsteam_stats['hitting']['vsteamtotal'])

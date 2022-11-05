@@ -100,6 +100,19 @@ class TestPlayerHittingStats(unittest.TestCase):
 
         self.assertTrue(vsteam_stats['hitting']['vsteam'])
 
+    def test_hitting_vs_team5y_stats_on_players(self):
+        self.params = { 'stats': [ 'vsTeam5Y', 'vsTeamTotal' ], 'group': ['hitting'], 'opposingTeamId': '158' }
+        vsteam_stats = self.mlb.get_stats(self.params, self.position_player)
+
+        self.assertTrue(vsteam_stats['hitting']['vsteam5y'])
+        self.assertTrue(vsteam_stats['hitting']['vsteamtotal'])
+
+    def test_hitting_vs_player_stats_on_players(self):
+        self.params = { 'stats': [ 'vsPlayer' ], 'group': ['hitting'], 'opposingPlayerId': '660271' }
+        vsteam_stats = self.mlb.get_stats(self.params, self.catching_player)
+
+        self.assertTrue(vsteam_stats['hitting']['vsplayer'])
+
     # def test_hitting_log_stats_stat_on_position_player(self):
     #     """mlb get stats should return two hittinglog objects object"""
     #     self.params = { 'stats': [ 'byDateRange', 'byDateRangeAdvanced', 'byMonthPlayoffs', 
@@ -146,6 +159,11 @@ class TestPlayerHittingStats(unittest.TestCase):
 
 
       
-
+    # "vsPlayer", 500
+    # "vsPlayerTotal", 500
+    # "vsPlayer5Y", 500
+    # "vsTeam", 500
+    # "vsTeam5Y", 500
+    # "vsTeamTotal", 500
         
 
