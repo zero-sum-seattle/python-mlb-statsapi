@@ -113,5 +113,14 @@ from .fielding import (
     FieldingSingleSeason,
 )
 
+from .game import (
+    SeasonGame,
+    CareerGame,
+    CareerPlayoffsGame,
+    CareerRegularSeasonGame
 
+)
 
+from .running import (
+    RunningOpponentsFaced
+)

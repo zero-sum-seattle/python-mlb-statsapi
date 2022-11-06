@@ -1,25 +1,94 @@
-﻿
+﻿from dataclasses import dataclass, field
+from typing import Optional, Union, List
 
-# class SimpleGame(Stats):
-#     """
-#     A class to represent a game statistic
+from mlbstatsapi.models.people import Person, Position
+from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.game import Game
 
-#     Used for the following stat types:
-#     season, career, careerRegularSeason, careerPlayoffs, statsSingleSeason
+from .stats import Splits, CodeDesc, Count
 
-#     Attributes
-#     ----------
-#     firstdateplayed : str
-#         first date of game played
-#     gamesplayed : int
-#         number of the games player
-#     gamesstarted : int
-#         number of the games started
-#     lastdateplayed : str
-#         last date of the game played
-#     """
-#     type_ = [ 'season', 'career', 'careerRegularSeason', 'careerPlayoffs', 'statsSingleSeason' ]
-#     firstdateplayed: str
-#     gamesplayed: int
-#     gamesstarted: int
-#     lastdateplayed: str 
+@dataclass
+class SimpleGameStats:
+    firstdateplayed: str
+    gamesplayed: int
+    gamesstarted: int
+    lastdateplayed: str 
+
+@dataclass(kw_only=True)
+class SeasonGame(Splits, SimpleGameStats):
+    """
+    A class to represent a game statistic
+
+    Used for the following stat types:
+    season, career, careerRegularSeason, careerPlayoffs, statsSingleSeason
+
+    Attributes
+    ----------
+    firstdateplayed : str
+        first date of game played
+    gamesplayed : int
+        number of the games player
+    gamesstarted : int
+        number of the games started
+    lastdateplayed : str
+        last date of the game played
+    """
+    type_ = [ 'season', 'statsSingleSeason' ]
+
+
+@dataclass(kw_only=True)
+class CareerGame(Splits, SimpleGameStats):
+    """
+    A class to represent a game statistic
+
+
+    Attributes
+    ----------
+    firstdateplayed : str
+        first date of game played
+    gamesplayed : int
+        number of the games player
+    gamesstarted : int
+        number of the games started
+    lastdateplayed : str
+        last date of the game played
+    """
+    type_ = [ 'career' ]
+
+
+@dataclass(kw_only=True)
+class CareerRegularSeasonGame(Splits, SimpleGameStats):
+    """
+    A class to represent a game statistic
+
+
+    Attributes
+    ----------
+    firstdateplayed : str
+        first date of game played
+    gamesplayed : int
+        number of the games player
+    gamesstarted : int
+        number of the games started
+    lastdateplayed : str
+        last date of the game played
+    """
+    type_ = [ 'careerRegularSeason' ]
+
+@dataclass(kw_only=True)
+class CareerPlayoffsGame(Splits, SimpleGameStats):
+    """
+    A class to represent a game statistic
+
+    Attributes
+    ----------
+    firstdateplayed : str
+        first date of game played
+    gamesplayed : int
+        number of the games player
+    gamesstarted : int
+        number of the games started
+    lastdateplayed : str
+        last date of the game played
+    """
+    type_ = [ 'careerPlayoffs' ]

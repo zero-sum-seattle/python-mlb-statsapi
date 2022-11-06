@@ -175,20 +175,6 @@ class PitchingSeason(Splits, SimplePitching):
     _stat = [ 'season', 'statsSingleSeason' ]
 
 @dataclass(kw_only=True)
-class PitchingSingleSeason(Splits, SimplePitching):
-    """
-    A class to represent a pitching season statistic
-    statsSingleSeason returns as type season
-    Attributes
-    ----------
-    gametype : str
-        the gametype code of the pitching season 
-    numteams : str
-        the number of teams for the pitching season
-    """
-    _stat = [ '' ]
-
-@dataclass(kw_only=True)
 class PitchingCareer(Splits, SimplePitching):
     """
     A class to represent a pitching season statistic
