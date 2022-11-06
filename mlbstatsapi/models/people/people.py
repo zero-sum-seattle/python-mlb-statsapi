@@ -111,5 +111,11 @@ class Coach(Person):
     jobid: str
     title: str
 
+@dataclass(kw_only=True)
+class Batter(Person):
+    pass
 
+@dataclass(kw_only=True)
+class Pitcher(Person):
+    pass
 

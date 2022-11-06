@@ -1,7 +1,7 @@
 ﻿from dataclasses import InitVar, dataclass, field
 from typing import Optional, Union, List
 
-from mlbstatsapi.models.people import Person
+from mlbstatsapi.models.people import Person, Pitcher, Batter
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 
@@ -299,6 +299,9 @@ class PitchingGameLog(Splits, SimplePitching):
     opponent: Union[Team, dict]
     _stat = [ 'gameLog' ]
 
+    def __post_init__(self):
+        self.opponent = Team(**self.opponent)
+
 @dataclass
 class PlayDetails:
     """
@@ -347,6 +350,12 @@ class PlayDetails:
     pitchhand: Union[CodeDesc, dict]
     description: Optional[str] = None
 
+    def __post_init__(self):
+        self.call = CodeDesc(**self.call)
+        self.batside = CodeDesc(**self.batside)
+        self.pitchhand = CodeDesc(**self.pitchhand) 
+        self.type = CodeDesc(**self.type) if self.type else self.type
+
 @dataclass(kw_only=True)
 class PitchingLog(Splits):
     """
@@ -383,8 +392,8 @@ class PitchingLog(Splits):
     opponent: Union[Team, dict]
     date: str
     ishome: bool
-    pitcher: Union[Person, dict]
-    batter: Union[Person, dict]
+    pitcher: Union[Pitcher, dict]
+    batter: Union[Batter, dict]
     game: Union[Game, dict]
     details: Union[PlayDetails, dict]
     count: Union[Count, dict]
@@ -396,6 +405,9 @@ class PitchingLog(Splits):
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
+        self.pitcher = Pitcher(**self.pitcher)
+        self.batter = Batter(**self.batter)
+        self.opponent = Team(**self.opponent)
 
 @dataclass(kw_only=True)
 class PitchingPlayLog(Splits):
@@ -433,8 +445,8 @@ class PitchingPlayLog(Splits):
     opponent: Union[Team, dict]
     date: str
     ishome: bool
-    pitcher: Union[Person, dict]
-    batter: Union[Person, dict]
+    pitcher: Union[Pitcher, dict]
+    batter: Union[Batter, dict]
     game: Union[Game, dict]
     details: Union[PlayDetails, dict]
     count: Union[Count, dict]
@@ -446,7 +458,9 @@ class PitchingPlayLog(Splits):
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
-
+        self.pitcher = Pitcher(**self.pitcher)
+        self.batter = Batter(**self.batter)
+        self.opponent = Team(**self.opponent)
 
 @dataclass(kw_only=True)
 class PitchingByDateRange(Splits, SimplePitching):
@@ -619,9 +633,14 @@ class PitchingOpponentsFaced(Splits):
     """
     _stat = [ 'opponentsFaced' ]
     group: str
-    pitcher: Union[Person, dict]
-    batter: Union[Person, dict]
+    pitcher: Union[Pitcher, dict]
+    batter: Union[Batter, dict]
     battingteam: Union[Team, dict]
+
+    def __post_init__(self):
+        self.pitcher = Pitcher(**self.pitcher)
+        self.batter = Batter(**self.batter)
+        self.battingteam = Team(**self.battingteam)
 
 @dataclass(kw_only=True)
 class PitchingExpectedStatistics(Splits):
@@ -656,7 +675,12 @@ class PitchingVsTeam(Splits, SimpleHittingStat):
     _stat = [ 'vsTeam' ]
     opponent: Union[Person, dict]
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
-    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)    
+
+    def __post_init__(self):
+        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
+        self.batter = Batter(**self.batter) if self.batter else self.batter
+        self.opponent = Team(**self.opponent)
 
 @dataclass(kw_only=True)
 class PitchingVsTeamTotal(Splits, SimpleHittingStat):
@@ -671,6 +695,11 @@ class PitchingVsTeamTotal(Splits, SimpleHittingStat):
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
+    def __post_init__(self):
+        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
+        self.batter = Batter(**self.batter) if self.batter else self.batter
+        self.opponent = Team(**self.opponent)
+
 @dataclass(kw_only=True)
 class PitchingVsTeam5Y(Splits, SimpleHittingStat):
     """
@@ -684,5 +713,9 @@ class PitchingVsTeam5Y(Splits, SimpleHittingStat):
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
+    def __post_init__(self):
+        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
+        self.batter = Batter(**self.batter) if self.batter else self.batter
+        self.opponent = Team(**self.opponent)
 
 

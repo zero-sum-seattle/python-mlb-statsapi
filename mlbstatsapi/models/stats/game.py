@@ -1,14 +1,24 @@
 ﻿from dataclasses import dataclass, field
 from typing import Optional, Union, List
 
-from mlbstatsapi.models.people import Person, Position
-from mlbstatsapi.models.teams import Team
-from mlbstatsapi.models.game import Game
-
-from .stats import Splits, CodeDesc, Count
+from .stats import Splits
 
 @dataclass
 class SimpleGameStats:
+    """
+    A class to represent a simple game statistics
+
+    Attributes
+    ----------
+    firstdateplayed : str
+        first date of game played
+    gamesplayed : int
+        number of the games player
+    gamesstarted : int
+        number of the games started
+    lastdateplayed : str
+        last date of the game played
+    """
     firstdateplayed: str
     gamesplayed: int
     gamesstarted: int
@@ -54,7 +64,6 @@ class CareerGame(Splits, SimpleGameStats):
         last date of the game played
     """
     type_ = [ 'career' ]
-
 
 @dataclass(kw_only=True)
 class CareerRegularSeasonGame(Splits, SimpleGameStats):

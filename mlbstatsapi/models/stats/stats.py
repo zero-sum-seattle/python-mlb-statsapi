@@ -3,7 +3,7 @@ from types import NoneType
 from typing import Optional, Union, List
 
 from mlbstatsapi.models.teams import Team
-from mlbstatsapi.models.people import Person
+from mlbstatsapi.models.people import Person, Player, Batter
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 
@@ -20,7 +20,7 @@ class CodeDesc:
         the description of the pitch
     """
     code: str
-    description: str
+    description: Optional[str] = None
 
 @dataclass
 class Count:
@@ -96,6 +96,12 @@ class Splits:
     sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
     league: Optional[Union[League, dict]] = field(default_factory=dict)
 
+    def __post_init__(self):
+        self.team =  Team(**self.team) if self.team else self.team
+        self.player = Person(**self.player) if self.player else self.player
+        self.sport = Sport(**self.sport) if self.sport else self.sport
+        self.league = League(**self.league) if self.league else self.league
+
 @dataclass(kw_only=True)
 class PitchArsenal(Splits):
     """
@@ -110,6 +116,9 @@ class PitchArsenal(Splits):
     percentage: float
     totalpitches: int
     type: Union[CodeDesc, dict]
+    
+    def __post_init__(self):
+        self.type = CodeDesc(**self.type) if self.type else self.type
 
 @dataclass(kw_only=True)
 class ZoneCodes:
@@ -175,8 +184,10 @@ class SprayCharts(Splits):
     rightcenterfield: int
     rightfield: int
     _stat = [ 'sprayChart' ]
-    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
 
+    def __post_init__(self):
+        self.batter = Batter(**self.batter) if self.batter else self.batter
 
 @dataclass(kw_only=True)
 class OutsAboveAverage(Splits):

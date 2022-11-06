@@ -65,7 +65,6 @@ from .pitching import (
     PitchingWinLossPlayoffs,
     PitchingRankings,
     PitchingPlayLog,
-    PitchingSingleSeason,
     PitchingSingleSeasonAdvanced,
     PitchingVsTeam,
     PitchingVsTeam5Y,
