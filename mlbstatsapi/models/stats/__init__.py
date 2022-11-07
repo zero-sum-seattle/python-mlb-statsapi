@@ -65,7 +65,6 @@ from .pitching import (
     PitchingWinLossPlayoffs,
     PitchingRankings,
     PitchingPlayLog,
-    PitchingSingleSeason,
     PitchingSingleSeasonAdvanced,
     PitchingVsTeam,
     PitchingVsTeam5Y,
@@ -113,5 +112,14 @@ from .fielding import (
     FieldingSingleSeason,
 )
 
+from .game import (
+    SeasonGame,
+    CareerGame,
+    CareerPlayoffsGame,
+    CareerRegularSeasonGame
 
+)
 
+from .running import (
+    RunningOpponentsFaced
+)

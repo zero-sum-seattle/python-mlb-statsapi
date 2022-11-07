@@ -15,14 +15,14 @@ def data_http_return():
     short_url = f"https://{hostname}/api/{ver}/"
 
     # pitcher? "position": "664034", "pitcher": "660271", 
-    type_object = { "catcher": "663728", "al_team":"133" } # need to check if sports, league etc have stats
+    type_object = { "al_team":"133", "position": "647351" } # need to check if sports, league etc have stats
     groups = [ 
     # "hitting",
     # "pitching",
     # "fielding",
-    "catching",
+    # "catching",
     # "running",
-    # "game",
+    "game",
     # "team",
     # "streak" 
     ]
