@@ -24,7 +24,6 @@ class Mlb:
         self._mlb_adapter_v1 = MlbDataAdapter(hostname, 'v1', logger)
         self._mlb_adapter_v1_1 = MlbDataAdapter(hostname, 'v1.1', logger)
         self._logger = logger or logging.getLogger(__name__)
-        self._logger.setLevel(logging.DEBUG) 
 
     def get_people(self, sportid: int = 1) -> List[Person]:
         """
@@ -481,7 +480,7 @@ class Mlb:
 
     def get_sport(self, sportid) -> Union[Sport, None]:
         """
-        return sport
+        return sport object from sportid
 
         Parameters
         ----------
@@ -516,7 +515,7 @@ class Mlb:
 
     def get_sport_id(self, sportname) -> List[int]:
         """
-        return Sport id
+        return sport id 
 
         Parameters
         ----------
@@ -727,6 +726,9 @@ class Mlb:
 
         Returns
         -------
+        splits : dict
+        mlbdata : dict
+        
         json 
         { 
             hitting: { 
@@ -755,6 +757,7 @@ class Mlb:
         group_names = params['group'] if params['group'] is list else list(params['group'])
         group_names = params['group']
         no_group_types = [ 'hotColdZones', 'sprayChart', 'pitchArsenal' ]
+
         # catch 400's return splits
         if mlbdata.status_code >= 400 and mlbdata.status_code <= 499:  
             return splits
@@ -777,7 +780,6 @@ class Mlb:
                 _type = stats['type']['displayname'] if 'type' in stats else None
             
                 for group in group_names:
-                    self._logger.debug(print(group))
                     if (_group == group):
                         # checking if we need to init list
                         if group not in splits:
