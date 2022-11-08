@@ -1,7 +1,7 @@
 ﻿from dataclasses import field
 import unittest
 
-from mlbstatsapi.mlbapi import Mlb
+from mlbstatsapi.mlb_api import Mlb
 
 class TestCatchingPlayerStats(unittest.TestCase):
     @classmethod

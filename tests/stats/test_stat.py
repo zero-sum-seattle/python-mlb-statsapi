@@ -3,7 +3,7 @@ import unittest
 
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
-from mlbstatsapi.mlbapi import Mlb
+from mlbstatsapi.mlb_api import Mlb
 
 
 
@@ -11,7 +11,7 @@ class TestCatchingPlayerStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.shoei_ohtani = cls.mlb.get_person(660271) # Cal Raleigh
+        cls.shoei_ohtani = cls.mlb.get_person(660271) 
 
     @classmethod
     def tearDownClass(cls) -> None:
