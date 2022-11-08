@@ -294,7 +294,6 @@ class PitchingGameLog(Splits, SimplePitching):
     """
     ishome: bool
     iswin: bool
-    ties: int
     game: Union[Game, dict]
     date: str
     opponent: Union[Team, dict]

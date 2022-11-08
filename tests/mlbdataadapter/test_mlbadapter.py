@@ -106,7 +106,7 @@ class MlbAdapterMockTesting(unittest.TestCase):
         self.params = { "stats": "season", "group": "hitting" }
 
         # patch mlbdataadapter to return bad JSON
-        with patch("mlbstatsapi.mlbdataadapter.requests.get", return_value=self.response):
+        with patch("mlbstatsapi.mlb_dataadapter.requests.get", return_value=self.response):
 
             # mlb_adapter should raise exception due to bad JSON
             with self.assertRaises(TheMlbStatsApiException):
@@ -122,7 +122,7 @@ class MlbAdapterMockTesting(unittest.TestCase):
         self.params = { "stats": "standard", "group": "hitting" }
 
         # patch mlbdataadapter to return 404 response
-        with patch("mlbstatsapi.mlbdataadapter.requests.get", return_value=self.response):
+        with patch("mlbstatsapi.mlb_dataadapter.requests.get", return_value=self.response):
 
             # mlb_adapter should raise exception due to bad JSON
             result = self.mlb_adapter.get(endpoint="teams/133/stats", ep_params=self.params)
@@ -144,7 +144,7 @@ class MlbAdapterMockTesting(unittest.TestCase):
         self.params = { "stats": "standard", "group": "hitting" }
 
         # patch mlbdataadapter to return mocked response
-        with patch("mlbstatsapi.mlbdataadapter.requests.get", return_value=self.response):
+        with patch("mlbstatsapi.mlb_dataadapter.requests.get", return_value=self.response):
 
             # mlb_adapter should raise exception due to 500 status code
             with self.assertRaises(TheMlbStatsApiException):
