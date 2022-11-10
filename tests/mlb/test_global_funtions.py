@@ -1,10 +1,7 @@
-﻿from typing import Dict, List
-from mlbstatsapi import _transform_mlbdata
+﻿from mlbstatsapi import _transform_mlb_data
 import unittest
 import json
 import os
-
-
 
 
 class TestMlbFuntions(unittest.TestCase):
@@ -21,13 +18,12 @@ class TestMlbFuntions(unittest.TestCase):
 
     def test_merging_one_dict_transform(self):
         """_transform_mlbdata should return the one dictionary merged with the base"""
-        
         with open(self.path_to_file, "r", encoding="utf-8-sig") as file:
             read_json = file.read()
             json_object = json.loads(read_json)
 
-            # pass json_object to transform for transformation to all lowercase key 
-            transform_dict = _transform_mlbdata(json_object, mlb_keys=['person'])
+            # pass json_object to transform for transformation to all lowercase key
+            transform_dict = _transform_mlb_data(json_object, mlb_keys=['person'])
 
             # let's make sure we get a dict back
             self.assertEqual(type(transform_dict), dict)
@@ -36,16 +32,15 @@ class TestMlbFuntions(unittest.TestCase):
             self.assertIn('id', transform_dict)
             self.assertIn('link', transform_dict)
             self.assertIn('fullname', transform_dict)
-            
+
     def test_merging_two_dict_transform(self):
         """_transform_mlbdata should return two dictionaries merged with the base"""
-
         with open(self.path_to_file, "r", encoding="utf-8-sig") as file:
             read_json = file.read()
             json_object = json.loads(read_json)
 
             # pass json_object to transform for transformation to all lowercase key 
-            transform_dict = _transform_mlbdata(json_object, mlb_keys=['person', 'status'])
+            transform_dict = _transform_mlb_data(json_object, mlb_keys=['person', 'status'])
 
             # let's make sure we get a dict back
             self.assertEqual(type(transform_dict), dict)
@@ -58,7 +53,3 @@ class TestMlbFuntions(unittest.TestCase):
             # let's check if the keys in person got merged
             self.assertIn('code', transform_dict)
             self.assertIn('description', transform_dict)
-
-
-
-

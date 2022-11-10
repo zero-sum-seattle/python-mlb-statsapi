@@ -1,7 +1,7 @@
 import unittest
-from unittest.mock import Mock, patch
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi import Mlb
+
 
 class TestVenue(unittest.TestCase):
     @classmethod

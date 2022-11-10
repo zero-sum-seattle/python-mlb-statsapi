@@ -7,10 +7,10 @@ class TestAttendance(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.attendance_team_away = cls.mlb.get_attendance(teamid=113) # Cincinati Reds 134
-        cls.attendance_team_home = cls.mlb.get_attendance(teamid=134)
-        # cls.attendance_league = cls.mlb.get_attendance(leagueId=103) # American League
-        cls.attendance_season = cls.mlb.get_attendance(teamid=113, season=2022)
+        params = {'season': 2022}
+        cls.attendance_team_away = cls.mlb.get_attendance(team_id=113)
+        cls.attendance_team_home = cls.mlb.get_attendance(team_id=134)
+        cls.attendance_season = cls.mlb.get_attendance(team_id=113, params=params)
 
 
     @classmethod
@@ -25,7 +25,7 @@ class TestAttendance(unittest.TestCase):
         self.assertEqual(self.attendance_team_away.records[0].team.id, 113)
         self.assertEqual(self.attendance_team_home.records[0].team.id, 134)
         self.assertEqual(self.attendance_season.records[0].team.id, 113)
-        
+
     def test_attendance_has_attributes(self):
         self.assertIsInstance(self.attendance_team_away, Attendance)
         self.assertIsInstance(self.attendance_team_home, Attendance)

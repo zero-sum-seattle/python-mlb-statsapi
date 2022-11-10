@@ -14,10 +14,11 @@ from mlbstatsapi import Mlb
 from mlbstatsapi import MlbResult
 from mlbstatsapi import TheMlbStatsApiException
 
+
 class TestMlbDataApi(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.mlb = Mlb() # Create instance of our baseclass
+        cls.mlb = Mlb()
         pass
 
     @classmethod
@@ -25,16 +26,15 @@ class TestMlbDataApi(unittest.TestCase):
         pass
 
     def test_mlb_adapter_200(self):
-        mlbdata = self.mlb._mlb_adapter_v1.get("/divisions") # A static endpoint to just return JSON
-        self.assertIsInstance(mlbdata, MlbResult) # Test result is MlbResult class
-        self.assertEqual(mlbdata.status_code, 200) # Check HTTP Status 200
-        self.assertIsInstance(mlbdata.data, Dict) # Check results are a Dict
+        mlbdata = self.mlb._mlb_adapter_v1.get("/divisions")
+        self.assertIsInstance(mlbdata, MlbResult)
+        self.assertEqual(mlbdata.status_code, 200)
+        self.assertIsInstance(mlbdata.data, Dict)
 
     def test_mlb_adapter_500(self):
         """mlb should raise a exception when adapter returns a 500"""
-        # bad endpoint should raise exception due to 500
         with self.assertRaises(TheMlbStatsApiException):
-            result = self.mlb._mlb_adapter_v1.get(endpoint="teams/133/stats?stats=vsPlayer&group=catching")
+            self.mlb._mlb_adapter_v1.get(endpoint="teams/133/stats?stats=vsPlayer&group=catching")
 
     def test_mlb_adapter_400(self):
         """mlb should return a MlbResult object with a empty data, and a status code"""
@@ -49,10 +49,9 @@ class TestMlbDataApi(unittest.TestCase):
 
     def test_get_object(self):
         """mlb get_object should return a poopulated object"""
-        test_sport = Sport(id=1,link="/api/v1/sports/1")
-        # LOL how did I miss this! let's keep this in for the timing being just for fun, poopulated.
+        test_sport = Sport(id=1, link="/api/v1/sports/1")
         poopulated_sport = self.mlb.get_object(test_sport)
-        self.assertIsInstance(poopulated_sport, Sport) # Test result is List    
+        self.assertIsInstance(poopulated_sport, Sport)
         self.assertEqual(poopulated_sport.id, 1)
         self.assertEqual(poopulated_sport.link, "/api/v1/sports/1")
         self.assertEqual(poopulated_sport.name, 'Major League Baseball')
@@ -61,10 +60,11 @@ class TestMlbDataApi(unittest.TestCase):
         self.assertEqual(poopulated_sport.sortorder, 11)
         self.assertEqual(poopulated_sport.activestatus, True)
 
+
 class TestMlbGetPeople(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.mlb = Mlb() # Create instance of our baseclass
+        cls.mlb = Mlb()
         pass
 
     @classmethod
@@ -77,19 +77,17 @@ class TestMlbGetPeople(unittest.TestCase):
         self.assertIsInstance(mlbdata, List)
         self.assertIsInstance(mlbdata[0], Person)
 
-    # was passing but now returns 500 we need to mock
-
-    # def test_mlbdataapi_get_people_with_sportid(self):
-    #     """mlb get_people should return a list of all sport 1 people"""
-    #     mlbdata = self.mlb.get_people(sportid=11)
-    #     self.assertIsInstance(mlbdata, List) 
-    #     self.assertIsInstance(mlbdata[0], Person) 
+    def test_mlbdataapi_get_people_with_sportid(self):
+        """mlb get_people should return a list of all sport 1 people"""
+        mlbdata = self.mlb.get_people(sport_id=11)
+        self.assertIsInstance(mlbdata, List)
+        self.assertIsInstance(mlbdata[0], Person)
 
     def test_mlb_get_person(self):
         """mlb get_person should return a Person object"""
         person = self.mlb.get_person('664034')
-        self.assertIsInstance(person, Person) # Return Ty France Person ID in a List
-        self.assertEqual(person.id, 664034) # Confirm the ID is correct
+        self.assertIsInstance(person, Person)
+        self.assertEqual(person.id, 664034)
 
     def test_mlb_failed_get_person(self):
         """mlb get_person should return None for invalid id"""
@@ -98,20 +96,19 @@ class TestMlbGetPeople(unittest.TestCase):
 
     def test_mlb_get_person_id(self):
         """mlb get_person_id should return a person id"""
-        id = self.mlb.get_people_id('Ty France') # Return Ty France Person ID in a List
-        self.assertEqual(id, [664034]) # Confirm the ID is correct
-        
-    # was passing but now returns 500 we need to mock
+        id = self.mlb.get_people_id('Ty France')
+        self.assertEqual(id, [664034])
 
-    # def test_mlb_get_person_id_with_sportid(self):
-    #     """mlb get_person_id should return a person id"""
-    #     id = self.mlb.get_people_id('Fernando Abad', sportid=11) 
-    #     self.assertEqual(id, [472551]) 
+    def test_mlb_get_person_id_with_sportid(self):
+        """mlb get_person_id should return a person id"""
+        id = self.mlb.get_people_id('Fernando Abad', sport_id=11)
+        self.assertEqual(id, [472551])
 
     def test_mlb_get_invalid_person_id(self):
         """mlb get_person_id should return empty list for invalid name"""
-        id = self.mlb.get_people_id('Joe Blow') # Return Ty France Person ID in a List
+        id = self.mlb.get_people_id('Joe Blow')
         self.assertEqual(id, [])
+
 
 class TestMlbGetTeam(unittest.TestCase):
     @classmethod
@@ -127,43 +124,45 @@ class TestMlbGetTeam(unittest.TestCase):
         """mlb get_team should return Team object"""
         team = self.mlb.get_team('133')
         self.assertIsInstance(team, Team)
-        self.assertEqual(team.id, 133) # Confirm the ID is correct
+        self.assertEqual(team.id, 133)
 
     def test_mlbdataapi_get_teams(self):
         """mlb get_teams should return a list of Teams"""
         mlbdata = self.mlb.get_teams()
-        self.assertIsInstance(mlbdata, List) # Test result is List
-        self.assertIsInstance(mlbdata[0], Team) # Lazy test to check the list contains instance of Team
+        self.assertIsInstance(mlbdata, List)
+        self.assertIsInstance(mlbdata[0], Team)
 
     def test_mlbdataapi_get_teams_with_sportid(self):
         """mlb get_teams should return a list of Teams"""
-        mlbdata = self.mlb.get_teams(sportid=16)
-        self.assertIsInstance(mlbdata, List) # Test result is List
-        self.assertIsInstance(mlbdata[0], Team) # Lazy test to check the list contains instance of Team
+        mlbdata = self.mlb.get_teams(sport_id=16)
+        self.assertIsInstance(mlbdata, List)
+        self.assertIsInstance(mlbdata[0], Team)
 
     def test_mlb_failed_get_team(self):
         """mlb get_team should return None for invalid team id"""
         team = self.mlb.get_team('19999')
         self.assertIsNone(team)
-    def test_mlb_get_team_id(self):
-        """mlb get_team_id should return a list of matching team id's"""
-        id = self.mlb.get_team_id('Mariners') # Return Mariners Team ID in a List
-        self.assertEqual(id, [136])
 
     def test_mlb_get_team_id(self):
         """mlb get_team_id should return a list of matching team id's"""
-        id = self.mlb.get_team_id('DSL Brewers 2') # Return Mariners Team ID in a List
+        id = self.mlb.get_team_id('Mariners')
+        self.assertEqual(id, [136])
+
+    def test_mlb_get_team_minor_id(self):
+        """mlb get_team_id should return a list of matching team id's"""
+        id = self.mlb.get_team_id('DSL Brewers 2')
         self.assertEqual(id, [2101])
 
     def test_mlb_get_bad_team_id(self):
         """mlb get_team_id should return a empty list for invalid team name"""
-        id = self.mlb.get_team_id('Banananananana') # Return Mariners Team ID in a List
+        id = self.mlb.get_team_id('Banananananana')
         self.assertEqual(id, [])
+
 
 class TestMlbGetSport(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.mlb = Mlb() # Create instance of our baseclass
+        cls.mlb = Mlb()
         pass
 
     @classmethod
@@ -172,30 +171,31 @@ class TestMlbGetSport(unittest.TestCase):
 
     def test_get_sport(self):
         """mlb get_sport should return a Sport Object"""
-        sport = self.mlb.get_sport(1) # Return MLB sport instance
-        self.assertIsInstance(sport, Sport) # Confirms that a sport instance is returned
-        self.assertEqual(sport.id, 1) # Confirm the ID is correct
+        sport = self.mlb.get_sport(1)
+        self.assertIsInstance(sport, Sport)
+        self.assertEqual(sport.id, 1)
 
     def test_get_sports(self):
         """mlb get_sports should return a list of sport objects"""
-        sports = self.mlb.get_sports() # Get all sports as a list[Sport]
-        self.assertIsInstance(sports, List) # Test result is List
-        self.assertIsInstance(sports[0], Sport) # Lazy Test to check the list contains instances of Sport
+        sports = self.mlb.get_sports()
+        self.assertIsInstance(sports, List)
+        self.assertIsInstance(sports[0], Sport)
 
     def test_get_sport_id(self):
         """mlb get_sport id should return a sport id"""
-        id = self.mlb.get_sport_id('Major League Baseball') # Get the id for MLB
-        self.assertEqual(id, [1]) # Confirm the ID is correct
+        id = self.mlb.get_sport_id('Major League Baseball')
+        self.assertEqual(id, [1])
 
     def test_get_sport_invalid_name(self):
         """mlb get_sport should return a empty list for invalid sport name"""
-        id = self.mlb.get_sport_id('NFL') # Get the id for MLB
-        self.assertEqual(id, []) # Confirm the ID is correct
+        id = self.mlb.get_sport_id('NFL')
+        self.assertEqual(id, [])
+
 
 class TestMlbGetLeague(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.mlb = Mlb() # Create instance of our baseclass
+        cls.mlb = Mlb()
         pass
 
     @classmethod
@@ -204,30 +204,31 @@ class TestMlbGetLeague(unittest.TestCase):
 
     def test_get_league(self):
         """mlb get_league should return a League object"""
-        league = self.mlb.get_league(103) # Return American League League instance
-        self.assertIsInstance(league, League) # Confirms that a League instance is returned
-        self.assertEqual(league.id, 103) # Confirm the ID is correct
+        league = self.mlb.get_league(103)
+        self.assertIsInstance(league, League)
+        self.assertEqual(league.id, 103)
 
     def test_get_leagues(self):
         """mlb get_leagues should return a list of Leagues"""
         leagues = self.mlb.get_leagues()
-        self.assertIsInstance(leagues, List) # Test result is List
-        self.assertIsInstance(leagues[0], League) # Lazy Test to check the list contains instances of League
+        self.assertIsInstance(leagues, List)
+        self.assertIsInstance(leagues[0], League)
 
     def test_get_league_id(self):
         """mlb get_league_id should return a league id"""
-        id = self.mlb.get_league_id('American League') # Get the id for American League West
-        self.assertEqual(id, [103]) # Confirm the ID is correct
+        id = self.mlb.get_league_id('American League')
+        self.assertEqual(id, [103])
 
     def test_get_invalid_league_id(self):
         """mlb get_league_id should return a empty list with invalid league name"""
         id = self.mlb.get_league_id('Russian League')
         self.assertEqual(id, [])
 
+
 class TestMlbGetDivision(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.mlb = Mlb() # Create instance of our baseclass
+        cls.mlb = Mlb()
         pass
 
     @classmethod
@@ -236,30 +237,31 @@ class TestMlbGetDivision(unittest.TestCase):
 
     def test_get_division(self):
         """mlb get_division should return a Division object"""
-        division = self.mlb.get_division(200) # Return MLB division instance
-        self.assertIsInstance(division, Division) # Confirms that a division instance is returned
-        self.assertEqual(division.id, 200) # Confirm the ID is correct
+        division = self.mlb.get_division(200)
+        self.assertIsInstance(division, Division)
+        self.assertEqual(division.id, 200)
 
     def test_get_divisions(self):
         """mlb get_divisions should return a list of Divisions"""
-        divisions = self.mlb.get_divisions() # Get all divisions as a list[Division]
-        self.assertIsInstance(divisions, List) # Test result is List
-        self.assertIsInstance(divisions[0], Division) # Lazy Test to check the list contains instances of Division
+        divisions = self.mlb.get_divisions()
+        self.assertIsInstance(divisions, List)
+        self.assertIsInstance(divisions[0], Division)
 
     def test_get_division_id(self):
         """mlb get_division_id should return a division id"""
-        id = self.mlb.get_division_id('American League West') # Get the id for American League West
-        self.assertEqual(id, [200]) # Confirm the ID is correct
+        id = self.mlb.get_division_id('American League West')
+        self.assertEqual(id, [200])
 
-    def test_get_division_id(self):
+    def test_get_division_fail_id(self):
         """mlb get_division_id should return a empty list for invalid division name"""
-        id = self.mlb.get_division_id('Canada West') # Get the id for American League West
-        self.assertEqual(id, []) # Confirm the ID is correct
+        id = self.mlb.get_division_id('Canada West')
+        self.assertEqual(id, [])
+
 
 class TestMlbGetVenue(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.mlb = Mlb() # Create instance of our baseclass
+        cls.mlb = Mlb()
         pass
 
     @classmethod
@@ -268,30 +270,31 @@ class TestMlbGetVenue(unittest.TestCase):
 
     def test_mlb_get_venue(self):
         """mlb get_division should return a Division object"""
-        venue = self.mlb.get_venue(31) # Return PNC Park venue instance
-        self.assertIsInstance(venue, Venue) # Confirms that a venue instance is returned
-        self.assertEqual(venue.id, 31) # Confirm the ID is correct
+        venue = self.mlb.get_venue(31)
+        self.assertIsInstance(venue, Venue)
+        self.assertEqual(venue.id, 31)
 
     def test_get_venues(self):
         """mlb get_divisions should return a list of Divisions"""
-        venues = self.mlb.get_venues() # Get all venues as a list[Venue]
-        self.assertIsInstance(venues, List) # Test result is List
-        self.assertIsInstance(venues[0], Venue) # Lazy Test to check the list contains instances of Venue
+        venues = self.mlb.get_venues()
+        self.assertIsInstance(venues, List)
+        self.assertIsInstance(venues[0], Venue)
 
     def test_mlb_get_venue_id(self):
         """mlb get_division_id should return a division id"""
-        id = self.mlb.get_venue_id('PNC Park') # Get the id for PNC Park
-        self.assertEqual(id, [31]) # Confirm the ID is correct
+        id = self.mlb.get_venue_id('PNC Park')
+        self.assertEqual(id, [31])
 
     def test_get_venue_id(self):
         """mlb get_division_id should return a empty list for invalid venue name"""
-        id = self.mlb.get_venue_id('Highschool Park') # Get the id for American League West
-        self.assertEqual(id, []) # Confirm the ID is correct
+        id = self.mlb.get_venue_id('Highschool Park')
+        self.assertEqual(id, [])
+
 
 class TestMlbGetGame(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.mlb = Mlb() # Create instance of our baseclass
+        cls.mlb = Mlb()
         pass
 
     @classmethod
@@ -299,34 +302,35 @@ class TestMlbGetGame(unittest.TestCase):
         pass
 
     def test_mlb_get_game(self):
-        game = self.mlb.get_game(662242) # Return a game instance of gaem 662242
-        self.assertIsInstance(game, Game) # Confirms that a Game instance is returned
-        self.assertEqual(game.id, 662242) # Confirm the ID is correct
-    
+        game = self.mlb.get_game(662242)
+        self.assertIsInstance(game, Game)
+        self.assertEqual(game.id, 662242)
+
     def test_get_game_playByPlay(self):
-        playByPlay = self.mlb.get_game_playByPlay(662242) # Return a game instance of gaem 662242
-        self.assertIsInstance(playByPlay, Plays) # Confirms that a Game instance is returned        
-    
+        playbyplay = self.mlb.get_game_play_by_play(662242)
+        self.assertIsInstance(playbyplay, Plays)
+
     def test_get_game_linescore(self):
-        linescore = self.mlb.get_game_linescore(662242) # Return a game instance of gaem 662242
-        self.assertIsInstance(linescore, Linescore) # Confirms that a Game instance is returned 
-    
+        linescore = self.mlb.get_game_line_score(662242)
+        self.assertIsInstance(linescore, Linescore)
+
     def test_get_game_boxscore(self):
-        boxscore = self.mlb.get_game_boxscore(662242) # Return a game instance of gaem 662242
-        self.assertIsInstance(boxscore, BoxScore) # Confirms that a Game instance is returned 
+        boxscore = self.mlb.get_game_box_score(662242)
+        self.assertIsInstance(boxscore, BoxScore)
 
     def test_get_todays_games_id(self):
-        todaysGames = self.mlb.get_todays_game_ids() # Get all divisions as a list[Division]
-        self.assertIsInstance(todaysGames, List) # Test result is List 
+        todaysGames = self.mlb.get_todays_game_ids()
+        self.assertIsInstance(todaysGames, List)
 
     def test_get_schedule(self):
-        schedule = self.mlb.get_schedule() # Get all divisions as a list[Division]
-        self.assertIsInstance(schedule, Schedule) # Test result is List
+        schedule = self.mlb.get_schedule()
+        self.assertIsInstance(schedule, Schedule)
 
     def test_get_attendance(self):
-        attendance_team_away = self.mlb.get_attendance(teamid=113) # Cincinati Reds 134
-        attendance_team_home = self.mlb.get_attendance(teamid=134)
-        attendance_season = self.mlb.get_attendance(teamid=113, season=2022)
+        params = {'season': 2022}
+        attendance_team_away = self.mlb.get_attendance(team_id=113)
+        attendance_team_home = self.mlb.get_attendance(team_id=134)
+        attendance_season = self.mlb.get_attendance(team_id=113, params=params)
         self.assertEqual(attendance_team_away.records[0].team.id, 113)
         self.assertEqual(attendance_team_home.records[0].team.id, 134)
         self.assertEqual(attendance_season.records[0].team.id, 113)

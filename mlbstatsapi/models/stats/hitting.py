@@ -139,31 +139,21 @@ class HittingCareer(Splits, SimpleHittingStat):
     """
     A class to represent a hitting career or careerPlayoffs statistic
 
+    #TODO Note that stat types career and careerregularseason, and careerplayoffs return same stat type of career
     Attributes
     ----------
     """
-    _stat = [ 'career' ]
+    _stat = [ 'career', 'careerRegularSeason', 'careerPlayoffs' ]
 
-@dataclass(kw_only=True)
-class HittingCareerRegularSeason(Splits, SimpleHittingStat):
-    """
-    A class to represent a hitting career or careerPlayoffs statistic
+# @dataclass(kw_only=True)
+# class HittingCareerPlayoffs(Splits, SimpleHittingStat):
+#     """
+#     A class to represent a hitting careerPlayoffs statistic
 
-    Attributes
-    ----------
-    """
-    _stat = [ 'careerRegularSeason' ]
-
-
-@dataclass(kw_only=True)
-class HittingCareerPlayoffs(Splits, SimpleHittingStat):
-    """
-    A class to represent a hitting careerPlayoffs statistic
-
-    Attributes
-    ----------
-    """
-    _stat = [ 'careerPlayoffs' ]
+#     Attributes
+#     ----------
+#     """
+#     _stat = [ 'careerPlayoffs' ]
 
 @dataclass(kw_only=True)
 class HittingSeason(Splits, SimpleHittingStat):
@@ -485,6 +475,26 @@ class HittingDateRangeAdvanced(Splits, AdvancedHittingStat):
     _stat = [ 'byDateRangeAdvanced' ]
 
 @dataclass(kw_only=True)
+class HittingDateRangeAdvancedByMonth(Splits, AdvancedHittingStat):
+    """
+    A class to represent a byDateRangeAdvanced statistic
+
+    Attributes
+    ----------
+    """
+    _stat = [ 'byDateRangeAdvanced' ]
+
+@dataclass(kw_only=True)
+class HittingDateRangeAdvancedByMonth(Splits, AdvancedHittingStat):
+    """
+    A class to represent a byDateRangeAdvanced statistic
+
+    Attributes
+    ----------
+    """
+    _stat = [ 'byDateRangeAdvancedbyMonth' ]
+
+@dataclass(kw_only=True)
 class HittingByMonth(Splits, SimpleHittingStat):
     """
     A class to represent a byMonth hitting statistic
@@ -681,6 +691,6 @@ class HittingVsPlayer5Y(Splits, SimpleHittingStat):
     opponent: Optional[Union[Team, dict]]  = field(default_factory=dict)
 
     def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
+        self.pitcher = Pitcher(**self.pitcher) 
+        self.batter = Batter(**self.batter) 
         self.opponent = Team(**self.opponent) if self.opponent else self.opponent

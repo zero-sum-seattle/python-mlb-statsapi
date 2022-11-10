@@ -606,6 +606,7 @@ class PitchingRankings(Splits, SimplePitching):
     gametype : str
     """
     _stat = [ 'rankings' ]
+    outspitched: int
 
 @dataclass(kw_only=True)
 class PitchingRankings(Splits, SimplePitching):
@@ -617,6 +618,7 @@ class PitchingRankings(Splits, SimplePitching):
     gametype : str
     """
     _stat = [ 'rankingsByYear' ]
+    outspitched: int
 
 @dataclass(kw_only=True)
 class PitchingOpponentsFaced(Splits):
@@ -646,8 +648,7 @@ class PitchingOpponentsFaced(Splits):
 class PitchingExpectedStatistics(Splits):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
-    """
-    """
+
     Attributes
     ----------
     avg : str

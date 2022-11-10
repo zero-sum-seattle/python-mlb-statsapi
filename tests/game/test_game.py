@@ -1,5 +1,5 @@
 import unittest
-from mlbstatsapi.mlbapi import Mlb
+from mlbstatsapi.mlb_api import Mlb
 from mlbstatsapi.models.game import Game
 
 # Game with id of 662242 is used for this testing.
@@ -29,4 +29,3 @@ class TestGame(unittest.TestCase):
         self.assertTrue(hasattr(self.game, "metadata"))
         self.assertTrue(hasattr(self.game, "gamedata"))
         self.assertTrue(hasattr(self.game, "livedata"))
- 
