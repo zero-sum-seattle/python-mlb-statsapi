@@ -691,10 +691,13 @@ class Mlb:
 
         return division_ids
 
+    # def get_attendance(self, team_id: int = None, league_id: int = None,
+    #                    season: str = None, date: str = None,
+    #                    league_list_id: int = None, gametype: str = None,
+    #                    fields: str = None) -> Union[Attendance, None]:
+
     def get_attendance(self, team_id: int = None, league_id: int = None,
-                       season: str = None, date: str = None,
-                       league_list_id: int = None, gametype: str = None,
-                       fields: str = None) -> Union[Attendance, None]:
+                       league_list_id: int = None, params: dict = {}) -> Union[Attendance, None]:
         """
         return attendance
 
@@ -721,41 +724,19 @@ class Mlb:
         -------
         Attendance
         """
+        required_args = {'teamId': team_id, 'leagueId': league_id, 'leagueListId': league_list_id}
 
-        if not any([team_id, league_id, league_list_id]):
+        # I like this
+        if not any(required_args):
             return
 
-        # TODO Let's clean this up to use params instead of creating a endpoint string
-        endpoint = 'attendance?'
+        # let's create a list of the args passed
+        # this will filter out None
+        for arg_name, arg_value in required_args.items():
+            if arg_value:
+                params[arg_name] = arg_value
 
-        if team_id:
-            endpoint += f'teamId={team_id}'
-
-        if league_id:
-            if endpoint == 'attendance?':
-                endpoint += f'{league_id}'
-            else:
-                endpoint += f'&leagueId = {league_id}'
-
-        if league_list_id:
-            if endpoint == 'attendance?':
-                endpoint += f'{league_list_id}'
-            else:
-                endpoint += f'&leagueListId={league_list_id}'
-
-        if season:
-            endpoint += f'&season={season}'
-
-        if date:
-            endpoint += f'&date={date}'
-
-        if gametype:
-            endpoint += f'&gameType={gametype}'
-
-        if fields:
-            endpoint += f'&fields={fields}'
-
-        mlb_data = self._mlb_adapter_v1.get(endpoint)
+        mlb_data = self._mlb_adapter_v1.get('attendance', ep_params=params)
 
         if 'records' in mlb_data.data and mlb_data.data['records']:
             return Attendance(**mlb_data.data)

@@ -327,9 +327,10 @@ class TestMlbGetGame(unittest.TestCase):
         self.assertIsInstance(schedule, Schedule)
 
     def test_get_attendance(self):
+        params = {'season': 2022}
         attendance_team_away = self.mlb.get_attendance(team_id=113)
         attendance_team_home = self.mlb.get_attendance(team_id=134)
-        attendance_season = self.mlb.get_attendance(team_id=113, season=2022)
+        attendance_season = self.mlb.get_attendance(team_id=113, params=params)
         self.assertEqual(attendance_team_away.records[0].team.id, 113)
         self.assertEqual(attendance_team_home.records[0].team.id, 134)
         self.assertEqual(attendance_season.records[0].team.id, 113)

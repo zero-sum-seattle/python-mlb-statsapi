@@ -7,9 +7,10 @@ class TestAttendance(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
+        params = {'season': 2022}
         cls.attendance_team_away = cls.mlb.get_attendance(team_id=113)
         cls.attendance_team_home = cls.mlb.get_attendance(team_id=134)
-        cls.attendance_season = cls.mlb.get_attendance(team_id=113, season=2022)
+        cls.attendance_season = cls.mlb.get_attendance(team_id=113, params=params)
 
 
     @classmethod
