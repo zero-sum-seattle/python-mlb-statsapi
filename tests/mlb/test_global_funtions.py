@@ -1,5 +1,4 @@
-﻿from typing import Dict, List
-from mlbstatsapi import _transform_mlb_data
+﻿from mlbstatsapi import _transform_mlb_data
 import unittest
 import json
 import os

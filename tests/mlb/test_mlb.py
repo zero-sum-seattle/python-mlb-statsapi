@@ -80,7 +80,7 @@ class TestMlbGetPeople(unittest.TestCase):
     def test_mlbdataapi_get_people_with_sportid(self):
         """mlb get_people should return a list of all sport 1 people"""
         mlbdata = self.mlb.get_people(sport_id=11)
-        self.assertIsInstance(mlbdata, List) 
+        self.assertIsInstance(mlbdata, List)
         self.assertIsInstance(mlbdata[0], Person)
 
     def test_mlb_get_person(self):
@@ -101,7 +101,7 @@ class TestMlbGetPeople(unittest.TestCase):
 
     def test_mlb_get_person_id_with_sportid(self):
         """mlb get_person_id should return a person id"""
-        id = self.mlb.get_people_id('Fernando Abad', sportid=11) 
+        id = self.mlb.get_people_id('Fernando Abad', sport_id=11)
         self.assertEqual(id, [472551])
 
     def test_mlb_get_invalid_person_id(self):

@@ -5,7 +5,7 @@ import inspect
 
 def _transform_mlb_data(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -> dict:
     """
-    merge requested nested dicts inside mlb_dict into mlb_dict base. 
+    merge requested nested dicts inside mlb_dict into mlb_dict base.
 
     Parameters
     ----------
@@ -56,7 +56,7 @@ def _return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['S
     -------
     splits
     """
-    stat_log_type = [ 'playLog', 'pitchLog' ]
+    stat_log_type = ['playLog', 'pitchLog']
     splits = []
 
     stat_module = f"mlbstatsapi.models.stats.{stat_group}"
@@ -74,7 +74,7 @@ def _return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['S
                 # if stat_type is in stat_log_type
                 # do required dictionary transformation
                 if stat_type in stat_log_type:
-                    split = _transform_mlb_data(split, [{'stat':'play'}])
+                    split = _transform_mlb_data(split, [{'stat': 'play'}])
 
                 # if stat is in split merge
                 # some splits don't have stat
