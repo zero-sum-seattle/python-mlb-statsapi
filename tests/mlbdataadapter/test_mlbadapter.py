@@ -1,9 +1,9 @@
-﻿from logging import exception
-import unittest
+﻿import unittest
 import requests
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from typing import List, Dict
 from mlbstatsapi import MlbDataAdapter, TheMlbStatsApiException
+
 
 class TestMlbAdapter(unittest.TestCase):
     @classmethod
@@ -13,7 +13,7 @@ class TestMlbAdapter(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         pass
-    
+
     # I don't know if this is best practice
     def lower_keys_in_response(self, data):
         if isinstance(data, Dict):
@@ -24,7 +24,7 @@ class TestMlbAdapter(unittest.TestCase):
         elif isinstance(data, List):        
             for item in data:
                 self.lower_keys_in_response(item)
-    
+
     def test_mlbadapter_get_200(self):
         """mlbadapter should return 200 and data for sports endpoint"""
 
@@ -60,8 +60,8 @@ class TestMlbAdapter(unittest.TestCase):
         """mlbadapter should accept params and parse them to the url"""
 
         # stat type season, stat group hitting
-        self.params = { "stats": "season", "group": "hitting" }
-        
+        self.params = {"stats": "season", "group": "hitting"}
+
         # use team stats end point for params
         result = self.mlb_adapter.get(endpoint="teams/133/stats", ep_params=self.params)
 
@@ -83,9 +83,10 @@ class TestMlbAdapter(unittest.TestCase):
         # data should not be None
         self.assertTrue(result.data)
 
-        # data should all be lowercase 
+        # data should all be lowercase
         self.lower_keys_in_response(result.data)
-        
+
+
 class MlbAdapterMockTesting(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -94,12 +95,12 @@ class MlbAdapterMockTesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        pass   
+        pass
 
     def test_mlbadapter_mock_bad_json(self):
         """mlbadapter should raise TheMlbStatsApiException"""
         # setting up mock
-        self.response.status_code = 200 # let's use 200 since this REST API is a little wonked
+        self.response.status_code = 200
         self.response._content = '{"some bad json": sdfsd'.encode()
 
         # params to pass
@@ -111,7 +112,7 @@ class MlbAdapterMockTesting(unittest.TestCase):
             # mlb_adapter should raise exception due to bad JSON
             with self.assertRaises(TheMlbStatsApiException):
                 result = self.mlb_adapter.get(endpoint="teams/133/stats", ep_params=self.params)
-        
+
     def test_mlbadapter_mock_404_json(self):
         """mlbadapter should raise TheMlbStatsApiException"""
         # setting up mock
@@ -133,7 +134,6 @@ class MlbAdapterMockTesting(unittest.TestCase):
             # result.data should be None
             self.assertEqual(result.data, {})
 
-
     def test_mlbadapter_mock_500_json(self):
         """mlbadapter should raise TheMlbStatsApiException"""
         # setting up mock
@@ -141,7 +141,7 @@ class MlbAdapterMockTesting(unittest.TestCase):
         self.response._content = '{ "messageNumber" : 1, "message" : "Internal error occurred", "timestamp" : "2022-10-13T18:37:47.600274Z", "traceId" : "9318607c0b50f493e9056648614a5cea" }'.encode()
 
         # params to pass
-        self.params = { "stats": "standard", "group": "hitting" }
+        self.params = {"stats": "standard", "group": "hitting"}
 
         # patch mlbdataadapter to return mocked response
         with patch("mlbstatsapi.mlb_dataadapter.requests.get", return_value=self.response):
@@ -149,5 +149,3 @@ class MlbAdapterMockTesting(unittest.TestCase):
             # mlb_adapter should raise exception due to 500 status code
             with self.assertRaises(TheMlbStatsApiException):
                 result = self.mlb_adapter.get(endpoint="teams/133/stats", ep_params=self.params)
-
-            

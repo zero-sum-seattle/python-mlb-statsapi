@@ -1,5 +1,4 @@
 ﻿import unittest
-from unittest.mock import Mock, patch
 from mlbstatsapi.models.people import Player, Coach
 from mlbstatsapi import Mlb
 
@@ -25,6 +24,7 @@ class TestTeamRoster(unittest.TestCase):
         """This should return a empty list"""
         roster = self.mlb.get_team_roster('1333')
         self.assertListEqual(roster, [])
+
 
 class TestCoachRoster(unittest.TestCase):
     @classmethod

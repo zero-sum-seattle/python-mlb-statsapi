@@ -15,13 +15,13 @@ class TestPlayerPitchingStats(unittest.TestCase):
 
     def test_get_one_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'season', 'statsSingleSeason' ], 'group': ['pitching'] }
+        self.params = {'stats': ['season', 'statsSingleSeason'], 'group': ['pitching']}
         stats = self.mlb.get_stats(self.params, self.pitching_player)
 
         self.assertTrue(stats['pitching']['season'])
         self.assertTrue(stats['pitching']['statssingleseason'])
 
-        self.params = { 'stats': [ 'seasonAdvanced', 'statsSingleSeasonAdvanced' ], 'group': ['pitching'] }
+        self.params = {'stats': ['seasonAdvanced', 'statsSingleSeasonAdvanced'], 'group': ['pitching']}
         stats = self.mlb.get_stats(self.params, self.pitching_player)
 
         self.assertTrue(stats['pitching']['seasonadvanced'])
@@ -29,14 +29,14 @@ class TestPlayerPitchingStats(unittest.TestCase):
 
     def test_get_sabermetrics_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': ['sabermetrics'], 'group': ['pitching'] }
+        self.params = {'stats': ['sabermetrics'], 'group': ['pitching']}
         stats = self.mlb.get_stats(self.params, self.pitching_player)
 
         self.assertTrue(stats['pitching']['sabermetrics'])
 
     def test_get_pitching_career_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'career', 'careerAdvanced' ], 'group': ['pitching'] }
+        self.params = {'stats': ['career', 'careerAdvanced'], 'group': ['pitching']}
         stats = self.mlb.get_stats(self.params, self.pitching_player)
 
         self.assertTrue(stats['pitching']['career'])
@@ -44,22 +44,21 @@ class TestPlayerPitchingStats(unittest.TestCase):
 
     def test_get_gamelog_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'gameLog' ], 'group': [ 'pitching' ] }
+        self.params = {'stats': ['gameLog'], 'group': ['pitching']}
         stats = self.mlb.get_stats(self.params, self.pitching_player)
 
         self.assertTrue(stats['pitching']['gamelog'])
 
-
     def test_get_playlog_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': [ 'playLog' ], 'group': [ 'pitching' ] }
+        self.params = {'stats': ['playLog'], 'group': ['pitching']}
         stats = self.mlb.get_stats(self.params, self.pitching_player)
 
         self.assertTrue(stats['pitching']['playlog'])
 
     def test_get_yearbyyear_pitching_stats_for_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = { 'stats': ['yearByYear'], 'group': [ 'pitching' ] }
+        self.params = {'stats': ['yearByYear'], 'group': ['pitching']}
         stats = self.mlb.get_stats(self.params, self.pitching_player)
 
         self.assertTrue(stats['pitching']['yearbyyear'])

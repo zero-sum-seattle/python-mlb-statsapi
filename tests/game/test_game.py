@@ -29,4 +29,3 @@ class TestGame(unittest.TestCase):
         self.assertTrue(hasattr(self.game, "metadata"))
         self.assertTrue(hasattr(self.game, "gamedata"))
         self.assertTrue(hasattr(self.game, "livedata"))
- 

@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 from dataclasses import dataclass
 
 @dataclass
@@ -46,13 +46,14 @@ class HitData:
     coordinates : HitCoordinate
         Hit coordinates
     """
-    launchspeed: float
-    launchangle: int
-    totaldistance: int
+    
     trajectory: str
     hardness: str
     location: str
     coordinates: HitCoordinate
+    launchspeed: Optional[float] = None
+    launchangle: Optional[int] = None
+    totaldistance: Optional[int] = None
 
     def __post_init__(self):
         self.coordinates = HitCoordinate(**self.coordinates)

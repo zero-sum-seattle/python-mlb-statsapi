@@ -16,7 +16,7 @@ from mlbstatsapi.models.stats import Splits
 
 from .mlb_dataadapter import MlbDataAdapter
 
-from .mlb_functions import _transform_mlbdata, _return_splits
+from .mlb_functions import _transform_mlb_data, _return_splits
 
 
 class Mlb:
@@ -24,56 +24,59 @@ class Mlb:
         self._mlb_adapter_v1 = MlbDataAdapter(hostname, 'v1', logger)
         self._mlb_adapter_v1_1 = MlbDataAdapter(hostname, 'v1.1', logger)
         self._logger = logger or logging.getLogger(__name__)
+        self._logger.setLevel(logging.DEBUG)
 
-    def get_people(self, sportid: int = 1) -> List[Person]:
+    def get_people(self, sport_id: int = 1) -> List[Person]:
         """
         return the all players for sportid
 
         Parameters
         ----------
-        sportid : int
+        sport_id : int
             sportid for players defaults to 1
 
         Returns
         -------
         List[Person]
-        """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports/{sportid}/players')
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players')
         people = []
 
-        if ('people' in mlbdata.data and mlbdata.data['people']):
-            people = [ Person(**person) for person in mlbdata.data['people'] ]
-        
+        if 'people' in mlb_data.data and mlb_data.data['people']:
+            people = [Person(**person) for person in mlb_data.data['people']]
+
         return people
 
-    def get_person(self, playerid) -> Union[Person, None]:
+    def get_person(self, player_id) -> Union[Person, None]:
         """
         return a person
 
         Parameters
         ----------
-        playerId : int
-            Person id 
+        player_id : int
+            Person id
 
         Returns
         -------
         Person
-        """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'people/{playerid}')
-        
-        if ('people' in mlbdata.data and mlbdata.data['people']):
-            for person in mlbdata.data['people']:
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{player_id}')
+
+        if 'people' in mlb_data.data and mlb_data.data['people']:
+            for person in mlb_data.data['people']:
                 return Person(**person)
 
-    def get_people_id(self, fullname, sportid: int = 1) -> List[int]:
+    def get_people_id(self, fullname, sport_id: int = 1) -> List[int]:
         """
         return a person Id
 
         Parameters
         ----------
-        fullName : str
+        fullname : str
             Person full name
-        sportid : int
+        sport_id : int
             sportid for players defaults to 1
 
         Returns
@@ -81,126 +84,130 @@ class Mlb:
         List[int]
         """
 
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports/{sportid}/players')
-        playerIds = []
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players')
+        player_ids = []
 
-        # if mlbdata is not empty, and 'people' key is in mlbdata.data and mlbdata.data['people'] is not empty list
-        if ('people' in mlbdata.data and mlbdata.data['people']): 
-            for person in mlbdata.data['people']:
+        if 'people' in mlb_data.data and mlb_data.data['people']:
+            for person in mlb_data.data['people']:
                 if person['fullname'].lower() == fullname.lower():
-                    playerIds.append(person['id'])
+                    player_ids.append(person['id'])
 
-        return playerIds
+        return player_ids
 
-    def get_teams(self, sportid: int = 1) -> List[Team]:
+    def get_teams(self, sport_id: int = 1) -> List[Team]:
         """
         return the all Teams
 
         Parameters
         ----------
-        sportid : int
-            sportid for players defaults to 1
+        sport_id : int
+            sport_id for players defaults to 1
 
         Returns
         -------
         List[Team]
         """
-        params = { 'sportId': sportid }
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'teams', ep_params=params)
+
+        params = {'sportId': sport_id}
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams', ep_params=params)
         teams = []
-        
-        if ('teams' in mlbdata.data and mlbdata.data['teams']):
-            teams = [ Team(**team) for team in mlbdata.data['teams']]
+
+        if 'teams' in mlb_data.data and mlb_data.data['teams']:
+            teams = [Team(**team) for team in mlb_data.data['teams']]
 
         return teams
 
-    def get_team(self, teamid) -> Union[Team, None]:
+    def get_team(self, team_id) -> Union[Team, None]:
         """
         return the Team
 
         Parameters
         ----------
-        teamId : int
-            Team id 
+        team_id : int
+            Team id
 
         Returns
         -------
         Team
-        """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'teams/{teamid}')
+        """
 
-        if ('teams' in mlbdata.data and mlbdata.data['teams']):
-            for team in mlbdata.data['teams']:
-                return Team(**team) 
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}')
 
-    def get_team_id(self, teamname) -> List[int]:
+        if 'teams' in mlb_data.data and mlb_data.data['teams']:
+            for team in mlb_data.data['teams']:
+                return Team(**team)
+
+    def get_team_id(self, team_name) -> List[int]:
         """
         return a team Id
 
         Parameters
         ----------
-        teamName : str
+        team_name : str
             Teams name
 
         Returns
         -------
         List[ints]
-        """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint='teams')
-        teamIds = []
-        
-        if ('teams' in mlbdata.data and mlbdata.data['teams']):
-            for team in mlbdata.data['teams']:
-                if team['teamname'].lower() == teamname.lower():
-                    teamIds.append(team['id'])
-        
-        return teamIds
+        """
 
-    def get_team_roster(self, teamid) -> List[Player]:
+        mlb_data = self._mlb_adapter_v1.get(endpoint='teams')
+        team_ids = []
+
+        if 'teams' in mlb_data.data and mlb_data.data['teams']:
+            for team in mlb_data.data['teams']:
+                if team['teamname'].lower() == team_name.lower():
+                    team_ids.append(team['id'])
+
+        return team_ids
+
+    def get_team_roster(self, team_id) -> List[Player]:
         """
         return the team player roster
 
         Parameters
         ----------
-        teamId : int
+        team_id : int
             Team id 
 
         Returns
         -------
         List[Player]
         """
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'teams/{teamid}/roster')
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/roster')
         players = []
 
-        if ('roster' in mlbdata.data and mlbdata.data['roster']):
-            for player in mlbdata.data['roster']:
-                players.append(Player(**_transform_mlbdata(player, ['person'])))
+        if 'roster' in mlb_data.data and mlb_data.data['roster']:
+            for player in mlb_data.data['roster']:
+                players.append(Player(**_transform_mlb_data(player, ['person'])))
 
         return players
 
-    def get_team_coaches(self, teamid) -> List[Coach]:
+    def get_team_coaches(self, team_id) -> List[Coach]:
         """
         return the team coach roster
 
         Parameters
         ----------
-        teamId : int
+        team_id : int
             Team id 
 
         Returns
         -------
         List[Coach]
-        """       
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'teams/{teamid}/coaches')
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/coaches')
         coaches = []
 
-        if ('roster' in mlbdata.data and mlbdata.data['roster']):
-            for coach in mlbdata.data['roster']:               
-                coaches.append(Coach(**_transform_mlbdata(coach, ['person'])))
+        if 'roster' in mlb_data.data and mlb_data.data['roster']:
+            for coach in mlb_data.data['roster']:
+                coaches.append(Coach(**_transform_mlb_data(coach, ['person'])))
 
         return coaches
 
-    def get_schedule(self, startdate = None, enddate = None) -> Union[Schedule, None]:
+    def get_schedule(self, start_date: str = None, end_date: str = None) -> Union[Schedule, None]:
         """
         return the schedule created from the included params.
 
@@ -211,27 +218,30 @@ class Mlb:
 
         Parameters
         ----------
-        startDate : str "yyyy-mm-dd"
+        start_date : str "yyyy-mm-dd"
             Start date
-        endDate : str "yyyy-mm-dd"
+        end_date : str "yyyy-mm-dd"
             End date
 
         Returns
         -------
         Schedule
-        """     
+        """
+
         # default to today if not set
-        startdate = datetime.date.today().strftime("%Y-%m-%d") if startdate is None else startdate
-        enddate = datetime.date.today().strftime("%Y-%m-%d") if enddate is None else enddate
-        
-        params = {'sportId': '1', 'startDate': startdate, 'endDate': enddate}
+        start_date = datetime.date.today().strftime("%Y-%m-%d") if start_date is None else start_date
+        end_date = datetime.date.today().strftime("%Y-%m-%d") if end_date is None else end_date
 
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'schedule', ep_params=params)
+        params = {'sportId': '1', 'startDate': start_date, 'endDate': end_date}
 
-        # if mlbdata is not empty, and 'dates' key is in mlbdata.data and mlbdata.data['dates] can sometimes be an empty list
-        # when there are no scheduled game for the date(s). Only check for existance 'dates' key for this reason.
-        if ('dates' in mlbdata.data):
-            return Schedule(**mlbdata.data)
+        mlb_data = self._mlb_adapter_v1.get(endpoint='schedule', ep_params=params)
+
+        # if mlb_data is not empty, and 'dates' key is in mlb_data.data and mlb_data.data['dates]
+        # can sometimes be an empty list when there are no scheduled game for the date(s).
+        # Only check for existance 'dates' key for this reason.
+
+        if 'dates' in mlb_data.data:
+            return Schedule(**mlb_data.data)
 
     def get_schedule_today(self) -> Union[Schedule, None]:        
         """
@@ -240,7 +250,8 @@ class Mlb:
         Returns
         -------
         Schedule
-        """    
+        """
+
         return self.get_schedule()
 
     def get_schedule_date(self, date) -> Union[Schedule, None]:
@@ -255,96 +266,105 @@ class Mlb:
         Returns
         -------
         Schedule
-        """  
-        return self.get_schedule(startdate = date, enddate = date)
+        """
 
-    def get_schedule_date_range(self, startdate, enddate) -> Union[Schedule, None]: 
+        return self.get_schedule(start_date=date, end_date=date)
+
+    def get_schedule_date_range(self, start_date: str, end_date: str) -> Union[Schedule, None]:
         """
         return the schedule for a range of dates
 
         Parameters
         ----------
-        startDate : str "yyyy-mm-dd"
+        start_date : str "yyyy-mm-dd"
             Start date
-        endDate : str "yyyy-mm-dd"
+        end_date : str "yyyy-mm-dd"
             End date
 
         Returns
         -------
         Schedule
-        """  
-        return self.get_schedule(startdate = startdate, enddate = enddate)
+        """
 
-    def get_game(self, gameid) -> Union[Game, None]:
+        return self.get_schedule(start_date=start_date, end_date=end_date)
+
+    def get_game(self, game_id) -> Union[Game, None]:
         """
         return the game for a specific game id
 
         Parameters
         ----------
-        gameId : int
+        game_id : int
             Game id number
 
         Returns
         -------
         Game
-        """  
-        mlbdata = self._mlb_adapter_v1_1.get(endpoint=f'game/{gameid}/feed/live')
-        
-        if ('gamepk' in mlbdata.data and mlbdata.data['gamepk'] == gameid):
-            return Game(**mlbdata.data)
+        """
 
-    def get_game_playByPlay(self, gameid) -> Union[Plays, None]:
+        mlb_data = self._mlb_adapter_v1_1.get(endpoint=f'game/{game_id}/feed/live')
+
+        if 'gamepk' in mlb_data.data and mlb_data.data['gamepk'] == game_id:
+            return Game(**mlb_data.data)
+
+    def get_game_play_by_play(self, game_id) -> Union[Plays, None]:
         """
         return the playbyplay of a game for a specific game id
 
         Parameters
         ----------
-        gameId : int
+        game_id : int
             Game id number
 
         Returns
         -------
         Plays
-        """  
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameid}/playByPlay') 
-        if ('allplays' in mlbdata.data and mlbdata.data['allplays']):
-            return Plays(**mlbdata.data)
+        """
 
-    def get_game_linescore(self, gameid) -> Union[Linescore, None]:
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/playByPlay')
+
+        if 'allplays' in mlb_data.data and mlb_data.data['allplays']:
+            return Plays(**mlb_data.data)
+
+    def get_game_line_score(self, game_id) -> Union[Linescore, None]:
         """
         return the Linescore of a game for a specific game id
 
         Parameters
         ----------
-        gameId : int
+        game_id : int
             Game id number
 
         Returns
         -------
         Linescore
-        """  
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameid}/linescore')
-        if ('teams' in mlbdata.data and mlbdata.data['teams']):
-            return Linescore(**mlbdata.data)
+        """
 
-    def get_game_boxscore(self, gameid) -> Union[BoxScore, None]:
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/linescore')
+
+        if 'teams' in mlb_data.data and mlb_data.data['teams']:
+            return Linescore(**mlb_data.data)
+
+    def get_game_box_score(self, game_id) -> Union[BoxScore, None]:
         """
         return the boxscore of a game for a specific game id
 
         Parameters
         ----------
-        gameId : int
+        game_id : int
             Game id number
 
         Returns
         -------
         BoxScore
-        """  
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'game/{gameid}/boxscore')
-        if ('teams' in mlbdata.data and mlbdata.data['teams']):
-            return BoxScore(**mlbdata.data)
+        """
 
-    def get_game_ids(self, date, abstractgamestate=None) -> List[int]:
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/boxscore')
+
+        if 'teams' in mlb_data.data and mlb_data.data['teams']:
+            return BoxScore(**mlb_data.data)
+
+    def get_game_ids(self, date: str, abstract_game_state: str = None) -> List[int]:
         """
         return game ids for a specific date and game status
 
@@ -352,48 +372,51 @@ class Mlb:
         ----------
         date : str 'yyyy-mm-dd'
             Date
-        abstractgamestate : str
-            Game status type to search for, abstractgamestate
+        abstract_game_state : str
+            Game status type to search for, abstract_game_state
 
         Returns
         -------
         List[int]
-        """  
-        scheduledgames = self.get_schedule(date, date)
-        gamesids = []
-        
-        # If get_schedule_today is successful and returns a schedule object
-        if scheduledgames:
-            # If only one date is in dates. Zero would mean no games today. 
-            if scheduledgames.dates and len(scheduledgames.dates) == 1:
-                # If the single date is todays date
-                if scheduledgames.dates[0].date == date:
-                    # If todays date has games. A date could have no games and events.
-                    if scheduledgames.dates[0].games:
-                        # Collect all the game Id's for todays games
-                        for game in scheduledgames.dates[0].games:
-                            # If abstractGameState param provided only get games that match
-                            if not abstractgamestate or (game.status.abstractgamestate == abstractgamestate):
-                                gamesids.append(game.gamepk) # Append game Ids
-            
-        return gamesids
+        """
 
-    def get_todays_game_ids(self, abstractgamestate=None) -> List[int]:
+        scheduled_games = self.get_schedule(date, date)
+        games_ids = []
+
+        # TODO Can we clean up this logic? lol
+        # If get_schedule_today is successful and returns a schedule object
+        if scheduled_games:
+            # If only one date is in dates. Zero would mean no games today. 
+            if scheduled_games.dates and len(scheduled_games.dates) == 1:
+                # If the single date is todays date
+                if scheduled_games.dates[0].date == date:
+                    # If todays date has games. A date could have no games and events.
+                    if scheduled_games.dates[0].games:
+                        # Collect all the game Id's for todays games
+                        for game in scheduled_games.dates[0].games:
+                            # If abstractGameState param provided only get games that match
+                            if not abstract_game_state or (game.status.abstractgamestate == abstract_game_state):
+                                games_ids.append(game.gamepk) # Append game Ids
+
+        return games_ids
+
+    def get_todays_game_ids(self, abstract_game_state: str = None) -> List[int]:
         """
         return game ids for todays date
 
         Parameters
         ----------
-        abstractgamestate : str
-            Game status type to search for, abstractgamestate
+        abstract_game_state : str
+            Game status type to search for, abstract_game_state
 
         Returns
         -------
         List[int]
-        """  
-        todaysdate = datetime.date.today()
-        todaysgames = self.get_game_ids(todaysdate.strftime("%Y-%m-%d"), abstractgamestate)
-        return todaysgames
+        """
+
+        todays_date = datetime.date.today()
+        todays_games = self.get_game_ids(todays_date.strftime("%Y-%m-%d"), abstract_game_state)
+        return todays_games
 
     def get_tomorrows_game_ids(self) -> List[int]:
         """
@@ -402,10 +425,11 @@ class Mlb:
         Returns
         -------
         List[int]
-        """  
-        tomorrowsdate = datetime.date.today() + datetime.timedelta(days=1)
-        tomorrowsgames = self.get_game_ids(tomorrowsdate.strftime("%Y-%m-%d"))
-        return tomorrowsgames
+        """
+
+        tomorrows_date = datetime.date.today() + datetime.timedelta(days=1)
+        tomorrows_games = self.get_game_ids(tomorrows_date.strftime("%Y-%m-%d"))
+        return tomorrows_games
 
     def get_yesterdays_game_ids(self) -> List[int]:
         """
@@ -414,28 +438,31 @@ class Mlb:
         Returns
         -------
         List[int]
-        """  
-        yesterdaysdate = datetime.date.today() - datetime.timedelta(days=1)
-        yesterdaysgames = self.get_game_ids(yesterdaysdate.strftime("%Y-%m-%d"))
-        return yesterdaysgames
+        """
 
-    def get_venue(self, venueid) -> Union[Venue, None]:
+        yesterdays_date = datetime.date.today() - datetime.timedelta(days=1)
+        yesterdays_games = self.get_game_ids(yesterdays_date.strftime("%Y-%m-%d"))
+        return yesterdays_games
+
+    def get_venue(self, venue_id) -> Union[Venue, None]:
         """
         return venue
 
         Parameters
         ----------
-        venueid : int
+        venue_id : int
 
         Returns
         -------
         Venue
         """
-        params = {'hydrate': ['location', 'fieldInfo', 'timezone'] }
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'venues/{venueid}', ep_params=params)
+
+        params = {'hydrate': ['location', 'fieldInfo', 'timezone']}
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'venues/{venue_id}', ep_params=params)
         
-        if ('venues' in mlbdata.data and mlbdata.data['venues']):
-            for venue in mlbdata.data['venues']:
+        if 'venues' in mlb_data.data and mlb_data.data['venues']:
+            for venue in mlb_data.data['venues']:
+
                 return Venue(**venue)
 
     def get_venues(self) -> List[Venue]:
@@ -445,56 +472,60 @@ class Mlb:
         Returns
         -------
         List[Venue]
-        """             
-        mlbdata = self._mlb_adapter_v1.get(endpoint="venues")
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint='venues')
         venues = []
-        
-        if ('venues' in mlbdata.data and mlbdata.data['venues']):
-            venues = [ Venue(**venue) for venue in mlbdata.data['venues']]
 
-        return venues 
+        if 'venues' in mlb_data.data and mlb_data.data['venues']:
+            venues = [Venue(**venue) for venue in mlb_data.data['venues']]
 
-    def get_venue_id(self, venuename) -> List[int]:
+        return venues
+
+    def get_venue_id(self, venue_name: str) -> List[int]:
         """
         return venue id
 
         Parameters
         ----------
-        venuename : str
-            venue name 
+        venue_name : str
+            venue name
 
         Returns
         -------
         List[int]
-        """        
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'venues')
-        venueIds = [] 
-        
-        if ('venues' in mlbdata.data and mlbdata.data['venues']):
-            for venue in mlbdata.data['venues']:
-                
-                if venue['name'].lower() == venuename.lower():
-                    venueIds.append(venue['id'])
+        """
 
-        return venueIds
+        mlb_data = self._mlb_adapter_v1.get(endpoint='venues')
+        venue_ids = []
 
-    def get_sport(self, sportid) -> Union[Sport, None]:
+        if 'venues' in mlb_data.data and mlb_data.data['venues']:
+            for venue in mlb_data.data['venues']:
+
+                if venue['name'].lower() == venue_name.lower():
+                    venue_ids.append(venue['id'])
+
+        return venue_ids
+
+    def get_sport(self, sport_id) -> Union[Sport, None]:
         """
         return sport object from sportid
 
         Parameters
         ----------
-        sportId : int 
+        sport_id : int
 
 
         Returns
         -------
         Sport
-        """             
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports/{sportid}')
+        """
 
-        if ('sports' in mlbdata.data and mlbdata.data['sports']):
-            for sport in mlbdata.data['sports']:
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}')
+
+        if 'sports' in mlb_data.data and mlb_data.data['sports']:
+            for sport in mlb_data.data['sports']:
+
                 return Sport(**sport)
 
     def get_sports(self) -> List[Sport]:
@@ -504,50 +535,55 @@ class Mlb:
         Returns
         -------
         List[Sport]
-        """          
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports')
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint='sports')
         sports = []
 
-        if ('sports' in mlbdata.data and mlbdata.data['sports']):
-            sports = [ Sport(**sport) for sport in mlbdata.data['sports'] ]
+        if 'sports' in mlb_data.data and mlb_data.data['sports']:
+            sports = [Sport(**sport) for sport in mlb_data.data['sports']]
 
         return sports
 
-    def get_sport_id(self, sportname) -> List[int]:
+    def get_sport_id(self, sport_name) -> List[int]:
         """
         return sport id 
 
         Parameters
         ----------
-        sportname : str
-            Sport name 
+        sport_name : str
+            Sport name
 
         Returns
         -------
         List[int]
-        """          
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'sports')
-        sportIds = []
+        """
 
-        if ('sports' in mlbdata.data and mlbdata.data['sports']):
-            for sport in mlbdata.data['sports']:
-                if sport['name'].lower() == sportname.lower(): 
-                    sportIds.append(sport['id'])
+        mlb_data = self._mlb_adapter_v1.get(endpoint='sports')
+        sport_ids = []
 
-        return sportIds
+        if 'sports' in mlb_data.data and mlb_data.data['sports']:
+            for sport in mlb_data.data['sports']:
 
-    def get_league(self, leagueid) -> Union[League, None]:
+                if sport['name'].lower() == sport_name.lower():
+                    sport_ids.append(sport['id'])
+
+        return sport_ids
+
+    def get_league(self, league_id) -> Union[League, None]:
         """
         return league
 
         Returns
         -------
         League
-        """   
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'league/{leagueid}')
+        """
 
-        if ('leagues' in mlbdata.data and mlbdata.data['leagues']):
-            for league in mlbdata.data['leagues']:
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'league/{league_id}')
+
+        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
+            for league in mlb_data.data['leagues']:
+
                 return League(**league)
 
     def get_leagues(self) -> List[League]:
@@ -557,37 +593,40 @@ class Mlb:
         Returns
         -------
         List[League]
-        """           
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'league')
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint='league')
         leagues = []
-        
-        if ('leagues' in mlbdata.data and mlbdata.data['leagues']):
-            leagues = [ League(**league) for league in mlbdata.data['leagues']]
-        
+
+        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
+            leagues = [League(**league) for league in mlb_data.data['leagues']]
+
         return leagues
 
-    def get_league_id(self, leaguename) -> List[League]:
+    def get_league_id(self, league_name) -> List[League]:
         """
         return league id
 
         Parameters
         ----------
-        leaguename : str
-            League name 
+        league_name : str
+            League name
 
         Returns
         -------
         List[int]
-        """            
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'league') 
-        leagueIds = []
+        """
 
-        if ('leagues' in mlbdata.data and mlbdata.data['leagues']):
-            for league in mlbdata.data['leagues']:
-                if league['name'].lower() == leaguename.lower():
-                    leagueIds.append(league['id'])
-        
-        return leagueIds
+        mlb_data = self._mlb_adapter_v1.get(endpoint='league')
+        league_ids = []
+
+        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
+            for league in mlb_data.data['leagues']:
+
+                if league['name'].lower() == league_name.lower():
+                    league_ids.append(league['id'])
+
+        return league_ids
 
     def get_division(self, divisionid) -> Union[Division, None]:
         """
@@ -596,16 +635,18 @@ class Mlb:
         Parameters
         ----------
         divisonid : int
-            Division id 
+            Division id
 
         Returns
         -------
         Division
-        """   
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'divisions/{divisionid}')
-        
-        if ('divisions' in mlbdata.data and mlbdata.data['divisions']):
-            for division in mlbdata.data['divisions']:
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'divisions/{divisionid}')
+
+        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
+            for division in mlb_data.data['divisions']:
+
                 return Division(**division)
 
     def get_divisions(self) -> List[Division]:
@@ -615,51 +656,54 @@ class Mlb:
         Returns
         -------
         List[Division]
-        """   
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'divisions')
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions')
         divisions = []
-        
-        if ('divisions' in mlbdata.data and mlbdata.data['divisions']):
-            divisions = [ Division(**division) for division in mlbdata.data['divisions']]
-        
+
+        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
+            divisions = [Division(**division) for division in mlb_data.data['divisions']]
+
         return divisions
 
-    def get_division_id(self, divisionname) -> List[Division]:
+    def get_division_id(self, division_name) -> List[Division]:
         """
         return divsion id
 
         Parameters
         ----------
-        divisonname : str
-            Division name 
+        division_name : str
+            Division name
 
         Returns
         -------
         List[int]
-        """           
-        mlbdata = self._mlb_adapter_v1.get(endpoint=f'divisions')
-        divisionIds = []
-        
-        if ('divisions' in mlbdata.data and mlbdata.data['divisions']):
-            for division in mlbdata.data['divisions']:
-                if division['name'].lower() == divisionname.lower():
-                    divisionIds.append(division['id'])
+        """
 
-        return divisionIds
+        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions')
+        division_ids = []
 
-    def get_attendance(self, teamid=None, leagueid=None, season=None, date=None,
-                            leaguelistid=None, gametype=None, fields=None) -> Union[Attendance, None]:
+        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
+            for division in mlb_data.data['divisions']:
+
+                if division['name'].lower() == division_name.lower():
+                    division_ids.append(division['id'])
+
+        return division_ids
+
+    def get_attendance(self, team_id: int = None, league_id: int = None,
+                       league_list_id: int = None, params: dict = {}) -> Union[Attendance, None]:
         """
         return attendance
 
-        Required Parameters (atleast one)
+        Required Parameters (at least one)
         ----------
-        teamid : int
+        team_id : int
             Team id number
-        leagueid : int
+        league_id : int
             League id number
-        leaguelistid : int
-            Not sure 
+        league_list_id : int
+            Not sure
 
         Parameters
         ----------
@@ -674,57 +718,57 @@ class Mlb:
         Returns
         -------
         Attendance
-        """   
-        if not any([teamid, leagueid, leaguelistid]):
+        """
+        required_args = {'teamId': team_id, 'leagueId': league_id, 'leagueListId': league_list_id}
+
+        # I like this
+        if not any(required_args):
             return
 
-        endpoint = f'attendance?'
-        if teamid: endpoint += f'teamId={teamid}'
-        if leagueid: endpoint += f'{leagueid}' if endpoint==f'attendance?' else f'&leagueId={leagueid}'
-        if leaguelistid: endpoint += f'{leaguelistid}' if endpoint==f'attendance?' else f'&leagueListId={leaguelistid}'
-        if season: endpoint += f'&season={season}' 
-        if date: endpoint += f'&date={date}'
-        if gametype: endpoint += f'&gameType={gametype}'
-        if fields: endpoint += f'&fields={fields}'
-        
-        mlbdata = self._mlb_adapter_v1.get(endpoint)
+        # let's create a list of the args passed
+        # this will filter out None
+        for arg_name, arg_value in required_args.items():
+            if arg_value:
+                params[arg_name] = arg_value
 
-        if ('records' in mlbdata.data and mlbdata.data['records']):   
-            return Attendance(**mlbdata.data)
+        mlb_data = self._mlb_adapter_v1.get('attendance', ep_params=params)
 
-    def get_object(self, object):
+        if 'records' in mlb_data.data and mlb_data.data['records']:
+            return Attendance(**mlb_data.data)
+
+    def get_object(self, mlb_object):
         """
         return a hydrated object
-
-        Parameters
+            Parameters
         ----------
-        object : class
+        mlb_object : class
             Object to be hydrated. Can by dry or one that just needs updating
-
-        Returns
+            Returns
         -------
         object
-        """   
-        get_func = getattr(self, 'get_'+str(object.__class__.__name__).lower())
-        hydratedobject = get_func(object.id)
-        # If problem with hydrating object, return the old dry object
-        return hydratedobject if hydratedobject else object
-
-    def get_stats(self, params : dict, mlb_object : Union[Union[Team, Person], dict] = NoneType) -> Union['Splits', dict]:
         """
-        return a split object 
 
-        The stat group parameter is used to locate the correct class to build. The group is passed to _return_splits along with
-        stat data. 
+        get_func = getattr(self, 'get_'+str(mlb_object.__class__.__name__).lower())
+        hydrated_object = get_func(mlb_object.id)
 
-        Parameters
+        # If problem with hydrating object, return the old dry object
+        if hydrated_object:
+            return hydrated_object
+        else:
+            return mlb_object
+
+    def get_stats(self, params: dict, mlb_object: Union[Union[Team, Person], dict] = NoneType) -> Union['Splits', dict]:
+        """
+        return a split object
+            The stat group parameter is used to locate the correct class to build. The group is passed to _return_splits along with
+        stat data.
+            Parameters
         ----------
-        object : mlb object
+        mlb_object : mlb object
             mlb object or dict e.g Team, Player, Person
         params : dict
             dict of params to pass e.g { 'stats': [ "seasonAdvanced", "season" ], 'group': 'hitting' }
-
-        Returns
+            Returns
         -------
         splits : dict
         mlbdata : dict
@@ -739,55 +783,78 @@ class Mlb:
                 'season': [ PitchingSeason ]
                 'seasonsAdvanced': [ PitchingSeasonAdvanced ]
             },
-            stats: { 
+            stats: {
                 'hotcoldzones': [ HotColdZones ]
             }
         }
         """
+
         if mlb_object is not NoneType:
-            mlbdata = self._mlb_adapter_v1.get(endpoint=f'{mlb_object.mlb_class}/{mlb_object.id}/stats', ep_params=params)
+            mlb_data = self._mlb_adapter_v1.get(endpoint=f'{mlb_object.mlb_class}/{mlb_object.id}/stats', ep_params=params)
         else:
-            mlbdata = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
-            
+            mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
+
         splits = {}
 
         # TODO convert group to list
         # Fix bug that adds stats to params
         # https://statsapi.mlb.com/api/v1/teams/143/stats?stats=expectedStatistics&stats=sprayChart&group=hitting&group=stats
-        group_names = params['group'] if params['group'] is list else list(params['group'])
-        group_names = params['group']
-        no_group_types = [ 'hotColdZones', 'sprayChart', 'pitchArsenal' ]
+        if params['group'] is list:
+            group_names = params['group']
+        else:
+            group_names = list(params['group'])
+
+        # These stat_type don't return a stat_group in the response
+        # so object must default to the 'stats' key
+        no_group_types = ['hotColdZones', 'sprayChart', 'pitchArsenal']
 
         # catch 400's return splits
-        if mlbdata.status_code >= 400 and mlbdata.status_code <= 499:  
+        if 400 <= mlb_data.status_code <= 499:
             return splits
 
         # create stat key if stat type is in no_group_types
         # these stat types don't return a group
+
+        # TODO this can be a function
         for _type in no_group_types:
             if _type in params['stats']:
+
                 group_names.append('stats')
-                
-                # break out 
+                # break out
                 break
 
         # these stat types require further dictionary transformation
-        if ('stats' in mlbdata.data and mlbdata.data['stats']):
-            for stats in mlbdata.data['stats']:
+        if 'stats' in mlb_data.data and mlb_data.data['stats']:
+            for stats in mlb_data.data['stats']:
 
-                # if no group is present default to stats 
-                _group = stats['group']['displayname'] if 'group' in stats else 'stats'
-                _type = stats['type']['displayname'] if 'type' in stats else None
-            
+                # if no group is present default to stats
+                stat_group = stats['group']['displayname'] if 'group' in stats else 'stats'
+                stat_type = stats['type']['displayname'] if 'type' in stats else None
+                # loop through each group sent through params
                 for group in group_names:
-                    if (_group == group):
+                    if stat_group == group:
+
                         # checking if we need to init list
                         if group not in splits:
-                            splits[_group] = {}
+                            splits[stat_group] = {}
+
                         # get splits from stats
-                        splits[_group][_type.lower()] = _return_splits(stats, _type, _group)
+                        splits[stat_group][stat_type.lower()] = _return_splits(stats, stat_type, stat_group)
 
         return splits
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  
 

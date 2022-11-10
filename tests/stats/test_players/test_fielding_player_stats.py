@@ -1,29 +1,27 @@
-﻿from dataclasses import field
-import unittest
+﻿import unittest
 
 from mlbstatsapi.mlb_api import Mlb
 
-from mlbstatsapi.models.stats import (
-    SimpleFielding,
-    FieldingGameLog
-)
 
 class TestPlayerFieldingStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.position_player = cls.mlb.get_person(665742) # Juan Soto
-        cls.pitching_player = cls.mlb.get_person(592662) # Robbie Ray
-        cls.catching_player = cls.mlb.get_person(663728) # Cal Raleigh
-        cls.utility_player = cls.mlb.get_person(647351) # Abraham Toro
+        # Juan Soto
+        cls.position_player = cls.mlb.get_person(665742)
+        # Robbie Ray
+        cls.pitching_player = cls.mlb.get_person(592662)
+        # Cal Raleigh
+        cls.catching_player = cls.mlb.get_person(663728)
+        # Abraham Toro
+        cls.utility_player = cls.mlb.get_person(647351)
 
     @classmethod
     def tearDownClass(cls) -> None:
         pass
 
-
     def test_fielding_season_stats_for_players(self):
-        self.params = { 'stats': [ 'season' ], 'group': [ 'fielding' ] }
+        self.params = {'stats': ['season'], 'group': ['fielding']}
 
         # get stats
         fielding_catching = self.mlb.get_stats(self.params, self.catching_player)
@@ -37,18 +35,16 @@ class TestPlayerFieldingStats(unittest.TestCase):
         self.assertTrue(fielding_position['fielding']['season'])
         self.assertTrue(fielding_utility['fielding']['season'])
 
-
     def test_fielding_gamelog_stats_for_player(self):
         """get stats should return game logs for players"""
-        self.params = { 'stats': [ 'gameLog' ], 'group': [ 'fielding' ] }
+        self.params = {'stats': ['gameLog'], 'group': ['fielding']}
         fielding_gamelogs = self.mlb.get_stats(self.params, self.catching_player)
         self.assertTrue(fielding_gamelogs['fielding']['gamelog'])
 
     def test_building_all_fielding_objects(self):
         """this test will build all what should be working stat objects"""
         # Let's build this set of tests 
-        self.params_one = { 'stats': [ 'homeAndAway', 'yearByYear',
-         'byDayOfWeek', 'byMonth' ], 'group': [ 'fielding' ] }
+        self.params_one = {'stats': ['homeAndAway', 'yearByYear', 'byDayOfWeek', 'byMonth'], 'group': ['fielding']}
         stat_group_one = self.mlb.get_stats(self.params_one, self.utility_player)
 
         self.assertTrue(stat_group_one['fielding']['homeandaway'])
@@ -56,17 +52,13 @@ class TestPlayerFieldingStats(unittest.TestCase):
         self.assertTrue(stat_group_one['fielding']['bydayofweek'])
         self.assertTrue(stat_group_one['fielding']['bymonth'])
 
-        self.params_two = { 'stats': [ 'statsSingleSeason', 'season',
-         ], 'group': [ 'fielding' ]}
+        self.params_two = {'stats': ['statsSingleSeason', 'season'], 'group': ['fielding']}
         stat_group_two = self.mlb.get_stats(self.params_two, self.utility_player)
 
         self.assertTrue(stat_group_two['fielding']['statssingleseason'])
         self.assertTrue(stat_group_two['fielding']['season'])
 
-        self.params_three = { 'stats': [ 'career' ], 'group': [ 'fielding' ]}
+        self.params_three = {'stats': ['career'], 'group': ['fielding']}
         stat_group_three = self.mlb.get_stats(self.params_three, self.utility_player)
 
         self.assertTrue(stat_group_three['fielding']['career'])
-
-
- 
