@@ -1,7 +1,7 @@
 import unittest
-from unittest.mock import Mock, patch
 from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi import Mlb
+
 
 class TestSchedule(unittest.TestCase):
     @classmethod

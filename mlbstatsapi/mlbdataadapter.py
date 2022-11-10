@@ -3,6 +3,7 @@ from .exceptions import TheMlbStatsApiException
 import requests
 import logging
 
+
 class MlbResult:
     """
     A class that holds data, status_code, and message returned from statsapi.mlb.com
@@ -16,6 +17,7 @@ class MlbResult:
     data : dict
         JSON Data received from request
     """
+
     def __init__(self, status_code: int, message: str, data: Dict = {}):
         self.status_code = int(status_code)
         self.message = str(message)
@@ -56,13 +58,14 @@ class MlbDataAdapter:
         Returns
         -------
         dict
-        """ 
+        """
+
         if isinstance(data, Dict):
             lowered_dict = {}
 
             for key, value in data.items():
                 lowered_dict[key.lower()] = self._transform_keys_in_data(value)
-            
+
             return lowered_dict
 
         elif isinstance(data, List):
@@ -92,10 +95,11 @@ class MlbDataAdapter:
         Returns
         -------
         MlbResult
-        """     
+        """
+
         full_url = self.url + endpoint
         logline_pre = f'url={full_url}'
-        logline_post = f" ,".join((logline_pre, 'success={}, status_code={}, message={}, url={}'))
+        logline_post = " ,".join((logline_pre, 'success={}, status_code={}, message={}, url={}'))
 
         try:
             self._logger.debug(logline_post)
@@ -113,7 +117,7 @@ class MlbDataAdapter:
             raise TheMlbStatsApiException('Bad JSON in response') from e
 
         if response.status_code <= 200 and response.status_code <= 299:
-            self._logger.debug(msg=logline_post.format('success', 
+            self._logger.debug(msg=logline_post.format('success',
             response.status_code, response.reason, response.url))
 
             data = self._transform_keys_in_data(data)
@@ -121,7 +125,7 @@ class MlbDataAdapter:
 
         elif response.status_code >= 400 and response.status_code <= 499:  
             self._logger.error(msg=logline_post.format('Invalid Request',
-            response.status_code, response.reason, response.url)) 
+            response.status_code, response.reason, response.url))
 
             # return MlbResult with 404 and empty data
             return MlbResult(response.status_code, message=response.reason, data={})
@@ -134,6 +138,4 @@ class MlbDataAdapter:
             raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}")
 
         else:
-            raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}") 
-
-
+            raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}")

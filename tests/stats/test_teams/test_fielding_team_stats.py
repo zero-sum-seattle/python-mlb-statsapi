@@ -1,11 +1,7 @@
-﻿from dataclasses import field
-import unittest
+﻿import unittest
 
 from mlbstatsapi.mlbapi import Mlb
 
-from mlbstatsapi.models.stats import (
-    SimpleFielding
-)
 
 class TestTeamFieldingStats(unittest.TestCase):
     @classmethod
@@ -18,7 +14,7 @@ class TestTeamFieldingStats(unittest.TestCase):
         pass
 
     def test_fielding_season_stats_for_team(self):
-        self.params = { 'stats': [ 'season' ], 'group': [ 'fielding' ]}
+        self.params = {'stats': ['season'], 'group': ['fielding']}
 
         # catching_player
         stats = self.mlb.get_stats(self.params, self.team)

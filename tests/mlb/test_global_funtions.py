@@ -22,7 +22,7 @@ class TestMlbFuntions(unittest.TestCase):
             read_json = file.read()
             json_object = json.loads(read_json)
 
-            # pass json_object to transform for transformation to all lowercase key 
+            # pass json_object to transform for transformation to all lowercase key
             transform_dict = _transform_mlb_data(json_object, mlb_keys=['person'])
 
             # let's make sure we get a dict back

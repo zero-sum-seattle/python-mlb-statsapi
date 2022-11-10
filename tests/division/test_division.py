@@ -1,7 +1,7 @@
 import unittest
-from unittest.mock import Mock, patch
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi import Mlb
+
 
 class TestDivision(unittest.TestCase):
     @classmethod

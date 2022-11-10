@@ -1,7 +1,7 @@
-﻿from logging import exception
-import unittest
+﻿import unittest
 from mlbstatsapi.models.people import Person, Position
 from mlbstatsapi import Mlb
+
 
 class TestPerson(unittest.TestCase):
     @classmethod
@@ -14,7 +14,7 @@ class TestPerson(unittest.TestCase):
         pass
 
     def test_player_instance_type_error(self):
-         with self.assertRaises(TypeError):
+        with self.assertRaises(TypeError):
             player = Person()
 
     def test_player_instance_position_arguments(self):
@@ -23,15 +23,6 @@ class TestPerson(unittest.TestCase):
         self.assertEqual(self.player.fullname, "Ty France")
         self.assertEqual(self.player.link, "/api/v1/people/664034")
 
-class TestPerson(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.mlb = Mlb()
-        cls.player = cls.mlb.get_person(664034)
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        pass
 
 class TestPersonPrimaryPosition(unittest.TestCase):
     @classmethod

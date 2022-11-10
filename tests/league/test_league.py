@@ -1,7 +1,7 @@
 import unittest
-from unittest.mock import Mock, patch
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi import Mlb
+
 
 class TestLeague(unittest.TestCase):
     @classmethod

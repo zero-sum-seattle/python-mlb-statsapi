@@ -1,11 +1,10 @@
 ﻿import unittest
-from unittest.mock import Mock, patch
 from mlbstatsapi.models.teams import Team
-from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi import Mlb
+
 
 class TestTeam(unittest.TestCase):
     @classmethod
