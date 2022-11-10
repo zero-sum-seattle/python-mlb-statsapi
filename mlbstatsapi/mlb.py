@@ -74,12 +74,12 @@ def _return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['S
                 # if stat_type is in stat_log_type
                 # do required dictionary transformation
                 if stat_type in stat_log_type:
-                    split = _transform_mlbdata(split, [{'stat':'play'}])
+                    split = _transform_mlb_data(split, [{'stat':'play'}])
 
                 # if stat is in split merge
                 # some splits don't have stat
                 if 'stat' in split:
-                    split = _transform_mlbdata(split, 'stat')
+                    split = _transform_mlb_data(split, 'stat')
                     
                 splits.append(obj(_type=stat_type, _group=stat_group, **split))
 

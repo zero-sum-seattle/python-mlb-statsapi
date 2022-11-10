@@ -137,7 +137,7 @@ class TestMlbGetTeam(unittest.TestCase):
 
     def test_mlbdataapi_get_teams_with_sportid(self):
         """mlb get_teams should return a list of Teams"""
-        mlbdata = self.mlb.get_teams(sportid=16)
+        mlbdata = self.mlb.get_teams(sport_id=16)
         self.assertIsInstance(mlbdata, List) # Test result is List
         self.assertIsInstance(mlbdata[0], Team) # Lazy test to check the list contains instance of Team
 
@@ -304,15 +304,15 @@ class TestMlbGetGame(unittest.TestCase):
         self.assertEqual(game.id, 662242) # Confirm the ID is correct
     
     def test_get_game_playByPlay(self):
-        playByPlay = self.mlb.get_game_playByPlay(662242) # Return a game instance of gaem 662242
-        self.assertIsInstance(playByPlay, Plays) # Confirms that a Game instance is returned        
+        playbyplay = self.mlb.get_game_play_by_play(662242) # Return a game instance of gaem 662242
+        self.assertIsInstance(playbyplay, Plays) # Confirms that a Game instance is returned        
     
     def test_get_game_linescore(self):
-        linescore = self.mlb.get_game_linescore(662242) # Return a game instance of gaem 662242
+        linescore = self.mlb.get_game_line_score(662242) # Return a game instance of gaem 662242
         self.assertIsInstance(linescore, Linescore) # Confirms that a Game instance is returned 
     
     def test_get_game_boxscore(self):
-        boxscore = self.mlb.get_game_boxscore(662242) # Return a game instance of gaem 662242
+        boxscore = self.mlb.get_game_box_score(662242) # Return a game instance of gaem 662242
         self.assertIsInstance(boxscore, BoxScore) # Confirms that a Game instance is returned 
 
     def test_get_todays_games_id(self):
@@ -324,9 +324,9 @@ class TestMlbGetGame(unittest.TestCase):
         self.assertIsInstance(schedule, Schedule) # Test result is List
 
     def test_get_attendance(self):
-        attendance_team_away = self.mlb.get_attendance(teamid=113) # Cincinati Reds 134
-        attendance_team_home = self.mlb.get_attendance(teamid=134)
-        attendance_season = self.mlb.get_attendance(teamid=113, season=2022)
+        attendance_team_away = self.mlb.get_attendance(team_id=113) # Cincinati Reds 134
+        attendance_team_home = self.mlb.get_attendance(team_id=134)
+        attendance_season = self.mlb.get_attendance(team_id=113, season=2022)
         self.assertEqual(attendance_team_away.records[0].team.id, 113)
         self.assertEqual(attendance_team_home.records[0].team.id, 134)
         self.assertEqual(attendance_season.records[0].team.id, 113)

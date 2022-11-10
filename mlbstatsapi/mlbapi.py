@@ -728,109 +728,104 @@ class Mlb:
         if 'records' in mlb_data.data and mlb_data.data['records']:
             return Attendance(**mlb_data.data)
 
-        def get_object(self, mlb_object):
-             """
-             return a hydrated object
+    def get_object(self, mlb_object):
+         """
+         return a hydrated object
+    
+         Parameters
+         ----------
+         mlb_object : class
+             Object to be hydrated. Can by dry or one that just needs updating
+    
+         Returns
+         -------
+         object
+         """
+         get_func = getattr(self, 'get_'+str(mlb_object.__class__.__name__).lower())
+         hydrated_object = get_func(mlb_object.id)
+    
+         # If problem with hydrating object, return the old dry object
+         if hydrated_object:
+             return hydrated_object
+         else:
+             return mlb_object
      
-             Parameters
-             ----------
-             mlb_object : class
-                 Object to be hydrated. Can by dry or one that just needs updating
-     
-             Returns
-             -------
-             object
-             """
-             get_func = getattr(self, 'get_'+str(mlb_object.__class__.__name__).lower())
-             hydrated_object = get_func(mlb_object.id)
-     
-             # If problem with hydrating object, return the old dry object
-             if hydrated_object:
-                 return hydrated_object
-             else:
-                 return mlb_object
-     
-        def get_stats(self, params: dict, mlb_object: Union[Union[Team, Person], dict] = NoneType) -> Union['Splits', dict]:
-            """
-            return a split object
-                The stat group parameter is used to locate the correct class to build. The group is passed to _return_splits along with
-            stat data.
-                Parameters
-            ----------
-            mlb_object : mlb object
-                mlb object or dict e.g Team, Player, Person
-            params : dict
-                dict of params to pass e.g { 'stats': [ "seasonAdvanced", "season" ], 'group': 'hitting' }
-                Returns
-            -------
-            json
-            {
-                hitting: {
-                    'season': [ HittingSeason ]
-                    'seasonsAdvanced': [ HittingSeasonsAdvanced ]
-                },
-                pitching: {
-                    'season': [ PitchingSeason ]
-                    'seasonsAdvanced': [ PitchingSeasonAdvanced ]
-                },
-                stats: {
-                    'hotcoldzones': [ HotColdZones ]
-                }
+    def get_stats(self, params: dict, mlb_object: Union[Union[Team, Person], dict] = NoneType) -> Union['Splits', dict]:
+        """
+        return a split object
+            The stat group parameter is used to locate the correct class to build. The group is passed to _return_splits along with
+        stat data.
+            Parameters
+        ----------
+        mlb_object : mlb object
+            mlb object or dict e.g Team, Player, Person
+        params : dict
+            dict of params to pass e.g { 'stats': [ "seasonAdvanced", "season" ], 'group': 'hitting' }
+            Returns
+        -------
+        json
+        {
+            hitting: {
+                'season': [ HittingSeason ]
+                'seasonsAdvanced': [ HittingSeasonsAdvanced ]
+            },
+            pitching: {
+                'season': [ PitchingSeason ]
+                'seasonsAdvanced': [ PitchingSeasonAdvanced ]
+            },
+            stats: {
+                'hotcoldzones': [ HotColdZones ]
             }
-            """
-            if mlb_object is not NoneType:
-                mlb_data = self._mlb_adapter_v1.get(endpoint=f'{mlb_object.mlb_class}/{mlb_object.id}/stats', ep_params=params)
-            else:
-                mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
-                splits = {}
+        }
+        """
+        if mlb_object is not NoneType:
+            mlb_data = self._mlb_adapter_v1.get(endpoint=f'{mlb_object.mlb_class}/{mlb_object.id}/stats', ep_params=params)
+        else:
+            mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
 
-            # TODO convert group to list
-            # Fix bug that adds stats to params
-            # https://statsapi.mlb.com/api/v1/teams/143/stats?stats=expectedStatistics&stats=sprayChart&group=hitting&group=stats
-            if params['group'] is list:
-                group_names = params['group']
-            else:
-                list(params['group'])
+        splits = {}   
 
-            # These stat_type don't return a stat_group in the response
-            # so object must default to the 'stats' key
-            no_group_types = [ 'hotColdZones', 'sprayChart', 'pitchArsenal' ]
-
-            # catch 400's return splits
-            if 400 <= mlb_data.status_code <= 499:
-                return splits
-
-            # create stat key if stat type is in no_group_types
-            # these stat types don't return a group
-            for _type in no_group_types:
-                if _type in params['stats']:
-                
-                    group_names.append('stats')
-                    # break out
-                    break
-                
-            # these stat types require further dictionary transformation
-            if 'stats' in mlb_data.data and mlb_data.data['stats']:
-                for stats in mlb_data.data['stats']:
-                
-                    # if no group is present default to stats
-                    stat_group = stats['group']['displayname'] if 'group' in stats else 'stats'
-                    stat_type = stats['type']['displayname'] if 'type' in stats else None
-                    # loop through each group sent through params
-                    for group in group_names:
-                        if stat_group == group:
-                            
-                            # checking if we need to init list
-                            if group not in splits:
-                                splits[stat_group] = {}
-                                
-                            # get splits from stats
-                            splits[stat_group][stat_type.lower()] = _return_splits(stats, stat_type, stat_group)
-                
+        # TODO convert group to list
+        # Fix bug that adds stats to params
+        # https://statsapi.mlb.com/api/v1/teams/143/stats?stats=expectedStatistics&stats=sprayChart&group=hitting&group=stats
+        if params['group'] is list:
+            group_names = params['group']
+        else:
+            group_names = list(params['group'])
+        # These stat_type don't return a stat_group in the response
+        # so object must default to the 'stats' key
+        no_group_types = [ 'hotColdZones', 'sprayChart', 'pitchArsenal' ]
+        # catch 400's return splits
+        if 400 <= mlb_data.status_code <= 499:
             return splits
-
-
-
+        # create stat key if stat type is in no_group_types
+        # these stat types don't return a group
+        for _type in no_group_types:
+            if _type in params['stats']:
+            
+                group_names.append('stats')
+                # break out
+                break
+            
+        # these stat types require further dictionary transformation
+        if 'stats' in mlb_data.data and mlb_data.data['stats']:
+            for stats in mlb_data.data['stats']:
+            
+                # if no group is present default to stats
+                stat_group = stats['group']['displayname'] if 'group' in stats else 'stats'
+                stat_type = stats['type']['displayname'] if 'type' in stats else None
+                # loop through each group sent through params
+                for group in group_names:
+                    if stat_group == group:
+                        
+                        # checking if we need to init list
+                        if group not in splits:
+                            splits[stat_group] = {}
+                            
+                        # get splits from stats
+                        splits[stat_group][stat_type.lower()] = _return_splits(stats, stat_type, stat_group)
+            
+        return splits
 
 
 

@@ -1,5 +1,5 @@
 ﻿from typing import Dict, List
-from mlbstatsapi import _transform_mlbdata
+from mlbstatsapi import _transform_mlb_data
 import unittest
 import json
 import os
@@ -27,7 +27,7 @@ class TestMlbFuntions(unittest.TestCase):
             json_object = json.loads(read_json)
 
             # pass json_object to transform for transformation to all lowercase key 
-            transform_dict = _transform_mlbdata(json_object, mlb_keys=['person'])
+            transform_dict = _transform_mlb_data(json_object, mlb_keys=['person'])
 
             # let's make sure we get a dict back
             self.assertEqual(type(transform_dict), dict)
@@ -45,7 +45,7 @@ class TestMlbFuntions(unittest.TestCase):
             json_object = json.loads(read_json)
 
             # pass json_object to transform for transformation to all lowercase key 
-            transform_dict = _transform_mlbdata(json_object, mlb_keys=['person', 'status'])
+            transform_dict = _transform_mlb_data(json_object, mlb_keys=['person', 'status'])
 
             # let's make sure we get a dict back
             self.assertEqual(type(transform_dict), dict)
