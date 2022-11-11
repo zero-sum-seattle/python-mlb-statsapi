@@ -82,6 +82,7 @@ class SimpleHittingStat:
     catchersinterference: Optional[int] = None
     atbatsperhomerun: Optional[int] = None
 
+
 @dataclass(kw_only=True)
 class HittingWinLoss(Splits, SimpleHittingStat):
     """
@@ -94,6 +95,7 @@ class HittingWinLoss(Splits, SimpleHittingStat):
     """
     _stat = ['winLoss']
     iswin: bool
+
 
 @dataclass(kw_only=True)
 class HittingWinLossPlayoffs(Splits, SimpleHittingStat):
@@ -108,6 +110,7 @@ class HittingWinLossPlayoffs(Splits, SimpleHittingStat):
     _stat = ['winLossPlayoffs']
     iswin: bool
 
+
 @dataclass(kw_only=True)
 class HittingHomeAndAway(Splits, SimpleHittingStat):
     """
@@ -120,6 +123,7 @@ class HittingHomeAndAway(Splits, SimpleHittingStat):
     """
     _stat = ['homeAndAway']
     ishome: bool
+
 
 @dataclass(kw_only=True)
 class HittingHomeAndAwayPlayoffs(Splits, SimpleHittingStat):
@@ -134,6 +138,7 @@ class HittingHomeAndAwayPlayoffs(Splits, SimpleHittingStat):
     _stat = ['homeAndAwayPlayoffs']
     ishome: bool
 
+
 @dataclass(kw_only=True)
 class HittingCareer(Splits, SimpleHittingStat):
     """
@@ -145,15 +150,6 @@ class HittingCareer(Splits, SimpleHittingStat):
     """
     _stat = ['career', 'careerRegularSeason', 'careerPlayoffs']
 
-# @dataclass(kw_only=True)
-# class HittingCareerPlayoffs(Splits, SimpleHittingStat):
-#     """
-#     A class to represent a hitting careerPlayoffs statistic
-
-#     Attributes
-#     ----------
-#     """
-#     _stat = [ 'careerPlayoffs' ]
 
 @dataclass(kw_only=True)
 class HittingSeason(Splits, SimpleHittingStat):
@@ -175,6 +171,7 @@ class HittingSingleSeason(Splits, SimpleHittingStat):
     ----------
     """
     _stat = ['statsSingleSeason']
+
 
 @dataclass(kw_only=True)
 class HittingSeasonAdvanced(Splits, AdvancedHittingStat):
@@ -431,7 +428,7 @@ class HittingPitchLog(Splits):
         the game of the log
 
     """
-    _stat = [ 'pitchLog' ]
+    _stat = ['pitchLog']
     opponent: Union[Team, dict]
     date: str
     ishome: bool
@@ -587,7 +584,6 @@ class HittingVsTeam(Splits, SimpleHittingStat):
     """
     _stat = ['vsTeam']
     opponent: Union[Team, dict]
-    rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
@@ -606,10 +602,15 @@ class HittingVsTeamTotal(Splits, SimpleHittingStat):
 
     Attributes
     ----------
+    opponent: Team
+        opponent team
+    batter: Person
+        batting person
+    pitcher: Person
+        pitching person
     """
     _stat = ['vsTeamTotal']
     opponent: Union[Team, dict]
-    rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
 
@@ -631,7 +632,6 @@ class HittingVsTeam5Y(Splits, SimpleHittingStat):
     """
     _stat = ['vsTeam5Y']
     opponent: Union[Team, dict]
-    rank: int
     batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
 
@@ -701,7 +701,7 @@ class HittingVsPlayer5Y(Splits, SimpleHittingStat):
     _stat = ['vsPlayer5Y']
     pitcher: Union[Pitcher, dict]
     batter: Union[Person, dict]
-    opponent: Optional[Union[Team, dict]]  = field(default_factory=dict)
+    opponent: Optional[Union[Team, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.pitcher = Pitcher(**self.pitcher) 

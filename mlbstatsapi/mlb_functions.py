@@ -57,7 +57,7 @@ def _return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['S
     -------
     splits
     """
-    
+
     stat_log_type = ['playLog', 'pitchLog']
     splits = []
 
@@ -82,7 +82,7 @@ def _return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['S
                 # some splits don't have stat
                 if 'stat' in split:
                     split = _transform_mlb_data(split, 'stat')
-                    
+
                 splits.append(obj(_type=stat_type, _group=stat_group, **split))
 
     return splits

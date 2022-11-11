@@ -797,7 +797,6 @@ class Mlb:
         else:
             mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
 
-        # catch 400's return splits
         if 400 <= mlb_data.status_code <= 499:
             return splits
 
@@ -807,12 +806,9 @@ class Mlb:
         else:
             group_names = list(params['group'])
 
-        # These stat_type don't return a stat_group in the response
-        # so object must default to the 'stats' key
-        no_group_types = ['hotColdZones', 'sprayChart', 'pitchArsenal']
-
         # create stat key if stat type is in no_group_types
         # these stat types don't return a group
+        no_group_types = ['hotColdZones', 'sprayChart', 'pitchArsenal']
         for _type in no_group_types:
             if _type in params['stats']:
                 group_names.append('stats')
@@ -828,11 +824,9 @@ class Mlb:
                 else:
                     stat_group = 'stat'
 
-                # just in case the a stat_type doesn't return it's stat type 
                 if 'type' in stats:
                     stat_type = stats['type']['displayname']
                 else:
-                    # no stat type? then let's skip over it
                     continue
 
                 # loop through each group sent through params
