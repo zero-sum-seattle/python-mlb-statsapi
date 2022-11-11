@@ -383,20 +383,23 @@ class Mlb:
         scheduled_games = self.get_schedule(date, date)
         games_ids = []
 
-        # TODO Can we clean up this logic? lol
+        # TODO Can we clean up this logic? lol my attempt isn't much better, it's still confusing
         # If get_schedule_today is successful and returns a schedule object
-        if scheduled_games:
+        if not scheduled_games:
+            return games_ids
             # If only one date is in dates. Zero would mean no games today. 
-            if scheduled_games.dates and len(scheduled_games.dates) == 1:
-                # If the single date is todays date
-                if scheduled_games.dates[0].date == date:
-                    # If todays date has games. A date could have no games and events.
-                    if scheduled_games.dates[0].games:
-                        # Collect all the game Id's for todays games
-                        for game in scheduled_games.dates[0].games:
-                            # If abstractGameState param provided only get games that match
-                            if not abstract_game_state or (game.status.abstractgamestate == abstract_game_state):
-                                games_ids.append(game.gamepk) # Append game Ids
+        if scheduled_games.dates and len(scheduled_games.dates) == 1:
+            # If the single date is todays date
+            if not scheduled_games.dates[0].date == date:
+                return games_ids
+                # If todays date has games. A date could have no games and events.
+            if not scheduled_games.dates[0].games:
+                return games_ids
+                # Collect all the game Id's for todays games
+            for game in scheduled_games.dates[0].games:
+                # If abstractGameState param provided only get games that match
+                if not abstract_game_state or (game.status.abstractgamestate == abstract_game_state):
+                    games_ids.append(game.gamepk)
 
         return games_ids
 
@@ -773,7 +776,6 @@ class Mlb:
         splits : dict
         mlbdata : dict
         
-        json 
         { 
             hitting: { 
                 'season': [ HittingSeason ]
@@ -789,16 +791,17 @@ class Mlb:
         }
         """
 
+        splits = {}
         if mlb_object is not NoneType:
             mlb_data = self._mlb_adapter_v1.get(endpoint=f'{mlb_object.mlb_class}/{mlb_object.id}/stats', ep_params=params)
         else:
             mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
 
-        splits = {}
+        # catch 400's return splits
+        if 400 <= mlb_data.status_code <= 499:
+            return splits
 
-        # TODO convert group to list
-        # Fix bug that adds stats to params
-        # https://statsapi.mlb.com/api/v1/teams/143/stats?stats=expectedStatistics&stats=sprayChart&group=hitting&group=stats
+        # params['group'] should be either a string or list of strings
         if params['group'] is list:
             group_names = params['group']
         else:
@@ -808,19 +811,11 @@ class Mlb:
         # so object must default to the 'stats' key
         no_group_types = ['hotColdZones', 'sprayChart', 'pitchArsenal']
 
-        # catch 400's return splits
-        if 400 <= mlb_data.status_code <= 499:
-            return splits
-
         # create stat key if stat type is in no_group_types
         # these stat types don't return a group
-
-        # TODO this can be a function
         for _type in no_group_types:
             if _type in params['stats']:
-
                 group_names.append('stats')
-                # break out
                 break
 
         # these stat types require further dictionary transformation
@@ -828,8 +823,18 @@ class Mlb:
             for stats in mlb_data.data['stats']:
 
                 # if no group is present default to stats
-                stat_group = stats['group']['displayname'] if 'group' in stats else 'stats'
-                stat_type = stats['type']['displayname'] if 'type' in stats else None
+                if 'group' in stats:
+                    stat_group = stats['group']['displayname']
+                else:
+                    stat_group = 'stat'
+
+                # just in case the a stat_type doesn't return it's stat type 
+                if 'type' in stats:
+                    stat_type = stats['type']['displayname']
+                else:
+                    # no stat type? then let's skip over it
+                    continue
+
                 # loop through each group sent through params
                 for group in group_names:
                     if stat_group == group:

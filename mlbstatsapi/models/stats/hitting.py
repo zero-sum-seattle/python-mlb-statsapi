@@ -92,7 +92,7 @@ class HittingWinLoss(Splits, SimpleHittingStat):
     iswin : bool
         the bool to hold if a win or not for hitting winLoss
     """
-    _stat = [ 'winLoss' ]
+    _stat = ['winLoss']
     iswin: bool
 
 @dataclass(kw_only=True)
@@ -105,7 +105,7 @@ class HittingWinLossPlayoffs(Splits, SimpleHittingStat):
     iswin : bool
         the bool to hold if a win or not for hitting winLoss
     """
-    _stat = [ 'winLossPlayoffs' ]
+    _stat = ['winLossPlayoffs']
     iswin: bool
 
 @dataclass(kw_only=True)
@@ -118,7 +118,7 @@ class HittingHomeAndAway(Splits, SimpleHittingStat):
     ishome : bool
         the bool to hold if it ishome hitting homeAndAway
     """
-    _stat = [ 'homeAndAway' ]
+    _stat = ['homeAndAway']
     ishome: bool
 
 @dataclass(kw_only=True)
@@ -131,7 +131,7 @@ class HittingHomeAndAwayPlayoffs(Splits, SimpleHittingStat):
     ishome : bool
         the bool to hold if it ishome hitting homeAndAway
     """
-    _stat = [ 'homeAndAwayPlayoffs' ]
+    _stat = ['homeAndAwayPlayoffs']
     ishome: bool
 
 @dataclass(kw_only=True)
@@ -143,7 +143,7 @@ class HittingCareer(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'career', 'careerRegularSeason', 'careerPlayoffs' ]
+    _stat = ['career', 'careerRegularSeason', 'careerPlayoffs']
 
 # @dataclass(kw_only=True)
 # class HittingCareerPlayoffs(Splits, SimpleHittingStat):
@@ -163,7 +163,7 @@ class HittingSeason(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'season' ]
+    _stat = ['season']
 
 
 @dataclass(kw_only=True)
@@ -174,7 +174,7 @@ class HittingSingleSeason(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'statsSingleSeason' ]
+    _stat = ['statsSingleSeason']
 
 @dataclass(kw_only=True)
 class HittingSeasonAdvanced(Splits, AdvancedHittingStat):
@@ -184,7 +184,8 @@ class HittingSeasonAdvanced(Splits, AdvancedHittingStat):
     Attributes
     ----------
     """
-    _stat = ['seasonAdvanced' ]
+    _stat = ['seasonAdvanced']
+
 
 @dataclass(kw_only=True)
 class HittingCareerAdvanced(Splits, AdvancedHittingStat):
@@ -194,7 +195,7 @@ class HittingCareerAdvanced(Splits, AdvancedHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'careerAdvanced' ]
+    _stat = ['careerAdvanced']
 
 
 @dataclass(kw_only=True)
@@ -205,7 +206,8 @@ class HittingYearByYear(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'yearByYear' ]
+    _stat = ['yearByYear']
+
 
 @dataclass(kw_only=True)
 class HittingYearByYearPlayoffs(Splits, SimpleHittingStat):
@@ -215,7 +217,8 @@ class HittingYearByYearPlayoffs(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'yearByYearPlayoffs' ]
+    _stat = ['yearByYearPlayoffs']
+
 
 @dataclass
 class OpponentsFacedHitting(Splits):
@@ -233,7 +236,7 @@ class OpponentsFacedHitting(Splits):
     group : str
         stat group
     """
-    _stat = [ 'opponentsFaced' ]
+    _stat = ['opponentsFaced']
     group: str
     batter: Union[Batter, dict]
     fieldingteam: Union[Team, dict]
@@ -243,18 +246,20 @@ class OpponentsFacedHitting(Splits):
         self.batter = Batter(**self.batter) if self.batter else self.batter
         self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
 
+
 @dataclass
 class HittingSabermetrics(Splits):
     """
     A class to represent a hitting sabermetric statistic
 
     """
-    _stat = [ 'sabermetrics' ]
+    _stat = ['sabermetrics']
     woba: float
     wrc: float
     wrcplus: float
     rar: float
     war: float
+
 
 @dataclass(kw_only=True)
 class HittingGameLog(Splits, SimpleHittingStat):
@@ -289,13 +294,14 @@ class HittingGameLog(Splits, SimpleHittingStat):
     game: Union[Game, dict]
     date: str
     opponent: Union[Team, dict]
-    _stat = [ 'gameLog' ]
+    _stat = ['gameLog']
     positionsplayed: Optional[List[Position]] = field(default_factory=list)
 
     def __post_init__(self):
         if self.positionsplayed:
-            self.positionsplayed = [ Position(**position) for position in self.positionsplayed ]
-        
+            self.positionsplayed = [Position(**position) for position in self.positionsplayed]
+
+
 @dataclass
 class PlayDetails:
     """
@@ -350,6 +356,7 @@ class PlayDetails:
         self.pitchhand = CodeDesc(**self.pitchhand) 
         self.type = CodeDesc(**self.type) if self.type else self.type
 
+
 @dataclass(kw_only=True)
 class HittingPlayLog(Splits):
     """
@@ -387,7 +394,7 @@ class HittingPlayLog(Splits):
     atbatnumber: int
     ispitch: bool
     playid: Optional[str] = None
-    _stat = [ 'playLog' ]
+    _stat = ['playLog']
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
@@ -395,6 +402,7 @@ class HittingPlayLog(Splits):
         self.pitcher = Pitcher(**self.pitcher)
         self.batter = Batter(**self.batter)
         self.opponent = Team(**self.opponent)
+
 
 @dataclass(kw_only=True)
 class HittingPitchLog(Splits):
@@ -436,13 +444,14 @@ class HittingPitchLog(Splits):
     atbatnumber: int
     ispitch: bool
     playid: Optional[str] = None 
-    
+
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
         self.pitcher = Pitcher(**self.pitcher)
         self.batter = Batter(**self.batter)
         self.opponent = Team(**self.opponent)
+
 
 @dataclass(kw_only=True)
 class HittingLastXGames(Splits, SimpleHittingStat):
@@ -452,7 +461,8 @@ class HittingLastXGames(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'lastXGames' ]
+    _stat = ['lastXGames']
+
 
 @dataclass(kw_only=True)
 class HittingDateRange(Splits, SimpleHittingStat):
@@ -462,7 +472,8 @@ class HittingDateRange(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'byDateRange' ]
+    _stat = ['byDateRange']
+
 
 @dataclass(kw_only=True)
 class HittingDateRangeAdvanced(Splits, AdvancedHittingStat):
@@ -472,7 +483,8 @@ class HittingDateRangeAdvanced(Splits, AdvancedHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'byDateRangeAdvanced' ]
+    _stat = ['byDateRangeAdvanced']
+
 
 @dataclass(kw_only=True)
 class HittingDateRangeAdvancedByMonth(Splits, AdvancedHittingStat):
@@ -482,17 +494,8 @@ class HittingDateRangeAdvancedByMonth(Splits, AdvancedHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'byDateRangeAdvanced' ]
+    _stat = ['byDateRangeAdvancedbyMonth']
 
-@dataclass(kw_only=True)
-class HittingDateRangeAdvancedByMonth(Splits, AdvancedHittingStat):
-    """
-    A class to represent a byDateRangeAdvanced statistic
-
-    Attributes
-    ----------
-    """
-    _stat = [ 'byDateRangeAdvancedbyMonth' ]
 
 @dataclass(kw_only=True)
 class HittingByMonth(Splits, SimpleHittingStat):
@@ -502,9 +505,10 @@ class HittingByMonth(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'byMonth' ]
+    _stat = ['byMonth']
     month: int
     gamesplayed: int
+
 
 @dataclass(kw_only=True)
 class HittingByMonthPlayoffs(Splits, SimpleHittingStat):
@@ -516,9 +520,10 @@ class HittingByMonthPlayoffs(Splits, SimpleHittingStat):
     month : str
         the month of the stat
     """
-    _stat = [ 'byMonthPlayoffs' ]
+    _stat = ['byMonthPlayoffs']
     month: int
     gamesplayed: int
+
 
 @dataclass(kw_only=True)
 class HittingDayOfWeek(Splits, SimpleHittingStat):
@@ -530,8 +535,9 @@ class HittingDayOfWeek(Splits, SimpleHittingStat):
     dayofweek : int
         the day of the week
     """
-    _stat = [ 'byDayOfWeek' ]
+    _stat = ['byDayOfWeek']
     dayofweek: int
+
 
 @dataclass(kw_only=True)
 class HittingDayOfWeekPlayoffs(Splits, SimpleHittingStat):
@@ -543,8 +549,9 @@ class HittingDayOfWeekPlayoffs(Splits, SimpleHittingStat):
     dayofweek : int
         the day of the week
     """
-    _stat = [ 'byDayOfWeekPlayoffs' ]
+    _stat = ['byDayOfWeekPlayoffs']
     dayofweek: int
+
 
 @dataclass(kw_only=True)
 class HittingExpectedStatistics(Splits):
@@ -558,13 +565,14 @@ class HittingExpectedStatistics(Splits):
     wobaCon : str
     rank : int
     """
-    _stat = [ 'expectedStatistics' ]
-    avg : str
-    slg : str
-    woba : str
-    wobacon : str
+    _stat = ['expectedStatistics']
+    avg: str
+    slg: str
+    woba: str
+    wobacon: str
     gametype: str
-    rank : Optional[int] = None
+    rank: Optional[int] = None
+
 
 @dataclass(kw_only=True)
 class HittingVsTeam(Splits, SimpleHittingStat):
@@ -577,7 +585,7 @@ class HittingVsTeam(Splits, SimpleHittingStat):
     dayofweek : int
         the day of the week
     """
-    _stat = [ 'vsTeam' ]
+    _stat = ['vsTeam']
     opponent: Union[Team, dict]
     rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
@@ -587,6 +595,7 @@ class HittingVsTeam(Splits, SimpleHittingStat):
         self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
         self.batter = Batter(**self.batter) if self.batter else self.batter
         self.opponent = Team(**self.opponent)
+
 
 @dataclass(kw_only=True)
 class HittingVsTeamTotal(Splits, SimpleHittingStat):
@@ -598,15 +607,17 @@ class HittingVsTeamTotal(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'vsTeamTotal' ]
+    _stat = ['vsTeamTotal']
     opponent: Union[Team, dict]
     rank: int
     batter: Optional[Union[Person, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
+
     def __post_init__(self):
         self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
         self.batter = Batter(**self.batter) if self.batter else self.batter
         self.opponent = Team(**self.opponent)
+
 
 @dataclass(kw_only=True)
 class HittingVsTeam5Y(Splits, SimpleHittingStat):
@@ -618,7 +629,7 @@ class HittingVsTeam5Y(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'vsTeam5Y' ]
+    _stat = ['vsTeam5Y']
     opponent: Union[Team, dict]
     rank: int
     batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
@@ -628,6 +639,7 @@ class HittingVsTeam5Y(Splits, SimpleHittingStat):
         self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
         self.batter = Batter(**self.batter) if self.batter else self.batter
         self.opponent = Team(**self.opponent)
+
 
 @dataclass(kw_only=True)
 class HittingVsPlayer(Splits, SimpleHittingStat):
@@ -641,7 +653,7 @@ class HittingVsPlayer(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'vsPlayer' ]
+    _stat = ['vsPlayer']
     pitcher: Union[Pitcher, dict]
     batter: Union[Batter, dict]
     opponent: Optional[Union[Team, dict]] = field(default_factory=dict)
@@ -650,6 +662,7 @@ class HittingVsPlayer(Splits, SimpleHittingStat):
         self.pitcher = Pitcher(**self.pitcher)
         self.batter = Batter(**self.batter)
         self.opponent = Team(**self.opponent) if self.opponent else self.opponent
+
 
 @dataclass(kw_only=True)
 class HittingVsPlayerTotal(Splits, SimpleHittingStat):
@@ -663,7 +676,7 @@ class HittingVsPlayerTotal(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'vsPlayerTotal' ]
+    _stat = ['vsPlayerTotal']
     pitcher: Union[Pitcher, dict]
     batter: Union[Batter, dict]
     opponent: Optional[Union[Team, dict]] = field(default_factory=dict)
@@ -685,7 +698,7 @@ class HittingVsPlayer5Y(Splits, SimpleHittingStat):
     Attributes
     ----------
     """
-    _stat = [ 'vsPlayer5Y' ]
+    _stat = ['vsPlayer5Y']
     pitcher: Union[Pitcher, dict]
     batter: Union[Person, dict]
     opponent: Optional[Union[Team, dict]]  = field(default_factory=dict)

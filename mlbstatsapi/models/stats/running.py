@@ -13,7 +13,7 @@ class RunningOpponentsFaced(Splits):
     Attributes
     ----------
     """
-    _stat = [ 'opponentsFaced' ]
+    _stat = ['opponentsFaced']
     batter: Union[Batter, dict]
     group: str 
     pitcher: Union[Pitcher, dict]

@@ -64,7 +64,7 @@ def _return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['S
     stat_module = f"mlbstatsapi.models.stats.{stat_group}"
     stat_module = importlib.import_module(stat_module)
 
-    # if splits is empty let's jump out
+    # if splits is empty return empty list
     if not ('splits' in split_data and split_data['splits']):
         return splits
 
