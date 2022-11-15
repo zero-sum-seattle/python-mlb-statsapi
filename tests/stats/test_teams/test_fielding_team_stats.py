@@ -7,7 +7,7 @@ class TestTeamFieldingStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.team = cls.mlb.get_team(133) # Oakland A's
+        cls.team = 133  # Oakland A's
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -17,7 +17,7 @@ class TestTeamFieldingStats(unittest.TestCase):
         self.params = {'stats': ['season'], 'group': ['fielding']}
 
         # catching_player
-        stats = self.mlb.get_stats(self.params, self.team)
+        stats = self.mlb.get_team_stats(self.team, self.params)
 
         self.assertIsNotNone(stats)
         self.assertNotEqual(stats, {})

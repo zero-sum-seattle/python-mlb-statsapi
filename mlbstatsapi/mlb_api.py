@@ -1,6 +1,7 @@
 import logging
 import datetime
-from types import NoneType
+
+
 from typing import List, Union
 
 from mlbstatsapi.models.people import Person, Player, Coach
@@ -12,14 +13,134 @@ from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi.models.attendances import Attendance
-from mlbstatsapi.models.stats import Splits 
+from mlbstatsapi.models.stats import Splits
 
 from .mlb_dataadapter import MlbDataAdapter
-
-from .mlb_functions import _transform_mlb_data, _return_splits
+from . import mlb_module
 
 
 class Mlb:
+    """
+    A class used to retrive MLB Stats API objects
+
+    ...
+
+    Attributes
+    ----------
+    hostname: str
+        hostname of statsapi.mlb.com
+    ver: str
+        api version
+    logger: logging.Loger
+        logger 
+
+    Methods
+    -------
+    get_people 
+    sport_id: int = 1
+
+    get_person 
+    player_id: int
+
+    get_people_id 
+    fullname, sport_id: int = 1
+
+    get_player_stats 
+    player_id: int
+
+    get_team sport_id: 
+    int = 1
+
+    get_teams 
+    team_id: int
+
+    get_team_id 
+    team_name: str
+
+    get_team_roster 
+    team_id: int
+
+    get_team_coaches 
+    team_id: int
+
+    get_team_stats 
+    team_id: int
+
+    get_schedule 
+    start_date: str = None, end_date: str = None
+
+    get_schedule_today 
+    None
+
+    get_schedule_date 
+    date
+
+    get_schedule_date_range 
+    start_date: str, end_date: str
+
+    get_game 
+    game_id: int
+
+    get_game_play_by_play 
+    game_id: int
+
+    get_game_line_score 
+    game_id: int
+
+    get_game_box_score 
+    game_id: int
+
+    get_game_ids 
+    date: str, abstract_game_state: str = None
+
+    get_todays_game_ids 
+    abstract_game_state: str = None
+
+    get_tomorrows_game_ids
+
+    get_yesterdays_game_ids
+
+    get_venue 
+    venue_id: int
+
+    get_venues
+
+    get_venue_id 
+    venue_name: str
+
+    get_sport 
+    sport_id: int
+
+    get_sports
+
+    get_sport_id 
+    sport_name
+
+    get_league 
+    league_id: int
+
+    get_leagues
+
+    get_league_id 
+    league_name
+
+    get_division 
+    division_id: int
+
+    get_divisions
+
+    get_division_id 
+    division_name: str
+
+    get_attendance
+
+    get_object
+
+    get_stats
+    
+    
+
+    """
     def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
         self._mlb_adapter_v1 = MlbDataAdapter(hostname, 'v1', logger)
         self._mlb_adapter_v1_1 = MlbDataAdapter(hostname, 'v1.1', logger)
@@ -180,7 +301,7 @@ class Mlb:
 
         if 'roster' in mlb_data.data and mlb_data.data['roster']:
             for player in mlb_data.data['roster']:
-                players.append(Player(**_transform_mlb_data(player, ['person'])))
+                players.append(Player(**mlb_module.transform_mlb_data(player, ['person'])))
 
         return players
 
@@ -203,7 +324,7 @@ class Mlb:
 
         if 'roster' in mlb_data.data and mlb_data.data['roster']:
             for coach in mlb_data.data['roster']:
-                coaches.append(Coach(**_transform_mlb_data(coach, ['person'])))
+                coaches.append(Coach(**mlb_module.transform_mlb_data(coach, ['person'])))
 
         return coaches
 
@@ -510,7 +631,7 @@ class Mlb:
 
         return venue_ids
 
-    def get_sport(self, sport_id) -> Union[Sport, None]:
+    def get_sport(self, sport_id: int) -> Union[Sport, None]:
         """
         return sport object from sportid
 
@@ -548,7 +669,7 @@ class Mlb:
 
         return sports
 
-    def get_sport_id(self, sport_name) -> List[int]:
+    def get_sport_id(self, sport_name: str) -> List[int]:
         """
         return sport id 
 
@@ -716,8 +837,6 @@ class Mlb:
             Date
         gametype : str
             Game type
-        fields : ?
-
         Returns
         -------
         Attendance
@@ -742,11 +861,13 @@ class Mlb:
     def get_object(self, mlb_object):
         """
         return a hydrated object
-            Parameters
+
+        Parameters
         ----------
         mlb_object : class
             Object to be hydrated. Can by dry or one that just needs updating
-            Returns
+
+        Returns
         -------
         object
         """
@@ -760,103 +881,71 @@ class Mlb:
         else:
             return mlb_object
 
-    def get_stats(self, params: dict, mlb_object: Union[Union[Team, Person], dict] = NoneType) -> Union['Splits', dict]:
+    def get_team_stats(self, team_id: int, params: dict):
         """
-        return a split object
-            The stat group parameter is used to locate the correct class to build. The group is passed to _return_splits along with
-        stat data.
-            Parameters
+        returns a split stat data for a team
+
+        Parameters
         ----------
-        mlb_object : mlb object
-            mlb object or dict e.g Team, Player, Person
-        params : dict
-            dict of params to pass e.g { 'stats': [ "seasonAdvanced", "season" ], 'group': 'hitting' }
-            Returns
-        -------
-        splits : dict
-        mlbdata : dict
+        params: dict
+            dict of params to pass
         
-        { 
-            hitting: { 
-                'season': [ HittingSeason ]
-                'seasonsAdvanced': [ HittingSeasonsAdvanced ]
-            },
-            pitching: {
-                'season': [ PitchingSeason ]
-                'seasonsAdvanced': [ PitchingSeasonAdvanced ]
-            },
-            stats: {
-                'hotcoldzones': [ HotColdZones ]
-            }
-        }
+        Returns
+        -------
+        splits: dict
         """
-
-        splits = {}
-        if mlb_object is not NoneType:
-            mlb_data = self._mlb_adapter_v1.get(endpoint=f'{mlb_object.mlb_class}/{mlb_object.id}/stats', ep_params=params)
-        else:
-            mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
-
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
-            return splits
+            return {}
 
-        # params['group'] should be either a string or list of strings
-        if params['group'] is list:
-            group_names = params['group']
-        else:
-            group_names = list(params['group'])
+        groups = mlb_module.build_group_list(params)
 
-        # create stat key if stat type is in no_group_types
-        # these stat types don't return a group
-        no_group_types = ['hotColdZones', 'sprayChart', 'pitchArsenal']
-        for _type in no_group_types:
-            if _type in params['stats']:
-                group_names.append('stats')
-                break
-
-        # these stat types require further dictionary transformation
-        if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            for stats in mlb_data.data['stats']:
-
-                # if no group is present default to stats
-                if 'group' in stats:
-                    stat_group = stats['group']['displayname']
-                else:
-                    stat_group = 'stat'
-
-                if 'type' in stats:
-                    stat_type = stats['type']['displayname']
-                else:
-                    continue
-
-                # loop through each group sent through params
-                for group in group_names:
-                    if stat_group == group:
-
-                        # checking if we need to init list
-                        if group not in splits:
-                            splits[stat_group] = {}
-
-                        # get splits from stats
-                        splits[stat_group][stat_type.lower()] = _return_splits(stats, stat_type, stat_group)
+        splits = mlb_module.create_split_data(mlb_data, groups)
 
         return splits
 
+    def get_player_stats(self, person_id: int, params: dict):
+        """
+        returns a split stat data for a team
 
+        Parameters
+        ----------
+        params: dict
+            dict of params to pass
 
+        Returns
+        -------
+        splits: dict
+        """
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return {}
+        # use the param groups to build a set of groups
+        groups = mlb_module.build_group_list(params)
 
+        splits = mlb_module.create_split_data(mlb_data, groups)
 
+        return splits
 
+    def get_stats(self, params: dict) -> Union['Splits', dict]:
+        """
+        return a split object
 
+        Parameters
+        ----------
+        params: dict
+            dict of params to pass
 
+        Returns
+        -------
+        splits: dict
+        """
+        mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return {}
 
+        groups = mlb_module.build_group_list(params)
 
+        splits = mlb_module.create_split_data(mlb_data, groups)
 
-
-
-
- 
-
- 
-
-
+        return splits

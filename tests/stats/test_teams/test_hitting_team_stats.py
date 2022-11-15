@@ -10,10 +10,10 @@ class TestTeamHitting(unittest.TestCase):
         cls.mlb = Mlb()
 
         # Oakland
-        cls.al_team = cls.mlb.get_team(133)
+        cls.al_team = 133
 
         # Philadelphia Phillies
-        cls.nl_team = cls.mlb.get_team(143)
+        cls.nl_team = 143
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -22,8 +22,8 @@ class TestTeamHitting(unittest.TestCase):
     def test_get_hitting_stats_for_teams(self):
         """mlb get stats should return hitting stats"""
         self.params = {'stats': ['season', 'seasonAdvanced'], 'group': ['hitting']}
-        al_stats = self.mlb.get_stats(self.params, self.al_team)
-        nl_stats = self.mlb.get_stats(self.params, self.nl_team)
+        al_stats = self.mlb.get_team_stats(self.al_team, self.params)
+        nl_stats = self.mlb.get_team_stats(self.nl_team, self.params)
 
         self.assertTrue(al_stats['hitting']['season'])
         self.assertTrue(al_stats['hitting']['seasonadvanced'])
@@ -31,12 +31,11 @@ class TestTeamHitting(unittest.TestCase):
         self.assertTrue(nl_stats['hitting']['season'])
         self.assertTrue(nl_stats['hitting']['seasonadvanced'])
 
-
     def test_get_multiple_stats_for_teams(self):
         """mlb get stats should return two hitting stats"""
         self.params = {'stats': ['seasonAdvanced', 'season', 'careerAdvanced', 'yearByYear'], 'group': ['hitting']}
-        al_stats = self.mlb.get_stats(self.params, self.al_team)
-        nl_stats = self.mlb.get_stats(self.params, self.nl_team)
+        al_stats = self.mlb.get_team_stats(self.al_team, self.params)
+        nl_stats = self.mlb.get_team_stats(self.nl_team, self.params)
 
         self.assertTrue(al_stats['hitting']['season'])
         self.assertTrue(al_stats['hitting']['seasonadvanced'])
@@ -51,8 +50,8 @@ class TestTeamHitting(unittest.TestCase):
     def test_hitting_pitch_arsenal_stat_on_teams(self):
         """mlb get stats should return PitchArsenal object"""
         self.params = {'stats': ['expectedStatistics'], 'group': ['hitting']}
-        al_stats = self.mlb.get_stats(self.params, self.al_team)
-        nl_stats = self.mlb.get_stats(self.params, self.nl_team)
+        al_stats = self.mlb.get_team_stats(self.al_team, self.params)
+        nl_stats = self.mlb.get_team_stats(self.nl_team, self.params)
 
         self.assertTrue(al_stats['hitting']['expectedstatistics'])
         self.assertTrue(nl_stats['hitting']['expectedstatistics'])
@@ -62,17 +61,17 @@ class TestTeamHitting(unittest.TestCase):
         self.params = {'stats': ['playLog'], 'group': ['hitting']}
 
         with self.assertRaises(TheMlbStatsApiException):
-            stats = self.mlb.get_stats(self.params, self.al_team)
+            stats = self.mlb.get_team_stats(self.al_team, self.params)
     
     def test_hitting_vs_team_stats_on_team(self):
-        self.params = { 'stats': ['vsTeam'], 'group': ['hitting'], 'opposingTeamId': '158' }
-        vsteam_stats = self.mlb.get_stats(self.params, self.nl_team)
+        self.params = {'stats': ['vsTeam'], 'group': ['hitting'], 'opposingTeamId': '158'}
+        vsteam_stats = self.mlb.get_team_stats(self.nl_team, self.params)
 
         self.assertTrue(vsteam_stats['hitting']['vsteam'])
 
     def test_hitting_vs_team5y_stats_on_teams(self):
-        self.params = {'stats': ['vsTeam5Y', 'vsTeamTotal'], 'group': ['hitting'], 'opposingTeamId': '158' }
-        vsteam_stats = self.mlb.get_stats(self.params, self.nl_team)
+        self.params = {'stats': ['vsTeam5Y', 'vsTeamTotal'], 'group': ['hitting'], 'opposingTeamId': '158'}
+        vsteam_stats = self.mlb.get_team_stats(self.nl_team, self.params)
 
         self.assertTrue(vsteam_stats['hitting']['vsteam5y'])
         self.assertTrue(vsteam_stats['hitting']['vsteamtotal'])

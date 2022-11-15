@@ -82,9 +82,9 @@ class Splits:
         date of game
     group : str 
         type of stat group
-    stat_group : str
+    _group : str
         type of the stat group
-    stat_type : str
+    _type : str
         type of the stat 
     """
     _group: str
@@ -105,6 +105,7 @@ class Splits:
         self.sport = Sport(**self.sport) if self.sport else self.sport
         self.league = League(**self.league) if self.league else self.league
         self.position = Position(**self.position) if self.position else self.position
+
 
 @dataclass(kw_only=True)
 class PitchArsenal(Splits):

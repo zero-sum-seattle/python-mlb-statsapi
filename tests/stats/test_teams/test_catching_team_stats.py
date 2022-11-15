@@ -8,8 +8,8 @@ class TestTeamCatchingStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.al_team = cls.mlb.get_team(133) # Oakland
-        cls.nl_team = cls.mlb.get_team(143) # Philadelphia Phillies
+        cls.al_team = 133  # Oakland
+        cls.nl_team = 143  # Philadelphia Phillies
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -19,8 +19,8 @@ class TestTeamCatchingStats(unittest.TestCase):
         """get a basic season stat split"""
         self.params = {'stats': ['season'], 'group': ['catching']}
 
-        al_catching = self.mlb.get_stats(self.params, self.al_team)
-        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
+        al_catching = self.mlb.get_team_stats(self.al_team, self.params)
+        nl_catching = self.mlb.get_team_stats(self.nl_team, self.params)
 
         self.assertTrue(al_catching['catching']['season'])
         self.assertTrue(nl_catching['catching']['season'])
@@ -28,7 +28,7 @@ class TestTeamCatchingStats(unittest.TestCase):
     def test_catching_yearbyyear_stats_team(self):
         """yearbyyear stats should return list of yearbyyear stats"""
         self.params = {'stats': ['yearByYear', 'yearByYearPlayoffs'], 'group':['catching']}
-        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
+        nl_catching = self.mlb.get_team_stats(self.nl_team, self.params)
 
         self.assertTrue(nl_catching['catching']['yearbyyear'])
         self.assertTrue(nl_catching['catching']['yearbyyearplayoffs'])
@@ -37,8 +37,8 @@ class TestTeamCatchingStats(unittest.TestCase):
         """career stats should return list of career stats"""
         self.params = {'stats': ['career', 'careerRegularSeason'], 'group':['catching']}
 
-        al_catching = self.mlb.get_stats(self.params, self.al_team)
-        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
+        al_catching = self.mlb.get_team_stats(self.al_team, self.params)
+        nl_catching = self.mlb.get_team_stats(self.nl_team, self.params)
 
         # check if lists are not empty
         self.assertTrue(al_catching['catching']['career'])
@@ -49,7 +49,7 @@ class TestTeamCatchingStats(unittest.TestCase):
         self.params = {'stats': ['homeAndAway', 'winLoss', ], 'group':['catching']}
 
         # check if lists are empty
-        al_catching = self.mlb.get_stats(self.params, self.al_team)
+        al_catching = self.mlb.get_team_stats(self.al_team, self.params)
 
         self.assertEqual({}, al_catching)
 
@@ -57,8 +57,8 @@ class TestTeamCatchingStats(unittest.TestCase):
         self.params = {'stats': ['byDateRange', 'byDayOfWeek'], 'group':['catching']}
 
         # check if lists are not empty
-        al_catching = self.mlb.get_stats(self.params, self.al_team)
-        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
+        al_catching = self.mlb.get_team_stats(self.al_team, self.params)
+        nl_catching = self.mlb.get_team_stats(self.nl_team, self.params)
         self.assertTrue(al_catching['catching']['bydaterange'])
         self.assertTrue(nl_catching['catching']['bydayofweek'])
 
@@ -66,8 +66,8 @@ class TestTeamCatchingStats(unittest.TestCase):
         self.params = {'stats': ['gameLog'], 'group':['catching']}
 
         # check if lists are not empty
-        al_catching = self.mlb.get_stats(self.params, self.al_team)
-        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
+        al_catching = self.mlb.get_team_stats(self.al_team, self.params)
+        nl_catching = self.mlb.get_team_stats(self.nl_team, self.params)
         self.assertTrue(al_catching['catching']['gamelog'])
         self.assertTrue(nl_catching['catching']['gamelog'])
 
@@ -75,8 +75,7 @@ class TestTeamCatchingStats(unittest.TestCase):
         self.params = {'stats': ['lastXGames'], 'group': ['catching']}
 
         # check if lists are not empty
-        al_catching = self.mlb.get_stats(self.params, self.al_team)
-        nl_catching = self.mlb.get_stats(self.params, self.nl_team)
+        al_catching = self.mlb.get_team_stats(self.al_team, self.params)
+        nl_catching = self.mlb.get_team_stats(self.nl_team, self.params)
         self.assertTrue(al_catching['catching']['lastxgames'])
         self.assertTrue(nl_catching['catching']['lastxgames'])
-        

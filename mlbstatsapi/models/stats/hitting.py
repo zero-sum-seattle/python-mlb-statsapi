@@ -27,7 +27,7 @@ class AdvancedHittingStat:
     walksperplateappearance: Optional[str] = None
     strikeoutsperplateappearance: Optional[str] = None
     homerunsperplateappearance: Optional[str] = None
-    walksperstrikeout: Optional[str]= None
+    walksperstrikeout: Optional[str] = None
     iso: Optional[str] = None
     reachedonerror: Optional[int] = None
     walkoffs: Optional[int] = None
@@ -440,7 +440,7 @@ class HittingPitchLog(Splits):
     pitchnumber: int
     atbatnumber: int
     ispitch: bool
-    playid: Optional[str] = None 
+    playid: Optional[str] = None
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
@@ -670,8 +670,8 @@ class HittingVsPlayerTotal(Splits, SimpleHittingStat):
     A class to represent a yearByYear hitting statistic
 
     This class is for the stat type vsPlayer*
-    
-    Requires the param opposingPlayerId set 
+
+    Requires the param opposingPlayerId set
 
     Attributes
     ----------
@@ -694,7 +694,7 @@ class HittingVsPlayer5Y(Splits, SimpleHittingStat):
 
     This class is for the stat type vsPlayer*
 
-    Requires the param opposingPlayerId set 
+    Requires the param opposingPlayerId set
     Attributes
     ----------
     """
@@ -704,6 +704,6 @@ class HittingVsPlayer5Y(Splits, SimpleHittingStat):
     opponent: Optional[Union[Team, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher) 
-        self.batter = Batter(**self.batter) 
+        self.pitcher = Pitcher(**self.pitcher)
+        self.batter = Batter(**self.batter)
         self.opponent = Team(**self.opponent) if self.opponent else self.opponent

@@ -10,9 +10,9 @@ class TestPitchingTeamStats(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
         # Oakland
-        cls.al_team = cls.mlb.get_team(133)
+        cls.al_team = 133
         # Philadelphia Phillies
-        cls.nl_team = cls.mlb.get_team(143)
+        cls.nl_team = 143
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -21,8 +21,8 @@ class TestPitchingTeamStats(unittest.TestCase):
     def test_get_one_pitching_stats_for_teams(self):
         """mlb get stats should return pitching stats"""
         self.params = {'stats': ['season', 'seasonAdvanced'], 'group': ['pitching']}
-        al_stats = self.mlb.get_stats(self.params, self.al_team)
-        nl_stats = self.mlb.get_stats(self.params, self.nl_team)
+        al_stats = self.mlb.get_team_stats(self.al_team, self.params)
+        nl_stats = self.mlb.get_team_stats(self.nl_team, self.params)
 
         self.assertTrue(al_stats['pitching']['season'])
         self.assertTrue(al_stats['pitching']['seasonadvanced'])
@@ -30,13 +30,11 @@ class TestPitchingTeamStats(unittest.TestCase):
         self.assertTrue(nl_stats['pitching']['season'])
         self.assertTrue(nl_stats['pitching']['seasonadvanced'])
 
-
-
     def test_get_pitching_career_stats_for_teams(self):
         """mlb get stats should return pitching stats"""
         self.params = {'stats': ['career', 'careerAdvanced'], 'group': ['pitching']}
-        al_stats = self.mlb.get_stats(self.params, self.al_team)
-        nl_stats = self.mlb.get_stats(self.params, self.nl_team)
+        al_stats = self.mlb.get_team_stats(self.al_team, self.params)
+        nl_stats = self.mlb.get_team_stats(self.nl_team, self.params)
 
         self.assertTrue(al_stats['pitching']['career'])
         self.assertTrue(al_stats['pitching']['careeradvanced'])
@@ -49,8 +47,8 @@ class TestPitchingTeamStats(unittest.TestCase):
         self.params = {'stats': [ 'playLog'], 'group': 'hitting'}
 
         with self.assertRaises(TheMlbStatsApiException):
-            al_stat_group_six = self.mlb.get_stats(self.params, self.al_team)
+            al_stat_group_six = self.mlb.get_team_stats(self.al_team, self.params)
 
         self.params = { 'stats': ['sabermetrics'], 'group': ['pitching'] }
         with self.assertRaises(TheMlbStatsApiException):
-            al_stats = self.mlb.get_stats(self.params, self.al_team)
+            al_stats = self.mlb.get_team_stats(self.al_team, self.params)

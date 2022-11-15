@@ -7,8 +7,8 @@ class TestCatchingPlayerStats(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.catching_player = cls.mlb.get_person(663728)
-        cls.utility_player = cls.mlb.get_person(647351)
+        cls.catching_player = 663728
+        cls.utility_player = 647351
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -18,7 +18,7 @@ class TestCatchingPlayerStats(unittest.TestCase):
         """build catching stat for season"""
         self.params = {'stats': ['season', 'statsSingleSeason','careerRegularSeason'], 'group': ['catching']}
 
-        splits = self.mlb.get_stats(self.params, self.catching_player)
+        splits = self.mlb.get_player_stats(self.catching_player, self.params)
 
         self.assertIsNotNone(splits)
         self.assertNotEqual(splits, {})
