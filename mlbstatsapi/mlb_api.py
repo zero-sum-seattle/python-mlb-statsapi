@@ -32,114 +32,7 @@ class Mlb:
     ver: str
         api version
     logger: logging.Loger
-        logger 
-
-    Methods
-    -------
-    get_people 
-    sport_id: int = 1
-
-    get_person 
-    player_id: int
-
-    get_people_id 
-    fullname, sport_id: int = 1
-
-    get_player_stats 
-    player_id: int
-
-    get_team sport_id: 
-    int = 1
-
-    get_teams 
-    team_id: int
-
-    get_team_id 
-    team_name: str
-
-    get_team_roster 
-    team_id: int
-
-    get_team_coaches 
-    team_id: int
-
-    get_team_stats 
-    team_id: int
-
-    get_schedule 
-    start_date: str = None, end_date: str = None
-
-    get_schedule_today 
-    None
-
-    get_schedule_date 
-    date
-
-    get_schedule_date_range 
-    start_date: str, end_date: str
-
-    get_game 
-    game_id: int
-
-    get_game_play_by_play 
-    game_id: int
-
-    get_game_line_score 
-    game_id: int
-
-    get_game_box_score 
-    game_id: int
-
-    get_game_ids 
-    date: str, abstract_game_state: str = None
-
-    get_todays_game_ids 
-    abstract_game_state: str = None
-
-    get_tomorrows_game_ids
-
-    get_yesterdays_game_ids
-
-    get_venue 
-    venue_id: int
-
-    get_venues
-
-    get_venue_id 
-    venue_name: str
-
-    get_sport 
-    sport_id: int
-
-    get_sports
-
-    get_sport_id 
-    sport_name
-
-    get_league 
-    league_id: int
-
-    get_leagues
-
-    get_league_id 
-    league_name
-
-    get_division 
-    division_id: int
-
-    get_divisions
-
-    get_division_id 
-    division_name: str
-
-    get_attendance
-
-    get_object
-
-    get_stats
-    
-    
-
+        logger
     """
     def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
         self._mlb_adapter_v1 = MlbDataAdapter(hostname, 'v1', logger)
@@ -158,7 +51,19 @@ class Mlb:
 
         Returns
         -------
-        List[Person]
+        list
+            Returns a list of People
+
+        See Also
+        --------
+        Mlb.get_person : Return Person from id.
+        Mlb.get_people_id : Return person id from name.
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_people()
+        [Person, Person, Person]
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players')
@@ -181,6 +86,18 @@ class Mlb:
         Returns
         -------
         Person
+            Returns a Person
+
+        See Also
+        --------
+        Mlb.get_people : Return a list of People from sport id.
+        Mlb.get_people_id : Return person id from name.
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_person(660271)
+        Person
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{player_id}')
@@ -202,7 +119,19 @@ class Mlb:
 
         Returns
         -------
-        List[int]
+        list of int
+            Returns a list of person ids
+
+        See Also
+        --------
+        Mlb.get_people : Return a list of People from sport id.
+        Mlb.get_person : Return Person from id.
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_people_id("Ty France")
+        [664034]
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players')
@@ -222,11 +151,25 @@ class Mlb:
         Parameters
         ----------
         sport_id : int
-            sport_id for players defaults to 1
+            sport_id for teams defaults to 1
 
         Returns
         -------
-        List[Team]
+        list of Teams
+            returns a list of teams
+
+        See Also
+        --------
+        Mlb.get_team : Return a Team from id
+        Mlb.get_team_id : Return a list of Teams from sport id.
+        Mlb.get_team_coaches : Return a list of Coaches from team id
+        Mlb.get_team_roster : Return a list of Players from team id
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_teams()
+        [Team, Team, Team]
         """
 
         params = {'sportId': sport_id}
@@ -250,6 +193,20 @@ class Mlb:
         Returns
         -------
         Team
+            returns a Team from team id
+
+        See Also
+        --------
+        Mlb.get_teams : Return a list of Teams from sport id.
+        Mlb.get_team_id : Return a list of team ids from name.
+        Mlb.get_team_coaches : Return a list of Coaches from team id
+        Mlb.get_team_roster : Return a list of Players from team id
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_team(133)
+        Team
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}')
@@ -269,7 +226,21 @@ class Mlb:
 
         Returns
         -------
-        List[ints]
+        list of ints
+            returns a list of matching team ids
+
+        See Also
+        --------
+        Mlb.get_teams : Return a list of Teams from sport id.
+        Mlb.get_team : Return a Team from id
+        Mlb.get_team_coaches : Return a list of Coaches from team id
+        Mlb.get_team_roster : Return a list of Players from team id
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_team_id("Oakland Athletics")
+        [133]
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='teams')
@@ -293,7 +264,19 @@ class Mlb:
 
         Returns
         -------
-        List[Player]
+        list of players
+
+        See Also
+        --------
+        Mlb.get_teams : Return a list of Teams from sport id.
+        Mlb.get_team : Return a Team from id
+        Mlb.get_team_coaches : Return a list of Coaches from team id
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_team_roster(133)
+        [Player, Player, Player]
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/roster')
@@ -316,7 +299,20 @@ class Mlb:
 
         Returns
         -------
-        List[Coach]
+        list of Coaches
+            returns a list of Coaches
+
+        See Also
+        --------
+        Mlb.get_teams : Return a list of Teams from sport id.
+        Mlb.get_team : Return a Team from id
+        Mlb.get_team_roster : Return a list of Players from team id
+        
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_team_coaches(133)
+        [Coach, Coach, Coach]
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/coaches')
@@ -328,7 +324,7 @@ class Mlb:
 
         return coaches
 
-    def get_schedule(self, start_date: str = None, end_date: str = None) -> Union[Schedule, None]:
+    def get_schedule(self, start_date: str = None, end_date: str = None, sport_id: int = 1) -> Union[Schedule, None]:
         """
         return the schedule created from the included params.
 
@@ -343,17 +339,33 @@ class Mlb:
             Start date
         end_date : str "yyyy-mm-dd"
             End date
+        spord_id : int
+            spord id of schedule defaults to 1
 
         Returns
         -------
         Schedule
+            returns the Schedule for the date
+
+        See Also
+        --------
+        Mlb.get_schedule_today : Return schedule for today
+        Mlb.get_schedule_date : Return schedule for date
+        Mlb.get_schedule_date_range : Return schedule between date
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_schedule(start_date="2021-08-01", end_date="2021-08-11")
+        Schedule
+
         """
 
         # default to today if not set
         start_date = datetime.date.today().strftime("%Y-%m-%d") if start_date is None else start_date
         end_date = datetime.date.today().strftime("%Y-%m-%d") if end_date is None else end_date
 
-        params = {'sportId': '1', 'startDate': start_date, 'endDate': end_date}
+        params = {'sportId': sport_id, 'startDate': start_date, 'endDate': end_date}
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='schedule', ep_params=params)
 
@@ -361,21 +373,39 @@ class Mlb:
         # can sometimes be an empty list when there are no scheduled game for the date(s).
         # Only check for existance 'dates' key for this reason.
 
-        if 'dates' in mlb_data.data:
+        if 'dates' in mlb_data.data and mlb_data.data['dates']:
             return Schedule(**mlb_data.data)
 
-    def get_schedule_today(self) -> Union[Schedule, None]:        
+    def get_schedule_today(self, sport_id: int = 1) -> Union[Schedule, None]:        
         """
         return the schedule for today
+
+        Parameters
+        ----------
+        spord_id : int
+            sport id of the schedule
 
         Returns
         -------
         Schedule
+            returns todays schedule
+
+        See Also
+        --------
+        Mlb.get_schedule : Return schedule for dates
+        Mlb.get_schedule_date : Return schedule for date
+        Mlb.get_schedule_date_range : Return schedule between date
+        
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_schedule_today()
+        Schedule
         """
 
-        return self.get_schedule()
+        return self.get_schedule(sport_id=sport_id)
 
-    def get_schedule_date(self, date) -> Union[Schedule, None]:
+    def get_schedule_date(self, date, sport_id: int = 1) -> Union[Schedule, None]:
         """
         return the schedule for a specific date
 
@@ -383,15 +413,30 @@ class Mlb:
         ----------
         date : str "yyyy-mm-dd"
             Date
+        sport_id : int
+            sport id of the schedule
 
         Returns
         -------
         Schedule
+            returns the schedule for given date
+
+        See Also
+        --------
+        Mlb.get_schedule : Return schedule for dates
+        Mlb.get_schedule_today : Return schedule for today
+        Mlb.get_schedule_date_range : Return schedule between date
+        
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_schedule_date("2022-07-03")
+        Schedule
         """
 
-        return self.get_schedule(start_date=date, end_date=date)
+        return self.get_schedule(start_date=date, end_date=date, sport_id=sport_id)
 
-    def get_schedule_date_range(self, start_date: str, end_date: str) -> Union[Schedule, None]:
+    def get_schedule_date_range(self, start_date: str, end_date: str, sport_id: int = 1) -> Union[Schedule, None]:
         """
         return the schedule for a range of dates
 
@@ -401,13 +446,26 @@ class Mlb:
             Start date
         end_date : str "yyyy-mm-dd"
             End date
+        sport_id : int
+            sport id of the schedule
 
         Returns
         -------
         Schedule
+
+        See Also
+        --------
+        Mlb.get_schedule : Return schedule for dates
+        Mlb.get_schedule_today : Return schedule for today
+        Mlb.get_schedule_date : Return schedule for date
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_schedule_date_range(start_date="2021-08-01", end_date="2021-08-11")
         """
 
-        return self.get_schedule(start_date=start_date, end_date=end_date)
+        return self.get_schedule(start_date=start_date, end_date=end_date, sport_id=sport_id)
 
     def get_game(self, game_id) -> Union[Game, None]:
         """
@@ -421,6 +479,13 @@ class Mlb:
         Returns
         -------
         Game
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1_1.get(endpoint=f'game/{game_id}/feed/live')
@@ -440,6 +505,13 @@ class Mlb:
         Returns
         -------
         Plays
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/playByPlay')
@@ -459,6 +531,13 @@ class Mlb:
         Returns
         -------
         Linescore
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/linescore')
@@ -478,6 +557,13 @@ class Mlb:
         Returns
         -------
         BoxScore
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/boxscore')
@@ -499,6 +585,13 @@ class Mlb:
         Returns
         -------
         List[int]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         scheduled_games = self.get_schedule(date, date)
@@ -536,6 +629,13 @@ class Mlb:
         Returns
         -------
         List[int]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         todays_date = datetime.date.today()
@@ -549,6 +649,13 @@ class Mlb:
         Returns
         -------
         List[int]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         tomorrows_date = datetime.date.today() + datetime.timedelta(days=1)
@@ -562,6 +669,13 @@ class Mlb:
         Returns
         -------
         List[int]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         yesterdays_date = datetime.date.today() - datetime.timedelta(days=1)
@@ -579,6 +693,13 @@ class Mlb:
         Returns
         -------
         Venue
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         params = {'hydrate': ['location', 'fieldInfo', 'timezone']}
@@ -596,6 +717,13 @@ class Mlb:
         Returns
         -------
         List[Venue]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='venues')
@@ -618,6 +746,13 @@ class Mlb:
         Returns
         -------
         List[int]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='venues')
@@ -639,10 +774,16 @@ class Mlb:
         ----------
         sport_id : int
 
-
         Returns
         -------
         Sport
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}')
@@ -659,6 +800,13 @@ class Mlb:
         Returns
         -------
         List[Sport]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='sports')
@@ -681,6 +829,13 @@ class Mlb:
         Returns
         -------
         List[int]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='sports')
@@ -701,6 +856,13 @@ class Mlb:
         Returns
         -------
         League
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'league/{league_id}')
@@ -717,6 +879,13 @@ class Mlb:
         Returns
         -------
         List[League]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='league')
@@ -739,6 +908,13 @@ class Mlb:
         Returns
         -------
         List[int]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='league')
@@ -764,6 +940,13 @@ class Mlb:
         Returns
         -------
         Division
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'divisions/{divisionid}')
@@ -780,6 +963,13 @@ class Mlb:
         Returns
         -------
         List[Division]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='divisions')
@@ -802,6 +992,13 @@ class Mlb:
         Returns
         -------
         List[int]
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='divisions')
@@ -840,6 +1037,13 @@ class Mlb:
         Returns
         -------
         Attendance
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
         required_args = {'teamId': team_id, 'leagueId': league_id, 'leagueListId': league_list_id}
 
@@ -870,6 +1074,14 @@ class Mlb:
         Returns
         -------
         object
+
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
 
         get_func = getattr(self, 'get_'+str(mlb_object.__class__.__name__).lower())
@@ -893,6 +1105,13 @@ class Mlb:
         Returns
         -------
         splits: dict
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
@@ -916,6 +1135,13 @@ class Mlb:
         Returns
         -------
         splits: dict
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
@@ -939,6 +1165,13 @@ class Mlb:
         Returns
         -------
         splits: dict
+
+        See Also
+        --------
+
+        Examples
+        --------
+        >>> mlb = Mlb()
         """
         mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
