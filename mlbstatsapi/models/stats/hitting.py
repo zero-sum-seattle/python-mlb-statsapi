@@ -239,11 +239,6 @@ class OpponentsFacedHitting(Splits):
     fieldingteam: Union[Team, dict]
     pitcher: Union[Pitcher, dict]
 
-    def __post_init__(self):
-        self.batter = Batter(**self.batter) if self.batter else self.batter
-        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
-
-
 @dataclass
 class HittingSabermetrics(Splits):
     """
@@ -396,9 +391,6 @@ class HittingPlayLog(Splits):
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
-        self.opponent = Team(**self.opponent)
 
 
 @dataclass(kw_only=True)
@@ -445,9 +437,6 @@ class HittingPitchLog(Splits):
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
-        self.opponent = Team(**self.opponent)
 
 
 @dataclass(kw_only=True)
@@ -584,13 +573,9 @@ class HittingVsTeam(Splits, SimpleHittingStat):
     """
     _stat = ['vsTeam']
     opponent: Union[Team, dict]
-    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
-    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
 
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
-        self.batter = Batter(**self.batter) if self.batter else self.batter
-        self.opponent = Team(**self.opponent)
 
 
 @dataclass(kw_only=True)
@@ -611,13 +596,8 @@ class HittingVsTeamTotal(Splits, SimpleHittingStat):
     """
     _stat = ['vsTeamTotal']
     opponent: Union[Team, dict]
-    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
-    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
-
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
-        self.batter = Batter(**self.batter) if self.batter else self.batter
-        self.opponent = Team(**self.opponent)
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
 
 
 @dataclass(kw_only=True)
@@ -634,11 +614,6 @@ class HittingVsTeam5Y(Splits, SimpleHittingStat):
     opponent: Union[Team, dict]
     batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
-
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
-        self.batter = Batter(**self.batter) if self.batter else self.batter
-        self.opponent = Team(**self.opponent)
 
 
 @dataclass(kw_only=True)
@@ -658,11 +633,6 @@ class HittingVsPlayer(Splits, SimpleHittingStat):
     batter: Union[Batter, dict]
     opponent: Optional[Union[Team, dict]] = field(default_factory=dict)
 
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
-        self.opponent = Team(**self.opponent) if self.opponent else self.opponent
-
 
 @dataclass(kw_only=True)
 class HittingVsPlayerTotal(Splits, SimpleHittingStat):
@@ -681,11 +651,6 @@ class HittingVsPlayerTotal(Splits, SimpleHittingStat):
     batter: Union[Batter, dict]
     opponent: Optional[Union[Team, dict]] = field(default_factory=dict)
 
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
-        self.opponent = Team(**self.opponent) if self.opponent else self.opponent
-
 
 @dataclass(kw_only=True)
 class HittingVsPlayer5Y(Splits, SimpleHittingStat):
@@ -703,7 +668,3 @@ class HittingVsPlayer5Y(Splits, SimpleHittingStat):
     batter: Union[Person, dict]
     opponent: Optional[Union[Team, dict]] = field(default_factory=dict)
 
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
-        self.opponent = Team(**self.opponent) if self.opponent else self.opponent

@@ -8,6 +8,7 @@ from mlbstatsapi.models.game import Game
 from .stats import Splits, CodeDesc, Count
 from .hitting import SimpleHittingStat
 
+
 @dataclass
 class SimplePitching:
     """
@@ -75,6 +76,7 @@ class SimplePitching:
     battersfaced: Optional[int] = None
     inheritedrunners: Optional[int] = None
     inheritedrunnersscored: Optional[int] = None
+
 
 @dataclass
 class AdvancedPitching:
@@ -309,9 +311,6 @@ class PitchingGameLog(Splits, SimplePitching):
     opponent: Union[Team, dict]
     _stat = ['gameLog']
 
-    def __post_init__(self):
-        self.opponent = Team(**self.opponent)
-
 
 @dataclass
 class PlayDetails:
@@ -417,9 +416,6 @@ class PitchingLog(Splits):
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
-        self.opponent = Team(**self.opponent)
 
 
 @dataclass(kw_only=True)
@@ -471,9 +467,6 @@ class PitchingPlayLog(Splits):
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
-        self.opponent = Team(**self.opponent)
 
 
 @dataclass(kw_only=True)
@@ -629,7 +622,7 @@ class PitchingRankings(Splits, SimplePitching):
     gametype : str
     """
     _stat = ['rankingsByYear']
-    outspitched: int
+    outspitched: Optional[int] = None
 
 
 @dataclass(kw_only=True)
@@ -651,10 +644,6 @@ class PitchingOpponentsFaced(Splits):
     batter: Union[Batter, dict]
     battingteam: Union[Team, dict]
 
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
-        self.battingteam = Team(**self.battingteam)
 
 @dataclass(kw_only=True)
 class PitchingExpectedStatistics(Splits):
@@ -686,14 +675,10 @@ class PitchingVsTeam(Splits, SimpleHittingStat):
     ----------
     """
     _stat = ['vsTeam']
-    opponent: Union[Person, dict]
-    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
-    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)    
+    opponent: Union[Team, dict]
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)    
 
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
-        self.batter = Batter(**self.batter) if self.batter else self.batter
-        self.opponent = Team(**self.opponent)
 
 @dataclass(kw_only=True)
 class PitchingVsTeamTotal(Splits, SimpleHittingStat):
@@ -704,14 +689,10 @@ class PitchingVsTeamTotal(Splits, SimpleHittingStat):
     ----------
     """
     _stat = ['vsTeamTotal']
-    opponent: Union[Person, dict]
-    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
-    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
+    opponent: Union[Team, dict]
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
 
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
-        self.batter = Batter(**self.batter) if self.batter else self.batter
-        self.opponent = Team(**self.opponent)
 
 @dataclass(kw_only=True)
 class PitchingVsTeam5Y(Splits, SimpleHittingStat):
@@ -722,13 +703,9 @@ class PitchingVsTeam5Y(Splits, SimpleHittingStat):
     ----------
     """
     _stat = ['vsTeam5Y']
-    opponent: Union[Person, dict]
-    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
-    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
+    opponent: Union[Team, dict]
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
 
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
-        self.batter = Batter(**self.batter) if self.batter else self.batter
-        self.opponent = Team(**self.opponent)
 
 

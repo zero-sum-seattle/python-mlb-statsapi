@@ -100,10 +100,6 @@ class Splits:
     league: Optional[Union[League, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
-        self.team = Team(**self.team) if self.team else self.team
-        self.player = Person(**self.player) if self.player else self.player
-        self.sport = Sport(**self.sport) if self.sport else self.sport
-        self.league = League(**self.league) if self.league else self.league
         self.position = Position(**self.position) if self.position else self.position
 
 
