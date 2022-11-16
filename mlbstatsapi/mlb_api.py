@@ -301,7 +301,7 @@ class Mlb:
 
         if 'roster' in mlb_data.data and mlb_data.data['roster']:
             for player in mlb_data.data['roster']:
-                players.append(Player(**mlb_module.transform_mlb_data(player, ['person'])))
+                players.append(Player(**mlb_module.merge_keys(player, ['person'])))
 
         return players
 
@@ -324,7 +324,7 @@ class Mlb:
 
         if 'roster' in mlb_data.data and mlb_data.data['roster']:
             for coach in mlb_data.data['roster']:
-                coaches.append(Coach(**mlb_module.transform_mlb_data(coach, ['person'])))
+                coaches.append(Coach(**mlb_module.merge_keys(coach, ['person'])))
 
         return coaches
 
