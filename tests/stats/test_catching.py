@@ -49,10 +49,6 @@ class TestCatchingStats(unittest.TestCase):
         self.assertTrue(stats['catching']['season'])
         self.assertTrue(stats['catching']['career'])
 
-        # let's make sure they aren't empty
-        self.assertNotEqual(stats['catching']['season'], [])
-        self.assertNotEqual(stats['catching']['career'], [])
-
         # let's pull out a object and test it
         season = stats['catching']['season'][0]
         career = stats['catching']['career'][0]
@@ -79,10 +75,6 @@ class TestCatchingStats(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['catching']['season'])
         self.assertTrue(stats['catching']['career'])
-
-        # let's make sure they aren't empty
-        self.assertNotEqual(stats['catching']['season'], [])
-        self.assertNotEqual(stats['catching']['career'], [])
 
         # let's pull out a object and test it
         season = stats['catching']['season'][0]

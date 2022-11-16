@@ -49,10 +49,6 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue(stats['fielding']['season'])
         self.assertTrue(stats['fielding']['career'])
 
-        # let's make sure they aren't empty
-        self.assertNotEqual(stats['fielding']['season'], [])
-        self.assertNotEqual(stats['fielding']['career'], [])
-
         # let's pull out a object and test it
         season = stats['fielding']['season'][0]
         career = stats['fielding']['career'][0]
@@ -81,11 +77,7 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue(stats['fielding']['career'])
         self.assertTrue(stats['fielding']['seasonadvanced'])
         self.assertTrue(stats['fielding']['careeradvanced'])
-        # let's make sure they aren't empty
-        self.assertNotEqual(stats['fielding']['season'], [])
-        self.assertNotEqual(stats['fielding']['career'], [])
-        self.assertNotEqual(stats['fielding']['seasonadvanced'], [])
-        self.assertNotEqual(stats['fielding']['careeradvanced'], [])
+
         # let's pull out a object and test it
         season = stats['fielding']['season'][0]
         career = stats['fielding']['career'][0]

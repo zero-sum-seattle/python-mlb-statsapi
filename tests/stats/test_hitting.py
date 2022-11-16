@@ -54,11 +54,7 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue(stats['hitting']['career'])
         self.assertTrue(stats['hitting']['seasonadvanced'])
         self.assertTrue(stats['hitting']['careeradvanced'])
-        # let's make sure they aren't empty
-        self.assertNotEqual(stats['hitting']['season'], [])
-        self.assertNotEqual(stats['hitting']['career'], [])
-        self.assertNotEqual(stats['hitting']['seasonadvanced'], [])
-        self.assertNotEqual(stats['hitting']['careeradvanced'], [])
+
         # let's pull out a object and test it
         season = stats['hitting']['season'][0]
         career = stats['hitting']['career'][0]
@@ -90,12 +86,6 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue(stats['hitting']['career'])
         self.assertTrue(stats['hitting']['seasonadvanced'])
         self.assertTrue(stats['hitting']['careeradvanced'])
-
-        # let's make sure they aren't empty
-        self.assertNotEqual(stats['hitting']['season'], [])
-        self.assertNotEqual(stats['hitting']['career'], [])
-        self.assertNotEqual(stats['hitting']['seasonadvanced'], [])
-        self.assertNotEqual(stats['hitting']['careeradvanced'], [])
 
         # let's pull out a object and test it
         season = stats['hitting']['season'][0]
