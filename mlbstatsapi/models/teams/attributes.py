@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class TeamRecord:
     """
@@ -7,31 +8,31 @@ class TeamRecord:
 
     Attributes 
     ----------
-    gamesplayed : int
+    gamesplayed: int
         Number of game played by team
-    wildcardgamesback : str
+    wildcardgamesback: str
         Number of game back from wildcard
-    leaguegamesback : str
+    leaguegamesback: str
         Number of league games back
-    springleaguegamesback : str
+    springleaguegamesback: str
         Number of game back in spring league
-    sportgamesback : str
+    sportgamesback: str
         Number of games back in sport
-    divisiongamesback : str
+    divisiongamesback: str
         Number of games back in division
-    conferencegamesback : str
+    conferencegamesback: str
         Number of games back in conference
-    leaguerecord : Dict
+    leaguerecord: Dict
         Record in league
-    records : Dict
+    records: Dict
         Records
-    divisionleader : bool
+    divisionleader: bool
         Is this team a divison leader
-    wins : int
+    wins: int
         Number of wins
-    losses : int
+    losses: int
         Number of losses
-    winningpercentage : str
+    winningpercentage: str
         Winning percentage
     """
     gamesplayed:            int
