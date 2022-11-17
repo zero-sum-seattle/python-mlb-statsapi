@@ -16,9 +16,9 @@ class LinescoreTeamScoreing:
         Team errors for this inning
     leftonbase : int
         Player left on base for this inning
-    runs : int = None
+    runs : int
         Team runs for this inning
-    iswinner : bool = None
+    iswinner : bool
         If team is winner
     """
     hits: int

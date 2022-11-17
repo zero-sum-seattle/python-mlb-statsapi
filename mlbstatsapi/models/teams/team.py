@@ -16,55 +16,55 @@ class Team:
 
     Attributes
     ----------
-    id: int
+    id : int
         id number of the team
-    name: str
+    name : str
         name of the team
-    link: str
+    link : str
         The API link for the team
-    name: str
+    name : str
         The name of the team
-    springleague: dict
+    springleague : dict
         The spring league of the team
-    allstarstatus: str
+    allstarstatus : str
         The all status status of the team
-    season: str
+    season : str
         The team's current season
-    venue: dict
+    venue : dict
         The team's home venue
-    springvenue: dict
+    springvenue : dict
         The team's spring venue
-    teamcode: str
+    teamcode : str
         team code 
-    filecode: str
+    filecode : str
         filecode name of the team
-    abbreviation: str
+    abbreviation : str
         The abbreviation of the team name
-    teamname: str
+    teamname : str
         The team name 
-    locationname: str
+    locationname : str
         The location of the team
-    firstyearofplay: str
+    firstyearofplay : str
         The first year the team began play
-    league: dict
+    league : dict
         The league of the team
-    division: dict
+    division : dict
         The division the team is in
-    sport: dict
+    sport : dict
         The sport of the team
-    shortname: str
+    shortname : str
         The shortname of the team
-    record: dict
+    record : dict
         The record of the team
-    franchisename: str
+    franchisename : str
         The franchisename of the team
-    clubname: str
+    clubname : str
         The clubname of the team
-    active: str
+    active : str
         Active status of the team
-    parentorgname: str
+    parentorgname : str
         The name of the parent team or org
-    parentorgid: str
+    parentorgid : str
         The id of the partent team or org
     """
     id: int

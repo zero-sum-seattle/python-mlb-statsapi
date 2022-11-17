@@ -5,13 +5,60 @@ from mlbstatsapi.models.people import Position
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 
-from .stats import Splits
+from .stats import Stat
+
 
 @dataclass
-class SimpleFielding:
+class SimpleFieldingSplit:
     """
-    A class to represent a simple fielding statistics
+    A class to represent a simple fielding split
 
+    gamesplayed: int
+        The number of games played 
+    gamesstarted: int
+        The number of games started
+    caughtstealing: int
+        The number of runners caught stealing
+    stolenbases: int
+        The number of stolen bases 
+    stolenbasepercentage: str
+        The stolen base percentage
+    assists: int
+        The number of assists
+    putouts: int
+        The number of put outs
+    errors: int
+        The number of errors commited
+    chances: int
+        The number of chances
+    fielding: str
+        The number of fielding
+    rangefactorpergame: str
+        Range rating per game.
+        see also: https://www.mlb.com/glossary/advanced-stats/range-factor
+    rangefactorper9inn: str
+        Range factor per 9 innings.
+        see also: https://www.mlb.com/glossary/advanced-stats/range-factor
+    innings: str
+        The number of innings played.
+    games: int
+        The number of games played.
+    passedball: int
+        The number of passed balls.
+    doubleplays: int
+        The number of double plays.
+    tripleplays: int
+        The number of triple plays.
+    catcherera: str
+        The catcher ERA of the fielding stat.
+    catchersinterference: int
+        The number of times catchers interfence was commited.
+    wildpitches: int
+        The number of wild pitches.
+    throwingerrors: int
+        The number of throwing errors.
+    pickoffs: int
+        The number of pick offs.
     """
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
     gamesplayed: Optional[int] = None
@@ -39,11 +86,13 @@ class SimpleFielding:
 
 
 @dataclass(kw_only=True)
-class FieldingSeasonAdvanced(Splits, SimpleFielding):
+class FieldingSeasonAdvanced(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding season Advanced statistic
     Attributes
     ----------
+    position : Position
+        The position of the player
     """
     _stat = ['seasonAdvanced']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
@@ -51,12 +100,15 @@ class FieldingSeasonAdvanced(Splits, SimpleFielding):
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
+
 @dataclass(kw_only=True)
-class FieldingCareerAdvanced(Splits, SimpleFielding):
+class FieldingCareerAdvanced(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding career Advanced statistic
     Attributes
     ----------
+    position : Position
+        The position of the player
     """
     _stat = ['careerAdvanced']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
@@ -64,13 +116,16 @@ class FieldingCareerAdvanced(Splits, SimpleFielding):
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
+
 @dataclass(kw_only=True)
-class FieldingSingleSeasonAdvanced(Splits, SimpleFielding):
+class FieldingSingleSeasonAdvanced(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding season statistic
-    # TODO Probably doesn't work either
+
     Attributes
     ----------
+    position : Position
+        The position of the player
     """
     _stat = ['statsSingleSeasonAdvanced']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
@@ -80,12 +135,14 @@ class FieldingSingleSeasonAdvanced(Splits, SimpleFielding):
 
 
 @dataclass(kw_only=True)
-class FieldingSeason(Splits, SimpleFielding):
+class FieldingSeason(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding season statistic
 
     Attributes
     ----------
+    position : Position
+        The position of the player
     """
     _stat = ['season']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
@@ -95,12 +152,14 @@ class FieldingSeason(Splits, SimpleFielding):
 
 
 @dataclass(kw_only=True)
-class FieldingSingleSeason(Splits, SimpleFielding):
+class FieldingSingleSeason(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding season statistic
 
     Attributes
     ----------
+    position : Position
+        The position of the player
     """
     _stat = ['statsSingleSeason']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
@@ -110,12 +169,14 @@ class FieldingSingleSeason(Splits, SimpleFielding):
 
 
 @dataclass(kw_only=True)
-class FieldingCareer(Splits, SimpleFielding):
+class FieldingCareer(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding career statistic
 
     Attributes
     ----------
+    position : Position
+        The position of the player
     """
     _stat = ['career', 'careerRegularSeason']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
@@ -125,12 +186,14 @@ class FieldingCareer(Splits, SimpleFielding):
 
 
 @dataclass(kw_only=True)
-class FieldingCareerPlayoffs(Splits, SimpleFielding):
+class FieldingCareerPlayoffs(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding career playoff statistic
 
     Attributes
     ----------
+    position : Position
+        The position of the player
     """
     _stat = ['careerPlayoffs']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
@@ -140,31 +203,35 @@ class FieldingCareerPlayoffs(Splits, SimpleFielding):
 
 
 @dataclass(kw_only=True)
-class FieldingHomeAndAway(Splits, SimpleFielding):
+class FieldingHomeAndAway(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding homeAndAway statistic
 
     Attributes
     ----------
+    ishome : bool
+        A bool value for is the game at home
     """
     _stat = ['homeAndAway']
     ishome: bool
 
 
 @dataclass(kw_only=True)
-class FieldingHomeAndAwayPlayoffs(Splits, SimpleFielding):
+class FieldingHomeAndAwayPlayoffs(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding homeAndAwayPlayoffs statistic
 
     Attributes
     ----------
+    ishome : bool
+        A bool value for is the game at home
     """
     _stat = ['homeAndAwayPlayoffs']
     ishome: bool
 
 
 @dataclass(kw_only=True)
-class FieldingYearByYear(Splits, SimpleFielding):
+class FieldingYearByYear(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding yearByYear statistic
 
@@ -175,7 +242,7 @@ class FieldingYearByYear(Splits, SimpleFielding):
 
 
 @dataclass(kw_only=True)
-class FieldingYearByYearAdvanced(Splits, SimpleFielding):
+class FieldingYearByYearAdvanced(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding yearByYearAdvanced statistic
 
@@ -186,7 +253,7 @@ class FieldingYearByYearAdvanced(Splits, SimpleFielding):
 
 
 @dataclass(kw_only=True)
-class FieldingYearByYearPlayoffs(Splits, SimpleFielding):
+class FieldingYearByYearPlayoffs(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding season statistic
 
@@ -197,31 +264,35 @@ class FieldingYearByYearPlayoffs(Splits, SimpleFielding):
 
 
 @dataclass(kw_only=True)
-class FieldingWinLoss(Splits, SimpleFielding):
+class FieldingWinLoss(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding winLoss statistic
 
     Attributes
     ----------
+    iswin : bool
+        is the game a win
     """
     _stat = ['winLoss']
     iswin: bool
 
 
 @dataclass(kw_only=True)
-class FieldingWinLossPlayoffs(Splits, SimpleFielding):
+class FieldingWinLossPlayoffs(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding winLossPlayoffs statistic
 
     Attributes
     ----------
+    iswin : bool
+        is the game a win
     """
     _stat = ['winLossPlayoffs']
     iswin: bool
 
 
 @dataclass(kw_only=True)
-class FieldingByDayOfWeek(Splits, SimpleFielding):
+class FieldingByDayOfWeek(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding byDayOfWeek statistic
 
@@ -233,12 +304,14 @@ class FieldingByDayOfWeek(Splits, SimpleFielding):
 
 
 @dataclass(kw_only=True)
-class FieldingByDateRangeAdvanced(Splits, SimpleFielding):
+class FieldingByDateRangeAdvanced(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding byMonth stat
 
     Attributes
     ----------
+    position : Position
+        The position of the player
     """
     _stat = ['byDateRangeAdvanced']
     position: Union[Position, dict] = field(default_factory=dict)
@@ -248,31 +321,35 @@ class FieldingByDateRangeAdvanced(Splits, SimpleFielding):
 
 
 @dataclass(kw_only=True)
-class FieldingByMonth(Splits, SimpleFielding):
+class FieldingByMonth(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding byMonth stat
 
     Attributes
     ----------
+    month : int
+        the month of the stat
     """
     _stat = ['byMonth']
     month: int
 
 
 @dataclass(kw_only=True)
-class FieldingByMonthPlayoffs(Splits, SimpleFielding):
+class FieldingByMonthPlayoffs(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding byMonthPlayoffs stat
 
     Attributes
     ----------
+    month : int
+        the month of the stat
     """
     _stat = ['byMonthPlayoffs']
     month: int
 
 
 @dataclass(kw_only=True)
-class FieldingLastXGames(Splits, SimpleFielding):
+class FieldingLastXGames(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding lastXGames stat
 
@@ -283,7 +360,7 @@ class FieldingLastXGames(Splits, SimpleFielding):
 
 
 @dataclass(kw_only=True)
-class FieldingGameLog(Splits, SimpleFielding):
+class FieldingGameLog(Stat, SimpleFieldingSplit):
     """
     A class to represent a fielding gameLog stats
 

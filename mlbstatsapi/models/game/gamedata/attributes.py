@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
 
+
 @dataclass
 class GameDataGame:
     """
@@ -42,6 +43,7 @@ class GameDataGame:
     season: str
     seasondisplay: str
 
+
 @dataclass
 class GameDatetime:
     """
@@ -68,6 +70,7 @@ class GameDatetime:
     daynight: str
     time: str
     ampm: str
+
 
 @dataclass
 class GameStatus:
@@ -99,6 +102,7 @@ class GameStatus:
     abstractgamecode: str
     reason: Optional[str] = None
 
+
 @dataclass
 class GameTeams:
     """
@@ -118,6 +122,7 @@ class GameTeams:
         self.away = Team(**self.away)
         self.home = Team(**self.home)
 
+
 @dataclass
 class GameWeather:
     """
@@ -135,6 +140,7 @@ class GameWeather:
     condition: str
     temp: str
     wind: str
+
 
 @dataclass
 class GameInfo:
@@ -157,6 +163,7 @@ class GameInfo:
     gamedurationminutes: int
     delaydurationminutes: int
 
+
 @dataclass
 class ReviewInfo:
     """
@@ -172,6 +179,7 @@ class ReviewInfo:
     used: int
     remaining: int
 
+
 @dataclass
 class GameReview:
     """
@@ -186,13 +194,14 @@ class GameReview:
     home : ReviewInfo
         Home team review info
     """
-    haschallenges:  bool
-    away:           Union[ReviewInfo, dict]
-    home:           Union[ReviewInfo, dict]
+    haschallenges: bool
+    away: Union[ReviewInfo, dict]
+    home: Union[ReviewInfo, dict]
 
     def __post_init__(self):
         self.away = ReviewInfo(**self.away)
         self.home = ReviewInfo(**self.home)
+
 
 @dataclass
 class GameFlags:
@@ -220,6 +229,7 @@ class GameFlags:
     awayteamperfectgame: bool
     hometeamnohitter: bool
     hometeamperfectgame: bool
+
 
 @dataclass
 class GameProbablePitchers:

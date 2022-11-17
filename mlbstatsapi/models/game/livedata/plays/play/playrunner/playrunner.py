@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from .attributes import RunnerMovement, RunnerDetails, RunnerCredits
 
+
 @dataclass
 class PlayRunner:
     """
@@ -10,11 +11,11 @@ class PlayRunner:
 
     Attributes
     ----------
-    movement : RunnerMovement
+    movement: RunnerMovement
         Runner movements
-    details : RunnerDetails
+    details: RunnerDetails
         Runner details
-    credits : List[RunnerCredits]
+    credits: List[RunnerCredits]
         Runner credits
     """
     movement: Union[RunnerMovement, dict]

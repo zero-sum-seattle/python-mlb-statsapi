@@ -25,29 +25,29 @@ class PlayEvent:
         Is this event a pitch
     type : str
         Type
-    playid : str = None
+    playid : str
         Unique play id ?
-    pitchnumber : int = None
+    pitchnumber : int
         Pitch number
-    actionplayid : str = None
+    actionplayid : str
         Unique action play id ?
-    isbaserunningplay : bool = None
+    isbaserunningplay : bool
         Is there base running this play
-    issubstitution : bool = None
+    issubstitution : bool
         Is this a substitution
-    battingorder : str = None
+    battingorder : str
         A weird batting order string that only has appeared once
-    count : PlayCount  = None
+    count : PlayCount
         Count
-    pitchdata : PitchData  = None
+    pitchdata : PitchData
         Pitch data
-    hitdata : HitData  = None
+    hitdata : HitData
         Hit data
-    player : Person  = None
+    player : Person
         Player
-    position : PrimaryPosition  = None
+    position : PrimaryPosition
         Position
-    replacedplayer : Person  = None
+    replacedplayer : Person
         Replaced player
     """
     details: Union[PlayEventDetails, dict]

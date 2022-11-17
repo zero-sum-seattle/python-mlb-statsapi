@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from mlbstatsapi.models.people import Person, Position
 
+
 @dataclass
 class RunnerCredits:
     """
@@ -10,11 +11,11 @@ class RunnerCredits:
 
     Attributes
     ----------
-    player : Person
+    player: Person
         The player
-    position : RunnerCreditsPosition
+    position: RunnerCreditsPosition
         The position
-    credit : str
+    credit: str
         The credit
     """
     player: Union[Person, dict]
@@ -25,6 +26,7 @@ class RunnerCredits:
         self.player = Person(**self.player)
         self.position = Position(**self.position)
 
+
 @dataclass
 class RunnerMovement:
     """
@@ -32,17 +34,17 @@ class RunnerMovement:
 
     Attributes
     ----------
-    isout : bool
+    isout: bool
         Was the running movement an out
-    outnumber : int
+    outnumber: int
         What is the outnumber
-    originbase : str = None
+    originbase: str
         Original base
-    start : str = None
+    start: str
         What base the runner started from
-    end : str = None
+    end: str
         What base the runner ended at
-    outbase : str = None
+    outbase: str
         Base runner was made out
     """
     isout: bool
@@ -52,6 +54,7 @@ class RunnerMovement:
     end: Optional[str] = None
     outbase: Optional[str] = None
 
+
 @dataclass
 class RunnerDetails:
     """
@@ -59,25 +62,25 @@ class RunnerDetails:
 
     Attributes
     ----------
-    event : str
+    event: str
         Runner event
-    eventtype : str
+    eventtype: str
         Runner event type
-    runner : Person
+    runner: Person
         Who the runner is
-    isscoringevent :  bool
+    isscoringevent:  bool
         Was this a scoring events
-    rbi : bool
+    rbi: bool
         Was this a rbi
-    earned : bool
+    earned: bool
         Was it earned
-    teamunearned : bool
+    teamunearned: bool
         Was it unearned
-    playindex : int
+    playindex: int
         Play index
-    movementreason : str = None
+    movementreason: str
         Reason for the movement
-    responsiblepitcher : Person = None
+    responsiblepitcher: Person
         WHo was the responsible pitcher
     """
     event: str

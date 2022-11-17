@@ -16,7 +16,8 @@ def merge_keys(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -> dict:
 
     Returns
     -------
-    transformed_dict
+    dict
+        returns a dict that has been transformed
     """
 
     if isinstance(mlb_keys, List):
@@ -46,7 +47,8 @@ def transform_mlb_data(split_data: dict, stat_type: str):
         dict of params to pass
     Returns
     -------
-    stat_splits: dict
+    dict
+        returns a dict that has been transformed
     """
     stat_log_type = ['playLog', 'pitchLog']
 
@@ -76,7 +78,8 @@ def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Sp
 
     Returns
     -------
-    splits
+    list
+        returns a list of stat objects
     """
 
     splits = []
@@ -84,9 +87,9 @@ def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Sp
     stat_module = f"mlbstatsapi.models.stats.{stat_group}"
     stat_module = importlib.import_module(stat_module)
 
-    for name, obj in inspect.getmembers(stat_module):
+    for name, obj in inspect.getmembers(stat_module, predicate=inspect.isclass):
         # type_ attribute holds the stat_type of the class
-        if inspect.isclass(obj) and (hasattr(obj, '_stat') and stat_type in obj._stat):
+        if hasattr(obj, '_stat') and stat_type in obj._stat:
             for split in split_data:
                 split = transform_mlb_data(split, stat_type)
                 splits.append(obj(_type=stat_type, _group=stat_group, **split))
@@ -103,7 +106,8 @@ def create_split_data(stat_data: dict, param_groups: list):
         dict of params to pass
     Returns
     -------
-    stat_splits: dict
+    dict
+        returns a dict of stats
     """
     stat_splits = {}
 
@@ -132,7 +136,8 @@ def build_group_list(params) -> List[str]:
 
     Returns
     -------
-    transformed_dict
+    list
+        returns a list of stat groups
     """
     no_group_types = ('hotColdZones', 'sprayChart', 'pitchArsenal')
 

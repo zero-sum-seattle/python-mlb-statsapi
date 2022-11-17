@@ -10,11 +10,11 @@ class MetaData:
     ----------
     wait : int
         No idea what this wait signifies
-    timeStamp : str
+    timestamp : str
         The timeStamp
-    gameEvents : List[str]
+    gameevents : List[str]
         Current game events for this game
-    logicalEvents : List[str]
+    logicalevents : List[str]
         Current logical events for this game
     """
     wait: int

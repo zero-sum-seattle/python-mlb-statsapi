@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional, Union
 from mlbstatsapi.models.teams import Team
 
+
 @dataclass
 class AttendanceHighLowGameContent:
     """
@@ -12,6 +13,7 @@ class AttendanceHighLowGameContent:
         games content endpoint link
     """
     link: str
+
 
 @dataclass
 class AttendanceHighLowGame:
@@ -36,6 +38,7 @@ class AttendanceHighLowGame:
     def __post_init__(self):
         self.content = AttendanceHighLowGameContent(**self.content)
 
+
 @dataclass
 class AttendenceGameType:
     """
@@ -50,6 +53,7 @@ class AttendenceGameType:
     id: str
     description: str
 
+
 @dataclass
 class AttendanceRecords:
     """
@@ -58,7 +62,7 @@ class AttendanceRecords:
     ----------
     openingstotal : int
         Total amount of openings
-    openingstotalaway : int 
+    openingstotalaway : int
         Total amount of opening away games
     openingstotalhome : int
         Total amount of opening home games
@@ -72,31 +76,31 @@ class AttendanceRecords:
         Total amount of home games
     year : str
         Year as a string
-    attendanceaverageaway : int = None
+    attendanceaverageaway : int
         Average attendance for away games
-    attendanceaveragehome : int = None
+    attendanceaveragehome : int
         Average attendance for home games
     attendanceaverageytd : int
         Average attendance year to date
-    attendancehigh : int = None
+    attendancehigh : int
         Attendance High number
-    attendancehighdate : str = None 
+    attendancehighdate : str
         Attendance high date
-    attendancehighgame : AttendanceHighLowGame = None
+    attendancehighgame : AttendanceHighLowGame
         Attendance high game
-    attendancelow : int = None
+    attendancelow : int
         Attendance low number
-    attendancelowdate : str = None 
+    attendancelowdate : str
          Attendance low date
-    attendancelowgame : AttendanceHighLowGame = None
+    attendancelowgame : AttendanceHighLowGame
          Attendance low game
-    attendanceopeningaverage : int = None
+    attendanceopeningaverage : int
          Attendance opening average
     attendancetotal : int
         Attendance total
-    attendancetotalaway : int = None
+    attendancetotalaway : int
         Attendance total away
-    attendancetotalhome : int = None
+    attendancetotalhome : int
         Attendance total home
     gametype : AttendenceGameType
         Game type
@@ -104,7 +108,7 @@ class AttendanceRecords:
         Team
     """
     openingstotal: int
-    openingstotalaway: int 
+    openingstotalaway: int
     openingstotalhome: int
     openingstotallost: int
     gamestotal: int
@@ -118,7 +122,7 @@ class AttendanceRecords:
     attendanceaverageaway: Optional[int] = None
     attendanceaveragehome: Optional[int] = None
     attendancehigh: Optional[int] = None
-    attendancehighdate: Optional[str ] = None
+    attendancehighdate: Optional[str] = None
     attendancehighgame: Optional[Union[AttendanceHighLowGame, dict]] = None
     attendancelow: Optional[int] = None
     attendancelowdate: Optional[str] = None
@@ -132,6 +136,7 @@ class AttendanceRecords:
         self.attendancelowgame = AttendanceHighLowGame(**self.attendancelowgame) if self.attendancelowgame else self.attendancelowgame
         self.gameType = AttendenceGameType(**self.gametype)
         self.team = Team(**self.team)
+
 
 @dataclass
 class AttendanceTotals:
@@ -147,9 +152,9 @@ class AttendanceTotals:
         Total amount of opening games lost
     openingstotalytd : int
         Total amount of opening games year to date
-    attendanceaverageaway : int = None
+    attendanceaverageaway : int
         Average away game attendance
-    attendanceaveragehome : int = None
+    attendanceaveragehome : int
         Average home game attendance
     attendanceaverageytd : int
         Average attendance year to date
