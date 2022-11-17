@@ -1195,8 +1195,9 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
-        groups = mlb_module.build_group_list(params)
-        splits = mlb_module.create_split_data(mlb_data, groups)
+        if 'stats' in mlb_data.data and mlb_data.data['stats']:
+            groups = mlb_module.build_group_list(params)
+            splits = mlb_module.create_split_data(mlb_data.data['stats'], groups)
 
         return splits
 
@@ -1231,8 +1232,9 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
-        groups = mlb_module.build_group_list(params)
-        splits = mlb_module.create_split_data(mlb_data, groups)
+        if 'stats' in mlb_data.data and mlb_data.data['stats']:
+            groups = mlb_module.build_group_list(params)
+            splits = mlb_module.create_split_data(mlb_data.data['stats'], groups)
 
         return splits
 
@@ -1263,7 +1265,8 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
-        groups = mlb_module.build_group_list(params)
-        splits = mlb_module.create_split_data(mlb_data, groups)
+        if 'stats' in mlb_data.data and mlb_data.data['stats']:
+            groups = mlb_module.build_group_list(params)
+            splits = mlb_module.create_split_data(mlb_data, groups)
 
         return splits

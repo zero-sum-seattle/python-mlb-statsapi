@@ -84,21 +84,17 @@ def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Sp
     stat_module = f"mlbstatsapi.models.stats.{stat_group}"
     stat_module = importlib.import_module(stat_module)
 
-    # if splits is empty return empty list
-    if not ('splits' in split_data and split_data['splits']):
-        return splits
-
     for name, obj in inspect.getmembers(stat_module):
         # type_ attribute holds the stat_type of the class
         if inspect.isclass(obj) and (hasattr(obj, '_stat') and stat_type in obj._stat):
-            for split in split_data['splits']:
+            for split in split_data:
                 split = transform_mlb_data(split, stat_type)
                 splits.append(obj(_type=stat_type, _group=stat_group, **split))
 
     return splits
 
 
-def create_split_data(mlb_data: dict, groups: list):
+def create_split_data(stat_data: dict, param_groups: list):
     """
     function that loops through stat information
     Parameters
@@ -110,17 +106,19 @@ def create_split_data(mlb_data: dict, groups: list):
     stat_splits: dict
     """
     stat_splits = {}
-    if 'stats' in mlb_data.data and mlb_data.data['stats']:
-        for stats in mlb_data.data['stats']:
 
-            t, g = get_stat_attributes(stats)
-            for group in groups:
-                if g == group:
-                    # checking if we need to init stat group key
-                    if g not in stat_splits:
-                        stat_splits[g] = {}        
+    for stat in stat_data:
+        stat_type, stat_group = get_stat_attributes(stat)
+
+        for group in param_groups:
+            if stat_group == group:
+                # checking if we need to init stat group key
+                if stat_group not in stat_splits:
+                    stat_splits[stat_group] = {}        
                     # get splits from stats
-                    stat_splits[g][t.lower()] = return_splits(stats, t, g)
+                if 'splits' in stat and stat['splits']:
+                    stat_splits[stat_group][stat_type.lower()] = return_splits(stat['splits'], stat_type, stat_group)
+
     return stat_splits
 
 
