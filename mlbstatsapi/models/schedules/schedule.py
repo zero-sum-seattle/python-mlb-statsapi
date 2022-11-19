@@ -70,7 +70,7 @@ class Schedule:
             for date in self.dates:
                 for game in date.games:
                     gamestatus = game.status                    
-                    if all(gamestatuses[status] == getattr(gamestatus,f'{status}') for status in gamestatuses if gameStatuses[status]):
+                    if all(gamestatuses[status] == getattr(gamestatus,f'{status}') for status in gamestatuses if gamestatuses[status]):
                         gameids.append(game.gamepk)
             return gameids
 
