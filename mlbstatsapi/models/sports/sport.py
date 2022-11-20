@@ -1,5 +1,5 @@
 ﻿from typing import Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, InitVar
 
 @dataclass
 class Sport:

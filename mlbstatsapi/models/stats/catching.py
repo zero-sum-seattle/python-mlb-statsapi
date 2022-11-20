@@ -1,4 +1,4 @@
-﻿from dataclasses import dataclass, field
+﻿from dataclasses import dataclass
 from typing import Optional, Union
 
 from mlbstatsapi.models.teams import Team
@@ -44,6 +44,7 @@ class SimpleCatching:
     sacflies: Optional[int] = None
     passedball: Optional[int] = None
 
+
 @dataclass(kw_only=True)
 class CatchingSeason(Splits, SimpleCatching):
     """
@@ -52,7 +53,8 @@ class CatchingSeason(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'season' ]
+    _stat = ['season']
+
 
 @dataclass(kw_only=True)
 class CatchingSingleSeason(Splits, SimpleCatching):
@@ -62,7 +64,8 @@ class CatchingSingleSeason(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'statsSingleSeason' ]
+    _stat = ['statsSingleSeason']
+
 
 @dataclass(kw_only=True)
 class CatchingYearByYearPlayoffs(Splits, SimpleCatching):
@@ -72,7 +75,8 @@ class CatchingYearByYearPlayoffs(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'yearByYearPlayoffs' ]
+    _stat = ['yearByYearPlayoffs']
+
 
 @dataclass(kw_only=True)
 class CatchingYearByYear(Splits, SimpleCatching):
@@ -82,7 +86,8 @@ class CatchingYearByYear(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'yearByYear' ]
+    _stat = ['yearByYear']
+
 
 @dataclass(kw_only=True)
 class CatchingProjected(Splits, SimpleCatching):
@@ -92,7 +97,8 @@ class CatchingProjected(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'projectedRos' ]
+    _stat = ['projectedRos']
+
 
 @dataclass(kw_only=True)
 class CatchingCareer(Splits, SimpleCatching):
@@ -102,7 +108,8 @@ class CatchingCareer(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'career' ]
+    _stat = ['career']
+
 
 @dataclass(kw_only=True)
 class CatchingCareerRegularSeason(Splits, SimpleCatching):
@@ -112,7 +119,8 @@ class CatchingCareerRegularSeason(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'careerRegularSeason' ]
+    _stat = ['careerRegularSeason']
+
 
 @dataclass(kw_only=True)
 class CatchingGameLog(Splits, SimpleCatching):
@@ -122,12 +130,13 @@ class CatchingGameLog(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'gameLog' ]
+    _stat = ['gameLog']
     ishome: bool
     iswin: bool
     date: str
     game: Union[Game, dict]
     opponent: Union[Team, dict]
+
 
 @dataclass(kw_only=True)
 class CatchingLastXGames(Splits, SimpleCatching):
@@ -137,7 +146,8 @@ class CatchingLastXGames(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'lastXGames' ]
+    _stat = ['lastXGames']
+
 
 @dataclass(kw_only=True)
 class CatchingByDateRange(Splits, SimpleCatching):
@@ -147,7 +157,8 @@ class CatchingByDateRange(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'byDateRange' ]
+    _stat = ['byDateRange']
+
 
 @dataclass(kw_only=True)
 class CatchingByDayOfWeek(Splits, SimpleCatching):
@@ -157,8 +168,9 @@ class CatchingByDayOfWeek(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'byDayOfWeek' ]
+    _stat = ['byDayOfWeek']
     dayofweek: int
+
 
 @dataclass(kw_only=True)
 class CatchingHomeAndAway(Splits, SimpleCatching):
@@ -168,8 +180,9 @@ class CatchingHomeAndAway(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'homeAndAway' ]
+    _stat = ['homeAndAway']
     ishome: bool
+
 
 @dataclass(kw_only=True)
 class CatchingWinLoss(Splits, SimpleCatching):
@@ -179,6 +192,6 @@ class CatchingWinLoss(Splits, SimpleCatching):
     Attributes
     ----------
     """
-    _stat = [ 'winLoss' ]
+    _stat = ['winLoss']
     iswin: bool
 

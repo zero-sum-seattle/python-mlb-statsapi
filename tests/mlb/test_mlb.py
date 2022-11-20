@@ -47,19 +47,6 @@ class TestMlbDataApi(unittest.TestCase):
         # result.data should be None
         self.assertEqual(mlbdata.data, {})
 
-    def test_get_object(self):
-        """mlb get_object should return a poopulated object"""
-        test_sport = Sport(id=1, link="/api/v1/sports/1")
-        poopulated_sport = self.mlb.get_object(test_sport)
-        self.assertIsInstance(poopulated_sport, Sport)
-        self.assertEqual(poopulated_sport.id, 1)
-        self.assertEqual(poopulated_sport.link, "/api/v1/sports/1")
-        self.assertEqual(poopulated_sport.name, 'Major League Baseball')
-        self.assertEqual(poopulated_sport.code, 'mlb')
-        self.assertEqual(poopulated_sport.abbreviation, 'MLB')
-        self.assertEqual(poopulated_sport.sortorder, 11)
-        self.assertEqual(poopulated_sport.activestatus, True)
-
 
 class TestMlbGetPeople(unittest.TestCase):
     @classmethod
@@ -321,10 +308,6 @@ class TestMlbGetGame(unittest.TestCase):
     def test_get_todays_games_id(self):
         todaysGames = self.mlb.get_todays_game_ids()
         self.assertIsInstance(todaysGames, List)
-
-    def test_get_schedule(self):
-        schedule = self.mlb.get_schedule()
-        self.assertIsInstance(schedule, Schedule)
 
     def test_get_attendance(self):
         params = {'season': 2022}
