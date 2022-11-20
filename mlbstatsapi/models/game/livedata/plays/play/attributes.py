@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class PlayAbout:
     """
@@ -42,6 +43,7 @@ class PlayAbout:
     hasout: bool
     captivatingindex: int
 
+
 @dataclass
 class PlayResult:
     """
@@ -71,6 +73,7 @@ class PlayResult:
     rbi: int
     awayscore: int
     homescore: int
+
 
 @dataclass
 class PlayReviewDetails:

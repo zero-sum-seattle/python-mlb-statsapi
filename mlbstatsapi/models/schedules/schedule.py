@@ -12,13 +12,13 @@ class Schedule:
     ----------
     copyright : str
         Copyright
-    totalItems : int 
+    totalitems : int 
         Total items in schedule
-    totalEvents : int
+    totalevents : int
         Total events in schedule
-    totalGames : int
+    totalgames : int
         Total games in schedule
-    totalGamesInProgress : int
+    totalgamesinprogress : int
         Total games in progress in schedule
     dates : ScheduleDates
         List of dates with games in schedule
@@ -40,39 +40,39 @@ class Schedule:
 
         Parameters
         ----------
-        abstractGameState : str = None
-
-        codedGameState : str = None
-
-        detailedState : str = None
-
-        statusCode : str = None
-
-        reason : str = None
-
-        abstractGameCode : str = None
+        abstractgamestate : str
+            Abstract game state
+        codedgamestate : str
+            coded game state
+        detailedstate : str
+            details of the game state
+        statuscode : str
+            status code of the game
+        reason : str
+            reason of the game
+        abstractgamecode : str
 
         Returns
         -------
-        List[int]
+        list of ints
         """       
-        gameStatuses = {'abstractgamestate':abstractgamestate,
-                        'codedgamestate':codedgamestate,
-                        'detailedstate':detailedstate,
-                        'statuscode':statuscode,
-                        'reason':reason,
-                        'abstractgamecode':abstractgamecode}
-        gameIds = []
+        gamestatuses = {'abstractgamestate': abstractgamestate,
+                        'codedgamestate': codedgamestate,
+                        'detailedstate': detailedstate,
+                        'statuscode': statuscode,
+                        'reason': reason,
+                        'abstractgamecode': abstractgamecode}
+        gameids = []
 
-        if all(gameStatuses[status] == None for status in gameStatuses):
-            return gameIds 
+        if all(gamestatuses[status] == None for status in gamestatuses):
+            return gameids 
         else:
             for date in self.dates:
                 for game in date.games:
-                    gameStatus = game.status                    
-                    if all(gameStatuses[status] == getattr(gameStatus,f'{status}') for status in gameStatuses if gameStatuses[status]):
-                        gameIds.append(game.gamepk)
-            return gameIds
+                    gamestatus = game.status                    
+                    if all(gamestatuses[status] == getattr(gamestatus,f'{status}') for status in gamestatuses if gamestatuses[status]):
+                        gameids.append(game.gamepk)
+            return gameids
 
     def get_games_inProgress(self) -> List[int]:
         return self.get_games_with_status(abstractgamestate='Live')

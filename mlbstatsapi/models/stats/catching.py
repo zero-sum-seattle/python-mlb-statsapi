@@ -4,16 +4,71 @@ from typing import Optional, Union
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 
-from .stats import Splits
+from .stats import Stat
 
 
 @dataclass
-class SimpleCatching:
+class SimpleCatchingSplit:
     """
-    A class to represent a simple catching statistics
+    A class to represent a simple catching split
 
-    Used for the following stat types:
-    season
+    gamesplayed : int
+        The number of games played by the catcher
+    runs : int
+        The number of runs given up while catching.
+    homeruns : int
+        The number of home runs given up while catching.
+    strikeouts : int
+        The number of strike outs while catching.
+    baseonballs : int
+        The number of base on balls while catching.
+    intentionalwalks : int
+        The number of intentional walks while catching.
+    hits : int
+        The number of hits while catching.
+    hitbypitch : int
+        The number of batters hit by a pitch while catching.
+    avg : str
+        The batting average while catching.
+    atbats : int
+        The number of at bats while catching.
+    obp : str
+        The on base percentage while catching.
+    slg : str
+        The slugging percentage while catching.
+    ops : str
+        The on-base slugging while catching.
+        see also: https://www.mlb.com/glossary/standard-stats/on-base-plus-slugging
+    caughtstealing : int
+        The number of runners caught stealing by the catcher.
+    stolenbases : int
+        The number of stolen bases while catching.
+    stolenbasepercentage : str
+        The stolen base percentage against the catcher. 
+    earnedruns : int
+        The earned run amount against the catcher.
+    battersfaced : int
+        The number of batters faced while catching.
+    gamespitched : int
+        The number of games pitched while catching.
+    hitbatsmen : int
+        The number of batters hit by pitches while catching.
+    wildpitches : int
+        The number of wild pitches while catching.
+    pickoffs : int
+        The number of pick offs while catching.
+    totalbases : int
+        The total number of bases
+    strikeoutwalkratio : str
+        The strike out to walk ratio while catching.
+    catchersinterference : int
+        The number of times catcher interference commited
+    sacbunts : int
+        The number of sac bunts performed while catching.
+    sacflies : int
+        The number of sac flies while catching.
+    passedball : int
+        The number of passed balls while catching.
     """
     gamesplayed: Optional[int] = None
     runs: Optional[int] = None
@@ -46,7 +101,7 @@ class SimpleCatching:
 
 
 @dataclass(kw_only=True)
-class CatchingSeason(Splits, SimpleCatching):
+class CatchingSeason(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -57,7 +112,7 @@ class CatchingSeason(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingSingleSeason(Splits, SimpleCatching):
+class CatchingSingleSeason(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -68,7 +123,7 @@ class CatchingSingleSeason(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingYearByYearPlayoffs(Splits, SimpleCatching):
+class CatchingYearByYearPlayoffs(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -79,7 +134,7 @@ class CatchingYearByYearPlayoffs(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingYearByYear(Splits, SimpleCatching):
+class CatchingYearByYear(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -90,7 +145,7 @@ class CatchingYearByYear(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingProjected(Splits, SimpleCatching):
+class CatchingProjected(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -101,7 +156,7 @@ class CatchingProjected(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingCareer(Splits, SimpleCatching):
+class CatchingCareer(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -112,7 +167,7 @@ class CatchingCareer(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingCareerRegularSeason(Splits, SimpleCatching):
+class CatchingCareerRegularSeason(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -123,7 +178,7 @@ class CatchingCareerRegularSeason(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingGameLog(Splits, SimpleCatching):
+class CatchingGameLog(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -139,7 +194,7 @@ class CatchingGameLog(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingLastXGames(Splits, SimpleCatching):
+class CatchingLastXGames(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -150,7 +205,7 @@ class CatchingLastXGames(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingByDateRange(Splits, SimpleCatching):
+class CatchingByDateRange(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -161,7 +216,7 @@ class CatchingByDateRange(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingByDayOfWeek(Splits, SimpleCatching):
+class CatchingByDayOfWeek(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -173,7 +228,7 @@ class CatchingByDayOfWeek(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingHomeAndAway(Splits, SimpleCatching):
+class CatchingHomeAndAway(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 
@@ -185,7 +240,7 @@ class CatchingHomeAndAway(Splits, SimpleCatching):
 
 
 @dataclass(kw_only=True)
-class CatchingWinLoss(Splits, SimpleCatching):
+class CatchingWinLoss(Stat, SimpleCatchingSplit):
     """
     A class to represent a catching winLoss statistic
 

@@ -7,6 +7,7 @@ from mlbstatsapi.models.game.livedata.boxscore import BoxScore
 
 from .attributes import GameLeaders, GameDecisions
 
+
 @dataclass
 class LiveData:
     """

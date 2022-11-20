@@ -3,6 +3,7 @@ from dataclasses import dataclass, field, InitVar
 
 from .attributes import PitchHand, Position, BatSide, Status
 
+
 @dataclass
 class Person:
     """
@@ -12,13 +13,96 @@ class Person:
     ----------
     id : int
         id number of the person
-    full_name: str
+    full_name : str
         full_name of the person
+    primaryposition : str
+        PrimaryPosition of the Person
+    pitchhand : str
+        PitchHand of the Person
+    batside : str
+        BatSide of the Person
+    fullname : str
+        full name of the Person
+    firstname : str
+        First name of the Person
+    lastname : str
+        Last name of the Person
+    primarynumber : str
+        Primary number of the Person
+    birthdate : str
+        Birth date of the Person
+    currentteam : str
+        The current Team of the Person
+    currentage : str
+        The current age of the Person
+    birthcity : str
+        The birthcity of the Person
+    birthstateprovince : str
+        The province of the birth state
+    height : str
+        The height of the Person
+    weight : str
+        The weight of the Person
+    active : str
+        The active status of the Person
+    usename : str
+        The use name of the Person
+    middlename : str
+        The middle name of the Person
+    boxscorename : str
+        The box score name of the Person
+    nickname : str
+        The nickname of the Person
+    draftyear : int
+        The draft year of the Person
+    mlbdebutdate : str
+        The MLB debut date of the Person
+    namefirstlast : str
+        The first and last name of the Person
+    nameslug : str
+        The name slug of the Person
+    firstlastname : str
+        The first and last name of the Person
+    lastfirstname : str
+        The last and first name of the Person
+    lastinitname : str
+        The last init name of the Person
+    initlastname : str
+        The init last name of the Person
+    fullfmlname : str
+        The full fml name of the Person
+    fulllfmname : str
+        The full lfm name of the Person
+    birthcountry : str
+        The birth country of the Person
+    pronunciation : str
+        The pronuciation of the Person's name
+    strikezonetop : float
+        The strike zone top of the Person
+    strikezonebottom : float
+        The strike zone bottom of the Person
+    nametitle : str
+        The name title of the Person
+    gender : str
+        The gender of the Person
+    isplayer : bool
+        The player status of the Person
+    isverified : bool
+        The verification of the Person
+    namematrilineal : str
+        The name matrilineal of the Person
+    deathdate : str
+        The death date of the Person
+    deathcity : str
+        The death city of the Person
+    deathcountry : str
+        The death country of the Person
+    lastplayeddate : str
+        The last played date of the Person
     """
 
     id: int
     link: str
-    mlb_class: str = "people"
     primaryposition: Union[Position, Dict[str, Any]] = field(default_factory=dict)
     pitchhand: Union[PitchHand, Dict[str, Any]] = field(default_factory=dict)
     batside: Union[BatSide, Dict[str, Any]] = field(default_factory=dict)
@@ -67,6 +151,7 @@ class Person:
         self.pitchhand = PitchHand(**self.pitchhand) if self.pitchhand else self.pitchhand
         self.batside = BatSide(**self.batside) if self.batside else self.batside
 
+
 @dataclass(kw_only=True)
 class Player(Person):
     """
@@ -74,11 +159,11 @@ class Player(Person):
 
     Attributes
     ----------
-    jerseyNumber : str
+    jerseynumber : str
         id number of the person
     status : 
         Status of the player
-    parentTeamId : int
+    parentteamid : int
         parent team id
     """
     jerseynumber: str
@@ -89,6 +174,7 @@ class Player(Person):
     def __post_init__(self, position: dict):
         self.primaryposition = Position(**position)
 
+
 @dataclass(kw_only=True)
 class Coach(Person):
     """
@@ -96,26 +182,34 @@ class Coach(Person):
 
     Attributes
     ----------
-    jerseyNumber : str
+    jerseynumber : str
         id number of the person
     job : str
         job of the coach
-    jobId : str
+    jobid : str
         job id of the coach
     title : str
         title of the coach
-    parentTeamId : int
+    parentteamid : int
     """
     jerseynumber: str
     job: str
     jobid: str
     title: str
 
+
 @dataclass(kw_only=True)
 class Batter(Person):
+    """
+    A class to represent a Batter.
+    """
     pass
+
 
 @dataclass(kw_only=True)
 class Pitcher(Person):
+    """
+    A class to represent a Pitcher
+    """
     pass
 

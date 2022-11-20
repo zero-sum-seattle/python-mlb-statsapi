@@ -12,7 +12,7 @@ from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi.models.attendances import Attendance
-from mlbstatsapi.models.stats import Splits
+from mlbstatsapi.models.stats import Stat
 
 from .mlb_dataadapter import MlbDataAdapter
 from . import mlb_module
@@ -1164,13 +1164,13 @@ class Mlb:
         if 'records' in mlb_data.data and mlb_data.data['records']:
             return Attendance(**mlb_data.data)
 
-    def get_team_stats(self, team_id: int, params: dict):
+    def get_team_stats(self, team_id: int, params: dict) -> dict:
         """
         returns a split stat data for a team
 
         Parameters
         ----------
-        params: dict
+        params : dict
             dict of params to pass
         
         Returns
@@ -1201,13 +1201,13 @@ class Mlb:
 
         return splits
 
-    def get_player_stats(self, person_id: int, params: dict):
+    def get_player_stats(self, person_id: int, params: dict) -> dict:
         """
         returns stat data for a team
 
         Parameters
         ----------
-        params: dict
+        params : dict
             dict of params to pass
 
         Returns
@@ -1238,18 +1238,18 @@ class Mlb:
 
         return splits
 
-    def get_stats(self, params: dict) -> Union['Splits', dict]:
+    def get_stats(self, params: dict) -> dict:
         """
         return a split object
 
         Parameters
         ----------
-        params: dict
+        params : dict
             dict of params to pass
 
         Returns
         -------
-        splits: dict
+        splits : dict
 
         See Also
         --------

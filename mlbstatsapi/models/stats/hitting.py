@@ -5,12 +5,89 @@ from mlbstatsapi.models.people import Person, Position, Batter, Pitcher
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 
-from .stats import Splits, CodeDesc, Count
+from .stats import Stat, CodeDesc, Count
+
 
 @dataclass
-class AdvancedHittingStat:
+class AdvancedHittingSplit:
     """
     A class to represent a advanced hitting statistics
+
+    Attributes
+    ----------
+    plateappearances : int
+        The number of plate appearances.
+    totalbases : int
+        The total number of bases.
+    leftonbase : int
+        The amount of runners left on base.
+    sacbunts : int
+        The amount of sac bunts.
+    sacflies : int
+        The amount of sac flies.
+    babip : str
+        Batting Average on Balls in Play.
+        see here: https://www.mlb.com/glossary/advanced-stats/babip
+    extrabasehits : int
+        The amount of extra base hits. e.g doubles, triples, homeruns
+        see here: https://www.mlb.com/glossary/standard-stats/extra-base-hit
+    hitbypitch : int
+        The amount of times the batter has been hit by a pitch.
+    gidp : int
+        The amount of hits that lead to a double play.
+        see here: https://www.mlb.com/glossary/standard-stats/ground-into-double-play
+    gidpopp : int
+        The amount of GIDP opportunities. 
+    numberofpitches : int
+        The number of pitches the batter has faced.
+        see here: https://www.mlb.com/glossary/standard-stats/number-of-pitches
+    pitchesperplateappearance : str
+        The avg amount of pitches per plate appearance for the hitter.
+        see here: https://www.mlb.com/glossary/advanced-stats/pitches-per-plate-appearance
+    walksperplateappearance : str
+        The avg walks per plate appearance.
+        see here: https://www.mlb.com/glossary/advanced-stats/walk-rate
+    strikeoutsperplateappearance : str
+        The amount of strike outs per plate appearance.
+        see here: https://www.mlb.com/glossary/advanced-stats/plate-appearances-per-strikeout
+    homerunsperplateappearance : str
+        The amount of home runs per plate appearance.
+        see here: https://en.wikipedia.org/wiki/At_bats_per_home_run
+    walksperstrikeout : str
+        The amount of walks per strike out.
+        see here: https://www.mlb.com/glossary/advanced-stats/strikeout-to-walk-ratio
+    iso : str
+        Isolasted power.
+        see also: https://www.mlb.com/glossary/advanced-stats/isolated-power
+    reachedonerror : int
+        The amount of times the batter has reached base on a error.
+        see also: https://www.mlb.com/glossary/standard-stats/reached-on-error
+    walkoffs : int
+        The amount of times the batter has walked off a game.
+        see also: https://www.mlb.com/glossary/standard-stats/walk-off
+    flyouts : int
+        The amount of flyouts for the batter.
+        see also: https://www.mlb.com/glossary/standard-stats/flyout
+    totalswings : int
+        The amount of swings the batter has taken at the plate.
+    swingandmisses : int
+        The amount of swing and misses the batter has taken at the plate.
+    ballsinplay : int
+        The amount of balls the batter has put in play.
+    popouts : int
+        The amount of popouts the batter has put in play.
+    lineouts : int
+        The amount of lineouts the batter has put in play.
+    groundouts : int
+        The amount of groundouts the batter has hit into.
+    flyhits : int
+        The amount of fly hits the batter has hit.
+    pophits : int
+        The amount of pop hits the batter has hit.
+    groundhits : int
+        The amount of ground hits the batter has hit.
+    linehits : int
+        The amount of line hits the the batter has hit.
     """
     plateappearances: Optional[int] = None
     totalbases: Optional[int] = None
@@ -43,10 +120,85 @@ class AdvancedHittingStat:
     groundhits: Optional[int] = None
     linehits: Optional[int] = None
 
+
 @dataclass
-class SimpleHittingStat:
+class SimpleHittingSplit:
     """
     A class to represent a simple hitting statistics
+    
+    gamesplayed : int
+        The number of games played by the batter.
+    groundouts : int
+        The amount of groundouts hit by the batter.
+    airouts : int
+        The amount of air hits by the batter.
+    runs : int
+        The amount of runs plated by the batter.
+    doubles : int
+        The amount of doubles hit by the batter.
+    triples : int
+        The amount of triples hit by the batter.
+    homeruns : int
+        The amount of homeruns hit by the batter.
+    strikeouts : int
+        The amount of strikeouts for the batter.
+    baseonballs : int
+        The amount of base on balls (walks) for the batter. 
+    intentionalwalks : int
+        The number of intentional walks for the batter.
+    hits : int
+        The number of hits for the batter.
+    hitbypitch : int
+        The number of pitches the batter has been hit by.
+    avg : str
+        The batting avg of the batter.
+    atbats : int
+        The number of at bats of the batter.
+    obp : str
+        The on base percentage of the batter.
+        see also: https://www.mlb.com/glossary/standard-stats/on-base-percentage
+    slg : str
+        The slugging percentage of the batter.
+        see also: https://www.mlb.com/glossary/standard-stats/slugging-percentage
+    ops : str
+        The on-base plug slugging of the batter.
+        see also: https://www.mlb.com/glossary/standard-stats/on-base-plus-slugging
+    caughtstealing : int
+        The amount of times the batter has been caught stealing.
+    stolenbases : int
+        The amount of stolen bases acheived by the batter.
+    stolenbasepercentage : int
+        The stolen base percentage of the batter.
+    groundintodoubleplay : int
+        The number of times the batter has hit into a double play.
+    groundintotripleplay : int
+        The number of times the batter has hit into a triple play.
+    numberofpitches : int
+        The number of pitches the batter has faced. 
+    plateappearances : int
+        The number of plate appearances of the batter. 
+    totalbases : int
+        The number of bases acheived by batter.
+    rbi : int
+        The number of Runs Batted In by the batter.
+        see also: https://www.mlb.com/glossary/standard-stats/runs-batted-in
+    leftonbase : int
+        The number of runners left on base by the batter.
+    sacbunts : int
+        The number of sac bunts performed by the batter.
+    sacflies : int
+        The number of sac flies performed by the batter.
+    babip : str
+        The batting average of balls in play of the batter.
+        see also: https://www.mlb.com/glossary/advanced-stats/babip
+    groundoutstoairouts : int
+        The groundout-to-airout ratio of the batter.
+        see also: https://www.mlb.com/glossary/advanced-stats/babip
+    catchersinterference : int
+        The number of times the batter has reached base due to catchers interference.
+        see also: https://www.mlb.com/glossary/rules/catcher-interference
+    atbatsperhomerun : int
+        The number of bats per home run of the batter.
     """
     gamesplayed: Optional[int] = None
     groundouts: Optional[int] = None
@@ -84,7 +236,7 @@ class SimpleHittingStat:
 
 
 @dataclass(kw_only=True)
-class HittingWinLoss(Splits, SimpleHittingStat):
+class HittingWinLoss(Stat, SimpleHittingSplit):
     """
     A class to represent a hitting winLoss statistic
 
@@ -98,7 +250,7 @@ class HittingWinLoss(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingWinLossPlayoffs(Splits, SimpleHittingStat):
+class HittingWinLossPlayoffs(Stat, SimpleHittingSplit):
     """
     A class to represent a hitting winLoss statistic
 
@@ -112,7 +264,7 @@ class HittingWinLossPlayoffs(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingHomeAndAway(Splits, SimpleHittingStat):
+class HittingHomeAndAway(Stat, SimpleHittingSplit):
     """
     A class to represent a hitting homeAndAway statistic
 
@@ -126,9 +278,9 @@ class HittingHomeAndAway(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingHomeAndAwayPlayoffs(Splits, SimpleHittingStat):
+class HittingHomeAndAwayPlayoffs(Stat, SimpleHittingSplit):
     """
-    A class to represent a hitting homeAndAway statistic
+    A class to represent a hitting homeAndAway Playoff statistic
 
     Attributes
     ----------
@@ -140,7 +292,7 @@ class HittingHomeAndAwayPlayoffs(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingCareer(Splits, SimpleHittingStat):
+class HittingCareer(Stat, SimpleHittingSplit):
     """
     A class to represent a hitting career or careerPlayoffs statistic
 
@@ -152,7 +304,7 @@ class HittingCareer(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingSeason(Splits, SimpleHittingStat):
+class HittingSeason(Stat, SimpleHittingSplit):
     """
     A class to represent a hitting season statistic
 
@@ -163,7 +315,7 @@ class HittingSeason(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingSingleSeason(Splits, SimpleHittingStat):
+class HittingSingleSeason(Stat, SimpleHittingSplit):
     """
     A class to represent a hitting season statistic
 
@@ -174,7 +326,7 @@ class HittingSingleSeason(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingSeasonAdvanced(Splits, AdvancedHittingStat):
+class HittingSeasonAdvanced(Stat, AdvancedHittingSplit):
     """
     A class to represent a hitting season statistic
 
@@ -185,7 +337,7 @@ class HittingSeasonAdvanced(Splits, AdvancedHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingCareerAdvanced(Splits, AdvancedHittingStat):
+class HittingCareerAdvanced(Stat, AdvancedHittingSplit):
     """
     A class to represent a hitting season statistic
 
@@ -196,7 +348,7 @@ class HittingCareerAdvanced(Splits, AdvancedHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingYearByYear(Splits, SimpleHittingStat):
+class HittingYearByYear(Stat, SimpleHittingSplit):
     """
     A class to represent a hitting yearbyyear or yearByYearPlayoffs statistic
 
@@ -207,7 +359,7 @@ class HittingYearByYear(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingYearByYearPlayoffs(Splits, SimpleHittingStat):
+class HittingYearByYearPlayoffs(Stat, SimpleHittingSplit):
     """
     A class to represent a hitting yearByYearPlayoffs statistic
 
@@ -218,7 +370,7 @@ class HittingYearByYearPlayoffs(Splits, SimpleHittingStat):
 
 
 @dataclass
-class OpponentsFacedHitting(Splits):
+class OpponentsFacedHitting(Stat):
     """
     A class to represent a hitting opponentsFaced statistic
 
@@ -240,7 +392,7 @@ class OpponentsFacedHitting(Splits):
     pitcher: Union[Pitcher, dict]
 
 @dataclass
-class HittingSabermetrics(Splits):
+class HittingSabermetrics(Stat):
     """
     A class to represent a hitting sabermetric statistic
 
@@ -254,14 +406,14 @@ class HittingSabermetrics(Splits):
 
 
 @dataclass(kw_only=True)
-class HittingGameLog(Splits, SimpleHittingStat):
+class HittingGameLog(Stat, SimpleHittingSplit):
     """
     A class to represent a gamelog stat for a hitter
 
     Attributes
     ----------
     positionsplayed : List[Position]
-    stat : SimpleHittingStat
+    stat : SimpleHittingSplit
     ishome : bool
         bool to hold ishome
     iswin : bool
@@ -350,7 +502,7 @@ class PlayDetails:
 
 
 @dataclass(kw_only=True)
-class HittingPlayLog(Splits):
+class HittingPlayLog(Stat):
     """
     A class to represent a gamelog stat for a hitter
 
@@ -394,7 +546,7 @@ class HittingPlayLog(Splits):
 
 
 @dataclass(kw_only=True)
-class HittingPitchLog(Splits):
+class HittingPitchLog(Stat):
     """
     A class to represent a gamelog stat for a hitter
 
@@ -440,7 +592,7 @@ class HittingPitchLog(Splits):
 
 
 @dataclass(kw_only=True)
-class HittingLastXGames(Splits, SimpleHittingStat):
+class HittingLastXGames(Stat, SimpleHittingSplit):
     """
     A class to represent a lastXGames statistic
 
@@ -451,7 +603,7 @@ class HittingLastXGames(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingDateRange(Splits, SimpleHittingStat):
+class HittingDateRange(Stat, SimpleHittingSplit):
     """
     A class to represent a byDateRange statistic
 
@@ -462,7 +614,7 @@ class HittingDateRange(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingDateRangeAdvanced(Splits, AdvancedHittingStat):
+class HittingDateRangeAdvanced(Stat, AdvancedHittingSplit):
     """
     A class to represent a byDateRangeAdvanced statistic
 
@@ -473,7 +625,7 @@ class HittingDateRangeAdvanced(Splits, AdvancedHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingDateRangeAdvancedByMonth(Splits, AdvancedHittingStat):
+class HittingDateRangeAdvancedByMonth(Stat, AdvancedHittingSplit):
     """
     A class to represent a byDateRangeAdvanced statistic
 
@@ -484,7 +636,7 @@ class HittingDateRangeAdvancedByMonth(Splits, AdvancedHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingByMonth(Splits, SimpleHittingStat):
+class HittingByMonth(Stat, SimpleHittingSplit):
     """
     A class to represent a byMonth hitting statistic
 
@@ -497,7 +649,7 @@ class HittingByMonth(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingByMonthPlayoffs(Splits, SimpleHittingStat):
+class HittingByMonthPlayoffs(Stat, SimpleHittingSplit):
     """
     A class to represent a yearByYear hitting statistic
 
@@ -512,7 +664,7 @@ class HittingByMonthPlayoffs(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingDayOfWeek(Splits, SimpleHittingStat):
+class HittingDayOfWeek(Stat, SimpleHittingSplit):
     """
     A class to represent a yearByYear hitting statistic
 
@@ -526,7 +678,7 @@ class HittingDayOfWeek(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingDayOfWeekPlayoffs(Splits, SimpleHittingStat):
+class HittingDayOfWeekPlayoffs(Stat, SimpleHittingSplit):
     """
     A class to represent a yearByYear hitting statistic
 
@@ -540,7 +692,7 @@ class HittingDayOfWeekPlayoffs(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingExpectedStatistics(Splits):
+class HittingExpectedStatistics(Stat):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
     Attributes
@@ -561,7 +713,7 @@ class HittingExpectedStatistics(Splits):
 
 
 @dataclass(kw_only=True)
-class HittingVsTeam(Splits, SimpleHittingStat):
+class HittingVsTeam(Stat, SimpleHittingSplit):
     """
     A class to represent a vsTeam hitting statistic
 
@@ -577,9 +729,8 @@ class HittingVsTeam(Splits, SimpleHittingStat):
     pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
 
 
-
 @dataclass(kw_only=True)
-class HittingVsTeamTotal(Splits, SimpleHittingStat):
+class HittingVsTeamTotal(Stat, SimpleHittingSplit):
     """
     A class to represent a vsTeamTotal hitting statistic
 
@@ -601,7 +752,7 @@ class HittingVsTeamTotal(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingVsTeam5Y(Splits, SimpleHittingStat):
+class HittingVsTeam5Y(Stat, SimpleHittingSplit):
     """
     A class to represent a vsTeam5Y hitting statistic
 
@@ -617,7 +768,7 @@ class HittingVsTeam5Y(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingVsPlayer(Splits, SimpleHittingStat):
+class HittingVsPlayer(Stat, SimpleHittingSplit):
     """
     A class to represent a yearByYear hitting statistic
 
@@ -627,6 +778,12 @@ class HittingVsPlayer(Splits, SimpleHittingStat):
 
     Attributes
     ----------
+    pitcher : Pitcher
+        The pitcher of the hitting vsplayer stat
+    batter : Batter
+        The batter of the hitting vsplayer stat
+    opponent : Team
+        The team of the hitting vsplayer stat
     """
     _stat = ['vsPlayer']
     pitcher: Union[Pitcher, dict]
@@ -635,7 +792,7 @@ class HittingVsPlayer(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingVsPlayerTotal(Splits, SimpleHittingStat):
+class HittingVsPlayerTotal(Stat, SimpleHittingSplit):
     """
     A class to represent a yearByYear hitting statistic
 
@@ -645,6 +802,12 @@ class HittingVsPlayerTotal(Splits, SimpleHittingStat):
 
     Attributes
     ----------
+    pitcher : Pitcher
+        The pitcher of the hitting vsplayer stat
+    batter : Batter
+        The batter of the hitting vsplayer stat
+    opponent : Team
+        The team of the hitting vsplayer stat
     """
     _stat = ['vsPlayerTotal']
     pitcher: Union[Pitcher, dict]
@@ -653,15 +816,22 @@ class HittingVsPlayerTotal(Splits, SimpleHittingStat):
 
 
 @dataclass(kw_only=True)
-class HittingVsPlayer5Y(Splits, SimpleHittingStat):
+class HittingVsPlayer5Y(Stat, SimpleHittingSplit):
     """
     A class to represent a yearByYear hitting statistic
 
     This class is for the stat type vsPlayer*
 
     Requires the param opposingPlayerId set
+
     Attributes
     ----------
+    pitcher : Pitcher
+        The pitcher of the hitting vsplayer stat
+    batter : Batter
+        The batter of the hitting vsplayer stat
+    opponent : Team
+        The team of the hitting vsplayer stat
     """
     _stat = ['vsPlayer5Y']
     pitcher: Union[Pitcher, dict]

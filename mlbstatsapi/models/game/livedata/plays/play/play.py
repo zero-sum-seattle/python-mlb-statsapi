@@ -8,6 +8,7 @@ from mlbstatsapi.models.game.livedata.plays.play.playevent import PlayEvent
 
 from .attributes import PlayAbout, PlayResult, PlayReviewDetails
 
+
 @dataclass
 class Play:
     """

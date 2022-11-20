@@ -60,7 +60,7 @@ class Count:
 
 
 @dataclass(kw_only=True)
-class Splits:
+class Stat:
     """
     Base class for stats
 
@@ -104,7 +104,7 @@ class Splits:
 
 
 @dataclass(kw_only=True)
-class PitchArsenal(Splits):
+class PitchArsenal(Stat):
     """
     A class to represent a pitcharsenal stat for a hitter and pitcher
 
@@ -145,7 +145,7 @@ class ZoneCodes:
 
 
 @dataclass(kw_only=True)
-class HotColdZones(Splits):
+class HotColdZones(Stat):
     """
     A class to represent a hot cold zone statistic
 
@@ -165,7 +165,7 @@ class HotColdZones(Splits):
 
 
 @dataclass(kw_only=True)
-class SprayCharts(Splits):
+class SprayCharts(Stat):
     """
     A class to represent a spraychart statistic
 
@@ -195,7 +195,7 @@ class SprayCharts(Splits):
 
 
 @dataclass(kw_only=True)
-class OutsAboveAverage(Splits):
+class OutsAboveAverage(Stat):
     """
     A class to represent a outs above average statistic
 

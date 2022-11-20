@@ -2,6 +2,7 @@ from typing import Union
 from dataclasses import dataclass
 from mlbstatsapi.models.people import Person
 
+
 @dataclass
 class GameDecisions:
     """
@@ -22,6 +23,7 @@ class GameDecisions:
         self.winner = Person(**self.winner)
         self.loser = Person(**self.loser)
 
+
 @dataclass
 class GameLeaders:
     """
@@ -31,12 +33,12 @@ class GameLeaders:
 
     Attributes
     ----------
-    hitdistance : Dict
-
-    hitspeed : Dict
-
-    pitchspeed : Dict
-
+    hitdistance : dict
+        hit distance
+    hitspeed : dict
+        hit speed
+    pitchspeed : dict
+        pitch speed
     """
     # Dont know what this populated looks like. Every game ive seen its three empty dicts?
     hitdistance: dict

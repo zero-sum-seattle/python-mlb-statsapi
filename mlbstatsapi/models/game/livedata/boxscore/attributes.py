@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
 
+
 @dataclass
 class BoxScoreVL:
     """
@@ -12,11 +13,12 @@ class BoxScoreVL:
     ----------
     label : str
         The label for this peice of info
-    value : str = None
+    value : str
         The info associated with this label
     """
     label: str
     value: str = None
+
 
 @dataclass
 class BoxScoreTeamInfo:
@@ -35,6 +37,7 @@ class BoxScoreTeamInfo:
 
     def __post_init__(self):
         self.fieldlist = [BoxScoreVL(**fieldlists) for fieldlists in self.fieldlist]
+
 
 @dataclass
 class BoxScoreTeam:
@@ -86,9 +89,9 @@ class BoxScoreTeams:
 
     Attributes
     ----------
-    home: BoxScoreTeam
+    home : BoxScoreTeam
         Home team boxscore information
-    away: BoxScoreTeam
+    away : BoxScoreTeam
         Away team boxscore information
     """
     home: Union[BoxScoreTeam, dict]

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from mlbstatsapi.models.game.livedata.plays.play import Play
 from mlbstatsapi.models.game.livedata.plays.playbyinning import PlayByInning
 
+
 @dataclass
 class Plays:
     """
