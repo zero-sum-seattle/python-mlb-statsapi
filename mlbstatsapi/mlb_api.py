@@ -257,7 +257,7 @@ class Mlb:
                     if team[search_key].lower() == team_name.lower():
                         team_ids.append(team['id'])
                 except (KeyError):
-                    raise TheMlbStatsApiException("Response is missing {search_key} key")
+                    raise TheMlbStatsApiException(f"{search_key} raised a KeyError")
         return team_ids
 
     def get_team_roster(self, team_id) -> List[Player]:
