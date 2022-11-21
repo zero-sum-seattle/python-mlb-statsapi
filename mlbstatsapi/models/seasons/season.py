@@ -1,57 +1,60 @@
-from typing import Optional
+﻿from typing import Optional
 from dataclasses import dataclass
 
 
 @dataclass
-class SeasonDateInfo:
+class Season:
     """
-    A class to represent a LeagueSeasonDateInfo.
-
+    This class represents a season object
 
     Attributes
     ----------
     seasonid : str
-        League season id
+        season id
+    haswildcard :  bool
+        wild card status
     preseasonstartdate : str
-        Leagues pre season start date
+        pre-season start date
     preseasonenddate : str
-        Leagues pre season end data
+        pre-season end date
     seasonstartdate : str
-        Leagues season start date
+        season start date
     springstartdate : str
-        Leagues spring season start date
+        spring start date
     springenddate : str
-        Leagues spring season end date
+        spring end date
     regularseasonstartdate : str
-        Leagues regular season start date
+        regular season start date
     lastdate1sthalf : str
-        The date of the last day of the first half of the season
+        last date 1st half
     allstardate : str
-        Leagues all star game date
+        all star date
     firstdate2ndhalf : str
-        The date of the first day of the second half of the season
+        first date 2nd half
     regularseasonenddate : str
-        Leagues regular season end date
+        regular season end date
     postseasonstartdate : str
-        Leagues post season start date
+        post season start date
     postseasonenddate : str
-        Leagues post season end date
+        post season end date
     seasonenddate : str
-        Leagues season end date
+        season end date
     offseasonstartdate : str
-        Leagues off season start date
+        off season start date
     offseasonenddate : str
-        Leagues off season end date
+        off season end date
     seasonlevelgamedaytype : str
-        Leagues game day type
+        season level game day type
     gamelevelgamedaytype : str
-        Leagues game day type
-    qualifierplateappearances : str
-        Qualfifier plate appearances
-    qualifieroutspitched : str
-        Qualifier outs pitched
+        game level game day type
+    qualifierplateappearances :  float
+        qualifier plate appearances
+    qualifieroutspitched : int
+        qualifier outs pitched
     """
-    seasonid: Optional[str] = None
+
+    seasonid: str
+    haswildcard: Optional[bool] = None
     preseasonstartdate: Optional[str] = None
     preseasonenddate: Optional[str] = None
     seasonstartdate: Optional[str] = None
@@ -69,5 +72,5 @@ class SeasonDateInfo:
     offseasonenddate: Optional[str] = None
     seasonlevelgamedaytype: Optional[str] = None
     gamelevelgamedaytype: Optional[str] = None
-    qualifierplateappearances: Optional[str] = None
-    qualifieroutspitched: Optional[str] = None
+    qualifierplateappearances: Optional[float] = None
+    qualifieroutspitched: Optional[int] = None

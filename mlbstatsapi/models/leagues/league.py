@@ -2,8 +2,8 @@
 from typing import Optional, Union
 
 from mlbstatsapi.models.sports import Sport
+from mlbstatsapi.models.seasons import Season
 
-from .attributes import SeasonDateInfo
 
 @dataclass
 class LeagueRecord:
@@ -25,6 +25,7 @@ class LeagueRecord:
     losses: int
     pct: str
     ties: Optional[int] = None
+
 
 @dataclass
 class League:
@@ -86,7 +87,7 @@ class League:
     hasplayoffpoints: Optional[bool] = None
     numteams: Optional[int] = None
     numwildcardteams: Optional[int] = None
-    seasondateinfo: Optional[Union[SeasonDateInfo, dict]] = None
+    seasondateinfo: Optional[Union[Season, dict]] = None
     season: Optional[str] = None
     orgcode: Optional[str] = None
     conferencesinuse: Optional[bool] = None
@@ -96,5 +97,5 @@ class League:
     active: Optional[bool] = None
 
     def __post_init__(self):
-        self.seasondateinfo = SeasonDateInfo(**self.seasondateinfo) if self.seasondateinfo else self.seasondateinfo
+        self.seasondateinfo = Season(**self.seasondateinfo) if self.seasondateinfo else self.seasondateinfo
         self.sport = Sport(**self.sport) if self.sport else self.sport
