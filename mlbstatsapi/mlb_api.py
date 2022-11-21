@@ -248,7 +248,7 @@ class Mlb:
 
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
             for team in mlb_data.data['teams']:
-                if team['teamname'].lower() == team_name.lower():
+                if team['name'].lower() == team_name.lower():
                     team_ids.append(team['id'])
 
         return team_ids
@@ -1303,14 +1303,18 @@ class Mlb:
         if 'records' in mlb_data.data and mlb_data.data['records']:
             return Attendance(**mlb_data.data)
 
-    def get_team_stats(self, team_id: int, params: dict) -> dict:
+    def get_team_stats(self, team_id: int, stats: list, groups: list, **params) -> dict:
         """
         returns a split stat data for a team
 
         Parameters
         ----------
-        params : dict
-            dict of params to pass
+        team_id : int
+            the team id 
+        stats : list
+            list of stat types
+        groups : list
+            list of stat groups
         
         Returns
         -------
@@ -1326,10 +1330,14 @@ class Mlb:
         Examples
         --------
         >>> mlb = Mlb()
-        >>> params = {'stats': ['season', 'seasonAdvanced'], 'group': ['pitching']}
-        >>> mlb.get_team_stats(133, params)
+        >>> stats = ['season', 'seasonAdvanced']
+        >>> groups = ['pitching']
+        >>> mlb.get_team_stats(133, stats, groups)
         {'pitching': {'season': [PitchingSeason], 'seasonadvanced': [PitchingSeasonAdvanced] }}
         """
+        params['stats'] = stats
+        params['group'] = groups
+
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return {}
@@ -1340,14 +1348,18 @@ class Mlb:
 
         return splits
 
-    def get_player_stats(self, person_id: int, params: dict) -> dict:
+    def get_player_stats(self, person_id: int, stats: list, groups: list, **params) -> dict:
         """
         returns stat data for a team
 
         Parameters
         ----------
-        params : dict
-            dict of params to pass
+        person_id : int
+            the person id
+        stats : list
+            list of stat types
+        groups : list
+            list of stat groups
 
         Returns
         -------
@@ -1363,10 +1375,14 @@ class Mlb:
         Examples
         --------
         >>> mlb = Mlb()
-        >>> params = {'stats': ['season', 'seasonAdvanced'], 'group': ['hitting']}
-        >>> mlb.get_player_stats(647351, params)
+        >>> stats = ['season', 'seasonAdvanced']
+        >>> groups = ['hitting']
+        >>> mlb.get_player_stats(647351, stats, groups)
         {'hitting': {'season': [HittingSeason], 'seasonadvanced': [HittingSeasonAdvanced] }}
         """
+        params['stats'] = stats
+        params['group'] = groups
+
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return {}
@@ -1377,7 +1393,7 @@ class Mlb:
 
         return splits
 
-    def get_stats(self, params: dict) -> dict:
+    def get_stats(self, stats: list, groups: list, **params: dict) -> dict:
         """
         return a split object
 
@@ -1400,6 +1416,8 @@ class Mlb:
         >>> mlb = Mlb()
         >>> mlb.get_stats()
         """
+        params['stats'] = stats
+        params['group'] = groups
         mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return {}

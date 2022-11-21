@@ -32,10 +32,10 @@ class TestPitchingStats(unittest.TestCase):
 
     def test_pitching_stat_attributes_player(self):
         """mlb get stats should return pitching stats"""
-        self.params = {'stats': ['season', 'career'], 'group': ['fielding']}
-
+        self.stats = ['season', 'career']
+        self.group = ['fielding']
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.utility_player, self.params)
+        stats = self.mlb.get_player_stats(self.utility_player, stats=self.stats, groups=self.group)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -59,10 +59,10 @@ class TestPitchingStats(unittest.TestCase):
 
     def test_pitching_stat_attributes_team(self):
         """mlb get stats should return pitching stats"""
-        self.params = {'stats': ['season', 'career', 'seasonAdvanced', 'careerAdvanced'], 'group': ['fielding']}
-
+        self.stats = ['season', 'career', 'seasonAdvanced', 'careerAdvanced']
+        self.group = ['fielding']
         # let's get some stats
-        stats = self.mlb.get_team_stats(self.al_team, self.params)
+        stats = self.mlb.get_team_stats(self.al_team, stats=self.stats, groups=self.group)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
