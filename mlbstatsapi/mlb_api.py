@@ -1153,7 +1153,7 @@ class Mlb:
         if sportid is not None:
             params['sportId'] = sportid
             
-        mlb_data = self._mlb_adapter_v1.get(endpoint='season', ep_params=params)
+        mlb_data = self._mlb_adapter_v1.get(endpoint='seasons', ep_params=params)
 
         if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
             for season in mlb_data.data['seasons']:
@@ -1204,7 +1204,7 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint='seasons/all', ep_params=params)
         season_list = []
 
-        if 'seasons' in mlb_data.data and mlb_data['seasons']:
+        if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
             for season in mlb_data.data['seasons']:
                 season_list.append(Season(**season))
         
