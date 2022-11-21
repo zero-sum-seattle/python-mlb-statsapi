@@ -136,31 +136,31 @@ class TestMlbGetTeam(unittest.TestCase):
         team = self.mlb.get_team('19999')
         self.assertIsNone(team)
 
-    # def test_mlb_get_team_id(self):
-    #     """mlb get_team_id should return a list of matching team id's"""
-    #     id = self.mlb.get_team_id('Mariners')
-    #     self.assertEqual(id, [136])
+    def test_mlb_get_team_id(self):
+        """mlb get_team_id should return a list of matching team id's"""
+        id = self.mlb.get_team_id('Mariners')
+        self.assertEqual(id, [136])
 
-    # def test_mlb_get_team_minor_id(self):
-    #     """mlb get_team_id should return a list of matching team id's"""
-    #     self.response = requests.Response()
+    def test_mlb_get_team_minor_id(self):
+        """mlb get_team_id should return a list of matching team id's"""
+        self.response = requests.Response()
 
-    #     with open(self.path_to_file, "r", encoding="utf-8-sig") as file:
-    #         read_json = file.read()
-    #         json_object = json.dumps(read_json)
-    #         self.response.status_code = 200
-    #         self.response._content = read_json
-    #         with patch("mlbstatsapi.mlb_dataadapter.requests.get", return_value=self.response):
+        with open(self.path_to_file, "r", encoding="utf-8-sig") as file:
+            # read_json = file.read()
+            json_object = json.load(file)
+            self.response.status_code = 200
+            self.response._content = json_object
+            with patch("mlbstatsapi.mlb_dataadapter.requests.get", return_value=self.response):
 
-    #             # mlb_adapter should raise exception due to bad JSON
+                # mlb_adapter should raise exception due to bad JSON
 
-    #             id = self.mlb.get_team_id('DSL Brewers 2')
-    #             self.assertEqual(id, [2101])
+                id = self.mlb.get_team_id('DSL Brewers 2')
+                self.assertEqual(id, [2101])
 
-    # def test_mlb_get_bad_team_id(self):
-    #     """mlb get_team_id should return a empty list for invalid team name"""
-    #     id = self.mlb.get_team_id('Banananananana')
-    #     self.assertEqual(id, [])
+    def test_mlb_get_bad_team_id(self):
+        """mlb get_team_id should return a empty list for invalid team name"""
+        id = self.mlb.get_team_id('Banananananana')
+        self.assertEqual(id, [])
 
 
 class TestMlbGetSport(unittest.TestCase):
