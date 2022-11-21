@@ -13,6 +13,7 @@ from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi.models.attendances import Attendance
 from mlbstatsapi.models.stats import Stat
+from mlbstatsapi.models.seasons import Season
 
 from .mlb_dataadapter import MlbDataAdapter
 from . import mlb_module
@@ -1109,6 +1110,105 @@ class Mlb:
                     division_ids.append(division['id'])
 
         return division_ids
+   
+    def get_current_season(self, sportid: int = None, **params) -> Season:
+        """
+        return a season object for sportid
+
+        Parameters
+        ----------
+        sportid : int
+            Insert a sportId to return a directory of seasons for a specific sport.
+        
+        Other Parameters
+        ----------------
+        divisionId : int, optional
+            Insert divisionId to return a directory of seasons for a specific division.
+        leagueId : int, optional
+            Insert leagueId to return a directory of seasons in a specific league.
+        withGameTypeDates : bool, optional
+            Insert a withGameTypeDates to return season information for all gameTypes.
+
+        Returns
+        -------
+        Season
+            returns a season object
+
+        See Also
+        --------
+        Mlb.get_all_seasons : return a list of seasons
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_current_season(sportid=1)
+        Season
+        >>> mlb = Mlb()
+        >>> mlb.get_current_season(leagueId=104)
+        Season
+        >>> mlb = Mlb()
+        >>> mlb.get_current_season(leagueId=104, withGameTypeDates=True)
+        Season
+        """
+        if sportid is not None:
+            params['sportId'] = sportid
+            
+        mlb_data = self._mlb_adapter_v1.get(endpoint='season', ep_params=params)
+
+        if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
+            for season in mlb_data.data['seasons']:
+                return Season(**season)
+
+    def get_all_seasons(self, sportid: int = None, **params) -> List[Season]:
+        """
+        return a season object for sportid
+
+        Parameters
+        ----------
+        sportid : int
+            Insert a sportId to return a directory of seasons for a specific sport.
+
+        Other Parameters
+        ----------------
+        divisionId : int, optional
+            Insert divisionId to return a directory of seasons for a specific division.
+        leagueId : int, optional
+            Insert leagueId to return a directory of seasons in a specific league.
+        withGameTypeDates : bool, optional
+            Insert a withGameTypeDates to return season information for all gameTypes.
+            
+        Returns
+        -------
+        Season
+            returns a season object
+
+        See Also
+        --------
+        Mlb.get_current_season : return a current Season
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_all_seasons(1)
+        [Season, Season, Season, Season]
+        >>> mlb = Mlb()
+        >>> mlb.get_all_seasons(leagueId=104)
+        [Season, Season, Season, Season]
+        >>> mlb = Mlb()
+        >>> mlb.get_all_seasons(leagueId=103, withGameTypeDates=True)
+        [Season, Season, Season, Season]
+        """
+        if sportid is not None:
+            params['sportId'] = sportid
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint='seasons/all', ep_params=params)
+        season_list = []
+
+        if 'seasons' in mlb_data.data and mlb_data['seasons']:
+            for season in mlb_data.data['seasons']:
+                season_list.append(Season(**season))
+        
+        return season_list
 
     def get_attendance(self, team_id: int = None, league_id: int = None,
                        league_list_id: int = None, params: dict = {}) -> Union[Attendance, None]:
@@ -1149,7 +1249,6 @@ class Mlb:
         """
         required_args = {'teamId': team_id, 'leagueId': league_id, 'leagueListId': league_list_id}
 
-        # I like this
         if not any(required_args):
             return
 
@@ -1270,3 +1369,6 @@ class Mlb:
             splits = mlb_module.create_split_data(mlb_data, groups)
 
         return splits
+
+
+
