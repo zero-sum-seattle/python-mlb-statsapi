@@ -215,7 +215,7 @@ class Mlb:
             for team in mlb_data.data['teams']:
                 return Team(**team)
 
-    def get_team_id(self, team_name) -> List[int]:
+    def get_team_id(self, team_name, sport_id: int = 1, **params) -> List[int]:
         """
         return a team Id
 
@@ -223,6 +223,8 @@ class Mlb:
         ----------
         team_name : str
             Teams name
+        sport_id : int
+            sport id number for team search
 
         Returns
         -------
@@ -242,8 +244,8 @@ class Mlb:
         >>> mlb.get_team_id("Oakland Athletics")
         [133]
         """
-
-        mlb_data = self._mlb_adapter_v1.get(endpoint='teams')
+        params['sportId'] = sport_id
+        mlb_data = self._mlb_adapter_v1.get(endpoint='teams', ep_params=params)
         team_ids = []
 
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
