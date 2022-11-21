@@ -1110,7 +1110,47 @@ class Mlb:
                     division_ids.append(division['id'])
 
         return division_ids
-   
+
+    def get_season(self, seasonid: str, sportid: int, **params) -> Season:
+        """
+        return a season object for seasonid and sportid
+
+        Parameters
+        ----------
+        sportid : int
+            Insert a sportId to return a directory of seasons for a specific sport.
+        seasonid : str
+            Insert year to return season information for a particular season.
+        
+        Other Parameters
+        ----------------
+        withGameTypeDates : bool, optional
+            Insert a withGameTypeDates to return season information for all gameTypes.
+
+        Returns
+        -------
+        Season
+            returns a season object
+
+        See Also
+        --------
+        Mlb.get_all_seasons : return a list of seasons
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_season(seasonid="2021", sportid=1)
+        Season
+        """
+        if sportid is not None:
+            params['sportId'] = sportid
+            
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'seasons/{seasonid}', ep_params=params)
+
+        if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
+            for season in mlb_data.data['seasons']:
+                return Season(**season)
+       
     def get_current_season(self, sportid: int = None, **params) -> Season:
         """
         return a season object for sportid
