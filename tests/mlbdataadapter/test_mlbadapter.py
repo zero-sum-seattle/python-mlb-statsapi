@@ -101,7 +101,7 @@ class MlbAdapterMockTesting(unittest.TestCase):
         """mlbadapter should raise TheMlbStatsApiException"""
         # setting up mock
         self.response.status_code = 200
-        self.response._content = '{"some bad json": sdfsd'.encode()
+        self.response.json = '{"some bad json": sdfsd'.encode()
 
         # params to pass
         self.params = { "stats": "season", "group": "hitting" }
