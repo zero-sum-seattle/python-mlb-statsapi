@@ -162,7 +162,7 @@ class TestMlbGetTeam(unittest.TestCase):
         id = self.mlb.get_team_id('Seattle Mariners')
         self.assertEqual(id, [136])
 
-    def test_mlb_get_team_minor_id(self, m):
+    def test_mlb_get_team_minor_id(self):
         """mlb get_team_id should return a list of matching team id's"""
         id = self.mlb.get_team_id('DSL Brewers 2')
         self.assertEqual(id, [2101])

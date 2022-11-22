@@ -215,8 +215,7 @@ class Mlb:
             for team in mlb_data.data['teams']:
                 return Team(**team)
 
-    def get_team_id(self, team_name, sport_id: int = 1,
-                search_key: str = 'name', **params) -> List[int]:
+    def get_team_id(self, team_name, search_key: str = 'name', **params) -> List[int]:
         """
         return a team Id
 
@@ -224,10 +223,14 @@ class Mlb:
         ----------
         team_name : str
             Teams name
-        sport_id : int
-            sport id number for team search
+
         search_key : str
             search key search json for matching team_name
+
+        Other Parameters
+        ----------------
+        sportId : int
+            sport id number for team search
 
         Returns
         -------
@@ -247,7 +250,7 @@ class Mlb:
         >>> mlb.get_team_id("Oakland Athletics")
         [133]
         """
-        params['sportId'] = sport_id
+    
         mlb_data = self._mlb_adapter_v1.get(endpoint='teams', ep_params=params)
         team_ids = []
     
