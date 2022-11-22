@@ -2,6 +2,7 @@
 from unittest.mock import patch
 import unittest
 import requests
+import requests_mock
 import json
 import os
 
@@ -17,6 +18,12 @@ from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi import Mlb
 from mlbstatsapi import MlbResult
 from mlbstatsapi import TheMlbStatsApiException
+
+# Mocked JSON directory
+path_to_current_file = os.path.realpath(__file__)
+current_directory = os.path.dirname(path_to_current_file)
+path_to_file = os.path.join(current_directory, "json_data/teams.json")
+TEAM_JSON_FILE = open(path_to_file, "r", encoding="utf-8-sig").read()
 
 
 class TestMlbDataApi(unittest.TestCase):
@@ -104,10 +111,8 @@ class TestMlbGetPeople(unittest.TestCase):
 class TestMlbGetTeam(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.mlb = Mlb() # Create instance of our baseclass
-        path_to_current_file = os.path.realpath(__file__)
-        current_directory = os.path.dirname(path_to_current_file)
-        cls.path_to_file = os.path.join(current_directory, "json_data/teams.json")
+        cls.mlb = Mlb()
+        cls.mock_json_objects = json.loads(TEAM_JSON_FILE)
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -136,29 +141,26 @@ class TestMlbGetTeam(unittest.TestCase):
         team = self.mlb.get_team('19999')
         self.assertIsNone(team)
 
-    def test_mlb_get_team_id(self):
+    @requests_mock.Mocker()
+    def test_mlb_get_team_id(self, m):
         """mlb get_team_id should return a list of matching team id's"""
-        id = self.mlb.get_team_id('Mariners')
+        m.get('https://statsapi.mlb.com/api/v1/teams', json=self.mock_json_objects)
+
+        id = self.mlb.get_team_id('Seattle Mariners')
         self.assertEqual(id, [136])
 
-    def test_mlb_get_team_minor_id(self):
+    @requests_mock.Mocker()
+    def test_mlb_get_team_minor_id(self, m):
         """mlb get_team_id should return a list of matching team id's"""
-        self.response = requests.Response()
-
-        with open(self.path_to_file, "r", encoding="utf-8-sig") as file:
-            # read_json = file.read()
-            json_object = json.load(file)
-            self.response.status_code = 200
-            self.response._content = json_object
-            with patch("mlbstatsapi.mlb_dataadapter.requests.get", return_value=self.response):
-
-                # mlb_adapter should raise exception due to bad JSON
-
-                id = self.mlb.get_team_id('DSL Brewers 2')
-                self.assertEqual(id, [2101])
-
-    def test_mlb_get_bad_team_id(self):
+        m.get('https://statsapi.mlb.com/api/v1/teams', json=self.mock_json_objects)
+        
+        id = self.mlb.get_team_id('DSL Brewers 2')
+        self.assertEqual(id, [2101])
+    
+    @requests_mock.Mocker()
+    def test_mlb_get_bad_team_id(self, m):
         """mlb get_team_id should return a empty list for invalid team name"""
+        m.get('https://statsapi.mlb.com/api/v1/teams', json=self.mock_json_objects)
         id = self.mlb.get_team_id('Banananananana')
         self.assertEqual(id, [])
 
