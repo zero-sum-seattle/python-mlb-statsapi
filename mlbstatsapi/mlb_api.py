@@ -979,7 +979,7 @@ class Mlb:
         [League]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'league/{league_id}')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'leagues/{league_id}')
 
         if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
             for league in mlb_data.data['leagues']:
@@ -1006,7 +1006,7 @@ class Mlb:
         [League, League, League]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='league')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='leagues')
         leagues = []
 
         if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
@@ -1040,7 +1040,7 @@ class Mlb:
         [103]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='league', ep_params=params)
+        mlb_data = self._mlb_adapter_v1.get(endpoint='leagues', ep_params=params)
         league_ids = []
 
         if 'leagues' in mlb_data.data and mlb_data.data['leagues']:

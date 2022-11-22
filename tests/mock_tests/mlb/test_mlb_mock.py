@@ -30,10 +30,17 @@ path_to_person_file = os.path.join(current_directory, "../mock_json/people/perso
 path_to_not_found = os.path.join(current_directory, "../mock_json/response/not_found_404.json")
 path_to_error = os.path.join(current_directory, "../mock_json/response/error_500.json")
 path_to_divisions = os.path.join(current_directory, "../mock_json/divisions/divisions.json")
+path_to_division = os.path.join(current_directory, "../mock_json/divisions/division.json")
 path_to_sports = os.path.join(current_directory, "../mock_json/sports/sports.json")
 path_to_sports = os.path.join(current_directory, "../mock_json/sports/sport.json")
+path_to_leagues = os.path.join(current_directory, "../mock_json/leagues/leagues.json")
+path_to_league = os.path.join(current_directory, "../mock_json/leagues/league.json")
+path_to_venues = os.path.join(current_directory, "../mock_json/venues/venues.json")
+path_to_venue = os.path.join(current_directory, "../mock_json/venues/venue.json")
 
 
+LEAGUES_JSON_FILE = open(path_to_leagues, "r", encoding="utf-8-sig").read()
+LEAGUE_JSON_FILE = open(path_to_league, "r", encoding="utf-8-sig").read()
 SPORTS_JSON_FILE = open(path_to_sports, "r", encoding="utf-8-sig").read()
 SPORT_JSON_FILE = open(path_to_sports, "r", encoding="utf-8-sig").read()
 TEAMS_JSON_FILE = open(path_to_teams_file, "r", encoding="utf-8-sig").read()
@@ -41,6 +48,9 @@ TEAM_JSON_FILE = open(path_to_oakland_file, "r", encoding="utf-8-sig").read()
 PEOPLE_JSON_FILE = open(path_to_players_file, "r", encoding="utf-8-sig").read()
 PERSON_JSON_FILE = open(path_to_person_file, "r", encoding="utf-8-sig").read()
 DIVISIONS_JSON_FILE = open(path_to_divisions, "r", encoding="utf-8-sig").read()
+DIVISION_JSON_FILE = open(path_to_division, "r", encoding="utf-8-sig").read()
+VENUES_JSON_FILE = open(path_to_venues, "r", encoding="utf-8-sig").read()
+VENUE_JSON_FILE = open(path_to_venue, "r", encoding="utf-8-sig").read()
 NOT_FOUND_404 = open(path_to_not_found, "r", encoding="utf-8-sig").read()
 ERROR_500 = open(path_to_error, "r", encoding="utf-8-sig").read()
 
@@ -266,103 +276,135 @@ class TestMlbGetSport(unittest.TestCase):
         self.assertEqual(id, [])
 
 
-# class TestMlbGetLeague(unittest.TestCase):
-#     @classmethod
-#     def setUpClass(cls) -> None:
-#         cls.mlb = Mlb()
-#         pass
+@requests_mock.Mocker()
+class TestMlbGetLeagueMock(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.mock_leagues = json.loads(LEAGUES_JSON_FILE)
+        cls.mock_league = json.loads(LEAGUE_JSON_FILE)
 
-#     @classmethod
-#     def tearDownClass(cls) -> None:
-#         pass
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
 
-#     def test_get_league(self):
-#         """mlb get_league should return a League object"""
-#         league = self.mlb.get_league(103)
-#         self.assertIsInstance(league, League)
-#         self.assertEqual(league.id, 103)
+    def test_get_league(self, m):
+        """mlb get_league should return a League object"""
+        m.get('https://statsapi.mlb.com/api/v1/leagues/103', json=self.mock_league,
+        status_code=200)
+        league = self.mlb.get_league(103)
+        self.assertIsInstance(league, League)
+        self.assertEqual(league.id, 103)
 
-#     def test_get_leagues(self):
-#         """mlb get_leagues should return a list of Leagues"""
-#         leagues = self.mlb.get_leagues()
-#         self.assertIsInstance(leagues, List)
-#         self.assertIsInstance(leagues[0], League)
+    def test_get_leagues(self, m):
+        """mlb get_leagues should return a list of Leagues"""
+        m.get('https://statsapi.mlb.com/api/v1/leagues', json=self.mock_leagues,
+        status_code=200)
+        leagues = self.mlb.get_leagues()
+        self.assertIsInstance(leagues, List)
+        self.assertIsInstance(leagues[0], League)
 
-#     def test_get_league_id(self):
-#         """mlb get_league_id should return a league id"""
-#         id = self.mlb.get_league_id('American League')
-#         self.assertEqual(id, [103])
+    def test_get_league_id(self, m):
+        """mlb get_league_id should return a league id"""
+        m.get('https://statsapi.mlb.com/api/v1/leagues', json=self.mock_leagues,
+        status_code=200)
+        id = self.mlb.get_league_id('American League')
+        self.assertEqual(id, [103])
 
-#     def test_get_invalid_league_id(self):
-#         """mlb get_league_id should return a empty list with invalid league name"""
-#         id = self.mlb.get_league_id('Russian League')
-#         self.assertEqual(id, [])
-
-
-# class TestMlbGetDivision(unittest.TestCase):
-#     @classmethod
-#     def setUpClass(cls) -> None:
-#         cls.mlb = Mlb()
-#         pass
-
-#     @classmethod
-#     def tearDownClass(cls) -> None:
-#         pass
-
-#     def test_get_division(self):
-#         """mlb get_division should return a Division object"""
-#         division = self.mlb.get_division(200)
-#         self.assertIsInstance(division, Division)
-#         self.assertEqual(division.id, 200)
-
-#     def test_get_divisions(self):
-#         """mlb get_divisions should return a list of Divisions"""
-#         divisions = self.mlb.get_divisions()
-#         self.assertIsInstance(divisions, List)
-#         self.assertIsInstance(divisions[0], Division)
-
-#     def test_get_division_id(self):
-#         """mlb get_division_id should return a division id"""
-#         id = self.mlb.get_division_id('American League West')
-#         self.assertEqual(id, [200])
-
-#     def test_get_division_fail_id(self):
-#         """mlb get_division_id should return a empty list for invalid division name"""
-#         id = self.mlb.get_division_id('Canada West')
-#         self.assertEqual(id, [])
+    def test_get_invalid_league_id(self, m):
+        """mlb get_league_id should return a empty list with invalid league name"""
+        m.get('https://statsapi.mlb.com/api/v1/leagues', json=self.mock_leagues,
+        status_code=200)
+        id = self.mlb.get_league_id('Russian League')
+        self.assertEqual(id, [])
 
 
-# class TestMlbGetVenue(unittest.TestCase):
-#     @classmethod
-#     def setUpClass(cls) -> None:
-#         cls.mlb = Mlb()
-#         pass
+@requests_mock.Mocker()
+class TestMlbGetDivision(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.mock_divisions = json.loads(DIVISIONS_JSON_FILE)
+        cls.mock_division = json.loads(DIVISION_JSON_FILE)
 
-#     @classmethod
-#     def tearDownClass(cls) -> None:
-#         pass
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
 
-#     def test_mlb_get_venue(self):
-#         """mlb get_division should return a Division object"""
-#         venue = self.mlb.get_venue(31)
-#         self.assertIsInstance(venue, Venue)
-#         self.assertEqual(venue.id, 31)
+    def test_get_division(self, m):
+        """mlb get_division should return a Division object"""
+        m.get('https://statsapi.mlb.com/api/v1/divisions/200', json=self.mock_division,
+        status_code=200)
+        division = self.mlb.get_division(200)
+        self.assertIsInstance(division, Division)
+        self.assertEqual(division.id, 200)
 
-#     def test_get_venues(self):
-#         """mlb get_divisions should return a list of Divisions"""
-#         venues = self.mlb.get_venues()
-#         self.assertIsInstance(venues, List)
-#         self.assertIsInstance(venues[0], Venue)
+    def test_get_divisions(self, m):
+        """mlb get_divisions should return a list of Divisions"""
+        m.get('https://statsapi.mlb.com/api/v1/divisions', json=self.mock_divisions,
+        status_code=200)
+        divisions = self.mlb.get_divisions()
+        self.assertIsInstance(divisions, List)
+        self.assertIsInstance(divisions[0], Division)
 
-#     def test_mlb_get_venue_id(self):
-#         """mlb get_division_id should return a division id"""
-#         id = self.mlb.get_venue_id('PNC Park')
-#         self.assertEqual(id, [31])
+    def test_get_division_id(self, m):
+        """mlb get_division_id should return a division id"""
+        m.get('https://statsapi.mlb.com/api/v1/divisions', json=self.mock_divisions,
+        status_code=200)
+        id = self.mlb.get_division_id('American League West')
+        self.assertEqual(id, [200])
 
-#     def test_get_venue_id(self):
-#         """mlb get_division_id should return a empty list for invalid venue name"""
-#         id = self.mlb.get_venue_id('Highschool Park')
-#         self.assertEqual(id, [])
+    def test_get_division_fail_id(self, m):
+        m.get('https://statsapi.mlb.com/api/v1/divisions', json=self.mock_divisions,
+        status_code=200)
+        """mlb get_division_id should return a empty list for invalid division name"""
+        id = self.mlb.get_division_id('Canada West')
+        self.assertEqual(id, [])
+
+
+@requests_mock.Mocker()
+class TestMlbGetVenue(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.mock_venues = json.loads(VENUES_JSON_FILE)
+        cls.mock_venue = json.loads(VENUE_JSON_FILE)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
+
+    def test_mlb_get_venue(self, m):
+        """mlb get_division should return a Division object"""
+        m.get('https://statsapi.mlb.com/api/v1/venues/31', json=self.mock_venue,
+        status_code=200)
+        venue = self.mlb.get_venue(31)
+        self.assertIsInstance(venue, Venue)
+        self.assertEqual(venue.id, 31)
+
+    def test_get_venues(self, m):
+        """mlb get_divisions should return a list of Divisions"""
+        m.get('https://statsapi.mlb.com/api/v1/venues', json=self.mock_venues,
+        status_code=200)
+        venues = self.mlb.get_venues()
+        self.assertIsInstance(venues, List)
+        self.assertIsInstance(venues[0], Venue)
+
+    def test_mlb_get_venue_id(self, m):
+        """mlb get_division_id should return a division id"""
+        """mlb get_divisions should return a list of Divisions"""
+        m.get('https://statsapi.mlb.com/api/v1/venues', json=self.mock_venues,
+        status_code=200)
+        id = self.mlb.get_venue_id('PNC Park')
+        self.assertEqual(id, [31])
+
+    def test_get_venue_id(self, m):
+        """mlb get_division_id should return a empty list for invalid venue name"""
+        """mlb get_divisions should return a list of Divisions"""
+        m.get('https://statsapi.mlb.com/api/v1/venues', json=self.mock_venues,
+        status_code=200)
+        id = self.mlb.get_venue_id('Highschool Park')
+        self.assertEqual(id, [])
 
 
 # class TestMlbGetGame(unittest.TestCase):
