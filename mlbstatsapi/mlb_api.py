@@ -16,6 +16,7 @@ from mlbstatsapi.models.stats import Stat
 from mlbstatsapi.models.seasons import Season
 
 from .mlb_dataadapter import MlbDataAdapter
+from .exceptions import TheMlbStatsApiException
 from . import mlb_module
 
 
@@ -144,7 +145,7 @@ class Mlb:
 
         return player_ids
 
-    def get_teams(self, sport_id: int = 1) -> List[Team]:
+    def get_teams(self, sport_id: int = 1, **params) -> List[Team]:
         """
         return the all Teams
 
@@ -171,8 +172,7 @@ class Mlb:
         >>> mlb.get_teams()
         [Team, Team, Team]
         """
-
-        params = {'sportId': sport_id}
+        params['sportId'] = sport_id
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams', ep_params=params)
         teams = []
 
@@ -215,7 +215,7 @@ class Mlb:
             for team in mlb_data.data['teams']:
                 return Team(**team)
 
-    def get_team_id(self, team_name) -> List[int]:
+    def get_team_id(self, team_name, search_key: str = 'name', **params) -> List[int]:
         """
         return a team Id
 
@@ -223,6 +223,10 @@ class Mlb:
         ----------
         team_name : str
             Teams name
+        sport_id : int
+            sport id number for team search
+        search_key : str
+            search key search json for matching team_name
 
         Returns
         -------
@@ -242,14 +246,16 @@ class Mlb:
         >>> mlb.get_team_id("Oakland Athletics")
         [133]
         """
-
-        mlb_data = self._mlb_adapter_v1.get(endpoint='teams')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='teams', ep_params=params)
         team_ids = []
-
+    
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
             for team in mlb_data.data['teams']:
-                if team['name'].lower() == team_name.lower():
-                    team_ids.append(team['id'])
+                try:
+                    if team[search_key].lower() == team_name.lower():
+                        team_ids.append(team['id'])
+                except (KeyError):
+                    continue
 
         return team_ids
 
