@@ -227,7 +227,7 @@ class Mlb:
         sport_id : int
             sport id number for team search
         search_key : str
-            search key search json for matching string
+            search key search json for matching team_name
 
         Returns
         -------
