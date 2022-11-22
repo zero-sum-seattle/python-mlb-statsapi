@@ -23,7 +23,7 @@ from mlbstatsapi import TheMlbStatsApiException
 path_to_current_file = os.path.realpath(__file__)
 current_directory = os.path.dirname(path_to_current_file)
 path_to_file = os.path.join(current_directory, "json_data/teams.json")
-TEAM_JSON_FILE = open(path_to_file, "r", encoding="utf-8-sig").read()
+TEAMS_JSON_FILE = open(path_to_file, "r", encoding="utf-8-sig").read()
 
 
 class TestMlbDataApi(unittest.TestCase):
@@ -112,7 +112,7 @@ class TestMlbGetTeam(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.mock_json_objects = json.loads(TEAM_JSON_FILE)
+        cls.mock_json_objects = json.loads(TEAMS_JSON_FILE)
 
     @classmethod
     def tearDownClass(cls) -> None:
