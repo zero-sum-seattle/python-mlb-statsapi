@@ -153,14 +153,15 @@ class TestMlbGetTeam(unittest.TestCase):
     def test_mlb_get_team_minor_id(self, m):
         """mlb get_team_id should return a list of matching team id's"""
         m.get('https://statsapi.mlb.com/api/v1/teams', json=self.mock_json_objects)
-        
+
         id = self.mlb.get_team_id('DSL Brewers 2')
         self.assertEqual(id, [2101])
-    
+   
     @requests_mock.Mocker()
     def test_mlb_get_bad_team_id(self, m):
         """mlb get_team_id should return a empty list for invalid team name"""
         m.get('https://statsapi.mlb.com/api/v1/teams', json=self.mock_json_objects)
+
         id = self.mlb.get_team_id('Banananananana')
         self.assertEqual(id, [])
 
