@@ -29,13 +29,4 @@ class TestSchedule(unittest.TestCase):
         self.assertTrue(hasattr(self.schedule, "totalgames"))
         self.assertTrue(hasattr(self.schedule, "totalgamesinprogress"))
         self.assertTrue(hasattr(self.schedule, "dates"))
-       
-    def test_schedule_get_games_with_status(self):
-        self.assertEqual(self.schedule.get_games_with_status(detailedstate="In Progress"), [])
-        self.assertEqual(self.schedule.get_games_with_status(abstractgamestate="Final"), [715770, 715764, 715767, 715761])
-        self.assertEqual(self.schedule.get_games_with_status(), [])
 
-    # def test_schedule_get_games_inProgress(self):
-
-    def test_schedule_get_games_finished(self):
-        self.assertEqual(self.schedule.get_games_finished(), [715770, 715764, 715767, 715761])

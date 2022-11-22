@@ -18,7 +18,6 @@ from mlbstatsapi import Mlb
 from mlbstatsapi import MlbResult
 from mlbstatsapi import TheMlbStatsApiException
 
-
 class TestMlbDataApi(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -104,10 +103,7 @@ class TestMlbGetPeople(unittest.TestCase):
 class TestMlbGetTeam(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.mlb = Mlb() # Create instance of our baseclass
-        path_to_current_file = os.path.realpath(__file__)
-        current_directory = os.path.dirname(path_to_current_file)
-        cls.path_to_file = os.path.join(current_directory, "json_data/teams.json")
+        cls.mlb = Mlb()
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -141,21 +137,10 @@ class TestMlbGetTeam(unittest.TestCase):
         id = self.mlb.get_team_id('Seattle Mariners')
         self.assertEqual(id, [136])
 
-    # def test_mlb_get_team_minor_id(self):
-    #     """mlb get_team_id should return a list of matching team id's"""
-    #     self.response = requests.Response()
-
-    #     with open(self.path_to_file, "r", encoding="utf-8-sig") as file:
-    #         read_json = file.read()
-    #         json_object = json.dumps(read_json)
-    #         self.response.status_code = 200
-    #         self.response._content = read_json
-    #         with patch("mlbstatsapi.mlb_dataadapter.requests.get", return_value=self.response):
-
-    #             # mlb_adapter should raise exception due to bad JSON
-
-    #             id = self.mlb.get_team_id('DSL Brewers 2')
-    #             self.assertEqual(id, [2101])
+    def test_mlb_get_team_minor_id(self):
+        """mlb get_team_id should return a list of matching team id's"""
+        id = self.mlb.get_team_id('DSL Brewers 2')
+        self.assertEqual(id, [2101])
 
     def test_mlb_get_bad_team_id(self):
         """mlb get_team_id should return a empty list for invalid team name"""

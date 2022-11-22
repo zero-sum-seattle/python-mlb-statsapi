@@ -96,22 +96,22 @@ class MlbAdapterMockTesting(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         pass
-    # TODO Fix test
-    # def test_mlbadapter_mock_bad_json(self):
-    #     """mlbadapter should raise TheMlbStatsApiException"""
-    #     # setting up mock
-    #     self.response.status_code = 200
-    #     self.response._content = '{"some bad json": sdfsd'.encode()
 
-    #     # params to pass
-    #     self.params = {"stats": "season", "group": "hitting"}
+    def test_mlbadapter_mock_bad_json(self):
+        """mlbadapter should raise TheMlbStatsApiException"""
+        # setting up mock
+        self.response.status_code = 200
+        self.response._content = '{"some bad json": sdfsd'.encode()
 
-    #     # patch mlbdataadapter to return bad JSON
-    #     with patch("mlbstatsapi.mlb_dataadapter.requests.get", return_value=self.response):
+        # params to pass
+        self.params = {"stats": "season", "group": "hitting"}
 
-    #         # mlb_adapter should raise exception due to bad JSON
-    #         with self.assertRaises(TheMlbStatsApiException):
-    #             result = self.mlb_adapter.get(endpoint="teams/133/stats", ep_params=self.params)
+        # patch mlbdataadapter to return bad JSON
+        with patch("mlbstatsapi.mlb_dataadapter.requests.get", return_value=self.response):
+
+            # mlb_adapter should raise exception due to bad JSON
+            with self.assertRaises(TheMlbStatsApiException):
+                result = self.mlb_adapter.get(endpoint="teams/133/stats", ep_params=self.params)
 
     def test_mlbadapter_mock_404_json(self):
         """mlbadapter should raise TheMlbStatsApiException"""
