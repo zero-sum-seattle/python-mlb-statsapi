@@ -1,0 +1,168 @@
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "teams": [ {
+            "allStarStatus": "N",
+            "id": 4124,
+            "name": "Pensacola Blue Wahoos",
+            "link": "/api/v1/teams/4124",
+            "season": 2022,
+            "venue": {
+                "id": 4329,
+                "name": "Blue Wahoos Stadium",
+                "link": "/api/v1/venues/4329"
+            },
+            "teamCode": "pen",
+            "fileCode": "t4124",
+            "abbreviation": "PNS",
+            "teamName": "Blue Wahoos",
+            "locationName": "Pensacola",
+            "firstYearOfPlay": "2012",
+            "league": {
+                "id": 111,
+                "name": "Southern League",
+                "link": "/api/v1/league/111"
+            },
+            "division": {
+                "id": 240,
+                "name": "Southern League South",
+                "link": "/api/v1/divisions/240"
+            },
+            "sport": {
+                "id": 12,
+                "link": "/api/v1/sports/12",
+                "name": "Double-A"
+            },
+            "shortName": "Pensacola",
+            "parentOrgName": "Miami Marlins",
+            "parentOrgId": 146,
+            "franchiseName": "Pensacola",
+            "clubName": "Blue Wahoos",
+            "active": true
+        },
+        {
+            "allStarStatus": "N",
+            "id": 2101,
+            "name": "DSL Brewers 2",
+            "link": "/api/v1/teams/2101",
+            "season": 2022,
+            "venue": {
+                "id": 401,
+                "name": "TBD",
+                "link": "/api/v1/venues/401"
+            },
+            "teamCode": "brc",
+            "fileCode": "t2101",
+            "abbreviation": "DSL BRW2",
+            "teamName": "DSL Brewers 2",
+            "locationName": "United States",
+            "firstYearOfPlay": "1990",
+            "league": {
+                "id": 130,
+                "name": "Dominican Summer League",
+                "link": "/api/v1/league/130"
+            },
+            "division": {
+                "id": 246,
+                "name": "Dominican Summer League San Pedro",
+                "link": "/api/v1/divisions/246"
+            },
+            "sport": {
+                "id": 16,
+                "link": "/api/v1/sports/16",
+                "name": "Rookie"
+            },
+            "shortName": "DSL Brewers 2",
+            "parentOrgName": "Milwaukee Brewers",
+            "parentOrgId": 158,
+            "franchiseName": "DSL Brewers 2",
+            "clubName": "DSL Brewers 2",
+            "active": true
+        },
+        {
+            "allStarStatus": "N",
+            "id": 3130,
+            "name": "DSL BAL Orange",
+            "link": "/api/v1/teams/3130",
+            "season": 2022,
+            "venue": {
+                "id": 401,
+                "name": "TBD",
+                "link": "/api/v1/venues/401"
+            },
+            "teamCode": "dba",
+            "fileCode": "t3130",
+            "abbreviation": "DSL BALO",
+            "teamName": "DSL BAL Orange",
+            "locationName": "United States",
+            "firstYearOfPlay": "2009",
+            "league": {
+                "id": 130,
+                "name": "Dominican Summer League",
+                "link": "/api/v1/league/130"
+            },
+            "division": {
+                "id": 250,
+                "name": "Dominican Summer League Baseball City",
+                "link": "/api/v1/divisions/250"
+            },
+            "sport": {
+                "id": 16,
+                "link": "/api/v1/sports/16",
+                "name": "Rookie"
+            },
+            "shortName": "DSL BAL Orange",
+            "parentOrgName": "Baltimore Orioles",
+            "parentOrgId": 110,
+            "franchiseName": "DSL BAL Orange",
+            "clubName": "DSL BAL Orange",
+            "active": true
+        },
+        {
+            "springLeague" : {
+              "id" : 114,
+              "name" : "Cactus League",
+              "link" : "/api/v1/league/114",
+              "abbreviation" : "CL"
+            },
+            "allStarStatus" : "N",
+            "id" : 136,
+            "name" : "Seattle Mariners",
+            "link" : "/api/v1/teams/136",
+            "season" : 2022,
+            "venue" : {
+              "id" : 680,
+              "name" : "T-Mobile Park",
+              "link" : "/api/v1/venues/680"
+            },
+            "springVenue" : {
+              "id" : 2530,
+              "link" : "/api/v1/venues/2530"
+            },
+            "teamCode" : "sea",
+            "fileCode" : "sea",
+            "abbreviation" : "SEA",
+            "teamName" : "Mariners",
+            "locationName" : "Seattle",
+            "firstYearOfPlay" : "1977",
+            "league" : {
+              "id" : 103,
+              "name" : "American League",
+              "link" : "/api/v1/league/103"
+            },
+            "division" : {
+              "id" : 200,
+              "name" : "American League West",
+              "link" : "/api/v1/divisions/200"
+            },
+            "sport" : {
+              "id" : 1,
+              "link" : "/api/v1/sports/1",
+              "name" : "Major League Baseball"
+            },
+            "shortName" : "Seattle",
+            "franchiseName" : "Seattle",
+            "clubName" : "Mariners",
+            "active" : true
+          }
+    ]
+}
