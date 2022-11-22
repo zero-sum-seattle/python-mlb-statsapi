@@ -268,7 +268,7 @@ class Mlb:
         >>> mlb.get_team_id("Oakland Athletics")
         [133]
         """
-    
+
         mlb_data = self._mlb_adapter_v1.get(endpoint='teams', ep_params=params)
         team_ids = []
     
