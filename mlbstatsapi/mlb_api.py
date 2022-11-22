@@ -215,8 +215,7 @@ class Mlb:
             for team in mlb_data.data['teams']:
                 return Team(**team)
 
-    def get_team_id(self, team_name, sport_id: int = 1,
-                search_key: str = 'name', **params) -> List[int]:
+    def get_team_id(self, team_name, search_key: str = 'name', **params) -> List[int]:
         """
         return a team Id
 
@@ -247,7 +246,6 @@ class Mlb:
         >>> mlb.get_team_id("Oakland Athletics")
         [133]
         """
-        params['sportId'] = sport_id
         mlb_data = self._mlb_adapter_v1.get(endpoint='teams', ep_params=params)
         team_ids = []
     
@@ -257,7 +255,8 @@ class Mlb:
                     if team[search_key].lower() == team_name.lower():
                         team_ids.append(team['id'])
                 except (KeyError):
-                    raise TheMlbStatsApiException(f"{search_key} raised a KeyError")
+                    continue
+
         return team_ids
 
     def get_team_roster(self, team_id) -> List[Player]:
