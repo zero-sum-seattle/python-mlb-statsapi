@@ -41,7 +41,7 @@ class Mlb:
         self._logger = logger or logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
 
-    def get_people(self, sport_id: int = 1) -> List[Person]:
+    def get_people(self, sport_id: int = 1, **params) -> List[Person]:
         """
         return the all players for sportid
 
@@ -55,6 +55,13 @@ class Mlb:
         list
             Returns a list of People
 
+        Other Parameters
+        ----------------
+        season : str
+            Insert year to return player information for a particular season.
+        sportId : str
+            Insert a sportId to return player information for a particular sport.
+
         See Also
         --------
         Mlb.get_person : Return Person from id.
@@ -67,7 +74,7 @@ class Mlb:
         [Person, Person, Person]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players', ep_params=params)
         people = []
 
         if 'people' in mlb_data.data and mlb_data.data['people']:
@@ -107,7 +114,8 @@ class Mlb:
             for person in mlb_data.data['people']:
                 return Person(**person)
 
-    def get_people_id(self, fullname, sport_id: int = 1) -> List[int]:
+    def get_people_id(self, fullname, sport_id: int = 1, 
+                      search_key: str = 'fullname', **params) -> List[int]:
         """
         return a person Id
 
@@ -135,14 +143,16 @@ class Mlb:
         [664034]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players', ep_params=params)
         player_ids = []
 
         if 'people' in mlb_data.data and mlb_data.data['people']:
             for person in mlb_data.data['people']:
-                if person['fullname'].lower() == fullname.lower():
-                    player_ids.append(person['id'])
-
+                try:
+                    if person[search_key].lower() == fullname.lower():
+                        player_ids.append(person['id'])
+                except KeyError:
+                    continue
         return player_ids
 
     def get_teams(self, sport_id: int = 1, **params) -> List[Team]:
@@ -152,7 +162,14 @@ class Mlb:
         Parameters
         ----------
         sport_id : int
-            sport_id for teams defaults to 1
+            Insert sportId to return team information for a particular sportId.
+
+        Other Parameters
+        ----------------
+        season : str
+            Insert year to return team information for a particular season.
+        leagueIds : int
+            Insert leagueId to return team information for particular league.
 
         Returns
         -------
@@ -215,7 +232,8 @@ class Mlb:
             for team in mlb_data.data['teams']:
                 return Team(**team)
 
-    def get_team_id(self, team_name, search_key: str = 'name', **params) -> List[int]:
+    def get_team_id(self, team_name,
+                    search_key: str = 'name', **params) -> List[int]:
         """
         return a team Id
 
@@ -768,7 +786,7 @@ class Mlb:
 
         params = {'hydrate': ['location', 'fieldInfo', 'timezone']}
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'venues/{venue_id}', ep_params=params)
-        
+
         if 'venues' in mlb_data.data and mlb_data.data['venues']:
             for venue in mlb_data.data['venues']:
                 return Venue(**venue)
@@ -802,7 +820,8 @@ class Mlb:
 
         return venues
 
-    def get_venue_id(self, venue_name: str) -> List[int]:
+    def get_venue_id(self, venue_name: str,
+                     search_key: str = 'name', **params) -> List[int]:
         """
         return venue id
 
@@ -828,14 +847,16 @@ class Mlb:
         [31]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='venues')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='venues', ep_params=params)
         venue_ids = []
 
         if 'venues' in mlb_data.data and mlb_data.data['venues']:
             for venue in mlb_data.data['venues']:
-                if venue['name'].lower() == venue_name.lower():
-                    venue_ids.append(venue['id'])
-
+                try:
+                    if venue[search_key].lower() == venue_name.lower():
+                        venue_ids.append(venue['id'])
+                except KeyError:
+                    continue
         return venue_ids
 
     def get_sport(self, sport_id: int) -> Union[Sport, None]:
@@ -898,7 +919,8 @@ class Mlb:
 
         return sports
 
-    def get_sport_id(self, sport_name: str) -> List[int]:
+    def get_sport_id(self, sport_name: str,
+                     search_key: str = 'name', **params) -> List[int]:
         """
         return sport id 
 
@@ -929,8 +951,11 @@ class Mlb:
 
         if 'sports' in mlb_data.data and mlb_data.data['sports']:
             for sport in mlb_data.data['sports']:
-                if sport['name'].lower() == sport_name.lower():
-                    sport_ids.append(sport['id'])
+                try:
+                    if sport[search_key].lower() == sport_name.lower():
+                        sport_ids.append(sport['id'])
+                except KeyError:
+                    continue
 
         return sport_ids
 
@@ -989,7 +1014,8 @@ class Mlb:
 
         return leagues
 
-    def get_league_id(self, league_name) -> List[int]:
+    def get_league_id(self, league_name,
+                      search_key: str = 'name', **params) -> List[int]:
         """
         return league id
 
@@ -1014,14 +1040,16 @@ class Mlb:
         [103]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='league')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='league', ep_params=params)
         league_ids = []
 
         if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
             for league in mlb_data.data['leagues']:
-                if league['name'].lower() == league_name.lower():
-                    league_ids.append(league['id'])
-
+                try:
+                    if league['name'].lower() == league_name.lower():
+                        league_ids.append(league['id'])
+                except KeyError:
+                    continue
         return league_ids
 
     def get_division(self, divisionid) -> Union[Division, None]:
@@ -1085,7 +1113,8 @@ class Mlb:
 
         return divisions
 
-    def get_division_id(self, division_name) -> List[Division]:
+    def get_division_id(self, division_name, 
+                        search_key: str = 'name', **params) -> List[Division]:
         """
         return divsion id
 
@@ -1111,14 +1140,16 @@ class Mlb:
         [200]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions', ep_params=params)
         division_ids = []
 
         if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
             for division in mlb_data.data['divisions']:
-                if division['name'].lower() == division_name.lower():
-                    division_ids.append(division['id'])
-
+                try:
+                    if division[search_key].lower() == division_name.lower():
+                        division_ids.append(division['id'])
+                except KeyError:
+                    continue
         return division_ids
 
     def get_season(self, seasonid: str, sportid: int, **params) -> Season:
@@ -1282,6 +1313,7 @@ class Mlb:
             Date
         gametype : str
             Game type
+    
         Returns
         -------
         Attendance

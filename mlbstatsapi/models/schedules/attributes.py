@@ -5,6 +5,7 @@ from mlbstatsapi.models.game.gamedata import GameStatus
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.leagues import LeagueRecord
 
+
 @dataclass
 class ScheduleGameTeam:
     """
@@ -36,6 +37,7 @@ class ScheduleGameTeam:
         self.leaguerecord = LeagueRecord(**self.leaguerecord)
         self.team = Team(**self.team)
 
+
 @dataclass
 class ScheduleHomeAndAway:
     """
@@ -54,6 +56,7 @@ class ScheduleHomeAndAway:
     def __post_init__(self):
         self.home = ScheduleGameTeam(**self.home)
         self.away = ScheduleGameTeam(**self.away)
+
 
 @dataclass
 class ScheduleGames:
