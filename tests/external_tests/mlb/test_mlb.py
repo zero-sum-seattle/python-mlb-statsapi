@@ -2,7 +2,6 @@
 from unittest.mock import patch
 import unittest
 import requests
-import requests_mock
 import json
 import os
 
@@ -18,13 +17,6 @@ from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi import Mlb
 from mlbstatsapi import MlbResult
 from mlbstatsapi import TheMlbStatsApiException
-
-# Mocked JSON directory
-path_to_current_file = os.path.realpath(__file__)
-current_directory = os.path.dirname(path_to_current_file)
-path_to_file = os.path.join(current_directory, "json_data/teams.json")
-TEAMS_JSON_FILE = open(path_to_file, "r", encoding="utf-8-sig").read()
-
 
 class TestMlbDataApi(unittest.TestCase):
     @classmethod
@@ -112,7 +104,6 @@ class TestMlbGetTeam(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.mock_json_objects = json.loads(TEAMS_JSON_FILE)
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -140,22 +131,6 @@ class TestMlbGetTeam(unittest.TestCase):
         """mlb get_team should return None for invalid team id"""
         team = self.mlb.get_team('19999')
         self.assertIsNone(team)
-
-    @requests_mock.Mocker()
-    def test_mlb_get_team_id(self, m):
-        """mlb get_team_id should return a list of matching team id's"""
-        m.get('https://statsapi.mlb.com/api/v1/teams', json=self.mock_json_objects)
-
-        id = self.mlb.get_team_id('Seattle Mariners')
-        self.assertEqual(id, [136])
-
-    @requests_mock.Mocker()
-    def test_mlb_get_team_minor_id(self, m):
-        """mlb get_team_id should return a list of matching team id's"""
-        m.get('https://statsapi.mlb.com/api/v1/teams', json=self.mock_json_objects)
-
-        id = self.mlb.get_team_id('DSL Brewers 2')
-        self.assertEqual(id, [2101])
 
     def test_mlb_get_team_id(self):
         """mlb get_team_id should return a list of matching team id's"""
