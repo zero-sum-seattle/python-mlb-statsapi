@@ -20,6 +20,7 @@ from mlbstatsapi import MlbResult
 from mlbstatsapi import TheMlbStatsApiException
 
 # Mocked JSON directory
+# TODO Find a better way to structure and handle this :) 
 path_to_current_file = os.path.realpath(__file__)
 current_directory = os.path.dirname(path_to_current_file)
 path_to_teams_file = os.path.join(current_directory, "../mock_json/teams/teams.json")
@@ -29,7 +30,12 @@ path_to_person_file = os.path.join(current_directory, "../mock_json/people/perso
 path_to_not_found = os.path.join(current_directory, "../mock_json/response/not_found_404.json")
 path_to_error = os.path.join(current_directory, "../mock_json/response/error_500.json")
 path_to_divisions = os.path.join(current_directory, "../mock_json/divisions/divisions.json")
+path_to_sports = os.path.join(current_directory, "../mock_json/sports/sports.json")
+path_to_sports = os.path.join(current_directory, "../mock_json/sports/sport.json")
 
+
+SPORTS_JSON_FILE = open(path_to_sports, "r", encoding="utf-8-sig").read()
+SPORT_JSON_FILE = open(path_to_sports, "r", encoding="utf-8-sig").read()
 TEAMS_JSON_FILE = open(path_to_teams_file, "r", encoding="utf-8-sig").read()
 TEAM_JSON_FILE = open(path_to_oakland_file, "r", encoding="utf-8-sig").read()
 PEOPLE_JSON_FILE = open(path_to_players_file, "r", encoding="utf-8-sig").read()
@@ -147,6 +153,7 @@ class TestMlbGetPeopleMock(unittest.TestCase):
         id = self.mlb.get_people_id('Joe Blow')
         self.assertEqual(id, [])
 
+
 @requests_mock.Mocker()
 class TestMlbGetTeamMock(unittest.TestCase):
     @classmethod
@@ -215,37 +222,48 @@ class TestMlbGetTeamMock(unittest.TestCase):
         self.assertEqual(id, [])
 
 
-# class TestMlbGetSport(unittest.TestCase):
-#     @classmethod
-#     def setUpClass(cls) -> None:
-#         cls.mlb = Mlb()
-#         pass
+@requests_mock.Mocker()
+class TestMlbGetSport(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.mock_sports = json.loads(SPORTS_JSON_FILE)
+        cls.mock_sport = json.loads(SPORT_JSON_FILE)
+        cls.mock_not_found = json.loads(NOT_FOUND_404)
 
-#     @classmethod
-#     def tearDownClass(cls) -> None:
-#         pass
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
 
-#     def test_get_sport(self):
-#         """mlb get_sport should return a Sport Object"""
-#         sport = self.mlb.get_sport(1)
-#         self.assertIsInstance(sport, Sport)
-#         self.assertEqual(sport.id, 1)
+    def test_get_sport(self, m):
+        """mlb get_sport should return a Sport Object"""
+        m.get('https://statsapi.mlb.com/api/v1/sports/1', json=self.mock_sport,
+        status_code=200)
+        sport = self.mlb.get_sport(1)
+        self.assertIsInstance(sport, Sport)
+        self.assertEqual(sport.id, 1)
 
-#     def test_get_sports(self):
-#         """mlb get_sports should return a list of sport objects"""
-#         sports = self.mlb.get_sports()
-#         self.assertIsInstance(sports, List)
-#         self.assertIsInstance(sports[0], Sport)
+    def test_get_sports(self, m):
+        """mlb get_sports should return a list of sport objects"""
+        m.get('https://statsapi.mlb.com/api/v1/sports', json=self.mock_sports,
+        status_code=200)
+        sports = self.mlb.get_sports()
+        self.assertIsInstance(sports, List)
+        self.assertIsInstance(sports[0], Sport)
 
-#     def test_get_sport_id(self):
-#         """mlb get_sport id should return a sport id"""
-#         id = self.mlb.get_sport_id('Major League Baseball')
-#         self.assertEqual(id, [1])
+    def test_get_sport_id(self, m):
+        """mlb get_sport id should return a sport id"""
+        m.get('https://statsapi.mlb.com/api/v1/sports', json=self.mock_sports,
+        status_code=200)
+        id = self.mlb.get_sport_id('Major League Baseball')
+        self.assertEqual(id, [1])
 
-#     def test_get_sport_invalid_name(self):
-#         """mlb get_sport should return a empty list for invalid sport name"""
-#         id = self.mlb.get_sport_id('NFL')
-#         self.assertEqual(id, [])
+    def test_get_sport_invalid_name(self, m):
+        """mlb get_sport should return a empty list for invalid sport name"""
+        m.get('https://statsapi.mlb.com/api/v1/sports', json=self.mock_sports,
+        status_code=200)
+        id = self.mlb.get_sport_id('NFL')
+        self.assertEqual(id, [])
 
 
 # class TestMlbGetLeague(unittest.TestCase):
