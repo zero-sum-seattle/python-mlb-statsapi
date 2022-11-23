@@ -1,6 +1,6 @@
 # Python MLB Stats API - Unofficial MLB Stats API
 
-![MLB Stats API](/images/background.jpg)
+![MLB Stats API](https://user-images.githubusercontent.com/2068393/203456246-dfdbdf0f-1e43-4329-aaa9-1c4008f9800d.jpg)
 
 
 *Python-mlb-statsapi* is an unffocial MLB Stats API written in python 3.7+. It provides developers access to the MLB Stats API endpoint to pull information related to MLB Rosters, Teams, Players, and stats. 
@@ -38,19 +38,21 @@ python3
 ## Documentation
 
 ### People, Person, Players, Coaches
-* `mlb.get_people_id("Ty France")` - Get Person IDs
+* `mlb.get_people_id('Ty France')` - Get Person IDs
 * `mlb.get_person(664034)` - Get Person Object
 * `mlb.get_people(sport_id=1`) - Get all Players for Sport
 
 ### Teams
-* `mlb.get_team_id()` - Get Team IDs
+* `mlb.get_team_id('Seattle Mariners')` - Get Team IDs
 * `mlb.get_team(133)` - Get Team Object
 * `mlb.get_teams(sport_id=1`) - Get all Teams for Sport
 
 ### Stats
 
 ### Venues
-* `mlb.get_venue_id` - Get Venue IDs
+* `mlb.get_venue_id()` - Get Venue IDs
+* `mlb.get_venue()` - Get Venue Object
+* `mlb.get_venues()` - Get all Venues
 
 ### Sports
 
