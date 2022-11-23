@@ -6,6 +6,7 @@ from mlbstatsapi.models.game.livedata import LiveData
 
 from .attributes import MetaData
 
+
 @dataclass
 class Game:
     """
@@ -13,7 +14,7 @@ class Game:
 
     Attributes
     ----------
-    gamePk : int
+    gamepk : int
         id number of this game
     link : str
         link to the api address for this game

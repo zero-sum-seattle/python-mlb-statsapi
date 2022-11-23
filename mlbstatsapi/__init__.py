@@ -1,4 +1,10 @@
-from .mlbapi import Mlb
-from .mlbdataadapter import MlbDataAdapter, MlbResult
+from .mlb_api import Mlb
+from .mlb_dataadapter import MlbDataAdapter, MlbResult
 from .exceptions import TheMlbStatsApiException
-from .mlb import _transform_mlbdata
+
+from .mlb_module import (
+    transform_mlb_data,
+    return_splits,
+    build_group_list,
+    get_stat_attributes
+    )

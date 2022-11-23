@@ -2,8 +2,8 @@
 from typing import Optional, Union
 
 from mlbstatsapi.models.sports import Sport
+from mlbstatsapi.models.seasons import Season
 
-from .attributes import SeasonDateInfo
 
 @dataclass
 class LeagueRecord:
@@ -14,17 +14,18 @@ class LeagueRecord:
     ----------
     wins : int
         number of wins in leaguerecord
-    losses: int
+    losses : int
         number of losses in leaguerecord
-    ties: int
+    ties : int
         number of ties in leaguerecord
-    pct: str
+    pct : str
         winning pct of leaguerecord
     """
     wins: int
     losses: int
     pct: str
     ties: Optional[int] = None
+
 
 @dataclass
 class League:
@@ -35,66 +36,66 @@ class League:
     ----------
     id : int
         id number of the league
-    name: str
+    name : str
         name of the league
     link : str
         link of the league
-    abbreviation : str = None
+    abbreviation : str
         abbreviation the league
-    nameShort : str = None
+    nameshort : str
         Short name for the league
-    seasonState : str = None
+    seasonstate : str
         State of the leagues season
-    hasWildCard : bool = None
+    haswildcard : bool
         Status of the leagues wildcard
-    hasSplitSeason : bool = None
+    hassplitseason : bool
         Status of the leagues split season
-    numGames : int = None
+    numgames : int
         Total number of league games
-    hasPlayoffPoints : bool = None
+    hasplayoffpoints : bool
         Status of the leagues playoff points
-    numTeams : int = None
+    numteams : int
         Total number of team in league
-    numWildcardTeams : int = None
+    numwildcardteams : int
         Total number of wildcard teams in league
-    seasonDateInfo : LeagueSeasonDateInfo = None
+    seasondateinfo : LeagueSeasonDateInfo
         LeagueSeasonDateInfo attribue
-    season : str = None
+    season : str
         League season
-    orgCode : str = None
+    orgcode : str
         Leagues orginization code
-    conferencesInUse : bool = None
+    conferencesinuse : bool
         Status of the in use conferences of the league
-    divisionsInUse : bool = None
+    divisionsinuse : bool
         Status of leagues divisions in use
-    sport : Sport = None
+    sport : Sport
         What 'sport' this league is a part of
-    sortOrder : int = None
+    sortorder : int
         League sort order
-    active : bool = None
+    active : bool
         Status on the activity of the league
     """
-    id:                 int
-    link:               str
-    name:               Optional[str] = None
-    abbreviation:       Optional[str] = None
-    nameshort:          Optional[str] = None
-    seasonstate:        Optional[str] = None
-    haswildcard:        Optional[bool] = None
-    hassplitseason:     Optional[bool] = None
-    numgames:           Optional[int] = None
-    hasplayoffpoints:   Optional[bool] = None
-    numteams:           Optional[int] = None
-    numwildcardteams:   Optional[int] = None
-    seasondateinfo:     Optional[Union[SeasonDateInfo, dict]] = None
-    season:             Optional[str] = None
-    orgcode:            Optional[str] = None
-    conferencesinuse:   Optional[bool] = None
-    divisionsinuse:     Optional[bool] = None
-    sport:              Optional[Union[Sport, dict]] = None
-    sortorder:          Optional[int] = None
-    active:             Optional[bool] = None
+    id: int
+    link: str
+    name: Optional[str] = None
+    abbreviation: Optional[str] = None
+    nameshort: Optional[str] = None
+    seasonstate: Optional[str] = None
+    haswildcard: Optional[bool] = None
+    hassplitseason: Optional[bool] = None
+    numgames: Optional[int] = None
+    hasplayoffpoints: Optional[bool] = None
+    numteams: Optional[int] = None
+    numwildcardteams: Optional[int] = None
+    seasondateinfo: Optional[Union[Season, dict]] = None
+    season: Optional[str] = None
+    orgcode: Optional[str] = None
+    conferencesinuse: Optional[bool] = None
+    divisionsinuse: Optional[bool] = None
+    sport: Optional[Union[Sport, dict]] = None
+    sortorder: Optional[int] = None
+    active: Optional[bool] = None
 
     def __post_init__(self):
-        self.seasondateinfo = SeasonDateInfo(**self.seasondateinfo) if self.seasondateinfo else self.seasondateinfo
+        self.seasondateinfo = Season(**self.seasondateinfo) if self.seasondateinfo else self.seasondateinfo
         self.sport = Sport(**self.sport) if self.sport else self.sport

@@ -1,6 +1,7 @@
 from typing import Union, Optional
 from dataclasses import dataclass
 
+
 @dataclass
 class HitCoordinate:
     """
@@ -23,6 +24,7 @@ class HitCoordinate:
     @property
     def y(self):
         return self.coordy
+
 
 @dataclass
 class HitData:
@@ -58,6 +60,7 @@ class HitData:
     def __post_init__(self):
         self.coordinates = HitCoordinate(**self.coordinates)
 
+
 @dataclass
 class PlayEventCallType:
     """
@@ -73,6 +76,7 @@ class PlayEventCallType:
     code: str
     description: str
 
+
 @dataclass
 class PlayEventDetails:
     """
@@ -86,33 +90,33 @@ class PlayEventDetails:
         Play event has review
     call : PlayEventDetailsCallType
         Play event call
-    event : str = None
+    event : str
         Play event
-    eventtype : str = None
+    eventtype : str
         Play event type
-    code : str = None
+    code : str
         Play event Code
-    ballcolor : str = None
+    ballcolor : str
         ballColor
-    trailcolor : str = None
+    trailcolor : str
         trailColor
-    awayscore : int = None
+    awayscore : int
         awayScore
-    homescore : int = None
+    homescore : int
         homeScore
-    isinplay : bool = None
+    isinplay : bool
         If it is in play
-    isstrike : bool = None
+    isstrike : bool
         If it is a strike
-    isball : bool = None
+    isball : bool
         If it is a ball
-    isscoringplay : bool = None
+    isscoringplay : bool
         If it is a scoring play
     type : PlayEventDetailsCallType
         Play type
-    fromcatcher : bool = None
+    fromcatcher : bool
         If from the catcher
-    runnergoing : bool = None
+    runnergoing : bool 
         If a runner is going
     """
     description: str
@@ -136,6 +140,7 @@ class PlayEventDetails:
     def __post_init__(self):
         self.call = PlayEventCallType(**self.call) if self.call else self.call
         self.type = PlayEventCallType(**self.type) if self.type else self.type
+
 
 @dataclass
 class PlayCount:

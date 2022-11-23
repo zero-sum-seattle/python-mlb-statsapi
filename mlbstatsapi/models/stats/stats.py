@@ -1,11 +1,11 @@
 ﻿from dataclasses import dataclass, field
-from types import NoneType
 from typing import Optional, Union, List
 
 from mlbstatsapi.models.teams import Team
-from mlbstatsapi.models.people import Person, Player, Batter
+from mlbstatsapi.models.people import Person, Batter, Position
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
+
 
 @dataclass
 class CodeDesc:
@@ -21,6 +21,7 @@ class CodeDesc:
     """
     code: str
     description: Optional[str] = None
+
 
 @dataclass
 class Count:
@@ -57,8 +58,9 @@ class Count:
     runneron3b: bool
     strikes: int
 
+
 @dataclass(kw_only=True)
-class Splits:
+class Stat:
     """
     Base class for stats
 
@@ -80,9 +82,9 @@ class Splits:
         date of game
     group : str 
         type of stat group
-    stat_group : str
+    _group : str
         type of the stat group
-    stat_type : str
+    _type : str
         type of the stat 
     """
     _group: str
@@ -91,34 +93,34 @@ class Splits:
     numteams: Optional[int] = None
     gametype: Optional[str] = None
     rank: Optional[int] = None
+    position: Optional[Union[Position, dict]] = field(default_factory=dict)
     team: Optional[Union[Team, dict]] = field(default_factory=dict)
     player: Optional[Union[Person, dict]] = field(default_factory=dict)
     sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
     league: Optional[Union[League, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
-        self.team =  Team(**self.team) if self.team else self.team
-        self.player = Person(**self.player) if self.player else self.player
-        self.sport = Sport(**self.sport) if self.sport else self.sport
-        self.league = League(**self.league) if self.league else self.league
+        self.position = Position(**self.position) if self.position else self.position
+
 
 @dataclass(kw_only=True)
-class PitchArsenal(Splits):
+class PitchArsenal(Stat):
     """
     A class to represent a pitcharsenal stat for a hitter and pitcher
 
     Attributes
     ----------
     """
-    _stat = [ 'pitchArsenal' ]
+    _stat = ['pitchArsenal']
     averagespeed: float
     count:  int
     percentage: float
     totalpitches: int
     type: Union[CodeDesc, dict]
-    
+
     def __post_init__(self):
         self.type = CodeDesc(**self.type) if self.type else self.type
+
 
 @dataclass(kw_only=True)
 class ZoneCodes:
@@ -141,8 +143,9 @@ class ZoneCodes:
     color: Optional[str] = None
     temp: Optional[str] = None
 
+
 @dataclass(kw_only=True)
-class HotColdZones(Splits):
+class HotColdZones(Stat):
     """
     A class to represent a hot cold zone statistic
 
@@ -153,15 +156,16 @@ class HotColdZones(Splits):
     zones : List[ZoneCodes]
         a list of zone codes to describe the zone
     """
-    name: str 
+    name: str
     zones: List[ZoneCodes]
-    _stat = [ 'hotColdZones' ]
+    _stat = ['hotColdZones']
 
     def __post_init__(self):
-        self.zones = [ ZoneCodes(**zone) for zone in self.zones ]
+        self.zones = [ZoneCodes(**zone) for zone in self.zones]
+
 
 @dataclass(kw_only=True)
-class SprayCharts(Splits):
+class SprayCharts(Stat):
     """
     A class to represent a spraychart statistic
 
@@ -183,20 +187,21 @@ class SprayCharts(Splits):
     centerfield: int
     rightcenterfield: int
     rightfield: int
-    _stat = [ 'sprayChart' ]
+    _stat = ['sprayChart']
     batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.batter = Batter(**self.batter) if self.batter else self.batter
 
+
 @dataclass(kw_only=True)
-class OutsAboveAverage(Splits):
+class OutsAboveAverage(Stat):
     """
     A class to represent a outs above average statistic
 
     NOTE: This stat type returns a empty list, or keys with with the value 0
     """
-    _stat = [ 'outsAboveAverage' ]
+    _stat = ['outsAboveAverage']
     attempts: int
     totaloutsaboveaverageback: int
     totaloutsaboveaveragebackunrounded: int

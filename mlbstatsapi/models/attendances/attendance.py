@@ -12,7 +12,7 @@ class Attendance:
         Copyright message
     records : List[AttendanceRecords]
         List of attendance records
-    aggregateTotals : AttendanceAggregateTotals
+    aggregatetotals : AttendanceAggregateTotals
         Attendence aggregate total numbers for query
     """
     aggregatetotals: Union[AttendanceTotals, dict]

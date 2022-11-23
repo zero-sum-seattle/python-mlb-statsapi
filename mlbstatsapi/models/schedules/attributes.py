@@ -5,6 +5,7 @@ from mlbstatsapi.models.game.gamedata import GameStatus
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.leagues import LeagueRecord
 
+
 @dataclass
 class ScheduleGameTeam:
     """
@@ -12,17 +13,17 @@ class ScheduleGameTeam:
 
     Attributes
     ----------
-    leagueRecord : LeagueRecord
+    leaguerecord : LeagueRecord
         League record for this team
     score : int
         Current score for this team in this game
     team : ScheduleGameTeamInfo
         Team info for this game
-    isWinner : bool
+    iswinner : bool
         If this team is the winner of this game
-    splitSquad : bool
+    splitsquad : bool
         Split squad
-    seriesNumber : int
+    seriesnumber : int
         Series number 
     """
     leaguerecord: Union[LeagueRecord, dict]
@@ -35,6 +36,7 @@ class ScheduleGameTeam:
     def __post_init__(self):
         self.leaguerecord = LeagueRecord(**self.leaguerecord)
         self.team = Team(**self.team)
+
 
 @dataclass
 class ScheduleHomeAndAway:
@@ -55,6 +57,7 @@ class ScheduleHomeAndAway:
         self.home = ScheduleGameTeam(**self.home)
         self.away = ScheduleGameTeam(**self.away)
 
+
 @dataclass
 class ScheduleGames:
     """
@@ -62,17 +65,17 @@ class ScheduleGames:
 
     Attributes
     ----------
-    gamePk : int
+    gamepk : int
         The games id number
     link : str
         The link for this game
-    gameType : str
+    gametype : str
         This games game type
     season : str
         The season this game takes place in
-    gameDate : str
+    gamedate : str
         The date for this game
-    officialDate : str
+    officialdate : str
         The official date for this game
     status : GameStatus
         The status of this game
@@ -82,51 +85,51 @@ class ScheduleGames:
         The venue this game takes place in
     content : dict
         Content for this game. Havent found a populated reference yet. Stays as dict
-    isTie : bool
+    istie : bool
         If this game is a tie
-    gameNumber : int
+    gamenumber : int
         Game number for this game
-    publicFacing : bool
+    publicfacing : bool
         Is this game public facing
-    doubleHeader : str
+    doubleheader : str
         The double header status for this game, "n','y'?
-    gamedayType : str
+    gamedaytype : str
         The type of gameday for this game
     tiebreaker : str
         Tie breaker for this game, 'n','y'?
-    calendarEventID : str
+    calendareventid : str
         Calender event Id for this game
-    seasonDisplay : str
+    seasondisplay : str
         Displayed season for this game
-    dayNight : str
+    daynight : str
         Day or night game as a string, 'am','pm'?
-    scheduledInnings : int
+    scheduledinnings : int
         Number of scheduled inning for the game
-    reverseHomeAwayStatus : bool
+    reversehomeawaystatus : bool
         If reverse home and away?
-    inningBreakLength : int
+    inningbreaklength : int
         Length of break between innings
-    gamesInSeries : int
+    gamesinseries : int
         Number of games in current series
-    seriesGameNumber : int
+    seriesgamenumber : int
         Game number in the current series
-    seriesDescription : str
+    seriesdescription : str
         Description of this current series
-    recordSource : str
+    recordsource : str
         Record source 
-    ifNecessary : str
+    ifnecessary : str
         If necessary
-    ifNecessaryDescription : str
+    ifnecessarydescription : str
         If necessary description
-    rescheduleDate : str = None
+    rescheduledate : str = None
         If game is rescheduled, this is the rescheduled date
-    rescheduleGameDate : str = None
+    reschedulegamedate : str = None
         rescheduled game date
-    rescheduledFrom : str = None
+    rescheduledfrom : str = None
         rescheduled from
-    rescheduledFromDate : str = None
+    rescheduledfromdate : str = None
         rescheduled from date
-    isTie : bool = None
+    istie : bool = None
         Is tie
     """
     gamepk: int
@@ -177,13 +180,13 @@ class ScheduleDates:
     ----------
     date : str
         Date for the group of games
-    totalItems : int
+    totalitems : int
         Total amount of items for this date
-    totalEvents : int
+    totalevents : int
         The number of events for this date
-    totalGames : int
+    totalgames : int
         The number of games for this date
-    totalGamesInProgress : int
+    totalgamesinprogress : int
         The number of games that are currently in progress for this date
     games : List[ScheduleGames]
         A list of games for this date

@@ -1,5 +1,6 @@
 ﻿from typing import Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, InitVar
+
 
 @dataclass
 class Sport:
@@ -12,15 +13,15 @@ class Sport:
         id number of the sport
     link : str
         link of the sport
-    name : str = None
+    name : str 
         name the sport
-    code : str = None
+    code : str
         Sport code
-    abbreviation : str = None
+    abbreviation : str
         Abbreviation for the sport
-    sortorder : int = None
+    sortorder : int
         Some sort of sorting order
-    activestatus : bool = None
+    activestatus : bool
         Is the sport active
     """
     id: int

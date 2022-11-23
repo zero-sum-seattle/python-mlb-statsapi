@@ -18,23 +18,23 @@ class Division:
         name of the division
     link : str
         link of the division
-    season : str = None
+    season : str
         Current season for the division
-    nameShort : str = None
+    nameshort : str
         Short name for the division
-    abbreviation : str = None
+    abbreviation : str
         Abbreviation of the divison name
-    league : League = None
+    league : League
         League this division is in
-    sport : Sport = None
+    sport : Sport
         Sport this divison is in
-    hasWildcard : bool = None
+    haswildcard : bool
         If this league has a wildcard
-    sortOrder : int = None
+    sortorder : int
         Sort order
-    numPlayoffTeams : int = None
+    numplayoffteams : int
         Number of playoff teams in division
-    active : bool = None
+    active : bool
         Current status of this division
     """
     id: int

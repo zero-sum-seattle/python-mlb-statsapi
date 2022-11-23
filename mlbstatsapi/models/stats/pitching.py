@@ -5,15 +5,141 @@ from mlbstatsapi.models.people import Person, Pitcher, Batter
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 
-from .stats import Splits, CodeDesc, Count
-from .hitting import SimpleHittingStat
+from .stats import Stat, CodeDesc, Count
+from .hitting import SimpleHittingSplit
+
 
 @dataclass
-class SimplePitching:
+class SimplePitchingSplit:
     """
     A class to represent a advanced pitching statistics
 
     attributes are all optional as there is no documentation for the stats endpoint
+
+    Attributes
+    ----------
+    gamesplayed : int
+        The games played by the pitcher.
+    gamesstarted : int
+        The games started by the pitcher.
+    groundouts : int
+        The number of groundouts for the pitcher.
+    airouts : int
+        The number of airouts for the pitcher.
+    runs : int
+        The number of runs given up by the pitcher.
+    doubles : int
+        The number of doubles given up by the pitcher.
+    triples : int
+        The number of triples given up by the pitcher.
+    homeruns : int
+        The number of home runs given up by the pitcher.
+    strikeouts : int
+        The number of strike outs performed by the pitcher.
+    baseonballs : int
+        The number of base on balls (walks) performed by the pitcher.
+    intentionalwalks : int
+        The number of intentional walks performed by the pitcher.
+    hits : int
+        The number of hits given up by the pitcher.
+    hitbypitch : int
+        The number of batters hit by the pitcher.
+    avg : int
+        The batting avg against the pitcher.
+    atbats : int
+        The at bats pitched by the pitcher.
+    obp : str
+        The on base percentage again the pitcher.
+    slg : str
+        The slugging percentage against the pitcher.
+    ops : str
+        The on base slugging against the pitcher.
+        see also: https://www.mlb.com/glossary/standard-stats/on-base-plus-slugging
+    caughtstealing : int
+        The number of runners caught stealing against the pitcher.
+    stolenbases : int
+        The number of stolen bases while pitching.
+    stolenbasepercentage : int
+        The stolen base percentage while pitching.
+    groundintodoubleplay : int
+        The number of hits against 
+    numberofpitches : int
+        The number of pitches thrown.
+    era : str
+        The earned run average of the pitcher.
+    inningspitched : int
+        The number of innings pitched by the pitcher.
+    wins : int
+        The number of wins by the pitcher.
+    losses : int
+        The number of losses by the pitcher.
+    saves : int
+        The number of saves by the pitcher.
+    saveopportunities : int
+        The number of save opportunities by the pitcher.
+    holds : int
+        The number of holds by the pitcher.
+    blownsaves : int
+        The number of blown saves performed by the pitcher.
+    earnedruns : int
+        The number of earned runs given up by the pitcher.
+    whip : str
+        The number of walks and hits per inning pitched.
+        see also: https://www.mlb.com/glossary/standard-stats/walks-and-hits-per-inning-pitched
+    outs : int
+        The number of outs 
+    gamespitched : int
+        The number of games pitched.
+    completegames : int
+        The number of complete games pitched.
+    shutouts : int
+        The number of shut outs pitched.
+    strikes : int
+        The number of strikes thown by the pitcher.
+    hitbatsmen : int
+        The number of batters hit by a pitch.
+    strikepercentage : str
+        The strike percentage thrown by the pitcher.
+    wildpitches : int
+        The number of wild pitches thown by the pitcher.
+    balks : int
+        The number of balks commited by the pitcher.
+    totalbases : int
+        The total bases given up by the pitcher.
+    pickoffs : int
+        The number of pick offs performed by the pitcher.
+    winpercentage : str
+        The winpercentage of the pitcher.
+    groundoutstoairouts : str
+        The groundout-to-airout ratio of the pitcher.
+    gamesfinished : int
+        The number of games finished by the pitcher.
+    pitchesperinning : str
+        The number of pitches thown per inning by the pitcher.
+    strikeoutsper9inn : str
+        The number of strike outs per 9 innings by the pitcher
+    strikeoutwalkratio : str
+        The strike out to walk ratio of the pitcher.
+    hitsper9inn : str
+        The number of hits per 9 innings pitched.
+    walksper9inn : str
+        The number of walks per 9 innings pitched.
+    homerunsper9 : str
+        The number of home runs per 9 innings pitched.
+    runsscoredper9 : str
+        The number of runs scored per 9 innings pitched.
+    sacbunts : int
+        The number of sac bunts given up when pitched.
+    catchersinterference : int
+        The number of times a runner has reached from catchers interference while pitching.
+    battersfaced : int
+        The number of batters faced by the pitcher.
+    sacflies : int
+        The number of sac flies given up by the pitcher.
+    inheritedrunnersscored : int
+        The number of inherited runners scored by the pitcher.
+    inheritedrunners : int
+        The number of inherited runners for the pitcher.
     """
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
@@ -76,12 +202,111 @@ class SimplePitching:
     inheritedrunners: Optional[int] = None
     inheritedrunnersscored: Optional[int] = None
 
-@dataclass
-class AdvancedPitching:
-    """
-    A class to represent a advanced pitching statistics
 
-    attributes are all optional as there is no documentation for the stats endpoint
+@dataclass
+class AdvancedPitchingSplit:
+    """
+    A class to represent a advanced pitching statistics 
+    
+    winningpercentage : str
+        The winning percentage of the pitcher.
+    runsscoredper9 : str
+        The number of runs scored per 9 innings
+    battersfaced : int
+        The number of batters faced
+    babip : str
+        The BABIP of the pitcher.
+    obp : str
+        The on base percentage again the pitcher.
+    slg : str
+        The slugging percentage against the pitcher.
+    ops : str
+        The on base slugging against the pitcher.
+        see also: https://www.mlb.com/glossary/standard-stats/on-base-plus-slugging
+    strikeoutsper9 : str
+        The number of strike outs per 9 innings by the pitcher
+    baseonballsper9 : str
+        The number of base on balls per 9 innings by the pitcher.
+    homerunsper9 : str
+        The number of home runs per 9 innings by the pitcher.
+    hitsper9 : str
+        The number of hits per 9 innings by the pitcher.
+    strikesoutstowalks : str
+        The strike out to walk ratio of the pitcher.
+    stolenbases : int
+         The number of stolen bases while pitching.  
+    caughtstealing : int
+        The number of runners caught stealing by the pitcher.
+    qualitystarts : int
+        The number of quality starts performed by the pitcher.
+    gamesfinished : int
+        The number of games finished performed by the pitcher.
+    doubles : int
+        The number of doubles given up by the pitcher.
+    triples : int
+        The number of triples given up by the pitcher.
+    gidp : int
+        The amount of hits that lead to a double play.
+        see here: https://www.mlb.com/glossary/standard-stats/ground-into-double-play
+    gidpopp : int
+        The amount of GIDP opportunities. 
+    wildpitches : int
+        The number of wild pitches thown by the pitcher.
+    balks : int
+        The number of balks commited by the pitcher.
+    pickoffs : int
+        The number of pick offs attempted by the pitcher.
+    totalswings : int
+        The number of swings against the pitcher.
+    swingandmisses : int
+        The number of swing and misses against the pitcher. 
+    ballsinplay : int
+        The number of balls put into play against the pitcher.
+    runsupport : int
+        The number of run support
+    strikepercentage : str
+        The strike percentage thown by the pitcher.
+    pitchesperinning : str
+        The number of pitches per inning
+    pitchesperplateappearance : str
+        The avg number of pitches per plate appearance of the pitcher.
+    walksperplateappearance : str
+        The number of walks per plate appearance for the pitcher.
+    strikeoutsperplateappearance : str
+        The strike outs per plate appearance for the pitcher.
+    homerunsperplateappearance : str
+        The home runs per plate appearance for the pitcher.
+    walksperstrikeout : str
+        The walk per strike out ratio of the pitcher
+    iso : str
+        Isolasted power.
+        see also: https://www.mlb.com/glossary/advanced-stats/isolated-power
+    flyouts : int
+        The number of ly outs given up by the pitcher.
+    popouts : int
+        The number of pop outs given up by the pitcher.
+    lineouts : int
+        The number of line outs given up by the pitcher.
+    groundouts : int
+        The number of ground outs given up by the pitcher.
+    flyhits : int
+        The number of fly hits given up by the pitcher.
+    pophits : int
+        The number of pop hits given up by the pitcher.
+    linehits : int
+        The number of line hits given up by the pitcher.
+    groundhits : int
+        The number of ground hits given up by the pitcher.
+    inheritedrunners : int
+        The number of inherited runners for the pitcher.
+    inheritedrunnersscored : int
+        The number of inherited runners scored for the pitcher.
+    bequeathedrunners : int
+        The number of bequeathed runners.
+        see also: https://www.mlb.com/glossary/advanced-stats/bequeathed-runners
+    bequeathedrunnersscored : int
+        The number of bequeathed runners scored.
+        see also: https://www.mlb.com/glossary/advanced-stats/bequeathed-runners
     """
     winningpercentage: Optional[str] = None
     runsscoredper9: Optional[str] = None
@@ -131,8 +356,9 @@ class AdvancedPitching:
     bequeathedrunners: Optional[int] = None
     bequeathedrunnersscored: Optional[int] = None
 
+
 @dataclass(kw_only=True)
-class PitchingSabermetrics(Splits):
+class PitchingSabermetrics(Stat):
     """
     A class to represent a pitching sabermetric statistics
 
@@ -160,120 +386,97 @@ class PitchingSabermetrics(Splits):
     rar: float
     war: float
 
+
 @dataclass(kw_only=True)
-class PitchingSeason(Splits, SimplePitching):
+class PitchingSeason(Stat, SimplePitchingSplit):
     """
     A class to represent a pitching season statistic
 
     Attributes
     ----------
-    gametype : str
-        the gametype code of the pitching season 
-    numteams : str
-        the number of teams for the pitching season
     """
-    _stat = [ 'season', 'statsSingleSeason' ]
+    _stat = ['season', 'statsSingleSeason']
+
 
 @dataclass(kw_only=True)
-class PitchingCareer(Splits, SimplePitching):
+class PitchingCareer(Stat, SimplePitchingSplit):
     """
     A class to represent a pitching season statistic
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching yearByYear 
-    numteams : str
-        the number of teams for the pitching season
     """
-    _stat = [ 'career']
+    _stat = ['career']
+
 
 @dataclass(kw_only=True)
-class PitchingCareerAdvanced(Splits, AdvancedPitching):
+class PitchingCareerAdvanced(Stat, AdvancedPitchingSplit):
     """
     A class to represent a pitching season statistic
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching yearByYear 
-    numteams : str
-        the number of teams for the pitching season
     """
-    _stat = [ 'careerAdvanced' ]
+    _stat = ['careerAdvanced']
+
 
 @dataclass(kw_only=True)
-class PitchingYearByYear(Splits, SimplePitching):
+class PitchingYearByYear(Stat, SimplePitchingSplit):
     """
     A class to represent a yearByYear season statistic
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching yearByYear 
-    numteams : str
-        the number of teams for the pitching yearByYear
     """
-    _stat = [ 'yearByYear' ]
+    _stat = ['yearByYear']
+
 
 @dataclass(kw_only=True)
-class PitchingYearByYearPlayoffs(Splits, SimplePitching):
+class PitchingYearByYearPlayoffs(Stat, SimplePitchingSplit):
     """
     A class to represent a yearByYear season statistic
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching yearByYear 
-    numteams : str
-        the number of teams for the pitching yearByYear
     """
-    _stat = [ 'yearByYearPlayoffs' ]
+    _stat = ['yearByYearPlayoffs']
+
 
 @dataclass(kw_only=True)
-class PitchingYearByYearAdvanced(Splits, AdvancedPitching):
+class PitchingYearByYearAdvanced(Stat, AdvancedPitchingSplit):
     """
     A class to represent a pitching yearByYear statistic
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching yearByYear 
-    numteams : str
-        the number of teams for the pitching yearByYear
     """
-    _stat = [ 'yearByYearAdvanced' ]
+    _stat = ['yearByYearAdvanced']
+
 
 @dataclass(kw_only=True)
-class PitchingSeasonAdvanced(Splits, AdvancedPitching):
+class PitchingSeasonAdvanced(Stat, AdvancedPitchingSplit):
     """
     A class to represent a pitching seasonAdvanced statistic
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching season 
-    numteams : str
-        the number of teams for the pitching season
     """
-    _stat = [ 'seasonAdvanced' ]
+    _stat = ['seasonAdvanced']
+
 
 @dataclass(kw_only=True)
-class PitchingSingleSeasonAdvanced(Splits, AdvancedPitching):
+class PitchingSingleSeasonAdvanced(Stat, AdvancedPitchingSplit):
     """
     A class to represent a pitching seasonAdvanced statistic
 
     Attributes
     ----------
-    gametype : Team
-        the gametype code of the pitching season 
-    numteams : str
-        the number of teams for the pitching season
     """
-    _stat = [ 'statsSingleSeasonAdvanced' ]
+    _stat = ['statsSingleSeasonAdvanced']
+
 
 @dataclass(kw_only=True)
-class PitchingGameLog(Splits, SimplePitching):
+class PitchingGameLog(Stat, SimplePitchingSplit):
     """
     A class to represent a gamelog stat for a pitcher
 
@@ -297,10 +500,8 @@ class PitchingGameLog(Splits, SimplePitching):
     game: Union[Game, dict]
     date: str
     opponent: Union[Team, dict]
-    _stat = [ 'gameLog' ]
+    _stat = ['gameLog']
 
-    def __post_init__(self):
-        self.opponent = Team(**self.opponent)
 
 @dataclass
 class PlayDetails:
@@ -356,8 +557,9 @@ class PlayDetails:
         self.pitchhand = CodeDesc(**self.pitchhand) 
         self.type = CodeDesc(**self.type) if self.type else self.type
 
+
 @dataclass(kw_only=True)
-class PitchingLog(Splits):
+class PitchingLog(Stat):
     """
     A class to represent a pitchLog stat for a pitcher
 
@@ -387,7 +589,7 @@ class PitchingLog(Splits):
         the game of the log
 
     """
-    _stat = [ 'pitchLog' ]
+    _stat = ['pitchLog']
     season: str
     opponent: Union[Team, dict]
     date: str
@@ -405,12 +607,10 @@ class PitchingLog(Splits):
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
-        self.opponent = Team(**self.opponent)
+
 
 @dataclass(kw_only=True)
-class PitchingPlayLog(Splits):
+class PitchingPlayLog(Stat):
     """
     A class to represent a playLog stat for a pitcher
 
@@ -440,7 +640,7 @@ class PitchingPlayLog(Splits):
         the game of the log
 
     """
-    _stat = [ 'playLog' ]
+    _stat = ['playLog']
     season: str
     opponent: Union[Team, dict]
     date: str
@@ -458,110 +658,101 @@ class PitchingPlayLog(Splits):
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
-        self.opponent = Team(**self.opponent)
+
 
 @dataclass(kw_only=True)
-class PitchingByDateRange(Splits, SimplePitching):
+class PitchingByDateRange(Stat, SimplePitchingSplit):
     """
     A class to represent a byDateRange stat for a pitcher
 
     Attributes
     ----------
-    daysofweek : int
-    numteams : int
-    daysofweek : int
-
+    dayofweek : int
     """
-    _stat = [ 'byDateRange' ]
+    _stat = ['byDateRange']
     dayofweek: Optional[int] = None
 
+
 @dataclass(kw_only=True)
-class PitchingByDateRangeAdvanced(Splits, AdvancedPitching):
+class PitchingByDateRangeAdvanced(Stat, AdvancedPitchingSplit):
     """
     A class to represent a byDateRangeAdvanced stat for a pitcher
 
     Attributes
     ----------
-    numteams : int
-    daysofweek : int
+    dayofweek : int
     """
-    _stat = [ 'byDateRangeAdvanced' ]
+    _stat = ['byDateRangeAdvanced']
     dayofweek: Optional[int] = None
 
+
 @dataclass(kw_only=True)
-class PitchingByMonth(Splits, SimplePitching):
+class PitchingByMonth(Stat, SimplePitchingSplit):
     """
     A class to represent a byMonthPlayoffs stat for a pitcher
 
     Attributes
     ----------
     month : int
-    numteams : int
-
     """
-    _stat = [ 'byMonth']
+    _stat = ['byMonth']
     month: int
 
+
 @dataclass(kw_only=True)
-class PitchingByMonthPlayoffs(Splits, SimplePitching):
+class PitchingByMonthPlayoffs(Stat, SimplePitchingSplit):
     """
     A class to represent a byMonthPlayoffs stat for a pitcher
 
     Attributes
     ----------
     month : int
-    numteams : int
     """
-    _stat = [ 'byMonthPlayoffs' ]
+    _stat = ['byMonthPlayoffs']
     month: int
 
+
 @dataclass(kw_only=True)
-class PitchingByDayOfWeek(Splits, SimplePitching):
+class PitchingByDayOfWeek(Stat, SimplePitchingSplit):
     """
     A class to represent a byDayOfWeek stat for a pitcher
 
     Attributes
     ----------
     dayofweek : int
-    daysofweek : int
-    numteams: int
-
     """
-    _stat = [ 'byDayOfWeek' ]
+    _stat = ['byDayOfWeek']
     dayofweek: Optional[int] = None
 
+
 @dataclass(kw_only=True)
-class PitchingByDayOfWeekPlayOffs(Splits, SimplePitching):
+class PitchingByDayOfWeekPlayOffs(Stat, SimplePitchingSplit):
     """
     A class to represent a byDayOfWeekPlayoffs stat for a pitcher
 
     Attributes
     ----------
-    daysofweek : int
-    daysofweek : int
-    numteams : int
-
+    dayofweek : int
     """
-    _stat = [ 'byDayOfWeekPlayoffs' ]
+    _stat = ['byDayOfWeekPlayoffs']
     dayofweek: Optional[int] = None
 
+
 @dataclass(kw_only=True)
-class PitchingHomeAndAway(Splits, SimplePitching):
+class PitchingHomeAndAway(Stat, SimplePitchingSplit):
     """
     A class to represent a homeAndAway stat for a pitcher
 
     Attributes
     ----------
     ishome : bool
-
     """
-    _stat = [ 'homeAndAway' ]
+    _stat = ['homeAndAway']
     ishome: bool
 
+
 @dataclass(kw_only=True)
-class PitchingHomeAndAwayPlayoffs(Splits, SimplePitching):
+class PitchingHomeAndAwayPlayoffs(Stat, SimplePitchingSplit):
     """
     A class to represent a homeAndAwayPlayoffs stat for a pitcher
 
@@ -569,11 +760,12 @@ class PitchingHomeAndAwayPlayoffs(Splits, SimplePitching):
     ----------
     ishome : bool
     """
-    _stat = [ 'homeAndAwayPlayoffs' ]
+    _stat = ['homeAndAwayPlayoffs']
     ishome: bool
 
+
 @dataclass(kw_only=True)
-class PitchingWinLoss(Splits, SimplePitching):
+class PitchingWinLoss(Stat, SimplePitchingSplit):
     """
     A class to represent a winLoss stat for a pitcher
 
@@ -581,11 +773,12 @@ class PitchingWinLoss(Splits, SimplePitching):
     ----------
     iswin : bool
     """
-    _stat = [ 'winLoss' ]
+    _stat = ['winLoss']
     iswin: bool
 
+
 @dataclass(kw_only=True)
-class PitchingWinLossPlayoffs(Splits, SimplePitching):
+class PitchingWinLossPlayoffs(Stat, SimplePitchingSplit):
     """
     A class to represent a winLossPlayoffs stat for a pitcher
 
@@ -593,61 +786,46 @@ class PitchingWinLossPlayoffs(Splits, SimplePitching):
     ----------
     iswin : bool
     """
-    _stat = [ 'winLossPlayoffs' ]
+    _stat = ['winLossPlayoffs']
     iswin: bool
 
+
 @dataclass(kw_only=True)
-class PitchingRankings(Splits, SimplePitching):
+class PitchingRankings(Stat, SimplePitchingSplit):
     """
     A class to represent a rankings stat for a pitcher
 
     Attributes
     ----------
-    gametype : str
     """
-    _stat = [ 'rankings' ]
+    _stat = ['rankingsByYear']
+    outspitched: Optional[int] = None
+
 
 @dataclass(kw_only=True)
-class PitchingRankings(Splits, SimplePitching):
-    """
-    A class to represent a rankings stat for a pitcher
-
-    Attributes
-    ----------
-    gametype : str
-    """
-    _stat = [ 'rankingsByYear' ]
-
-@dataclass(kw_only=True)
-class PitchingOpponentsFaced(Splits):
+class PitchingOpponentsFaced(Stat):
     """
     A class to represent a opponentsFaced stat for a pitcher
 
     Attributes
     ----------
-    gametype : str
     group : str
     pitch : Person
     batter : Person
     battingteam : Team
     """
-    _stat = [ 'opponentsFaced' ]
+    _stat = ['opponentsFaced']
     group: str
     pitcher: Union[Pitcher, dict]
     batter: Union[Batter, dict]
     battingteam: Union[Team, dict]
 
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher)
-        self.batter = Batter(**self.batter)
-        self.battingteam = Team(**self.battingteam)
 
 @dataclass(kw_only=True)
-class PitchingExpectedStatistics(Splits):
+class PitchingExpectedStatistics(Stat):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
-    """
-    """
+
     Attributes
     ----------
     avg : str
@@ -656,66 +834,51 @@ class PitchingExpectedStatistics(Splits):
     wobaCon : str
     rank : int
     """
-    _stat = [ 'expectedStatistics' ]
-    avg : str
-    slg : str
-    woba : str
-    wobacon : str
+    _stat = ['expectedStatistics']
+    avg: str
+    slg: str
+    woba: str
+    wobacon: str
 
 # These stat_types return a hitting stat for a pitching stat group
 # odd, but need to deal with it.
 @dataclass(kw_only=True)
-class PitchingVsTeam(Splits, SimpleHittingStat):
+class PitchingVsTeam(Stat, SimpleHittingSplit):
     """
     A class to represent a vsTeam pitching statistic
 
     Attributes
     ----------
     """
-    _stat = [ 'vsTeam' ]
-    opponent: Union[Person, dict]
-    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
-    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)    
+    _stat = ['vsTeam']
+    opponent: Union[Team, dict]
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)    
 
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
-        self.batter = Batter(**self.batter) if self.batter else self.batter
-        self.opponent = Team(**self.opponent)
 
 @dataclass(kw_only=True)
-class PitchingVsTeamTotal(Splits, SimpleHittingStat):
+class PitchingVsTeamTotal(Stat, SimpleHittingSplit):
     """
     A class to represent a vsTeamTotal pitching statistic
 
     Attributes
     ----------
     """
-    _stat = [ 'vsTeamTotal' ]
-    opponent: Union[Person, dict]
-    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
-    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
+    _stat = ['vsTeamTotal']
+    opponent: Union[Team, dict]
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
 
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
-        self.batter = Batter(**self.batter) if self.batter else self.batter
-        self.opponent = Team(**self.opponent)
 
 @dataclass(kw_only=True)
-class PitchingVsTeam5Y(Splits, SimpleHittingStat):
+class PitchingVsTeam5Y(Stat, SimpleHittingSplit):
     """
     A class to represent a vsTeam5Y pitching statistic
 
     Attributes
     ----------
     """
-    _stat = [ 'vsTeam5Y' ]
-    opponent: Union[Person, dict]
-    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
-    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
-
-    def __post_init__(self):
-        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
-        self.batter = Batter(**self.batter) if self.batter else self.batter
-        self.opponent = Team(**self.opponent)
-
-
+    _stat = ['vsTeam5Y']
+    opponent: Union[Team, dict]
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)

@@ -1,0 +1,25 @@
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "divisions": [
+    {
+    "id": 200,
+    "name": "American League West",
+    "season": "2022",
+    "nameShort": "AL West",
+    "link": "/api/v1/divisions/200",
+    "abbreviation": "ALW",
+    "league": {
+        "id": 103,
+        "link": "/api/v1/league/103"
+    },
+    "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1"
+    },
+    "hasWildcard": false,
+    "sortOrder": 24,
+    "numPlayoffTeams": 1,
+    "active": true
+    }
+    ]
+}

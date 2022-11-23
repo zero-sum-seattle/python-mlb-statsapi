@@ -1,5 +1,5 @@
 from .stats import (
-    Splits, 
+    Stat, 
     PitchArsenal,
     CodeDesc,
     Count,
@@ -9,8 +9,8 @@ from .stats import (
 )
 
 from .hitting import (
-    SimpleHittingStat, 
-    AdvancedHittingStat,
+    SimpleHittingSplit, 
+    AdvancedHittingSplit,
     HittingSabermetrics,
     OpponentsFacedHitting, 
     HittingGameLog,
@@ -40,8 +40,8 @@ from .hitting import (
 )
 
 from .pitching import (
-    SimplePitching,
-    AdvancedPitching, 
+    SimplePitchingSplit,
+    AdvancedPitchingSplit, 
     PitchingSeasonAdvanced,
     PitchingYearByYear,
     PitchingSeason,
@@ -90,7 +90,7 @@ from .catching import (
 )
 
 from .fielding import (
-    SimpleFielding,
+    SimpleFieldingSplit,
     FieldingGameLog,
     FieldingLastXGames,
     FieldingByMonthPlayoffs,
