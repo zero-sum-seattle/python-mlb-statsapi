@@ -33,3 +33,27 @@ python3
 >>> mlb.get_team_stats(133, stats, groups)
 {'pitching': {'season': [PitchingSeason], 'seasonadvanced': [PitchingSeasonAdvanced] }}
 ```
+
+
+## Documentation
+
+### People, Person, Players, Coaches
+* `mlb.get_people_id("Ty France")` - Get Person IDs
+* `mlb.get_person(664034)` - Get Person Object
+* `mlb.get_people(sport_id=1`) - Get all Players for Sport
+
+### Teams
+* `mlb.get_team_id()` - Get Team IDs
+* `mlb.get_team(133)` - Get Team Object
+* `mlb.get_teams(sport_id=1`) - Get all Teams for Sport
+
+### Stats
+
+### Venues
+* `mlb.get_venue_id` - Get Venue IDs
+
+### Sports
+
+### Divisions
+
+### Leagues
