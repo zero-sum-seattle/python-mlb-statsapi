@@ -103,7 +103,7 @@ python3
 [136]
 ```
 - Set the stat types and groups.
-````
+```
 >>> types = ['season', 'seasonAdvanced']
 >>> groups = ['hitting']
 ```
