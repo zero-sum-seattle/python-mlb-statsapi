@@ -38,24 +38,29 @@ python3
 ## Documentation
 
 ### People, Person, Players, Coaches
-* `mlb.get_people_id('Ty France')` - Get Person IDs
+* `mlb.get_people_id('Ty France')` - Get Person IDs from fullname
 * `mlb.get_person(664034)` - Get Person Object
 * `mlb.get_people(sport_id=1`) - Get all Players for Sport
-
 ### Teams
-* `mlb.get_team_id('Seattle Mariners')` - Get Team IDs
-* `mlb.get_team(133)` - Get Team Object
+* `mlb.get_team_id('Seattle Mariners')` - Get Team IDs from name
+* `mlb.get_team(133)` - Get Team Object from team id
 * `mlb.get_teams(sport_id=1`) - Get all Teams for Sport
-
 ### Stats
-
+* `mlb.get_player_stats()` get stats by player id, stat types, and stat groups
+* `mlb.get_team_stats()` get stats by team id, stat types, and stat groups
 ### Venues
 * `mlb.get_venue_id()` - Get Venue IDs
-* `mlb.get_venue()` - Get Venue Object
+* `mlb.get_venue()` - Get Venue Object from venue id
 * `mlb.get_venues()` - Get all Venues
-
 ### Sports
-
+* `mlb.get_sport()` - Get a Sport object from id
+* `mlb.get_sports()` - Get all teams for sport id
+* `mlb.get_sport_id()`- Get sport ID from name
 ### Divisions
-
+* `mlb.get_division()` - Get a Divison 
+* `mlb.get_divisions()` - Get all divisions
+* `mlb.get_division_id()` - Get divion id from name
 ### Leagues
+* `mlb.get_league()` - Get a League from id
+* `mlb.get_leagues()` - Get all Leagues
+* `mlb.get_league_id()` - Get League IDs by name
