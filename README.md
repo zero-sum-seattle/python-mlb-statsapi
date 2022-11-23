@@ -38,42 +38,53 @@ python3
 ## Documentation
 
 ### People, Person, Players, Coaches
-* `mlb.get_people_id()` - Get Person IDs from fullname
-* `mlb.get_person()` - Get Person Object
-* `mlb.get_people()`) - Get all Players for Sport
+* `Mlb.get_people_id()` - Return Person Id(s) from fullname
+* `Mlb.get_person()` - Return Person Object from Id
+* `Mlb.get_people()` - Return all Players from Sport
 ### Teams
-* `mlb.get_team_id()` - Get Team IDs from name
-* `mlb.get_team()` - Get Team Object from team id
-* `mlb.get_teams(`) - Get all Teams for Sport
+* `Mlb.get_team_id()` - Return Team Id(s) from name
+* `Mlb.get_team()` - Return Team Object from Team Id
+* `Mlb.get_teams()`) - Return all Teams for Sport
+* `Mlb.get_team_coaches()` - Return coaching roster for team for current or specified season
+* `Mlb.get_team_roster()` - Return player roster for team for current or specified season
 ### Stats
-* `mlb.get_player_stats()` get stats by player id, stat type and groups
-* `mlb.get_team_stats()` get stats by team id, stat types and groups
+* `Mlb.get_player_stats()` Return stats by player id, stat type and groups
+* `Mlb.get_team_stats()` Return stats by team id, stat types and groups
 ### Venues
-* `mlb.get_venue_id()` - Get Venue IDs
-* `mlb.get_venue()` - Get Venue Object from venue id
-* `mlb.get_venues()` - Get all Venues
+* `Mlb.get_venue_id()` - Return Venue Id(s)
+* `Mlb.get_venue()` - Return Venue Object from venue Id
+* `Mlb.get_venues()` - Return all Venues
 ### Sports
-* `mlb.get_sport()` - Get a Sport object from id
-* `mlb.get_sports()` - Get all teams for sport id
-* `mlb.get_sport_id()`- Get sport ID from name
+* `Mlb.get_sport()` - Return a Sport object from Id
+* `Mlb.get_sports()` - Return all teams for Sport Id
+* `Mlb.get_sport_id()`- Return Sport Id from name
 ### Divisions
-* `mlb.get_division()` - Get a Divison 
-* `mlb.get_divisions()` - Get all divisions
-* `mlb.get_division_id()` - Get divion id from name
+* `Mlb.get_division()` - Return a Divison 
+* `Mlb.get_divisions()` - Return all Divisions
+* `Mlb.get_division_id()` - Return Division Id(s) from name
 ### Leagues
-* `mlb.get_league()` - Get a League from id
-* `mlb.get_leagues()` - Get all Leagues
-* `mlb.get_league_id()` - Get League IDs by name
+* `Mlb.get_league()` - Return a League from Id
+* `Mlb.get_leagues()` - Return all Leagues
+* `Mlb.get_league_id()` - Return League Id(s)
+### Schedules
+* `Mlb.get_schedule()` : Return a Schedule from dates
+* `Mlb.get_schedule_today()` : Return Schedule for today
+* `Mlb.get_schedule_date()` : Return Schedule for date
+* `Mlb.get_schedule_date_range()` : Return Schedule between date
 ### Games
-
+* `Mlb.get_game()` : Return the Game for a specific Game Id
+* `Mlb.get_game_play_by_play()` : Return Play by play data for a game
+* `Mlb.get_game_line_score()` : Return a Linescore for a game
+* `Mlb.get_game_box_score()` : Return a Boxscore for a game
 
 ## Examples
 
 Let's show some examples of getting stat objects from the API. What is baseball with out stats right?
 
 NOTE: Stat types and groups are case sensitive
+### Stats
 
-### Player Stats
+#### Player Stats
 - Get the Id(s) of the players you want stats for and set stat types and groups.
 ```
 >>> mlb = mlbstatsapi.Mlb()
@@ -83,7 +94,7 @@ NOTE: Stat types and groups are case sensitive
 ```
 - Use player.id and stat types and groups to return a stats dictionary
 ```
->>> stat_dict = mlb.get_player_stats(player.id, stats=types groups=groups )
+>>> stat_dict = mlb.get_player_stats(player.id, stats=types, groups=groups )
 >>> season_hitting_stat = stat_dict['hitting']['season']
 >>> career_pitching_stat = stat_dict['pitching']['career']
 ```
@@ -93,8 +104,8 @@ NOTE: Stat types and groups are case sensitive
 >>>     print(attribute, value)
 >>>
 ```
-### Team stats
-- Get the Team Id(s)
+#### Team stats
+Get the Team Id(s)
 ```
 python3
 >>> mlb = mlbstatsapi.Mlb()
@@ -102,18 +113,18 @@ python3
 >>> print(team.id)
 [136]
 ```
-- Set the stat types and groups.
+Set the stat types and groups.
 ```
 >>> types = ['season', 'seasonAdvanced']
 >>> groups = ['hitting']
 ```
-- Use team.id and the stat types and groups to return season hitting stats
+Use team.id and the stat types and groups to return season hitting stats
 ```
 stats = mlb.get_team_stats(team.id, stats=types, groups=groups)
 season_hitting = stats['hitting']['season']
 advanced_hitting = stats['hitting']['seasonadvanced']
 ```
-- print season and seasonadvanced stats
+Print season and seasonadvanced stats
 ```
 >>> for attribute, value in season_hitting.__dict__.items():
 >>>     print(attribute, value)
@@ -121,3 +132,58 @@ advanced_hitting = stats['hitting']['seasonadvanced']
 >>> for attribute, value in advanced_hitting.__dict__.items():
 >>>     print(attribute, value)
 ```
+
+### More stats examples
+
+#### hotColdZones
+Get player Id's
+```
+>>> hitter = mlb.get_player_id('Ty France')
+>>> pitcher = mlb.get_player_id('Shoei Ohtani')
+```
+Set the stat types and groups
+```
+>>> type = ['hotColdZones']
+>>> hitting_group = ['hitting']
+>>> pitching_group = ['pitching']
+```
+The stat groups pitching and hitting both return hotColdZones for a pitcher and hitter. hotColdZones are not assigned to a
+stat group because of issues related to the REST API. So hotColdZones will be assigned to the stat key in stats return dict.
+```
+>>> hitting_hotcoldzones = mlb.get_player_stats(hitter.id, stats=type, groups=hitting_group)
+>>> pitching_hotcoldzones = mlb.get_player_stats(pitcher.id, stats=type, groups=pitching_group)
+```
+hotColdZones returns a list of the HotColdZones
+```
+>>> ty_france_hotcoldzones = hitting_hotcoldzones['stats']['hotcoldzones']
+>>> shoei_ohtani_hotcoldzones = pitching_hotcoldzones['stats']['hotcoldzones']
+```
+Loop through the hotColdZone objects for Ty France
+```
+>>> for hotcoldzone in ty_france_hotcoldzones:
+>>>     print(hotcoldzone.name)
+>>>         for zonecodes in hotcoldzone.zones
+>>>             print(zonecodes.zone)
+>>>             print(zonecodes.value)
+>>>             print(zonecodes.color)
+>>>             print(zonecodes.temp)
+```
+Loop through the hotColdZone objects for Shoei Ohtani
+```
+>>> for hotcoldzone in shoei_ohtani_hotcoldzones:
+>>>     print(hotcoldzone.name)
+>>>         for zonecodes in hotcoldzone.zones
+>>>             print(zonecodes.zone)
+>>>             print(zonecodes.value)
+>>>             print(zonecodes.color)
+>>>             print(zonecodes.temp)
+```
+
+### Game Examples
+
+### People Examples
+
+### Team Examples
+
+### Venue Examples
+
