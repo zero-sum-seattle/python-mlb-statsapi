@@ -64,3 +64,35 @@ python3
 * `mlb.get_league()` - Get a League from id
 * `mlb.get_leagues()` - Get all Leagues
 * `mlb.get_league_id()` - Get League IDs by name
+
+
+## Examples
+
+Let's show some examples of getting stat objects from the API. What is baseball with out stats right?
+
+NOTE: Stat types and stat groups are case sensitive
+### Player Stats
+
+
+- Get the ID(s) of the players you want stats for and set stat type and group.
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> player = mlb.get_player_id("Ty France")
+>>> types = ['season`, `career` ]
+>>> groups = ['hitting', 'pitching]
+```
+
+- Use player.id and stat types and groups to return a stats dictionary
+```
+>>> stat_dict = mlb.get_player_stats(player.id, stats=types groups=groups )
+>>> season_hitting_stat = stat_dict['hitting']['season']
+>>> career_pitching_stat = stat_dict['pitching']'career']
+
+- Print season hitting stats
+>>> for attribute, value in season_hitting_stat.__dict__.items():
+>>>     print(attribute, value)
+>>>
+```
+    
+    
+    
