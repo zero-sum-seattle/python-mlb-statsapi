@@ -38,16 +38,16 @@ python3
 ## Documentation
 
 ### People, Person, Players, Coaches
-* `mlb.get_people_id('Ty France')` - Get Person IDs from fullname
-* `mlb.get_person(664034)` - Get Person Object
-* `mlb.get_people(sport_id=1`) - Get all Players for Sport
+* `mlb.get_people_id()` - Get Person IDs from fullname
+* `mlb.get_person()` - Get Person Object
+* `mlb.get_people()`) - Get all Players for Sport
 ### Teams
-* `mlb.get_team_id('Seattle Mariners')` - Get Team IDs from name
-* `mlb.get_team(133)` - Get Team Object from team id
-* `mlb.get_teams(sport_id=1`) - Get all Teams for Sport
+* `mlb.get_team_id()` - Get Team IDs from name
+* `mlb.get_team()` - Get Team Object from team id
+* `mlb.get_teams(`) - Get all Teams for Sport
 ### Stats
-* `mlb.get_player_stats()` get stats by player id, stat types, and stat groups
-* `mlb.get_team_stats()` get stats by team id, stat types, and stat groups
+* `mlb.get_player_stats()` get stats by player id, stat type and groups
+* `mlb.get_team_stats()` get stats by team id, stat types and groups
 ### Venues
 * `mlb.get_venue_id()` - Get Venue IDs
 * `mlb.get_venue()` - Get Venue Object from venue id
@@ -64,29 +64,28 @@ python3
 * `mlb.get_league()` - Get a League from id
 * `mlb.get_leagues()` - Get all Leagues
 * `mlb.get_league_id()` - Get League IDs by name
+### Games
 
 
 ## Examples
 
 Let's show some examples of getting stat objects from the API. What is baseball with out stats right?
 
-NOTE: Stat types and stat groups are case sensitive
+NOTE: Stat types and groups are case sensitive
+
 ### Player Stats
-
-
-- Get the ID(s) of the players you want stats for and set stat type and group.
+- Get the Id(s) of the players you want stats for and set stat types and groups.
 ```
 >>> mlb = mlbstatsapi.Mlb()
 >>> player = mlb.get_player_id("Ty France")
 >>> types = ['season`, `career` ]
 >>> groups = ['hitting', 'pitching]
 ```
-
 - Use player.id and stat types and groups to return a stats dictionary
 ```
 >>> stat_dict = mlb.get_player_stats(player.id, stats=types groups=groups )
 >>> season_hitting_stat = stat_dict['hitting']['season']
->>> career_pitching_stat = stat_dict['pitching']'career']
+>>> career_pitching_stat = stat_dict['pitching']['career']
 ```
 - Print season hitting stats
 ```
@@ -94,6 +93,31 @@ NOTE: Stat types and stat groups are case sensitive
 >>>     print(attribute, value)
 >>>
 ```
-    
-    
-    
+### Team stats
+- Get the Team Id(s)
+```
+python3
+>>> mlb = mlbstatsapi.Mlb()
+>>> team = mlb.get_team_id('Seattle Mariners')
+>>> print(team.id)
+[136]
+```
+- Set the stat types and groups.
+````
+>>> types = ['season', 'seasonAdvanced']
+>>> groups = ['hitting']
+```
+- Use team.id and the stat types and groups to return season hitting stats
+```
+stats = mlb.get_team_stats(team.id, stats=types, groups=groups)
+season_hitting = stats['hitting']['season']
+advanced_hitting = stats['hitting']['seasonadvanced']
+```
+- print season and seasonadvanced stats
+```
+>>> for attribute, value in season_hitting.__dict__.items():
+>>>     print(attribute, value)
+>>>
+>>> for attribute, value in advanced_hitting.__dict__.items():
+>>>     print(attribute, value)
+```
