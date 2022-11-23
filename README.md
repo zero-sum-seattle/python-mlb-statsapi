@@ -87,8 +87,9 @@ NOTE: Stat types and stat groups are case sensitive
 >>> stat_dict = mlb.get_player_stats(player.id, stats=types groups=groups )
 >>> season_hitting_stat = stat_dict['hitting']['season']
 >>> career_pitching_stat = stat_dict['pitching']'career']
-
+```
 - Print season hitting stats
+```
 >>> for attribute, value in season_hitting_stat.__dict__.items():
 >>>     print(attribute, value)
 >>>
