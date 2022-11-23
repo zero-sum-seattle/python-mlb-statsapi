@@ -85,20 +85,20 @@ NOTE: Stat types and groups are case sensitive
 ### Stats
 
 #### Player Stats
-- Get the Id(s) of the players you want stats for and set stat types and groups.
+Get the Id(s) of the players you want stats for and set stat types and groups.
 ```
 >>> mlb = mlbstatsapi.Mlb()
 >>> player = mlb.get_player_id("Ty France")
 >>> types = ['season`, `career` ]
 >>> groups = ['hitting', 'pitching]
 ```
-- Use player.id and stat types and groups to return a stats dictionary
+Use player.id and stat types and groups to return a stats dictionary
 ```
 >>> stat_dict = mlb.get_player_stats(player.id, stats=types, groups=groups )
 >>> season_hitting_stat = stat_dict['hitting']['season']
 >>> career_pitching_stat = stat_dict['pitching']['career']
 ```
-- Print season hitting stats
+Print season hitting stats
 ```
 >>> for attribute, value in season_hitting_stat.__dict__.items():
 >>>     print(attribute, value)
