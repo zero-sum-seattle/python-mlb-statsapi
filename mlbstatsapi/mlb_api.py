@@ -76,6 +76,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         people = []
 
         if 'people' in mlb_data.data and mlb_data.data['people']:
@@ -110,6 +113,8 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{player_id}')
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         if 'people' in mlb_data.data and mlb_data.data['people']:
             for person in mlb_data.data['people']:
@@ -145,6 +150,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         player_ids = []
 
         if 'people' in mlb_data.data and mlb_data.data['people']:
@@ -192,6 +200,9 @@ class Mlb:
         """
         params['sportId'] = sport_id
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         teams = []
 
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
@@ -228,6 +239,8 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}')
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
             for team in mlb_data.data['teams']:
@@ -271,6 +284,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='teams', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         team_ids = []
     
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
@@ -309,6 +325,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/roster')
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         players = []
 
         if 'roster' in mlb_data.data and mlb_data.data['roster']:
@@ -345,6 +364,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/coaches')
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         coaches = []
 
         if 'roster' in mlb_data.data and mlb_data.data['roster']:
@@ -397,6 +419,8 @@ class Mlb:
         params = {'sportId': sport_id, 'startDate': start_date, 'endDate': end_date}
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='schedule', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         # if mlb_data is not empty, and 'dates' key is in mlb_data.data and mlb_data.data['dates]
         # can sometimes be an empty list when there are no scheduled game for the date(s).
@@ -523,6 +547,8 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1_1.get(endpoint=f'game/{game_id}/feed/live')
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         if 'gamepk' in mlb_data.data and mlb_data.data['gamepk'] == game_id:
             return Game(**mlb_data.data)
@@ -554,6 +580,8 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/playByPlay')
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         if 'allplays' in mlb_data.data and mlb_data.data['allplays']:
             return Plays(**mlb_data.data)
@@ -616,6 +644,8 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/boxscore')
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
             return BoxScore(**mlb_data.data)
@@ -787,6 +817,8 @@ class Mlb:
 
         params = {'hydrate': ['location', 'fieldInfo', 'timezone']}
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'venues/{venue_id}', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
 
         if 'venues' in mlb_data.data and mlb_data.data['venues']:
             for venue in mlb_data.data['venues']:
@@ -814,6 +846,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='venues')
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         venues = []
 
         if 'venues' in mlb_data.data and mlb_data.data['venues']:
@@ -849,6 +884,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='venues', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         venue_ids = []
 
         if 'venues' in mlb_data.data and mlb_data.data['venues']:
@@ -886,6 +924,8 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}')
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         if 'sports' in mlb_data.data and mlb_data.data['sports']:
             for sport in mlb_data.data['sports']:
@@ -913,6 +953,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='sports')
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         sports = []
 
         if 'sports' in mlb_data.data and mlb_data.data['sports']:
@@ -948,6 +991,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='sports')
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         sport_ids = []
 
         if 'sports' in mlb_data.data and mlb_data.data['sports']:
@@ -981,6 +1027,8 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'leagues/{league_id}')
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
             for league in mlb_data.data['leagues']:
@@ -1007,6 +1055,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='leagues')
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         leagues = []
 
         if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
@@ -1041,6 +1092,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='leagues', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         league_ids = []
 
         if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
@@ -1079,6 +1133,8 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'divisions/{divisionid}')
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
             for division in mlb_data.data['divisions']:
@@ -1106,6 +1162,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='divisions')
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         divisions = []
 
         if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
@@ -1141,6 +1200,9 @@ class Mlb:
         """
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='divisions', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+        
         division_ids = []
 
         if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
@@ -1187,6 +1249,8 @@ class Mlb:
             params['sportId'] = sportid
             
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'seasons/{seasonid}', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
             for season in mlb_data.data['seasons']:
@@ -1235,6 +1299,8 @@ class Mlb:
             params['sportId'] = sportid
             
         mlb_data = self._mlb_adapter_v1.get(endpoint='seasons', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
             for season in mlb_data.data['seasons']:
@@ -1283,6 +1349,9 @@ class Mlb:
             params['sportId'] = sportid
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='seasons/all', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
         season_list = []
 
         if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
@@ -1341,6 +1410,8 @@ class Mlb:
                 params[arg_name] = arg_value
 
         mlb_data = self._mlb_adapter_v1.get('attendance', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return None
 
         if 'records' in mlb_data.data and mlb_data.data['records']:
             return Attendance(**mlb_data.data)
