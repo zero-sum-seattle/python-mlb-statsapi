@@ -318,7 +318,7 @@ class Mlb:
         [Player, Player, Player]
         >>> mlb.get_team_roster(133, rosterType=40Man, season=2018)
         [Player, Player, Player]
-        >>> mlb.get_team_roster(133, date=06/05/2018)
+        >>> mlb.get_team_roster(133, date='06/05/2018')
         [Player, Player, Player]
         """
 
@@ -362,7 +362,7 @@ class Mlb:
         >>> mlb = Mlb()
         >>> mlb.get_team_coaches(133)
         [Coach, Coach, Coach]
-        >>> mlb.get_team_coaches(133, season=2018)
+        >>> mlb.get_team_coaches(133, season='2018')
         [Coach, Coach, Coach]
         """
 
