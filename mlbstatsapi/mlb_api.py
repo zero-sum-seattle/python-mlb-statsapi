@@ -298,14 +298,25 @@ class Mlb:
                     continue
         return team_ids
 
-    def get_team_roster(self, team_id) -> List[Player]:
+    def get_team_roster(self, team_id, **params) -> List[Player]:
         """
         return the team player roster
 
         Parameters
         ----------
         team_id : int
-            Team id 
+            Team id
+
+        Other Parameters
+        ----------------
+        season : str
+            Insert year to return a directory of players based on roster status for a particular club in a specific season.
+        rosterType : str
+            Insert teamId to return a directory of players based on roster status for a particular club.
+            rosterType's include 40Man, fullSeason, fullRoster, nonRosterInvitees, active, allTime,
+            depthChart, gameday, and coach.
+        date : str
+            Insert date to return a directory of players based on roster status for a particular club on a specific date.
 
         Returns
         -------
@@ -322,9 +333,13 @@ class Mlb:
         >>> mlb = Mlb()
         >>> mlb.get_team_roster(133)
         [Player, Player, Player]
+        >>> mlb.get_team_roster(133, rosterType=40Man, season=2018)
+        [Player, Player, Player]
+        >>> mlb.get_team_roster(133, date='06/05/2018')
+        [Player, Player, Player]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/roster')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/roster', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
@@ -336,7 +351,7 @@ class Mlb:
 
         return players
 
-    def get_team_coaches(self, team_id) -> List[Coach]:
+    def get_team_coaches(self, team_id, **params) -> List[Coach]:
         """
         return the team coach roster
 
@@ -345,6 +360,12 @@ class Mlb:
         team_id : int
             Team id 
 
+        Other Parameters
+        ----------------
+        season : str
+            Insert year to return a directory of players based on roster status for a particular club in a specific season.
+        date : str
+            Insert date to return a directory of players based on roster status for a particular club on a specific date.           
         Returns
         -------
         list of Coaches
@@ -360,6 +381,8 @@ class Mlb:
         --------
         >>> mlb = Mlb()
         >>> mlb.get_team_coaches(133)
+        [Coach, Coach, Coach]
+        >>> mlb.get_team_coaches(133, season='2018')
         [Coach, Coach, Coach]
         """
 
@@ -931,7 +954,7 @@ class Mlb:
             for sport in mlb_data.data['sports']:
                 return Sport(**sport)
 
-    def get_sports(self) -> List[Sport]:
+    def get_sports(self, ) -> List[Sport]:
         """
         return all sports
 
@@ -1229,7 +1252,7 @@ class Mlb:
         ----------------
         withGameTypeDates : bool, optional
             Insert a withGameTypeDates to return season information for all gameTypes.
-
+        
         Returns
         -------
         Season
