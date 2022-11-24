@@ -14,6 +14,7 @@ from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi.models.attendances import Attendance
 from mlbstatsapi.models.stats import Stat
 from mlbstatsapi.models.seasons import Season
+from mlbstatsapi.models.drafts import Round
 
 from .mlb_dataadapter import MlbDataAdapter
 from .exceptions import TheMlbStatsApiException
@@ -983,7 +984,6 @@ class Mlb:
 
         if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
             for league in mlb_data.data['leagues']:
-
                 return League(**league)
 
     def get_leagues(self) -> List[League]:
@@ -1345,6 +1345,57 @@ class Mlb:
         if 'records' in mlb_data.data and mlb_data.data['records']:
             return Attendance(**mlb_data.data)
 
+    def get_draft(self, year_id, **params) -> List[Round]:
+        """
+        return a season object for sportid
+
+        Parameters
+        ----------
+        year_id : int
+            Insert a year_id to return a directory of seasons for a specific sport.
+
+        Other Parameters
+        ----------------
+        round : str
+            Insert a round to return biographical and financial data for a specific round in a Rule 4 draft.
+        name : str
+            Insert the first letter of a draftees last name to return their Rule 4 biographical and financial data.
+        school : str
+            Insert the first letter of a draftees school to return their Rule 4 biographical and financial data.
+        state : str
+            Insert state to return a list of Rule 4 draftees from that given state
+        country : str
+            Insert state to return a list of Rule 4 draftees from that given state
+        position : str
+            Insert the position to return Rule 4 biographical and financial data for a players drafted at that position.    
+        teamId : int
+            Insert teamId to return Rule 4 biographical and financial data for all picks made by a specific team.
+        playerId : int
+            Insert MLB playerId to return a player's Rule 4 biographical and financial data a specific Rule 4 draft.
+        bisPlayerId : int
+            Insert bisPlayerId to return a player's Rule 4 biographical and financial data a specific Rule 4 draft.
+
+        Returns
+        -------
+        list of DraftPicks
+            returns a list of DraftPicks
+        See Also
+        --------
+
+        Examples
+        --------
+        """
+        round_list = []
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'draft/{year_id}', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        if 'drafts' in mlb_data.data and mlb_data.data['drafts']:
+            if mlb_data.data['drafts']['rounds']:
+                for round in mlb_data.data['drafts']['rounds']:
+                    round_list.append(Round(**round))
+        return round_list
+        
     def get_team_stats(self, team_id: int, stats: list, groups: list, **params) -> dict:
         """
         returns a split stat data for a team

@@ -1,7 +1,6 @@
 ﻿from typing import Dict, List
 from unittest.mock import patch
 import unittest
-import requests
 import requests_mock
 import json
 import os
