@@ -13,11 +13,11 @@ from mlbstatsapi import TheMlbStatsApiException
 # TODO Find a better way to structure and handle this :) 
 path_to_current_file = os.path.realpath(__file__)
 current_directory = os.path.dirname(path_to_current_file)
-path_to_hotcoldzone_file = os.path.join(current_directory, "../mock_json/stats/person/hotcoldzone.json")
+path_to_spraychart_file = os.path.join(current_directory, "../mock_json/stats/person/spraychart.json")
 path_to_not_found = os.path.join(current_directory, "../mock_json/response/not_found_404.json")
 path_to_error = os.path.join(current_directory, "../mock_json/response/error_500.json")
 
-HOTCOLDZONE = open(path_to_hotcoldzone_file, "r", encoding="utf-8-sig").read()
+SPRAYCHART = open(path_to_spraychart_file, "r", encoding="utf-8-sig").read()
 NOT_FOUND_404 = open(path_to_not_found, "r", encoding="utf-8-sig").read()
 ERROR_500 = open(path_to_error, "r", encoding="utf-8-sig").read()
 
@@ -28,7 +28,7 @@ class TestMlbDataApiMock(unittest.TestCase):
         cls.mlb = Mlb()
         cls.player = cls.mlb.get_person(665742)
         cls.pitcher = cls.mlb.get_person(660271)
-        cls.mock_hotcoldzone = json.loads(HOTCOLDZONE)
+        cls.mock_hotcoldzone = json.loads(SPRAYCHART)
         cls.error_500 = json.loads(ERROR_500)
         cls.mock_not_found = json.loads(NOT_FOUND_404)
 
@@ -38,32 +38,32 @@ class TestMlbDataApiMock(unittest.TestCase):
         
     def test_hitting_play_log_for_player(self, m):
         """get_player_game_stats should return a dict with stats"""
-        m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=hotColdZones&group=hitting', json=self.mock_hotcoldzone,
+        m.get('https://statsapi.mlb.com/api/v1/people/665742/stats?stats=sprayChart&group=hitting', json=self.mock_hotcoldzone,
         status_code=200)
-        self.stats = ['hotColdZones']
+        self.stats = ['sprayChart']
         self.groups = ['hitting']
-        hotcoldzones = self.mlb.get_player_stats(self.player.id, stats=self.stats, groups=self.groups)
+        spraychart = self.mlb.get_player_stats(self.player.id, stats=self.stats, groups=self.groups)
 
         # game_stats should not be None
-        self.assertIsNotNone(hotcoldzones)
+        self.assertIsNotNone(spraychart)
         
         # game_stats should not be empty dic
-        self.assertNotEqual(hotcoldzones, {})
+        self.assertNotEqual(spraychart, {})
 
-        self.assertTrue(hotcoldzones['stats']['hotcoldzones'])
+        self.assertTrue(spraychart['stats']['spraychart'])
 
     def test_pitching_play_log_for_player(self, m):
         """get_player_game_stats should return a dict with stats"""
-        m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=hotColdZones&group=pitching', json=self.mock_hotcoldzone,
+        m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=sprayChart&group=pitching', json=self.mock_hotcoldzone,
         status_code=200)
-        self.stats = ['hotColdZones']
+        self.stats = ['sprayChart']
         self.groups = ['pitching']
-        hotcoldzones = self.mlb.get_player_stats(self.pitcher.id, stats=self.stats, groups=self.groups)
+        spraychart = self.mlb.get_player_stats(self.pitcher.id, stats=self.stats, groups=self.groups)
 
         # game_stats should not be None
-        self.assertIsNotNone(hotcoldzones)
+        self.assertIsNotNone(spraychart)
 
         # game_stats should not be empty dic
-        self.assertNotEqual(hotcoldzones, {})
+        self.assertNotEqual(spraychart, {})
 
-        self.assertTrue(hotcoldzones['stats']['hotcoldzones'])
+        self.assertTrue(spraychart['stats']['spraychart'])

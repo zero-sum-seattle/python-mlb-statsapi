@@ -203,11 +203,10 @@ class HotColdZones(Stat):
     def __post_init__(self):
         self.stat = Zones(**self.stat)
 
-
-@dataclass(kw_only=True)
-class SprayCharts(Stat):
+@dataclass
+class Chart:
     """
-    A class to represent a spraychart statistic
+    A class to represent a chart for SprayCharts
 
     Attributes
     ----------
@@ -227,12 +226,18 @@ class SprayCharts(Stat):
     centerfield: int
     rightcenterfield: int
     rightfield: int
+
+@dataclass(kw_only=True)
+class SprayCharts(Stat):
+
+
     _stat = ['sprayChart']
+    stat: Union[Chart, dict]
     batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.batter = Batter(**self.batter) if self.batter else self.batter
-
+        self.stat = Chart(**self.stat)
 
 @dataclass(kw_only=True)
 class OutsAboveAverage(Stat):
