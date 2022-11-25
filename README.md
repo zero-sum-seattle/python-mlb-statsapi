@@ -155,28 +155,22 @@ stat group because of issues related to the REST API. So hotColdZones will be as
 ```
 hotColdZones returns a list of the HotColdZones
 ```
->>> ty_france_hotcoldzones = hitting_hotcoldzones['stats']['hotcoldzones']
->>> shoei_ohtani_hotcoldzones = pitching_hotcoldzones['stats']['hotcoldzones']
+>>> ty_france_hotcoldzones = hitting_hotcoldzones['stats']['hotcoldzones'][0]
+>>> shoei_ohtani_hotcoldzones = pitching_hotcoldzones['stats']['hotcoldzones'][0]
 ```
 Loop through the hotColdZone objects for Ty France
 ```
->>> for hotcoldzone in ty_france_hotcoldzones:
->>>     print(hotcoldzone.name)
->>>         for zonecodes in hotcoldzone.zones
->>>             print(zonecodes.zone)
->>>             print(zonecodes.value)
->>>             print(zonecodes.color)
->>>             print(zonecodes.temp)
+>>> for zone in ty_france_hotcoldzones:
+>>>     print(zone.zone)
+>>>     print(zone.value)
+>>>             
 ```
 Loop through the hotColdZone objects for Shoei Ohtani
 ```
->>> for hotcoldzone in shoei_ohtani_hotcoldzones:
->>>     print(hotcoldzone.name)
->>>         for zonecodes in hotcoldzone.zones
->>>             print(zonecodes.zone)
->>>             print(zonecodes.value)
->>>             print(zonecodes.color)
->>>             print(zonecodes.temp)
+>>> for zone in shoei_ohtani_hotcoldzones:
+>>>     print(zonecodes.zone)
+>>>     print(zonecodes.value)
+>>>
 ```
 #### Passing params
 Get Team Ids
@@ -206,6 +200,19 @@ assertEqual(stats[advanced_hitting.season == 2018)
 ### Game Examples
 
 ### People Examples
+Get all Players for a given sport id
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> sport_id = mlb.get_sport_id()
+>>> players = mlb.get_players(sport_id=sport_id)
+>>> for player in players:
+>>>     print(player.id)
+```
+Get a player id
+```
+>>> player_id = mlb.get_player_id("Ty France")
+>>> print(player_id[0])
+```
 
 ### Team Examples
 

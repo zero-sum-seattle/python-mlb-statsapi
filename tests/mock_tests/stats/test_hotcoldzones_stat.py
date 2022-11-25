@@ -49,6 +49,14 @@ class TestMlbDataApiMock(unittest.TestCase):
 
         self.assertTrue(hotcoldzones['stats']['hotcoldzones'])
 
+        hotcoldzone = hotcoldzones['stats']['hotcoldzones'][0]
+
+        # should not be empty
+        self.assertTrue(hotcoldzone.stat)
+
+        for zone in hotcoldzone.zones:
+            self.assertTrue(zone.zone)
+
     def test_pitching_play_log_for_player(self, m):
         """get_player_game_stats should return a dict with stats"""
         m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=hotColdZones&group=pitching', json=self.mock_hotcoldzone,
@@ -63,4 +71,16 @@ class TestMlbDataApiMock(unittest.TestCase):
         # game_stats should not be empty dic
         self.assertNotEqual(hotcoldzones, {})
 
+        # should not be empty
         self.assertTrue(hotcoldzones['stats']['hotcoldzones'])
+
+        hotcoldzone = hotcoldzones['stats']['hotcoldzones'][0]
+
+        # should not be empty
+        self.assertTrue(hotcoldzone.stat)
+
+        for zone in hotcoldzone.zones:
+            self.assertTrue(zone.zone)
+
+
+
