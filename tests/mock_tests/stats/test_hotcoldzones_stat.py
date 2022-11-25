@@ -38,7 +38,7 @@ class TestMlbDataApiMock(unittest.TestCase):
         
     def test_hitting_play_log_for_player(self, m):
         """get_player_game_stats should return a dict with stats"""
-        m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=hotColdZones&group=hitting', json=self.mock_hotcoldzone,
+        m.get('https://statsapi.mlb.com/api/v1/people/665742/stats?stats=hotColdZones&group=hitting', json=self.mock_hotcoldzone,
         status_code=200)
         self.stats = ['hotColdZones']
         self.groups = ['hitting']
