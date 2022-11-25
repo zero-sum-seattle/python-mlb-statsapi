@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 from dataclasses import dataclass
 from mlbstatsapi.models.people import Person
 
@@ -18,10 +18,12 @@ class GameDecisions:
     """
     winner: Union[Person, dict]
     loser: Union[Person, dict]
+    save: Optional[Union[Person, dict]] = None
 
     def __post_init__(self):
         self.winner = Person(**self.winner)
         self.loser = Person(**self.loser)
+        self.save = Person(**self.save) if self.save else self.save
 
 
 @dataclass

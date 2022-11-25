@@ -36,6 +36,7 @@ path_to_leagues = os.path.join(current_directory, "../mock_json/leagues/leagues.
 path_to_league = os.path.join(current_directory, "../mock_json/leagues/league.json")
 path_to_venues = os.path.join(current_directory, "../mock_json/venues/venues.json")
 path_to_venue = os.path.join(current_directory, "../mock_json/venues/venue.json")
+path_to_game = os.path.join(current_directory, "../mock_json/games/game.json")
 
 
 LEAGUES_JSON_FILE = open(path_to_leagues, "r", encoding="utf-8-sig").read()
@@ -50,6 +51,7 @@ DIVISIONS_JSON_FILE = open(path_to_divisions, "r", encoding="utf-8-sig").read()
 DIVISION_JSON_FILE = open(path_to_division, "r", encoding="utf-8-sig").read()
 VENUES_JSON_FILE = open(path_to_venues, "r", encoding="utf-8-sig").read()
 VENUE_JSON_FILE = open(path_to_venue, "r", encoding="utf-8-sig").read()
+GAME_JSON_FILE = open(path_to_game, "r", encoding="utf-8-sig").read()
 NOT_FOUND_404 = open(path_to_not_found, "r", encoding="utf-8-sig").read()
 ERROR_500 = open(path_to_error, "r", encoding="utf-8-sig").read()
 
@@ -405,43 +407,47 @@ class TestMlbGetVenue(unittest.TestCase):
         id = self.mlb.get_venue_id('Highschool Park')
         self.assertEqual(id, [])
 
+@requests_mock.Mocker()
+class TestMlbGetGame(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.mock_game = json.loads(GAME_JSON_FILE)
+        pass
 
-# class TestMlbGetGame(unittest.TestCase):
-#     @classmethod
-#     def setUpClass(cls) -> None:
-#         cls.mlb = Mlb()
-#         pass
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
 
-#     @classmethod
-#     def tearDownClass(cls) -> None:
-#         pass
+    def test_mlb_get_game(self, m):
+        """mlb get_game should return a Game object"""
+        m.get('https://statsapi.mlb.com/api/v1.1/game/715720/feed/live', json=self.mock_game,
+        status_code=200)
+        game = self.mlb.get_game(715720)
+        self.assertIsInstance(game, Game)
+        self.assertEqual(game.id, 715720)
 
-#     def test_mlb_get_game(self):
-#         game = self.mlb.get_game(662242)
-#         self.assertIsInstance(game, Game)
-#         self.assertEqual(game.id, 662242)
+    # def test_get_game_playByPlay(self):
+    #     playbyplay = self.mlb.get_game_play_by_play(662242)
+    #     self.assertIsInstance(playbyplay, Plays)
 
-#     def test_get_game_playByPlay(self):
-#         playbyplay = self.mlb.get_game_play_by_play(662242)
-#         self.assertIsInstance(playbyplay, Plays)
+    # def test_get_game_linescore(self):
+    #     linescore = self.mlb.get_game_line_score(662242)
+    #     self.assertIsInstance(linescore, Linescore)
 
-#     def test_get_game_linescore(self):
-#         linescore = self.mlb.get_game_line_score(662242)
-#         self.assertIsInstance(linescore, Linescore)
+    # def test_get_game_boxscore(self):
+    #     boxscore = self.mlb.get_game_box_score(662242)
+    #     self.assertIsInstance(boxscore, BoxScore)
 
-#     def test_get_game_boxscore(self):
-#         boxscore = self.mlb.get_game_box_score(662242)
-#         self.assertIsInstance(boxscore, BoxScore)
+    # def test_get_todays_games_id(self):
+    #     todaysGames = self.mlb.get_todays_game_ids()
+    #     self.assertIsInstance(todaysGames, List)
 
-#     def test_get_todays_games_id(self):
-#         todaysGames = self.mlb.get_todays_game_ids()
-#         self.assertIsInstance(todaysGames, List)
-
-#     def test_get_attendance(self):
-#         params = {'season': 2022}
-#         attendance_team_away = self.mlb.get_attendance(team_id=113)
-#         attendance_team_home = self.mlb.get_attendance(team_id=134)
-#         attendance_season = self.mlb.get_attendance(team_id=113, params=params)
-#         self.assertEqual(attendance_team_away.records[0].team.id, 113)
-#         self.assertEqual(attendance_team_home.records[0].team.id, 134)
-#         self.assertEqual(attendance_season.records[0].team.id, 113)
+    # def test_get_attendance(self):
+    #     params = {'season': 2022}
+    #     attendance_team_away = self.mlb.get_attendance(team_id=113)
+    #     attendance_team_home = self.mlb.get_attendance(team_id=134)
+    #     attendance_season = self.mlb.get_attendance(team_id=113, params=params)
+    #     self.assertEqual(attendance_team_away.records[0].team.id, 113)
+    #     self.assertEqual(attendance_team_home.records[0].team.id, 134)
+    #     self.assertEqual(attendance_season.records[0].team.id, 113)
