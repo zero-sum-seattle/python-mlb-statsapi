@@ -1,13 +1,10 @@
-﻿from typing import Dict, List
-from unittest.mock import patch
-import unittest
+﻿import unittest
 import requests_mock
 import json
 import os
 
 from mlbstatsapi import Mlb
-from mlbstatsapi import MlbResult
-from mlbstatsapi import TheMlbStatsApiException
+
 
 # Mocked JSON directory
 # TODO Find a better way to structure and handle this :) 

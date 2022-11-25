@@ -11,7 +11,7 @@ from mlbstatsapi import Mlb
 path_to_current_file = os.path.realpath(__file__)
 current_directory = os.path.dirname(path_to_current_file)
 path_to_player_stats = os.path.join(current_directory, "../mock_json/stats/person/hitting_player_stats.json")
-path_to_team_stats = os.path.join(current_directory, "../mock_json/stats/person/hitting_team_stats.json")
+path_to_team_stats = os.path.join(current_directory, "../mock_json/stats/team/hitting_team_stats.json")
 path_to_not_found = os.path.join(current_directory, "../mock_json/response/not_found_404.json")
 path_to_error = os.path.join(current_directory, "../mock_json/response/error_500.json")
 

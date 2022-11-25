@@ -196,7 +196,9 @@ stats = mlb.get_team_stats(team.id, stats=types, groups=groups, season=2018)
 
 season_hitting = stats['hitting']['season']
 advanced_hitting = stats['hitting']['seasonadvanced']
-
+```
+season should be 2018
+```
 assertEqual(stats[season_hitting.season == 2018)
 assertEqual(stats[advanced_hitting.season == 2018)
 ```
