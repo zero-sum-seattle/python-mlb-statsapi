@@ -113,8 +113,8 @@ class Stat:
     _type : str
         type of the stat 
     """
-    _group: str
-    _type: str
+    group: str
+    type: str
     season: Optional[str] = None
     numteams: Optional[int] = None
     gametype: Optional[str] = None
