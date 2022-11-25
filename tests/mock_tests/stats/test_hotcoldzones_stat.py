@@ -54,7 +54,7 @@ class TestMlbDataApiMock(unittest.TestCase):
         # should not be empty
         self.assertTrue(hotcoldzone.stat)
 
-        for zone in hotcoldzone.zones:
+        for zone in hotcoldzone.stat.zones:
             self.assertTrue(zone.zone)
 
     def test_pitching_play_log_for_player(self, m):
@@ -79,7 +79,7 @@ class TestMlbDataApiMock(unittest.TestCase):
         # should not be empty
         self.assertTrue(hotcoldzone.stat)
 
-        for zone in hotcoldzone.zones:
+        for zone in hotcoldzone.stat.zones:
             self.assertTrue(zone.zone)
 
 
