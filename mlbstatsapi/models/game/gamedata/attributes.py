@@ -161,7 +161,7 @@ class GameInfo:
     attendance: int
     firstpitch: str
     gamedurationminutes: int
-    delaydurationminutes: int
+    delaydurationminutes: Optional[int] = None
 
 
 @dataclass
