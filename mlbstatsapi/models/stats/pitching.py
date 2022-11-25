@@ -579,9 +579,9 @@ class PlayDetails:
     description: Optional[str] = None
 
     def __post_init__(self):
-        self.call = CodeDesc(**self.call)
-        self.batside = CodeDesc(**self.batside)
-        self.pitchhand = CodeDesc(**self.pitchhand) 
+        self.call = CodeDesc(**self.call) if self.call else self.call
+        self.batside = CodeDesc(**self.batside) if self.batside else self.batside
+        self.pitchhand = CodeDesc(**self.pitchhand) if self.pitchhand else self.pitchhand
         self.type = CodeDesc(**self.type) if self.type else self.type
 
 @dataclass
@@ -597,6 +597,7 @@ class PitchingPlay:
     pitchnumber: int
     atbatnumber: int
     ispitch: bool
+    playid: str
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
@@ -642,7 +643,6 @@ class PitchingLog(Stat):
     pitcher: Union[Pitcher, dict]
     batter: Union[Batter, dict]
     game: Union[Game, dict]
-    playid: str
 
     def __post_init__(self):
         self.stat = PitchingPlay(**merge_keys(self.stat, 'play'))
@@ -687,7 +687,6 @@ class PitchingPlayLog(Stat):
     pitcher: Union[Pitcher, dict]
     batter: Union[Batter, dict]
     game: Union[Game, dict]
-    playid: str
 
     def __post_init__(self):
         self.stat = PitchingPlay(**merge_keys(self.stat, 'play'))

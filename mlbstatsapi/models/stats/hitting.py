@@ -429,10 +429,6 @@ class OpponentsFacedHitting(Stat):
     fieldingteam: Union[Team, dict]
     pitcher: Union[Pitcher, dict]
 
-
-
-
-
 @dataclass
 class HittingSabermetrics(Stat):
     """
@@ -537,9 +533,9 @@ class PlayDetails:
     type: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
-        self.call = CodeDesc(**self.call)
-        self.batside = CodeDesc(**self.batside)
-        self.pitchhand = CodeDesc(**self.pitchhand) 
+        self.call = CodeDesc(**self.call) if self.call else self.call
+        self.batside = CodeDesc(**self.batside) if self.batside else self.batside
+        self.pitchhand = CodeDesc(**self.pitchhand) if self.pitchhand else self.pitchhand
         self.type = CodeDesc(**self.type) if self.type else self.type
 
 @dataclass
@@ -555,6 +551,7 @@ class HittingPlay:
     pitchnumber: int
     atbatnumber: int
     ispitch: bool
+    playid: Optional[str] = None
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
@@ -592,12 +589,9 @@ class HittingPlayLog(Stat):
     pitcher: Union[Pitcher, dict]
     batter: Union[Batter, dict]
     game: Union[Game, dict]
-    playid: Optional[str] = None
     _stat = ['playLog']
 
     def __post_init__(self):
-        self.details = PlayDetails(**self.details)
-        self.count = Count(**self.count)
         self.stat = HittingPlay(**merge_keys(self.stat, 'play'))
 
 @dataclass(kw_only=True)

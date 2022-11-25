@@ -1,0 +1,184 @@
+﻿{
+  "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "stats": [
+      {
+          "type": {
+              "displayName": "playLog"
+          },
+          "group": {
+              "displayName": "hitting"
+          },
+          "exemptions": [],
+          "splits": [
+              {
+                  "season": "2022",
+                  "stat": {
+                      "play": {
+                          "details": {
+                              "call": {
+                                  "code": "X",
+                                  "description": "Hit Into Play - Out(s)"
+                              },
+                              "description": "Juan Soto grounds out, second baseman Robinson Cano to first baseman Pete Alonso.  ",
+                              "event": "field_out",
+                              "eventType": "field_out",
+                              "isInPlay": true,
+                              "isStrike": false,
+                              "isBall": false,
+                              "isBaseHit": false,
+                              "isAtBat": true,
+                              "isPlateAppearance": true,
+                              "type": {
+                                  "code": "CH",
+                                  "description": "Changeup"
+                              },
+                              "batSide": {
+                                  "code": "L",
+                                  "description": "Left"
+                              },
+                              "pitchHand": {
+                                  "code": "R",
+                                  "description": "Right"
+                              }
+                          },
+                          "count": {
+                              "balls": 2,
+                              "strikes": 1,
+                              "outs": 1,
+                              "inning": 1,
+                              "isTopInning": false,
+                              "runnerOn1b": false,
+                              "runnerOn2b": false,
+                              "runnerOn3b": false
+                          },
+                          "playId": "11ecdb59-e9f1-4d83-9d2a-5501e1411539",
+                          "pitchNumber": 4,
+                          "atBatNumber": 6,
+                          "isPitch": true
+                      }
+                  },
+                  "team": {
+                      "id": 120,
+                      "name": "Washington Nationals",
+                      "link": "/api/v1/teams/120"
+                  },
+                  "player": {
+                      "id": 665742,
+                      "fullName": "Juan Soto",
+                      "link": "/api/v1/people/665742"
+                  },
+                  "opponent": {
+                      "id": 121,
+                      "name": "New York Mets",
+                      "link": "/api/v1/teams/121"
+                  },
+                  "date": "2022-04-07",
+                  "gameType": "R",
+                  "isHome": true,
+                  "pitcher": {
+                      "id": 656731,
+                      "fullName": "Tylor Megill",
+                      "link": "/api/v1/people/656731"
+                  },
+                  "batter": {
+                      "id": 665742,
+                      "fullName": "Juan Soto",
+                      "link": "/api/v1/people/665742"
+                  },
+                  "game": {
+                      "gamePk": 662571,
+                      "link": "/api/v1.1/game/662571/feed/live",
+                      "content": {
+                          "link": "/api/v1/game/662571/content"
+                      },
+                      "gameNumber": 1,
+                      "dayNight": "day"
+                  }
+              },
+              {
+                  "season": "2022",
+                  "stat": {
+                      "play": {
+                          "details": {
+                              "call": {
+                                  "code": "S",
+                                  "description": "Strike - Swinging"
+                              },
+                              "description": "Juan Soto strikes out swinging.  ",
+                              "event": "strikeout",
+                              "eventType": "strikeout",
+                              "isInPlay": false,
+                              "isStrike": true,
+                              "isBall": false,
+                              "isBaseHit": false,
+                              "isAtBat": true,
+                              "isPlateAppearance": true,
+                              "type": {
+                                  "code": "FF",
+                                  "description": "Four-seam FB"
+                              },
+                              "batSide": {
+                                  "code": "L",
+                                  "description": "Left"
+                              },
+                              "pitchHand": {
+                                  "code": "R",
+                                  "description": "Right"
+                              }
+                          },
+                          "count": {
+                              "balls": 2,
+                              "strikes": 2,
+                              "outs": 1,
+                              "inning": 3,
+                              "isTopInning": false,
+                              "runnerOn1b": true,
+                              "runnerOn2b": false,
+                              "runnerOn3b": true
+                          },
+                          "playId": "af4ab082-2308-4320-9445-7d40a4947bcf",
+                          "pitchNumber": 5,
+                          "atBatNumber": 21,
+                          "isPitch": true
+                      }
+                  },
+                  "team": {
+                      "id": 120,
+                      "name": "Washington Nationals",
+                      "link": "/api/v1/teams/120"
+                  },
+                  "player": {
+                      "id": 665742,
+                      "fullName": "Juan Soto",
+                      "link": "/api/v1/people/665742"
+                  },
+                  "opponent": {
+                      "id": 121,
+                      "name": "New York Mets",
+                      "link": "/api/v1/teams/121"
+                  },
+                  "date": "2022-04-07",
+                  "gameType": "R",
+                  "isHome": true,
+                  "pitcher": {
+                      "id": 656731,
+                      "fullName": "Tylor Megill",
+                      "link": "/api/v1/people/656731"
+                  },
+                  "batter": {
+                      "id": 665742,
+                      "fullName": "Juan Soto",
+                      "link": "/api/v1/people/665742"
+                  },
+                  "game": {
+                      "gamePk": 662571,
+                      "link": "/api/v1.1/game/662571/feed/live",
+                      "content": {
+                          "link": "/api/v1/game/662571/content"
+                      },
+                      "gameNumber": 1,
+                      "dayNight": "day"
+                  }
+              }]
+}]
+}
