@@ -100,7 +100,7 @@ Use player.id and stat types and groups to return a stats dictionary
 ```
 Print season hitting stats
 ```
->>> for attribute, value in season_hitting_stat.__dict__.items():
+>>> for attribute, value in season_hitting_stat.stat.__dict__.items():
 >>>     print(attribute, value)
 >>>
 ```
@@ -126,10 +126,10 @@ advanced_hitting = stats['hitting']['seasonadvanced']
 ```
 Print season and seasonadvanced stats
 ```
->>> for attribute, value in season_hitting.__dict__.items():
+>>> for attribute, value in season_hitting.stat.__dict__.items():
 >>>     print(attribute, value)
 >>>
->>> for attribute, value in advanced_hitting.__dict__.items():
+>>> for attribute, value in advanced_hitting.stat.__dict__.items():
 >>>     print(attribute, value)
 ```
 

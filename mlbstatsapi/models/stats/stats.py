@@ -169,9 +169,8 @@ class ZoneCodes:
     color: Optional[str] = None
     temp: Optional[str] = None
 
-
 @dataclass(kw_only=True)
-class HotColdZones(Stat):
+class Zones:
     """
     A class to represent a hot cold zone statistic
 
@@ -184,10 +183,25 @@ class HotColdZones(Stat):
     """
     name: str
     zones: List[ZoneCodes]
-    _stat = ['hotColdZones']
 
     def __post_init__(self):
         self.zones = [ZoneCodes(**zone) for zone in self.zones]
+
+@dataclass(kw_only=True)
+class HotColdZones(Stat):
+    """
+    A class to represent a hotcoldzone statistic
+
+    Attributes
+    ----------
+    stat : Zones
+        the holdcoldzones for the stat
+    """
+    stat: Zones
+    _stat = ['hotColdZones']
+
+    def __post_init__(self):
+        self.stat = Zones(**self.stat)
 
 
 @dataclass(kw_only=True)
