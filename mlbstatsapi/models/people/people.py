@@ -1,7 +1,8 @@
-﻿from typing import List, Dict, Union, Any, Optional
-from dataclasses import dataclass, field, InitVar
+﻿from dataclasses import dataclass, field, InitVar
+from typing import List, Union, Dict, Any, Optional
 
-from .attributes import PitchHand, Position, BatSide, Status
+from .attributes import BatSide, Position, PitchHand, Status
+from mlbstatsapi.models.teams import Team
 
 
 @dataclass
@@ -213,3 +214,44 @@ class Pitcher(Person):
     """
     pass
 
+
+@dataclass(kw_only=True)
+class DraftPick(Person):
+    """
+    bisplayerid : int
+    pickround :  str
+    picknumber :  int
+    roundpicknumber :  int
+    rank :  int
+    pickvalue : str
+    signingbonus :  str
+    home : dict
+    scoutingreport : str
+    school : dict 
+    blurb : str
+    headshotlink : str
+    person : Person
+    team : Team
+    drafttype : dict
+    isdrafted : bool
+    ispass : bool
+    year : str
+    """
+
+    bisplayerid: Optional[int] = None
+    pickround:  str
+    picknumber:  int
+    roundpicknumber:  int
+    rank: Optional[int] = None
+    pickvalue: Optional[str] = None
+    signingbonus:  str
+    home: dict
+    scoutingreport: Optional[str] = None
+    school: dict 
+    blurb: Optional[str] = None
+    headshotlink: str
+    team: Union[Team, dict]
+    drafttype: dict
+    isdrafted: bool
+    ispass: bool
+    year: str
