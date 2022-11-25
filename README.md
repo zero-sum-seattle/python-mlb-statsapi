@@ -178,6 +178,28 @@ Loop through the hotColdZone objects for Shoei Ohtani
 >>>             print(zonecodes.color)
 >>>             print(zonecodes.temp)
 ```
+#### Passing params
+Get Team Ids
+```
+python3
+>>> mlb = mlbstatsapi.Mlb()
+>>> team = mlb.get_team_id('Seattle Mariners')
+```
+Set the stat types and groups.
+```
+>>> types = ['season', 'seasonAdvanced']
+>>> groups = ['hitting']
+```
+Pass season to get_team_stats()
+```
+stats = mlb.get_team_stats(team.id, stats=types, groups=groups, season=2018)
+
+season_hitting = stats['hitting']['season']
+advanced_hitting = stats['hitting']['seasonadvanced']
+
+assertEqual(stats[season_hitting.season == 2018)
+assertEqual(stats[advanced_hitting.season == 2018)
+```
 
 ### Game Examples
 
