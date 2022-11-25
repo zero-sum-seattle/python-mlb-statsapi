@@ -96,8 +96,10 @@ class FieldingSeasonAdvanced(Stat, SimpleFieldingSplit):
     """
     _stat = ['seasonAdvanced']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
+    stat: Union[SimpleFieldingSplit, dict]
 
     def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
         self.position = Position(**self.position) if self.position else self.position
 
 
@@ -112,8 +114,10 @@ class FieldingCareerAdvanced(Stat, SimpleFieldingSplit):
     """
     _stat = ['careerAdvanced']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
+    stat: Union[SimpleFieldingSplit, dict]
 
     def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
         self.position = Position(**self.position) if self.position else self.position
 
 
@@ -129,8 +133,10 @@ class FieldingSingleSeasonAdvanced(Stat, SimpleFieldingSplit):
     """
     _stat = ['statsSingleSeasonAdvanced']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
+    stat: Union[SimpleFieldingSplit, dict]
 
     def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
         self.position = Position(**self.position) if self.position else self.position
 
 
@@ -146,8 +152,10 @@ class FieldingSeason(Stat, SimpleFieldingSplit):
     """
     _stat = ['season']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
+    stat: Union[SimpleFieldingSplit, dict]
 
     def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
         self.position = Position(**self.position) if self.position else self.position
 
 
@@ -163,8 +171,10 @@ class FieldingSingleSeason(Stat, SimpleFieldingSplit):
     """
     _stat = ['statsSingleSeason']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
+    stat: Union[SimpleFieldingSplit, dict]
 
     def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
         self.position = Position(**self.position) if self.position else self.position
 
 
@@ -180,9 +190,11 @@ class FieldingCareer(Stat, SimpleFieldingSplit):
     """
     _stat = ['career', 'careerRegularSeason']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
+    stat: Union[SimpleFieldingSplit, dict]
 
     def __post_init__(self):
-        self.position = Position(**self.position) if self.position else self.position    
+        self.stat = SimpleFieldingSplit(**self.stat)
+        self.position = Position(**self.position) if self.position else self.position   
 
 
 @dataclass(kw_only=True)
@@ -197,8 +209,10 @@ class FieldingCareerPlayoffs(Stat, SimpleFieldingSplit):
     """
     _stat = ['careerPlayoffs']
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
+    stat: Union[SimpleFieldingSplit, dict]
 
     def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
         self.position = Position(**self.position) if self.position else self.position
 
 
@@ -214,7 +228,10 @@ class FieldingHomeAndAway(Stat, SimpleFieldingSplit):
     """
     _stat = ['homeAndAway']
     ishome: bool
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingHomeAndAwayPlayoffs(Stat, SimpleFieldingSplit):
@@ -228,7 +245,10 @@ class FieldingHomeAndAwayPlayoffs(Stat, SimpleFieldingSplit):
     """
     _stat = ['homeAndAwayPlayoffs']
     ishome: bool
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingYearByYear(Stat, SimpleFieldingSplit):
@@ -239,7 +259,10 @@ class FieldingYearByYear(Stat, SimpleFieldingSplit):
     ----------
     """
     _stat = ['yearByYear']
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingYearByYearAdvanced(Stat, SimpleFieldingSplit):
@@ -250,7 +273,10 @@ class FieldingYearByYearAdvanced(Stat, SimpleFieldingSplit):
     ----------
     """
     _stat = ['yearByYearAdvanced']
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingYearByYearPlayoffs(Stat, SimpleFieldingSplit):
@@ -261,7 +287,10 @@ class FieldingYearByYearPlayoffs(Stat, SimpleFieldingSplit):
     ----------
     """
     _stat = ['yearByYearPlayoffs']
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingWinLoss(Stat, SimpleFieldingSplit):
@@ -275,7 +304,10 @@ class FieldingWinLoss(Stat, SimpleFieldingSplit):
     """
     _stat = ['winLoss']
     iswin: bool
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingWinLossPlayoffs(Stat, SimpleFieldingSplit):
@@ -289,7 +321,10 @@ class FieldingWinLossPlayoffs(Stat, SimpleFieldingSplit):
     """
     _stat = ['winLossPlayoffs']
     iswin: bool
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingByDayOfWeek(Stat, SimpleFieldingSplit):
@@ -301,7 +336,10 @@ class FieldingByDayOfWeek(Stat, SimpleFieldingSplit):
     """
     _stat = ['byDayOfWeek']
     dayofweek: str
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingByDateRangeAdvanced(Stat, SimpleFieldingSplit):
@@ -318,7 +356,10 @@ class FieldingByDateRangeAdvanced(Stat, SimpleFieldingSplit):
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingByMonth(Stat, SimpleFieldingSplit):
@@ -332,7 +373,10 @@ class FieldingByMonth(Stat, SimpleFieldingSplit):
     """
     _stat = ['byMonth']
     month: int
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingByMonthPlayoffs(Stat, SimpleFieldingSplit):
@@ -346,7 +390,10 @@ class FieldingByMonthPlayoffs(Stat, SimpleFieldingSplit):
     """
     _stat = ['byMonthPlayoffs']
     month: int
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingLastXGames(Stat, SimpleFieldingSplit):
@@ -357,7 +404,10 @@ class FieldingLastXGames(Stat, SimpleFieldingSplit):
     ----------
     """
     _stat = ['lastXGames']
+    stat: Union[SimpleFieldingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class FieldingGameLog(Stat, SimpleFieldingSplit):
@@ -374,3 +424,7 @@ class FieldingGameLog(Stat, SimpleFieldingSplit):
     iswin: bool
     position: Union[Position, dict] = field(default_factory=dict)
     game: Union[Game, dict] = field(default_factory=dict)
+    stat: Union[SimpleFieldingSplit, dict]
+
+    def __post_init__(self):
+        self.stat = SimpleFieldingSplit(**self.stat)

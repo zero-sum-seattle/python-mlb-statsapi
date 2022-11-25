@@ -62,7 +62,9 @@ class TestPitchingStats(unittest.TestCase):
         # check that attrs exist and contain data
         self.assertTrue(season.season)
         self.assertTrue(career.player)
+        self.assertTrue(season.stat.strikeoutsper9inn)
         self.assertTrue(season_advanced.season)
+        self.assertTrue(season_advanced.stat.strikeoutsper9)
         self.assertTrue(career_advanced.player)
 
     def test_pitching_stat_attributes_team(self):
@@ -94,5 +96,7 @@ class TestPitchingStats(unittest.TestCase):
         # check that attrs exist and contain data
         self.assertTrue(season.season)
         self.assertTrue(career.team)
+        self.assertTrue(season.stat.strikeoutsper9inn)
         self.assertTrue(season_advanced.season)
+        self.assertTrue(season_advanced.stat.strikeoutsper9)
         self.assertTrue(career_advanced.team)

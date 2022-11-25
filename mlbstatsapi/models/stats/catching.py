@@ -101,7 +101,7 @@ class SimpleCatchingSplit:
 
 
 @dataclass(kw_only=True)
-class CatchingSeason(Stat, SimpleCatchingSplit):
+class CatchingSeason(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -109,10 +109,14 @@ class CatchingSeason(Stat, SimpleCatchingSplit):
     ----------
     """
     _stat = ['season']
+    stat: Union[SimpleCatchingSplit, dict]
+
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)
 
 
 @dataclass(kw_only=True)
-class CatchingSingleSeason(Stat, SimpleCatchingSplit):
+class CatchingSingleSeason(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -120,10 +124,13 @@ class CatchingSingleSeason(Stat, SimpleCatchingSplit):
     ----------
     """
     _stat = ['statsSingleSeason']
+    stat: Union[SimpleCatchingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingYearByYearPlayoffs(Stat, SimpleCatchingSplit):
+class CatchingYearByYearPlayoffs(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -131,10 +138,13 @@ class CatchingYearByYearPlayoffs(Stat, SimpleCatchingSplit):
     ----------
     """
     _stat = ['yearByYearPlayoffs']
+    stat: Union[SimpleCatchingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingYearByYear(Stat, SimpleCatchingSplit):
+class CatchingYearByYear(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -142,10 +152,13 @@ class CatchingYearByYear(Stat, SimpleCatchingSplit):
     ----------
     """
     _stat = ['yearByYear']
+    stat: Union[SimpleCatchingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingProjected(Stat, SimpleCatchingSplit):
+class CatchingProjected(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -153,10 +166,13 @@ class CatchingProjected(Stat, SimpleCatchingSplit):
     ----------
     """
     _stat = ['projectedRos']
+    stat: Union[SimpleCatchingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingCareer(Stat, SimpleCatchingSplit):
+class CatchingCareer(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -164,10 +180,13 @@ class CatchingCareer(Stat, SimpleCatchingSplit):
     ----------
     """
     _stat = ['career']
+    stat: Union[SimpleCatchingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingCareerRegularSeason(Stat, SimpleCatchingSplit):
+class CatchingCareerRegularSeason(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -175,10 +194,13 @@ class CatchingCareerRegularSeason(Stat, SimpleCatchingSplit):
     ----------
     """
     _stat = ['careerRegularSeason']
+    stat: Union[SimpleCatchingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingGameLog(Stat, SimpleCatchingSplit):
+class CatchingGameLog(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -192,9 +214,8 @@ class CatchingGameLog(Stat, SimpleCatchingSplit):
     game: Union[Game, dict]
     opponent: Union[Team, dict]
 
-
 @dataclass(kw_only=True)
-class CatchingLastXGames(Stat, SimpleCatchingSplit):
+class CatchingLastXGames(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -202,7 +223,10 @@ class CatchingLastXGames(Stat, SimpleCatchingSplit):
     ----------
     """
     _stat = ['lastXGames']
+    stat: Union[SimpleCatchingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class CatchingByDateRange(Stat, SimpleCatchingSplit):
@@ -213,10 +237,13 @@ class CatchingByDateRange(Stat, SimpleCatchingSplit):
     ----------
     """
     _stat = ['byDateRange']
+    stat: Union[SimpleCatchingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingByDayOfWeek(Stat, SimpleCatchingSplit):
+class CatchingByDayOfWeek(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -225,10 +252,13 @@ class CatchingByDayOfWeek(Stat, SimpleCatchingSplit):
     """
     _stat = ['byDayOfWeek']
     dayofweek: int
+    stat: Union[SimpleCatchingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingHomeAndAway(Stat, SimpleCatchingSplit):
+class CatchingHomeAndAway(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -237,10 +267,13 @@ class CatchingHomeAndAway(Stat, SimpleCatchingSplit):
     """
     _stat = ['homeAndAway']
     ishome: bool
+    stat: Union[SimpleCatchingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingWinLoss(Stat, SimpleCatchingSplit):
+class CatchingWinLoss(Stat):
     """
     A class to represent a catching winLoss statistic
 
@@ -249,4 +282,7 @@ class CatchingWinLoss(Stat, SimpleCatchingSplit):
     """
     _stat = ['winLoss']
     iswin: bool
+    stat: Union[SimpleCatchingSplit, dict]
 
+    def __post_init__(self):
+        self.stat = SimpleCatchingSplit(**self.stat)

@@ -5,8 +5,11 @@ from .stats import (
     Count,
     HotColdZones,
     ZoneCodes,
-    SprayCharts
+    SprayCharts,
+    Sabermetrics,
+    ExpectedStatistics
 )
+
 
 from .hitting import (
     SimpleHittingSplit, 

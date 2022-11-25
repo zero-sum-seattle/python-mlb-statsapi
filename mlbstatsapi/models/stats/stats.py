@@ -6,6 +6,32 @@ from mlbstatsapi.models.people import Person, Batter, Position
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 
+@dataclass
+class ExpectedStatistics:
+    """
+    a class to hold a code and a description
+
+    Attributes
+    ----------
+    """
+    avg: str
+    slg: str
+    woba: str
+    wobacon: str
+
+@dataclass
+class Sabermetrics:
+    """
+    a class to hold a code and a description
+
+    Attributes
+    ----------
+    """
+    woba: float
+    wrc: float
+    wrcplus: float
+    rar: float
+    war: float
 
 @dataclass
 class CodeDesc:

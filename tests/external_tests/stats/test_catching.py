@@ -55,6 +55,7 @@ class TestCatchingStats(unittest.TestCase):
 
         # check that attrs exist and contain data
         self.assertTrue(season.season)
+        self.assertTrue(season.stat.baseonballs)
         self.assertTrue(career.player)
 
     def test_pitching_stat_attributes_team(self):
@@ -82,4 +83,5 @@ class TestCatchingStats(unittest.TestCase):
 
         # check that attrs exist and contain data
         self.assertTrue(season.season)
+        self.assertTrue(season.stat.baseonballs)
         self.assertTrue(career.team)
