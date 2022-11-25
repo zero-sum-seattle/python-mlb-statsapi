@@ -36,30 +36,6 @@ def merge_keys(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -> dict:
 
     return mlb_dict
 
-
-def transform_mlb_data(split_data: dict, stat_type: str):
-    """
-    returns a dictionary with the keys merged
-    
-    Parameters
-    ----------
-    split_data: dict
-        dict of params to pass
-    Returns
-    -------
-    dict
-        returns a dict that has been transformed
-    """
-    stat_log_type = ['playLog', 'pitchLog']
-
-    if stat_type in stat_log_type:
-        return merge_keys(split_data, [{'stat': 'play'}])
-    elif 'stat' in split_data:
-        return merge_keys(split_data, 'stat')
-    else:
-        return split_data
-
-
 def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Splits']:
     """
     The split objects are built using the group name and split data. The stat group name is used to source the correct
@@ -86,12 +62,10 @@ def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Sp
 
     stat_module = f"mlbstatsapi.models.stats.{stat_group}"
     stat_module = importlib.import_module(stat_module)
-
+    
     for name, obj in inspect.getmembers(stat_module, predicate=inspect.isclass):
-        # type_ attribute holds the stat_type of the class
         if hasattr(obj, '_stat') and stat_type in obj._stat:
             for split in split_data:
-                split = transform_mlb_data(split, stat_type)
                 splits.append(obj(_type=stat_type, _group=stat_group, **split))
 
     return splits
@@ -121,7 +95,8 @@ def create_split_data(stat_data: dict, param_groups: list):
                     stat_splits[stat_group] = {}        
                     # get splits from stats
                 if 'splits' in stat and stat['splits']:
-                    stat_splits[stat_group][stat_type.lower()] = return_splits(stat['splits'], stat_type, stat_group)
+                    split = return_splits(stat['splits'], stat_type, stat_group)
+                    stat_splits[stat_group][stat_type.lower()] = split
 
     return stat_splits
 
@@ -166,10 +141,11 @@ def get_stat_attributes(stats) -> str:
     -------
     (stat_type, stat_group)
     """
-    stat_type = stats['type']['displayname']
+    if 'type' in stats and 'displayname' in stats['type']:
+        stat_type = stats['type']['displayname']
 
     # default to stats if no group returned
-    if 'group' in stats:
+    if 'group' in stats and 'displayname' in stats['group']:
         stat_group = stats['group']['displayname']
     else:
         # stats.py

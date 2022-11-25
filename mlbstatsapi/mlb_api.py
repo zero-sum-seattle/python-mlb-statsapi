@@ -1431,7 +1431,12 @@ class Mlb:
             list of stat types
         groups : list
             list of stat groups
-        
+    
+        Other Parameters
+        ----------------
+        season : str
+            Insert year to return team stats for a particular season, season=2018
+
         Returns
         -------
         dict 
@@ -1477,6 +1482,46 @@ class Mlb:
         groups : list
             list of stat groups
 
+        Other Parameters
+        ----------------
+        season : str
+            Insert year to return team stats for a particular season, season=2018
+        
+        Stat Types
+        __________
+        season : str
+            a season stat, supports stat groups hitting, pitching, fielding, and catching
+        seasonAdvanced : str
+            a seasonAdvanced stat, supports stat groups hitting, pitching, fielding, and catching
+        career : str
+            a career stat, supports stat groups hitting, pitching, fielding, and catching
+        winLoss : str
+            a winLoss stat, supports stat groups hitting, pitching
+        winLossPlayoffs : str
+            a winloss playoff stat, supports stat groups hitting, pitching
+        homeAndAway : str
+            a homeandaway stat, supports stat groups hitting, pitching
+        homeAndAwayPlayoffs : str
+            a homeandaway playoffs stat, supports stat groups hitting, pitching
+        careerRegularSeason : str
+            a career stat, supports stat groups hitting, pitching
+        careerPlayoffs : str
+            a career playoff stat, supports stat groups hitting, pitching
+        statsSingleSeason : str 
+            a careeer playoff stat, supports stat groups hitting, pitching
+        careerAdvanced : str
+            a careerAdvanced  stat, supports stat groups hitting, pitching
+        yearByYear : str
+            a yearbyyear  stat, supports stat groups hitting, pitching
+        yearByYearPlayoffs : str
+            a yearbyyear playoff stat, supports stat groups hitting, pitching
+        opponentsFaced : str
+            a opponentsFace stat, supports stat groups hitting, pitching
+        sabermetrics : str
+            a sabermetrics stat
+        gameLog : str
+            a gamelog stat, supports stat groups hitting, pitching
+
         Returns
         -------
         dict
@@ -1517,6 +1562,46 @@ class Mlb:
         ----------
         params : dict
             dict of params to pass
+
+        Other Parameters
+        ----------------
+        season : str
+            Insert year to return team stats for a particular season, season=2018
+
+        Stat Types
+        __________
+        season : str
+            a season stat, supports stat groups hitting, pitching, fielding, and catching
+        seasonAdvanced : str
+            a seasonAdvanced stat, supports stat groups hitting, pitching, fielding, and catching
+        career : str
+            a career stat, supports stat groups hitting, pitching, fielding, and catching
+        winLoss : str
+            a winLoss stat, supports stat groups hitting, pitching
+        winLossPlayoffs : str
+            a winloss playoff stat, supports stat groups hitting, pitching
+        homeAndAway : str
+            a homeandaway stat, supports stat groups hitting, pitching
+        homeAndAwayPlayoffs : str
+            a homeandaway playoffs stat, supports stat groups hitting, pitching
+        careerRegularSeason : str
+            a career stat, supports stat groups hitting, pitching
+        careerPlayoffs : str
+            a career playoff stat, supports stat groups hitting, pitching
+        statsSingleSeason : str 
+            a careeer playoff stat, supports stat groups hitting, pitching
+        careerAdvanced : str
+            a careerAdvanced  stat, supports stat groups hitting, pitching
+        yearByYear : str
+            a yearbyyear  stat, supports stat groups hitting, pitching
+        yearByYearPlayoffs : str
+            a yearbyyear playoff stat, supports stat groups hitting, pitching
+        opponentsFaced : str
+            a opponentsFace stat, supports stat groups hitting, pitching
+        sabermetrics : str
+            a sabermetrics stat
+        gameLog : str
+            a gamelog stat, supports stat groups hitting, pitching
 
         Returns
         -------

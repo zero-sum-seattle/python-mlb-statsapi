@@ -1,0 +1,207 @@
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "stats": [
+        {
+            "type": {
+                "displayName": "career"
+            },
+            "group": {
+                "displayName": "hitting"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "stat": {
+                        "gamesPlayed": 18951,
+                        "groundOuts": 55579,
+                        "airOuts": 60176,
+                        "runs": 83856,
+                        "doubles": 28656,
+                        "triples": 5286,
+                        "homeRuns": 13714,
+                        "strikeOuts": 89222,
+                        "baseOnBalls": 63371,
+                        "intentionalWalks": 2245,
+                        "hits": 165714,
+                        "hitByPitch": 4586,
+                        "avg": ".258",
+                        "atBats": 642577,
+                        "obp": ".327",
+                        "slg": ".383",
+                        "ops": ".710",
+                        "caughtStealing": 4795,
+                        "stolenBases": 11834,
+                        "stolenBasePercentage": ".712",
+                        "groundIntoDoublePlay": 10338,
+                        "numberOfPitches": 943087,
+                        "plateAppearances": 724217,
+                        "totalBases": 246088,
+                        "rbi": 77208,
+                        "leftOnBase": 120358,
+                        "sacBunts": 10633,
+                        "sacFlies": 3020,
+                        "babip": ".280",
+                        "groundOutsToAirouts": "0.92",
+                        "catchersInterference": 30,
+                        "atBatsPerHomeRun": "46.86"
+                    },
+                    "team": {
+                        "id": 133,
+                        "link": "/api/v1/teams/133"
+                    }
+                }
+            ]
+        },
+        {
+            "type": {
+                "displayName": "careerAdvanced"
+            },
+            "group": {
+                "displayName": "hitting"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "stat": {
+                        "plateAppearances": 724217,
+                        "totalBases": 246088,
+                        "leftOnBase": 120358,
+                        "sacBunts": 10633,
+                        "sacFlies": 3020,
+                        "babip": ".280",
+                        "extraBaseHits": 47656,
+                        "hitByPitch": 4586,
+                        "gidp": 10338,
+                        "gidpOpp": 42607,
+                        "numberOfPitches": 943087,
+                        "pitchesPerPlateAppearance": "1.302",
+                        "walksPerPlateAppearance": ".088",
+                        "strikeoutsPerPlateAppearance": ".123",
+                        "homeRunsPerPlateAppearance": ".019",
+                        "walksPerStrikeout": ".710",
+                        "iso": ".125",
+                        "reachedOnError": 3019,
+                        "walkOffs": 731,
+                        "flyOuts": 34906,
+                        "totalSwings": 455234,
+                        "swingAndMisses": -240895,
+                        "ballsInPlay": 567008,
+                        "popOuts": 13180,
+                        "lineOuts": 12090,
+                        "groundOuts": 55579,
+                        "flyHits": 8504,
+                        "popHits": 428,
+                        "lineHits": 21512,
+                        "groundHits": 14797
+                    },
+                    "team": {
+                        "id": 133,
+                        "link": "/api/v1/teams/133"
+                    }
+                }
+            ]
+        },
+        {
+            "type": {
+                "displayName": "season"
+            },
+            "group": {
+                "displayName": "hitting"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "season": "2022",
+                    "stat": {
+                        "gamesPlayed": 162,
+                        "groundOuts": 1439,
+                        "airOuts": 1394,
+                        "runs": 568,
+                        "doubles": 249,
+                        "triples": 15,
+                        "homeRuns": 137,
+                        "strikeOuts": 1389,
+                        "baseOnBalls": 433,
+                        "intentionalWalks": 7,
+                        "hits": 1147,
+                        "hitByPitch": 59,
+                        "avg": ".216",
+                        "atBats": 5314,
+                        "obp": ".281",
+                        "slg": ".346",
+                        "ops": ".627",
+                        "caughtStealing": 23,
+                        "stolenBases": 78,
+                        "stolenBasePercentage": ".772",
+                        "groundIntoDoublePlay": 109,
+                        "numberOfPitches": 22568,
+                        "plateAppearances": 5863,
+                        "totalBases": 1837,
+                        "rbi": 537,
+                        "leftOnBase": 969,
+                        "sacBunts": 22,
+                        "sacFlies": 33,
+                        "babip": ".264",
+                        "groundOutsToAirouts": "1.03",
+                        "catchersInterference": 2,
+                        "atBatsPerHomeRun": "38.79"
+                    },
+                    "team": {
+                        "id": 133,
+                        "name": "Oakland Athletics",
+                        "link": "/api/v1/teams/133"
+                    }
+                }
+            ]
+        },
+        {
+            "type": {
+                "displayName": "seasonAdvanced"
+            },
+            "group": {
+                "displayName": "hitting"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "season": "2022",
+                    "stat": {
+                        "plateAppearances": 5863,
+                        "totalBases": 1837,
+                        "leftOnBase": 969,
+                        "sacBunts": 22,
+                        "sacFlies": 33,
+                        "babip": ".264",
+                        "extraBaseHits": 401,
+                        "hitByPitch": 59,
+                        "gidp": 109,
+                        "gidpOpp": 670,
+                        "numberOfPitches": 22568,
+                        "pitchesPerPlateAppearance": "3.849",
+                        "walksPerPlateAppearance": ".074",
+                        "strikeoutsPerPlateAppearance": ".237",
+                        "homeRunsPerPlateAppearance": ".023",
+                        "walksPerStrikeout": ".312",
+                        "iso": ".130",
+                        "reachedOnError": 32,
+                        "walkOffs": 14,
+                        "flyOuts": 758,
+                        "totalSwings": 11013,
+                        "swingAndMisses": 2992,
+                        "ballsInPlay": 3980,
+                        "popOuts": 272,
+                        "lineOuts": 364,
+                        "groundOuts": 1439,
+                        "flyHits": 213,
+                        "popHits": 7,
+                        "lineHits": 546,
+                        "groundHits": 381
+                    },
+                    "team": {
+                        "id": 133,
+                        "name": "Oakland Athletics",
+                        "link": "/api/v1/teams/133"
+                    }
+                } ]
+        } ]
+}

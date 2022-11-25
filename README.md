@@ -100,7 +100,7 @@ Use player.id and stat types and groups to return a stats dictionary
 ```
 Print season hitting stats
 ```
->>> for attribute, value in season_hitting_stat.__dict__.items():
+>>> for attribute, value in season_hitting_stat.stat.__dict__.items():
 >>>     print(attribute, value)
 >>>
 ```
@@ -126,10 +126,10 @@ advanced_hitting = stats['hitting']['seasonadvanced']
 ```
 Print season and seasonadvanced stats
 ```
->>> for attribute, value in season_hitting.__dict__.items():
+>>> for attribute, value in season_hitting.stat.__dict__.items():
 >>>     print(attribute, value)
 >>>
->>> for attribute, value in advanced_hitting.__dict__.items():
+>>> for attribute, value in advanced_hitting.stat.__dict__.items():
 >>>     print(attribute, value)
 ```
 
@@ -155,33 +155,64 @@ stat group because of issues related to the REST API. So hotColdZones will be as
 ```
 hotColdZones returns a list of the HotColdZones
 ```
->>> ty_france_hotcoldzones = hitting_hotcoldzones['stats']['hotcoldzones']
->>> shoei_ohtani_hotcoldzones = pitching_hotcoldzones['stats']['hotcoldzones']
+>>> ty_france_hotcoldzones = hitting_hotcoldzones['stats']['hotcoldzones'][0]
+>>> shoei_ohtani_hotcoldzones = pitching_hotcoldzones['stats']['hotcoldzones'][0]
 ```
 Loop through the hotColdZone objects for Ty France
 ```
->>> for hotcoldzone in ty_france_hotcoldzones:
->>>     print(hotcoldzone.name)
->>>         for zonecodes in hotcoldzone.zones
->>>             print(zonecodes.zone)
->>>             print(zonecodes.value)
->>>             print(zonecodes.color)
->>>             print(zonecodes.temp)
+>>> for zone in ty_france_hotcoldzones:
+>>>     print(zone.zone)
+>>>     print(zone.value)
+>>>             
 ```
 Loop through the hotColdZone objects for Shoei Ohtani
 ```
->>> for hotcoldzone in shoei_ohtani_hotcoldzones:
->>>     print(hotcoldzone.name)
->>>         for zonecodes in hotcoldzone.zones
->>>             print(zonecodes.zone)
->>>             print(zonecodes.value)
->>>             print(zonecodes.color)
->>>             print(zonecodes.temp)
+>>> for zone in shoei_ohtani_hotcoldzones:
+>>>     print(zonecodes.zone)
+>>>     print(zonecodes.value)
+>>>
+```
+#### Passing params
+Get Team Ids
+```
+python3
+>>> mlb = mlbstatsapi.Mlb()
+>>> team = mlb.get_team_id('Seattle Mariners')
+```
+Set the stat types and groups.
+```
+>>> types = ['season', 'seasonAdvanced']
+>>> groups = ['hitting']
+```
+Pass season to get_team_stats()
+```
+stats = mlb.get_team_stats(team.id, stats=types, groups=groups, season=2018)
+
+season_hitting = stats['hitting']['season']
+advanced_hitting = stats['hitting']['seasonadvanced']
+```
+season should be 2018
+```
+assertEqual(stats[season_hitting.season == 2018)
+assertEqual(stats[advanced_hitting.season == 2018)
 ```
 
 ### Game Examples
 
 ### People Examples
+Get all Players for a given sport id
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> sport_id = mlb.get_sport_id()
+>>> players = mlb.get_players(sport_id=sport_id)
+>>> for player in players:
+>>>     print(player.id)
+```
+Get a player id
+```
+>>> player_id = mlb.get_player_id("Ty France")
+>>> print(player_id[0])
+```
 
 ### Team Examples
 

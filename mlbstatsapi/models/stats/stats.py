@@ -6,6 +6,32 @@ from mlbstatsapi.models.people import Person, Batter, Position
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 
+@dataclass
+class ExpectedStatistics:
+    """
+    a class to hold a code and a description
+
+    Attributes
+    ----------
+    """
+    avg: str
+    slg: str
+    woba: str
+    wobacon: str
+
+@dataclass
+class Sabermetrics:
+    """
+    a class to hold a code and a description
+
+    Attributes
+    ----------
+    """
+    woba: float
+    wrc: float
+    wrcplus: float
+    rar: float
+    war: float
 
 @dataclass
 class CodeDesc:
@@ -143,9 +169,8 @@ class ZoneCodes:
     color: Optional[str] = None
     temp: Optional[str] = None
 
-
 @dataclass(kw_only=True)
-class HotColdZones(Stat):
+class Zones:
     """
     A class to represent a hot cold zone statistic
 
@@ -158,16 +183,30 @@ class HotColdZones(Stat):
     """
     name: str
     zones: List[ZoneCodes]
-    _stat = ['hotColdZones']
 
     def __post_init__(self):
         self.zones = [ZoneCodes(**zone) for zone in self.zones]
 
-
 @dataclass(kw_only=True)
-class SprayCharts(Stat):
+class HotColdZones(Stat):
     """
-    A class to represent a spraychart statistic
+    A class to represent a hotcoldzone statistic
+
+    Attributes
+    ----------
+    stat : Zones
+        the holdcoldzones for the stat
+    """
+    stat: Zones
+    _stat = ['hotColdZones']
+
+    def __post_init__(self):
+        self.stat = Zones(**self.stat)
+
+@dataclass
+class Chart:
+    """
+    A class to represent a chart for SprayCharts
 
     Attributes
     ----------
@@ -187,12 +226,18 @@ class SprayCharts(Stat):
     centerfield: int
     rightcenterfield: int
     rightfield: int
+
+@dataclass(kw_only=True)
+class SprayCharts(Stat):
+
+
     _stat = ['sprayChart']
+    stat: Union[Chart, dict]
     batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.batter = Batter(**self.batter) if self.batter else self.batter
-
+        self.stat = Chart(**self.stat)
 
 @dataclass(kw_only=True)
 class OutsAboveAverage(Stat):

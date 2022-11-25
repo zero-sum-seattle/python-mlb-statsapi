@@ -1,45 +1,49 @@
 ﻿import unittest
-import time
+import requests_mock
+import json
+import os
 
-from mlbstatsapi.mlb_api import Mlb
+from mlbstatsapi import Mlb
 
 
-class TestHittingStats(unittest.TestCase):
+# Mocked JSON directory
+# TODO Find a better way to structure and handle this :) 
+path_to_current_file = os.path.realpath(__file__)
+current_directory = os.path.dirname(path_to_current_file)
+path_to_player_stats = os.path.join(current_directory, "../mock_json/stats/person/hitting_player_stats.json")
+path_to_team_stats = os.path.join(current_directory, "../mock_json/stats/team/hitting_team_stats.json")
+path_to_not_found = os.path.join(current_directory, "../mock_json/response/not_found_404.json")
+path_to_error = os.path.join(current_directory, "../mock_json/response/error_500.json")
+
+PLAYERSTATS = open(path_to_player_stats, "r", encoding="utf-8-sig").read()
+TEAMSTATS = open(path_to_team_stats, "r", encoding="utf-8-sig").read()
+NOT_FOUND_404 = open(path_to_not_found, "r", encoding="utf-8-sig").read()
+ERROR_500 = open(path_to_error, "r", encoding="utf-8-sig").read()
+
+@requests_mock.Mocker()
+class TestMlbDataApiMock(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.al_team = 133
-        cls.shoei_ohtani = 660271
-        cls.catching_player = 663728
-        cls.utility_player = 647351
-        cls.stats_200_blank = ('projected', 'projectedRos', 'standard', 'advanced', 'firstYearStats', 'lastYearStats',
-        'vsOpponents', 'outsAboveAverage', 'tracking', 'availableStats', 'gameTypeStats', 'vsOpponents')
-        cls.hitting = 'hitting'
-        cls.stats_500 = ('careerStatSplits', 'metricLog', 'metricAverages', 'statSplits', 'statSplitsAdvanced')
-        # these stat groups require a team with recent playoff appearences 
-        cls.stats_playoffs = ('byMonthPlayoffs', 'byDayOfWeekPlayoffs', 'homeAndAwayPlayoffs', 'winLossPlayoffs')
-        # These stat groups require addition params passed like playerid or teamid
-        cls.stats_require_params = ('vsTeam', 'vsTeam5Y', 'vsTeamTotal', 'vsPlayer', 'vsPlayerTotal', 'vsPlayer5Y')
-        # These stat types should all return a stat split object for hitting and pitching stat groups
-        cls.hitting = (
-                    "yearByYear", "yearByYearAdvanced", "yearByYearPlayoffs", "season",
-                    "career", "careerRegularSeason", "careerAdvanced", "seasonAdvanced", "careerPlayoffs",
-                    "gameLog", "playLog", "pitchLog", "pitchArsenal", "expectedStatistics", "sabermetrics",
-                    "sprayChart", "lastXGames", "byDateRange", "byDateRangeAdvanced", "byMonth", "byDayOfWeek",
-                    "homeAndAway", "winLoss", "rankings", "rankingsByYear", "statsSingleSeason", "statsSingleSeasonAdvanced",
-                    "hotColdZones", "opponentsFaced", "atGameStart"
-                    )
-                    
+        cls.player = cls.mlb.get_person(665742)
+        cls.team = cls.mlb.get_team(133)
+        cls.mock_player_stats = json.loads(PLAYERSTATS)
+        cls.mock_team_stats = json.loads(TEAMSTATS)
+        cls.error_500 = json.loads(ERROR_500)
+        cls.mock_not_found = json.loads(NOT_FOUND_404)
+
     @classmethod
     def tearDownClass(cls) -> None:
         pass
 
-    def test_hitting_stat_attributes_player(self):
+    def test_hitting_stat_attributes_player(self, m):
         """mlb get stats should return pitching stats"""
+        m.get('https://statsapi.mlb.com/api/v1/people/665742/stats?stats=season&stats=career&stats=seasonAdvanced&stats=careerAdvanced&group=hitting', json=self.mock_player_stats,
+        status_code=200)
         self.stats = ['season', 'career','seasonAdvanced', 'careerAdvanced']
         self.group = ['hitting']
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_player_stats(self.player.id, stats=self.stats, groups=self.group)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -68,13 +72,14 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue(season_advanced.stat.plateappearances)
         self.assertTrue(career_advanced.player)
 
-    def test_pitching_stat_attributes_team(self):
+    def test_pitching_stat_attributes_team(self, m):
         """mlb get stats should return pitching stats"""
+        m.get('https://statsapi.mlb.com/api/v1/teams/133/stats?stats=season&stats=career&stats=seasonAdvanced&stats=careerAdvanced&group=hitting', json=self.mock_team_stats,
+        status_code=200)
         self.stats = ['season', 'career', 'seasonAdvanced', 'careerAdvanced']
         self.group = ['hitting']
         # let's get some stats
-        # let's get some stats
-        stats = self.mlb.get_team_stats(self.al_team, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_team_stats(self.team.id, stats=self.stats, groups=self.group)
 
         # check for empty dict
         self.assertNotEqual(stats, {})

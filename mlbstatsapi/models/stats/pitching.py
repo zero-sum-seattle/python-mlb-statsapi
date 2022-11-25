@@ -4,8 +4,8 @@ from typing import Optional, Union, List
 from mlbstatsapi.models.people import Person, Pitcher, Batter
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
-
-from .stats import Stat, CodeDesc, Count
+from mlbstatsapi.mlb_module import merge_keys
+from .stats import Stat, CodeDesc, Count, Sabermetrics, ExpectedStatistics
 from .hitting import SimpleHittingSplit
 
 
@@ -380,15 +380,14 @@ class PitchingSabermetrics(Stat):
         the number of teams for the pitching season
     """
     _stat = ['sabermetrics']
-    fip: float
-    fipminus: float
-    ra9war: float
-    rar: float
-    war: float
+    stat: Union[Sabermetrics, dict]
+
+    def __post_init__(self):
+        self.stat = Sabermetrics(**self.stat)
 
 
 @dataclass(kw_only=True)
-class PitchingSeason(Stat, SimplePitchingSplit):
+class PitchingSeason(Stat):
     """
     A class to represent a pitching season statistic
 
@@ -396,10 +395,13 @@ class PitchingSeason(Stat, SimplePitchingSplit):
     ----------
     """
     _stat = ['season', 'statsSingleSeason']
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingCareer(Stat, SimplePitchingSplit):
+class PitchingCareer(Stat):
     """
     A class to represent a pitching season statistic
 
@@ -407,10 +409,13 @@ class PitchingCareer(Stat, SimplePitchingSplit):
     ----------
     """
     _stat = ['career']
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingCareerAdvanced(Stat, AdvancedPitchingSplit):
+class PitchingCareerAdvanced(Stat):
     """
     A class to represent a pitching season statistic
 
@@ -418,10 +423,14 @@ class PitchingCareerAdvanced(Stat, AdvancedPitchingSplit):
     ----------
     """
     _stat = ['careerAdvanced']
+    stat: Union[AdvancedPitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = AdvancedPitchingSplit(**self.stat)
 
 
 @dataclass(kw_only=True)
-class PitchingYearByYear(Stat, SimplePitchingSplit):
+class PitchingYearByYear(Stat):
     """
     A class to represent a yearByYear season statistic
 
@@ -429,10 +438,13 @@ class PitchingYearByYear(Stat, SimplePitchingSplit):
     ----------
     """
     _stat = ['yearByYear']
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingYearByYearPlayoffs(Stat, SimplePitchingSplit):
+class PitchingYearByYearPlayoffs(Stat):
     """
     A class to represent a yearByYear season statistic
 
@@ -440,10 +452,13 @@ class PitchingYearByYearPlayoffs(Stat, SimplePitchingSplit):
     ----------
     """
     _stat = ['yearByYearPlayoffs']
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingYearByYearAdvanced(Stat, AdvancedPitchingSplit):
+class PitchingYearByYearAdvanced(Stat):
     """
     A class to represent a pitching yearByYear statistic
 
@@ -451,10 +466,13 @@ class PitchingYearByYearAdvanced(Stat, AdvancedPitchingSplit):
     ----------
     """
     _stat = ['yearByYearAdvanced']
-
+    stat: Union[AdvancedPitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = AdvancedPitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingSeasonAdvanced(Stat, AdvancedPitchingSplit):
+class PitchingSeasonAdvanced(Stat):
     """
     A class to represent a pitching seasonAdvanced statistic
 
@@ -462,10 +480,13 @@ class PitchingSeasonAdvanced(Stat, AdvancedPitchingSplit):
     ----------
     """
     _stat = ['seasonAdvanced']
-
+    stat: Union[AdvancedPitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = AdvancedPitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingSingleSeasonAdvanced(Stat, AdvancedPitchingSplit):
+class PitchingSingleSeasonAdvanced(Stat):
     """
     A class to represent a pitching seasonAdvanced statistic
 
@@ -473,10 +494,13 @@ class PitchingSingleSeasonAdvanced(Stat, AdvancedPitchingSplit):
     ----------
     """
     _stat = ['statsSingleSeasonAdvanced']
-
+    stat: Union[AdvancedPitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = AdvancedPitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingGameLog(Stat, SimplePitchingSplit):
+class PitchingGameLog(Stat):
     """
     A class to represent a gamelog stat for a pitcher
 
@@ -501,7 +525,10 @@ class PitchingGameLog(Stat, SimplePitchingSplit):
     date: str
     opponent: Union[Team, dict]
     _stat = ['gameLog']
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass
 class PlayDetails:
@@ -552,11 +579,29 @@ class PlayDetails:
     description: Optional[str] = None
 
     def __post_init__(self):
-        self.call = CodeDesc(**self.call)
-        self.batside = CodeDesc(**self.batside)
-        self.pitchhand = CodeDesc(**self.pitchhand) 
+        self.call = CodeDesc(**self.call) if self.call else self.call
+        self.batside = CodeDesc(**self.batside) if self.batside else self.batside
+        self.pitchhand = CodeDesc(**self.pitchhand) if self.pitchhand else self.pitchhand
         self.type = CodeDesc(**self.type) if self.type else self.type
 
+@dataclass
+class PitchingPlay:
+    """
+    A class to represent a gamelog stat for a hitter
+
+    Attributes
+    ----------
+    """
+    details: Union[PlayDetails, dict]
+    count: Union[Count, dict]
+    pitchnumber: int
+    atbatnumber: int
+    ispitch: bool
+    playid: str
+
+    def __post_init__(self):
+        self.details = PlayDetails(**self.details)
+        self.count = Count(**self.count)
 
 @dataclass(kw_only=True)
 class PitchingLog(Stat):
@@ -590,6 +635,7 @@ class PitchingLog(Stat):
 
     """
     _stat = ['pitchLog']
+    stat: Union[PitchingPlay, dict]
     season: str
     opponent: Union[Team, dict]
     date: str
@@ -597,17 +643,9 @@ class PitchingLog(Stat):
     pitcher: Union[Pitcher, dict]
     batter: Union[Batter, dict]
     game: Union[Game, dict]
-    details: Union[PlayDetails, dict]
-    count: Union[Count, dict]
-    playid: str
-    pitchnumber: int
-    atbatnumber: int
-    ispitch: bool
 
     def __post_init__(self):
-        self.details = PlayDetails(**self.details)
-        self.count = Count(**self.count)
-
+        self.stat = PitchingPlay(**merge_keys(self.stat, 'play'))
 
 @dataclass(kw_only=True)
 class PitchingPlayLog(Stat):
@@ -641,6 +679,7 @@ class PitchingPlayLog(Stat):
 
     """
     _stat = ['playLog']
+    stat: Union[PitchingPlay, dict]
     season: str
     opponent: Union[Team, dict]
     date: str
@@ -648,20 +687,12 @@ class PitchingPlayLog(Stat):
     pitcher: Union[Pitcher, dict]
     batter: Union[Batter, dict]
     game: Union[Game, dict]
-    details: Union[PlayDetails, dict]
-    count: Union[Count, dict]
-    playid: str
-    pitchnumber: int
-    atbatnumber: int
-    ispitch: bool
 
     def __post_init__(self):
-        self.details = PlayDetails(**self.details)
-        self.count = Count(**self.count)
-
+        self.stat = PitchingPlay(**merge_keys(self.stat, 'play'))
 
 @dataclass(kw_only=True)
-class PitchingByDateRange(Stat, SimplePitchingSplit):
+class PitchingByDateRange(Stat):
     """
     A class to represent a byDateRange stat for a pitcher
 
@@ -671,10 +702,13 @@ class PitchingByDateRange(Stat, SimplePitchingSplit):
     """
     _stat = ['byDateRange']
     dayofweek: Optional[int] = None
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingByDateRangeAdvanced(Stat, AdvancedPitchingSplit):
+class PitchingByDateRangeAdvanced(Stat):
     """
     A class to represent a byDateRangeAdvanced stat for a pitcher
 
@@ -684,10 +718,13 @@ class PitchingByDateRangeAdvanced(Stat, AdvancedPitchingSplit):
     """
     _stat = ['byDateRangeAdvanced']
     dayofweek: Optional[int] = None
-
+    stat: Union[AdvancedPitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = AdvancedPitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingByMonth(Stat, SimplePitchingSplit):
+class PitchingByMonth(Stat):
     """
     A class to represent a byMonthPlayoffs stat for a pitcher
 
@@ -697,10 +734,13 @@ class PitchingByMonth(Stat, SimplePitchingSplit):
     """
     _stat = ['byMonth']
     month: int
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingByMonthPlayoffs(Stat, SimplePitchingSplit):
+class PitchingByMonthPlayoffs(Stat):
     """
     A class to represent a byMonthPlayoffs stat for a pitcher
 
@@ -710,10 +750,13 @@ class PitchingByMonthPlayoffs(Stat, SimplePitchingSplit):
     """
     _stat = ['byMonthPlayoffs']
     month: int
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingByDayOfWeek(Stat, SimplePitchingSplit):
+class PitchingByDayOfWeek(Stat):
     """
     A class to represent a byDayOfWeek stat for a pitcher
 
@@ -723,10 +766,13 @@ class PitchingByDayOfWeek(Stat, SimplePitchingSplit):
     """
     _stat = ['byDayOfWeek']
     dayofweek: Optional[int] = None
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingByDayOfWeekPlayOffs(Stat, SimplePitchingSplit):
+class PitchingByDayOfWeekPlayOffs(Stat):
     """
     A class to represent a byDayOfWeekPlayoffs stat for a pitcher
 
@@ -736,10 +782,13 @@ class PitchingByDayOfWeekPlayOffs(Stat, SimplePitchingSplit):
     """
     _stat = ['byDayOfWeekPlayoffs']
     dayofweek: Optional[int] = None
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingHomeAndAway(Stat, SimplePitchingSplit):
+class PitchingHomeAndAway(Stat):
     """
     A class to represent a homeAndAway stat for a pitcher
 
@@ -749,10 +798,13 @@ class PitchingHomeAndAway(Stat, SimplePitchingSplit):
     """
     _stat = ['homeAndAway']
     ishome: bool
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingHomeAndAwayPlayoffs(Stat, SimplePitchingSplit):
+class PitchingHomeAndAwayPlayoffs(Stat):
     """
     A class to represent a homeAndAwayPlayoffs stat for a pitcher
 
@@ -762,10 +814,13 @@ class PitchingHomeAndAwayPlayoffs(Stat, SimplePitchingSplit):
     """
     _stat = ['homeAndAwayPlayoffs']
     ishome: bool
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingWinLoss(Stat, SimplePitchingSplit):
+class PitchingWinLoss(Stat):
     """
     A class to represent a winLoss stat for a pitcher
 
@@ -775,10 +830,13 @@ class PitchingWinLoss(Stat, SimplePitchingSplit):
     """
     _stat = ['winLoss']
     iswin: bool
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingWinLossPlayoffs(Stat, SimplePitchingSplit):
+class PitchingWinLossPlayoffs(Stat):
     """
     A class to represent a winLossPlayoffs stat for a pitcher
 
@@ -788,10 +846,13 @@ class PitchingWinLossPlayoffs(Stat, SimplePitchingSplit):
     """
     _stat = ['winLossPlayoffs']
     iswin: bool
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingRankings(Stat, SimplePitchingSplit):
+class PitchingRankings(Stat):
     """
     A class to represent a rankings stat for a pitcher
 
@@ -800,7 +861,10 @@ class PitchingRankings(Stat, SimplePitchingSplit):
     """
     _stat = ['rankingsByYear']
     outspitched: Optional[int] = None
-
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
 class PitchingOpponentsFaced(Stat):
@@ -835,15 +899,12 @@ class PitchingExpectedStatistics(Stat):
     rank : int
     """
     _stat = ['expectedStatistics']
-    avg: str
-    slg: str
-    woba: str
-    wobacon: str
+    stat: Union[ExpectedStatistics, dict]
 
 # These stat_types return a hitting stat for a pitching stat group
 # odd, but need to deal with it.
 @dataclass(kw_only=True)
-class PitchingVsTeam(Stat, SimpleHittingSplit):
+class PitchingVsTeam(Stat):
     """
     A class to represent a vsTeam pitching statistic
 
@@ -854,10 +915,13 @@ class PitchingVsTeam(Stat, SimpleHittingSplit):
     opponent: Union[Team, dict]
     batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)    
-
+    stat: Union[SimpleHittingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimpleHittingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingVsTeamTotal(Stat, SimpleHittingSplit):
+class PitchingVsTeamTotal(Stat):
     """
     A class to represent a vsTeamTotal pitching statistic
 
@@ -868,10 +932,13 @@ class PitchingVsTeamTotal(Stat, SimpleHittingSplit):
     opponent: Union[Team, dict]
     batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
-
+    stat: Union[SimpleHittingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimpleHittingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingVsTeam5Y(Stat, SimpleHittingSplit):
+class PitchingVsTeam5Y(Stat):
     """
     A class to represent a vsTeam5Y pitching statistic
 
@@ -882,3 +949,7 @@ class PitchingVsTeam5Y(Stat, SimpleHittingSplit):
     opponent: Union[Team, dict]
     batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
+    stat: Union[SimpleHittingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimpleHittingSplit(**self.stat)
