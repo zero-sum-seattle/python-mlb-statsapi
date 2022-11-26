@@ -101,7 +101,7 @@ Use player.id and stat types and groups to return a stats dictionary
 Print season hitting stats
 ```
 >>> for attribute, value in season_hitting_stat.stat.__dict__.items():
->>>     print(attribute, value)
+...     print(attribute, value)
 >>>
 ```
 #### Team stats
@@ -127,9 +127,9 @@ advanced_hitting = stats['hitting']['seasonadvanced']
 Print season and seasonadvanced stats
 ```
 >>> for attribute, value in season_hitting.stat.__dict__.items():
->>>     print(attribute, value)
+...     print(attribute, value)
 >>>
->>> for attribute, value in advanced_hitting.stat.__dict__.items():
+... for attribute, value in advanced_hitting.stat.__dict__.items():
 >>>     print(attribute, value)
 ```
 
@@ -196,7 +196,24 @@ season should be 2018
 assertEqual(stats[season_hitting.season == 2018)
 assertEqual(stats[advanced_hitting.season == 2018)
 ```
-
+### Schedule Examples
+Get a schedule for given date
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> schedule = mlb.get_schedule_date('2022-10-13')
+```
+Get ScheduleDates from Schedule
+```
+dates = schedule.dates
+```
+Print Game status and Home and Away Teams
+```
+>>> for date in dates:
+...     for game in date.games:
+...             print(game.status)
+...             print(game.teams.home)
+...             print(game.teams.away)
+```
 ### Game Examples
 
 ### People Examples
@@ -206,13 +223,14 @@ Get all Players for a given sport id
 >>> sport_id = mlb.get_sport_id()
 >>> players = mlb.get_players(sport_id=sport_id)
 >>> for player in players:
->>>     print(player.id)
+...     print(player.id)
 ```
 Get a player id
 ```
 >>> player_id = mlb.get_player_id("Ty France")
 >>> print(player_id[0])
 ```
+
 
 ### Team Examples
 
