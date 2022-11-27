@@ -459,7 +459,7 @@ class Mlb:
     def get_scheduled_games_by_date(self, date: str, 
                                     end_date: str = None,
                                     sport_id: int = 1, 
-                                    abstract_game_state: str = None, **params) -> List[ScheduleGames]:
+                                    **params) -> List[ScheduleGames]:
         """
         return game ids for a specific date and game status
 
@@ -469,8 +469,6 @@ class Mlb:
             start date, 'yyyy-mm-dd'
         end_date : str
             end date, 'yyyy-mm-dd'
-        abstract_game_state : str
-            Game status type to search for, abstract_game_state
 
         Returns
         -------
@@ -642,10 +640,11 @@ class Mlb:
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
             return BoxScore(**mlb_data.data)
 
- 
 
-
-    def get_game_ids(self, start_date: str, end_date: str = None, abstract_game_state: str = None) -> List[int]:
+    def get_game_ids(self, date: str, 
+                     end_date: str = None,
+                     sport_id: int = 1,
+                    **params) -> List[int]:
         """
         return game ids for a specific date and game status
 
@@ -673,31 +672,28 @@ class Mlb:
         >>> mlb = Mlb()
         >>> mlb.get_game_ids()
         """
-        if not start_date:
-            end_date = start_date
+        if not end_date:
+            params['endDate'] = date
+            params['startDate'] = date
+        else:
+            params['startDate'] = date
+            params['endDate'] = end_date
 
-        scheduled_games = self.get_schedule(date=start_date, end_date=end_date)
-        games_ids = []
+        params['sportId'] = sport_id
 
-        # TODO Can we clean up this logic? lol my attempt isn't much better, it's still confusing
-        # If get_schedule_today is successful and returns a schedule object
-        if not scheduled_games:
-            return games_ids
-            # If only one date is in dates. Zero would mean no games today. 
-        if scheduled_games.dates and len(scheduled_games.dates) == 1:
-            # If the single date is todays date
-            if not scheduled_games.dates[0].date == date:
-                return games_ids
-                # If todays date has games. A date could have no games and events.
-            if not scheduled_games.dates[0].games:
-                return games_ids
-                # Collect all the game Id's for todays games
-            for game in scheduled_games.dates[0].games:
-                # If abstractGameState param provided only get games that match
-                if not abstract_game_state or (game.status.abstractgamestate == abstract_game_state):
-                    games_ids.append(game.gamepk)
+        mlb_data = self._mlb_adapter_v1.get(endpoint='schedule', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
 
-        return games_ids
+        game_ids = []
+
+        if 'dates' in mlb_data.data and mlb_data.data['dates']:
+            for date in mlb_data.data['dates']:
+               for game in date['games']:
+                   game_ids.append(game.gamepk)
+
+        return game_ids
+
 
     def get_todays_game_ids(self, abstract_game_state: str = None) -> List[int]:
         """
