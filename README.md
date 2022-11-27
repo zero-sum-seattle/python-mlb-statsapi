@@ -231,8 +231,14 @@ Get a player id
 >>> print(player_id[0])
 ```
 
-
 ### Team Examples
-
+Get a Team
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> team_id = mlb.get_team_id("Seattle Mariners")
+>>> team = mlb.get_team(team_id)
+>>> print(team.id)
+>>> print(team.name)
+```
 ### Venue Examples
 
