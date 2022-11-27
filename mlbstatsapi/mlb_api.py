@@ -1470,6 +1470,43 @@ class Mlb:
 
         return splits
 
+    def get_players_stats_for_game(self, person_id: int, game_id: int, **params) -> dict:
+        """
+        returns a split stat data for a team
+
+        Parameters
+        ----------
+        person_id : int
+            the team id 
+        game_id : list
+            list of stat types
+
+        Returns
+        -------
+        dict 
+            returns a dict of stats
+
+        See Also
+        --------
+        Mlb.get_team_stats
+        Mlb.get_player_stats
+        Mlb.get_stats
+
+        Examples
+        --------
+ 
+        """
+        
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'https://statsapi.mlb.com/api/v1/people/{person_id}/stats/game/{game_id}', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return {}
+
+        if 'stats' in mlb_data.data and mlb_data.data['stats']:
+            groups = mlb_module.build_group_list(params)
+            splits = mlb_module.create_split_data(mlb_data.data['stats'], groups)
+
+        return splits
+        
     def get_player_stats(self, person_id: int, stats: list, groups: list, **params) -> dict:
         """
         returns stat data for a team
