@@ -10,7 +10,7 @@ from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.game import Game, Plays, Linescore, BoxScore
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
-from mlbstatsapi.models.schedules import Schedule
+from mlbstatsapi.models.schedules import Schedule, ScheduleGames
 from mlbstatsapi.models.attendances import Attendance
 from mlbstatsapi.models.stats import Stat
 from mlbstatsapi.models.seasons import Season
@@ -398,7 +398,7 @@ class Mlb:
 
         return coaches
 
-    def get_schedule(self, start_date: str = None, end_date: str = None, sport_id: int = 1) -> Union[Schedule, None]:
+    def get_schedule(self, date: str, end_date: str = None, sport_id: int = 1, **params) -> Union[Schedule, None]:
         """
         return the schedule created from the included params.
 
@@ -419,13 +419,12 @@ class Mlb:
         Returns
         -------
         Schedule
-            returns the Schedule for the date
+            returns the Schedule for the dates
 
         See Also
         --------
-        Mlb.get_schedule_today : Return schedule for today
-        Mlb.get_schedule_date : Return schedule for date
-        Mlb.get_schedule_date_range : Return schedule between date
+        Mlb.get_scheduled_games_by_date : return a list of scheduledgames
+
 
         Examples
         --------
@@ -436,10 +435,15 @@ class Mlb:
         """
 
         # default to today if not set
-        start_date = datetime.date.today().strftime("%Y-%m-%d") if start_date is None else start_date
-        end_date = datetime.date.today().strftime("%Y-%m-%d") if end_date is None else end_date
+        if not end_date:
+            params['endDate'] = date
+            params['startDate'] = date
+        else:
+            params['startDate'] = date
+            params['endDate'] = end_date
 
-        params = {'sportId': sport_id, 'startDate': start_date, 'endDate': end_date}
+        params['sportId'] = sport_id
+    
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='schedule', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
@@ -452,96 +456,61 @@ class Mlb:
         if 'dates' in mlb_data.data and mlb_data.data['dates']:
             return Schedule(**mlb_data.data)
 
-    def get_schedule_today(self, sport_id: int = 1) -> Union[Schedule, None]:        
+    def get_scheduled_games_by_date(self, date: str, 
+                                    end_date: str = None,
+                                    sport_id: int = 1, 
+                                    **params) -> List[ScheduleGames]:
         """
-        return the schedule for today
+        return game ids for a specific date and game status
 
         Parameters
         ----------
+        date : str 
+            start date, 'yyyy-mm-dd'
+        end_date : str
+            end date, 'yyyy-mm-dd'
         spord_id : int
-            sport id of the schedule
+            spord id of schedule defaults to 1
 
         Returns
         -------
-        Schedule
-            returns todays schedule
+        list of ScheduleGames 
+            returns a list of matching game ids
 
         See Also
         --------
-        Mlb.get_schedule : Return schedule for dates
-        Mlb.get_schedule_date : Return schedule for date
-        Mlb.get_schedule_date_range : Return schedule between date
-        
-        Examples
-        --------
-        >>> mlb = Mlb()
-        >>> mlb.get_schedule_today()
-        Schedule
-        """
-
-        return self.get_schedule(sport_id=sport_id)
-
-    def get_schedule_date(self, date, sport_id: int = 1) -> Union[Schedule, None]:
-        """
-        return the schedule for a specific date
-
-        Parameters
-        ----------
-        date : str "yyyy-mm-dd"
-            Date
-        sport_id : int
-            sport id of the schedule
-
-        Returns
-        -------
-        Schedule
-            returns the schedule for given date
-
-        See Also
-        --------
-        Mlb.get_schedule : Return schedule for dates
-        Mlb.get_schedule_today : Return schedule for today
-        Mlb.get_schedule_date_range : Return schedule between date
-        
-        Examples
-        --------
-        >>> mlb = Mlb()
-        >>> mlb.get_schedule_date("2022-07-03")
-        Schedule
-        """
-
-        return self.get_schedule(start_date=date, end_date=date, sport_id=sport_id)
-
-    def get_schedule_date_range(self, start_date: str, end_date: str, sport_id: int = 1) -> Union[Schedule, None]:
-        """
-        return the schedule for a range of dates
-
-        Parameters
-        ----------
-        start_date : str "yyyy-mm-dd"
-            Start date
-        end_date : str "yyyy-mm-dd"
-            End date
-        sport_id : int
-            sport id of the schedule
-
-        Returns
-        -------
-        Schedule
-
-        See Also
-        --------
-        Mlb.get_schedule : Return schedule for dates
-        Mlb.get_schedule_today : Return schedule for today
-        Mlb.get_schedule_date : Return schedule for date
+        Mlb.get_game_play_by_play : return play by play data for a game
+        Mlb.get_game_line_score : return a linescore for a game
+        Mlb.get_todays_game_ids : return a list of game ids for today
+        Mlb.get_game : return a specific game from game id
 
         Examples
         --------
         >>> mlb = Mlb()
-        >>> mlb.get_schedule_date_range(start_date="2021-08-01", end_date="2021-08-11")
+        >>> mlb.get_game_ids()
         """
+        # default to today if not set
+        if not end_date:
+            params['endDate'] = date
+            params['startDate'] = date
+        else:
+            params['startDate'] = date
+            params['endDate'] = end_date
 
-        return self.get_schedule(start_date=start_date, end_date=end_date, sport_id=sport_id)
+        params['sportId'] = sport_id
+
+        games = []
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint='schedule', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        if 'dates' in mlb_data.data and mlb_data.data['dates']:
+            for date in mlb_data.data['dates']:
+               for game in date['games']:
+                   games.append(ScheduleGames(**game))
+
+        return games
 
     def get_game(self, game_id) -> Union[Game, None]:
         """
@@ -673,16 +642,22 @@ class Mlb:
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
             return BoxScore(**mlb_data.data)
 
-    def get_game_ids(self, date: str, abstract_game_state: str = None) -> List[int]:
+
+    def get_game_ids(self, date: str, 
+                     end_date: str = None,
+                     sport_id: int = 1,
+                    **params) -> List[int]:
         """
         return game ids for a specific date and game status
 
         Parameters
         ----------
-        date : str 'yyyy-mm-dd'
-            Date
-        abstract_game_state : str
-            Game status type to search for, abstract_game_state
+        date : str 
+            start date, 'yyyy-mm-dd'
+        end_date : str
+            end date, 'yyyy-mm-dd'
+        spord_id : int
+            spord id of schedule defaults to 1
 
         Returns
         -------
@@ -701,118 +676,27 @@ class Mlb:
         >>> mlb = Mlb()
         >>> mlb.get_game_ids()
         """
+        if not end_date:
+            params['endDate'] = date
+            params['startDate'] = date
+        else:
+            params['startDate'] = date
+            params['endDate'] = end_date
 
-        scheduled_games = self.get_schedule(date, date)
-        games_ids = []
+        params['sportId'] = sport_id
 
-        # TODO Can we clean up this logic? lol my attempt isn't much better, it's still confusing
-        # If get_schedule_today is successful and returns a schedule object
-        if not scheduled_games:
-            return games_ids
-            # If only one date is in dates. Zero would mean no games today. 
-        if scheduled_games.dates and len(scheduled_games.dates) == 1:
-            # If the single date is todays date
-            if not scheduled_games.dates[0].date == date:
-                return games_ids
-                # If todays date has games. A date could have no games and events.
-            if not scheduled_games.dates[0].games:
-                return games_ids
-                # Collect all the game Id's for todays games
-            for game in scheduled_games.dates[0].games:
-                # If abstractGameState param provided only get games that match
-                if not abstract_game_state or (game.status.abstractgamestate == abstract_game_state):
-                    games_ids.append(game.gamepk)
+        mlb_data = self._mlb_adapter_v1.get(endpoint='schedule', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
 
-        return games_ids
+        game_ids = []
 
-    def get_todays_game_ids(self, abstract_game_state: str = None) -> List[int]:
-        """
-        return game ids for todays date
+        if 'dates' in mlb_data.data and mlb_data.data['dates']:
+            for date in mlb_data.data['dates']:
+               for game in date['games']:
+                   game_ids.append(game.gamepk)
 
-        Parameters
-        ----------
-        abstract_game_state : str
-            Game status type to search for, abstract_game_state
-
-        Returns
-        -------
-        list of ints
-            returns a list of game ids
-
-        See Also
-        --------
-        Mlb.get_game_play_by_play : return play by play data for a game
-        Mlb.get_game_line_score : return a linescore for a game
-        Mlb.get_tomorrows_game_ids : return a list of game ids for today
-        Mlb.get_yesterdays_game_ids : return a list of game ids from yesterday
-        Mlb.get_game : return a specific game from game id
-
-        Examples
-        --------
-        >>> mlb = Mlb()
-        >>> mlb.get_todays_game_ids()
-        [662242, 662243, 662244]
-        """
-
-        todays_date = datetime.date.today()
-        todays_games = self.get_game_ids(todays_date.strftime("%Y-%m-%d"), abstract_game_state)
-        return todays_games
-
-    def get_tomorrows_game_ids(self) -> List[int]:
-        """
-        return game ids for tomorrows date
-
-        Returns
-        -------
-        list of ints
-            returns a list of game ids
-
-        See Also
-        --------
-        Mlb.get_game_play_by_play : return play by play data for a game
-        Mlb.get_game_line_score : return a linescore for a game
-        Mlb.get_todays_game_ids : return a list of game ids for today
-        Mlb.get_yesterdays_game_ids : return a list of game ids from yesterday
-        Mlb.get_game : return a specific game from game id
-
-        Examples
-        --------
-        >>> mlb = Mlb()
-        >>> mlb.get_tomorrows_game_ids()
-        [662242, 662243, 662244]
-        """
-
-        tomorrows_date = datetime.date.today() + datetime.timedelta(days=1)
-        tomorrows_games = self.get_game_ids(tomorrows_date.strftime("%Y-%m-%d"))
-        return tomorrows_games
-
-    def get_yesterdays_game_ids(self) -> List[int]:
-        """
-        return game ids for yesterdays date
-
-        Returns
-        -------
-        list of ints
-            returns a list of game ids
-
-        See Also
-        --------
-        Mlb.get_game_play_by_play : return play by play data for a game
-        Mlb.get_game_line_score : return a linescore for a game
-        Mlb.get_todays_game_ids : return a list of game ids for today
-        Mlb.get_yesterdays_game_ids : return a list of game ids from yesterday
-        Mlb.get_game : return a specific game from game id
-
-        Examples
-        --------
-        >>> mlb = Mlb()
-        >>> mlb.get_yesterdays_game_ids()
-        [662242, 662243, 662244]
-        """
-
-        yesterdays_date = datetime.date.today() - datetime.timedelta(days=1)
-        yesterdays_games = self.get_game_ids(yesterdays_date.strftime("%Y-%m-%d"))
-        return yesterdays_games
+        return game_ids
 
     def get_venue(self, venue_id) -> Union[Venue, None]:
         """
@@ -1508,6 +1392,52 @@ class Mlb:
         season : str
             Insert year to return team stats for a particular season, season=2018
 
+        Stats
+        -----
+        season : str
+            a season stat, supports stat groups hitting, pitching, fielding, and catching
+        seasonAdvanced : str
+            a seasonAdvanced stat, supports stat groups hitting, pitching, fielding, and catching
+        career : str
+            a career stat, supports stat groups hitting, pitching, fielding, and catching
+        winLoss : str
+            a winLoss stat, supports stat groups hitting, pitching
+        winLossPlayoffs : str
+            a winloss playoff stat, supports stat groups hitting, pitching
+        homeAndAway : str
+            a homeandaway stat, supports stat groups hitting, pitching
+        homeAndAwayPlayoffs : str
+            a homeandaway playoffs stat, supports stat groups hitting, pitching
+        careerRegularSeason : str
+            a career stat, supports stat groups hitting, pitching
+        careerPlayoffs : str
+            a career playoff stat, supports stat groups hitting, pitching
+        statsSingleSeason : str 
+            a careeer playoff stat, supports stat groups hitting, pitching
+        careerAdvanced : str
+            a careerAdvanced  stat, supports stat groups hitting, pitching
+        yearByYear : str
+            a yearbyyear  stat, supports stat groups hitting, pitching
+        yearByYearPlayoffs : str
+            a yearbyyear playoff stat, supports stat groups hitting, pitching
+        opponentsFaced : str
+            a opponentsFace stat, supports stat groups hitting, pitching
+        sabermetrics : str
+            a sabermetrics stat
+        gameLog : str
+            a gamelog stat, supports stat groups hitting, pitching
+
+        Groups
+        ------
+        hitting : str
+            stat group hitting
+        pitching : str
+            stat group pitching
+        fielding : str
+            stat group fielding
+        catching : str
+            stat group catching
+
         Returns
         -------
         dict 
@@ -1558,8 +1488,8 @@ class Mlb:
         season : str
             Insert year to return team stats for a particular season, season=2018
         
-        Stat Types
-        __________
+        Stats
+        -----
         season : str
             a season stat, supports stat groups hitting, pitching, fielding, and catching
         seasonAdvanced : str
@@ -1592,6 +1522,17 @@ class Mlb:
             a sabermetrics stat
         gameLog : str
             a gamelog stat, supports stat groups hitting, pitching
+
+        Groups
+        ------
+        hitting : str
+            stat group hitting
+        pitching : str
+            stat group pitching
+        fielding : str
+            stat group fielding
+        catching : str
+            stat group catching
 
         Returns
         -------
@@ -1639,8 +1580,8 @@ class Mlb:
         season : str
             Insert year to return team stats for a particular season, season=2018
 
-        Stat Types
-        __________
+        Stats
+        -----
         season : str
             a season stat, supports stat groups hitting, pitching, fielding, and catching
         seasonAdvanced : str
@@ -1674,6 +1615,16 @@ class Mlb:
         gameLog : str
             a gamelog stat, supports stat groups hitting, pitching
 
+        Groups
+        ------
+        hitting : str
+            stat group hitting
+        pitching : str
+            stat group pitching
+        fielding : str
+            stat group fielding
+        catching : str
+            stat group catching
         Returns
         -------
         splits : dict

@@ -7,7 +7,7 @@ class TestSchedule(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.schedule = cls.mlb.get_schedule_date('2022-10-07')
+        cls.schedule = cls.mlb.get_schedule(date='2022-10-07')
 
     @classmethod
     def tearDownClass(cls) -> None:
