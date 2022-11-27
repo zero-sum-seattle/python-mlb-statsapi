@@ -28,3 +28,6 @@ class TestHittingStats(unittest.TestCase):
 
         # game_stats should be a dict
         self.assertIsInstance(game_stats, dict)
+
+        # vsPlayer5Y hitting
+        # vsPlayer5Y pitching

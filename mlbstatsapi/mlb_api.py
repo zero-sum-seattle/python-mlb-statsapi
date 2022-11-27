@@ -1363,10 +1363,11 @@ class Mlb:
         Examples
         --------
         """
-        round_list = []
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'draft/{year_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
+
+        round_list = []
 
         if 'drafts' in mlb_data.data and mlb_data.data['drafts']:
             if mlb_data.data['drafts']['rounds']:
