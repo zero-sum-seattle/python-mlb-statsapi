@@ -465,10 +465,12 @@ class Mlb:
 
         Parameters
         ----------
-        start_date : str 
+        date : str 
             start date, 'yyyy-mm-dd'
         end_date : str
             end date, 'yyyy-mm-dd'
+        spord_id : int
+            spord id of schedule defaults to 1
 
         Returns
         -------
@@ -650,10 +652,12 @@ class Mlb:
 
         Parameters
         ----------
-        date : str 'yyyy-mm-dd'
-            Date
-        abstract_game_state : str
-            Game status type to search for, abstract_game_state
+        date : str 
+            start date, 'yyyy-mm-dd'
+        end_date : str
+            end date, 'yyyy-mm-dd'
+        spord_id : int
+            spord id of schedule defaults to 1
 
         Returns
         -------
@@ -693,96 +697,6 @@ class Mlb:
                    game_ids.append(game.gamepk)
 
         return game_ids
-
-
-    def get_todays_game_ids(self, abstract_game_state: str = None) -> List[int]:
-        """
-        return game ids for todays date
-
-        Parameters
-        ----------
-        abstract_game_state : str
-            Game status type to search for, abstract_game_state
-
-        Returns
-        -------
-        list of ints
-            returns a list of game ids
-
-        See Also
-        --------
-        Mlb.get_game_play_by_play : return play by play data for a game
-        Mlb.get_game_line_score : return a linescore for a game
-        Mlb.get_tomorrows_game_ids : return a list of game ids for today
-        Mlb.get_yesterdays_game_ids : return a list of game ids from yesterday
-        Mlb.get_game : return a specific game from game id
-
-        Examples
-        --------
-        >>> mlb = Mlb()
-        >>> mlb.get_todays_game_ids()
-        [662242, 662243, 662244]
-        """
-
-        todays_date = datetime.date.today()
-        todays_games = self.get_game_ids(todays_date.strftime("%Y-%m-%d"), abstract_game_state)
-        return todays_games
-
-    def get_tomorrows_game_ids(self) -> List[int]:
-        """
-        return game ids for tomorrows date
-
-        Returns
-        -------
-        list of ints
-            returns a list of game ids
-
-        See Also
-        --------
-        Mlb.get_game_play_by_play : return play by play data for a game
-        Mlb.get_game_line_score : return a linescore for a game
-        Mlb.get_todays_game_ids : return a list of game ids for today
-        Mlb.get_yesterdays_game_ids : return a list of game ids from yesterday
-        Mlb.get_game : return a specific game from game id
-
-        Examples
-        --------
-        >>> mlb = Mlb()
-        >>> mlb.get_tomorrows_game_ids()
-        [662242, 662243, 662244]
-        """
-
-        tomorrows_date = datetime.date.today() + datetime.timedelta(days=1)
-        tomorrows_games = self.get_game_ids(tomorrows_date.strftime("%Y-%m-%d"))
-        return tomorrows_games
-
-    def get_yesterdays_game_ids(self) -> List[int]:
-        """
-        return game ids for yesterdays date
-
-        Returns
-        -------
-        list of ints
-            returns a list of game ids
-
-        See Also
-        --------
-        Mlb.get_game_play_by_play : return play by play data for a game
-        Mlb.get_game_line_score : return a linescore for a game
-        Mlb.get_todays_game_ids : return a list of game ids for today
-        Mlb.get_yesterdays_game_ids : return a list of game ids from yesterday
-        Mlb.get_game : return a specific game from game id
-
-        Examples
-        --------
-        >>> mlb = Mlb()
-        >>> mlb.get_yesterdays_game_ids()
-        [662242, 662243, 662244]
-        """
-
-        yesterdays_date = datetime.date.today() - datetime.timedelta(days=1)
-        yesterdays_games = self.get_game_ids(yesterdays_date.strftime("%Y-%m-%d"))
-        return yesterdays_games
 
     def get_venue(self, venue_id) -> Union[Venue, None]:
         """

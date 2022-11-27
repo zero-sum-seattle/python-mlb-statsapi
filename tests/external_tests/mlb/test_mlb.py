@@ -307,10 +307,6 @@ class TestMlbGetGame(unittest.TestCase):
         boxscore = self.mlb.get_game_box_score(662242)
         self.assertIsInstance(boxscore, BoxScore)
 
-    def test_get_todays_games_id(self):
-        todaysGames = self.mlb.get_todays_game_ids()
-        self.assertIsInstance(todaysGames, List)
-
     def test_get_attendance(self):
         params = {'season': 2022}
         attendance_team_away = self.mlb.get_attendance(team_id=113)
