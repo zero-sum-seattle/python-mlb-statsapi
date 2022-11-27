@@ -5,9 +5,17 @@ from mlbstatsapi.models.people import Person, Position, Batter, Pitcher
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 from mlbstatsapi.mlb_module import merge_keys
-from .stats import Stat, CodeDesc, Count, Sabermetrics
-
-
+from .stats import (
+    Stat,
+    CodeDesc,
+    Count,
+    Sabermetrics,
+    PitchBreak,
+    PitchCoordinates,
+    PitchData,
+    HitCoordinates,
+    HitData
+)
 @dataclass
 class AdvancedHittingSplit:
     """
@@ -531,6 +539,12 @@ class PlayDetails:
     pitchhand: Union[CodeDesc, dict]
     description: Optional[str] = None
     type: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
+    awayscore: Optional[int] = None
+    homescore: Optional[int] = None
+    hasreview: Optional[bool] = None
+    code: Optional[str] = None
+    ballColor: Optional[str] = None
+    trailColor: Optional[str] = None
 
     def __post_init__(self):
         self.call = CodeDesc(**self.call) if self.call else self.call
@@ -552,6 +566,8 @@ class HittingPlay:
     atbatnumber: int
     ispitch: bool
     playid: Optional[str] = None
+    pitchdata: Optional[Union[PitchData, dict]] = field(default_factory=dict)
+    hitdata: Optional[Union[HitData, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
@@ -589,6 +605,8 @@ class HittingPlayLog(Stat):
     pitcher: Union[Pitcher, dict]
     batter: Union[Batter, dict]
     game: Union[Game, dict]
+    startTime: Optional[str] = None
+    endTime: Optional[str] = None
     _stat = ['playLog']
 
     def __post_init__(self):

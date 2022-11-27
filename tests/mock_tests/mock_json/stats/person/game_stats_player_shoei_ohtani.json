@@ -1,1 +1,109 @@
-﻿
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "stats": [
+      {
+        "type": {
+          "displayName": "vsPlayer5Y"
+        },
+        "group": {
+          "displayName": "hitting"
+        },
+        "totalSplits": 0,
+        "exemptions": [],
+        "splits": []
+      },
+      {
+        "type": {
+          "displayName": "vsPlayer5Y"
+        },
+        "group": {
+          "displayName": "pitching"
+        },
+        "totalSplits": 1,
+        "exemptions": [],
+        "splits": [
+          {
+            "stat": {
+              "gamesPlayed": 1,
+              "groundOuts": 0,
+              "airOuts": 3,
+              "doubles": 0,
+              "triples": 0,
+              "homeRuns": 0,
+              "strikeOuts": 0,
+              "baseOnBalls": 0,
+              "intentionalWalks": 0,
+              "hits": 0,
+              "hitByPitch": 0,
+              "avg": ".000",
+              "atBats": 3,
+              "obp": ".000",
+              "slg": ".000",
+              "ops": ".000",
+              "groundIntoDoublePlay": 0,
+              "numberOfPitches": 7,
+              "inningsPitched": "1.0",
+              "outsPitched": 3,
+              "whip": "0.00",
+              "battersFaced": 3,
+              "outs": 3,
+              "gamesPitched": 1,
+              "balls": 2,
+              "strikes": 5,
+              "strikePercentage": ".710",
+              "hitBatsmen": 0,
+              "balks": 0,
+              "wildPitches": 0,
+              "totalBases": 0,
+              "groundOutsToAirouts": "0.00",
+              "rbi": 0,
+              "pitchesPerInning": "7.00",
+              "strikeoutWalkRatio": "-.--",
+              "strikeoutsPer9Inn": "0.00",
+              "walksPer9Inn": "0.00",
+              "hitsPer9Inn": "0.00",
+              "homeRunsPer9": "0.00",
+              "catchersInterference": 0,
+              "sacBunts": 0,
+              "sacFlies": 0
+            },
+            "team": {
+              "id": 108,
+              "name": "Los Angeles Angels",
+              "link": "/api/v1/teams/108"
+            },
+            "opponent": {
+              "id": 136,
+              "name": "Seattle Mariners",
+              "link": "/api/v1/teams/136"
+            },
+            "gameType": "R",
+            "numTeams": 1,
+            "pitcher": {
+              "id": 660271,
+              "fullName": "Shohei Ohtani",
+              "link": "/api/v1/people/660271",
+              "firstName": "Shohei",
+              "lastName": "Ohtani"
+            },
+            "batter": {
+              "id": 429664,
+              "fullName": "Robinson Cano",
+              "link": "/api/v1/people/429664",
+              "firstName": "Robinson",
+              "lastName": "Cano"
+            }
+          }
+        ]
+      },
+      {
+        "type": {
+          "displayName": "playLog"
+        },
+        "group": {
+          "displayName": "hitting"
+        },
+        "exemptions": [],
+        "splits": []
+      } ]
+  }

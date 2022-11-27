@@ -1497,8 +1497,13 @@ class Mlb:
         --------
  
         """
+        # this endpoint is very inconsitent
+        # so we'll just make it work
         
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'https://statsapi.mlb.com/api/v1/people/{person_id}/stats/game/{game_id}', ep_params=params)
+        # set stat groups
+        params['group'] = ['hitting', 'pitching']
+        params['stats'] = ['playLog', 'vsPlayer5Y']
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats/game/{game_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return {}
 

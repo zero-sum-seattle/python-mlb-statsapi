@@ -7,7 +7,12 @@ from .stats import (
     ZoneCodes,
     SprayCharts,
     Sabermetrics,
-    ExpectedStatistics
+    ExpectedStatistics,
+    PitchBreak,
+    PitchCoordinates,
+    PitchData,
+    HitCoordinates,
+    HitData
 )
 
 

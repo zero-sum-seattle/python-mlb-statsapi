@@ -7,6 +7,139 @@ from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 
 @dataclass
+class PitchBreak:
+    """
+    A class to hold pitch pitch break data
+    
+    Attributes
+    ----------
+    breakangle : float
+    breaklength : float
+    breaky : float
+    spinrate : float
+    spindirection : float
+    """
+    breakangle: float
+    breaklength: float
+    breaky: float
+    spinrate: float
+    spindirection: float
+
+
+@dataclass
+class PitchCoordinates:
+    """
+    A class to hold pitch coordinates for playLog
+
+    Attributes
+    ----------
+    ay : float
+    az : float
+    pfxx : float
+    pfxz : float
+    px : float
+    pz : float
+    vx0 : float
+    vy0 : float
+    vz0 : float
+    x : float
+    y : float
+    x0 : float
+    y0 : float
+    z0 : float
+    ax : float
+    """
+    ay: float
+    az: float
+    pfxx: float
+    pfxz: float
+    px: float
+    pz: float
+    vx0: float
+    vy0: float
+    vz0: float
+    x: float
+    y: float
+    x0: float
+    y0: float
+    z0: float
+    ax: float
+
+
+@dataclass
+class PitchData:
+    """
+    A class to hold pitch pitch break data
+    
+    Attributes
+    ----------
+    startspeed : float
+    endspeed : float
+    strikezonetop : float
+    strikezonebottom : float
+    coordinates : Union[PitchCoordinates, dict]
+    breaks : Union[PitchBreak, dict] 
+    zone : float
+    typeconfidence : float
+    platetime : float
+    extension : float
+    """
+    startspeed: float
+    endspeed: float
+    strikezonetop: float
+    strikezonebottom: float
+    coordinates: Union[PitchCoordinates, dict]
+    breaks: Union[PitchBreak, dict] 
+    zone:float
+    typeconfidence: float
+    platetime: float
+    extension: float
+
+
+    def __post_init__(self):
+        self.coordinates = PitchCoordinates(**self.coordinates) if self.coordinates else self.coordinates
+        self.breaks = PitchBreak(**self.breaks) if self.breaks else self.breaks
+
+@dataclass
+class HitCoordinates:
+    """
+    A class to hold pitch pitch break data
+    
+    Attributes
+    ----------
+    coordx: float
+    coordy: float
+    """
+    coordx: float
+    coordy: float
+
+@dataclass
+class HitData:
+    """
+    A class to hold pitch pitch break data
+    
+    Attributes
+    ----------
+    launchSpeed : float
+    launchAngle : str
+    totalDistance : float
+    trajectory : str
+    hardness : str
+    location : int
+    coordinates : Union[HitCoordinates, dict]
+    """
+    launchSpeed: float
+    launchAngle: str # this is a negative number and I'm brain farting on those
+    totalDistance: float
+    trajectory: str
+    hardness: str
+    location: int
+    coordinates: Union[HitCoordinates, dict]
+
+    def __post_init__(self):
+        self.coordinates = HitCoordinates(**self.coordinates) if self.coordinates else self.coordinates
+
+@dataclass
 class ExpectedStatistics:
     """
     a class to hold a code and a description
