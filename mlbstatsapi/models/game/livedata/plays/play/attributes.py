@@ -1,5 +1,5 @@
+from typing import Optional
 from dataclasses import dataclass
-
 
 @dataclass
 class PlayAbout:
@@ -73,6 +73,7 @@ class PlayResult:
     rbi: int
     awayscore: int
     homescore: int
+    isout: Optional[bool] = None
 
 
 @dataclass

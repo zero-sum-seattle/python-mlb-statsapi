@@ -121,21 +121,22 @@ class PlayEventDetails:
     """
     description: str
     hasreview: bool
-    call: Union[PlayEventCallType, dict] = None
-    event: str = None
-    eventtype: str = None
-    code: str = None
-    ballcolor: str = None
-    trailcolor: str = None
-    awayscore: int = None
-    homescore: int = None
-    isinplay: bool = None
-    isstrike: bool = None
-    isball: bool = None
-    isscoringplay: bool = None
-    type: Union[PlayEventCallType, dict] = None
-    fromcatcher: bool = None
-    runnergoing: bool = None
+    call: Optional[Union[PlayEventCallType, dict]] = None
+    event: Optional[str] = None
+    eventtype: Optional[str] = None
+    code: Optional[str] = None
+    ballcolor: Optional[str] = None
+    trailcolor: Optional[str] = None
+    awayscore: Optional[int] = None
+    homescore: Optional[int] = None
+    isinplay: Optional[bool] = None
+    isstrike: Optional[bool] = None
+    isball: Optional[bool] = None
+    isout: Optional[bool] = None
+    isscoringplay: Optional[bool] = None
+    type: Optional[Union[PlayEventCallType, dict]] = None
+    fromcatcher: Optional[bool] = None
+    runnergoing: Optional[bool] = None
 
     def __post_init__(self):
         self.call = PlayEventCallType(**self.call) if self.call else self.call
