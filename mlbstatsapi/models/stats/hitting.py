@@ -242,7 +242,6 @@ class SimpleHittingSplit:
     catchersinterference: Optional[int] = None
     atbatsperhomerun: Optional[int] = None
 
-
 @dataclass(kw_only=True)
 class HittingWinLoss(Stat):
     """
@@ -954,3 +953,84 @@ class HittingVsPlayer5Y(Stat):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+
+#
+# These dataclasses are for the game stats end point only
+# url: https://statsapi.mlb.com/api/v1/people/663728/stats/game/715757
+# The gamelog stats in this JSON have different keys set for their stat
+# and group. This breaks my logic of handling stat classes
+#
+
+@dataclass
+class HittingSplit:
+    """
+    A dataclass to handle a fielding gamelog stat for the game player stats endpoint
+
+    Attributes
+    ----------
+    gamesplayed : int
+    flyouts : int
+    groundouts : int
+    runs : int
+    doubles : int
+    triples : int
+    homeruns : int
+    strikeouts : int
+    baseonballs : int
+    intentionalwalks : int
+    hits : int
+    hitbypitch : int
+    atbats : int
+    caughtstealing : int
+    stolenbases : int
+    stolenbasepercentage : str
+    groundintodoubleplay : int
+    groundintotripleplay : int
+    plateappearances : int
+    totalbases : int
+    rbi : int
+    leftonbase : int
+    sacbunts : int
+    sacflies : int
+    catchersinterference : int
+    pickoffs : int
+    atbatsperhomerun : int
+    """
+    gamesplayed: int
+    flyouts: int
+    groundouts: int
+    runs: int
+    doubles: int
+    triples: int
+    homeruns: int
+    strikeouts: int
+    baseonballs: int
+    intentionalwalks: int
+    hits: int
+    hitbypitch: int
+    atbats: int
+    caughtstealing: int
+    stolenbases: int
+    stolenbasepercentage: str
+    groundintodoubleplay: int
+    groundintotripleplay: int
+    plateappearances: int
+    totalbases: int
+    rbi: int
+    leftonbase: int
+    sacbunts: int
+    sacflies: int
+    catchersinterference: int
+    pickoffs: int
+    atbatsperhomerun: int
+
+
+@dataclass
+class HittingGameLogStat:
+    type: str
+    group: str
+    stat: Union[HittingSplit, dict]
+    _stat = ['hitting']
+
+    def __post_init__(self):
+        self.stat = HittingSplit(**self.stat)

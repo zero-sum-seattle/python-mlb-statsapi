@@ -63,6 +63,7 @@ class TestHittingStats(unittest.TestCase):
         # game_stats should have vsplayer5y and playlog stats
         self.assertTrue(game_stats['hitting']['vsplayer5y'])
         self.assertTrue(game_stats['hitting']['playlog'])
+        self.assertTrue(game_stats['stats']['gamelog'])
 
         splits = game_stats['hitting']['vsplayer5y']
 
@@ -88,6 +89,7 @@ class TestHittingStats(unittest.TestCase):
         # game_stats should have vsplayer5y and playlog stats
         self.assertTrue(game_stats['hitting']['vsplayer5y'])
         self.assertTrue(game_stats['hitting']['playlog'])
+        self.assertTrue(game_stats['stats']['gamelog'])
         
         splits = game_stats['hitting']['vsplayer5y']
 

@@ -36,6 +36,41 @@ def merge_keys(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -> dict:
 
     return mlb_dict
 
+def return_splits_no_groups(split_data: dict):
+    """
+    function that loops through split information
+
+    Parameters
+    ----------
+    split_data : dict
+        dict of params to pass
+    Returns
+    -------
+    dict
+        returns a dict of stats
+    """
+
+    splits = []
+    
+    for split in split_data:
+        if split['stat']:
+            if 'group' in split:
+                stat_group = split['group']
+        else: # if no stat skip
+            continue
+
+        # get stat_module file to build a stat object
+        stat_type = 'gameLog'
+        stat_module = f"mlbstatsapi.models.stats.{stat_group}"
+        stat_module = importlib.import_module(stat_module)
+
+        # match stat object to stat_group
+        for name, obj in inspect.getmembers(stat_module, predicate=inspect.isclass):
+            if hasattr(obj, '_stat') and stat_group in obj._stat:
+                splits.append(obj(**split))
+
+    return splits
+
 def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Splits']:
     """
     The split objects are built using the group name and split data. The stat group name is used to source the correct
@@ -88,10 +123,23 @@ def create_split_data(stat_data: dict, param_groups: list):
     for stat in stat_data:
         stat_type, stat_group = get_stat_attributes(stat)
 
-        # if there is no stat_type or stat_group go to next stat
+        # if stat_type is None and stat_group is None
+        # we are assumming this is a call to the game player stats
+        # endpoint. Build gamelog stats
+        # URL: https://statsapi.mlb.com/api/v1/people/664034/stats/game/715757
         if stat_type is None and stat_group is None:
+            split = return_splits_no_groups(stat['splits'])
+
+            stat_group = 'stats'
+            stat_type = 'gameLog'
+
+            if stat_group not in stat_splits:
+                    stat_splits[stat_group] = {}   
+            stat_splits[stat_group][stat_type.lower()] = split
+            
             continue
 
+        # build stat classes that have stat groups and stat types set
         for group in param_groups:
             if stat_group == group:
                 # checking if we need to init stat group key

@@ -159,7 +159,7 @@ class TestPitchingStatsMock(unittest.TestCase):
         self.assertNotEqual(stats, {})
 
         # playlog key should be populated
-        self.assertTrue(stats['pitching'])
+        self.assertTrue('pitching' in stats)
         self.assertTrue(stats['pitching']['pitchlog'])
 
         # pitchlog items should have attr set

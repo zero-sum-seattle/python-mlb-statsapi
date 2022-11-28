@@ -1501,9 +1501,9 @@ class Mlb:
         # so we'll just make it work
         
         # set stat groups
-        # game stats should return a playlog and vsplayer5y stat objects
-        params['group'] = ['hitting', 'pitching']
-        params['stats'] = ['playLog', 'vsPlayer5Y']
+        # game stats should return a playlog, vsplayer5y, or gameLog stat objects
+        params['group'] = ['hitting', 'pitching', 'stats']
+        params['stats'] = ['playLog', 'vsPlayer5Y', 'gameLog']
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats/game/{game_id}')
         if 400 <= mlb_data.status_code <= 499:
