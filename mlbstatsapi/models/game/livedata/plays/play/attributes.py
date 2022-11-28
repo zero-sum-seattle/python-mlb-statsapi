@@ -1,5 +1,5 @@
+from typing import Optional
 from dataclasses import dataclass
-
 
 @dataclass
 class PlayAbout:
@@ -65,6 +65,8 @@ class PlayResult:
         Score for away team
     homescore : int
         Score for home team
+    isout : bool
+        If the play was an out
     """
     type: str
     event: str
@@ -73,6 +75,7 @@ class PlayResult:
     rbi: int
     awayscore: int
     homescore: int
+    isout: Optional[bool] = None
 
 
 @dataclass
