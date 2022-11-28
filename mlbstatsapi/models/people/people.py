@@ -74,6 +74,8 @@ class Person:
         The full fml name of the Person
     fulllfmname : str
         The full lfm name of the Person
+    uselastname : str
+        The last name of the
     birthcountry : str
         The birth country of the Person
     pronunciation : str
@@ -100,6 +102,8 @@ class Person:
         The death country of the Person
     lastplayeddate : str
         The last played date of the Person
+    namesuffix : str
+        The namesuffix of the Person
     """
 
     id: int
@@ -146,6 +150,8 @@ class Person:
     deathcity: Optional[str] = None
     deathcountry: Optional[str] = None
     lastplayeddate: Optional[str] = None
+    uselastname: Optional[str] = None
+    namesuffix: Optional[str] = None
 
     def __post_init__(self):
         self.primaryposition = Position(**self.primaryposition) if self.primaryposition else self.primaryposition
