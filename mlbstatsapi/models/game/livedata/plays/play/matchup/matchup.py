@@ -2,6 +2,7 @@ from typing import Union, Optional, List
 from dataclasses import dataclass
 
 from mlbstatsapi.models.people import Person
+from mlbstatsapi.models.data import CodeDesc
 
 from .attributes import PlayMatchupSide, PlayMatchupSplits
 
@@ -36,9 +37,9 @@ class PlayMatchup:
         Runner on third
     """
     batter: Union[Person, dict]
-    batside: Union[PlayMatchupSide, dict]
+    batside: Union[CodeDesc, dict]
     pitcher: Union[Person, dict]
-    pitchhand: Union[PlayMatchupSide, dict]
+    pitchhand: Union[CodeDesc, dict]
     batterhotcoldzones: List
     pitcherhotcoldzones: List
     splits: Union[PlayMatchupSplits, dict]
@@ -49,9 +50,9 @@ class PlayMatchup:
 
     def __post_init__(self):
         self.batter = Person(**self.batter)
-        self.batside = PlayMatchupSide(**self.batside)
+        self.batside = CodeDesc(**self.batside)
         self.pitcher = Person(**self.pitcher)
-        self.pitchhand = PlayMatchupSide(**self.pitchhand)
+        self.pitchhand = CodeDesc(**self.pitchhand)
         self.splits = PlayMatchupSplits(**self.splits)
         self.batterhotcoldzonestats = self.batterhotcoldzonestats['stats'] if self.batterhotcoldzonestats else self.batterhotcoldzonestats
         self.postonfirst = Person(**self.postonfirst) if self.postonfirst else self.postonfirst

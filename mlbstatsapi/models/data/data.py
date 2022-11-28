@@ -56,13 +56,12 @@ class PitchCoordinates:
     vx0: float
     vy0: float
     vz0: float
-    x: float
-    y: float
     x0: float
     y0: float
     z0: float
     ax: float
-
+    x: Optional[float] = None
+    y: Optional[float] = None
 
 @dataclass
 class PitchData:
@@ -101,34 +100,52 @@ class PitchData:
 @dataclass
 class HitCoordinates:
     """
-    A class to hold pitch pitch break data
-    
+    A class to represent a play events hit location coordinates.
+
     Attributes
     ----------
-    coordx: float
-    coordy: float
+    coordx : int
+        X coordinate for hit
+    coordy : int
+        Y coordinate for hit
     """
     coordx: float
     coordy: float
 
+    @property
+    def x(self):
+        return self.coordx
+
+    @property
+    def y(self):
+        return self.coordy
+
 @dataclass
 class HitData:
     """
-    A class to hold pitch pitch break data
-    
+    A class to represent a play events hit data.
+
     Attributes
     ----------
-    launchSpeed : float
-    launchAngle : str
-    totalDistance : float
+    launchspeed : float
+        Hit launch speed
+    launchangle : int
+        Hit launch angle
+    totaldistance : int
+        Hits total distance
     trajectory : str
+        Hit trajectory
     hardness : str
-    location : int
-    coordinates : Union[HitCoordinates, dict]
+        Hit hardness
+    location : str
+        Hit location
+    coordinates : HitCoordinate
+        Hit coordinates
     """
-    launchSpeed: float
-    launchAngle: str # this is a negative number and I'm brain farting on those
-    totalDistance: float
+
+    launchspeed: float
+    launchangle: str # this is a negative number and I'm brain farting on those
+    totaldistance: float
     trajectory: str
     hardness: str
     location: int
@@ -180,9 +197,9 @@ class Count:
         strike count
     """
     balls: int
-    inning: int
     outs: int
     strikes: int
+    inning: Optional[int] = None
     runneron1b: Optional[bool] = None
     runneron2b: Optional[bool] = None
     runneron3b: Optional[bool] = None
@@ -221,10 +238,12 @@ class PlayDetails:
         bat side code and description
     pitchhand : dict
         pitch hand code and description
+    fromcatcher : bool
     """
-    call: Union[CodeDesc, dict]
-    isinplay: bool
-    isstrike: bool
+    call: Optional[Union[CodeDesc, dict]] = None
+    isinplay: Optional[bool] = None
+    isstrike: Optional[bool] = None
+    isscoringplay: Optional[bool] = None
     isout: Optional[bool] = None
     runnergoing: Optional[bool] = None
     isball: Optional[bool] = None
@@ -243,6 +262,7 @@ class PlayDetails:
     code: Optional[str] = None
     ballcolor: Optional[str] = None
     trailcolor: Optional[str] = None
+    fromcatcher: Optional[bool] = None
 
     def __post_init__(self):
         self.call = CodeDesc(**self.call) if self.call else self.call

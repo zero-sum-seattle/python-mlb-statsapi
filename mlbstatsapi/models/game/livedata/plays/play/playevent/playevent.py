@@ -1,10 +1,7 @@
 from typing import Union, Optional
 from dataclasses import dataclass
 from mlbstatsapi.models.people import Person, Position
-
-from mlbstatsapi.models.game.livedata.plays.play.playevent.pitchdata import PitchData
-
-from .attributes import PlayEventDetails, PlayCount, HitData
+from mlbstatsapi.models.data import Count, HitData, PitchData, PlayDetails
 
 @dataclass
 class PlayEvent:
@@ -50,7 +47,7 @@ class PlayEvent:
     replacedplayer : Person
         Replaced player
     """
-    details: Union[PlayEventDetails, dict]
+    details: Union[PlayDetails, dict]
     index: int
     starttime: str
     endtime: str
@@ -62,7 +59,7 @@ class PlayEvent:
     isbaserunningplay: Optional[bool] = None
     issubstitution: Optional[bool] = None
     battingorder: Optional[str] = None
-    count: Optional[Union[PlayCount, dict]] = None
+    count: Optional[Union[Count, dict]] = None
     pitchdata: Optional[Union[PitchData, dict]] = None
     hitdata: Optional[Union[HitData, dict]] = None
     player: Optional[Union[Person, dict]] = None
@@ -70,8 +67,8 @@ class PlayEvent:
     replacedplayer: Optional[Union[Person, dict]] = None
 
     def __post_init__(self):
-        self.details = PlayEventDetails(**self.details)
-        self.count = PlayCount(**self.count) if self.count else self.count
+        self.details = PlayDetails(**self.details)
+        self.count = Count(**self.count) if self.count else self.count
         self.pitchdata = PitchData(**self.pitchdata) if self.pitchdata else self.pitchdata
         self.hitdata = HitData(**self.hitdata) if self.hitdata else self.hitdata
         self.player = Person(**self.player) if self.player else self.player
