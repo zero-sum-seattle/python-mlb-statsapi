@@ -5,7 +5,12 @@ from mlbstatsapi.models.people import Person, Pitcher, Batter
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 from mlbstatsapi.mlb_module import merge_keys
-from .stats import Stat, CodeDesc, Count, Sabermetrics, ExpectedStatistics
+from mlbstatsapi.models.data import (
+    Count,
+    PlayDetails,
+)
+
+from .stats import Stat, Sabermetrics, ExpectedStatistics
 from .hitting import SimpleHittingSplit
 
 
@@ -533,60 +538,6 @@ class PitchingGameLog(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass
-class PlayDetails:
-    """
-    A class to represent a gamelog stat for a hitter
-
-    Attributes
-    ----------
-    call : dict
-        play call code and description
-    description : str
-        description of the play
-    event : str
-        type of event
-    eventtype : str
-        type of event
-    isinplay : bool
-        is the ball in play true or false
-    isstrike : bool
-        is the ball a strike true or false
-    isball : bool
-        is it a ball true or false
-    isbasehit : bool
-        is the event a base hit true or false
-    isatbat : bool
-        is the event at bat true or false
-    isplateappearance : bool
-        is the event a at play appears true or false
-    type : dict
-        type of pitch code and description
-    batside : dict
-        bat side code and description
-    pitchhand : dict
-        pitch hand code and description
-    """
-    call: Union[CodeDesc, dict]
-    event: str
-    eventtype: str
-    isinplay: bool
-    isstrike: bool
-    isball: bool
-    isbasehit: bool
-    isatbat: bool
-    isplateappearance: bool
-    type: Union[CodeDesc, dict]
-    batside: Union[CodeDesc, dict]
-    pitchhand: Union[CodeDesc, dict]
-    description: Optional[str] = None
-
-    def __post_init__(self):
-        self.call = CodeDesc(**self.call) if self.call else self.call
-        self.batside = CodeDesc(**self.batside) if self.batside else self.batside
-        self.pitchhand = CodeDesc(**self.pitchhand) if self.pitchhand else self.pitchhand
-        self.type = CodeDesc(**self.type) if self.type else self.type
-
-@dataclass
 class PitchingPlay:
     """
     A class to represent a gamelog stat for a hitter
@@ -987,56 +938,56 @@ class PitchingVsTeam5Y(Stat):
 
 @dataclass
 class PitchingSplit:
-    gamesPlayed: int
-    gamesStarted: int
-    flyOuts: int
-    groundOuts : int
-    airOuts: int
+    gamesplayed: int
+    gamesstarted: int
+    flyouts: int
+    groundouts : int
+    airouts: int
     runs: int
     doubles: int
     triples : int
-    homeRuns: int
-    strikeOuts: int
-    baseOnBalls: int
-    intentionalWalks: int
+    homeruns: int
+    strikeouts: int
+    baseonballs: int
+    intentionalwalks: int
     hits: int
-    hitByPitch: int
-    atBats: int
-    caughtStealing : int
-    stolenBases : int
-    stolenBasePercentage: str
-    numberOfPitches: int
-    inningsPitched: str
+    hitbypitch: int
+    atbats: int
+    caughtstealing : int
+    stolenbases : int
+    stolenbasepercentage: str
+    numberofpitches: int
+    inningspitched: str
     wins: int
     losses: int
     saves: int
-    saveOpportunities: int
+    saveopportunities: int
     holds: int
-    blownSaves : int
-    earnedRuns: int
-    battersFaced: int
+    blownsaves : int
+    earnedruns: int
+    battersfaced: int
     outs: int
-    gamesPitched: int
-    completeGames: int
+    gamespitched: int
+    completegames: int
     shutouts: int
-    pitchesThrown: int
+    pitchesthrown: int
     balls: int
     strikes: int
-    strikePercentage: str
-    hitBatsmen: int
+    strikepercentage: str
+    hitbatsmen: int
     balks: int
-    wildPitches: int
+    wildpitches: int
     pickoffs: int
     rbi: int
-    gamesFinished: int
-    runsScoredPer9: str 
-    homeRunsPer9: str
-    inheritedRunners: int
-    inheritedRunnersScored: int
-    catchersInterference: int
-    sacBunts: int
-    sacFlies: int
-    passedBall: int
+    gamesfinished: int
+    runsscoredper9: str 
+    homerunsper9: str
+    inheritedrunners: int
+    inheritedrunnersscored: int
+    catchersinterference: int
+    sacbunts: int
+    sacflies: int
+    passedball: int
 
 
 @dataclass

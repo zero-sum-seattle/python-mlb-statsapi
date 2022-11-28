@@ -5,16 +5,15 @@ from mlbstatsapi.models.people import Person, Position, Batter, Pitcher
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 from mlbstatsapi.mlb_module import merge_keys
+from mlbstatsapi.models.data import (
+    PitchData,
+    HitData,
+    Count,
+    PlayDetails
+)
 from .stats import (
     Stat,
-    CodeDesc,
-    Count,
     Sabermetrics,
-    PitchBreak,
-    PitchCoordinates,
-    PitchData,
-    HitCoordinates,
-    HitData
 )
 @dataclass
 class AdvancedHittingSplit:
@@ -491,66 +490,7 @@ class HittingGameLog(Stat):
         self.stat = [SimpleHittingSplit(**stat) for stat in self.stat]
 
 
-@dataclass
-class PlayDetails:
-    """
-    A class to represent a gamelog stat for a hitter
 
-    Attributes
-    ----------
-    call : dict
-        play call code and description
-    description : str
-        description of the play
-    event : str
-        type of event
-    eventtype : str
-        type of event
-    isinplay : bool
-        is the ball in play true or false
-    isstrike : bool
-        is the ball a strike true or false
-    isball : bool
-        is it a ball true or false
-    isbasehit : bool
-        is the event a base hit true or false
-    isatbat : bool
-        is the event at bat true or false
-    isplateappearance : bool
-        is the event a at play appears true or false
-    type : dict
-        type of pitch code and description
-    batside : dict
-        bat side code and description
-    pitchhand : dict
-        pitch hand code and description
-    """
-    call: Union[CodeDesc, dict]
-    isinplay: bool
-    isstrike: bool
-    runnergoing: Optional[bool] = None
-    isball: Optional[bool] = None
-    isbasehit: Optional[bool] = None
-    isatbat: Optional[bool] = None
-    isplateappearance: Optional[bool] = None
-    batside: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
-    pitchhand: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
-    eventtype: Optional[str] = None
-    event: Optional[str] = None
-    description: Optional[str] = None
-    type: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
-    awayscore: Optional[int] = None
-    homescore: Optional[int] = None
-    hasreview: Optional[bool] = None
-    code: Optional[str] = None
-    ballcolor: Optional[str] = None
-    trailcolor: Optional[str] = None
-
-    def __post_init__(self):
-        self.call = CodeDesc(**self.call) if self.call else self.call
-        self.batside = CodeDesc(**self.batside) if self.batside else self.batside
-        self.pitchhand = CodeDesc(**self.pitchhand) if self.pitchhand else self.pitchhand
-        self.type = CodeDesc(**self.type) if self.type else self.type
 
 @dataclass
 class HittingPlay:

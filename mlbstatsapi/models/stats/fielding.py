@@ -456,7 +456,6 @@ class FieldingSplit:
     passedball : int
     pickoffs : int
     """
-    gamesstarted : int
     caughtstealing : int
     stolenbases : int
     stolenbasepercentage : str
@@ -467,6 +466,7 @@ class FieldingSplit:
     fielding : str
     passedball : int
     pickoffs : int
+    gamesstarted : Optional[int] = None
 
 
 @dataclass
@@ -474,7 +474,7 @@ class FieldingGameLogStat:
     type: str
     group: str
     stat: Union[FieldingSplit, dict]
-    _type = ['fielding']
+    _stat = ['fielding']
 
     def __post_init__(self):
         self.stat = FieldingSplit(**self.stat)
