@@ -527,24 +527,25 @@ class PlayDetails:
         pitch hand code and description
     """
     call: Union[CodeDesc, dict]
-    event: str
-    eventtype: str
     isinplay: bool
     isstrike: bool
-    isball: bool
-    isbasehit: bool
-    isatbat: bool
-    isplateappearance: bool
-    batside: Union[CodeDesc, dict]
-    pitchhand: Union[CodeDesc, dict]
+    runnergoing: Optional[bool] = None
+    isball: Optional[bool] = None
+    isbasehit: Optional[bool] = None
+    isatbat: Optional[bool] = None
+    isplateappearance: Optional[bool] = None
+    batside: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
+    pitchhand: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
+    eventtype: Optional[str] = None
+    event: Optional[str] = None
     description: Optional[str] = None
     type: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
     awayscore: Optional[int] = None
     homescore: Optional[int] = None
     hasreview: Optional[bool] = None
     code: Optional[str] = None
-    ballColor: Optional[str] = None
-    trailColor: Optional[str] = None
+    ballcolor: Optional[str] = None
+    trailcolor: Optional[str] = None
 
     def __post_init__(self):
         self.call = CodeDesc(**self.call) if self.call else self.call
@@ -562,12 +563,17 @@ class HittingPlay:
     """
     details: Union[PlayDetails, dict]
     count: Union[Count, dict]
-    pitchnumber: int
-    atbatnumber: int
     ispitch: bool
+    pitchnumber: Optional[int] = None
+    atbatnumber: Optional[int] = None
+    index: Optional[str] = None
     playid: Optional[str] = None
     pitchdata: Optional[Union[PitchData, dict]] = field(default_factory=dict)
     hitdata: Optional[Union[HitData, dict]] = field(default_factory=dict)
+    starttime: Optional[str] = None
+    endtime: Optional[str] = None
+    type: Optional[str] = None
+
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
@@ -599,14 +605,13 @@ class HittingPlayLog(Stat):
 
     """
     stat: Union[HittingPlay, dict]
-    opponent: Union[Team, dict]
-    date: str
-    ishome: bool
-    pitcher: Union[Pitcher, dict]
-    batter: Union[Batter, dict]
-    game: Union[Game, dict]
-    startTime: Optional[str] = None
-    endTime: Optional[str] = None
+    opponent: Optional[Union[Team, dict]] = field(default_factory=dict)
+    date: Optional[str] = None
+    ishome: Optional[bool] = None
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    game: Optional[Union[Game, dict]] = field(default_factory=dict)
+
     _stat = ['playLog']
 
     def __post_init__(self):

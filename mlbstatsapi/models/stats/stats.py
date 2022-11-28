@@ -210,12 +210,13 @@ class Count:
     """
     balls: int
     inning: int
-    istopinning: bool
     outs: int
-    runneron1b: bool
-    runneron2b: bool
-    runneron3b: bool
     strikes: int
+    runneron1b: Optional[bool] = None
+    runneron2b: Optional[bool] = None
+    runneron3b: Optional[bool] = None
+    istopinning: Optional[bool] = None
+
 
 
 @dataclass(kw_only=True)

@@ -31,8 +31,17 @@ class TestHittingStats(unittest.TestCase):
         # game_stats should be a dict
         self.assertIsInstance(game_stats, dict)
 
-        # vsPlayer5Y hitting
-        # vsPlayer5Y pitching
+        # game_stats should have hitting stats
+        self.assertTrue(game_stats['pitching'])
+
+        # game_stats should have vsplayer5y and playlog stats
+        self.assertTrue(game_stats['pitching']['vsplayer5y'])
+
+        splits = game_stats['pitching']['vsplayer5y']
+
+        for split in splits:
+            self.assertTrue(split.team)
+            self.assertTrue(split.stat)
 
     def test_get_players_stats_for_ty_france(self):
         """return player stat objects"""
@@ -46,5 +55,10 @@ class TestHittingStats(unittest.TestCase):
         # game_stats should be a dict
         self.assertIsInstance(game_stats, dict)
 
-        # vsPlayer5Y hitting
-        # vsPlayer5Y pitching
+        # game_stats should have hitting stats
+        self.assertTrue(game_stats['hitting'])
+
+        # game_stats should have vsplayer5y and playlog stats
+        self.assertTrue(game_stats['hitting']['vsplayer5y'])
+        self.assertTrue(game_stats['hitting']['playlog'])
+        

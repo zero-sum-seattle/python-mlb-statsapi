@@ -201,7 +201,9 @@ class SimplePitchingSplit:
     battersfaced: Optional[int] = None
     inheritedrunners: Optional[int] = None
     inheritedrunnersscored: Optional[int] = None
-
+    balls: Optional[int] = None
+    outspitched: Optional[int] = None
+    rbi: Optional[int] = None
 
 @dataclass
 class AdvancedPitchingSplit:
@@ -900,6 +902,26 @@ class PitchingExpectedStatistics(Stat):
     """
     _stat = ['expectedStatistics']
     stat: Union[ExpectedStatistics, dict]
+
+
+
+@dataclass(kw_only=True)
+class PitchingVsPlayer5Y(Stat):
+    """
+    A class to represent a vsTeam pitching statistic
+
+    Attributes
+    ----------
+    """
+    _stat = ['vsPlayer5Y']
+    opponent: Union[Team, dict]
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)    
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
+
 
 # These stat_types return a hitting stat for a pitching stat group
 # odd, but need to deal with it.

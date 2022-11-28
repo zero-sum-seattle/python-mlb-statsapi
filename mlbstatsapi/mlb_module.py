@@ -88,6 +88,10 @@ def create_split_data(stat_data: dict, param_groups: list):
     for stat in stat_data:
         stat_type, stat_group = get_stat_attributes(stat)
 
+        # if there is no stat_type or stat_group go to next stat
+        if stat_type is None and stat_group is None:
+            continue
+
         for group in param_groups:
             if stat_group == group:
                 # checking if we need to init stat group key
@@ -143,13 +147,18 @@ def get_stat_attributes(stats) -> str:
     """
     if 'type' in stats and 'displayname' in stats['type']:
         stat_type = stats['type']['displayname']
+    else:
+        stat_type = None
 
     # default to stats if no group returned
     if 'group' in stats and 'displayname' in stats['group']:
         stat_group = stats['group']['displayname']
     else:
-        # stats.py
-        stat_group = 'stats'
+        # if stat_type is None return None
+        if stat_type:
+            stat_group = 'stats'
+        else: 
+            stat_group = None
 
     return (stat_type, stat_group)
 
