@@ -138,8 +138,6 @@ class ScheduleGames:
     season: str
     gamedate: str
     officialdate: str
-    status: Union[GameStatus, dict]
-    teams: Union[ScheduleHomeAndAway, dict]
     venue: Venue
     content: dict
     gamenumber: int
@@ -158,6 +156,8 @@ class ScheduleGames:
     recordsource: str
     ifnecessary: str
     ifnecessarydescription: str
+    status: Union[GameStatus, dict] = field(default_factory=dict)
+    teams: Union[ScheduleHomeAndAway, dict] = field(default_factory=dict)
     description: Optional[str] = None
     inningbreaklength: Optional[int] = None
     rescheduledate: Optional[str] = None
@@ -167,8 +167,8 @@ class ScheduleGames:
     istie: Optional[bool] = None
 
     def __post_init__(self):
-        self.status = GameStatus(**self.status)
-        self.teams = ScheduleHomeAndAway(**self.teams)
+        self.status = GameStatus(**self.status) if self.status else self.status
+        self.teams = ScheduleHomeAndAway(**self.teams) if self.teams else self.teams
 
 
 @dataclass
@@ -203,4 +203,4 @@ class ScheduleDates:
     games: List[ScheduleGames] = field(default_factory=list)
 
     def __post_init__(self):
-        self.games = [ScheduleGames(**game) for game in self.games if self.games]
+        self.games = [ScheduleGames(**game) for game in self.games ] if self.games else self.games
