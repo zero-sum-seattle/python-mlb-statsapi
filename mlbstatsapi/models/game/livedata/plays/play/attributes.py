@@ -65,6 +65,8 @@ class PlayResult:
         Score for away team
     homescore : int
         Score for home team
+    isout : bool
+        If the play was an out
     """
     type: str
     event: str

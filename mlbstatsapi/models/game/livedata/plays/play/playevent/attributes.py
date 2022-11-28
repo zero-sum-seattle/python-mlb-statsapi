@@ -110,6 +110,8 @@ class PlayEventDetails:
         If it is a strike
     isball : bool
         If it is a ball
+    isout : bool
+        If its is an out
     isscoringplay : bool
         If it is a scoring play
     type : PlayEventDetailsCallType
