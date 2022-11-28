@@ -8,42 +8,42 @@ class PitchCoordinates:
 
     Attributes
     ----------
-    ay : float = None
+    ay : float, default=None
         Ball acceleration on the y axis
-    az : float = None
+    az : float, default=None
         Ball acceleration on the z axis
-    pfxx : float = None
+    pfxx : float, default=None
         horizontal movement of the ball in inches
-    pfxz : float = None
+    pfxz : float, default=None
         Vertical movement of the ball in inches
-    px : float = None
+    px : float, default=None
         Horizontal position in feet of the ball as it 
         crosses the front axis of home plate
-    pz : float = None
+    pz : float, default=None
         Vertical position in feet of the ball as it 
         crosses the front axis of home plate
-    vx0 : float = None
+    vx0 : float, default=None
         Velocity of the ball from the x-axis
-    vy0 : float = None
+    vy0 : float, default=None
         Velocity of the ball from the y axis, this
         is negative becuase 0,0,0 is behind the batter
         and the ball travels from pitcher mound towards 0,0,0
-    vz0 : float = None
+    vz0 : float, default=None
         Velocity of the ball from the z axis
-    x0 : float = None
+    x0 : float, default=None
         Coordinate location of the ball at the point it was
         reeased from pitchers hand on the x axis (time=0)
-    y0 : float = None
+    y0 : float, default=None
         Coordinate location of the ball at the point it was
         reeased from pitchers hand on the y axis (time=0)
-    z0 : float = None
+    z0 : float, default=None
         Coordinate location of the ball at the point it was
         reeased from pitchers hand on the z axis (time=0)
-    ax : float = None
+    ax : float, default=None
         Ball acceleration on the x axis
-    x : float = None
+    x : float, default=None
         X coordinate where pitch crossed front of home plate
-    y : float = None
+    y : float, default=None
         Y coordinate where pitch crossed front of home plate
     """
     ay: Optional[float] = None
@@ -73,7 +73,7 @@ class PitchBreaks:
         Degrees clockwise (batter's view) that the plane of 
         the pitch deviates from the vertical
     breaklength : float
-        Max distance that the pitch separates fromt he straight
+        Max distance that the pitch separates from the straight
         line between pitch start and pitch end
     breaky : int
         Distance from home plate where the break is greatest
