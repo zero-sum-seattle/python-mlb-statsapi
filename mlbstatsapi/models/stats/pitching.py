@@ -975,3 +975,78 @@ class PitchingVsTeam5Y(Stat):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+
+#
+# These dataclasses are for the game stats end point only
+# url: https://statsapi.mlb.com/api/v1/people/663728/stats/game/715757
+# The gamelog stats in this JSON have different keys set for their stat
+# and group. This breaks my logic of handling stat classes
+#
+
+
+
+@dataclass
+class PitchingSplit:
+    gamesPlayed: int
+    gamesStarted: int
+    flyOuts: int
+    groundOuts : int
+    airOuts: int
+    runs: int
+    doubles: int
+    triples : int
+    homeRuns: int
+    strikeOuts: int
+    baseOnBalls: int
+    intentionalWalks: int
+    hits: int
+    hitByPitch: int
+    atBats: int
+    caughtStealing : int
+    stolenBases : int
+    stolenBasePercentage: str
+    numberOfPitches: int
+    inningsPitched: str
+    wins: int
+    losses: int
+    saves: int
+    saveOpportunities: int
+    holds: int
+    blownSaves : int
+    earnedRuns: int
+    battersFaced: int
+    outs: int
+    gamesPitched: int
+    completeGames: int
+    shutouts: int
+    pitchesThrown: int
+    balls: int
+    strikes: int
+    strikePercentage: str
+    hitBatsmen: int
+    balks: int
+    wildPitches: int
+    pickoffs: int
+    rbi: int
+    gamesFinished: int
+    runsScoredPer9: str 
+    homeRunsPer9: str
+    inheritedRunners: int
+    inheritedRunnersScored: int
+    catchersInterference: int
+    sacBunts: int
+    sacFlies: int
+    passedBall: int
+
+
+@dataclass
+class PitchingGameLogStat:
+    type: str
+    group: str
+    stat: Union[PitchingSplit, dict]
+    _stat = ['pitching']
+
+    def __post_init__(self):
+        self.stat = PitchingSplit(**self.stat)
+
+

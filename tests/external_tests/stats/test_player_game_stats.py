@@ -15,6 +15,8 @@ class TestHittingStats(unittest.TestCase):
         cls.ty_game_id = 715757
         cls.cal_realeigh = 663728
         cls.cal_game_id = 715757
+        cls.archie_bradley = 605151
+        cls.archie_game_id = 531368
              
     @classmethod
     def tearDownClass(cls) -> None:
@@ -90,6 +92,33 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue(game_stats['hitting']['vsplayer5y'])
         self.assertTrue(game_stats['hitting']['playlog'])
         self.assertTrue(game_stats['stats']['gamelog'])
+        
+        splits = game_stats['hitting']['vsplayer5y']
+
+        for split in splits:
+            self.assertTrue(split.team)
+            self.assertTrue(split.stat)
+
+    def test_get_players_stats_for_archie(self):
+        """return player stat objects"""
+
+        game_stats = self.mlb.get_players_stats_for_game(person_id=self.archie_bradley,
+                                                         game_id=self.archie_game_id)
+
+        # game stats should not be None
+        self.assertIsNotNone(game_stats)
+
+        # game_stats should be a dict
+        self.assertIsInstance(game_stats, dict)
+
+        # game_stats should have hitting stats
+        self.assertTrue(game_stats['hitting'])
+
+        # game_stats should have vsplayer5y and playlog stats
+        self.assertTrue(game_stats['hitting']['vsplayer5y'])
+        self.assertTrue(game_stats['hitting']['playlog'])
+        self.assertTrue(game_stats['stats']['gamelog'])
+        self.assertTrue(len(game_stats['stats']['gamelog']) == 3)
         
         splits = game_stats['hitting']['vsplayer5y']
 

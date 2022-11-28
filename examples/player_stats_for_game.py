@@ -5,7 +5,7 @@ import mlbstatsapi
 mlb = mlbstatsapi.Mlb()
 
 # set date
-date = '2022-10-13'
+date = '2022-10-01'
 
 # get schedule for 13th of october
 schedule = mlb.get_schedule(date=date)
