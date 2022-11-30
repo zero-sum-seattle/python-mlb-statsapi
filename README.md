@@ -50,6 +50,8 @@ python3
 ### Stats
 * `Mlb.get_player_stats()` Return stats by player id, stat type and groups
 * `Mlb.get_team_stats()` Return stats by team id, stat types and groups
+* `Mlb.get_stats()` Return stats by stat type and group args
+* `Mlb.get_players_stats_for_game()` Return player stats for a game
 ### Venues
 * `Mlb.get_venue_id()` - Return Venue Id(s)
 * `Mlb.get_venue()` - Return Venue Object from venue Id
@@ -68,9 +70,6 @@ python3
 * `Mlb.get_league_id()` - Return League Id(s)
 ### Schedules
 * `Mlb.get_schedule()` : Return a Schedule from dates
-* `Mlb.get_schedule_today()` : Return Schedule for today
-* `Mlb.get_schedule_date()` : Return Schedule for date
-* `Mlb.get_schedule_date_range()` : Return Schedule between date
 ### Games
 * `Mlb.get_game()` : Return the Game for a specific Game Id
 * `Mlb.get_game_play_by_play()` : Return Play by play data for a game
