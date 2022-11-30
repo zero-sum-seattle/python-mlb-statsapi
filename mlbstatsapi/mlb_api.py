@@ -1446,9 +1446,10 @@ class Mlb:
 
         See Also
         --------
-        Mlb.get_team_stats
-        Mlb.get_player_stats
-        Mlb.get_stats
+        Mlb.get_player_stats : Get stats for a player
+        Mlb.get_stats : Get stats
+        Mlb.get_player_stats : Get player stats
+
 
         Examples
         --------
@@ -1473,7 +1474,9 @@ class Mlb:
 
     def get_players_stats_for_game(self, person_id: int, game_id: int, **params) -> dict:
         """
-        returns a split stat data for a team
+        Insert personId and gamePk to view stats for individual player based on a specific game.
+         
+         Fielding, Hitting, & Pitching gameLog Statistics as well as vsPlayer stats.
 
         Parameters
         ----------
@@ -1489,13 +1492,18 @@ class Mlb:
 
         See Also
         --------
-        Mlb.get_team_stats
-        Mlb.get_player_stats
-        Mlb.get_stats
+        Mlb.get_team_stats : Get team stats
+        Mlb.get_player_stats : Get stats for a player
+        Mlb.get_stats : Get stats
 
         Examples
         --------
- 
+        >>> mlb = Mlb()
+        >>> player_id = 663728
+        >>> game_id = 715757
+        >>> stats = mlb.get_player_stats_for_game(person_id=person_id, game_id=game_id)
+        >>> print(stats['stats']['gamelog'])
+        >>> print(stats['hitting']['playlog'])
         """
         # this endpoint is very inconsitent
         # so we'll just make it work
@@ -1586,9 +1594,9 @@ class Mlb:
 
         See Also
         --------
-        Mlb.get_team_stats
-        Mlb.get_player_stats
-        Mlb.get_stats
+        Mlb.get_stats : Get stats
+        Mlb.get_team_stats : Get team stats
+        Mlb.get_players_stats_for_game : Get player stats for a game
 
         Examples
         --------
@@ -1613,7 +1621,7 @@ class Mlb:
 
     def get_stats(self, stats: list, groups: list, **params: dict) -> dict:
         """
-        return a split object
+        return a stat dictionary
 
         Parameters
         ----------
@@ -1676,8 +1684,9 @@ class Mlb:
 
         See Also
         --------
-        Mlb.get_team_stats
-        Mlb.get_player_stats
+        Mlb.get_team_stats : Get team stats
+        Mlb.get_player_stats : Get player stats
+        Mlb.get_players_stats_for_game : Get player stats for a game
 
         Examples
         --------

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.data import CodeDesc
 
-from .attributes import PlayMatchupSide, PlayMatchupSplits
+from .attributes import PlayMatchupSplits
 
 @dataclass
 class PlayMatchup:

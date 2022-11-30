@@ -1,1 +1,1 @@
-from .matchup import PlayMatchup
+from .matchup import PlayMatchupSplits, PlayMatchup
