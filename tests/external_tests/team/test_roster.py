@@ -17,6 +17,11 @@ class TestTeamRoster(unittest.TestCase):
     def test_team_roster_list_of_player_objects(self):
         """Default Team Roster should return a list of players"""
         self.assertIsInstance(self.roster, list)
+        # Roster should return a list
+        self.assertIsInstance(self.roster, list)
+
+        # Roster should not return a empty list
+        self.assertNotEqual(self.roster, [])
         for player in self.roster:
             self.assertIsInstance(player, Player)
 
@@ -39,7 +44,13 @@ class TestCoachRoster(unittest.TestCase):
 
     def test_team_roster_list_of_coach_objects(self):
         """Default Team Roster should return a list of coaches"""
+        # Roster should return a list
         self.assertIsInstance(self.roster, list)
+
+        # Roster should not return a empty list
+        self.assertNotEqual(self.roster, [])
+
+        # Roster should return a list of Coaches
         for player in self.roster:
             self.assertIsInstance(player, Coach)
 
