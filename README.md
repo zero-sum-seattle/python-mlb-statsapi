@@ -44,14 +44,14 @@ python3
 ### Teams
 * `Mlb.get_team_id()` - Return Team Id(s) from name
 * `Mlb.get_team()` - Return Team Object from Team Id
-* `Mlb.get_teams()`) - Return all Teams for Sport
+* `Mlb.get_teams()` - Return all Teams for Sport
 * `Mlb.get_team_coaches()` - Return coaching roster for team for current or specified season
 * `Mlb.get_team_roster()` - Return player roster for team for current or specified season
 ### Stats
-* `Mlb.get_player_stats()` Return stats by player id, stat type and groups
-* `Mlb.get_team_stats()` Return stats by team id, stat types and groups
-* `Mlb.get_stats()` Return stats by stat type and group args
-* `Mlb.get_players_stats_for_game()` Return player stats for a game
+* `Mlb.get_player_stats()` - Return stats by player id, stat type and groups
+* `Mlb.get_team_stats()` - Return stats by team id, stat types and groups
+* `Mlb.get_stats()` - Return stats by stat type and group args
+* `Mlb.get_players_stats_for_game()` - Return player stats for a game
 ### Venues
 * `Mlb.get_venue_id()` - Return Venue Id(s)
 * `Mlb.get_venue()` - Return Venue Object from venue Id
@@ -69,12 +69,12 @@ python3
 * `Mlb.get_leagues()` - Return all Leagues
 * `Mlb.get_league_id()` - Return League Id(s)
 ### Schedules
-* `Mlb.get_schedule()` : Return a Schedule from dates
+* `Mlb.get_schedule()` - Return a Schedule from dates
 ### Games
-* `Mlb.get_game()` : Return the Game for a specific Game Id
-* `Mlb.get_game_play_by_play()` : Return Play by play data for a game
-* `Mlb.get_game_line_score()` : Return a Linescore for a game
-* `Mlb.get_game_box_score()` : Return a Boxscore for a game
+* `Mlb.get_game()` - Return the Game for a specific Game Id
+* `Mlb.get_game_play_by_play()` - Return Play by play data for a game
+* `Mlb.get_game_line_score()` - Return a Linescore for a game
+* `Mlb.get_game_box_score()` - Return a Boxscore for a game
 
 ## Examples
 
@@ -229,15 +229,24 @@ Get a player id
 >>> player_id = mlb.get_player_id("Ty France")
 >>> print(player_id[0])
 ```
-
+Get a list of all players for a given sport.
 ### Team Examples
 Get a Team
 ```
 >>> mlb = mlbstatsapi.Mlb()
->>> team_id = mlb.get_team_id("Seattle Mariners")
->>> team = mlb.get_team(team_id)
+>>> team_ids = mlb.get_team_id("Seattle Mariners")
+>>> team_id = team_ids[0]
+>>> team = mlb.get_team(team_id.id)
 >>> print(team.id)
 >>> print(team.name)
 ```
 ### Venue Examples
-
+Get a Venue
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> vevue_ids = mlb.get_venue_id('PNC Park')
+>>> venue_id = venue_ids[0]
+>>> venue = mlb.get_team(venue.id)
+>>> print(venue.id)
+>>> print(venue.name)
+```
