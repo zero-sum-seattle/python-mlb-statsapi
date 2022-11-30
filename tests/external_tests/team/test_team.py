@@ -10,7 +10,7 @@ class TestTeam(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.team = cls.mlb.get_team(133)
+
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -21,15 +21,41 @@ class TestTeam(unittest.TestCase):
             team = Team()
 
     def test_team_instance_id_instance_success(self):
+        """get_team should return a Team object"""
+        self.team = self.mlb.get_team(133)
+
+        # team should not be None
+        self.assertIsNotNone(self.team)
+
+        # Team object should have attrs set
         self.assertEqual(self.team.id, 133)
         self.assertIsInstance(self.team, Team)
         self.assertEqual(self.team.name, "Oakland Athletics")
         self.assertEqual(self.team.link, "/api/v1/teams/133")
-
-    def test_team_instances_attribute_classes(self):
-        """Team should return attributes as instances of Classes"""
-
-        # test team attributes classes
         self.assertIsInstance(self.team.sport, Sport)
         self.assertIsInstance(self.team.venue, Venue)
         self.assertIsInstance(self.team.division, Division)
+
+    def test_get_teams_for_sport(self):
+        """get_teams should return a list of teams"""
+        self.teams = self.mlb.get_teams(sport_id=1)
+
+        # teams should not be none
+        self.assertIsNotNone(self.teams)
+
+        # teams should be a list
+        self.assertIsInstance(self.teams, list)
+
+        # teams should not be empty list
+        self.assertNotEqual(self.teams, [])
+
+        self.teams = self.mlb.get_teams(sport_id=11)
+
+        # teams should not be none
+        self.assertIsNotNone(self.teams)
+
+        # teams should be a list
+        self.assertIsInstance(self.teams, list)
+
+        # teams should not be empty list
+        self.assertNotEqual(self.teams, [])
