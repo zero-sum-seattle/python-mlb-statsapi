@@ -56,7 +56,7 @@ class HitsByTeam:
         self.coordinates = HitCoordinates(**self.coordinates)
 
 @dataclass
-class PlayByInningHits():
+class PlayByInningHits:
     """
     A class to represent a play by inning in this game.
 

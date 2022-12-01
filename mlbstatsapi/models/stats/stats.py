@@ -5,6 +5,8 @@ from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.people import Person, Batter, Position
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.data import CodeDesc
+
 
 @dataclass
 class ExpectedStatistics:
@@ -32,57 +34,6 @@ class Sabermetrics:
     wrcplus: float
     rar: float
     war: float
-
-@dataclass
-class CodeDesc:
-    """
-    a class to hold a code and a description
-
-    Attributes
-    ----------
-    code : str
-        the pitch code to reference the pitch
-    description : str
-        the description of the pitch
-    """
-    code: str
-    description: Optional[str] = None
-
-
-@dataclass
-class Count:
-    """
-    a class to hold a pitch count and base runners
-
-    Attributes
-    ----------
-    code : str
-        code
-    balls : int
-        number of balls
-    inning : int
-        inning number
-    istopinning : bool
-        bool to hold status of top inning
-    outs : int
-        number of outs
-    runneron1b : bool
-        bool to hold 1b runner status
-    runneron2b : bool
-        bool to hold 2b runner status
-    runneron3b : bool
-        bool to hold 3b runner status
-    strikes : int
-        strike count
-    """
-    balls: int
-    inning: int
-    istopinning: bool
-    outs: int
-    runneron1b: bool
-    runneron2b: bool
-    runneron3b: bool
-    strikes: int
 
 
 @dataclass(kw_only=True)

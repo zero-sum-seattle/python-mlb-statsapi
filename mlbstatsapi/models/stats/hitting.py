@@ -5,9 +5,16 @@ from mlbstatsapi.models.people import Person, Position, Batter, Pitcher
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 from mlbstatsapi.mlb_module import merge_keys
-from .stats import Stat, CodeDesc, Count, Sabermetrics
-
-
+from mlbstatsapi.models.data import (
+    PitchData,
+    HitData,
+    Count,
+    PlayDetails
+)
+from .stats import (
+    Stat,
+    Sabermetrics,
+)
 @dataclass
 class AdvancedHittingSplit:
     """
@@ -233,7 +240,6 @@ class SimpleHittingSplit:
     groundoutstoairouts: Optional[int] = None
     catchersinterference: Optional[int] = None
     atbatsperhomerun: Optional[int] = None
-
 
 @dataclass(kw_only=True)
 class HittingWinLoss(Stat):
@@ -484,59 +490,7 @@ class HittingGameLog(Stat):
         self.stat = [SimpleHittingSplit(**stat) for stat in self.stat]
 
 
-@dataclass
-class PlayDetails:
-    """
-    A class to represent a gamelog stat for a hitter
 
-    Attributes
-    ----------
-    call : dict
-        play call code and description
-    description : str
-        description of the play
-    event : str
-        type of event
-    eventtype : str
-        type of event
-    isinplay : bool
-        is the ball in play true or false
-    isstrike : bool
-        is the ball a strike true or false
-    isball : bool
-        is it a ball true or false
-    isbasehit : bool
-        is the event a base hit true or false
-    isatbat : bool
-        is the event at bat true or false
-    isplateappearance : bool
-        is the event a at play appears true or false
-    type : dict
-        type of pitch code and description
-    batside : dict
-        bat side code and description
-    pitchhand : dict
-        pitch hand code and description
-    """
-    call: Union[CodeDesc, dict]
-    event: str
-    eventtype: str
-    isinplay: bool
-    isstrike: bool
-    isball: bool
-    isbasehit: bool
-    isatbat: bool
-    isplateappearance: bool
-    batside: Union[CodeDesc, dict]
-    pitchhand: Union[CodeDesc, dict]
-    description: Optional[str] = None
-    type: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
-
-    def __post_init__(self):
-        self.call = CodeDesc(**self.call) if self.call else self.call
-        self.batside = CodeDesc(**self.batside) if self.batside else self.batside
-        self.pitchhand = CodeDesc(**self.pitchhand) if self.pitchhand else self.pitchhand
-        self.type = CodeDesc(**self.type) if self.type else self.type
 
 @dataclass
 class HittingPlay:
@@ -548,10 +502,17 @@ class HittingPlay:
     """
     details: Union[PlayDetails, dict]
     count: Union[Count, dict]
-    pitchnumber: int
-    atbatnumber: int
     ispitch: bool
+    pitchnumber: Optional[int] = None
+    atbatnumber: Optional[int] = None
+    index: Optional[str] = None
     playid: Optional[str] = None
+    pitchdata: Optional[Union[PitchData, dict]] = field(default_factory=dict)
+    hitdata: Optional[Union[HitData, dict]] = field(default_factory=dict)
+    starttime: Optional[str] = None
+    endtime: Optional[str] = None
+    type: Optional[str] = None
+
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
@@ -583,12 +544,13 @@ class HittingPlayLog(Stat):
 
     """
     stat: Union[HittingPlay, dict]
-    opponent: Union[Team, dict]
-    date: str
-    ishome: bool
-    pitcher: Union[Pitcher, dict]
-    batter: Union[Batter, dict]
-    game: Union[Game, dict]
+    opponent: Optional[Union[Team, dict]] = field(default_factory=dict)
+    date: Optional[str] = None
+    ishome: Optional[bool] = None
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    game: Optional[Union[Game, dict]] = field(default_factory=dict)
+
     _stat = ['playLog']
 
     def __post_init__(self):
@@ -931,3 +893,84 @@ class HittingVsPlayer5Y(Stat):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+
+#
+# These dataclasses are for the game stats end point only
+# url: https://statsapi.mlb.com/api/v1/people/663728/stats/game/715757
+# The gamelog stats in this JSON have different keys set for their stat
+# and group. This breaks my logic of handling stat classes
+#
+
+@dataclass
+class HittingSplit:
+    """
+    A dataclass to handle a fielding gamelog stat for the game player stats endpoint
+
+    Attributes
+    ----------
+    gamesplayed : int
+    flyouts : int
+    groundouts : int
+    runs : int
+    doubles : int
+    triples : int
+    homeruns : int
+    strikeouts : int
+    baseonballs : int
+    intentionalwalks : int
+    hits : int
+    hitbypitch : int
+    atbats : int
+    caughtstealing : int
+    stolenbases : int
+    stolenbasepercentage : str
+    groundintodoubleplay : int
+    groundintotripleplay : int
+    plateappearances : int
+    totalbases : int
+    rbi : int
+    leftonbase : int
+    sacbunts : int
+    sacflies : int
+    catchersinterference : int
+    pickoffs : int
+    atbatsperhomerun : int
+    """
+    gamesplayed: int
+    flyouts: int
+    groundouts: int
+    runs: int
+    doubles: int
+    triples: int
+    homeruns: int
+    strikeouts: int
+    baseonballs: int
+    intentionalwalks: int
+    hits: int
+    hitbypitch: int
+    atbats: int
+    caughtstealing: int
+    stolenbases: int
+    stolenbasepercentage: str
+    groundintodoubleplay: int
+    groundintotripleplay: int
+    plateappearances: int
+    totalbases: int
+    rbi: int
+    leftonbase: int
+    sacbunts: int
+    sacflies: int
+    catchersinterference: int
+    pickoffs: int
+    atbatsperhomerun: int
+
+
+@dataclass
+class HittingGameLogStat:
+    type: str
+    group: str
+    stat: Union[HittingSplit, dict]
+    _stat = ['hitting']
+
+    def __post_init__(self):
+        self.stat = HittingSplit(**self.stat)

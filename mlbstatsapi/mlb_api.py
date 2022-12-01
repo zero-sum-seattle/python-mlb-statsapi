@@ -1363,10 +1363,11 @@ class Mlb:
         Examples
         --------
         """
-        round_list = []
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'draft/{year_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
+
+        round_list = []
 
         if 'drafts' in mlb_data.data and mlb_data.data['drafts']:
             if mlb_data.data['drafts']['rounds']:
@@ -1383,9 +1384,12 @@ class Mlb:
         team_id : int
             the team id 
         stats : list
-            list of stat types
+            list of stat types.
+            List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
         groups : list
-            list of stat groups
+            list of stat grous.
+            List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
+
     
         Other Parameters
         ----------------
@@ -1445,9 +1449,10 @@ class Mlb:
 
         See Also
         --------
-        Mlb.get_team_stats
-        Mlb.get_player_stats
-        Mlb.get_stats
+        Mlb.get_player_stats : Get stats for a player
+        Mlb.get_stats : Get stats
+        Mlb.get_player_stats : Get player stats
+
 
         Examples
         --------
@@ -1470,6 +1475,57 @@ class Mlb:
 
         return splits
 
+    def get_players_stats_for_game(self, person_id: int, game_id: int, **params) -> dict:
+        """
+        Insert personId and gamePk to view stats for individual player based on a specific game.
+         
+         Fielding, Hitting, & Pitching gameLog Statistics as well as vsPlayer stats.
+
+        Parameters
+        ----------
+        person_id : int
+            the team id 
+        game_id : list
+            list of stat types
+
+        Returns
+        -------
+        dict 
+            returns a dict of stats
+
+        See Also
+        --------
+        Mlb.get_team_stats : Get team stats
+        Mlb.get_player_stats : Get stats for a player
+        Mlb.get_stats : Get stats
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> player_id = 663728
+        >>> game_id = 715757
+        >>> stats = mlb.get_player_stats_for_game(person_id=person_id, game_id=game_id)
+        >>> print(stats['stats']['gamelog'])
+        >>> print(stats['hitting']['playlog'])
+        """
+        # this endpoint is very inconsitent
+        # so we'll just make it work
+        
+        # set stat groups
+        # game stats should return a playlog, vsplayer5y, or gameLog stat objects
+        params['group'] = ['hitting', 'pitching', 'stats']
+        params['stats'] = ['playLog', 'vsPlayer5Y', 'gameLog']
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats/game/{game_id}')
+        if 400 <= mlb_data.status_code <= 499:
+            return {}
+
+        if 'stats' in mlb_data.data and mlb_data.data['stats']:
+            groups = mlb_module.build_group_list(params)
+            splits = mlb_module.create_split_data(mlb_data.data['stats'], groups)
+
+        return splits
+        
     def get_player_stats(self, person_id: int, stats: list, groups: list, **params) -> dict:
         """
         returns stat data for a team
@@ -1479,15 +1535,20 @@ class Mlb:
         person_id : int
             the person id
         stats : list
-            list of stat types
+            list of stat types.
+            List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
         groups : list
-            list of stat groups
+            list of stat grous.
+            List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
 
         Other Parameters
         ----------------
         season : str
             Insert year to return team stats for a particular season, season=2018
-        
+        eventType : str
+            Notes for individual events for playLog, playlog can be filered by individual events.
+            List of eventTypes can be found at https://statsapi.mlb.com/api/v1/eventTypes
+
         Stats
         -----
         season : str
@@ -1541,9 +1602,9 @@ class Mlb:
 
         See Also
         --------
-        Mlb.get_team_stats
-        Mlb.get_player_stats
-        Mlb.get_stats
+        Mlb.get_stats : Get stats
+        Mlb.get_team_stats : Get team stats
+        Mlb.get_players_stats_for_game : Get player stats for a game
 
         Examples
         --------
@@ -1568,17 +1629,35 @@ class Mlb:
 
     def get_stats(self, stats: list, groups: list, **params: dict) -> dict:
         """
-        return a split object
+        return a stat dictionary
 
         Parameters
         ----------
         params : dict
             dict of params to pass
+        stats : list
+            list of stat types.
+            List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
+        groups : list
+            list of stat grous.
+            List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
 
         Other Parameters
         ----------------
         season : str
             Insert year to return team stats for a particular season, season=2018
+        teamId : int
+            Insert teamId to return statistics for a given team. Default to "Qualified" playerPool.
+            For a list of all teamIds : Mlb.get_leagues()
+        leagueId : int
+            Insert leagueId to return statistics for a given league. Default to "Qualified" playerPool
+            For a list of all leagueIds : Mlb.get_leagues()
+        gameType : str
+            Insert gameType to return statistics for a given sport or league based on gameType. Default to "Qualified" playerPool
+            Find available gameType at https://statsapi.mlb.com/api/v1/gameTypes
+        sportIds : int
+            Insert sportId to return statistics for a given sport.
+            For a list of all sportIds : Mlb.get_sports()
 
         Stats
         -----
@@ -1631,8 +1710,9 @@ class Mlb:
 
         See Also
         --------
-        Mlb.get_team_stats
-        Mlb.get_player_stats
+        Mlb.get_team_stats : Get team stats
+        Mlb.get_player_stats : Get player stats
+        Mlb.get_players_stats_for_game : Get player stats for a game
 
         Examples
         --------
