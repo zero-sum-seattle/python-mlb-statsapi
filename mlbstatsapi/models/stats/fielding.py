@@ -428,3 +428,53 @@ class FieldingGameLog(Stat, SimpleFieldingSplit):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+
+
+#
+# These dataclasses are for the game stats end point only
+# url: https://statsapi.mlb.com/api/v1/people/663728/stats/game/715757
+# The gamelog stats in this JSON have different keys set for their stat
+# and group. This breaks my logic of handling stat classes
+#
+
+@dataclass
+class FieldingSplit:
+    """
+    A dataclass to handle a fielding gamelog stat for the game player stats endpoint
+
+    Attributes
+    ----------
+    gamesstarted : int
+    caughtstealing : int
+    stolenbases : int
+    stolenbasepercentage : str
+    assists : int
+    putouts : int
+    errors : int
+    chances : int
+    fielding : str
+    passedball : int
+    pickoffs : int
+    """
+    caughtstealing : int
+    stolenbases : int
+    stolenbasepercentage : str
+    assists : int
+    putouts : int
+    errors : int
+    chances : int
+    fielding : str
+    passedball : int
+    pickoffs : int
+    gamesstarted : Optional[int] = None
+
+
+@dataclass
+class FieldingGameLogStat:
+    type: str
+    group: str
+    stat: Union[FieldingSplit, dict]
+    _stat = ['fielding']
+
+    def __post_init__(self):
+        self.stat = FieldingSplit(**self.stat)

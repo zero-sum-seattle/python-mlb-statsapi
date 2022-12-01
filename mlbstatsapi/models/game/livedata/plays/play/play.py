@@ -1,11 +1,10 @@
 from typing import Union, Optional, List
 from dataclasses import dataclass
 
-from mlbstatsapi.models.game.livedata.plays.play.playevent import PlayCount
 from mlbstatsapi.models.game.livedata.plays.play.matchup import PlayMatchup
 from mlbstatsapi.models.game.livedata.plays.play.playrunner import PlayRunner
 from mlbstatsapi.models.game.livedata.plays.play.playevent import PlayEvent
-
+from mlbstatsapi.models.data import Count
 from .attributes import PlayAbout, PlayResult, PlayReviewDetails
 
 
@@ -43,7 +42,7 @@ class Play:
     """
     result: Union[PlayResult, dict]
     about: Union[PlayAbout, dict]
-    count: Union[PlayCount, dict]
+    count: Union[Count, dict]
     matchup: Union[PlayMatchup, dict]
     pitchindex: List[int]
     actionindex: List[int]
@@ -57,7 +56,7 @@ class Play:
     def __post_init__(self):
         self.result = PlayResult(**self.result)
         self.about = PlayAbout(**self.about)
-        self.count = PlayCount(**self.count)
+        self.count = Count(**self.count)
         self.matchup = PlayMatchup(**self.matchup)
         self.runners = [PlayRunner(**runner) for runner in self.runners]
         self.playevents = [PlayEvent(**playevent) for playevent in self.playevents]

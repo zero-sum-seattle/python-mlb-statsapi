@@ -1,13 +1,12 @@
 from .stats import (
     Stat, 
     PitchArsenal,
-    CodeDesc,
-    Count,
     HotColdZones,
     ZoneCodes,
     SprayCharts,
     Sabermetrics,
-    ExpectedStatistics
+    ExpectedStatistics,
+
 )
 
 
@@ -39,7 +38,8 @@ from .hitting import (
     HittingSingleSeason,
     HittingVsTeam,
     HittingVsTeam5Y,
-    HittingVsTeamTotal
+    HittingVsTeamTotal,
+    HittingGameLogStat
 )
 
 from .pitching import (
@@ -113,6 +113,7 @@ from .fielding import (
     FieldingSeasonAdvanced,
     FieldingSingleSeasonAdvanced,
     FieldingSingleSeason,
+    FieldingGameLogStat
 )
 
 from .game import (
