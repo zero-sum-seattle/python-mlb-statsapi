@@ -1541,8 +1541,6 @@ class Mlb:
             list of stat grous.
             List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
 
-
-
         Other Parameters
         ----------------
         season : str
@@ -1550,8 +1548,6 @@ class Mlb:
         eventType : str
             Notes for individual events for playLog, playlog can be filered by individual events.
             List of eventTypes can be found at https://statsapi.mlb.com/api/v1/eventTypes
-
-
 
         Stats
         -----
