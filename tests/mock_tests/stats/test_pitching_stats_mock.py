@@ -17,6 +17,7 @@ path_to_player_stats = os.path.join(current_directory, "../mock_json/stats/perso
 path_to_team_stats = os.path.join(current_directory, "../mock_json/stats/team/pitching_team_stats.json")
 path_to_pitching_playlog_file = os.path.join(current_directory, "../mock_json/stats/person/pitching_player_playlog.json")
 path_to_pitching_pitchlog_file = os.path.join(current_directory, "../mock_json/stats/person/pitching_player_pitchlog.json")
+path_to_spraychart_file = os.path.join(current_directory, "../mock_json/stats/person/spraychart.json")
 
 HOTCOLDZONE = open(path_to_hotcoldzone_file, "r", encoding="utf-8-sig").read()
 NOT_FOUND_404 = open(path_to_not_found, "r", encoding="utf-8-sig").read()
@@ -25,6 +26,7 @@ PLAYERSTATS = open(path_to_player_stats, "r", encoding="utf-8-sig").read()
 TEAMSTATS = open(path_to_team_stats, "r", encoding="utf-8-sig").read()
 PITCHING_PLAY_LOG = open(path_to_pitching_playlog_file, "r", encoding="utf-8-sig").read()
 PITCHING_PITCH_LOG = open(path_to_pitching_pitchlog_file, "r", encoding="utf-8-sig").read()
+SPRAYCHART = open(path_to_spraychart_file, "r", encoding="utf-8-sig").read()
 
 
 @requests_mock.Mocker()
@@ -41,6 +43,8 @@ class TestPitchingStatsMock(unittest.TestCase):
         cls.mock_team_stats = json.loads(TEAMSTATS)
         cls.mock_pitching_playlog = json.loads(PITCHING_PLAY_LOG)
         cls.mock_pitching_pitchlog = json.loads(PITCHING_PITCH_LOG)
+        cls.mock_spraycharts = json.loads(SPRAYCHART)
+
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -192,3 +196,18 @@ class TestPitchingStatsMock(unittest.TestCase):
         for pitchlog in pitchlogs:
             self.assertTrue(pitchlog.stat)
     
+    def test_pitching_play_log_for_player(self, m):
+        """get_player_game_stats should return a dict with stats"""
+        m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=sprayChart&group=pitching', json=self.mock_spraycharts,
+        status_code=200)
+        self.stats = ['sprayChart']
+        self.groups = ['pitching']
+        spraychart = self.mlb.get_player_stats(self.pitcher.id, stats=self.stats, groups=self.groups)
+
+        # game_stats should not be None
+        self.assertIsNotNone(spraychart)
+
+        # game_stats should not be empty dic
+        self.assertNotEqual(spraychart, {})
+
+        self.assertTrue(spraychart['stats']['spraychart'])

@@ -1,0 +1,779 @@
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "stats": [
+        {
+            "type": {
+                "displayName": "playLog"
+            },
+            "group": {
+                "displayName": "hitting"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "season": "2018",
+                    "stat": {
+                        "play": {
+                            "details": {
+                                "call": {
+                                    "code": "D",
+                                    "description": "Hit Into Play - No Out(s)"
+                                },
+                                "description": "Jose Altuve singles on a line drive to left fielder Ryan Rua.  ",
+                                "event": "single",
+                                "eventType": "single",
+                                "isInPlay": true,
+                                "isStrike": false,
+                                "isBall": false,
+                                "isBaseHit": true,
+                                "isAtBat": true,
+                                "isPlateAppearance": true,
+                                "type": {
+                                    "code": "CH",
+                                    "description": "Changeup"
+                                },
+                                "batSide": {
+                                    "code": "R",
+                                    "description": "Right"
+                                },
+                                "pitchHand": {
+                                    "code": "R",
+                                    "description": "Right"
+                                }
+                            },
+                            "count": {
+                                "balls": 0,
+                                "strikes": 1,
+                                "outs": 0,
+                                "inning": 4,
+                                "isTopInning": true,
+                                "runnerOn1b": false,
+                                "runnerOn2b": false,
+                                "runnerOn3b": false
+                            },
+                            "playId": "05a348c5-0cf4-4fd3-86fb-0f4e2ec45767",
+                            "pitchNumber": 2,
+                            "atBatNumber": 24,
+                            "isPitch": true
+                        }
+                    },
+                    "team": {
+                        "id": 117,
+                        "name": "Houston Astros",
+                        "link": "/api/v1/teams/117"
+                    },
+                    "player": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "opponent": {
+                        "id": 140,
+                        "name": "Texas Rangers",
+                        "link": "/api/v1/teams/140"
+                    },
+                    "date": "2018-03-30",
+                    "gameType": "R",
+                    "isHome": false,
+                    "pitcher": {
+                        "id": 450729,
+                        "fullName": "Doug Fister",
+                        "link": "/api/v1/people/450729"
+                    },
+                    "batter": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "game": {
+                        "gamePk": 529424,
+                        "link": "/api/v1.1/game/529424/feed/live",
+                        "content": {
+                            "link": "/api/v1/game/529424/content"
+                        },
+                        "gameNumber": 1,
+                        "dayNight": "day"
+                    }
+                },
+                {
+                    "season": "2018",
+                    "stat": {
+                        "play": {
+                            "details": {
+                                "call": {
+                                    "code": "D",
+                                    "description": "Hit Into Play - No Out(s)"
+                                },
+                                "description": "Rangers challenged (catch or drop), call on the field was upheld: Jose Altuve singles on a sharp line drive to right fielder Nomar Mazara.  ",
+                                "event": "single",
+                                "eventType": "single",
+                                "isInPlay": true,
+                                "isStrike": false,
+                                "isBall": false,
+                                "isBaseHit": true,
+                                "isAtBat": true,
+                                "isPlateAppearance": true,
+                                "type": {
+                                    "code": "FF",
+                                    "description": "Four-seam FB"
+                                },
+                                "batSide": {
+                                    "code": "R",
+                                    "description": "Right"
+                                },
+                                "pitchHand": {
+                                    "code": "R",
+                                    "description": "Right"
+                                }
+                            },
+                            "count": {
+                                "balls": 2,
+                                "strikes": 1,
+                                "outs": 0,
+                                "inning": 6,
+                                "isTopInning": true,
+                                "runnerOn1b": false,
+                                "runnerOn2b": false,
+                                "runnerOn3b": false
+                            },
+                            "playId": "a9b08a59-f75f-48ba-b87c-3cece624b940",
+                            "pitchNumber": 4,
+                            "atBatNumber": 43,
+                            "isPitch": true
+                        }
+                    },
+                    "team": {
+                        "id": 117,
+                        "name": "Houston Astros",
+                        "link": "/api/v1/teams/117"
+                    },
+                    "player": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "opponent": {
+                        "id": 140,
+                        "name": "Texas Rangers",
+                        "link": "/api/v1/teams/140"
+                    },
+                    "date": "2018-03-30",
+                    "gameType": "R",
+                    "isHome": false,
+                    "pitcher": {
+                        "id": 455119,
+                        "fullName": "Chris Martin",
+                        "link": "/api/v1/people/455119"
+                    },
+                    "batter": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "game": {
+                        "gamePk": 529424,
+                        "link": "/api/v1.1/game/529424/feed/live",
+                        "content": {
+                            "link": "/api/v1/game/529424/content"
+                        },
+                        "gameNumber": 1,
+                        "dayNight": "day"
+                    }
+                },
+                {
+                    "season": "2018",
+                    "stat": {
+                        "play": {
+                            "details": {
+                                "call": {
+                                    "code": "D",
+                                    "description": "Hit Into Play - No Out(s)"
+                                },
+                                "description": "Jose Altuve singles on a sharp ground ball to left fielder Drew Robinson.  ",
+                                "event": "single",
+                                "eventType": "single",
+                                "isInPlay": true,
+                                "isStrike": false,
+                                "isBall": false,
+                                "isBaseHit": true,
+                                "isAtBat": true,
+                                "isPlateAppearance": true,
+                                "type": {
+                                    "code": "FF",
+                                    "description": "Four-seam FB"
+                                },
+                                "batSide": {
+                                    "code": "R",
+                                    "description": "Right"
+                                },
+                                "pitchHand": {
+                                    "code": "L",
+                                    "description": "Left"
+                                }
+                            },
+                            "count": {
+                                "balls": 0,
+                                "strikes": 0,
+                                "outs": 2,
+                                "inning": 1,
+                                "isTopInning": true,
+                                "runnerOn1b": false,
+                                "runnerOn2b": false,
+                                "runnerOn3b": false
+                            },
+                            "playId": "5babd368-40a8-4048-80df-9e8cd1a1aae8",
+                            "pitchNumber": 1,
+                            "atBatNumber": 3,
+                            "isPitch": true
+                        }
+                    },
+                    "team": {
+                        "id": 117,
+                        "name": "Houston Astros",
+                        "link": "/api/v1/teams/117"
+                    },
+                    "player": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "opponent": {
+                        "id": 140,
+                        "name": "Texas Rangers",
+                        "link": "/api/v1/teams/140"
+                    },
+                    "date": "2018-03-31",
+                    "gameType": "R",
+                    "isHome": false,
+                    "pitcher": {
+                        "id": 519043,
+                        "fullName": "Matt Moore",
+                        "link": "/api/v1/people/519043"
+                    },
+                    "batter": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "game": {
+                        "gamePk": 529435,
+                        "link": "/api/v1.1/game/529435/feed/live",
+                        "content": {
+                            "link": "/api/v1/game/529435/content"
+                        },
+                        "gameNumber": 1,
+                        "dayNight": "day"
+                    }
+                },
+                {
+                    "season": "2018",
+                    "stat": {
+                        "play": {
+                            "details": {
+                                "call": {
+                                    "code": "D",
+                                    "description": "Hit Into Play - No Out(s)"
+                                },
+                                "description": "Jose Altuve singles on a line drive to left fielder Drew Robinson.  ",
+                                "event": "single",
+                                "eventType": "single",
+                                "isInPlay": true,
+                                "isStrike": false,
+                                "isBall": false,
+                                "isBaseHit": true,
+                                "isAtBat": true,
+                                "isPlateAppearance": true,
+                                "type": {
+                                    "code": "SL",
+                                    "description": "Slider"
+                                },
+                                "batSide": {
+                                    "code": "R",
+                                    "description": "Right"
+                                },
+                                "pitchHand": {
+                                    "code": "R",
+                                    "description": "Right"
+                                }
+                            },
+                            "count": {
+                                "balls": 0,
+                                "strikes": 1,
+                                "outs": 1,
+                                "inning": 5,
+                                "isTopInning": true,
+                                "runnerOn1b": false,
+                                "runnerOn2b": false,
+                                "runnerOn3b": false
+                            },
+                            "playId": "9de4f965-e7b9-4b1b-a528-040109907cb5",
+                            "pitchNumber": 2,
+                            "atBatNumber": 36,
+                            "isPitch": true
+                        }
+                    },
+                    "team": {
+                        "id": 117,
+                        "name": "Houston Astros",
+                        "link": "/api/v1/teams/117"
+                    },
+                    "player": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "opponent": {
+                        "id": 140,
+                        "name": "Texas Rangers",
+                        "link": "/api/v1/teams/140"
+                    },
+                    "date": "2018-03-31",
+                    "gameType": "R",
+                    "isHome": false,
+                    "pitcher": {
+                        "id": 643320,
+                        "fullName": "Nick Gardewine",
+                        "link": "/api/v1/people/643320"
+                    },
+                    "batter": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "game": {
+                        "gamePk": 529435,
+                        "link": "/api/v1.1/game/529435/feed/live",
+                        "content": {
+                            "link": "/api/v1/game/529435/content"
+                        },
+                        "gameNumber": 1,
+                        "dayNight": "day"
+                    }
+                },
+                {
+                    "season": "2018",
+                    "stat": {
+                        "play": {
+                            "details": {
+                                "call": {
+                                    "code": "D",
+                                    "description": "Hit Into Play - No Out(s)"
+                                },
+                                "description": "Jose Altuve singles on a line drive to center fielder Carlos Tocci.  ",
+                                "event": "single",
+                                "eventType": "single",
+                                "isInPlay": true,
+                                "isStrike": false,
+                                "isBall": false,
+                                "isBaseHit": true,
+                                "isAtBat": true,
+                                "isPlateAppearance": true,
+                                "type": {
+                                    "code": "FC",
+                                    "description": "Cutter"
+                                },
+                                "batSide": {
+                                    "code": "R",
+                                    "description": "Right"
+                                },
+                                "pitchHand": {
+                                    "code": "R",
+                                    "description": "Right"
+                                }
+                            },
+                            "count": {
+                                "balls": 1,
+                                "strikes": 2,
+                                "outs": 0,
+                                "inning": 7,
+                                "isTopInning": true,
+                                "runnerOn1b": false,
+                                "runnerOn2b": false,
+                                "runnerOn3b": false
+                            },
+                            "playId": "2ff53b97-c5e2-4e1b-8a27-bbc07d55a306",
+                            "pitchNumber": 5,
+                            "atBatNumber": 53,
+                            "isPitch": true
+                        }
+                    },
+                    "team": {
+                        "id": 117,
+                        "name": "Houston Astros",
+                        "link": "/api/v1/teams/117"
+                    },
+                    "player": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "opponent": {
+                        "id": 140,
+                        "name": "Texas Rangers",
+                        "link": "/api/v1/teams/140"
+                    },
+                    "date": "2018-03-31",
+                    "gameType": "R",
+                    "isHome": false,
+                    "pitcher": {
+                        "id": 445926,
+                        "fullName": "Jesse Chavez",
+                        "link": "/api/v1/people/445926"
+                    },
+                    "batter": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "game": {
+                        "gamePk": 529435,
+                        "link": "/api/v1.1/game/529435/feed/live",
+                        "content": {
+                            "link": "/api/v1/game/529435/content"
+                        },
+                        "gameNumber": 1,
+                        "dayNight": "day"
+                    }
+                },
+                {
+                    "season": "2018",
+                    "stat": {
+                        "play": {
+                            "details": {
+                                "call": {
+                                    "code": "E",
+                                    "description": "Hit Into Play - Run(s)"
+                                },
+                                "description": "Jose Altuve singles on a line drive to center fielder Carlos Tocci.   Brian McCann scores.    George Springer to 3rd.  ",
+                                "event": "single",
+                                "eventType": "single",
+                                "isInPlay": true,
+                                "isStrike": false,
+                                "isBall": false,
+                                "isBaseHit": true,
+                                "isAtBat": true,
+                                "isPlateAppearance": true,
+                                "type": {
+                                    "code": "SL",
+                                    "description": "Slider"
+                                },
+                                "batSide": {
+                                    "code": "R",
+                                    "description": "Right"
+                                },
+                                "pitchHand": {
+                                    "code": "R",
+                                    "description": "Right"
+                                }
+                            },
+                            "count": {
+                                "balls": 2,
+                                "strikes": 2,
+                                "outs": 2,
+                                "inning": 8,
+                                "isTopInning": true,
+                                "runnerOn1b": true,
+                                "runnerOn2b": true,
+                                "runnerOn3b": false
+                            },
+                            "playId": "6aec893c-ba38-4ff7-9703-43ac0792280b",
+                            "pitchNumber": 6,
+                            "atBatNumber": 65,
+                            "isPitch": true
+                        }
+                    },
+                    "team": {
+                        "id": 117,
+                        "name": "Houston Astros",
+                        "link": "/api/v1/teams/117"
+                    },
+                    "player": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "opponent": {
+                        "id": 140,
+                        "name": "Texas Rangers",
+                        "link": "/api/v1/teams/140"
+                    },
+                    "date": "2018-03-31",
+                    "gameType": "R",
+                    "isHome": false,
+                    "pitcher": {
+                        "id": 600917,
+                        "fullName": "Jose Leclerc",
+                        "link": "/api/v1/people/600917"
+                    },
+                    "batter": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "game": {
+                        "gamePk": 529435,
+                        "link": "/api/v1.1/game/529435/feed/live",
+                        "content": {
+                            "link": "/api/v1/game/529435/content"
+                        },
+                        "gameNumber": 1,
+                        "dayNight": "day"
+                    }
+                },
+                {
+                    "season": "2018",
+                    "stat": {
+                        "play": {
+                            "details": {
+                                "call": {
+                                    "code": "D",
+                                    "description": "Hit Into Play - No Out(s)"
+                                },
+                                "description": "Jose Altuve doubles (1) on a sharp line drive to center fielder Drew Robinson.  ",
+                                "event": "double",
+                                "eventType": "double",
+                                "isInPlay": true,
+                                "isStrike": false,
+                                "isBall": false,
+                                "isBaseHit": true,
+                                "isAtBat": true,
+                                "isPlateAppearance": true,
+                                "type": {
+                                    "code": "SL",
+                                    "description": "Slider"
+                                },
+                                "batSide": {
+                                    "code": "R",
+                                    "description": "Right"
+                                },
+                                "pitchHand": {
+                                    "code": "L",
+                                    "description": "Left"
+                                }
+                            },
+                            "count": {
+                                "balls": 1,
+                                "strikes": 1,
+                                "outs": 0,
+                                "inning": 4,
+                                "isTopInning": true,
+                                "runnerOn1b": false,
+                                "runnerOn2b": false,
+                                "runnerOn3b": false
+                            },
+                            "playId": "41dfefc2-5621-4bbf-98d2-5c338033a518",
+                            "pitchNumber": 3,
+                            "atBatNumber": 24,
+                            "isPitch": true
+                        }
+                    },
+                    "team": {
+                        "id": 117,
+                        "name": "Houston Astros",
+                        "link": "/api/v1/teams/117"
+                    },
+                    "player": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "opponent": {
+                        "id": 140,
+                        "name": "Texas Rangers",
+                        "link": "/api/v1/teams/140"
+                    },
+                    "date": "2018-04-01",
+                    "gameType": "R",
+                    "isHome": false,
+                    "pitcher": {
+                        "id": 501985,
+                        "fullName": "Mike Minor",
+                        "link": "/api/v1/people/501985"
+                    },
+                    "batter": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "game": {
+                        "gamePk": 529449,
+                        "link": "/api/v1.1/game/529449/feed/live",
+                        "content": {
+                            "link": "/api/v1/game/529449/content"
+                        },
+                        "gameNumber": 1,
+                        "dayNight": "day"
+                    }
+                },
+                {
+                    "season": "2018",
+                    "stat": {
+                        "play": {
+                            "details": {
+                                "call": {
+                                    "code": "D",
+                                    "description": "Hit Into Play - No Out(s)"
+                                },
+                                "description": "Jose Altuve singles on a soft line drive to right fielder Nomar Mazara.   Alex Bregman to 3rd.  ",
+                                "event": "single",
+                                "eventType": "single",
+                                "isInPlay": true,
+                                "isStrike": false,
+                                "isBall": false,
+                                "isBaseHit": true,
+                                "isAtBat": true,
+                                "isPlateAppearance": true,
+                                "type": {
+                                    "code": "CH",
+                                    "description": "Changeup"
+                                },
+                                "batSide": {
+                                    "code": "R",
+                                    "description": "Right"
+                                },
+                                "pitchHand": {
+                                    "code": "L",
+                                    "description": "Left"
+                                }
+                            },
+                            "count": {
+                                "balls": 1,
+                                "strikes": 2,
+                                "outs": 1,
+                                "inning": 7,
+                                "isTopInning": true,
+                                "runnerOn1b": true,
+                                "runnerOn2b": false,
+                                "runnerOn3b": false
+                            },
+                            "playId": "9118562f-42c3-4ea1-b27c-d40f9212ada3",
+                            "pitchNumber": 4,
+                            "atBatNumber": 52,
+                            "isPitch": true
+                        }
+                    },
+                    "team": {
+                        "id": 117,
+                        "name": "Houston Astros",
+                        "link": "/api/v1/teams/117"
+                    },
+                    "player": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "opponent": {
+                        "id": 140,
+                        "name": "Texas Rangers",
+                        "link": "/api/v1/teams/140"
+                    },
+                    "date": "2018-04-01",
+                    "gameType": "R",
+                    "isHome": false,
+                    "pitcher": {
+                        "id": 592222,
+                        "fullName": "Alex Claudio",
+                        "link": "/api/v1/people/592222"
+                    },
+                    "batter": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "game": {
+                        "gamePk": 529449,
+                        "link": "/api/v1.1/game/529449/feed/live",
+                        "content": {
+                            "link": "/api/v1/game/529449/content"
+                        },
+                        "gameNumber": 1,
+                        "dayNight": "day"
+                    }
+                },
+                {
+                    "season": "2018",
+                    "stat": {
+                        "play": {
+                            "details": {
+                                "call": {
+                                    "code": "D",
+                                    "description": "Hit Into Play - No Out(s)"
+                                },
+                                "description": "Jose Altuve singles on a ground ball to shortstop Jurickson Profar.  ",
+                                "event": "single",
+                                "eventType": "single",
+                                "isInPlay": true,
+                                "isStrike": false,
+                                "isBall": false,
+                                "isBaseHit": true,
+                                "isAtBat": true,
+                                "isPlateAppearance": true,
+                                "type": {
+                                    "code": "SL",
+                                    "description": "Slider"
+                                },
+                                "batSide": {
+                                    "code": "R",
+                                    "description": "Right"
+                                },
+                                "pitchHand": {
+                                    "code": "R",
+                                    "description": "Right"
+                                }
+                            },
+                            "count": {
+                                "balls": 0,
+                                "strikes": 0,
+                                "outs": 1,
+                                "inning": 9,
+                                "isTopInning": true,
+                                "runnerOn1b": false,
+                                "runnerOn2b": false,
+                                "runnerOn3b": false
+                            },
+                            "playId": "7b8bb205-31b9-4214-b0f8-cb0d41a8a0b1",
+                            "pitchNumber": 1,
+                            "atBatNumber": 69,
+                            "isPitch": true
+                        }
+                    },
+                    "team": {
+                        "id": 117,
+                        "name": "Houston Astros",
+                        "link": "/api/v1/teams/117"
+                    },
+                    "player": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "opponent": {
+                        "id": 140,
+                        "name": "Texas Rangers",
+                        "link": "/api/v1/teams/140"
+                    },
+                    "date": "2018-04-01",
+                    "gameType": "R",
+                    "isHome": false,
+                    "pitcher": {
+                        "id": 643320,
+                        "fullName": "Nick Gardewine",
+                        "link": "/api/v1/people/643320"
+                    },
+                    "batter": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "game": {
+                        "gamePk": 529449,
+                        "link": "/api/v1.1/game/529449/feed/live",
+                        "content": {
+                            "link": "/api/v1/game/529449/content"
+                        },
+                        "gameNumber": 1,
+                        "dayNight": "day"
+                    }
+                } ]
+        } ]
+}
