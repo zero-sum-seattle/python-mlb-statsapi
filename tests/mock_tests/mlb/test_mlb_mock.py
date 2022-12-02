@@ -13,6 +13,7 @@ from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule
+from mlbstatsapi.models.awards import Awards
 
 from mlbstatsapi import Mlb
 from mlbstatsapi import MlbResult
@@ -37,6 +38,7 @@ path_to_league = os.path.join(current_directory, "../mock_json/leagues/league.js
 path_to_venues = os.path.join(current_directory, "../mock_json/venues/venues.json")
 path_to_venue = os.path.join(current_directory, "../mock_json/venues/venue.json")
 path_to_game = os.path.join(current_directory, "../mock_json/games/game.json")
+path_to_awards = os.path.join(current_directory, "../mock_json/awards/awards.json")
 
 
 LEAGUES_JSON_FILE = open(path_to_leagues, "r", encoding="utf-8-sig").read()
@@ -52,6 +54,7 @@ DIVISION_JSON_FILE = open(path_to_division, "r", encoding="utf-8-sig").read()
 VENUES_JSON_FILE = open(path_to_venues, "r", encoding="utf-8-sig").read()
 VENUE_JSON_FILE = open(path_to_venue, "r", encoding="utf-8-sig").read()
 GAME_JSON_FILE = open(path_to_game, "r", encoding="utf-8-sig").read()
+AWARDS_JSON_FILE = open(path_to_awards, "r", encoding="utf-8-sig").read()
 NOT_FOUND_404 = open(path_to_not_found, "r", encoding="utf-8-sig").read()
 ERROR_500 = open(path_to_error, "r", encoding="utf-8-sig").read()
 
@@ -451,3 +454,23 @@ class TestMlbGetGame(unittest.TestCase):
     #     self.assertEqual(attendance_team_away.records[0].team.id, 113)
     #     self.assertEqual(attendance_team_home.records[0].team.id, 134)
     #     self.assertEqual(attendance_season.records[0].team.id, 113)
+
+
+@requests_mock.Mocker()
+class TestMlbGetAwards(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.mlb = Mlb()
+        cls.mock_awards = json.loads(AWARDS_JSON_FILE)
+        pass
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        pass
+
+    def test_mlb_get_awards(self, m):
+        """mlb get_awards should return a Awards object"""
+        m.get('https://statsapi.mlb.com/api/v1/awards/RETIREDUNI_108/recipients?', json=self.mock_awards,
+        status_code=200)
+        awards = self.mlb.get_awards('RETIREDUNI_108')
+        self.assertIsInstance(awards, Awards)

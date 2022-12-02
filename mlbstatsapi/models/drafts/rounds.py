@@ -1,7 +1,6 @@
 ﻿from dataclasses import dataclass, field
-from typing import Optional, Union, List
+from typing import List
 
-from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.people import DraftPick
 from mlbstatsapi import mlb_module
 

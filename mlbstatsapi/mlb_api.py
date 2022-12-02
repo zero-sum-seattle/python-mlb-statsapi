@@ -15,6 +15,7 @@ from mlbstatsapi.models.attendances import Attendance
 from mlbstatsapi.models.stats import Stat
 from mlbstatsapi.models.seasons import Season
 from mlbstatsapi.models.drafts import Round
+from mlbstatsapi.models.awards import Awards
 
 from .mlb_dataadapter import MlbDataAdapter
 from .exceptions import TheMlbStatsApiException
@@ -1325,7 +1326,7 @@ class Mlb:
 
     def get_draft(self, year_id, **params) -> List[Round]:
         """
-        return a season object for sportid
+        return a draft object for year_id
 
         Parameters
         ----------
@@ -1374,6 +1375,42 @@ class Mlb:
                 for round in mlb_data.data['drafts']['rounds']:
                     round_list.append(Round(**round))
         return round_list
+
+    def get_awards(self, award_id, **params):
+        """
+        return a awards object for award_id
+
+        Parameters
+        ----------
+        award_id : str
+            Insert a awardId to return a directory of players for a given award.
+
+        Other Parameters
+        ----------------
+        sportId : int
+            Insert a sportId to return a directory of players for a given award in a specific sport.
+        leagueId : 
+            Insert leagueId(s) to return a directory of players for a given award in a specific league. Format '103,104'
+        season : int
+            Insert year(s) to return a directory of players for a given award in a given season. Format '2016,2017'
+
+        Returns
+        -------
+        list of Awards
+            returns a list of awards
+        See Also
+        --------
+
+        Examples
+        --------
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'awards/{award_id}/recipients?', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        if 'awards' in mlb_data.data and mlb_data.data['awards']:
+            return Awards(**mlb_data.data)
         
     def get_team_stats(self, team_id: int, stats: list, groups: list, **params) -> dict:
         """
