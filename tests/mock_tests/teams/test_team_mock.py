@@ -26,11 +26,9 @@ class TestScheduleMock(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
         cls.al_team = 133
-
         cls.mock_team = json.loads(TEAMS)
         cls.mock_teams = json.loads(TEAMS)
-        cls.error_500 = json.loads(ERROR_500)
-        cls.mock_not_found = json.loads(NOT_FOUND_404)
+
 
                     
     @classmethod

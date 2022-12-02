@@ -229,7 +229,7 @@ Get a player id
 >>> player_id = mlb.get_player_id("Ty France")
 >>> print(player_id[0])
 ```
-Get a list of all players for a given sport.
+
 ### Team Examples
 Get a Team
 ```
@@ -240,6 +240,23 @@ Get a Team
 >>> print(team.id)
 >>> print(team.name)
 ```
+Get a Player Roster
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> team_id = 133
+>>> players = mlb.get_team_roster(team_id)
+>>> for player in players:
+        print(player.jerseynumber)
+```
+Get a Coach Roster
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> team_id = 133
+>>> coaches = mlb.get_team_coaches(team_id)
+>>> for coach in coaches:
+        print(coach.title)
+```
+
 ### Venue Examples
 Get a Venue
 ```
