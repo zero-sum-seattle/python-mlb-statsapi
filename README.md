@@ -41,6 +41,8 @@ python3
 * `Mlb.get_people_id()` - Return Person Id(s) from fullname
 * `Mlb.get_person()` - Return Person Object from Id
 * `Mlb.get_people()` - Return all Players from Sport
+### Draft
+* `Mlb.get_draft()` - Return a draft for a given year
 ### Teams
 * `Mlb.get_team_id()` - Return Team Id(s) from name
 * `Mlb.get_team()` - Return Team Object from Team Id
