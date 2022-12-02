@@ -256,6 +256,20 @@ Get a Coach Roster
 >>> for coach in coaches:
         print(coach.title)
 ```
+### Draft Examples
+Get a draft for a year
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> draft_year = '2019'
+>>> draft = mlb.get_draft(draft_year)
+```
+Get Players from Draft
+```
+>>> draftpicks = draft[0].picks
+>>> for draftpick in draftpicks:
+...     print(draftpick.id)
+...     print(draftpick.pickround)
+```
 
 ### Venue Examples
 Get a Venue
@@ -267,3 +281,13 @@ Get a Venue
 >>> print(venue.id)
 >>> print(venue.name)
 ```
+
+### Sport Examples
+Get a Sport
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> sport_ids = mlb.get_sport_id('Major League Baseball')
+>>> sport_id = sport_ids[0]
+>>> sport = mlb.get_sport(sport_id)
+```
+
