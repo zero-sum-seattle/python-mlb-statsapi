@@ -135,7 +135,20 @@ Print season and seasonadvanced stats
 ```
 
 ### More stats examples
-
+#### Expected Stats
+Get player Id's
+```
+>>> player = mlb.get_player_id('Ty France')
+```
+Set the stat type and group
+```
+>>> stats = ['expectedStatistics']
+>>> group = ['hitting']
+```
+Get Stats
+```
+stats = mlb.get_player_stats(player, stats=stats, groups=group)
+expectedstats = stats['hitting']['expectedstatistics']
 #### hotColdZones
 Get player Id's
 ```
