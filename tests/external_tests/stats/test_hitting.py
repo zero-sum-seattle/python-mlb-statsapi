@@ -103,3 +103,19 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue(season_advanced.season)
         self.assertTrue(season_advanced.stat.plateappearances)
         self.assertTrue(career_advanced.team)
+
+    def test_hitting_excepected_stats_player(self):
+        """mlb get stats should return pitching stats"""
+        self.stats = ['expectedStatistics']
+        self.group = ['hitting']
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('hitting' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['hitting']['expectedstatistics'])

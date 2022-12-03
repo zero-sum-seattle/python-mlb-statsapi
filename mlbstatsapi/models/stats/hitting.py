@@ -14,6 +14,7 @@ from mlbstatsapi.models.data import (
 from .stats import (
     Stat,
     Sabermetrics,
+    ExpectedStatistics
 )
 @dataclass
 class AdvancedHittingSplit:
@@ -741,12 +742,7 @@ class HittingExpectedStatistics(Stat):
     rank : int
     """
     _stat = ['expectedStatistics']
-    avg: str
-    slg: str
-    woba: str
-    wobacon: str
-    gametype: str
-    rank: Optional[int] = None
+    stat: Union[ExpectedStatistics, dict]
 
 
 @dataclass(kw_only=True)
