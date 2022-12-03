@@ -41,6 +41,8 @@ python3
 * `Mlb.get_people_id()` - Return Person Id(s) from fullname
 * `Mlb.get_person()` - Return Person Object from Id
 * `Mlb.get_people()` - Return all Players from Sport
+### Draft
+* `Mlb.get_draft()` - Return a draft for a given year
 ### Teams
 * `Mlb.get_team_id()` - Return Team Id(s) from name
 * `Mlb.get_team()` - Return Team Object from Team Id
@@ -256,6 +258,20 @@ Get a Coach Roster
 >>> for coach in coaches:
         print(coach.title)
 ```
+### Draft Examples
+Get a draft for a year
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> draft_year = '2019'
+>>> draft = mlb.get_draft(draft_year)
+```
+Get Players from Draft
+```
+>>> draftpicks = draft[0].picks
+>>> for draftpick in draftpicks:
+...     print(draftpick.id)
+...     print(draftpick.pickround)
+```
 
 ### Venue Examples
 Get a Venue
@@ -267,3 +283,13 @@ Get a Venue
 >>> print(venue.id)
 >>> print(venue.name)
 ```
+
+### Sport Examples
+Get a Sport
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> sport_ids = mlb.get_sport_id('Major League Baseball')
+>>> sport_id = sport_ids[0]
+>>> sport = mlb.get_sport(sport_id)
+```
+
