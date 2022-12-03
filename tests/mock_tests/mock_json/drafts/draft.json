@@ -1,100 +1,380 @@
 ﻿{
-    "copyright" : "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
-    "drafts" : {
-      "draftYear" : 2018,
-      "rounds" : [ {
-        "round" : "1",
-        "picks" : [ {
-          "bisPlayerId" : 759143,
-          "pickRound" : "1",
-          "pickNumber" : 1,
-          "roundPickNumber" : 1,
-          "rank" : 1,
-          "pickValue" : "8096300",
-          "signingBonus" : "7500000",
-          "home" : {
-            "city" : "Springville",
-            "state" : "AL",
-            "country" : "USA"
-          },
-          "scoutingReport" : "http://m.mlb.com/video/topic/262722544/v1868819183",
-          "school" : {
-            "name" : "Auburn",
-            "schoolClass" : "JR",
-            "city" : "Auburn",
-            "country" : "USA",
-            "state" : "AL"
-          },
-          "blurb" : "Raw and undrafted out of an Alabama high school three years ago, Mize has blossomed at Auburn and not only is a lock to join Gregg Olson (1988) and Frank Thomas (1989) as Tigers selected in the top 10 picks, but he's also the prohibitive favorite to go No. 1 overall. He has the best combination of stuff and control among college pitchers in the 2018 Draft, and he has proven he can stay healthy. Shut down last spring at Auburn and again during the summer with Team USA with a tired arm and a flexor strain in his forearm, he has had no issues this year. Mize can get swings and misses with three different pitches, the best of which is a mid-80s splitter that dives at the plate. He sets it up with a 92-97 mph fastball that he commands exceptionally well despite its running life. His mid-80s slider has taken a step forward this spring, consistently grading as a plus offering. Mize has an athletic frame and a clean delivery, so there's no glaring flaw that can be blamed for his health concerns. He pounds the strike zone, ranking first in NCAA Division I in K/BB ratio (12.1) and fourth in walks per nine innings (1.0) as a sophomore and posting similar numbers as a junior. Scouts also love the way he competes on the mound.",
-          "headshotLink" : "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/663554/headshot/draft/current",
-          "person" : {
-            "id" : 663554,
-            "fullName" : "Casey Mize",
-            "link" : "/api/v1/people/663554",
-            "firstName" : "Casey",
-            "lastName" : "Mize",
-            "primaryNumber" : "12",
-            "birthDate" : "1997-05-01",
-            "currentAge" : 25,
-            "birthCity" : "Springville",
-            "birthStateProvince" : "AL",
-            "birthCountry" : "USA",
-            "height" : "6' 3\"",
-            "weight" : 212,
-            "active" : true,
-            "primaryPosition" : {
-              "code" : "1",
-              "name" : "Pitcher",
-              "type" : "Pitcher",
-              "abbreviation" : "P"
+  "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "drafts": {
+    "draftYear": 2018,
+    "rounds": [
+      {
+        "round": "1",
+        "picks": [
+          {
+            "bisPlayerId": 759143,
+            "pickRound": "1",
+            "pickNumber": 1,
+            "roundPickNumber": 1,
+            "rank": 1,
+            "pickValue": "8096300",
+            "signingBonus": "7500000",
+            "home": {
+              "city": "Springville",
+              "state": "AL",
+              "country": "USA"
             },
-            "useName" : "Casey",
-            "middleName" : "A.",
-            "boxscoreName" : "Mize",
-            "gender" : "M",
-            "isPlayer" : true,
-            "isVerified" : true,
-            "draftYear" : 2018,
-            "mlbDebutDate" : "2020-08-19",
-            "batSide" : {
-              "code" : "R",
-              "description" : "Right"
+            "scoutingReport": "http://m.mlb.com/video/topic/262722544/v1868819183",
+            "school": {
+              "name": "Auburn",
+              "schoolClass": "JR",
+              "city": "Auburn",
+              "country": "USA",
+              "state": "AL"
             },
-            "pitchHand" : {
-              "code" : "R",
-              "description" : "Right"
+            "blurb": "Raw and undrafted out of an Alabama high school three years ago, Mize has blossomed at Auburn and not only is a lock to join Gregg Olson (1988) and Frank Thomas (1989) as Tigers selected in the top 10 picks, but he's also the prohibitive favorite to go No. 1 overall. He has the best combination of stuff and control among college pitchers in the 2018 Draft, and he has proven he can stay healthy. Shut down last spring at Auburn and again during the summer with Team USA with a tired arm and a flexor strain in his forearm, he has had no issues this year. Mize can get swings and misses with three different pitches, the best of which is a mid-80s splitter that dives at the plate. He sets it up with a 92-97 mph fastball that he commands exceptionally well despite its running life. His mid-80s slider has taken a step forward this spring, consistently grading as a plus offering. Mize has an athletic frame and a clean delivery, so there's no glaring flaw that can be blamed for his health concerns. He pounds the strike zone, ranking first in NCAA Division I in K/BB ratio (12.1) and fourth in walks per nine innings (1.0) as a sophomore and posting similar numbers as a junior. Scouts also love the way he competes on the mound.",
+            "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/663554/headshot/draft/current",
+            "person": {
+              "id": 663554,
+              "fullName": "Casey Mize",
+              "link": "/api/v1/people/663554",
+              "firstName": "Casey",
+              "lastName": "Mize",
+              "primaryNumber": "12",
+              "birthDate": "1997-05-01",
+              "currentAge": 25,
+              "birthCity": "Springville",
+              "birthStateProvince": "AL",
+              "birthCountry": "USA",
+              "height": "6' 3\"",
+              "weight": 212,
+              "active": true,
+              "primaryPosition": {
+                "code": "1",
+                "name": "Pitcher",
+                "type": "Pitcher",
+                "abbreviation": "P"
+              },
+              "useName": "Casey",
+              "useLastName": "Mize",
+              "middleName": "A.",
+              "boxscoreName": "Mize",
+              "gender": "M",
+              "isPlayer": true,
+              "isVerified": true,
+              "draftYear": 2018,
+              "mlbDebutDate": "2020-08-19",
+              "batSide": {
+                "code": "R",
+                "description": "Right"
+              },
+              "pitchHand": {
+                "code": "R",
+                "description": "Right"
+              },
+              "nameFirstLast": "Casey Mize",
+              "nameSlug": "casey-mize-663554",
+              "firstLastName": "Casey Mize",
+              "lastFirstName": "Mize, Casey",
+              "lastInitName": "Mize, C",
+              "initLastName": "C Mize",
+              "fullFMLName": "Casey A. Mize",
+              "fullLFMName": "Mize, Casey A.",
+              "strikeZoneTop": 3.49,
+              "strikeZoneBottom": 1.601
             },
-            "nameFirstLast" : "Casey Mize",
-            "nameSlug" : "casey-mize-663554",
-            "firstLastName" : "Casey Mize",
-            "lastFirstName" : "Mize, Casey",
-            "lastInitName" : "Mize, C",
-            "initLastName" : "C Mize",
-            "fullFMLName" : "Casey A. Mize",
-            "fullLFMName" : "Mize, Casey A.",
-            "strikeZoneTop" : 3.49,
-            "strikeZoneBottom" : 1.601
-          },
-          "team" : {
-            "springLeague" : {
-              "id" : 115,
-              "name" : "Grapefruit League",
-              "link" : "/api/v1/league/115",
-              "abbreviation" : "GL"
+            "team": {
+              "springLeague": {
+                "id": 115,
+                "name": "Grapefruit League",
+                "link": "/api/v1/league/115",
+                "abbreviation": "GL"
+              },
+              "allStarStatus": "N",
+              "id": 116,
+              "name": "Detroit Tigers",
+              "link": "/api/v1/teams/116"
             },
-            "allStarStatus" : "N",
-            "id" : 116,
-            "name" : "Detroit Tigers",
-            "link" : "/api/v1/teams/116"
+            "draftType": {
+              "code": "JR",
+              "description": "June Amateur Draft"
+            },
+            "isDrafted": true,
+            "isPass": false,
+            "year": "2018"
           },
-          "draftType" : {
-            "code" : "JR",
-            "description" : "June Amateur Draft"
+          {
+            "bisPlayerId": 390858,
+            "pickRound": "1",
+            "pickNumber": 2,
+            "roundPickNumber": 2,
+            "rank": 6,
+            "pickValue": "7494600",
+            "signingBonus": "7025000",
+            "home": {
+              "city": "Buford",
+              "state": "GA",
+              "country": "USA"
+            },
+            "scoutingReport": "http://m.mlb.com/video/topic/262722544/v1868827883",
+            "school": {
+              "name": "Georgia Tech",
+              "schoolClass": "JR",
+              "city": "Atlanta",
+              "country": "USA",
+              "state": "GA"
+            },
+            "blurb": "Bart's power potential could have gotten him selected in the first five rounds of the Draft after he led Buford High to the 2015 Georgia 4-A state championship, but he dropped to the Rays in the 27th round because he was committed to Georgia Tech. His development at the plate and improvement behind it has him positioned as the top college catcher available in 2018. He's poised to join Jason Varitek and Matt Wieters as Yellow Jackets backstops popped in the first round, and he's even been linked to the Giants as a possible No. 2 overall pick. Bart's bat speed, strength and leverage give him power to all fields from the right side of the plate. He has the swing and the feel to hit for a solid average, and he has made huge strides with his plate discipline this spring. He has enough natural pop that he doesn't need to sell out for home runs, and he's not falling into that trap as much as he did in the past. There were questions about Bart's long-term catching ability when he arrived at Georgia Tech, but he has cleaned up his receiving enough that there no longer are doubts that he'll stay behind the plate. His strong arm never has been in question and he threw out 40 percent of basestealers in his first two college seasons. Though he's a well-below-average runner, he's relatively athletic for a catcher.",
+            "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/663698/headshot/draft/current",
+            "person": {
+              "id": 663698,
+              "fullName": "Joey Bart",
+              "link": "/api/v1/people/663698",
+              "firstName": "Joey",
+              "lastName": "Bart",
+              "primaryNumber": "21",
+              "birthDate": "1996-12-15",
+              "currentAge": 25,
+              "birthCity": "Buford",
+              "birthStateProvince": "GA",
+              "birthCountry": "USA",
+              "height": "6' 2\"",
+              "weight": 238,
+              "active": true,
+              "primaryPosition": {
+                "code": "2",
+                "name": "Catcher",
+                "type": "Catcher",
+                "abbreviation": "C"
+              },
+              "useName": "Joey",
+              "useLastName": "Bart",
+              "middleName": "Andrew",
+              "boxscoreName": "Bart",
+              "gender": "M",
+              "isPlayer": true,
+              "isVerified": true,
+              "draftYear": 2018,
+              "mlbDebutDate": "2020-08-20",
+              "batSide": {
+                "code": "R",
+                "description": "Right"
+              },
+              "pitchHand": {
+                "code": "R",
+                "description": "Right"
+              },
+              "nameFirstLast": "Joey Bart",
+              "nameSlug": "joey-bart-663698",
+              "firstLastName": "Joey Bart",
+              "lastFirstName": "Bart, Joey",
+              "lastInitName": "Bart, J",
+              "initLastName": "J Bart",
+              "fullFMLName": "Joseph Andrew Bart",
+              "fullLFMName": "Bart, Joseph Andrew",
+              "strikeZoneTop": 3.34,
+              "strikeZoneBottom": 1.49
+            },
+            "team": {
+              "springLeague": {
+                "id": 114,
+                "name": "Cactus League",
+                "link": "/api/v1/league/114",
+                "abbreviation": "CL"
+              },
+              "allStarStatus": "N",
+              "id": 137,
+              "name": "San Francisco Giants",
+              "link": "/api/v1/teams/137"
+            },
+            "draftType": {
+              "code": "JR",
+              "description": "June Amateur Draft"
+            },
+            "isDrafted": true,
+            "isPass": false,
+            "year": "2018"
           },
-          "isDrafted" : true,
-          "isPass" : false,
-          "year" : "2018"
+          {
+            "bisPlayerId": 764614,
+            "pickRound": "1",
+            "pickNumber": 3,
+            "roundPickNumber": 3,
+            "rank": 7,
+            "pickValue": "6947500",
+            "signingBonus": "5850000",
+            "home": {
+              "city": "Omaha",
+              "state": "NE",
+              "country": "USA"
+            },
+            "scoutingReport": "http://m.mlb.com/video/topic/262722544/v1868832683",
+            "school": {
+              "name": "Wichita State",
+              "schoolClass": "JR",
+              "city": "Wichita",
+              "country": "USA",
+              "state": "KS"
+            },
+            "blurb": "Coming into 2018, scouts were divided as to which of Wichita State's two potential first-round position players was better. Greyson Jenista has more all-around ability and won the Cape Cod League MVP award last summer, but Bohm posted better numbers there and does a better job of tapping into his considerable power potential. Though Jenista has had a good junior season, Bohm has been great and settled the argument, thrusting himself into consideration as a top-five-overall pick. Bohm manages the strike zone very well and makes consistent hard contact from the right side of the plate. He doesn't strike out as much as Jenista, has an edge in bat speed and his stroke is more geared to generate power at this point. He understands that he doesn't have to sell out to hit home runs, so he doesn't. Bohm doesn't offer much when he's outside of the batter's box, however. Though he has worked diligently to improve at third base, he lacks quickness and range, his hands are just fair and his arm is only average. He'll probably wind up at first base but has the offensive upside to profile there.",
+            "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/664761/headshot/draft/current",
+            "person": {
+              "id": 664761,
+              "fullName": "Alec Bohm",
+              "link": "/api/v1/people/664761",
+              "firstName": "Alec",
+              "lastName": "Bohm",
+              "primaryNumber": "28",
+              "birthDate": "1996-08-03",
+              "currentAge": 26,
+              "birthCity": "Omaha",
+              "birthStateProvince": "NE",
+              "birthCountry": "USA",
+              "height": "6' 5\"",
+              "weight": 218,
+              "active": true,
+              "primaryPosition": {
+                "code": "5",
+                "name": "Third Base",
+                "type": "Infielder",
+                "abbreviation": "3B"
+              },
+              "useName": "Alec",
+              "useLastName": "Bohm",
+              "middleName": "Daniel",
+              "boxscoreName": "Bohm",
+              "gender": "M",
+              "isPlayer": true,
+              "isVerified": true,
+              "draftYear": 2018,
+              "pronunciation": "bome; like home",
+              "mlbDebutDate": "2020-08-13",
+              "batSide": {
+                "code": "R",
+                "description": "Right"
+              },
+              "pitchHand": {
+                "code": "R",
+                "description": "Right"
+              },
+              "nameFirstLast": "Alec Bohm",
+              "nameSlug": "alec-bohm-664761",
+              "firstLastName": "Alec Bohm",
+              "lastFirstName": "Bohm, Alec",
+              "lastInitName": "Bohm, A",
+              "initLastName": "A Bohm",
+              "fullFMLName": "Alec Daniel Bohm",
+              "fullLFMName": "Bohm, Alec Daniel",
+              "strikeZoneTop": 3.45,
+              "strikeZoneBottom": 1.55
+            },
+            "team": {
+              "springLeague": {
+                "id": 115,
+                "name": "Grapefruit League",
+                "link": "/api/v1/league/115",
+                "abbreviation": "GL"
+              },
+              "allStarStatus": "N",
+              "id": 143,
+              "name": "Philadelphia Phillies",
+              "link": "/api/v1/teams/143"
+            },
+            "draftType": {
+              "code": "JR",
+              "description": "June Amateur Draft"
+            },
+            "isDrafted": true,
+            "isPass": false,
+            "year": "2018"
+          },
+          {
+            "bisPlayerId": 400315,
+            "pickRound": "1",
+            "pickNumber": 4,
+            "roundPickNumber": 4,
+            "rank": 3,
+            "pickValue": "6411400",
+            "signingBonus": "6411400",
+            "home": {
+              "city": "Elk Grove",
+              "state": "CA",
+              "country": "USA"
+            },
+            "scoutingReport": "http://m.mlb.com/video/topic/262722544/v1868818883",
+            "school": {
+              "name": "Oregon State",
+              "schoolClass": "JR",
+              "city": "Corvallis",
+              "country": "USA",
+              "state": "OR"
+            },
+            "blurb": "In the not-too-distant past, a player like Madrigal would have been overlooked by many teams because of his size. The combination of more organizations embracing analytics and the success of players like Jose Altuve, not to mention the superb performance of the 5-foot-7 infielder, had Madrigal poised to perhaps be the top college position player taken in the 2018 Draft. A broken wrist at the start of the season slowed him down, but he returned in April swinging a hot bat. While Madrigal might have been more of a gut feel kind of player for scouts, he now has track record on top of being a scout favorite. Analytics departments love him because of his approach at the plate that led to more walks than strikeouts in 2017, and while he doesn't have a ton of over-the-fence power, he makes consistent hard contact and is a legitimate extra-base threat. His speed and instincts should allow him to continue to be a base stealer. While Madrigal has played mostly second base in deference to Cadyn Grenier at Oregon State, some feel he could handle shortstop if need be. If not, he has the chance to be a Gold Glove caliber second baseman in the future. Even with the injury, he should land squarely in the top 10 in June.",
+            "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/663611/headshot/draft/current",
+            "person": {
+              "id": 663611,
+              "fullName": "Nick Madrigal",
+              "link": "/api/v1/people/663611",
+              "firstName": "Nick",
+              "lastName": "Madrigal",
+              "primaryNumber": "1",
+              "birthDate": "1997-03-05",
+              "currentAge": 25,
+              "birthCity": "Sacramento",
+              "birthStateProvince": "CA",
+              "birthCountry": "USA",
+              "height": "5' 8\"",
+              "weight": 175,
+              "active": true,
+              "primaryPosition": {
+                "code": "4",
+                "name": "Second Base",
+                "type": "Infielder",
+                "abbreviation": "2B"
+              },
+              "useName": "Nick",
+              "useLastName": "Madrigal",
+              "middleName": "M.",
+              "boxscoreName": "Madrigal",
+              "gender": "M",
+              "isPlayer": true,
+              "isVerified": true,
+              "draftYear": 2018,
+              "mlbDebutDate": "2020-07-31",
+              "batSide": {
+                "code": "R",
+                "description": "Right"
+              },
+              "pitchHand": {
+                "code": "R",
+                "description": "Right"
+              },
+              "nameFirstLast": "Nick Madrigal",
+              "nameSlug": "nick-madrigal-663611",
+              "firstLastName": "Nick Madrigal",
+              "lastFirstName": "Madrigal, Nick",
+              "lastInitName": "Madrigal, N",
+              "initLastName": "N Madrigal",
+              "fullFMLName": "Nicklaus M. Madrigal",
+              "fullLFMName": "Madrigal, Nicklaus M.",
+              "strikeZoneTop": 2.98,
+              "strikeZoneBottom": 1.31
+            },
+            "team": {
+              "springLeague": {
+                "id": 114,
+                "name": "Cactus League",
+                "link": "/api/v1/league/114",
+                "abbreviation": "CL"
+              },
+              "allStarStatus": "N",
+              "id": 145,
+              "name": "Chicago White Sox",
+              "link": "/api/v1/teams/145"
+            },
+            "draftType": {
+              "code": "JR",
+              "description": "June Amateur Draft"
+            },
+            "isDrafted": true,
+            "isPass": false,
+            "year": "2018"
           } ]
-          } ]
-        }
-    }
+      } ]
+  }
+}
