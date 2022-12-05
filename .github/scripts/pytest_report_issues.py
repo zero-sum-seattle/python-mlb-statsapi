@@ -35,7 +35,6 @@ def cronbot_post_uka(slack_webclient_token, channel_id, message, status, linecol
     except SlackApiError as e:
         print(f"Error: {e}")
 
-
 def escape_ansi(line):
     ansi_escape = re.compile(r'(?:\x1B[@-_]|[\x80-\x9F])[0-?]*[@-~]')
     return ansi_escape.sub('', line)
@@ -60,6 +59,7 @@ def generate_outputstring(from_list) -> str:
             
             elif output[-8] == "[" and output[-3] == "]":
                 if output[-12:-8] != "    ":
+                    output = list(output)                    
                     output[-15] = '.'
                     output[-14] = '.'
                     output[-13] = '.' 
@@ -67,6 +67,7 @@ def generate_outputstring(from_list) -> str:
                     output[-11] = ' '
                     output[-10] = ' '
                     output[-9]  = ' '
+                    output = ''.join(output)
                 output = output[:72] + output[-8:]
             
             elif output[:10] == "collecting":
@@ -103,7 +104,10 @@ def generate_outputstring(from_list) -> str:
             else:
                 output = output[:75] + "...\r\n"
 
-        testing_output+=output
+        if output[0] == "." and output[-8] == "[" and output[-3] == "]":
+            pass
+        else:
+            testing_output+=output
 
     return testing_output
 
@@ -114,10 +118,15 @@ if __name__ == "__main__":
     
     output_list = []
 
+    line = None
+
     for line in sys.stdin:
         output_list.append(line)
 
-    if ("failed" in line or "xfailed" in line):
+    if not line:
+        statusmessage   = "failed"
+        statuscolor     = "#cd3920"
+    elif ("failed" in line or "xfailed" in line):
         statusmessage   = "Failed"
         statuscolor     = "#cd3920"
     elif ("errors" in line or "error" in line or "SKIPPED" in line):
