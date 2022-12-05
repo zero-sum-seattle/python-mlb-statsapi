@@ -30,7 +30,7 @@ class LinescoreTeamScoreing:
 @dataclass
 class LinescoreInning:
     """
-    A class to represent a inning for a ames Linescore
+    A class to represent a inning for a games Linescore
 
     Attributes
     ----------
