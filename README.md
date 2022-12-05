@@ -64,15 +64,15 @@ python3
 * `Mlb.get_sport()` - Return a Sport object from Id
 * `Mlb.get_sports()` - Return all teams for Sport Id
 * `Mlb.get_sport_id()`- Return Sport Id from name
-### Divisions
+### [Divisions](#division-examples)
 * `Mlb.get_division()` - Return a Divison 
 * `Mlb.get_divisions()` - Return all Divisions
 * `Mlb.get_division_id()` - Return Division Id(s) from name
-### Leagues
+### [Leagues](#league-examples)
 * `Mlb.get_league()` - Return a League from Id
 * `Mlb.get_leagues()` - Return all Leagues
 * `Mlb.get_league_id()` - Return League Id(s)
-### Schedules
+### [Schedules](#schedule-examples)
 * `Mlb.get_schedule()` - Return a Schedule from dates
 ### [Games](#game-examples)
 * `Mlb.get_game()` - Return the Game for a specific Game Id
@@ -386,3 +386,18 @@ Get a Sport
 >>> sport = mlb.get_sport(sport_id)
 ```
 
+### Division Examples
+Get a division
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> division = mlb.get_division(200)
+>>> print (division.name)
+```
+
+### League Examples
+Get a league
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> league = mlb.get_league(103)
+>>> print (league.name)
+```
