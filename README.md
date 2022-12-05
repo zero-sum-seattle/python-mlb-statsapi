@@ -37,42 +37,44 @@ python3
 
 ## Documentation
 
-### People, Person, Players, Coaches
+### [People, Person, Players, Coaches](#people-examples)
 * `Mlb.get_people_id()` - Return Person Id(s) from fullname
 * `Mlb.get_person()` - Return Person Object from Id
 * `Mlb.get_people()` - Return all Players from Sport
-### Draft
+### [Draft](#draft-examples)
 * `Mlb.get_draft()` - Return a draft for a given year
-### Teams
+### [Awards](#award-examples)
+* `Mlb.get_awards()` - Return rewards recipinets for a given award
+### [Teams](#team-examples)
 * `Mlb.get_team_id()` - Return Team Id(s) from name
 * `Mlb.get_team()` - Return Team Object from Team Id
 * `Mlb.get_teams()` - Return all Teams for Sport
 * `Mlb.get_team_coaches()` - Return coaching roster for team for current or specified season
 * `Mlb.get_team_roster()` - Return player roster for team for current or specified season
-### Stats
+### [Stats](#stats)
 * `Mlb.get_player_stats()` - Return stats by player id, stat type and groups
 * `Mlb.get_team_stats()` - Return stats by team id, stat types and groups
 * `Mlb.get_stats()` - Return stats by stat type and group args
 * `Mlb.get_players_stats_for_game()` - Return player stats for a game
-### Venues
+### [Venues](#venue-examples)
 * `Mlb.get_venue_id()` - Return Venue Id(s)
 * `Mlb.get_venue()` - Return Venue Object from venue Id
 * `Mlb.get_venues()` - Return all Venues
-### Sports
+### [Sports](#sport-examples)
 * `Mlb.get_sport()` - Return a Sport object from Id
 * `Mlb.get_sports()` - Return all teams for Sport Id
 * `Mlb.get_sport_id()`- Return Sport Id from name
-### Divisions
+### [Divisions](#division-examples)
 * `Mlb.get_division()` - Return a Divison 
 * `Mlb.get_divisions()` - Return all Divisions
 * `Mlb.get_division_id()` - Return Division Id(s) from name
-### Leagues
+### [Leagues](#league-examples)
 * `Mlb.get_league()` - Return a League from Id
 * `Mlb.get_leagues()` - Return all Leagues
 * `Mlb.get_league_id()` - Return League Id(s)
-### Schedules
+### [Schedules](#schedule-examples)
 * `Mlb.get_schedule()` - Return a Schedule from dates
-### Games
+### [Games](#game-examples)
 * `Mlb.get_game()` - Return the Game for a specific Game Id
 * `Mlb.get_game_play_by_play()` - Return Play by play data for a game
 * `Mlb.get_game_line_score()` - Return a Linescore for a game
@@ -339,6 +341,7 @@ Get a Coach Roster
 >>> for coach in coaches:
         print(coach.title)
 ```
+
 ### Draft Examples
 Get a draft for a year
 ```
@@ -352,6 +355,15 @@ Get Players from Draft
 >>> for draftpick in draftpicks:
 ...     print(draftpick.id)
 ...     print(draftpick.pickround)
+```
+
+### Award Examples
+Get awards for a given award id
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> retiredjersy = self.mlb.get_awards(award_id='RETIREDUNI_108')
+>>> for recipient in retiredjersy.awards:
+...     print (recipient.player.nameFirstLast, recipient.name, recipient.date)
 ```
 
 ### Venue Examples
@@ -374,3 +386,18 @@ Get a Sport
 >>> sport = mlb.get_sport(sport_id)
 ```
 
+### Division Examples
+Get a division
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> division = mlb.get_division(200)
+>>> print (division.name)
+```
+
+### League Examples
+Get a league
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> league = mlb.get_league(103)
+>>> print (league.name)
+```
