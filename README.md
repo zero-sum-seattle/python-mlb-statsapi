@@ -230,6 +230,72 @@ Print Game status and Home and Away Teams
 ...             print(game.teams.away)
 ```
 ### Game Examples
+Get a Game for a given game id
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> game = mlb.get_game(662242)
+```
+Get the weather for a game for a given game id
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> game = mlb.get_game(662242)
+>>> weather = game.gamedata.weather
+>>> print(weather.condition)
+>>> print(weather.temp)
+>>> print(weather.wind)
+```
+Get the current status of a game for a given game id
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> game = mlb.get_game(662242)
+>>>
+>>> linescore = game.livedata.linescore
+>>> hometeaminfo = game.gamedata.teams.home
+>>> awayteaminfo = game.gamedata.teams.away
+>>> hometeamstatus = linescore.teams.home
+>>> awayteamstatus = linescore.teams.away
+>>>
+>>> print ("Home: ", hometeaminfo.franchiseName, hometeaminfo.clubName)
+>>> print ("      runs:", hometeamstatus.runs)
+>>> print ("      hits:", hometeamstatus.hits)
+>>> print ("      errors:", hometeamstatus.errors)
+>>> print ("Away: ", awayteaminfo.franchiseName, awayteaminfo.clubName)
+>>> print ("      runs:", awayteamstatus.runs)
+>>> print ("      hits:", awayteamstatus.hits)
+>>> print ("      errors:", awayteamstatus.errors)
+>>> print ("")
+>>> print ("Inning:", linescore.inningHalf, linescore.currentInningOrdinal)
+>>> print ("Balls:", linescore.balls)
+>>> print ("Strikes:", linescore.strikes)
+>>> print ("Outs:", linescore.outs)
+```
+Get the play by play, line score, and box score objects from a game
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> game = mlb.get_game(662242)
+>>>
+>>> play_by_play = game.livedata.plays
+>>> line_score = game.livedata.linescore
+>>> box_score = game.livedata.boxscore
+```
+#### Play by Play
+Get only the play by play for a given game id
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> game = mlb.get_play_by_play(662242)
+```
+#### Line Score
+Get only the line score for a given game id
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> game = mlb.get_line_score(662242)
+```
+#### Box Score
+Get only the box score for a given game id
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> game = mlb.get_box_score(662242)
+```
 
 ### People Examples
 Get all Players for a given sport id
