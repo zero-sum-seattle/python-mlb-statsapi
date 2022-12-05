@@ -240,6 +240,7 @@ Get the weather for a game for a given game id
 >>> mlb = mlbstatsapi.Mlb()
 >>> game = mlb.get_game(662242)
 >>> weather = game.gamedata.weather
+>>>
 >>> print(weather.condition)
 >>> print(weather.temp)
 >>> print(weather.wind)
@@ -282,19 +283,19 @@ Get the play by play, line score, and box score objects from a game
 Get only the play by play for a given game id
 ```
 >>> mlb = mlbstatsapi.Mlb()
->>> game = mlb.get_play_by_play(662242)
+>>> playbyplay = mlb.get_play_by_play(662242)
 ```
 #### Line Score
 Get only the line score for a given game id
 ```
 >>> mlb = mlbstatsapi.Mlb()
->>> game = mlb.get_line_score(662242)
+>>> linescore = mlb.get_line_score(662242)
 ```
 #### Box Score
 Get only the box score for a given game id
 ```
 >>> mlb = mlbstatsapi.Mlb()
->>> game = mlb.get_box_score(662242)
+>>> boxscore = mlb.get_box_score(662242)
 ```
 
 ### People Examples
