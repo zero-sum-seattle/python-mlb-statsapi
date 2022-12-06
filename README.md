@@ -56,6 +56,8 @@ python3
 * `Mlb.get_team_stats()` - Return stats by team id, stat types and groups
 * `Mlb.get_stats()` - Return stats by stat type and group args
 * `Mlb.get_players_stats_for_game()` - Return player stats for a game
+### [Gamepace](#gamepace-examples)
+* `Mlb.get_gamepace()` - Return pace of game metrics for specific sport, league or team.
 ### [Venues](#venue-examples)
 * `Mlb.get_venue_id()` - Return Venue Id(s)
 * `Mlb.get_venue()` - Return Venue Object from venue Id
@@ -79,8 +81,6 @@ python3
 * `Mlb.get_game_play_by_play()` - Return Play by play data for a game
 * `Mlb.get_game_line_score()` - Return a Linescore for a game
 * `Mlb.get_game_box_score()` - Return a Boxscore for a game
-### [Gamepace](#gamepace-examples)
-* `Mlb.get_gamepace()` - Return pace of game metrics for specific sport, league or team.
 
 ## Examples
 
@@ -215,6 +215,15 @@ season should be 2018
 assertEqual(stats[season_hitting.season == 2018)
 assertEqual(stats[advanced_hitting.season == 2018)
 ```
+
+### Gamepace examples
+Get pace of game metrics for specific sport, league or team.
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> season = 2021
+>>> gamepace = mlb.get_gamepace(season)
+```
+
 ### Schedule Examples
 Get a schedule for given date
 ```
@@ -300,14 +309,6 @@ Get only the box score for a given game id
 ```
 >>> mlb = mlbstatsapi.Mlb()
 >>> boxscore = mlb.get_box_score(662242)
-```
-
-### Gamepace examples
-Get pace of game metrics for specific sport, league or team.
-```
->>> mlb = mlbstatsapi.Mlb()
->>> season = 2021
->>> gamepace = mlb.get_gamepace(season)
 ```
 
 ### People Examples
