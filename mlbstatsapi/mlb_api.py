@@ -700,7 +700,7 @@ class Mlb:
 
         return game_ids
 
-    def get_gamepace(self, season: str, **params) -> Union[Gamepace, None]:
+    def get_gamepace(self, season: str, sport_id=1, **params) -> Union[Gamepace, None]:
         """
         Get pace of game metrics for specific sport, league or team.
 
@@ -755,7 +755,8 @@ class Mlb:
             Comma delimited list of specific fields to be returned. 
             Format: topLevelNode, childNode, attribute
         """
-        
+        params['sportId'] = sport_id
+
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'gamePace?season={season}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
