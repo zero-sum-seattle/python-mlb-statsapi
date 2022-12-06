@@ -43,7 +43,7 @@ class TestGamepaceMock(unittest.TestCase):
         self.assertIsInstance(gamepace, Gamepace)
 
         # list should not be empty
-        self.assertNotEqual(gamepace.leagues, [])
+        self.assertNotEqual(gamepace.sports, [])
 
         # items in list should be gamepace data
         self.assertIsInstance(gamepace.sports[0], Gamepacedata)
