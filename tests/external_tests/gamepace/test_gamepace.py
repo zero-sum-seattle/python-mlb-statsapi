@@ -3,7 +3,7 @@ from mlbstatsapi.models.gamepace import Gamepace, Gamepacedata
 from mlbstatsapi import Mlb
 
 
-class TestAwards(unittest.TestCase):
+class TestGamepace(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
