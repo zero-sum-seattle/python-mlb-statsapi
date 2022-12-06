@@ -15,11 +15,11 @@ from mlbstatsapi.models.attendances import Attendance
 from mlbstatsapi.models.stats import Stat
 from mlbstatsapi.models.seasons import Season
 from mlbstatsapi.models.drafts import Round
-from mlbstatsapi.models.awards import Awards
+from mlbstatsapi.models.awards import Award
 from mlbstatsapi.models.gamepace import Gamepace
 
 from .mlb_dataadapter import MlbDataAdapter
-from .exceptions import TheMlbStatsApiException
+# from .exceptions import TheMlbStatsApiException
 from . import mlb_module
 
 
@@ -763,7 +763,7 @@ class Mlb:
         if ('teams' in mlb_data.data and mlb_data.data['teams']
             or 'leagues' in mlb_data.data and mlb_data.data['leagues']
             or 'sports' in mlb_data.data and mlb_data.data['sports']):
-            
+
             return Gamepace(**mlb_data.data)
 
     def get_venue(self, venue_id) -> Union[Venue, None]:
@@ -1443,7 +1443,7 @@ class Mlb:
                     round_list.append(Round(**round))
         return round_list
 
-    def get_awards(self, award_id, **params):
+    def get_awards(self, award_id, **params) -> List[Award]:
         """
         return a awards object for award_id
 
@@ -1475,10 +1475,16 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'awards/{award_id}/recipients?', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
+        
+        awards_list = []
 
         if 'awards' in mlb_data.data and mlb_data.data['awards']:
-            return Awards(**mlb_data.data)
+            for award in mlb_data.data['awards']:
+                awards_list.append(Award(**award))
         
+        return awards_list
+
+
     def get_team_stats(self, team_id: int, stats: list, groups: list, **params) -> dict:
         """
         returns a split stat data for a team
