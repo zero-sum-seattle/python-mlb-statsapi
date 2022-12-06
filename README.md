@@ -79,6 +79,8 @@ python3
 * `Mlb.get_game_play_by_play()` - Return Play by play data for a game
 * `Mlb.get_game_line_score()` - Return a Linescore for a game
 * `Mlb.get_game_box_score()` - Return a Boxscore for a game
+### [Gamepace](#gamepace-examples)
+* `Mlb.get_gamepace()` - Return pace of game metrics for specific sport, league or team.
 
 ## Examples
 
@@ -298,6 +300,14 @@ Get only the box score for a given game id
 ```
 >>> mlb = mlbstatsapi.Mlb()
 >>> boxscore = mlb.get_box_score(662242)
+```
+
+### Gamepace examples
+Get pace of game metrics for specific sport, league or team.
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> season = 2021
+>>> gamepace = mlb.get_gamepace(season)
 ```
 
 ### People Examples
