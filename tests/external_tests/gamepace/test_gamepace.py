@@ -17,9 +17,10 @@ class TestGamepace(unittest.TestCase):
 
         # set draft id
         season_id = 2021
+        sports_id = 1
 
         # call get_gamepace return Gamepace object
-        gamepace = self.mlb.get_gamepace(season_id)
+        gamepace = self.mlb.get_gamepace(season_id, sportId=sports_id)
 
         # Gamepace should not be None
         self.assertIsNotNone(gamepace)
@@ -58,9 +59,10 @@ class TestGamepace(unittest.TestCase):
 
         season_id = 2021
         leagueId = "103"
+        sports_id = 1
 
         # call get_gamepace return gamepace object
-        gamepace = self.mlb.get_gamepace(season_id, leagueId=leagueId)
+        gamepace = self.mlb.get_gamepace(season_id, sportId=sports_id, leagueId=leagueId)
         # gamepace should not be None
         self.assertIsNotNone(gamepace)
         # list should not be empty
