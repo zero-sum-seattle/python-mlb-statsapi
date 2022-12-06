@@ -64,4 +64,4 @@ class TestGamepace(unittest.TestCase):
         # gamepace should not be None
         self.assertIsNotNone(gamepace)
         # list should not be empty
-        self.assertNotEqual(gamepace.sports, [])
+        self.assertNotEqual(gamepace.leagues, [])
