@@ -27,12 +27,12 @@ class TestGamepace(unittest.TestCase):
         self.assertIsInstance(gamepace, Gamepace)
 
         # list should not be empty
-        self.assertNotEqual(gamepace.leagues, [])
+        self.assertNotEqual(gamepace.sports, [])
 
         # items in list should be gamepace data
-        self.assertIsInstance(gamepace.leagues[0], Gamepacedata)
+        self.assertIsInstance(gamepace.sports[0], Gamepacedata)
 
-        sportgamepace = gamepace.leagues[0]
+        sportgamepace = gamepace.sports[0]
 
         # sportgamepace should not be none
         self.assertIsNotNone(sportgamepace)
@@ -64,4 +64,4 @@ class TestGamepace(unittest.TestCase):
         # gamepace should not be None
         self.assertIsNotNone(gamepace)
         # list should not be empty
-        self.assertNotEqual(gamepace.leagues, [])
+        self.assertNotEqual(gamepace.sports, [])
