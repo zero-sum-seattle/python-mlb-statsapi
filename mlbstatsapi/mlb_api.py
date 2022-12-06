@@ -16,6 +16,7 @@ from mlbstatsapi.models.stats import Stat
 from mlbstatsapi.models.seasons import Season
 from mlbstatsapi.models.drafts import Round
 from mlbstatsapi.models.awards import Awards
+from mlbstatsapi.models.gamepace import Gamepace
 
 from .mlb_dataadapter import MlbDataAdapter
 from .exceptions import TheMlbStatsApiException
@@ -698,6 +699,72 @@ class Mlb:
                    game_ids.append(game.gamepk)
 
         return game_ids
+
+    def get_gamepace(self, season: str, **params) -> Union[Gamepace, None]:
+        """
+        Get pace of game metrics for specific sport, league or team.
+
+        Parameters
+        ----------
+        season : int
+            Insert year to return a directory of pace of game metrics for a 
+            given season.
+        
+        Other Parameters
+        ----------------
+        teamIds : int
+            Insert a teamIds to return directory of pace of game metrics for 
+            a given team. Format '110' or '110,147'
+        leagueId : int
+            Insert leagueIds to return a directory of pace of game metrics 
+            for a given league. Format '103' or '103,104'
+        leagueListId : str
+            Insert a unique League List Identifier to return a directory of 
+            pace of game metrics for a specific league listId.
+            Available values : milb_full, milb_short, milb_complex, milb_all,
+                milb_all_nomex, milb_all_domestic, milb_noncomp, 
+                milb_noncomp_nomex, milb_domcomp, milb_intcomp, win_noabl, 
+                win_caribbean, win_all, abl, mlb, mlb_hist, mlb_milb, 
+                mlb_milb_hist, mlb_milb_win, baseball_all
+        sportId : int
+            Insert a sportId to return a directory of pace of game metrics 
+            for a specific sport. Format '11' or '1,11'
+        gameType : str
+            Insert gameType(s) a return a directory of pace of game metrics 
+            for a specific gameType. For a list of all gameTypes: 
+            https://statsapi.mlb.com/api/v1/gameTypes
+        date : str
+            Insert date to return a directory of pace of game metrics for a 
+            particular date range. Format: MM/DD/YYYY
+            !!! startDate must be coupled with endDate !!!
+        endDate : str
+            Insert date to return a directory of pace of game metrics for a 
+            particular date range. Format: MM/DD/YYYY
+            !!! endDate must be coupled with startDate !!!
+        venueIds : id
+            Insert venueId to return a directory of pace of game metrics for 
+            a particular venueId.
+        orgType : str
+            Insert a orgType to return a directory of pace of game metrics 
+            based on team, league or sport.
+            Available values : T- TEAM, L- LEAGUE, S- SPORT
+        includeChildren : bool
+            Insert includeChildren to return a directory of pace of game 
+            metrics for all child teams in a given parent sport.
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+        """
+        
+        mlb_data = self._mlb_adapter_v1.get(endpoint='gamePace', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return None
+
+        if ('teams' in mlb_data.data and mlb_data.data['teams']
+            or 'leagues' in mlb_data.data and mlb_data.data['leagues']
+            or 'sports' in mlb_data.data and mlb_data.data['sports']):
+            
+            return Gamepace(**mlb_data.data)
 
     def get_venue(self, venue_id) -> Union[Venue, None]:
         """
