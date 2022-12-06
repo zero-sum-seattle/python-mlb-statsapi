@@ -23,6 +23,6 @@ class Gamepace:
 
 
     def __post_init__(self):
-        self.teams = Gamepacedata(**self.teams) if self.teams else None        
-        self.leagues = Gamepacedata(**self.leagues) if self.leagues else None    
-        self.sports = Gamepacedata(**self.sports) if self.sports else None        
+        self.teams = [Gamepacedata(**teams) for teams in self.teams]        
+        self.leagues = [Gamepacedata(**leagues) for leagues in self.leagues]    
+        self.sports = [Gamepacedata(**sports) for sports in self.sports]     

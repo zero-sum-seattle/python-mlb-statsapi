@@ -1,6 +1,7 @@
 from typing import Union, Optional
 from dataclasses import dataclass
 
+from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.sports import Sport
 
@@ -12,25 +13,25 @@ class Prportalcalculatedfields():
 
     Attributes:
     ----------
-    total7InnGames : int
+    total7inngames : int
         The total number of 7-inning games played.
-    total9InnGames : int
+    total9inngames : int
         The total number of 9-inning games played.
-    totalExtraInnGames : int
+    totalextrainngames : int
         The total number of extra-inning games played.
-    timePer7InnGame : str
+    timeper7inngame : str
         The average time per 7-inning game.
-    timePer9InnGame : str
+    timeper9inngame : str
         The average time per 9-inning game.
-    timePerExtraInnGame : str
+    timeperextrainngame : str
         The average time per extra-inning game.
     """
-    total7InnGames: int
-    total9InnGames: int
-    totalExtraInnGames: int
-    timePer7InnGame: str
-    timePer9InnGame: str
-    timePerExtraInnGame: str
+    total7inngames: int
+    total9inngames: int
+    totalextrainngames: int
+    timeper7inngame: str
+    timeper9inngame: str
+    timeperextrainngame: str
 
 
 @dataclass(kw_only=True)
@@ -40,81 +41,83 @@ class Gamepacedata():
 
     Attributes:
     ----------
-    hitsPer9Inn : float
+    hitsper9inn : float
         The number of hits per 9 innings played.
-    runsPer9Inn : float
+    runsper9inn : float
         The number of runs scored per 9 innings played.
-    pitchesPer9Inn : float
+    pitchesper9inn : float
         The number of pitches thrown per 9 innings played.
-    plateAppearancesPer9Inn : float
+    plateappearancesper9inn : float
         The number of plate appearances per 9 innings played.
-    hitsPerGame : float
+    hitspergame : float
         The number of hits per game played.
-    runsPerGame : float
+    runspergame : float
         The number of runs scored per game played.
-    inningsPlayedPerGame : float
+    inningsplayedpergame : float
         The number of innings played per game.
-    pitchesPerGame : float
+    pitchespergame : float
         The number of pitches thrown per game played.
-    pitchersPerGame : float
+    pitcherspergame : float
         The number of pitchers used per game played.
-    plateAppearancesPerGame : float
+    plateappearancespergame : float
         The number of plate appearances per game played.
-    totalGameTime : str
+    totalgametime : str
         The total time spent playing games in the league.
-    totalInningsPlayed : float
+    totalinningsplayed : float
         The total number of innings played in the league.
-    totalHits : int
+    totalhits : int
         The total number of hits in the league.
-    totalRuns : int
+    totalruns : int
         The total number of runs scored in the league.
-    totalPlateAppearances : int
+    totalplateappearances : int
         The total number of plate appearances in the league.
-    totalPitchers : int
+    totalpitchers : int
         The total number of pitchers used in the league.
-    totalPitches : int
+    totalpitches : int
         The total number of pitches thrown in the league.
-    totalGames : int
+    totalgames : int
         The total number of games played in the league.
-    total7InnGames : int
+    total7inngames : int
         The total number of 7-inning games played in the league.
-    total9InnGames : int
+    total9inngames : int
         The total number of 9-inning games played in the league.
-    totalExtraInnGames : int
+    totalextrainngames : int
         The total number of extra inning games played in the league.
-    timePerGame : str
+    timepergame : str
         The amount of time spent per game in the league.
-    timePerPitch : str
+    timeperpitch : str
         The amount of time spent per pitch in the league.
-    timePerHit : str
+    timeperhit : str
         The amount of time spent per hit in the league.
-    timePerRun : str
+    timeperrun : str
         The amount of time spent per run scored in the league.
-    timePerPlateAppearance : str
+    timeperplateappearance : str
         The amount of time spent per plate appearance in the league.
-    timePer9Inn : str
+    timeper9inn : str
         The amount of time spent per 9 innings played in the league.
-    timePer77PlateAppearances : str
+    timeper77plateappearances : str
         The amount of time spent per 7-7 plate appearances in the league.
-    totalExtraInnTime : str
+    totalextrainntime : str
         The total amount of time spent on extra inning games in the league.
-    timePer7InnGame : str
+    timeper7inngame : str
         The amount of time spent per 7-inning game in the league.
-    timePer7InnGameWithoutExtraInn: str
+    total7inngamescompletedearly: int
+        The total number of 7-inning games completed early in the league.
+    timeper7inngamewithoutextrainn: str
         The amount of time spent per 7-inning game without extra innings in the league.
-    total7InnGamesScheduled : int
+    total7inngamesscheduled : int
         The total number of 7-inning games scheduled in the league.
-    total7InnGamesWithoutExtraInn : int
+    total7inngameswithoutextrainn : int
         The total number of 7-inning games played without extra innings in the league.
-    total9InnGamesCompletedEarly : int
+    total9inngamescompletedearly : int
         The total number of 9-inning games completed early in the league.
-    total9InnGamesWithoutExtraInn : int
+    total9inngameswithoutextrainn : int
         The total number of 9-inning games
-    total9InnGamesScheduled : int
+    total9inngamesscheduled : int
         The total number of 9 inning games scheduled
-    hitsPerRun : float
+    hitsperrun : float
         The number of hits per run
-    pitchesPerPitcher : float
+    pitchesperpitcher : float
         Number of pitches thrown per pitcher
     season : str
         Season number
@@ -122,53 +125,56 @@ class Gamepacedata():
         League
     sport : Union[Sport, dict]
         Sport`
-    prPortalCalculatedFields : Union[Prportalcalculatedfields, dict]
+    prportalcalculatedfields : Union[Prportalcalculatedfields, dict]
         calculated fields for a league
     """
-    hitsPer9Inn: Optional[float] = None
-    runsPer9Inn: Optional[float] = None
-    pitchesPer9Inn: Optional[float] = None
-    plateAppearancesPer9Inn: Optional[float] = None
-    hitsPerGame: Optional[float] = None
-    runsPerGame: Optional[float] = None
-    inningsPlayedPerGame: Optional[float] = None
-    pitchesPerGame: Optional[float] = None
-    pitchersPerGame: Optional[float] = None
-    plateAppearancesPerGame: Optional[float] = None
-    totalGameTime: Optional[str] = None
-    totalInningsPlayed: Optional[float] = None
-    totalHits: Optional[int] = None
-    totalRuns: Optional[int] = None
-    totalPlateAppearances: Optional[int] = None
-    totalPitchers: Optional[int] = None
-    totalPitches: Optional[int] = None
-    totalGames: Optional[int] = None
-    total7InnGames: Optional[int] = None
-    total9InnGames: Optional[int] = None
-    totalExtraInnGames: Optional[int] = None
-    timePerGame: Optional[str] = None
-    timePerPitch: Optional[str] = None
-    timePerHit: Optional[str] = None
-    timePerRun: Optional[str] = None
-    timePerPlateAppearance: Optional[str] = None
-    timePer9Inn: Optional[str] = None
-    timePer77PlateAppearances: Optional[str] = None
-    totalExtraInnTime: Optional[str] = None
-    timePer7InnGame: Optional[str] = None
-    timePer7InnGameWithoutExtraInn: Optional[str] = None
-    total7InnGamesScheduled: Optional[int] = None
-    total7InnGamesWithoutExtraInn: Optional[int] = None
-    total9InnGamesCompletedEarly: Optional[int] = None
-    total9InnGamesWithoutExtraInn: Optional[int] = None
-    total9InnGamesScheduled: Optional[int] = None
-    hitsPerRun: Optional[float] = None
-    pitchesPerPitcher: Optional[float] = None
+    hitsper9inn: Optional[float] = None
+    runsper9inn: Optional[float] = None
+    pitchesper9inn: Optional[float] = None
+    plateappearancesper9inn: Optional[float] = None
+    hitspergame: Optional[float] = None
+    runspergame: Optional[float] = None
+    inningsplayedpergame: Optional[float] = None
+    pitchespergame: Optional[float] = None
+    pitcherspergame: Optional[float] = None
+    plateappearancespergame: Optional[float] = None
+    totalgametime: Optional[str] = None
+    totalinningsplayed: Optional[float] = None
+    totalhits: Optional[int] = None
+    totalruns: Optional[int] = None
+    totalplateappearances: Optional[int] = None
+    totalpitchers: Optional[int] = None
+    totalpitches: Optional[int] = None
+    totalgames: Optional[int] = None
+    total7inngames: Optional[int] = None
+    total9inngames: Optional[int] = None
+    totalextrainngames: Optional[int] = None
+    timepergame: Optional[str] = None
+    timeperpitch: Optional[str] = None
+    timeperhit: Optional[str] = None
+    timeperrun: Optional[str] = None
+    timeperplateappearance: Optional[str] = None
+    timeper9inn: Optional[str] = None
+    timeper77plateappearances: Optional[str] = None
+    totalextrainntime: Optional[str] = None
+    timeper7inngame: Optional[str] = None
+    total7inngamescompletedearly: Optional[int] = None
+    timeper7inngamewithoutextrainn: Optional[str] = None
+    total7inngamesscheduled: Optional[int] = None
+    total7inngameswithoutextrainn: Optional[int] = None
+    total9inngamescompletedearly: Optional[int] = None
+    total9inngameswithoutextrainn: Optional[int] = None
+    total9inngamesscheduled: Optional[int] = None
+    hitsperrun: Optional[float] = None
+    pitchesperpitcher: Optional[float] = None
     season: Optional[str] = None
+    team: Optional[Union[Team, dict]] = None
     league: Optional[Union[League, dict]] = None
     sport: Optional[Union[Sport, dict]] = None
-    prPortalCalculatedFields: Optional[Union[Prportalcalculatedfields, dict]] = None
+    prportalcalculatedfields: Optional[Union[Prportalcalculatedfields, dict]] = None
 
     def __post_init__(self):
+        self.team = Team(**self.team) if self.team else None
         self.league = League(**self.league) if self.league else None   
         self.sport = Sport(**self.sport) if self.sport else None
-        self.prPortalCalculatedFields = Prportalcalculatedfields(**self.prPortalCalculatedFields) if self.prPortalCalculatedFields else None  
+        self.prportalcalculatedfields = Prportalcalculatedfields(**self.prportalcalculatedfields) if self.prportalcalculatedfields else None  

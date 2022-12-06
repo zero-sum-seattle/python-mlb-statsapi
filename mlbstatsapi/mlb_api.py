@@ -756,7 +756,7 @@ class Mlb:
             Format: topLevelNode, childNode, attribute
         """
         
-        mlb_data = self._mlb_adapter_v1.get(endpoint='gamePace', ep_params=params)
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'gamePace?season={season}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
 

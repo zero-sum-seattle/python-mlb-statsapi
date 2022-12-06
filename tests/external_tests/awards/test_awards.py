@@ -56,7 +56,7 @@ class TestAwards(unittest.TestCase):
 
 
     def test_get_awards_with_params(self):
-        """this test should return results for draft round 1 2019"""
+        """this test should return results for retired uniform number awards"""
 
         award_id = "RETIREDUNI_108"
         leagueId = "103"
