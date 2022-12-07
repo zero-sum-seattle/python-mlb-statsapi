@@ -1,0 +1,1 @@
+from .standings import Standings

@@ -18,6 +18,7 @@ from mlbstatsapi.models.drafts import Round
 from mlbstatsapi.models.awards import Award
 from mlbstatsapi.models.gamepace import Gamepace
 from mlbstatsapi.models.homerunderby import Homerunderby
+from mlbstatsapi.models.standings import Standings
 
 from .mlb_dataadapter import MlbDataAdapter
 # from .exceptions import TheMlbStatsApiException
@@ -1336,6 +1337,85 @@ class Mlb:
         
         return season_list
 
+    def get_standings(self, league_id, season, **params):
+        """
+        return a list of standings for league_id and season
+
+        Parameters
+        ----------
+        league_id : str
+            Insert leagueId to return all standings based on a particular 
+            standingType for a specific league.
+        season : str
+            Insert year to return all standings based on a particular year.
+
+        Other Parameters
+        ----------------
+        standingsTypes : str
+            Insert standingType to return all standings based on a particular 
+            year.
+            Description of all standingTypes:
+                regularSeason - Regular Season Standings
+                wildCard - Wild card standings
+                divisionLeaders - Division Leader standings
+                wildCardWithLeaders - Wild card standings with Division 
+                Leaders firstHalf - First half standings. Only valid for 
+                                    leagues with a split season 
+                                    (Mexican League).
+                secondHalf - Second half standings. Only valid for leagues 
+                             with a split season (Mexican League).
+                springTraining - Spring Training Standings
+                postseason - Postseason Standings
+                byDivision - Standings by Division
+                byConference - Standings by Conference
+                byLeague - Standings by League  
+            Find standingTypes at https://statsapi.mlb.com/api/v1/standingsTypes
+        date : str
+            Insert date to return standing information for on a particular 
+            date. Format: MM/DD/YYYY
+        hydrate : str
+            Insert Hydration(s) to return data for any available standings 
+            hydration. Format "team,league"
+            Available Hydrations:
+                team
+                league
+                division
+                sport
+                conference
+                record(conference)
+                record(division)
+        fields : str
+            Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        list of Standings
+            returns a list of Standings
+        See Also
+        --------
+
+        Examples
+        --------
+        """
+        if league_id is not None:
+            params['leagueId'] = league_id
+
+        if season is not None:
+            params['season'] = season
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'standings', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+        
+        standings_list = []
+
+        if 'records' in mlb_data.data and mlb_data.data['records']:
+            for standing in mlb_data.data['records']:
+                standings_list.append(Standings(**standing))
+        
+        return standings_list
+
+
     def get_attendance(self, team_id: int = None, league_id: int = None,
                        league_list_id: int = None, params: dict = {}) -> Union[Attendance, None]:
         """
@@ -1446,7 +1526,7 @@ class Mlb:
 
     def get_awards(self, award_id, **params) -> List[Award]:
         """
-        return a awards object for award_id
+        return a list of awards for award_id
 
         Parameters
         ----------
