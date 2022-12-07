@@ -171,8 +171,8 @@ class Hitdata:
     trajectorydata : Trajectorydata: None
         Trajectory data for the hit
     """
-    launchspeed: float
     totaldistance: int
+    launchspeed: Optional[float] = None
     launchangle: Optional[float] = None
     coordinates: Optional[Union[Coordinates, dict]] = None
     trajectorydata: Optional[Union[Trajectorydata, dict]] = None
@@ -217,10 +217,10 @@ class Hits:
     tiebreaker: bool
     hitdata: Union[Hitdata, dict]
     ishomerun: bool
-    playid: str
     timeremaining: str
     isbonustime: bool
     istiebreaker: bool
+    playid: Optional[str] = None
 
     def __post_init__(self):
         self.hitdata = Hitdata(**self.hitdata)

@@ -31,4 +31,12 @@ class Homerunderby:
         self.info = Info(**self.info)
         self.status = Status(**self.status)
         self.rounds = [Round(**round) for round in self.rounds]
-        self.players = [Person(**player) for player in self.players]
+        
+        player_list = []
+
+        for player in self.players:
+            if 'stats' in player:
+                player.pop('stats')
+            player_list.append(Person(**player))
+
+        self.players = player_list
