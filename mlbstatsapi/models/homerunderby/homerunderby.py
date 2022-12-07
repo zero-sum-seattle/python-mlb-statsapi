@@ -3,23 +3,28 @@ from dataclasses import dataclass
 
 from mlbstatsapi.models.people import Person
 
-from .attributes import info, status, rounds
+from .attributes import Info, Status, Round
 
 
 @dataclass
-class Game:
+class Homerunderby:
     """
-    A class to represent a Game.
+    A class representing a homerun derby
 
     Attributes
     ----------
-    gamepk : int
-        id number of this game
-    
+    info : Info
+        An object containing information about the game.
+    status : Status
+        An object containing the status of the game.
+    rounds : Round
+        A list of Round objects representing the rounds in the game.
+    players : List[Person]
+        A list of objects containing the data for the players in the game.
     """
     info: Union[Info, dict]
     status: Union[Status, dict]
-    rounds: List
+    rounds: List[Round]
     players: List[Union[Person, dict]]
 
     def __post_init__(self):
