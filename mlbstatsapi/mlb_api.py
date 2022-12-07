@@ -17,6 +17,7 @@ from mlbstatsapi.models.seasons import Season
 from mlbstatsapi.models.drafts import Round
 from mlbstatsapi.models.awards import Award
 from mlbstatsapi.models.gamepace import Gamepace
+from mlbstatsapi.models.homerunderby import Homerunderby
 
 from .mlb_dataadapter import MlbDataAdapter
 # from .exceptions import TheMlbStatsApiException
@@ -1483,6 +1484,41 @@ class Mlb:
                 awards_list.append(Award(**award))
         
         return awards_list
+
+    def get_homerun_derby(self, game_id, **params) -> Union[Homerunderby, None]:
+        """
+        The homerun derby endpoint on the Stats API allows for users to 
+        request information from the MLB database pertaining to the 
+        homerun derby. This is endpoint contains Statcast trajectory, 
+        launchSpeed, launchAngle, & hit coordinates data. Also a timeRemaning 
+        string is added to track the progress of the derby in real time.
+
+        Parameters
+        ----------
+        game_id : int
+            Insert gamePk to return HomerunDerby data for a specific gamepk.
+
+        Other Parameters
+        ----------------
+        fields : str
+            Format: Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        Homerunderby object
+
+        See Also
+        --------
+
+        Examples
+        --------
+        """
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'homeRunDerby/{game_id}', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            None
+        
+        if 'status' in mlb_data.data and mlb_data.data['status']:
+            return Homerunderby(**mlb_data.data)
 
 
     def get_team_stats(self, team_id: int, stats: list, groups: list, **params) -> dict:
