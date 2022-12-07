@@ -56,6 +56,8 @@ python3
 * `Mlb.get_team_stats()` - Return stats by team id, stat types and groups
 * `Mlb.get_stats()` - Return stats by stat type and group args
 * `Mlb.get_players_stats_for_game()` - Return player stats for a game
+### [Gamepace](#gamepace-examples)
+* `Mlb.get_gamepace()` - Return pace of game metrics for specific sport, league or team.
 ### [Venues](#venue-examples)
 * `Mlb.get_venue_id()` - Return Venue Id(s)
 * `Mlb.get_venue()` - Return Venue Object from venue Id
@@ -213,6 +215,15 @@ season should be 2018
 assertEqual(stats[season_hitting.season == 2018)
 assertEqual(stats[advanced_hitting.season == 2018)
 ```
+
+### Gamepace examples
+Get pace of game metrics for specific sport, league or team.
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> season = 2021
+>>> gamepace = mlb.get_gamepace(season)
+```
+
 ### Schedule Examples
 Get a schedule for given date
 ```

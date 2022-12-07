@@ -56,7 +56,7 @@ class TestRound(unittest.TestCase):
         # draft should not be None
         self.assertIsNotNone(draft)
 
-        # list should not be empty
+        # list should be empty
         self.assertEqual(draft, [])
 
 
