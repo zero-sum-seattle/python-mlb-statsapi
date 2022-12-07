@@ -38,8 +38,8 @@ class Division:
         Current status of this division
     """
     id: int
-    name: str
     link: str
+    name: Optional[str] = None
     season: Optional[str] = None
     nameshort: Optional[str] = None
     abbreviation: Optional[str] = None

@@ -74,6 +74,12 @@ python3
 * `Mlb.get_league()` - Return a League from Id
 * `Mlb.get_leagues()` - Return all Leagues
 * `Mlb.get_league_id()` - Return League Id(s)
+### [Seasons](#season-examples)
+* `Mlb.get_season()` - Return a season
+* `Mlb.get_current_season()` - Return current season
+* `Mlb.get_all_seasons()` - Return all seasons
+### [Standings](#standings-examples)
+* `Mlb.get_standings()` - Return standings
 ### [Schedules](#schedule-examples)
 * `Mlb.get_schedule()` - Return a Schedule from dates
 ### [Games](#game-examples)
@@ -411,4 +417,19 @@ Get a league
 >>> mlb = mlbstatsapi.Mlb()
 >>> league = mlb.get_league(103)
 >>> print (league.name)
+```
+
+### Season Examples
+Get a Season
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> season = mlb.get_season(2018)
+>>> print (season.seasonid)
+```
+
+### Standings Examples
+Get a Standings
+```
+>>> mlb = mlbstatsapi.Mlb()
+>>> standings = mlb.get_standings(103, 2018)
 ```
