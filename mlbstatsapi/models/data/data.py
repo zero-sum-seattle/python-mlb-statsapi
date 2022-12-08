@@ -20,8 +20,8 @@ class PitchBreak:
     breakangle: float
     breaklength: float
     breaky: float
-    spinrate: float
-    spindirection: float
+    spinrate: Optional[float] = None
+    spindirection: Optional[float] = None
 
 
 @dataclass
@@ -81,16 +81,16 @@ class PitchData:
     platetime : float
     extension : float
     """
-    startspeed: float
-    endspeed: float
     strikezonetop: float
     strikezonebottom: float
     coordinates: Union[PitchCoordinates, dict]
     breaks: Union[PitchBreak, dict] 
-    zone:float
-    typeconfidence: float
-    platetime: float
-    extension: float
+    extension: Optional[float] = None
+    startspeed: Optional[float] = None
+    endspeed: Optional[float] = None
+    zone: Optional[float] = None
+    typeconfidence: Optional[float] = None
+    platetime: Optional[float] = None
 
 
     def __post_init__(self):
@@ -143,13 +143,14 @@ class HitData:
         Hit coordinates
     """
 
-    launchspeed: float
-    launchangle: str # this is a negative number and I'm brain farting on those
-    totaldistance: float
+
     trajectory: str
     hardness: str
-    location: int
     coordinates: Union[HitCoordinates, dict]
+    location: Optional[int] = None
+    launchspeed: Optional[float] = None
+    launchangle: Optional[str] = None # this is a negative number and I'm brain farting on those
+    totaldistance: Optional[float] = None
 
     def __post_init__(self):
         self.coordinates = HitCoordinates(**self.coordinates) if self.coordinates else self.coordinates

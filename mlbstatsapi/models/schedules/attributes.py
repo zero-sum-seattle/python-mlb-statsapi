@@ -165,6 +165,7 @@ class ScheduleGames:
     rescheduledfrom: Optional[str] = None
     rescheduledfromdate: Optional[str] = None
     istie: Optional[bool] = None
+    resumedate: Optional[str] = None
 
     def __post_init__(self):
         self.status = GameStatus(**self.status) if self.status else self.status
