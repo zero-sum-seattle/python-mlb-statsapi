@@ -595,7 +595,7 @@ class Mlb:
 
         return coaches
 
-    def get_schedule(self, date: str, end_date: str = None, sport_id: int = 1, team_id: int = None, **params) -> Union[Schedule, None]:
+    def get_schedule(self, date: str = None, start_date: str = None, end_date: str = None, sport_id: int = 1, team_id: int = None, **params) -> Union[Schedule, None]:
         """
         return the schedule created from the included params.
 
@@ -606,6 +606,8 @@ class Mlb:
 
         Parameters
         ----------
+        date : str
+            Date
         start_date : str "yyyy-mm-dd"
             Start date
         end_date : str "yyyy-mm-dd"
@@ -614,6 +616,129 @@ class Mlb:
             sport id of schedule defaults to 1
         team_id : int
             get schedule for team with team_id
+
+        Other Parameters
+        ----------------
+        leagueId : int,str
+            Insert leagueId to return all schedules based on a particular 
+            scheduleType for a specific league. Usage: 1 or '1,11
+        gamePks : int,str
+            Insert gamePks to return all schedules based on a particular 
+            scheduleType for specific games. Usage: 531493 or '531493,531497'
+        venueIds : int
+            Insert venueId to return all schedules based on a particular 
+            scheduleType for a specific venueId.
+        gameTypes : str
+            Insert gameTypes to return schedule information for all games in 
+            particular gameTypes. For a list of all gameTypes: 
+            https://statsapi.mlb.com/api/v1/gameTypes
+        
+        scheduleType : str
+            Insert one or mutliple of the three available scheduleTypes to 
+            return data for a particular schedule. Format "games,events,xref"
+        eventTypes : str
+            Insert one or mutliple of the three available eventTypes to 
+            return data for a particular schedule. Format "primary,secondary"
+            There are two different schedule eventTypes:
+                primary- returns calendar/schedule pages.
+                secondary returns ticket pages.
+        hydrate : str
+            Insert Hydration(s) to return data for any available schedule 
+            hydration. The hydrations for schedule contain "venue" and "team" 
+            which have subhydrations.
+            Format "team(subHydration1, subHydrations2)"
+            Available Hydrations:
+                tickets
+                game(content)
+                game(content(all))
+                game(content(media(all)))
+                game(content(editorial(all)))
+                game(content(highlights(all)))
+                game(content(editorial(preview)))
+                game(content(editorial(recap)))
+                game(content(editorial(articles)))
+                game(content(editorial(wrap)))
+                game(content(media(epg)))
+                game(content(media(milestones)))
+                game(content(highlights(scoreboard)))
+                game(content(highlights(scoreboardPreview)))
+                game(content(highlights(highlights)))
+                game(content(highlights(gamecenter)))
+                game(content(highlights(milestone)))
+                game(content(highlights(live)))
+                game(content(media(featured)))
+                game(content(summary))
+                game(content(gamenotes))
+                game(tickets)
+                game(atBatTickets)
+                game(promotions)
+                game(atBatPromotions)
+                game(sponsorships)
+                lineup
+                linescore
+                linescore(matchup)
+                linescore(runners)
+                linescore(defense)
+                decisions
+                scoringplays
+                broadcasts
+                broadcasts(all)
+                radioBroadcasts
+                metadata
+                game(seriesSummary)
+                seriesStatus
+                event(performers)
+                event(promotions)
+                event(timezone)
+                event(tickets)
+                event(venue)
+                event(designations)
+                event(game)
+                event(status)
+                weather
+                officials
+                probablePitcher
+                venue                    
+                    relatedVenues
+                    parentVenues
+                    residentVenues
+                    relatedVenues(venue)
+                    parentVenues(venue)
+                    residentVenues(venue)
+                    location
+                    social
+                    relatedApplications
+                    timezone
+                    menu
+                    metadata
+                    performers
+                    images
+                    schedule
+                    nextSchedule
+                    previousSchedule
+                    ticketManagement
+                    xrefId
+                team                                    
+                    previousSchedule
+                    nextSchedule
+                    venue
+                    springVenue
+                    social
+                    deviceProperties
+                    game(promotions)
+                    game(promotions)
+                    game(atBatPromotions)
+                    game(tickets)
+                    game(atBatTickets)
+                    game(sponsorships)
+                    league
+                    videos
+                    person
+                    sport
+                    standings
+                    division
+                    xref
+
 
         Returns
         -------
@@ -632,14 +757,15 @@ class Mlb:
         Schedule
 
         """
-
-        # default to today if not set
-        if not end_date:
-            params['endDate'] = date
-            params['startDate'] = date
-        else:
-            params['startDate'] = date
+        
+        if start_date and end_date:
+            params['startDate'] = start_date
             params['endDate'] = end_date
+        elif date and not (start_date or end_date):
+            params['date'] = date
+        else:
+            return None
+
 
         if team_id:
             params['teamId'] = team_id
@@ -657,7 +783,8 @@ class Mlb:
         if 'dates' in mlb_data.data and mlb_data.data['dates']:
             return Schedule(**mlb_data.data)
 
-    def get_scheduled_games_by_date(self, date: str, 
+    def get_scheduled_games_by_date(self, date: str,
+                                    start_date: str = None, 
                                     end_date: str = None,
                                     sport_id: int = 1, 
                                     **params) -> List[ScheduleGames]:
@@ -668,10 +795,28 @@ class Mlb:
         ----------
         date : str 
             start date, 'yyyy-mm-dd'
+        start_date : str "yyyy-mm-dd"
+            Start date
         end_date : str
             end date, 'yyyy-mm-dd'
         spord_id : int
             spord id of schedule defaults to 1
+
+        Other Parameters
+        ----------------
+        leagueId : int,str
+            Insert leagueId to return all schedules based on a particular 
+            scheduleType for a specific league. Usage: 1 or '1,11
+        gamePks : int,str
+            Insert gamePks to return all schedules based on a particular 
+            scheduleType for specific games. Usage: 531493 or '531493,531497'
+        venueIds : int
+            Insert venueId to return all schedules based on a particular 
+            scheduleType for a specific venueId.
+        gameTypes : str
+            Insert gameTypes to return schedule information for all games in 
+            particular gameTypes. For a list of all gameTypes: 
+            https://statsapi.mlb.com/api/v1/gameTypes
 
         Returns
         -------
@@ -690,13 +835,13 @@ class Mlb:
         >>> mlb = Mlb()
         >>> mlb.get_game_ids()
         """
-        # default to today if not set
-        if not end_date:
-            params['endDate'] = date
-            params['startDate'] = date
-        else:
-            params['startDate'] = date
+        if start_date and end_date:
+            params['startDate'] = start_date
             params['endDate'] = end_date
+        elif date and not (start_date or end_date):
+            params['date'] = date
+        else:
+            return None
 
         params['sportId'] = sport_id
 
