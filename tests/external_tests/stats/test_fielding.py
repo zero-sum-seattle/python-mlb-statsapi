@@ -30,7 +30,7 @@ class TestPitchingStats(unittest.TestCase):
     def tearDownClass(cls) -> None:
         pass
 
-    def test_pitching_stat_attributes_player(self):
+    def test_fielding_stat_attributes_player(self):
         """mlb get stats should return pitching stats"""
         self.stats = ['season', 'career']
         self.group = ['fielding']
@@ -58,7 +58,7 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue(season.stat.fielding)
         self.assertTrue(career.player)
 
-    def test_pitching_stat_attributes_team(self):
+    def test_fielding_stat_attributes_team(self):
         """mlb get stats should return pitching stats"""
         self.stats = ['season', 'career', 'seasonAdvanced', 'careerAdvanced']
         self.group = ['fielding']
