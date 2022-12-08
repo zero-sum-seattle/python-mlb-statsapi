@@ -97,4 +97,4 @@ class PlayReviewDetails:
     isoverturned: bool
     inprogress: bool
     reviewtype: str
-    challengeteamid: int
+    challengeteamid: Optional[int] = None

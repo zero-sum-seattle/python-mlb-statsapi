@@ -53,6 +53,8 @@ class PlayEvent:
     endtime: str
     ispitch: bool
     type: str
+    umpire: Optional[str] = None
+    base: Optional[str] = None
     playid: Optional[str] = None
     pitchnumber: Optional[int] = None
     actionplayid: Optional[str] = None
@@ -65,6 +67,8 @@ class PlayEvent:
     player: Optional[Union[Person, dict]] = None
     position: Optional[Union[Position, dict]] = None
     replacedplayer: Optional[Union[Person, dict]] = None
+    reviewdetails: Optional[dict] = None
+    injurytype: Optional[str] = None
 
     def __post_init__(self):
         self.details = PlayDetails(**self.details)
