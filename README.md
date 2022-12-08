@@ -11,11 +11,11 @@ This is a educational project so no commercial use.
 This package and its authors are not affiliated with MLB or any MLB team. This API wrapper interfaces with MLB's Stats API. Use of MLB data is subject to the notice posted at http://gdx.mlb.com/components/copyright.txt.
 
 ## Installation
-```
+```python
 python3 -m pip install -i https://test.pypi.org/simple/ python-mlb-statsapi
 ```
 ## Usage
-```
+```python
 python3
 >>> mlb = mlbstatsapi.Mlb()
 >>> mlb.get_people_id("Ty France")
@@ -97,27 +97,27 @@ NOTE: Stat types and groups are case sensitive
 
 #### Player Stats
 Get the Id(s) of the players you want stats for and set stat types and groups.
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> player = mlb.get_player_id("Ty France")
 >>> types = ['season`, `career` ]
 >>> groups = ['hitting', 'pitching]
 ```
 Use player.id and stat types and groups to return a stats dictionary
-```
+```python
 >>> stat_dict = mlb.get_player_stats(player.id, stats=types, groups=groups )
 >>> season_hitting_stat = stat_dict['hitting']['season']
 >>> career_pitching_stat = stat_dict['pitching']['career']
 ```
 Print season hitting stats
-```
+```python
 >>> for attribute, value in season_hitting_stat.stat.__dict__.items():
 ...     print(attribute, value)
 >>>
 ```
 #### Team stats
 Get the Team Id(s)
-```
+```python
 python3
 >>> mlb = mlbstatsapi.Mlb()
 >>> team = mlb.get_team_id('Seattle Mariners')
@@ -125,18 +125,18 @@ python3
 [136]
 ```
 Set the stat types and groups.
-```
+```python
 >>> types = ['season', 'seasonAdvanced']
 >>> groups = ['hitting']
 ```
 Use team.id and the stat types and groups to return season hitting stats
-```
+```python
 stats = mlb.get_team_stats(team.id, stats=types, groups=groups)
 season_hitting = stats['hitting']['season']
 advanced_hitting = stats['hitting']['seasonadvanced']
 ```
 Print season and seasonadvanced stats
-```
+```python
 >>> for attribute, value in season_hitting.stat.__dict__.items():
 ...     print(attribute, value)
 >>>
@@ -146,52 +146,52 @@ Print season and seasonadvanced stats
 ### More stats examples
 #### Expected Stats
 Get player Id's
-```
+```python
 >>> player = mlb.get_player_id('Ty France')
 ```
 Set the stat type and group
-```
+```python
 >>> stats = ['expectedStatistics']
 >>> group = ['hitting']
 ```
 Get Stats
-```
+```python
 >>> stats = mlb.get_player_stats(player, stats=stats, groups=group)
 >>> expectedstats = stats['hitting']['expectedstatistics']
 ```
 
 #### hotColdZones
 Get player Id's
-```
+```python
 >>> hitter = mlb.get_player_id('Ty France')
 >>> pitcher = mlb.get_player_id('Shoei Ohtani')
 ```
 Set the stat types and groups
-```
+```python
 >>> type = ['hotColdZones']
 >>> hitting_group = ['hitting']
 >>> pitching_group = ['pitching']
 ```
 The stat groups pitching and hitting both return hotColdZones for a pitcher and hitter. hotColdZones are not assigned to a
 stat group because of issues related to the REST API. So hotColdZones will be assigned to the stat key in stats return dict.
-```
+```python
 >>> hitting_hotcoldzones = mlb.get_player_stats(hitter.id, stats=type, groups=hitting_group)
 >>> pitching_hotcoldzones = mlb.get_player_stats(pitcher.id, stats=type, groups=pitching_group)
 ```
 hotColdZones returns a list of the HotColdZones
-```
+```python
 >>> ty_france_hotcoldzones = hitting_hotcoldzones['stats']['hotcoldzones'][0]
 >>> shoei_ohtani_hotcoldzones = pitching_hotcoldzones['stats']['hotcoldzones'][0]
 ```
 Loop through the hotColdZone objects for Ty France
-```
+```python
 >>> for zone in ty_france_hotcoldzones:
 >>>     print(zone.zone)
 >>>     print(zone.value)
 >>>             
 ```
 Loop through the hotColdZone objects for Shoei Ohtani
-```
+```python
 >>> for zone in shoei_ohtani_hotcoldzones:
 >>>     print(zonecodes.zone)
 >>>     print(zonecodes.value)
@@ -199,32 +199,32 @@ Loop through the hotColdZone objects for Shoei Ohtani
 ```
 #### Passing params
 Get Team Ids
-```
+```python
 python3
 >>> mlb = mlbstatsapi.Mlb()
 >>> team = mlb.get_team_id('Seattle Mariners')
 ```
 Set the stat types and groups.
-```
+```python
 >>> types = ['season', 'seasonAdvanced']
 >>> groups = ['hitting']
 ```
 Pass season to get_team_stats()
-```
+```python
 stats = mlb.get_team_stats(team.id, stats=types, groups=groups, season=2018)
 
 season_hitting = stats['hitting']['season']
 advanced_hitting = stats['hitting']['seasonadvanced']
 ```
 season should be 2018
-```
-assertEqual(stats[season_hitting.season == 2018)
-assertEqual(stats[advanced_hitting.season == 2018)
+```python
+assertEqual(season_hitting.season == 2018)
+assertEqual(advanced_hitting.season == 2018)
 ```
 
 ### Gamepace examples
 Get pace of game metrics for specific sport, league or team.
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> season = 2021
 >>> gamepace = mlb.get_gamepace(season)
@@ -232,16 +232,16 @@ Get pace of game metrics for specific sport, league or team.
 
 ### Schedule Examples
 Get a schedule for given date
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> schedule = mlb.get_schedule_date('2022-10-13')
 ```
 Get ScheduleDates from Schedule
-```
+```python
 dates = schedule.dates
 ```
 Print Game status and Home and Away Teams
-```
+```python
 >>> for date in dates:
 ...     for game in date.games:
 ...             print(game.status)
@@ -250,12 +250,12 @@ Print Game status and Home and Away Teams
 ```
 ### Game Examples
 Get a Game for a given game id
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> game = mlb.get_game(662242)
 ```
 Get the weather for a game for a given game id
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> game = mlb.get_game(662242)
 >>> weather = game.gamedata.weather
@@ -265,7 +265,7 @@ Get the weather for a game for a given game id
 >>> print(weather.wind)
 ```
 Get the current status of a game for a given game id
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> game = mlb.get_game(662242)
 >>>
@@ -290,7 +290,7 @@ Get the current status of a game for a given game id
 >>> print ("Outs:", linescore.outs)
 ```
 Get the play by play, line score, and box score objects from a game
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> game = mlb.get_game(662242)
 >>>
@@ -300,26 +300,26 @@ Get the play by play, line score, and box score objects from a game
 ```
 #### Play by Play
 Get only the play by play for a given game id
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> playbyplay = mlb.get_play_by_play(662242)
 ```
 #### Line Score
 Get only the line score for a given game id
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> linescore = mlb.get_line_score(662242)
 ```
 #### Box Score
 Get only the box score for a given game id
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> boxscore = mlb.get_box_score(662242)
 ```
 
 ### People Examples
 Get all Players for a given sport id
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> sport_id = mlb.get_sport_id()
 >>> players = mlb.get_players(sport_id=sport_id)
@@ -327,14 +327,14 @@ Get all Players for a given sport id
 ...     print(player.id)
 ```
 Get a player id
-```
+```python
 >>> player_id = mlb.get_player_id("Ty France")
 >>> print(player_id[0])
 ```
 
 ### Team Examples
 Get a Team
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> team_ids = mlb.get_team_id("Seattle Mariners")
 >>> team_id = team_ids[0]
@@ -343,7 +343,7 @@ Get a Team
 >>> print(team.name)
 ```
 Get a Player Roster
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> team_id = 133
 >>> players = mlb.get_team_roster(team_id)
@@ -351,7 +351,7 @@ Get a Player Roster
         print(player.jerseynumber)
 ```
 Get a Coach Roster
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> team_id = 133
 >>> coaches = mlb.get_team_coaches(team_id)
@@ -361,13 +361,13 @@ Get a Coach Roster
 
 ### Draft Examples
 Get a draft for a year
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> draft_year = '2019'
 >>> draft = mlb.get_draft(draft_year)
 ```
 Get Players from Draft
-```
+```python
 >>> draftpicks = draft[0].picks
 >>> for draftpick in draftpicks:
 ...     print(draftpick.id)
@@ -376,7 +376,7 @@ Get Players from Draft
 
 ### Award Examples
 Get awards for a given award id
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> retiredjersy = self.mlb.get_awards(award_id='RETIREDUNI_108')
 >>> for recipient in retiredjersy.awards:
@@ -385,7 +385,7 @@ Get awards for a given award id
 
 ### Venue Examples
 Get a Venue
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> vevue_ids = mlb.get_venue_id('PNC Park')
 >>> venue_id = venue_ids[0]
@@ -396,7 +396,7 @@ Get a Venue
 
 ### Sport Examples
 Get a Sport
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> sport_ids = mlb.get_sport_id('Major League Baseball')
 >>> sport_id = sport_ids[0]
@@ -405,7 +405,7 @@ Get a Sport
 
 ### Division Examples
 Get a division
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> division = mlb.get_division(200)
 >>> print (division.name)
@@ -413,7 +413,7 @@ Get a division
 
 ### League Examples
 Get a league
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> league = mlb.get_league(103)
 >>> print (league.name)
@@ -421,7 +421,7 @@ Get a league
 
 ### Season Examples
 Get a Season
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> season = mlb.get_season(2018)
 >>> print (season.seasonid)
@@ -429,7 +429,7 @@ Get a Season
 
 ### Standings Examples
 Get a Standings
-```
+```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> standings = mlb.get_standings(103, 2018)
 ```
