@@ -266,7 +266,7 @@ Get the weather for a game for a given game id
 ```
 Get the current status of a game for a given game id
 ```python
->>> mlb = mlbstatsapi.Mlb()
+>>> mlb = mlbstatsapi.mlb()
 >>> game = mlb.get_game(662242)
 >>>
 >>> linescore = game.livedata.linescore
@@ -275,18 +275,18 @@ Get the current status of a game for a given game id
 >>> hometeamstatus = linescore.teams.home
 >>> awayteamstatus = linescore.teams.away
 >>>
->>> print("Home: ", hometeaminfo.franchiseName, hometeaminfo.clubName)
+>>> print("home: ", hometeaminfo.franchisename, hometeaminfo.clubname)
 >>> print("      runs:", hometeamstatus.runs)
 >>> print("      hits:", hometeamstatus.hits)
 >>> print("      errors:", hometeamstatus.errors)
->>> print("Away: ", awayteaminfo.franchiseName, awayteaminfo.clubName)
+>>> print("away: ", awayteaminfo.franchisename, awayteaminfo.clubname)
 >>> print("      runs:", awayteamstatus.runs)
 >>> print("      hits:", awayteamstatus.hits)
 >>> print("      errors:", awayteamstatus.errors)
 >>> print("")
->>> print("Inning:", linescore.inningHalf, linescore.currentInningOrdinal)
->>> print("Balls:", linescore.balls)
->>> print("Strikes:", linescore.strikes)
+>>> print("inning:", linescore.inninghalf, linescore.currentinningordinal)
+>>> print("balls:", linescore.balls)
+>>> print("strikes:", linescore.strikes)
 >>> print("Outs:", linescore.outs)
 ```
 Get the play by play, line score, and box score objects from a game
