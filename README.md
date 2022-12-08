@@ -100,8 +100,8 @@ Get the Id(s) of the players you want stats for and set stat types and groups.
 ```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> player = mlb.get_player_id("Ty France")
->>> types = ['season`, `career` ]
->>> groups = ['hitting', 'pitching]
+>>> types = ['season', 'career']
+>>> groups = ['hitting', 'pitching']
 ```
 Use player.id and stat types and groups to return a stats dictionary
 ```python
@@ -275,19 +275,19 @@ Get the current status of a game for a given game id
 >>> hometeamstatus = linescore.teams.home
 >>> awayteamstatus = linescore.teams.away
 >>>
->>> print ("Home: ", hometeaminfo.franchiseName, hometeaminfo.clubName)
->>> print ("      runs:", hometeamstatus.runs)
->>> print ("      hits:", hometeamstatus.hits)
->>> print ("      errors:", hometeamstatus.errors)
->>> print ("Away: ", awayteaminfo.franchiseName, awayteaminfo.clubName)
->>> print ("      runs:", awayteamstatus.runs)
->>> print ("      hits:", awayteamstatus.hits)
->>> print ("      errors:", awayteamstatus.errors)
->>> print ("")
->>> print ("Inning:", linescore.inningHalf, linescore.currentInningOrdinal)
->>> print ("Balls:", linescore.balls)
->>> print ("Strikes:", linescore.strikes)
->>> print ("Outs:", linescore.outs)
+>>> print("Home: ", hometeaminfo.franchiseName, hometeaminfo.clubName)
+>>> print("      runs:", hometeamstatus.runs)
+>>> print("      hits:", hometeamstatus.hits)
+>>> print("      errors:", hometeamstatus.errors)
+>>> print("Away: ", awayteaminfo.franchiseName, awayteaminfo.clubName)
+>>> print("      runs:", awayteamstatus.runs)
+>>> print("      hits:", awayteamstatus.hits)
+>>> print("      errors:", awayteamstatus.errors)
+>>> print("")
+>>> print("Inning:", linescore.inningHalf, linescore.currentInningOrdinal)
+>>> print("Balls:", linescore.balls)
+>>> print("Strikes:", linescore.strikes)
+>>> print("Outs:", linescore.outs)
 ```
 Get the play by play, line score, and box score objects from a game
 ```python
@@ -408,7 +408,7 @@ Get a division
 ```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> division = mlb.get_division(200)
->>> print (division.name)
+>>> print(division.name)
 ```
 
 ### League Examples
@@ -416,7 +416,7 @@ Get a league
 ```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> league = mlb.get_league(103)
->>> print (league.name)
+>>> print(league.name)
 ```
 
 ### Season Examples
@@ -424,7 +424,7 @@ Get a Season
 ```python
 >>> mlb = mlbstatsapi.Mlb()
 >>> season = mlb.get_season(2018)
->>> print (season.seasonid)
+>>> print(season.seasonid)
 ```
 
 ### Standings Examples
