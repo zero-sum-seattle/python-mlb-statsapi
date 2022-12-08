@@ -338,14 +338,45 @@ class Mlb:
 
         return teams
 
-    def get_team(self, team_id) -> Union[Team, None]:
+    def get_team(self, team_id, **params) -> Union[Team, None]:
         """
-        return the Team
+        Returns a team based on teamId.
 
         Parameters
         ----------
         team_id : int
-            Team id
+            Insert teamId to return a directory of team information for a 
+            particular club.
+
+        Other Parameters
+        ----------------
+        season : int
+            Insert year to return a directory of team information for a 
+            particular club in a specific season.
+        sportId : int
+            Insert a sportId to return a directory of team information for a 
+            particular club in a sport.
+        hydrate : str
+            Insert Hydration(s) to return data for any available team 
+            hydration. Format "league,venue"
+            Available Hydrations:
+                previousSchedule
+                nextSchedule
+                venue
+                social
+                deviceProperties
+                game(promotions)
+                game(atBatPromotions)
+                game(tickets)
+                game(atBatTickets)
+                game(sponsorships)
+                league
+                person
+                sport
+                division
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -366,7 +397,9 @@ class Mlb:
         Team
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}', 
+                                            ep_params=params)
+
         if 400 <= mlb_data.status_code <= 499:
             return None
 
@@ -410,6 +443,7 @@ class Mlb:
         >>> mlb.get_team_id("Oakland Athletics")
         [133]
         """
+        params['fields'] = 'teams,id,name'
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='teams', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
@@ -433,18 +467,47 @@ class Mlb:
         Parameters
         ----------
         team_id : int
-            Team id
+            teamId to return a directory of players based on roster status for
+            a particular club.
 
         Other Parameters
         ----------------
-        season : str
-            Insert year to return a directory of players based on roster status for a particular club in a specific season.
         rosterType : str
-            Insert teamId to return a directory of players based on roster status for a particular club.
-            rosterType's include 40Man, fullSeason, fullRoster, nonRosterInvitees, active, allTime,
+            Insert teamId to return a directory of players based on roster 
+            status for a particular club. rosterType's include 40Man, 
+            fullSeason, fullRoster, nonRosterInvitees, active, allTime,
             depthChart, gameday, and coach.
+        season : str
+            Insert year to return a directory of players based on roster 
+            status for a particular club in a specific season.
         date : str
-            Insert date to return a directory of players based on roster status for a particular club on a specific date.
+            Insert date to return a directory of players based on roster 
+            status for a particular club on a specific date.
+        hydrate : str
+            Insert Hydration(s) to return data for any available team 
+            hydration. The hydration for Teams contains "person" which has 
+            subhydrations Format "person(subHydration1, subHydrations2)"
+            Available Hydrations:
+                "person"
+                    Hydrations Available Through Person
+                    hydrations
+                    awards
+                    currentTeam
+                    team
+                    rosterEntries
+                    relatives
+                    transactions
+                    social
+                    education
+                    stats
+                    draft
+                    mixedFeed
+                    articles
+                    video
+                    xrefId
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -481,19 +544,22 @@ class Mlb:
 
     def get_team_coaches(self, team_id, **params) -> List[Coach]:
         """
-        return the team coach roster
+        Return a directory of coaches for a particular team.
 
         Parameters
         ----------
         team_id : int
-            Team id 
+            Insert teamId to return a directory of coaches for a given team.
 
         Other Parameters
         ----------------
         season : str
             Insert year to return a directory of players based on roster status for a particular club in a specific season.
         date : str
-            Insert date to return a directory of players based on roster status for a particular club on a specific date.           
+            Insert date to return a directory of players based on roster status for a particular club on a specific date.   
+        fields : str
+            Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute
+
         Returns
         -------
         list of Coaches
