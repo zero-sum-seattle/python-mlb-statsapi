@@ -11,12 +11,13 @@ class TestPitchingStats(unittest.TestCase):
         cls.al_team = 133
         cls.shoei_ohtani = 660271
         cls.utility_player = 647351
+        cls.ty_france = 664034
         cls.stats_200_blank = ('projected', 'projectedRos', 'standard', 'advanced', 'firstYearStats', 'lastYearStats',
         'vsOpponents', 'outsAboveAverage', 'tracking', 'availableStats', 'gameTypeStats', 'vsOpponents')
         cls.pitching = 'pitching'
         cls.stats_500 = ('careerStatSplits', 'metricLog', 'metricAverages', 'statSplits', 'statSplitsAdvanced')
         # these stat groups require a team with recent playoff appearences 
-        cls.stats_playoffs = ('byMonthPlayoffs', 'byDayOfWeekPlayoffs', 'homeAndAwayPlayoffs', 'winLossPlayoffs')
+        cls.stats_playoffs = ('byMonthPlayoffs', 'bydayofweekPlayoffs', 'homeAndAwayPlayoffs', 'winLossPlayoffs')
         # These stat groups require addition params passed like playerid or teamid
         cls.stats_require_params = ('vsTeam', 'vsTeam5Y', 'vsTeamTotal', 'vsPlayer', 'vsPlayerTotal', 'vsPlayer5Y')
         # These stat types should all return a stat split object for hitting and pitching stat groups
@@ -101,7 +102,7 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue(season_advanced.stat.strikeoutsper9)
         self.assertTrue(career_advanced.team)
 
-    def test_hitting_excepected_stats_player(self):
+    def test_pitching_excepected_stats_player(self):
         """mlb get stats should return pitching stats"""
         self.stats = ['expectedStatistics']
         self.group = ['pitching']
@@ -116,3 +117,134 @@ class TestPitchingStats(unittest.TestCase):
 
         # check for split objects
         self.assertTrue(stats['pitching']['expectedstatistics'])
+
+
+    def test_pitching_bydate_stats_player(self):
+        """mlb get stats should return pitching stats"""
+        self.stats = ['byDateRange', 'byDateRangeAdvanced']
+        self.group = ['pitching']
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('pitching' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['pitching']['bydaterange'])
+        self.assertTrue(stats['pitching']['bydaterangeadvanced'])
+
+    def test_pitching_bymonth_stats_player(self):
+        """mlb get stats should return pitching stats"""
+        self.stats = ['byMonth']
+        self.group = ['pitching']
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('pitching' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['pitching']['bymonth'])
+
+    def test_pitching_bydayofweek_stats_player(self):
+        """mlb get stats should return pitching stats"""
+        self.stats = ['byDayOfWeek']
+        self.group = ['pitching']
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('pitching' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['pitching']['bydayofweek'])
+
+    def test_pitching_vsplayer_stats_player(self):
+        """mlb get stats should return hitting stats"""
+        self.stats = ['vsPlayer']
+        self.group = ['pitching']
+        self.params = {'opposingPlayerId': 664034}
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('pitching' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['pitching']['vsplayer'])
+
+    def test_pitching_pitchlog_stats_player(self):
+        """mlb get stats should return hitting stats"""
+        self.stats = ['pitchLog']
+        self.group = ['pitching']
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('pitching' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['pitching']['pitchlog'])
+
+    def test_pitching_playlog_stats_player(self):
+        """mlb get stats should return hitting stats"""
+        self.stats = ['playLog']
+        self.group = ['pitching']
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('pitching' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['pitching']['playlog'])
+
+    def test_pitching_pitchArsenal_stats_player(self):
+        """mlb get stats should return hitting stats"""
+        self.stats = ['pitchArsenal']
+        self.group = ['pitching']
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('stats' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['stats']['pitcharsenal'])
+
+    def test_pitching_hotcoldzones_stats_player(self):
+        """mlb get stats should return hitting stats"""
+        self.stats = ['hotColdZones']
+        self.group = ['pitching']
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('stats' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['stats']['hotcoldzones'])

@@ -1772,6 +1772,8 @@ class Mlb:
         ----------------
         season : str
             Insert year to return team stats for a particular season, season=2018
+        opposingPlayerId : int
+            The opposing player Id for vsPlayer, vsPlayer5Y, and vsPlayerTotal
         eventType : str
             Notes for individual events for playLog, playlog can be filered by individual events.
             List of eventTypes can be found at https://statsapi.mlb.com/api/v1/eventTypes
