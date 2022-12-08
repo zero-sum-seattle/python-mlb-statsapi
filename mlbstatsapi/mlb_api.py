@@ -1681,7 +1681,7 @@ class Mlb:
                     continue
         return division_ids
 
-    def get_season(self, seasonid: str, sportid: int, **params) -> Season:
+    def get_season(self, seasonid: str, sportid: int = None, **params) -> Season:
         """
         return a season object for seasonid and sportid
 
@@ -1696,6 +1696,9 @@ class Mlb:
         ----------------
         withGameTypeDates : bool, optional
             Insert a withGameTypeDates to return season information for all gameTypes.
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
         
         Returns
         -------
@@ -1733,13 +1736,12 @@ class Mlb:
             Insert a sportId to return a directory of seasons for a specific sport.
         
         Other Parameters
-        ----------------
-        divisionId : int, optional
-            Insert divisionId to return a directory of seasons for a specific division.
-        leagueId : int, optional
-            Insert leagueId to return a directory of seasons in a specific league.
+        ----------------        
         withGameTypeDates : bool, optional
             Insert a withGameTypeDates to return season information for all gameTypes.
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -1780,16 +1782,23 @@ class Mlb:
         Parameters
         ----------
         sportid : int
-            Insert a sportId to return a directory of seasons for a specific sport.
+            Insert a sportId to return a directory of seasons for a specific 
+            sport.
 
         Other Parameters
         ----------------
         divisionId : int, optional
-            Insert divisionId to return a directory of seasons for a specific division.
+            Insert divisionId to return a directory of seasons for a specific 
+            division.
         leagueId : int, optional
-            Insert leagueId to return a directory of seasons in a specific league.
+            Insert leagueId to return a directory of seasons in a specific 
+            league.
         withGameTypeDates : bool, optional
-            Insert a withGameTypeDates to return season information for all gameTypes.
+            Insert a withGameTypeDates to return season information for all 
+            gameTypes.
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
             
         Returns
         -------
