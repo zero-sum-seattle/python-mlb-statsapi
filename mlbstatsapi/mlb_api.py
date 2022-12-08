@@ -1563,12 +1563,12 @@ class Mlb:
 
     def get_division(self, divisionid) -> Union[Division, None]:
         """
-        return the Division
+        Returns a division based on divisionId,
 
         Parameters
         ----------
         divisonid : int
-            Division id
+            divisionId to return a directory of division(s) for a specific division.
 
         Returns
         -------
@@ -1595,9 +1595,21 @@ class Mlb:
             for division in mlb_data.data['divisions']:
                 return Division(**division)
 
-    def get_divisions(self) -> List[Division]:
+    def get_divisions(self, **params) -> List[Division]:
         """
         return all divisons
+
+        Other Parameters
+        ----------------
+        divisionId : str
+            Insert divisionId(s) to return a directory of division(s) for a 
+            specific division. Format '200,201'
+        leagueId : int
+            Insert leagueId to return a directory of division(s) for all 
+            divisions in a specific league.
+        sportId : int
+            Insert a sportId to return a directory of division(s) for all 
+            divisions in a specific sport.
 
         Returns
         -------
@@ -1616,7 +1628,7 @@ class Mlb:
         [Divison, Division, Division]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
@@ -1628,7 +1640,7 @@ class Mlb:
         return divisions
 
     def get_division_id(self, division_name, 
-                        search_key: str = 'name', **params) -> List[Division]:
+                        search_key: str = 'name') -> List[Division]:
         """
         return divsion id
 
@@ -1654,7 +1666,7 @@ class Mlb:
         [200]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions', ep_params=params)
+        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions')
         if 400 <= mlb_data.status_code <= 499:
             return []
         
