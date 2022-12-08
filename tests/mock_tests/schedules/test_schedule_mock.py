@@ -41,7 +41,7 @@ class TestScheduleMock(unittest.TestCase):
 
     def test_get_schedule(self, m ):
         """get_schedule should return schedules for date, starDate, endDate"""
-        m.get('https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=04/07/2022&endDate=04/07/2022', json=self.mock_schedule,
+        m.get('https://statsapi.mlb.com/api/v1/schedule?date=04%2F07%2F2022&sportId=1', json=self.mock_schedule,
         status_code=200)
         self.date = '04/07/2022'
         self.sport_id = 1
@@ -59,7 +59,7 @@ class TestScheduleMock(unittest.TestCase):
         self.sport_id = 1
         self.start_date = '10/10/2022'
         self.end_date = '10/13/2022'
-        schedule = self.mlb.get_schedule(date=self.start_date, end_date=self.end_date, sport_id=self.sport_id)
+        schedule = self.mlb.get_schedule(start_date=self.start_date, end_date=self.end_date, sport_id=self.sport_id)
 
         # get_schedule should return Schedule object
         self.assertIsInstance(schedule, Schedule)
@@ -76,7 +76,7 @@ class TestScheduleMock(unittest.TestCase):
         self.start_date = '10/10/2022'
         self.end_date = '10/13/2022'
         
-        scheduled_games = self.mlb.get_scheduled_games_by_date(date=self.start_date, end_date=self.end_date, sport_id=1)
+        scheduled_games = self.mlb.get_scheduled_games_by_date(start_date=self.start_date, end_date=self.end_date, sport_id=1)
 
         # scheduled games should not be none
         self.assertIsNotNone(scheduled_games)

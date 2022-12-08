@@ -1346,7 +1346,7 @@ class Mlb:
             for sport in mlb_data.data['sports']:
                 return Sport(**sport)
 
-    def get_sports(self, sport_id, **params) -> List[Sport]:
+    def get_sports(self, **params) -> List[Sport]:
         """
         return all sports
 
@@ -1354,12 +1354,6 @@ class Mlb:
         -------
         list of Sports
             returns a list of sport objects
-
-        Parameters
-        ----------
-        sport_id : int
-            Insert a sportId to return a directory of sport(s).
-            For a list of all sportIds: http://statsapi.mlb.com/api/v1/sports
 
         Other Parameters
         ----------------
@@ -1417,7 +1411,7 @@ class Mlb:
         [1]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='sports', ep_params=params)
+        mlb_data = self._mlb_adapter_v1.get(endpoint='sports')
         if 400 <= mlb_data.status_code <= 499:
             return []
 
