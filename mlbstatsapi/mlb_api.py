@@ -1417,7 +1417,7 @@ class Mlb:
         [1]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='sports, ep_params=params')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='sports', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
@@ -1433,9 +1433,20 @@ class Mlb:
 
         return sport_ids
 
-    def get_league(self, league_id) -> Union[League, None]:
+    def get_league(self, league_id, **params) -> Union[League, None]:
         """
         return league
+
+        Parameters
+        ----------
+        league_id : int
+            leagueId to return league information for a specific league
+
+        Other Parameters
+        ----------------
+        fields : str
+            Format: Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute    
 
         Returns
         -------
@@ -1453,7 +1464,7 @@ class Mlb:
         [League]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'leagues/{league_id}')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'leagues/{league_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
 
@@ -1461,13 +1472,28 @@ class Mlb:
             for league in mlb_data.data['leagues']:
                 return League(**league)
 
-    def get_leagues(self) -> List[League]:
+    def get_leagues(self, **params) -> List[League]:
         """
         return all leagues
 
         Returns
         -------
         list of Leagues
+
+        Other Parameters
+        ----------------
+        league_id : str
+            leagueId(s) to return league information for specific leagues.
+            Format '103,104'
+        sportId : int
+            Insert sportId to return league information for a specific sport.
+            For a list of all sportIds: http://statsapi.mlb.com/api/v1/sports   
+        seasons : str
+            Insert year(s) to return league information for a specific season. 
+            Format '2017,2018'
+        fields : str
+            Format: Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute    
 
         See Also
         --------
@@ -1481,7 +1507,7 @@ class Mlb:
         [League, League, League]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='leagues')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='leagues', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
@@ -1517,6 +1543,8 @@ class Mlb:
         >>> mlb.get_league_id('American League')
         [103]
         """
+        # Used to reduce the amount of unneccessary data requested from api
+        params['fields'] = 'leagues,id,name'
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='leagues', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
