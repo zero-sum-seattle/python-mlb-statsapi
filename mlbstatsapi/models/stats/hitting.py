@@ -251,6 +251,8 @@ class HittingWinLoss(Stat):
     ----------
     iswin : bool
         the bool to hold if a win or not for hitting winLoss
+    stat : dict
+        the hitting split stat
     """
     _stat = ['winLoss']
     iswin: bool
@@ -263,12 +265,14 @@ class HittingWinLoss(Stat):
 @dataclass(kw_only=True)
 class HittingWinLossPlayoffs(Stat):
     """
-    A class to represent a hitting winLoss statistic
+    A class to represent a hitting winLossPlayoffs statistic
 
     Attributes
     ----------
     iswin : bool
         the bool to hold if a win or not for hitting winLoss
+    stat : dict
+        the hitting split stat
     """
     _stat = ['winLossPlayoffs']
     iswin: bool
@@ -287,6 +291,8 @@ class HittingHomeAndAway(Stat):
     ----------
     ishome : bool
         the bool to hold if it ishome hitting homeAndAway
+    stat : dict
+        the hitting split stat
     """
     _stat = ['homeAndAway']
     ishome: bool
@@ -305,6 +311,8 @@ class HittingHomeAndAwayPlayoffs(Stat):
     ----------
     ishome : bool
         the bool to hold if it ishome hitting homeAndAway
+    stat : dict
+        the hitting split stat
     """
     _stat = ['homeAndAwayPlayoffs']
     ishome: bool
@@ -316,11 +324,12 @@ class HittingHomeAndAwayPlayoffs(Stat):
 @dataclass(kw_only=True)
 class HittingCareer(Stat):
     """
-    A class to represent a hitting career or careerPlayoffs statistic
+    A class to represent a hitting career, careerRegularSeason or careerPlayoffs statistic
 
-    #TODO Note that stat types career and careerregularseason, and careerplayoffs return same stat type of career
     Attributes
     ----------
+    stat : dict
+        the hitting split stat
     """
     _stat = ['career', 'careerRegularSeason', 'careerPlayoffs']
     stat: Union[SimpleHittingSplit, dict]
@@ -335,6 +344,8 @@ class HittingSeason(Stat):
 
     Attributes
     ----------
+    stat : dict
+        the hitting split stat
     """
     _stat = ['season']
     stat: Union[SimpleHittingSplit, dict]
@@ -345,10 +356,12 @@ class HittingSeason(Stat):
 @dataclass(kw_only=True)
 class HittingSingleSeason(Stat):
     """
-    A class to represent a hitting season statistic
+    A class to represent a hitting statsSingleSeason statistic
 
     Attributes
     ----------
+    stat : dict
+        the hitting split stat
     """
     _stat = ['statsSingleSeason']
     stat: Union[SimpleHittingSplit, dict]
@@ -359,10 +372,12 @@ class HittingSingleSeason(Stat):
 @dataclass(kw_only=True)
 class HittingSeasonAdvanced(Stat):
     """
-    A class to represent a hitting season statistic
+    A class to represent a hitting seasonAdvanced statistic
 
     Attributes
     ----------
+    stat : dict
+        the hitting split stat
     """
     _stat = ['seasonAdvanced']
     stat: Union[AdvancedHittingSplit, dict]
@@ -668,7 +683,6 @@ class HittingByMonth(Stat):
     """
     _stat = ['byMonth']
     month: int
-    gamesplayed: int
     stat: Union[SimpleHittingSplit, dict]
     
     def __post_init__(self):
@@ -687,7 +701,6 @@ class HittingByMonthPlayoffs(Stat):
     """
     _stat = ['byMonthPlayoffs']
     month: int
-    gamesplayed: int
     stat: Union[SimpleHittingSplit, dict]
     
     def __post_init__(self):

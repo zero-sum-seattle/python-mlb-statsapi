@@ -103,7 +103,7 @@ class SimpleCatchingSplit:
 @dataclass(kw_only=True)
 class CatchingSeason(Stat):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching season statistic
 
     Attributes
     ----------
@@ -118,7 +118,7 @@ class CatchingSeason(Stat):
 @dataclass(kw_only=True)
 class CatchingSingleSeason(Stat):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching statsSingleSeason statistic
 
     Attributes
     ----------
@@ -132,7 +132,7 @@ class CatchingSingleSeason(Stat):
 @dataclass(kw_only=True)
 class CatchingYearByYearPlayoffs(Stat):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching yearByYearPlayoffs statistic
 
     Attributes
     ----------
@@ -146,7 +146,7 @@ class CatchingYearByYearPlayoffs(Stat):
 @dataclass(kw_only=True)
 class CatchingYearByYear(Stat):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching yearByYear statistic
 
     Attributes
     ----------
@@ -160,7 +160,7 @@ class CatchingYearByYear(Stat):
 @dataclass(kw_only=True)
 class CatchingProjected(Stat):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching projectedRos statistic
 
     Attributes
     ----------
@@ -174,7 +174,7 @@ class CatchingProjected(Stat):
 @dataclass(kw_only=True)
 class CatchingCareer(Stat):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching career statistic
 
     Attributes
     ----------
@@ -188,7 +188,7 @@ class CatchingCareer(Stat):
 @dataclass(kw_only=True)
 class CatchingCareerRegularSeason(Stat):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching careerRegularSeason statistic
 
     Attributes
     ----------
@@ -202,7 +202,7 @@ class CatchingCareerRegularSeason(Stat):
 @dataclass(kw_only=True)
 class CatchingGameLog(Stat):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching gameLog statistic
 
     Attributes
     ----------
@@ -217,7 +217,7 @@ class CatchingGameLog(Stat):
 @dataclass(kw_only=True)
 class CatchingLastXGames(Stat):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching lastXGames statistic
 
     Attributes
     ----------
@@ -231,7 +231,7 @@ class CatchingLastXGames(Stat):
 @dataclass(kw_only=True)
 class CatchingByDateRange(Stat, SimpleCatchingSplit):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching byDateRange statistic
 
     Attributes
     ----------
@@ -245,7 +245,7 @@ class CatchingByDateRange(Stat, SimpleCatchingSplit):
 @dataclass(kw_only=True)
 class CatchingByDayOfWeek(Stat):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching byDayOfWeek statistic
 
     Attributes
     ----------
@@ -260,7 +260,7 @@ class CatchingByDayOfWeek(Stat):
 @dataclass(kw_only=True)
 class CatchingHomeAndAway(Stat):
     """
-    A class to represent a catching winLoss statistic
+    A class to represent a catching homeAndAway statistic
 
     Attributes
     ----------

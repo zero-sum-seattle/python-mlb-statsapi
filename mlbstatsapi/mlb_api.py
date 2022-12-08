@@ -1747,6 +1747,8 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
+        splits = {}
+
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
             groups = mlb_module.build_group_list(params)
             splits = mlb_module.create_split_data(mlb_data.data['stats'], groups)
@@ -1772,6 +1774,8 @@ class Mlb:
         ----------------
         season : str
             Insert year to return team stats for a particular season, season=2018
+        opposingPlayerId : int
+            The opposing player Id for vsPlayer, vsPlayer5Y, and vsPlayerTotal
         eventType : str
             Notes for individual events for playLog, playlog can be filered by individual events.
             List of eventTypes can be found at https://statsapi.mlb.com/api/v1/eventTypes
@@ -1847,6 +1851,8 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return {}
+
+        splits = {}
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
             groups = mlb_module.build_group_list(params)
@@ -1951,6 +1957,8 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return {}
+
+        splits = {}
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
             groups = mlb_module.build_group_list(params)

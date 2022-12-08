@@ -159,7 +159,22 @@ Get Stats
 >>> stats = mlb.get_player_stats(player, stats=stats, groups=group)
 >>> expectedstats = stats['hitting']['expectedstatistics']
 ```
-
+#### vsPlayer
+Get pitcher and batter player Ids
+```
+>>> hitter = mlb.get_player_id('Ty France')
+>>> pitcher = mlb.get_player_id('Shoei Ohtani')
+```
+Set stat type, stat groups, and params
+```
+>>> stats = ['vsPlayer']
+>>> group = ['hitting']
+>>> params = {'opposingPlayerId': pitcher.id}
+```
+Get stats
+```
+>>> stats = self.mlb.get_player_stats(self.ty_france, stats=self.stats, groups=self.group, **self.params)
+```
 #### hotColdZones
 Get player Id's
 ```
