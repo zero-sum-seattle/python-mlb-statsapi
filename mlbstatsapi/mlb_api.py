@@ -783,7 +783,7 @@ class Mlb:
         if 'dates' in mlb_data.data and mlb_data.data['dates']:
             return Schedule(**mlb_data.data)
 
-    def get_scheduled_games_by_date(self, date: str,
+    def get_scheduled_games_by_date(self, date: str = None,
                                     start_date: str = None, 
                                     end_date: str = None,
                                     sport_id: int = 1, 
@@ -858,14 +858,38 @@ class Mlb:
 
         return games
 
-    def get_game(self, game_id) -> Union[Game, None]:
+    def get_game(self, game_id, **params) -> Union[Game, None]:
         """
-        return the game for a specific game id
+        Return the game for a specific game id
+        Gumbo Live Feed for a specific gamePk.
 
         Parameters
         ----------
         game_id : int
-            Game id number
+            Insert gamePk to return the GUMBO live feed for a specific game.
+            
+        Other Parameters
+        ----------------
+        timecode : str
+            Use this parameter to return a snapshot of the data at the 
+            specified time. Format: YYYYMMDD_HHMMSS.
+            Return timecodes from timecodes endpoint 
+            https://statsapi.mlb.com/api/v1.1/game/534196/feed/live/timestamps
+        hydrate : str
+            Insert hydration(s) to return putout credits or defensive 
+            positioning data for all plays in a particular game. 
+            Format 'credits,alignment,flags'
+            Available Hydrations:
+                credits
+                alignment
+                flags
+                officials
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+            !!! To use this we would need to make almost every !!!
+            !!!    data class attr optonal? Do we want this?   !!!
 
         Returns
         -------
@@ -884,14 +908,14 @@ class Mlb:
         Game
         """
 
-        mlb_data = self._mlb_adapter_v1_1.get(endpoint=f'game/{game_id}/feed/live')
+        mlb_data = self._mlb_adapter_v1_1.get(endpoint=f'game/{game_id}/feed/live', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
 
         if 'gamepk' in mlb_data.data and mlb_data.data['gamepk'] == game_id:
             return Game(**mlb_data.data)
 
-    def get_game_play_by_play(self, game_id) -> Union[Plays, None]:
+    def get_game_play_by_play(self, game_id, **params) -> Union[Plays, None]:
         """
         return the playbyplay of a game for a specific game id
 
@@ -899,6 +923,18 @@ class Mlb:
         ----------
         game_id : int
             Game id number
+
+        Other Parameters
+        ----------------
+        timecode : int
+            Use this parameter to return a snapshot of the data at the 
+            specified time. Format: YYYYMMDD_HHMMSS
+        fields :
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+            !!! To use this we would need to make almost every !!!
+            !!!    data class attr optonal? Do we want this?   !!!
 
         Returns
         -------
@@ -917,14 +953,14 @@ class Mlb:
         Plays
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/playByPlay')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/playByPlay', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
 
         if 'allplays' in mlb_data.data and mlb_data.data['allplays']:
             return Plays(**mlb_data.data)
 
-    def get_game_line_score(self, game_id) -> Union[Linescore, None]:
+    def get_game_line_score(self, game_id, **params) -> Union[Linescore, None]:
         """
         return the Linescore of a game for a specific game id
 
@@ -932,6 +968,18 @@ class Mlb:
         ----------
         game_id : int
             Game id number
+
+        Other Parameters
+        ----------------
+        timecode : int
+            Use this parameter to return a snapshot of the data at the 
+            specified time. Format: YYYYMMDD_HHMMSS
+        fields :
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+            !!! To use this we would need to make almost every !!!
+            !!!    data class attr optonal? Do we want this?   !!!
 
         Returns
         -------
@@ -950,12 +998,12 @@ class Mlb:
         Linescore
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/linescore')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/linescore', ep_params=params)
 
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
             return Linescore(**mlb_data.data)
 
-    def get_game_box_score(self, game_id) -> Union[BoxScore, None]:
+    def get_game_box_score(self, game_id, **params) -> Union[BoxScore, None]:
         """
         return the boxscore of a game for a specific game id
 
@@ -963,6 +1011,18 @@ class Mlb:
         ----------
         game_id : int
             Game id number
+
+        Other Parameters
+        ----------------
+        timecode : int
+            Use this parameter to return a snapshot of the data at the 
+            specified time. Format: YYYYMMDD_HHMMSS
+        fields :
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+            !!! To use this we would need to make almost every !!!
+            !!!    data class attr optonal? Do we want this?   !!!
 
         Returns
         -------
@@ -981,7 +1041,7 @@ class Mlb:
         BoxScore
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/boxscore')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/boxscore', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
 
@@ -989,7 +1049,8 @@ class Mlb:
             return BoxScore(**mlb_data.data)
 
 
-    def get_game_ids(self, date: str, 
+    def get_game_ids(self, date: str = None,
+                     start_date: str = None,
                      end_date: str = None,
                      sport_id: int = 1,
                     **params) -> List[int]:
@@ -999,6 +1060,8 @@ class Mlb:
         Parameters
         ----------
         date : str 
+            date, 'yyyy-mm-dd'
+        start_date : str
             start date, 'yyyy-mm-dd'
         end_date : str
             end date, 'yyyy-mm-dd'
@@ -1022,12 +1085,13 @@ class Mlb:
         >>> mlb = Mlb()
         >>> mlb.get_game_ids()
         """
-        if not end_date:
-            params['endDate'] = date
-            params['startDate'] = date
-        else:
-            params['startDate'] = date
+        if start_date and end_date:
+            params['startDate'] = start_date
             params['endDate'] = end_date
+        elif date and not (start_date or end_date):
+            params['date'] = date
+        else:
+            return None
 
         params['sportId'] = sport_id
 
