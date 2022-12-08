@@ -240,6 +240,8 @@ class Mlb:
         >>> mlb.get_people_id("Ty France")
         [664034]
         """
+        # Used to reduce the amount of unneccessary data requested from api
+        params['fields'] = 'people,id,fullName'
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
@@ -443,6 +445,7 @@ class Mlb:
         >>> mlb.get_team_id("Oakland Athletics")
         [133]
         """
+        # Used to reduce the amount of unneccessary data requested from api
         params['fields'] = 'teams,id,name'
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='teams', ep_params=params)
