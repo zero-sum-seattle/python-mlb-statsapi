@@ -40,7 +40,7 @@ class Mlb:
     logger: logging.Loger
         logger
     """
-    def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
+    def __init__(self, hostname: str = 'statsapi.mlb.com', logger: logging.Logger = None):
         self._mlb_adapter_v1 = MlbDataAdapter(hostname, 'v1', logger)
         self._mlb_adapter_v1_1 = MlbDataAdapter(hostname, 'v1.1', logger)
         self._logger = logger or logging.getLogger(__name__)
@@ -53,7 +53,10 @@ class Mlb:
         Parameters
         ----------
         sport_id : int
-            sportid for players defaults to 1
+            Insert a sportId to return player information for a particular 
+            sport. For a list of all sportIds: 
+            http://statsapi.mlb.com/api/v1/sports
+            !!! sportid for players defaults to 1 !!!
 
         Returns
         -------
@@ -64,8 +67,10 @@ class Mlb:
         ----------------
         season : str
             Insert year to return player information for a particular season.
-        sportId : str
-            Insert a sportId to return player information for a particular sport.
+        gameType : str
+            Insert gameType to return player information for a particular 
+            gameType. Find available game types at 
+            https://statsapi.mlb.com/api/v1/gameTypes
 
         See Also
         --------
@@ -92,12 +97,14 @@ class Mlb:
 
     def get_person(self, player_id, **params) -> Union[Person, None]:
         """
-        return a person
+        This endpoint returns statistical data and biographical information 
+        for a player,coach or umpire based on playerId.
 
         Parameters
         ----------
-        player_id : int
-            Person id
+        person_id : int
+            Insert personId for a specific player, coach or umpire based on
+            playerId..
 
         Returns
         -------
@@ -124,17 +131,98 @@ class Mlb:
             for person in mlb_data.data['people']:
                 return Person(**person)
 
+    def get_persons(self, person_ids, **params) -> List[Person]:
+        """
+        This endpoint returns statistical data and biographical information 
+        for a players,umpires, and coaches based on playerId.
+
+        Parameters
+        ----------
+        person_ids : str
+            Insert personId(s) to return biographical information for a 
+            specific player. Format '605151,592450'
+
+        Other Parameters
+        ----------------
+        hydrate : str
+            Insert hydration(s) to return statistical or biographical data 
+            for a specific player(s). 
+            Format stats(group=["statGroup1","statGroup2"],
+                         type=["statType1","statType2"]).
+            Available Hydrations:
+                hydrations
+                # awards
+                currentTeam
+                team
+                rosterEntries
+                relatives
+                transactions
+                social
+                education
+                # stats
+                draft
+                mixedFeed
+                articles
+                videos
+                xrefId
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        Person
+            Returns a Person
+
+        See Also
+        --------
+        Mlb.get_people : Return a list of People from sport id.
+        Mlb.get_people_id : Return person id from name.
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_person(660271)
+        Person
+        """
+        if 'stats' in params:
+            return []
+        elif 'awards' in params:
+            return []
+
+        params['personIds'] = person_ids
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_ids}')
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        person_list = []
+
+        if 'people' in mlb_data.data and mlb_data.data['people']:
+            for person in mlb_data.data['people']:
+                person_list.append(Person(**person))
+
     def get_people_id(self, fullname, sport_id: int = 1, 
                       search_key: str = 'fullname', **params) -> List[int]:
         """
-        return a person Id
+        Returns specific player information based on players fullname
 
         Parameters
         ----------
         fullname : str
             Person full name
         sport_id : int
+            Insert sportId to return player information for particular sport.
             sportid for players defaults to 1
+
+        Other Parameters
+        ----------------
+        season : int
+            Insert year to return player information for a particular season.
+        gameType : str
+            Insert gameType to return player information for a particular 
+            gameType. Find available game types at 
+            https://statsapi.mlb.com/api/v1/gameTypes
 
         Returns
         -------
@@ -168,14 +256,14 @@ class Mlb:
                     continue
         return player_ids
 
-    def get_teams(self, sport_id: int = 1, **params) -> List[Team]:
+    def get_teams(self, **params) -> List[Team]:
         """
         return the all Teams
 
         Parameters
         ----------
         sport_id : int
-            Insert sportId to return team information for a particular sportId.
+            Insert sportId to return team information for a particular sportId
 
         Other Parameters
         ----------------
@@ -183,6 +271,40 @@ class Mlb:
             Insert year to return team information for a particular season.
         leagueIds : int
             Insert leagueId to return team information for particular league.
+        activeStatus : str
+            Insert activeStatus to populate a teams based on active/inactive 
+            status for a given season. There are three status types: Y, N, B
+        allStarStatuses : str
+            Insert allStarStatuses to populate a teams based on Allstar status
+            for a given season. There are two status types: Y and N
+        sportIds : str
+            Insert sportId to return team information for a particular sportId
+            Usage: '1' or '1,11,12'
+        gameType : str
+            Insert gameType to return team information for a particular 
+            gameType. For a list of all gameTypes: 
+            https://statsapi.mlb.com/api/v1/gameTypes
+        hydrate : str
+            Insert Hydration(s) to return data for any available team 
+            hydration. Format "league,venue"
+            Available Hydrations:
+                previousSchedule
+                nextSchedule
+                venue
+                social
+                deviceProperties
+                game(promotions)
+                game(atBatPromotions)
+                game(tickets)
+                game(atBatTickets)
+                game(sponsorships)
+                league
+                person
+                sport
+                division
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -202,7 +324,9 @@ class Mlb:
         >>> mlb.get_teams()
         [Team, Team, Team]
         """
-        params['sportId'] = sport_id
+        if 'sportId' not in params:
+            params['sportId'] = 1
+
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
