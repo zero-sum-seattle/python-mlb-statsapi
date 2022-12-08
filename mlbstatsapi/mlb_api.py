@@ -1305,13 +1305,21 @@ class Mlb:
                     continue
         return venue_ids
 
-    def get_sport(self, sport_id: int) -> Union[Sport, None]:
+    def get_sport(self, sport_id: int, **params) -> Union[Sport, None]:
         """
         return sport object from sportid
 
         Parameters
         ----------
         sport_id : int
+            Insert a sportId to return a directory of sport(s).
+            For a list of all sportIds: http://statsapi.mlb.com/api/v1/sports
+
+        Other Parameters
+        ----------------
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -1330,7 +1338,7 @@ class Mlb:
         Sport
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
 
@@ -1338,7 +1346,7 @@ class Mlb:
             for sport in mlb_data.data['sports']:
                 return Sport(**sport)
 
-    def get_sports(self, ) -> List[Sport]:
+    def get_sports(self, sport_id, **params) -> List[Sport]:
         """
         return all sports
 
@@ -1346,6 +1354,18 @@ class Mlb:
         -------
         list of Sports
             returns a list of sport objects
+
+        Parameters
+        ----------
+        sport_id : int
+            Insert a sportId to return a directory of sport(s).
+            For a list of all sportIds: http://statsapi.mlb.com/api/v1/sports
+
+        Other Parameters
+        ----------------
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         See Also
         --------
@@ -1359,7 +1379,7 @@ class Mlb:
         [Sport, Sport, Sport]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='sports')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='sports', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
@@ -1371,7 +1391,7 @@ class Mlb:
         return sports
 
     def get_sport_id(self, sport_name: str,
-                     search_key: str = 'name', **params) -> List[int]:
+                     search_key: str = 'name') -> List[int]:
         """
         return sport id 
 
@@ -1397,7 +1417,7 @@ class Mlb:
         [1]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='sports')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='sports, ep_params=params')
         if 400 <= mlb_data.status_code <= 499:
             return []
 
