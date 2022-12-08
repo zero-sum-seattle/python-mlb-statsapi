@@ -162,7 +162,7 @@ class FieldingSeason(Stat, SimpleFieldingSplit):
 @dataclass(kw_only=True)
 class FieldingSingleSeason(Stat, SimpleFieldingSplit):
     """
-    A class to represent a fielding season statistic
+    A class to represent a fielding statsSingleSeason statistic
 
     Attributes
     ----------
@@ -200,7 +200,7 @@ class FieldingCareer(Stat, SimpleFieldingSplit):
 @dataclass(kw_only=True)
 class FieldingCareerPlayoffs(Stat, SimpleFieldingSplit):
     """
-    A class to represent a fielding career playoff statistic
+    A class to represent a fielding careerPlayoffs statistic
 
     Attributes
     ----------
@@ -281,7 +281,7 @@ class FieldingYearByYearAdvanced(Stat, SimpleFieldingSplit):
 @dataclass(kw_only=True)
 class FieldingYearByYearPlayoffs(Stat, SimpleFieldingSplit):
     """
-    A class to represent a fielding season statistic
+    A class to represent a fielding yearByYearPlayoffs statistic
 
     Attributes
     ----------
@@ -344,12 +344,10 @@ class FieldingByDayOfWeek(Stat, SimpleFieldingSplit):
 @dataclass(kw_only=True)
 class FieldingByDateRangeAdvanced(Stat, SimpleFieldingSplit):
     """
-    A class to represent a fielding byMonth stat
+    A class to represent a fielding byDateRangeAdvanced stat
 
     Attributes
     ----------
-    position : Position
-        The position of the player
     """
     _stat = ['byDateRangeAdvanced']
     position: Union[Position, dict] = field(default_factory=dict)

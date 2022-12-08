@@ -7,6 +7,24 @@ from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.data import CodeDesc
 
+@dataclass
+class PitchArsenalSplit:
+    """
+    A class to represent a pitching pitch arsenal split 
+
+    Attributes
+    ----------
+    percentage : float
+    count : int
+    totalPitches : int
+    averageSpeed : float
+    type : Union[CodeDesc, dict]
+    """
+    percentage: float
+    count: int
+    totalpitches: int
+    averagespeed: float
+    type: Union[CodeDesc, dict]
 
 @dataclass
 class ExpectedStatistics:
@@ -89,14 +107,10 @@ class PitchArsenal(Stat):
     ----------
     """
     _stat = ['pitchArsenal']
-    averagespeed: float
-    count:  int
-    percentage: float
-    totalpitches: int
-    type: Union[CodeDesc, dict]
+    stat: Union[PitchArsenalSplit, dict]
 
     def __post_init__(self):
-        self.type = CodeDesc(**self.type) if self.type else self.type
+        self.stat = PitchArsenalSplit(**self.stat)
 
 
 @dataclass(kw_only=True)

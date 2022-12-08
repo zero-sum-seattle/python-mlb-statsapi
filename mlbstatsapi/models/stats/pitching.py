@@ -8,6 +8,7 @@ from mlbstatsapi.mlb_module import merge_keys
 from mlbstatsapi.models.data import (
     Count,
     PlayDetails,
+    CodeDesc
 )
 
 from .stats import Stat, Sabermetrics, ExpectedStatistics
@@ -364,6 +365,8 @@ class AdvancedPitchingSplit:
     bequeathedrunnersscored: Optional[int] = None
 
 
+
+
 @dataclass(kw_only=True)
 class PitchingSabermetrics(Stat):
     """
@@ -544,6 +547,18 @@ class PitchingPlay:
 
     Attributes
     ----------
+    details : dict
+        a dict containing PlayDetails
+    count : dict
+        a dict containing the pitch Count
+    pitchnumber : int
+        pitcher number
+    atbatnumber : int
+        at bat number
+    ispitch : bool
+        ispitch bool
+    playid : str
+        A play id
     """
     details: Union[PlayDetails, dict]
     count: Union[Count, dict]
@@ -559,7 +574,7 @@ class PitchingPlay:
 @dataclass(kw_only=True)
 class PitchingLog(Stat):
     """
-    A class to represent a pitchLog stat for a pitcher
+    A class to represent a pitchLog stat for a pitcher.
 
     Attributes
     ----------
@@ -603,7 +618,7 @@ class PitchingLog(Stat):
 @dataclass(kw_only=True)
 class PitchingPlayLog(Stat):
     """
-    A class to represent a playLog stat for a pitcher
+    A class to represent a playLog stat for a pitcher.
 
     Attributes
     ----------
@@ -647,7 +662,7 @@ class PitchingPlayLog(Stat):
 @dataclass(kw_only=True)
 class PitchingByDateRange(Stat):
     """
-    A class to represent a byDateRange stat for a pitcher
+    A class to represent a byDateRange stat for a pitcher.
 
     Attributes
     ----------
@@ -663,7 +678,7 @@ class PitchingByDateRange(Stat):
 @dataclass(kw_only=True)
 class PitchingByDateRangeAdvanced(Stat):
     """
-    A class to represent a byDateRangeAdvanced stat for a pitcher
+    A class to represent a byDateRangeAdvanced stat for a pitcher.
 
     Attributes
     ----------
@@ -679,7 +694,7 @@ class PitchingByDateRangeAdvanced(Stat):
 @dataclass(kw_only=True)
 class PitchingByMonth(Stat):
     """
-    A class to represent a byMonthPlayoffs stat for a pitcher
+    A class to represent a byMonth stat for a pitcher.
 
     Attributes
     ----------
@@ -695,7 +710,7 @@ class PitchingByMonth(Stat):
 @dataclass(kw_only=True)
 class PitchingByMonthPlayoffs(Stat):
     """
-    A class to represent a byMonthPlayoffs stat for a pitcher
+    A class to represent a byMonthPlayoffs stat for a pitcher.
 
     Attributes
     ----------
@@ -711,7 +726,7 @@ class PitchingByMonthPlayoffs(Stat):
 @dataclass(kw_only=True)
 class PitchingByDayOfWeek(Stat):
     """
-    A class to represent a byDayOfWeek stat for a pitcher
+    A class to represent a byDayOfWeek stat for a pitcher.
 
     Attributes
     ----------
@@ -727,7 +742,7 @@ class PitchingByDayOfWeek(Stat):
 @dataclass(kw_only=True)
 class PitchingByDayOfWeekPlayOffs(Stat):
     """
-    A class to represent a byDayOfWeekPlayoffs stat for a pitcher
+    A class to represent a byDayOfWeekPlayoffs stat for a pitcher.
 
     Attributes
     ----------
@@ -743,7 +758,7 @@ class PitchingByDayOfWeekPlayOffs(Stat):
 @dataclass(kw_only=True)
 class PitchingHomeAndAway(Stat):
     """
-    A class to represent a homeAndAway stat for a pitcher
+    A class to represent a homeAndAway stat for a pitcher.
 
     Attributes
     ----------
@@ -759,7 +774,7 @@ class PitchingHomeAndAway(Stat):
 @dataclass(kw_only=True)
 class PitchingHomeAndAwayPlayoffs(Stat):
     """
-    A class to represent a homeAndAwayPlayoffs stat for a pitcher
+    A class to represent a homeAndAwayPlayoffs stat for a pitcher.
 
     Attributes
     ----------
@@ -775,7 +790,7 @@ class PitchingHomeAndAwayPlayoffs(Stat):
 @dataclass(kw_only=True)
 class PitchingWinLoss(Stat):
     """
-    A class to represent a winLoss stat for a pitcher
+    A class to represent a winLoss stat for a pitcher.
 
     Attributes
     ----------
@@ -791,7 +806,7 @@ class PitchingWinLoss(Stat):
 @dataclass(kw_only=True)
 class PitchingWinLossPlayoffs(Stat):
     """
-    A class to represent a winLossPlayoffs stat for a pitcher
+    A class to represent a winLossPlayoffs stat for a pitcher.
 
     Attributes
     ----------
@@ -807,7 +822,7 @@ class PitchingWinLossPlayoffs(Stat):
 @dataclass(kw_only=True)
 class PitchingRankings(Stat):
     """
-    A class to represent a rankings stat for a pitcher
+    A class to represent a rankingsByYear stat for a pitcher.
 
     Attributes
     ----------
@@ -822,7 +837,7 @@ class PitchingRankings(Stat):
 @dataclass(kw_only=True)
 class PitchingOpponentsFaced(Stat):
     """
-    A class to represent a opponentsFaced stat for a pitcher
+    A class to represent an opponentsFaced stat for a pitcher.
 
     Attributes
     ----------
@@ -841,7 +856,7 @@ class PitchingOpponentsFaced(Stat):
 @dataclass(kw_only=True)
 class PitchingExpectedStatistics(Stat):
     """
-    A class to represent a excepted statistics statType: expectedStatistics.
+    A class to represent an expectedStatistics stat for a pitcher.
 
     Attributes
     ----------
@@ -859,13 +874,55 @@ class PitchingExpectedStatistics(Stat):
 @dataclass(kw_only=True)
 class PitchingVsPlayer5Y(Stat):
     """
-    A class to represent a vsTeam pitching statistic
+    A class to represent a vsPlayer5Y pitching statistic
+
+    requires the use of opposingTeamId params
 
     Attributes
     ----------
     """
     _stat = ['vsPlayer5Y']
     opponent: Union[Team, dict]
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)    
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
+
+
+@dataclass(kw_only=True)
+class PitchingVsPlayer(Stat):
+    """
+    A class to represent a vsPlayer pitching statistic
+
+    requires the use of opposingTeamId params
+
+    Attributes
+    ----------
+    """
+    _stat = ['vsPlayer']
+    opponent: Union[Team, dict]
+    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
+    pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)    
+    stat: Union[SimplePitchingSplit, dict]
+    
+    def __post_init__(self):
+        self.stat = SimplePitchingSplit(**self.stat)
+
+
+@dataclass(kw_only=True)
+class PitchingVsPlayerTotal(Stat):
+    """
+    A class to represent a vsPlayerTotal pitching statistic
+
+    requires the use of opposingTeamId params
+
+    Attributes
+    ----------
+    """
+    _stat = ['vsPlayerTotal']
+    opponent: Optional[Union[Team, dict]] = field(default_factory=dict)
     batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
     pitcher: Optional[Union[Pitcher, dict]] = field(default_factory=dict)    
     stat: Union[SimplePitchingSplit, dict]
