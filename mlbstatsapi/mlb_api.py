@@ -1747,6 +1747,8 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
+        splits = {}
+
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
             groups = mlb_module.build_group_list(params)
             splits = mlb_module.create_split_data(mlb_data.data['stats'], groups)
@@ -1849,6 +1851,8 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return {}
+
+        splits = {}
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
             groups = mlb_module.build_group_list(params)
@@ -1953,6 +1957,8 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return {}
+
+        splits = {}
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
             groups = mlb_module.build_group_list(params)
