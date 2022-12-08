@@ -1916,27 +1916,39 @@ class Mlb:
 
 
     def get_attendance(self, team_id: int = None, league_id: int = None,
-                       league_list_id: int = None, params: dict = {}) -> Union[Attendance, None]:
+                       league_list_id: int = None, 
+                       params: dict = {}) -> Union[Attendance, None]:
         """
-        return attendance
+        returns attendance data based on teamId, leagueId, or leagueListId.
 
         Required Parameters (at least one)
         ----------
         team_id : int
-            Team id number
+            Insert a teamId to return directory of attendnace for a given team
         league_id : int
-            League id number
+            Insert leagueId(s) to return a directory of attendanace for a 
+            specific league. Format '103,104'
         league_list_id : int
-            Not sure
+            Insert a unique League List Identifier to return a directory of 
+            attendanace for a specific league listId.
+            Available values : milb_full, milb_short, milb_complex, milb_all, 
+            milb_all_nomex, milb_all_domestic, milb_noncomp, 
+            milb_noncomp_nomex, milb_domcomp, milb_intcomp, win_noabl, 
+            win_caribbean, win_all, abl, mlb, mlb_hist, mlb_milb, 
+            mlb_milb_hist, mlb_milb_win, baseball_all
 
         Parameters
         ----------
         season : int
-            Season year number format yyyy
+            Insert year(s) to return a directory of attendance for a given 
+            season. Season year number format yyyy
         date : str 'yyyy-mm-dd'
-            Date
+            Insert date to return information for attendance on a particular 
+            date. Format: MM/DD/YYYY
         gametype : str
-            Game type
+            Insert gameType(s) a directory of attendance for a given gameType.
+            For a list of all gameTypes: 
+            https://statsapi.mlb.com/api/v1/gameTypes
     
         Returns
         -------
