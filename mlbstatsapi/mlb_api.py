@@ -1175,13 +1175,20 @@ class Mlb:
 
             return Gamepace(**mlb_data.data)
 
-    def get_venue(self, venue_id) -> Union[Venue, None]:
+    def get_venue(self, venue_id, **params) -> Union[Venue, None]:
         """
-        return venue
+        returns venue directorial information for all available venues in the Stats API.
 
         Parameters
         ----------
         venue_id : int
+            venueId to return venue directorial information based venueId.
+
+        Other Parameters
+        ----------------
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -1198,8 +1205,8 @@ class Mlb:
         >>> mlb.get_venue(31)
         Venue
         """
+        params['hydrate'] = ['location', 'fieldInfo', 'timezone']
 
-        params = {'hydrate': ['location', 'fieldInfo', 'timezone']}
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'venues/{venue_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
@@ -1208,7 +1215,7 @@ class Mlb:
             for venue in mlb_data.data['venues']:
                 return Venue(**venue)
 
-    def get_venues(self) -> List[Venue]:
+    def get_venues(self, **params) -> List[Venue]:
         """
         return all venues
 
@@ -1216,6 +1223,22 @@ class Mlb:
         -------
         list of Venues
             returns a list of Venues
+
+        Other Parameters
+        ----------------
+        venueIds : int, List[int]
+            Insert venueId to return venue directorial information based 
+            venueId.
+        sportIds : int, List[int]
+            Insert sportIds to return venue directorial information based a 
+            given sport(s). For a list of all sports: 
+            https://statsapi.mlb.com/api/v1/sports
+        season : int
+            Insert year to return venue directorial information for a given 
+            season.        
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         See Also
         --------
@@ -1228,8 +1251,9 @@ class Mlb:
         >>> mlb.get_venues()
         [Venue, Venue, Venue]
         """
+        params['hydrate'] = ['location', 'fieldInfo', 'timezone']
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='venues')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='venues', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
@@ -1266,7 +1290,6 @@ class Mlb:
         >>> mlb.get_venue_id('PNC Park')
         [31]
         """
-
         mlb_data = self._mlb_adapter_v1.get(endpoint='venues', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
