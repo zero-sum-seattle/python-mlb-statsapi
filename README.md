@@ -94,8 +94,7 @@ python3
 
 Let's show some examples of getting stat objects from the API. What is baseball with out stats right?
 
-NOTE: Stat types and groups are case sensitive
-### Stats
+### MLB Stats
 
 #### Player Stats
 Get the Id(s) of the players you want stats for and set stat types and groups.

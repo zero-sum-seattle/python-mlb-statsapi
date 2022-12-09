@@ -1,5 +1,5 @@
-from typing import Union, List
-from dataclasses import dataclass
+from typing import Union, List, Optional
+from dataclasses import dataclass, field
 
 from .attributes import RunnerMovement, RunnerDetails, RunnerCredits
 
@@ -20,7 +20,7 @@ class PlayRunner:
     """
     movement: Union[RunnerMovement, dict]
     details: Union[RunnerDetails, dict]
-    credits: Union[List[RunnerCredits], List[dict]]
+    credits: Optional[Union[List[RunnerCredits], List[dict]]] = field(default_factory=list)
 
     def __post_init__(self):
         self.movement = RunnerMovement(**self.movement)

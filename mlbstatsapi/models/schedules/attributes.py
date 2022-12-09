@@ -29,8 +29,8 @@ class ScheduleGameTeam:
     leaguerecord: Union[LeagueRecord, dict]
     team: Union[Team, dict]
     splitsquad: bool
-    seriesnumber: int
-    score: Optional[int] = False
+    seriesnumber: Optional[int] = None
+    score: Optional[int] = None
     iswinner: Optional[bool] = False
 
     def __post_init__(self):
@@ -150,8 +150,6 @@ class ScheduleGames:
     daynight: str
     scheduledinnings: int
     reversehomeawaystatus: bool
-    gamesinseries: int
-    seriesgamenumber: int
     seriesdescription: str
     recordsource: str
     ifnecessary: str
@@ -166,6 +164,11 @@ class ScheduleGames:
     rescheduledfromdate: Optional[str] = None
     istie: Optional[bool] = None
     resumedate: Optional[str] = None
+    resumegamedate: Optional[str] = None
+    resumedfrom: Optional[str] = None
+    resumedfromdate: Optional[str] = None
+    seriesgamenumber: Optional[int] = None
+    gamesinseries: Optional[int] = None
 
     def __post_init__(self):
         self.status = GameStatus(**self.status) if self.status else self.status

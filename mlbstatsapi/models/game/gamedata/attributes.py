@@ -1,5 +1,5 @@
 from typing import Optional, Union
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
 
@@ -70,7 +70,10 @@ class GameDatetime:
     daynight: str
     time: str
     ampm: str
-
+    resumedate: Optional[str] = None
+    resumedatetime: Optional[str] = None
+    resumedfromdate: Optional[str] = None
+    resumedfromdatetime: Optional[str] = None
 
 @dataclass
 class GameStatus:
@@ -139,7 +142,7 @@ class GameWeather:
     """
     condition: str
     temp: str
-    wind: str
+    wind: Optional[str] = None
 
 
 @dataclass
@@ -243,9 +246,9 @@ class GameProbablePitchers:
     away : Person
         Away team probable pitcher
     """
-    away: Union[Person, dict]
-    home: Union[Person, dict]
+    away: Union[Person, dict] = field(default_factory=dict)
+    home: Union[Person, dict] = field(default_factory=dict)
 
     def __post_init__(self):
-        self.away = Person(**self.away)
-        self.home = Person(**self.home)
+        self.away = Person(**self.away) if self.away else self.away
+        self.home = Person(**self.home) if self.home else self.home

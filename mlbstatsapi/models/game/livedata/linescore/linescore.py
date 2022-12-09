@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Optional
 from dataclasses import dataclass
 
 from .attributes import LinescoreInning
@@ -40,19 +40,21 @@ class Linescore:
     outs : int
         current count outs
     """
-    currentinning: int
-    currentinningordinal: str
-    inningstate: str
-    inninghalf: str
-    istopinning: bool
+
     scheduledinnings: int
     innings: Union[List[LinescoreInning], List[dict]]
     teams: Union[LinescoreTeams, dict]
     defense: Union[LinescoreDefense, dict]
     offense: Union[LinescoreOffense, dict]
-    balls: int
-    strikes: int
-    outs: int
+    balls: Optional[int] = None
+    strikes: Optional[int] = None
+    outs: Optional[int] = None
+    note: Optional[str] = None
+    currentinning: Optional[int] = None
+    currentinningordinal: Optional[str] = None
+    inningstate: Optional[str] = None
+    inninghalf: Optional[str] = None
+    istopinning: Optional[bool] = None
 
     def __post_init__(self):
         self.innings = [LinescoreInning(**inning) for inning in self.innings]

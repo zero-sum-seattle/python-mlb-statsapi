@@ -592,7 +592,12 @@ class Mlb:
 
         return coaches
 
-    def get_schedule(self, date: str = None, start_date: str = None, end_date: str = None, sport_id: int = 1, team_id: int = None, **params) -> Union[Schedule, None]:
+    def get_schedule(self, 
+                    date: str = None, 
+                    start_date: str = None, 
+                    end_date: str = None, 
+                    sport_id: int = 1, 
+                    team_id: int = None, **params) -> Union[Schedule, None]:
         """
         return the schedule created from the included params.
 

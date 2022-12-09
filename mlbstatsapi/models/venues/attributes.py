@@ -1,5 +1,5 @@
 from typing import Optional, Union
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class VenueDefaultCoordinates:
@@ -47,13 +47,14 @@ class Location:
     state: str
     stateabbrev: str
     postalcode: str
-    defaultcoordinates: Union[VenueDefaultCoordinates, dict]
     country: str
-    phone: str
+    phone: Optional[str] = None
     address2: Optional[str] = None
+    defaultcoordinates: Optional[Union[VenueDefaultCoordinates, dict]] = field(default_factory=dict)
+
 
     def __post_init__(self):
-        self.defaultcoordinates = VenueDefaultCoordinates(**self.defaultcoordinates)
+        self.defaultcoordinates = VenueDefaultCoordinates(**self.defaultcoordinates) if self.defaultcoordinates else self.defaultcoordinates
 
 @dataclass
 class TimeZone:

@@ -1,5 +1,5 @@
 from typing import Optional, Union, List
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.people import Person
 
@@ -59,14 +59,16 @@ class GameData:
     players: Union[List[Person], dict]
     venue: Union[Venue, dict]
     officialvenue: Union[Venue, dict]
-    weather: Union[GameWeather, dict]
-    gameinfo: Union[GameInfo, dict]
     review: Union[GameReview, dict]
     flags: Union[GameFlags, dict]
     alerts: List
     probablepitchers: Union[GameProbablePitchers, dict]
-    officialscorer: Union[Person, dict]
-    primarydatacaster: Union[Person, dict]
+    gameinfo: Union[GameInfo, dict] = field(default_factory=dict)
+    weather: Union[GameWeather, dict] = field(default_factory=dict)
+    officialscorer: Optional[Union[Person, dict]] = field(default_factory=dict)
+    primarydatacaster: Optional[Union[Person, dict]] = field(default_factory=dict)
+    secondarydatacaster: Optional[Union[Person, dict]] = field(default_factory=dict)
+
 
     def __post_init__(self):
         self.game = GameDataGame(**self.game)
@@ -76,10 +78,11 @@ class GameData:
         self.players = [Person(**(self.players[key])) for key in self.players]
         self.venue = Venue(**self.venue)
         self.officialvenue = Venue(**self.officialvenue)
-        self.weather = GameWeather(**self.weather)
-        self.gameinfo = GameInfo(**self.gameinfo)
+        self.weather = GameWeather(**self.weather) if self.weather else self.weather
+        self.gameinfo = GameInfo(**self.gameinfo) if self.gameinfo else self.gameinfo
         self.review = GameReview(**self.review)
         self.flags = GameFlags(**self.flags)
         self.probablepitchers = GameProbablePitchers(**self.probablepitchers)
-        self.officialscorer = Person(**self.officialscorer)
-        self.primarydatacaster = Person(**self.primarydatacaster)
+        self.officialscorer = Person(**self.officialscorer) if self.officialscorer else self.officialscorer
+        self.primarydatacaster = Person(**self.primarydatacaster) if self.primarydatacaster else self.primarydatacaster
+        self.secondarydatacaster = Person(**self.secondarydatacaster) if self.secondarydatacaster else self.secondarydatacaster

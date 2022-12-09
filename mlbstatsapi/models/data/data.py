@@ -47,19 +47,19 @@ class PitchCoordinates:
     z0 : float
     ax : float
     """
-    ay: float
-    az: float
-    pfxx: float
-    pfxz: float
-    px: float
-    pz: float
-    vx0: float
-    vy0: float
-    vz0: float
-    x0: float
-    y0: float
-    z0: float
-    ax: float
+    ay: Optional[float] = None
+    az: Optional[float] = None
+    pfxx: Optional[float] = None
+    pfxz: Optional[float] = None
+    px: Optional[float] = None
+    pz: Optional[float] = None
+    vx0: Optional[float] = None
+    vy0: Optional[float] = None
+    vz0: Optional[float] = None
+    x0: Optional[float] = None
+    y0: Optional[float] = None
+    z0: Optional[float] = None
+    ax: Optional[float] = None
     x: Optional[float] = None
     y: Optional[float] = None
 
@@ -83,8 +83,8 @@ class PitchData:
     """
     strikezonetop: float
     strikezonebottom: float
-    coordinates: Union[PitchCoordinates, dict]
     breaks: Union[PitchBreak, dict] 
+    coordinates: Optional[Union[PitchCoordinates, dict]] = field(default_factory=dict) 
     extension: Optional[float] = None
     startspeed: Optional[float] = None
     endspeed: Optional[float] = None
