@@ -70,7 +70,10 @@ class GameDatetime:
     daynight: str
     time: str
     ampm: str
-
+    resumedate: Optional[str] = None
+    resumedatetime: Optional[str] = None
+    resumedfromdate: Optional[str] = None
+    resumedfromdatetime: Optional[str] = None
 
 @dataclass
 class GameStatus:
@@ -139,7 +142,7 @@ class GameWeather:
     """
     condition: str
     temp: str
-    wind: str
+    wind: Optional[str] = None
 
 
 @dataclass

@@ -49,7 +49,7 @@ class Location:
     postalcode: str
     defaultcoordinates: Union[VenueDefaultCoordinates, dict]
     country: str
-    phone: str
+    phone: Optional[str] = None
     address2: Optional[str] = None
 
     def __post_init__(self):

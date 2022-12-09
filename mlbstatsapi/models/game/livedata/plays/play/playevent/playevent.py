@@ -50,9 +50,9 @@ class PlayEvent:
     details: Union[PlayDetails, dict]
     index: int
     starttime: str
-    endtime: str
     ispitch: bool
     type: str
+    endtime: Optional[str] = None
     umpire: Optional[str] = None
     base: Optional[str] = None
     playid: Optional[str] = None

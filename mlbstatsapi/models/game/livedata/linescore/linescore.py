@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Optional
 from dataclasses import dataclass
 
 from .attributes import LinescoreInning
@@ -53,6 +53,7 @@ class Linescore:
     balls: int
     strikes: int
     outs: int
+    note: Optional[str] = None
 
     def __post_init__(self):
         self.innings = [LinescoreInning(**inning) for inning in self.innings]

@@ -1,5 +1,5 @@
 from typing import Optional, Union, List
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.people import Person
 
@@ -67,6 +67,8 @@ class GameData:
     probablepitchers: Union[GameProbablePitchers, dict]
     officialscorer: Union[Person, dict]
     primarydatacaster: Union[Person, dict]
+    secondarydatacaster: Optional[Union[Person, dict]] = field(default_factory=dict)
+
 
     def __post_init__(self):
         self.game = GameDataGame(**self.game)
@@ -83,3 +85,4 @@ class GameData:
         self.probablepitchers = GameProbablePitchers(**self.probablepitchers)
         self.officialscorer = Person(**self.officialscorer)
         self.primarydatacaster = Person(**self.primarydatacaster)
+        self.secondarydatacaster = Person(**self.secondarydatacaster) if self.secondarydatacaster else self.secondarydatacaster

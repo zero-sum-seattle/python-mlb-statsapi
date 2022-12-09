@@ -39,9 +39,10 @@ class PlayAbout:
     endtime: str
     iscomplete: bool
     isscoringplay: bool
-    hasreview: bool
     hasout: bool
+    hasreview: bool
     captivatingindex: int
+    hasreview: Optional[bool] = None
 
 
 @dataclass
@@ -98,3 +99,4 @@ class PlayReviewDetails:
     inprogress: bool
     reviewtype: str
     challengeteamid: Optional[int] = None
+    additionalreviews: Optional[str] = None

@@ -97,6 +97,9 @@ class LinescoreOffense:
     pitcher: Union[Person, dict]
     battingorder: int
     team: Union[Team, dict]
+    first: Optional[str] = None
+    second: Optional[str] = None
+    third: Optional[str] = None
 
     def __post_init__(self):
         self.batter = Person(**self.batter)
