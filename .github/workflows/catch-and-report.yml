@@ -1,4 +1,4 @@
-name: Report mlbstatsapi tests periodically
+name: External tests - Bidaily 
 
 on:
   schedule:
