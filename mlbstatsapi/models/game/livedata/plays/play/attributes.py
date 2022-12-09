@@ -40,7 +40,6 @@ class PlayAbout:
     iscomplete: bool
     isscoringplay: bool
     hasout: bool
-    hasreview: bool
     captivatingindex: int
     hasreview: Optional[bool] = None
 
@@ -72,10 +71,10 @@ class PlayResult:
     type: str
     event: str
     eventtype: str
-    description: str
     rbi: int
     awayscore: int
     homescore: int
+    description: Optional[str] = None
     isout: Optional[bool] = None
 
 

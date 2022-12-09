@@ -1,5 +1,5 @@
 from typing import Union, List
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from mlbstatsapi.models.game.livedata.plays.play import Play
 from mlbstatsapi.models.game.livedata.plays.playbyinning import PlayByInning
@@ -22,11 +22,12 @@ class Plays:
         Plays by inning
     """
     allplays: Union[List[Play], List[dict]]
-    currentplay: Union[Play, dict]
     scoringplays: List[int]
     playsbyinning: Union[List[PlayByInning], List[dict]]
+    currentplay: Union[Play, dict] = field(default_factory=dict)
+
 
     def __post_init__(self):
         self.allplays = [Play(**play) for play in self.allplays if play]
-        self.currentplay = Play(**self.currentplay)
+        self.currentplay = Play(**self.currentplay) if self.currentplay else self.currentplay
         self.playsbyinning = [PlayByInning(**inning) for inning in self.playsbyinning if inning]
