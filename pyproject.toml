@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "python-mlb-statsapi"
 
-version = "0.2.9"
+version = "0.2.10"
 
 authors = [
   { name="Matthew Spah", email="spahmatthew@gmail.com" },

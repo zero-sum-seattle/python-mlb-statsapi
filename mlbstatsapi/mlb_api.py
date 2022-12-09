@@ -40,7 +40,7 @@ class Mlb:
     logger: logging.Loger
         logger
     """
-    def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
+    def __init__(self, hostname: str = 'statsapi.mlb.com', logger: logging.Logger = None):
         self._mlb_adapter_v1 = MlbDataAdapter(hostname, 'v1', logger)
         self._mlb_adapter_v1_1 = MlbDataAdapter(hostname, 'v1.1', logger)
         self._logger = logger or logging.getLogger(__name__)
@@ -53,7 +53,10 @@ class Mlb:
         Parameters
         ----------
         sport_id : int
-            sportid for players defaults to 1
+            Insert a sportId to return player information for a particular 
+            sport. For a list of all sportIds: 
+            http://statsapi.mlb.com/api/v1/sports
+            !!! sportid for players defaults to 1 !!!
 
         Returns
         -------
@@ -64,8 +67,10 @@ class Mlb:
         ----------------
         season : str
             Insert year to return player information for a particular season.
-        sportId : str
-            Insert a sportId to return player information for a particular sport.
+        gameType : str
+            Insert gameType to return player information for a particular 
+            gameType. Find available game types at 
+            https://statsapi.mlb.com/api/v1/gameTypes
 
         See Also
         --------
@@ -92,12 +97,14 @@ class Mlb:
 
     def get_person(self, player_id, **params) -> Union[Person, None]:
         """
-        return a person
+        This endpoint returns statistical data and biographical information 
+        for a player,coach or umpire based on playerId.
 
         Parameters
         ----------
-        player_id : int
-            Person id
+        person_id : int
+            Insert personId for a specific player, coach or umpire based on
+            playerId..
 
         Returns
         -------
@@ -124,17 +131,96 @@ class Mlb:
             for person in mlb_data.data['people']:
                 return Person(**person)
 
+    def get_persons(self, person_ids, **params) -> List[Person]:
+        """
+        This endpoint returns statistical data and biographical information 
+        for a players,umpires, and coaches based on playerId.
+
+        Parameters
+        ----------
+        person_ids : str
+            Insert personId(s) to return biographical information for a 
+            specific player. Format '605151,592450'
+
+        Other Parameters
+        ----------------
+        hydrate : str
+            Insert hydration(s) to return statistical or biographical data 
+            for a specific player(s). 
+            Format stats(group=["statGroup1","statGroup2"],
+                         type=["statType1","statType2"]).
+            Available Hydrations:
+                hydrations                
+                currentTeam
+                team
+                rosterEntries
+                relatives
+                transactions
+                social
+                education                
+                draft
+                mixedFeed
+                articles
+                videos
+                xrefId
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        Person
+            Returns a Person
+
+        See Also
+        --------
+        Mlb.get_people : Return a list of People from sport id.
+        Mlb.get_people_id : Return person id from name.
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_person(660271)
+        Person
+        """
+        if 'stats' in params:
+            return []
+        elif 'awards' in params:
+            return []
+
+        params['personIds'] = person_ids
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_ids}')
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        person_list = []
+
+        if 'people' in mlb_data.data and mlb_data.data['people']:
+            for person in mlb_data.data['people']:
+                person_list.append(Person(**person))
+
     def get_people_id(self, fullname, sport_id: int = 1, 
                       search_key: str = 'fullname', **params) -> List[int]:
         """
-        return a person Id
+        Returns specific player information based on players fullname
 
         Parameters
         ----------
         fullname : str
             Person full name
         sport_id : int
+            Insert sportId to return player information for particular sport.
             sportid for players defaults to 1
+
+        Other Parameters
+        ----------------
+        season : int
+            Insert year to return player information for a particular season.
+        gameType : str
+            Insert gameType to return player information for a particular 
+            gameType. Find available game types at 
+            https://statsapi.mlb.com/api/v1/gameTypes
 
         Returns
         -------
@@ -152,6 +238,8 @@ class Mlb:
         >>> mlb.get_people_id("Ty France")
         [664034]
         """
+        # Used to reduce the amount of unneccessary data requested from api
+        params['fields'] = 'people,id,fullName'
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
@@ -175,7 +263,7 @@ class Mlb:
         Parameters
         ----------
         sport_id : int
-            Insert sportId to return team information for a particular sportId.
+            Insert sportId to return team information for a particular sportId
 
         Other Parameters
         ----------------
@@ -183,6 +271,40 @@ class Mlb:
             Insert year to return team information for a particular season.
         leagueIds : int
             Insert leagueId to return team information for particular league.
+        activeStatus : str
+            Insert activeStatus to populate a teams based on active/inactive 
+            status for a given season. There are three status types: Y, N, B
+        allStarStatuses : str
+            Insert allStarStatuses to populate a teams based on Allstar status
+            for a given season. There are two status types: Y and N
+        sportIds : str
+            Insert sportId to return team information for a particular sportId
+            Usage: '1' or '1,11,12'
+        gameType : str
+            Insert gameType to return team information for a particular 
+            gameType. For a list of all gameTypes: 
+            https://statsapi.mlb.com/api/v1/gameTypes
+        hydrate : str
+            Insert Hydration(s) to return data for any available team 
+            hydration. Format "league,venue"
+            Available Hydrations:
+                previousSchedule
+                nextSchedule
+                venue
+                social
+                deviceProperties
+                game(promotions)
+                game(atBatPromotions)
+                game(tickets)
+                game(atBatTickets)
+                game(sponsorships)
+                league
+                person
+                sport
+                division
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -203,6 +325,7 @@ class Mlb:
         [Team, Team, Team]
         """
         params['sportId'] = sport_id
+
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
@@ -214,14 +337,45 @@ class Mlb:
 
         return teams
 
-    def get_team(self, team_id) -> Union[Team, None]:
+    def get_team(self, team_id, **params) -> Union[Team, None]:
         """
-        return the Team
+        Returns a team based on teamId.
 
         Parameters
         ----------
         team_id : int
-            Team id
+            Insert teamId to return a directory of team information for a 
+            particular club.
+
+        Other Parameters
+        ----------------
+        season : int
+            Insert year to return a directory of team information for a 
+            particular club in a specific season.
+        sportId : int
+            Insert a sportId to return a directory of team information for a 
+            particular club in a sport.
+        hydrate : str
+            Insert Hydration(s) to return data for any available team 
+            hydration. Format "league,venue"
+            Available Hydrations:
+                previousSchedule
+                nextSchedule
+                venue
+                social
+                deviceProperties
+                game(promotions)
+                game(atBatPromotions)
+                game(tickets)
+                game(atBatTickets)
+                game(sponsorships)
+                league
+                person
+                sport
+                division
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -242,7 +396,9 @@ class Mlb:
         Team
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}', 
+                                            ep_params=params)
+
         if 400 <= mlb_data.status_code <= 499:
             return None
 
@@ -286,6 +442,8 @@ class Mlb:
         >>> mlb.get_team_id("Oakland Athletics")
         [133]
         """
+        # Used to reduce the amount of unneccessary data requested from api
+        params['fields'] = 'teams,id,name'
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='teams', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
@@ -309,18 +467,47 @@ class Mlb:
         Parameters
         ----------
         team_id : int
-            Team id
+            teamId to return a directory of players based on roster status for
+            a particular club.
 
         Other Parameters
         ----------------
-        season : str
-            Insert year to return a directory of players based on roster status for a particular club in a specific season.
         rosterType : str
-            Insert teamId to return a directory of players based on roster status for a particular club.
-            rosterType's include 40Man, fullSeason, fullRoster, nonRosterInvitees, active, allTime,
+            Insert teamId to return a directory of players based on roster 
+            status for a particular club. rosterType's include 40Man, 
+            fullSeason, fullRoster, nonRosterInvitees, active, allTime,
             depthChart, gameday, and coach.
+        season : str
+            Insert year to return a directory of players based on roster 
+            status for a particular club in a specific season.
         date : str
-            Insert date to return a directory of players based on roster status for a particular club on a specific date.
+            Insert date to return a directory of players based on roster 
+            status for a particular club on a specific date.
+        hydrate : str
+            Insert Hydration(s) to return data for any available team 
+            hydration. The hydration for Teams contains "person" which has 
+            subhydrations Format "person(subHydration1, subHydrations2)"
+            Available Hydrations:
+                "person"
+                    Hydrations Available Through Person
+                    hydrations
+                    awards
+                    currentTeam
+                    team
+                    rosterEntries
+                    relatives
+                    transactions
+                    social
+                    education
+                    stats
+                    draft
+                    mixedFeed
+                    articles
+                    video
+                    xrefId
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -357,19 +544,22 @@ class Mlb:
 
     def get_team_coaches(self, team_id, **params) -> List[Coach]:
         """
-        return the team coach roster
+        Return a directory of coaches for a particular team.
 
         Parameters
         ----------
         team_id : int
-            Team id 
+            Insert teamId to return a directory of coaches for a given team.
 
         Other Parameters
         ----------------
         season : str
             Insert year to return a directory of players based on roster status for a particular club in a specific season.
         date : str
-            Insert date to return a directory of players based on roster status for a particular club on a specific date.           
+            Insert date to return a directory of players based on roster status for a particular club on a specific date.   
+        fields : str
+            Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute
+
         Returns
         -------
         list of Coaches
@@ -402,7 +592,7 @@ class Mlb:
 
         return coaches
 
-    def get_schedule(self, date: str, end_date: str = None, sport_id: int = 1, team_id: int = None, **params) -> Union[Schedule, None]:
+    def get_schedule(self, date: str = None, start_date: str = None, end_date: str = None, sport_id: int = 1, team_id: int = None, **params) -> Union[Schedule, None]:
         """
         return the schedule created from the included params.
 
@@ -413,6 +603,8 @@ class Mlb:
 
         Parameters
         ----------
+        date : str
+            Date
         start_date : str "yyyy-mm-dd"
             Start date
         end_date : str "yyyy-mm-dd"
@@ -421,6 +613,129 @@ class Mlb:
             sport id of schedule defaults to 1
         team_id : int
             get schedule for team with team_id
+
+        Other Parameters
+        ----------------
+        leagueId : int,str
+            Insert leagueId to return all schedules based on a particular 
+            scheduleType for a specific league. Usage: 1 or '1,11
+        gamePks : int,str
+            Insert gamePks to return all schedules based on a particular 
+            scheduleType for specific games. Usage: 531493 or '531493,531497'
+        venueIds : int
+            Insert venueId to return all schedules based on a particular 
+            scheduleType for a specific venueId.
+        gameTypes : str
+            Insert gameTypes to return schedule information for all games in 
+            particular gameTypes. For a list of all gameTypes: 
+            https://statsapi.mlb.com/api/v1/gameTypes
+        
+        scheduleType : str
+            Insert one or mutliple of the three available scheduleTypes to 
+            return data for a particular schedule. Format "games,events,xref"
+        eventTypes : str
+            Insert one or mutliple of the three available eventTypes to 
+            return data for a particular schedule. Format "primary,secondary"
+            There are two different schedule eventTypes:
+                primary- returns calendar/schedule pages.
+                secondary returns ticket pages.
+        hydrate : str
+            Insert Hydration(s) to return data for any available schedule 
+            hydration. The hydrations for schedule contain "venue" and "team" 
+            which have subhydrations.
+            Format "team(subHydration1, subHydrations2)"
+            Available Hydrations:
+                tickets
+                game(content)
+                game(content(all))
+                game(content(media(all)))
+                game(content(editorial(all)))
+                game(content(highlights(all)))
+                game(content(editorial(preview)))
+                game(content(editorial(recap)))
+                game(content(editorial(articles)))
+                game(content(editorial(wrap)))
+                game(content(media(epg)))
+                game(content(media(milestones)))
+                game(content(highlights(scoreboard)))
+                game(content(highlights(scoreboardPreview)))
+                game(content(highlights(highlights)))
+                game(content(highlights(gamecenter)))
+                game(content(highlights(milestone)))
+                game(content(highlights(live)))
+                game(content(media(featured)))
+                game(content(summary))
+                game(content(gamenotes))
+                game(tickets)
+                game(atBatTickets)
+                game(promotions)
+                game(atBatPromotions)
+                game(sponsorships)
+                lineup
+                linescore
+                linescore(matchup)
+                linescore(runners)
+                linescore(defense)
+                decisions
+                scoringplays
+                broadcasts
+                broadcasts(all)
+                radioBroadcasts
+                metadata
+                game(seriesSummary)
+                seriesStatus
+                event(performers)
+                event(promotions)
+                event(timezone)
+                event(tickets)
+                event(venue)
+                event(designations)
+                event(game)
+                event(status)
+                weather
+                officials
+                probablePitcher
+                venue                    
+                    relatedVenues
+                    parentVenues
+                    residentVenues
+                    relatedVenues(venue)
+                    parentVenues(venue)
+                    residentVenues(venue)
+                    location
+                    social
+                    relatedApplications
+                    timezone
+                    menu
+                    metadata
+                    performers
+                    images
+                    schedule
+                    nextSchedule
+                    previousSchedule
+                    ticketManagement
+                    xrefId
+                team                                    
+                    previousSchedule
+                    nextSchedule
+                    venue
+                    springVenue
+                    social
+                    deviceProperties
+                    game(promotions)
+                    game(promotions)
+                    game(atBatPromotions)
+                    game(tickets)
+                    game(atBatTickets)
+                    game(sponsorships)
+                    league
+                    videos
+                    person
+                    sport
+                    standings
+                    division
+                    xref
+
 
         Returns
         -------
@@ -439,14 +754,15 @@ class Mlb:
         Schedule
 
         """
-
-        # default to today if not set
-        if not end_date:
-            params['endDate'] = date
-            params['startDate'] = date
-        else:
-            params['startDate'] = date
+        
+        if start_date and end_date:
+            params['startDate'] = start_date
             params['endDate'] = end_date
+        elif date and not (start_date or end_date):
+            params['date'] = date
+        else:
+            return None
+
 
         if team_id:
             params['teamId'] = team_id
@@ -464,7 +780,8 @@ class Mlb:
         if 'dates' in mlb_data.data and mlb_data.data['dates']:
             return Schedule(**mlb_data.data)
 
-    def get_scheduled_games_by_date(self, date: str, 
+    def get_scheduled_games_by_date(self, date: str = None,
+                                    start_date: str = None, 
                                     end_date: str = None,
                                     sport_id: int = 1, 
                                     **params) -> List[ScheduleGames]:
@@ -475,10 +792,28 @@ class Mlb:
         ----------
         date : str 
             start date, 'yyyy-mm-dd'
+        start_date : str "yyyy-mm-dd"
+            Start date
         end_date : str
             end date, 'yyyy-mm-dd'
         spord_id : int
             spord id of schedule defaults to 1
+
+        Other Parameters
+        ----------------
+        leagueId : int,str
+            Insert leagueId to return all schedules based on a particular 
+            scheduleType for a specific league. Usage: 1 or '1,11
+        gamePks : int,str
+            Insert gamePks to return all schedules based on a particular 
+            scheduleType for specific games. Usage: 531493 or '531493,531497'
+        venueIds : int
+            Insert venueId to return all schedules based on a particular 
+            scheduleType for a specific venueId.
+        gameTypes : str
+            Insert gameTypes to return schedule information for all games in 
+            particular gameTypes. For a list of all gameTypes: 
+            https://statsapi.mlb.com/api/v1/gameTypes
 
         Returns
         -------
@@ -497,13 +832,13 @@ class Mlb:
         >>> mlb = Mlb()
         >>> mlb.get_game_ids()
         """
-        # default to today if not set
-        if not end_date:
-            params['endDate'] = date
-            params['startDate'] = date
-        else:
-            params['startDate'] = date
+        if start_date and end_date:
+            params['startDate'] = start_date
             params['endDate'] = end_date
+        elif date and not (start_date or end_date):
+            params['date'] = date
+        else:
+            return None
 
         params['sportId'] = sport_id
 
@@ -520,14 +855,38 @@ class Mlb:
 
         return games
 
-    def get_game(self, game_id) -> Union[Game, None]:
+    def get_game(self, game_id, **params) -> Union[Game, None]:
         """
-        return the game for a specific game id
+        Return the game for a specific game id
+        Gumbo Live Feed for a specific gamePk.
 
         Parameters
         ----------
         game_id : int
-            Game id number
+            Insert gamePk to return the GUMBO live feed for a specific game.
+            
+        Other Parameters
+        ----------------
+        timecode : str
+            Use this parameter to return a snapshot of the data at the 
+            specified time. Format: YYYYMMDD_HHMMSS.
+            Return timecodes from timecodes endpoint 
+            https://statsapi.mlb.com/api/v1.1/game/534196/feed/live/timestamps
+        hydrate : str
+            Insert hydration(s) to return putout credits or defensive 
+            positioning data for all plays in a particular game. 
+            Format 'credits,alignment,flags'
+            Available Hydrations:
+                credits
+                alignment
+                flags
+                officials
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+            !!! To use this we would need to make almost every !!!
+            !!!    data class attr optonal? Do we want this?   !!!
 
         Returns
         -------
@@ -546,14 +905,14 @@ class Mlb:
         Game
         """
 
-        mlb_data = self._mlb_adapter_v1_1.get(endpoint=f'game/{game_id}/feed/live')
+        mlb_data = self._mlb_adapter_v1_1.get(endpoint=f'game/{game_id}/feed/live', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
 
         if 'gamepk' in mlb_data.data and mlb_data.data['gamepk'] == game_id:
             return Game(**mlb_data.data)
 
-    def get_game_play_by_play(self, game_id) -> Union[Plays, None]:
+    def get_game_play_by_play(self, game_id, **params) -> Union[Plays, None]:
         """
         return the playbyplay of a game for a specific game id
 
@@ -561,6 +920,18 @@ class Mlb:
         ----------
         game_id : int
             Game id number
+
+        Other Parameters
+        ----------------
+        timecode : int
+            Use this parameter to return a snapshot of the data at the 
+            specified time. Format: YYYYMMDD_HHMMSS
+        fields :
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+            !!! To use this we would need to make almost every !!!
+            !!!    data class attr optonal? Do we want this?   !!!
 
         Returns
         -------
@@ -579,14 +950,14 @@ class Mlb:
         Plays
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/playByPlay')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/playByPlay', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
 
         if 'allplays' in mlb_data.data and mlb_data.data['allplays']:
             return Plays(**mlb_data.data)
 
-    def get_game_line_score(self, game_id) -> Union[Linescore, None]:
+    def get_game_line_score(self, game_id, **params) -> Union[Linescore, None]:
         """
         return the Linescore of a game for a specific game id
 
@@ -594,6 +965,18 @@ class Mlb:
         ----------
         game_id : int
             Game id number
+
+        Other Parameters
+        ----------------
+        timecode : int
+            Use this parameter to return a snapshot of the data at the 
+            specified time. Format: YYYYMMDD_HHMMSS
+        fields :
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+            !!! To use this we would need to make almost every !!!
+            !!!    data class attr optonal? Do we want this?   !!!
 
         Returns
         -------
@@ -612,12 +995,12 @@ class Mlb:
         Linescore
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/linescore')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/linescore', ep_params=params)
 
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
             return Linescore(**mlb_data.data)
 
-    def get_game_box_score(self, game_id) -> Union[BoxScore, None]:
+    def get_game_box_score(self, game_id, **params) -> Union[BoxScore, None]:
         """
         return the boxscore of a game for a specific game id
 
@@ -625,6 +1008,18 @@ class Mlb:
         ----------
         game_id : int
             Game id number
+
+        Other Parameters
+        ----------------
+        timecode : int
+            Use this parameter to return a snapshot of the data at the 
+            specified time. Format: YYYYMMDD_HHMMSS
+        fields :
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+            !!! To use this we would need to make almost every !!!
+            !!!    data class attr optonal? Do we want this?   !!!
 
         Returns
         -------
@@ -643,7 +1038,7 @@ class Mlb:
         BoxScore
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/boxscore')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/boxscore', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
 
@@ -651,7 +1046,8 @@ class Mlb:
             return BoxScore(**mlb_data.data)
 
 
-    def get_game_ids(self, date: str, 
+    def get_game_ids(self, date: str = None,
+                     start_date: str = None,
                      end_date: str = None,
                      sport_id: int = 1,
                     **params) -> List[int]:
@@ -661,6 +1057,8 @@ class Mlb:
         Parameters
         ----------
         date : str 
+            date, 'yyyy-mm-dd'
+        start_date : str
             start date, 'yyyy-mm-dd'
         end_date : str
             end date, 'yyyy-mm-dd'
@@ -684,12 +1082,13 @@ class Mlb:
         >>> mlb = Mlb()
         >>> mlb.get_game_ids()
         """
-        if not end_date:
-            params['endDate'] = date
-            params['startDate'] = date
-        else:
-            params['startDate'] = date
+        if start_date and end_date:
+            params['startDate'] = start_date
             params['endDate'] = end_date
+        elif date and not (start_date or end_date):
+            params['date'] = date
+        else:
+            return None
 
         params['sportId'] = sport_id
 
@@ -773,13 +1172,20 @@ class Mlb:
 
             return Gamepace(**mlb_data.data)
 
-    def get_venue(self, venue_id) -> Union[Venue, None]:
+    def get_venue(self, venue_id, **params) -> Union[Venue, None]:
         """
-        return venue
+        returns venue directorial information for all available venues in the Stats API.
 
         Parameters
         ----------
         venue_id : int
+            venueId to return venue directorial information based venueId.
+
+        Other Parameters
+        ----------------
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -796,8 +1202,8 @@ class Mlb:
         >>> mlb.get_venue(31)
         Venue
         """
+        params['hydrate'] = ['location', 'fieldInfo', 'timezone']
 
-        params = {'hydrate': ['location', 'fieldInfo', 'timezone']}
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'venues/{venue_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
@@ -806,7 +1212,7 @@ class Mlb:
             for venue in mlb_data.data['venues']:
                 return Venue(**venue)
 
-    def get_venues(self) -> List[Venue]:
+    def get_venues(self, **params) -> List[Venue]:
         """
         return all venues
 
@@ -814,6 +1220,22 @@ class Mlb:
         -------
         list of Venues
             returns a list of Venues
+
+        Other Parameters
+        ----------------
+        venueIds : int, List[int]
+            Insert venueId to return venue directorial information based 
+            venueId.
+        sportIds : int, List[int]
+            Insert sportIds to return venue directorial information based a 
+            given sport(s). For a list of all sports: 
+            https://statsapi.mlb.com/api/v1/sports
+        season : int
+            Insert year to return venue directorial information for a given 
+            season.        
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         See Also
         --------
@@ -826,8 +1248,9 @@ class Mlb:
         >>> mlb.get_venues()
         [Venue, Venue, Venue]
         """
+        params['hydrate'] = ['location', 'fieldInfo', 'timezone']
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='venues')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='venues', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
@@ -864,7 +1287,6 @@ class Mlb:
         >>> mlb.get_venue_id('PNC Park')
         [31]
         """
-
         mlb_data = self._mlb_adapter_v1.get(endpoint='venues', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
@@ -880,13 +1302,21 @@ class Mlb:
                     continue
         return venue_ids
 
-    def get_sport(self, sport_id: int) -> Union[Sport, None]:
+    def get_sport(self, sport_id: int, **params) -> Union[Sport, None]:
         """
         return sport object from sportid
 
         Parameters
         ----------
         sport_id : int
+            Insert a sportId to return a directory of sport(s).
+            For a list of all sportIds: http://statsapi.mlb.com/api/v1/sports
+
+        Other Parameters
+        ----------------
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -905,7 +1335,7 @@ class Mlb:
         Sport
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
 
@@ -913,7 +1343,7 @@ class Mlb:
             for sport in mlb_data.data['sports']:
                 return Sport(**sport)
 
-    def get_sports(self, ) -> List[Sport]:
+    def get_sports(self, **params) -> List[Sport]:
         """
         return all sports
 
@@ -921,6 +1351,12 @@ class Mlb:
         -------
         list of Sports
             returns a list of sport objects
+
+        Other Parameters
+        ----------------
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         See Also
         --------
@@ -934,7 +1370,7 @@ class Mlb:
         [Sport, Sport, Sport]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='sports')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='sports', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
@@ -946,7 +1382,7 @@ class Mlb:
         return sports
 
     def get_sport_id(self, sport_name: str,
-                     search_key: str = 'name', **params) -> List[int]:
+                     search_key: str = 'name') -> List[int]:
         """
         return sport id 
 
@@ -988,9 +1424,20 @@ class Mlb:
 
         return sport_ids
 
-    def get_league(self, league_id) -> Union[League, None]:
+    def get_league(self, league_id: int, **params) -> Union[League, None]:
         """
         return league
+
+        Parameters
+        ----------
+        league_id : int
+            leagueId to return league information for a specific league
+
+        Other Parameters
+        ----------------
+        fields : str
+            Format: Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute    
 
         Returns
         -------
@@ -1008,7 +1455,7 @@ class Mlb:
         [League]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'leagues/{league_id}')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'leagues/{league_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return None
 
@@ -1016,13 +1463,28 @@ class Mlb:
             for league in mlb_data.data['leagues']:
                 return League(**league)
 
-    def get_leagues(self) -> List[League]:
+    def get_leagues(self, **params) -> List[League]:
         """
         return all leagues
 
         Returns
         -------
         list of Leagues
+
+        Other Parameters
+        ----------------
+        league_id : str
+            leagueId(s) to return league information for specific leagues.
+            Format '103,104'
+        sportId : int
+            Insert sportId to return league information for a specific sport.
+            For a list of all sportIds: http://statsapi.mlb.com/api/v1/sports   
+        seasons : str
+            Insert year(s) to return league information for a specific season. 
+            Format '2017,2018'
+        fields : str
+            Format: Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute    
 
         See Also
         --------
@@ -1036,7 +1498,7 @@ class Mlb:
         [League, League, League]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='leagues')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='leagues', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
@@ -1072,6 +1534,8 @@ class Mlb:
         >>> mlb.get_league_id('American League')
         [103]
         """
+        # Used to reduce the amount of unneccessary data requested from api
+        params['fields'] = 'leagues,id,name'
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='leagues', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
@@ -1090,12 +1554,12 @@ class Mlb:
 
     def get_division(self, divisionid) -> Union[Division, None]:
         """
-        return the Division
+        Returns a division based on divisionId,
 
         Parameters
         ----------
         divisonid : int
-            Division id
+            divisionId to return a directory of division(s) for a specific division.
 
         Returns
         -------
@@ -1122,9 +1586,21 @@ class Mlb:
             for division in mlb_data.data['divisions']:
                 return Division(**division)
 
-    def get_divisions(self) -> List[Division]:
+    def get_divisions(self, **params) -> List[Division]:
         """
         return all divisons
+
+        Other Parameters
+        ----------------
+        divisionId : str
+            Insert divisionId(s) to return a directory of division(s) for a 
+            specific division. Format '200,201'
+        leagueId : int
+            Insert leagueId to return a directory of division(s) for all 
+            divisions in a specific league.
+        sportId : int
+            Insert a sportId to return a directory of division(s) for all 
+            divisions in a specific sport.
 
         Returns
         -------
@@ -1143,7 +1619,7 @@ class Mlb:
         [Divison, Division, Division]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions')
+        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
@@ -1155,7 +1631,7 @@ class Mlb:
         return divisions
 
     def get_division_id(self, division_name, 
-                        search_key: str = 'name', **params) -> List[Division]:
+                        search_key: str = 'name') -> List[Division]:
         """
         return divsion id
 
@@ -1181,7 +1657,7 @@ class Mlb:
         [200]
         """
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions', ep_params=params)
+        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions')
         if 400 <= mlb_data.status_code <= 499:
             return []
         
@@ -1196,7 +1672,7 @@ class Mlb:
                     continue
         return division_ids
 
-    def get_season(self, seasonid: str, sportid: int, **params) -> Season:
+    def get_season(self, seasonid: str, sportid: int = None, **params) -> Season:
         """
         return a season object for seasonid and sportid
 
@@ -1211,6 +1687,9 @@ class Mlb:
         ----------------
         withGameTypeDates : bool, optional
             Insert a withGameTypeDates to return season information for all gameTypes.
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
         
         Returns
         -------
@@ -1248,13 +1727,12 @@ class Mlb:
             Insert a sportId to return a directory of seasons for a specific sport.
         
         Other Parameters
-        ----------------
-        divisionId : int, optional
-            Insert divisionId to return a directory of seasons for a specific division.
-        leagueId : int, optional
-            Insert leagueId to return a directory of seasons in a specific league.
+        ----------------        
         withGameTypeDates : bool, optional
             Insert a withGameTypeDates to return season information for all gameTypes.
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
@@ -1295,16 +1773,23 @@ class Mlb:
         Parameters
         ----------
         sportid : int
-            Insert a sportId to return a directory of seasons for a specific sport.
+            Insert a sportId to return a directory of seasons for a specific 
+            sport.
 
         Other Parameters
         ----------------
         divisionId : int, optional
-            Insert divisionId to return a directory of seasons for a specific division.
+            Insert divisionId to return a directory of seasons for a specific 
+            division.
         leagueId : int, optional
-            Insert leagueId to return a directory of seasons in a specific league.
+            Insert leagueId to return a directory of seasons in a specific 
+            league.
         withGameTypeDates : bool, optional
-            Insert a withGameTypeDates to return season information for all gameTypes.
+            Insert a withGameTypeDates to return season information for all 
+            gameTypes.
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
             
         Returns
         -------
@@ -1422,27 +1907,39 @@ class Mlb:
 
 
     def get_attendance(self, team_id: int = None, league_id: int = None,
-                       league_list_id: int = None, params: dict = {}) -> Union[Attendance, None]:
+                       league_list_id: int = None, 
+                       params: dict = {}) -> Union[Attendance, None]:
         """
-        return attendance
+        returns attendance data based on teamId, leagueId, or leagueListId.
 
         Required Parameters (at least one)
         ----------
         team_id : int
-            Team id number
+            Insert a teamId to return directory of attendnace for a given team
         league_id : int
-            League id number
+            Insert leagueId(s) to return a directory of attendanace for a 
+            specific league. Format '103,104'
         league_list_id : int
-            Not sure
+            Insert a unique League List Identifier to return a directory of 
+            attendanace for a specific league listId.
+            Available values : milb_full, milb_short, milb_complex, milb_all, 
+            milb_all_nomex, milb_all_domestic, milb_noncomp, 
+            milb_noncomp_nomex, milb_domcomp, milb_intcomp, win_noabl, 
+            win_caribbean, win_all, abl, mlb, mlb_hist, mlb_milb, 
+            mlb_milb_hist, mlb_milb_win, baseball_all
 
         Parameters
         ----------
         season : int
-            Season year number format yyyy
+            Insert year(s) to return a directory of attendance for a given 
+            season. Season year number format yyyy
         date : str 'yyyy-mm-dd'
-            Date
+            Insert date to return information for attendance on a particular 
+            date. Format: MM/DD/YYYY
         gametype : str
-            Game type
+            Insert gameType(s) a directory of attendance for a given gameType.
+            For a list of all gameTypes: 
+            https://statsapi.mlb.com/api/v1/gameTypes
     
         Returns
         -------
