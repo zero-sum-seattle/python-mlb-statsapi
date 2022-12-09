@@ -150,16 +150,14 @@ class Mlb:
             Format stats(group=["statGroup1","statGroup2"],
                          type=["statType1","statType2"]).
             Available Hydrations:
-                hydrations
-                # awards
+                hydrations                
                 currentTeam
                 team
                 rosterEntries
                 relatives
                 transactions
                 social
-                education
-                # stats
+                education                
                 draft
                 mixedFeed
                 articles
@@ -258,7 +256,7 @@ class Mlb:
                     continue
         return player_ids
 
-    def get_teams(self, **params) -> List[Team]:
+    def get_teams(self, sport_id: int = 1, **params) -> List[Team]:
         """
         return the all Teams
 
@@ -326,8 +324,7 @@ class Mlb:
         >>> mlb.get_teams()
         [Team, Team, Team]
         """
-        if 'sportId' not in params:
-            params['sportId'] = 1
+        params['sportId'] = sport_id
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
@@ -1427,7 +1424,7 @@ class Mlb:
 
         return sport_ids
 
-    def get_league(self, league_id, **params) -> Union[League, None]:
+    def get_league(self, league_id: int, **params) -> Union[League, None]:
         """
         return league
 

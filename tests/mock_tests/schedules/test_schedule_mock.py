@@ -41,7 +41,7 @@ class TestScheduleMock(unittest.TestCase):
 
     def test_get_schedule(self, m ):
         """get_schedule should return schedules for date, starDate, endDate"""
-        m.get('https://statsapi.mlb.com/api/v1/schedule?date=04%2F07%2F2022&sportId=1', json=self.mock_schedule,
+        m.get('https://statsapi.mlb.com/api/v1/schedule?date=04/07/2022&sportId=1', json=self.mock_schedule,
         status_code=200)
         self.date = '04/07/2022'
         self.sport_id = 1
