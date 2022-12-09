@@ -1,6 +1,6 @@
 # Python MLB Stats API - Unofficial MLB Stats API
 
-![Development Branch Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test.yml/badge.svg?event=push)  ![Periodic External Test Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/catch-and-report.yml/badge.svg?event=schedule)
+![Development Branch Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test-mlbstatsapi-test.yml/badge.svg?event=push)  ![Periodic External Test Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/catch-and-report.yml/badge.svg?event=schedule)
 
 ![MLB Stats API](https://user-images.githubusercontent.com/2068393/203456246-dfdbdf0f-1e43-4329-aaa9-1c4008f9800d.jpg)
 
