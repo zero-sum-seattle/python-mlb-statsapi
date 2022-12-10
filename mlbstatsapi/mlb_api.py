@@ -128,6 +128,72 @@ class Mlb:
             for person in mlb_data.data['people']:
                 return Person(**person)
 
+    def get_persons(self, person_ids: Union[str, List[int]], **params) -> List[Person]:
+        """
+        This endpoint returns statistical data and biographical information 
+        for a players,umpires, and coaches based on playerId.
+
+        Parameters
+        ----------
+        person_ids : str, List[int]
+            Insert personId(s) to return biographical information for a 
+            specific player. Format '605151,592450' or [605151,592450]
+
+        Other Parameters
+        ----------------
+        hydrate : str
+            Insert hydration(s) to return statistical or biographical data 
+            for a specific player(s). 
+            Format stats(group=["statGroup1","statGroup2"],
+                         type=["statType1","statType2"]).
+            Available Hydrations:
+                hydrations                
+                currentTeam
+                team
+                rosterEntries
+                relatives
+                transactions
+                social
+                education                
+                draft
+                mixedFeed
+                articles
+                videos
+                xrefId
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        Person
+            Returns a Person
+
+        See Also
+        --------
+        Mlb.get_people : Return a list of People from sport id.
+        Mlb.get_people_id : Return person id from name.
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_person(660271)
+        Person
+        """
+        params['personIds'] = person_ids
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        person_list = []
+
+        if 'people' in mlb_data.data and mlb_data.data['people']:
+            for person in mlb_data.data['people']:
+                person_list.append(Person(**person))
+
+        return person_list
+
     def get_people_id(self, fullname: str, sport_id: int = 1, 
                       search_key: str = 'fullname', **params) -> List[int]:
         """

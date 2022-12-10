@@ -149,6 +149,7 @@ class Person:
     deathdate: Optional[str] = None
     deathcity: Optional[str] = None
     deathcountry: Optional[str] = None
+    deathstateprovince: Optional[str] = None
     lastplayeddate: Optional[str] = None
     uselastname: Optional[str] = None
     namesuffix: Optional[str] = None
