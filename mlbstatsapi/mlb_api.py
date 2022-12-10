@@ -138,9 +138,9 @@ class Mlb:
 
         Parameters
         ----------
-        person_ids : str
+        person_ids : str, List[int]
             Insert personId(s) to return biographical information for a 
-            specific player. Format '605151,592450'
+            specific player. Format '605151,592450' or [605151,592450]
 
         Other Parameters
         ----------------
