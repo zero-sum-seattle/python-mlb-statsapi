@@ -54,12 +54,7 @@ class Mlb:
         ----------
         sport_id : int
             Insert a sportId to return player information for a particular 
-            sport. 
-
-        Returns
-        -------
-        list
-            Returns a list of People
+            sport.
 
         Other Parameters
         ----------------
@@ -67,8 +62,12 @@ class Mlb:
             Insert year to return player information for a particular season.
         gameType : str
             Insert gameType to return player information for a particular 
-            gameType. Find available game types at 
-            https://statsapi.mlb.com/api/v1/gameTypes
+            gameType.
+
+        Returns
+        -------
+        list
+            Returns a list of People
 
         See Also
         --------
