@@ -1607,7 +1607,7 @@ class Mlb:
                     continue
         return division_ids
 
-    def get_season(self, season_id: str, sport_id: int = None, **params) -> Season:
+    def get_season(self, season_id: str, sport_id: int = 1, **params) -> Season:
         """
         return a season object for seasonid and sportid
 
