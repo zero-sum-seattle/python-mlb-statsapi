@@ -13,6 +13,7 @@ Description: Return Person Id(s) from fullname
 | `sport_id`  | string/int| Yes      | Insert a sportId to return player information for a particular sport. For a list of all sportIds: http://statsapi.mlb.com/api/v1/sports | 1
 | `fullname`   | string| Yes       | Search fullname | 
 | `search_key` | string| No     | Search key | 'fullname'
+
 **Other Parameters:**
 
 | Name       | Type      | Required | Description                         | Default
