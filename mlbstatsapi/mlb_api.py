@@ -131,7 +131,7 @@ class Mlb:
             for person in mlb_data.data['people']:
                 return Person(**person)
 
-    def get_persons(self, person_ids, **params) -> List[Person]:
+    def get_persons(self, person_ids: Union[str, List[int]], **params) -> List[Person]:
         """
         This endpoint returns statistical data and biographical information 
         for a players,umpires, and coaches based on playerId.
