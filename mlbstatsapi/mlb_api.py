@@ -54,9 +54,7 @@ class Mlb:
         ----------
         sport_id : int
             Insert a sportId to return player information for a particular 
-            sport. For a list of all sportIds: 
-            http://statsapi.mlb.com/api/v1/sports
-            !!! sportid for players defaults to 1 !!!
+            sport. 
 
         Returns
         -------
