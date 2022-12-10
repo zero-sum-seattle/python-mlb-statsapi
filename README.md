@@ -40,9 +40,9 @@ python3
 ## Documentation
 
 ### [People, Person, Players, Coaches](#people-examples)
-* `Mlb.get_people_id(self, sport_id: int = 1, **params)` - Return Person Id(s) from fullname
+* `Mlb.get_people_id(self, fullname: str, sport_id: int = 1, search_key: str = 'fullname', **params)` - Return Person Id(s) from fullname
 * `Mlb.get_person(self, player_id: int, **params)` - Return Person Object from Id
-* `Mlb.get_people(self, fullname: str, sport_id: int = 1, search_key: str = 'fullname', **params)` - Return all Players from Sport
+* `Mlb.get_people(self, sport_id: int = 1, **params)` - Return all Players from Sport
 ### [Draft](#draft-examples)
 * `Mlb.get_draft()` - Return a draft for a given year
 ### [Awards](#award-examples)
