@@ -81,7 +81,7 @@ python3
 * `Mlb.get_current_season(self, sport_id: int = None, **params)` - Return current season
 * `Mlb.get_all_seasons(self, sportid: int = None, **params)` - Return all seasons
 ### [Standings](#standings-examples)
-* `Mlb.get_standings()` - Return standings
+* `Mlb.get_standings(self, league_id: int, season: str, **params)` - Return standings
 ### [Schedules](#schedule-examples)
 * `Mlb.get_schedule(self, date: str = None, start_date: str = None, end_date: str = None, sport_id: int = 1, team_id: int = None, **params)` - Return a Schedule from dates
 * `Mlb.get_scheduled_games_by_date(self, date: str = None,start_date: str = None, end_date: str = None, sport_id: int = 1, **params)` - Return game ids from dates
