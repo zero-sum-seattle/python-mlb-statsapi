@@ -44,10 +44,10 @@ class Location:
     """
     address1: str
     city: str
-    state: str
     stateabbrev: str
-    postalcode: str
     country: str
+    state: Optional[str] = None
+    postalcode: Optional[str] = None
     phone: Optional[str] = None
     address2: Optional[str] = None
     defaultcoordinates: Optional[Union[VenueDefaultCoordinates, dict]] = field(default_factory=dict)

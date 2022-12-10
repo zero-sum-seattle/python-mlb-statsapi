@@ -49,8 +49,8 @@ class Play:
     runnerindex: List[int]
     runners: Union[List[PlayRunner], List[dict]]
     playevents: Union[List[PlayEvent], List[dict]]
-    playendtime: str
     atbatindex: int
+    playendtime: Optional[str] = None
     reviewdetails: Optional[Union[PlayReviewDetails, dict]] = None
 
     def __post_init__(self):

@@ -49,9 +49,10 @@ class PlayEvent:
     """
     details: Union[PlayDetails, dict]
     index: int
-    starttime: str
     ispitch: bool
     type: str
+    pfxid: Optional[str] = None
+    starttime: Optional[str] = None
     endtime: Optional[str] = None
     umpire: Optional[str] = None
     base: Optional[str] = None
