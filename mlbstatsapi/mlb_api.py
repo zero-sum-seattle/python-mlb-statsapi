@@ -1638,7 +1638,7 @@ class Mlb:
         Examples
         --------
         >>> mlb = Mlb()
-        >>> mlb.get_season(seasonid="2021", sportid=1)
+        >>> mlb.get_season(season_id="2021", sport_id=1)
         Season
         """
         if sport_id is not None:
@@ -1651,57 +1651,8 @@ class Mlb:
         if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
             for season in mlb_data.data['seasons']:
                 return Season(**season)
-       
-    def get_current_season(self, sport_id: int = None, **params) -> Season:
-        """
-        return a season object for sportid
 
-        Parameters
-        ----------
-        sportid : int
-            Insert a sportId to return a directory of seasons for a specific sport.
-        
-        Other Parameters
-        ----------------        
-        withGameTypeDates : bool, optional
-            Insert a withGameTypeDates to return season information for all gameTypes.
-        fields : str
-            Comma delimited list of specific fields to be returned. 
-            Format: topLevelNode, childNode, attribute
-
-        Returns
-        -------
-        Season
-            returns a season object
-
-        See Also
-        --------
-        Mlb.get_all_seasons : return a list of seasons
-
-        Examples
-        --------
-        >>> mlb = Mlb()
-        >>> mlb.get_current_season(sportid=1)
-        Season
-        >>> mlb = Mlb()
-        >>> mlb.get_current_season(leagueId=104)
-        Season
-        >>> mlb = Mlb()
-        >>> mlb.get_current_season(leagueId=104, withGameTypeDates=True)
-        Season
-        """
-        if sport_id is not None:
-            params['sportId'] = sport_id
-            
-        mlb_data = self._mlb_adapter_v1.get(endpoint='seasons', ep_params=params)
-        if 400 <= mlb_data.status_code <= 499:
-            return None
-
-        if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
-            for season in mlb_data.data['seasons']:
-                return Season(**season)
-
-    def get_all_seasons(self, sport_id: int = None, **params) -> List[Season]:
+    def get_seasons(self, sport_id: int = None, **params) -> List[Season]:
         """
         return a season object for sportid
 
