@@ -23,6 +23,21 @@ class TestPerson(unittest.TestCase):
         self.assertEqual(self.player.fullname, "Ty France")
         self.assertEqual(self.player.link, "/api/v1/people/664034")
 
+    def test_get_persons(self):
+        # set draft id
+        player_ids = '605151,592450'
+
+        # call get_persons return list of players objects
+        players = self.mlb.get_persons('605151,592450')
+
+        # players should not be None
+        self.assertIsNotNone(players)
+
+        # list should not be empty
+        self.assertNotEqual(players, [])
+
+        # items in list should be Person data
+        self.assertIsInstance(players[0], Person)
 
 class TestPersonPrimaryPosition(unittest.TestCase):
     @classmethod

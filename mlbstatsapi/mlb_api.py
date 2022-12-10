@@ -190,7 +190,7 @@ class Mlb:
 
         params['personIds'] = person_ids
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_ids}')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
@@ -199,6 +199,8 @@ class Mlb:
         if 'people' in mlb_data.data and mlb_data.data['people']:
             for person in mlb_data.data['people']:
                 person_list.append(Person(**person))
+
+        return person_list
 
     def get_people_id(self, fullname, sport_id: int = 1, 
                       search_key: str = 'fullname', **params) -> List[int]:
