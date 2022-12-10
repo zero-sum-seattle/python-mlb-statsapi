@@ -31,12 +31,12 @@ Description: Return Person Object from Id
 
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
-| `player_id`  | string/int| Yes      | unique person id | 
+| `person_id`  | string/int| Yes      | Insert personId for a specific player, coach or umpire based on playerId. | 
 
 `get_people`
 ----------
 
-Description: Return Person Object from Id
+Description: Return list of all people for sport_id
 
 **Parameters:**
 
@@ -44,3 +44,10 @@ Description: Return Person Object from Id
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
 | `sport_id`  | string/int| Yes      | Insert a sportId to return player information for a particular sport. For a list of all sportIds: http://statsapi.mlb.com/api/v1/sports | 1
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `season`  | string/int| Yes      | Insert year to return player information for a particular season. | 
+| `gameType`   | string| Yes       | Insert gameType to return player information for a particular gameType. Find available game types at https://statsapi.mlb.com/api/v1/gameTypes | 

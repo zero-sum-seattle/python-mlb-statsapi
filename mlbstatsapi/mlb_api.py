@@ -101,7 +101,7 @@ class Mlb:
         ----------
         person_id : int
             Insert personId for a specific player, coach or umpire based on
-            playerId..
+            playerId.
 
         Returns
         -------
@@ -139,7 +139,6 @@ class Mlb:
             Person full name
         sport_id : int
             Insert sportId to return player information for particular sport.
-            sportid for players defaults to 1
 
         Other Parameters
         ----------------
@@ -147,8 +146,7 @@ class Mlb:
             Insert year to return player information for a particular season.
         gameType : str
             Insert gameType to return player information for a particular 
-            gameType. Find available game types at 
-            https://statsapi.mlb.com/api/v1/gameTypes
+            gameType. 
 
         Returns
         -------
