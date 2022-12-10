@@ -13,4 +13,28 @@ Description: Return Person Id(s) from fullname
 | ---------- | --------- | -------- | ----------------------------------- | -------
 | `sport_id`  | string/int| Yes      | unique sport id of people | 1
 | `fullname`   | string| Yes       | Search fullname | 
-| `search_key` | string| No     | fullname
+| `search_key` | string| No     | Search key | 'fullname'
+
+`get_person`
+----------
+
+Description: Return Person Object from Id
+
+**Parameters:**
+
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `player_id`  | string/int| Yes      | unique person id | 
+
+`get_people`
+----------
+
+Description: Return Person Object from Id
+
+**Parameters:**
+
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `sport_id`  | string/int| Yes      | unique sport id of people | 1
