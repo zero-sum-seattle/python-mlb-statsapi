@@ -35,12 +35,12 @@ class PlayAbout:
     halfinning: str
     istopinning: bool
     inning: int
-    starttime: str
     endtime: str
     iscomplete: bool
     isscoringplay: bool
     hasout: bool
     captivatingindex: int
+    starttime: Optional[str] = None
     hasreview: Optional[bool] = None
 
 

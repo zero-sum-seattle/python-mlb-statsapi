@@ -109,8 +109,8 @@ class HitCoordinates:
     coordy : int
         Y coordinate for hit
     """
-    coordx: float
-    coordy: float
+    coordx: Optional[float] = None
+    coordy: Optional[float] = None
 
     @property
     def x(self):
