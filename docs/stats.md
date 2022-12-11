@@ -83,4 +83,45 @@ Return standard statistics.
 | `teamId` | string | No      | Insert teamId to return statistics for a given team. Default to "Qualified" playerPool. |
 | `leagueId` | string | No      | Insert leagueId to return statistics for a given team. Default to "Qualified" playerPool. |
 
+`stattypes`
+-----------
 
+Return stat types.
+
+**Stats:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `season` | string | No      | A season stat, supports stat groups hitting, pitching, fielding, and catching. Requires use of season param.|
+| `seasonAdvanced` | string | No      | A seasonAdvanced stat, supports stat groups hitting, pitching, fielding, and catching. |
+| `career` | string | No      |  A career stat, supports stat groups hitting, pitching, fielding, and catching. |
+| `careerAdvanced` | string | No      | A career advanced stat, supports stat groups hitting, pitching, fielding, and catching. |
+| `winLoss` | string | No      | A winLoss stat, supports stat groups hitting, pitching. |
+| `winLossPlayoffs` | string | No      | A winloss playoff stat, supports stat groups hitting, pitching. |
+| `homeAndAway` | string | No      |  A homeandaway stat, supports stat groups hitting, pitching. |
+| `homeAndAwayPlayoffs` | string | No      | A winLoss stat, supports stat groups hitting, pitching. |
+| `careerRegularSeason` | string | No      | A homeandaway playoffs stat, supports stat groups hitting, pitching. |
+| `careerPlayoffs` | string | No      |  A career playoff stat, supports stat groups hitting, pitching. |
+| `statsSingleSeason` | string | No      | A season stat, supports stat groups hitting, pitching, fielding, and catching. |
+| `yearByYear` | string | No      | A yearbyyear stat, supports stat groups hitting, pitching, fielding, and catching. |
+| `yearByYearPlayoffs` | string | No      | A yearByYearPlayoffs stat, supports stat groups hitting, pitching, fielding, and catching. |
+| `opponentsFaced` | string | No      | A opponentsFaced stat, supports stat groups hitting, pitching. |
+| `sabermetrics` | string | No      | A sabermetrics stat, supports stat groups hitting, pitching. |
+| `gameLog` | string | No      | A gameLog stat, supports stat groups hitting, pitching. |
+| `pitchLog` | string | No      | A pitchLog stat, supports stat groups hitting, pitching. |
+| `playLog` | string | No      | A playLog stat, supports stat groups hitting, pitching. |
+| `vsPlayer` | string | No      | A playLog stat, supports stat groups hitting, pitching. Requires use of opposingPlayerId param. |
+
+`statgroups`
+-----------
+
+Return stat types.
+
+**Groups:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `hitting` | string | No      | hitting stat group |
+| `pitching` | string | No      | pitching stat group |
+| `fielding` | string | No      | fielding stat group |
+| `catching` | string | No      | catching stat group |
