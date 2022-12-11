@@ -39,56 +39,57 @@ python3
 
 ## Documentation
 
-### [People, Person, Players, Coaches](#people-examples)
-* `Mlb.get_people_id()` - Return Person Id(s) from fullname
-* `Mlb.get_person()` - Return Person Object from Id
-* `Mlb.get_people()` - Return all Players from Sport
+### [People, Person, Players, Coaches](docs/people.md#class-mlb)
+* `Mlb.get_people_id(self, fullname: str, sport_id: int = 1, search_key: str = 'fullname', **params)` - Return Person Id(s) from fullname
+* `Mlb.get_person(self, player_id: int, **params)` - Return Person Object from Id
+* `Mlb.get_people(self, sport_id: int = 1, **params)` - Return all Players from Sport
 ### [Draft](#draft-examples)
 * `Mlb.get_draft()` - Return a draft for a given year
 ### [Awards](#award-examples)
 * `Mlb.get_awards()` - Return rewards recipinets for a given award
-### [Teams](#team-examples)
-* `Mlb.get_team_id()` - Return Team Id(s) from name
-* `Mlb.get_team()` - Return Team Object from Team Id
-* `Mlb.get_teams()` - Return all Teams for Sport
-* `Mlb.get_team_coaches()` - Return coaching roster for team for current or specified season
-* `Mlb.get_team_roster()` - Return player roster for team for current or specified season
+### [Teams](docs/teams.md#class-mlb)
+* `Mlb.get_team_id(self, team_name: str, search_key: str = 'name', **params)` - Return Team Id(s) from name
+* `Mlb.get_team(self, team_id: int, **params)` - Return Team Object from Team Id
+* `Mlb.get_teams(self, sport_id: int = 1, **params)` - Return all Teams for Sport
+* `Mlb.get_team_coaches(self, team_id: int, **params)` - Return coaching roster for team for current or specified season
+* `Mlb.get_team_roster(self, team_id: int, **params)` - Return player roster for team for current or specified season
 ### [Stats](#stats)
-* `Mlb.get_player_stats()` - Return stats by player id, stat type and groups
-* `Mlb.get_team_stats()` - Return stats by team id, stat types and groups
-* `Mlb.get_stats()` - Return stats by stat type and group args
-* `Mlb.get_players_stats_for_game()` - Return player stats for a game
+* `Mlb.get_player_stats(self, person_id: int, stats: list, groups: list, **params)` - Return stats by player id, stat type and groups
+* `Mlb.get_team_stats(self, team_id: int, stats: list, groups: list, **params)` - Return stats by team id, stat types and groups
+* `Mlb.get_stats(self, stats: list, groups: list, **params: dict)` - Return stats by stat type and group args
+* `Mlb.get_players_stats_for_game(self, person_id: int, game_id: int, **params)` - Return player stats for a game
 ### [Gamepace](#gamepace-examples)
-* `Mlb.get_gamepace()` - Return pace of game metrics for specific sport, league or team.
-### [Venues](#venue-examples)
-* `Mlb.get_venue_id()` - Return Venue Id(s)
-* `Mlb.get_venue()` - Return Venue Object from venue Id
-* `Mlb.get_venues()` - Return all Venues
+* `Mlb.get_gamepace(self, season: str, sport_id=1, **params)` - Return pace of game metrics for specific sport, league or team.
+### [Venues](docs/venues.md#class-mlb)
+* `Mlb.get_venue_id(self, venue_name: str, search_key: str = 'name', **params)` - Return Venue Id(s)
+* `Mlb.get_venue(self, venue_id: int, **params)` - Return Venue Object from venue Id
+* `Mlb.get_venues(self, **params)` - Return all Venues
 ### [Sports](#sport-examples)
-* `Mlb.get_sport()` - Return a Sport object from Id
-* `Mlb.get_sports()` - Return all teams for Sport Id
-* `Mlb.get_sport_id()`- Return Sport Id from name
+* `Mlb.get_sport(self, sport_id: int, **params)` - Return a Sport object from Id
+* `Mlb.get_sports(self, **params)` - Return all teams for Sport Id
+* `Mlb.get_sport_id(self, sport_name: str, search_key: str = 'name', **params)`- Return Sport Id from name
 ### [Divisions](#division-examples)
-* `Mlb.get_division()` - Return a Divison 
-* `Mlb.get_divisions()` - Return all Divisions
-* `Mlb.get_division_id()` - Return Division Id(s) from name
+* `Mlb.get_division(self, division_id: int, **params)` - Return a Divison 
+* `Mlb.get_divisions(self, **params)` - Return all Divisions
+* `Mlb.get_division_id(self, division_name: str, search_key: str = 'name', **params)` - Return Division Id(s) from name
 ### [Leagues](#league-examples)
-* `Mlb.get_league()` - Return a League from Id
-* `Mlb.get_leagues()` - Return all Leagues
-* `Mlb.get_league_id()` - Return League Id(s)
+* `Mlb.get_league(self, league_id: int, **params)` - Return a League from Id
+* `Mlb.get_leagues(self, **params)` - Return all Leagues
+* `Mlb.get_league_id(self, league_name: str, search_key: str = 'name', **params)` - Return League Id(s)
 ### [Seasons](#season-examples)
-* `Mlb.get_season()` - Return a season
-* `Mlb.get_current_season()` - Return current season
-* `Mlb.get_all_seasons()` - Return all seasons
+* `Mlb.get_season(self, season_id: str, sport_id: int = None, **params)` - Return a season
+* `Mlb.get_current_season(self, sport_id: int = None, **params)` - Return current season
+* `Mlb.get_all_seasons(self, sportid: int = None, **params)` - Return all seasons
 ### [Standings](#standings-examples)
-* `Mlb.get_standings()` - Return standings
+* `Mlb.get_standings(self, league_id: int, season: str, **params)` - Return standings
 ### [Schedules](#schedule-examples)
-* `Mlb.get_schedule()` - Return a Schedule from dates
+* `Mlb.get_schedule(self, date: str = None, start_date: str = None, end_date: str = None, sport_id: int = 1, team_id: int = None, **params)` - Return a Schedule from dates
+* `Mlb.get_scheduled_games_by_date(self, date: str = None,start_date: str = None, end_date: str = None, sport_id: int = 1, **params)` - Return game ids from dates
 ### [Games](#game-examples)
-* `Mlb.get_game()` - Return the Game for a specific Game Id
-* `Mlb.get_game_play_by_play()` - Return Play by play data for a game
-* `Mlb.get_game_line_score()` - Return a Linescore for a game
-* `Mlb.get_game_box_score()` - Return a Boxscore for a game
+* `Mlb.get_game(self, game_id: int, **params)` - Return the Game for a specific Game Id
+* `Mlb.get_game_play_by_play(self, game_id: int, **params)` - Return Play by play data for a game
+* `Mlb.get_game_line_score(self, game_id: int, **params)` - Return a Linescore for a game
+* `Mlb.get_game_box_score(self, game_id: int, **params)` - Return a Boxscore for a game
 
 ## Examples
 

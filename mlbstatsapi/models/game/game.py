@@ -37,7 +37,6 @@ class Game:
     metadata: Union[MetaData, dict]
     gamedata: Union[GameData, dict]
     livedata: Union[LiveData, dict]
-    secondarydatacaster: Optional[str] = None
 
     def __post_init__(self):
         self.metadata = MetaData(**self.metadata)

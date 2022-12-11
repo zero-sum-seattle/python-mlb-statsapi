@@ -42,10 +42,10 @@ class Location:
     phone : str
         Phone number for this venue
     """
-    address1: str
     city: str
-    stateabbrev: str
     country: str
+    stateabbrev: Optional[str] = None
+    address1: Optional[str] = None
     state: Optional[str] = None
     postalcode: Optional[str] = None
     phone: Optional[str] = None
