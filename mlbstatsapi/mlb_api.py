@@ -1181,7 +1181,6 @@ class Mlb:
         ----------------
         fields : str
             Comma delimited list of specific fields to be returned. 
-            Format: topLevelNode, childNode, attribute
 
         Returns
         -------
