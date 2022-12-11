@@ -53,7 +53,7 @@ python3
 * `Mlb.get_teams(self, sport_id: int = 1, **params)` - Return all Teams for Sport
 * `Mlb.get_team_coaches(self, team_id: int, **params)` - Return coaching roster for team for current or specified season
 * `Mlb.get_team_roster(self, team_id: int, **params)` - Return player roster for team for current or specified season
-### [Stats](#stats)
+### [Stats](docs/stats.md#class-mlb)
 * `Mlb.get_player_stats(self, person_id: int, stats: list, groups: list, **params)` - Return stats by player id, stat type and groups
 * `Mlb.get_team_stats(self, team_id: int, stats: list, groups: list, **params)` - Return stats by team id, stat types and groups
 * `Mlb.get_stats(self, stats: list, groups: list, **params: dict)` - Return stats by stat type and group args
