@@ -43,7 +43,7 @@ python3
 * `Mlb.get_people_id(self, fullname: str, sport_id: int = 1, search_key: str = 'fullname', **params)` - Return Person Id(s) from fullname
 * `Mlb.get_person(self, player_id: int, **params)` - Return Person Object from Id
 * `Mlb.get_people(self, sport_id: int = 1, **params)` - Return all Players from Sport
-### [Draft](#draft-examples)
+### [Draft](docs/drafts.md#class-mlb)
 * `Mlb.get_draft()` - Return a draft for a given year
 ### [Awards](#award-examples)
 * `Mlb.get_awards()` - Return rewards recipinets for a given award
