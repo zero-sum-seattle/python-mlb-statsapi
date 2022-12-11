@@ -35,11 +35,11 @@ class PlayAbout:
     halfinning: str
     istopinning: bool
     inning: int
-    endtime: str
     iscomplete: bool
     isscoringplay: bool
     hasout: bool
     captivatingindex: int
+    endtime: Optional[str] = None
     starttime: Optional[str] = None
     hasreview: Optional[bool] = None
 
@@ -69,11 +69,11 @@ class PlayResult:
         If the play was an out
     """
     type: str
-    event: str
-    eventtype: str
     rbi: int
     awayscore: int
     homescore: int
+    event: Optional[str] = None
+    eventtype: Optional[str] = None
     description: Optional[str] = None
     isout: Optional[bool] = None
 

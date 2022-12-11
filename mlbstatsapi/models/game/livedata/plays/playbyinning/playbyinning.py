@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from .attributes import PlayByInningHits
 
 @dataclass
-class PlayByInning():
+class PlayByInning:
     """
     A class to represent a play by inning in this game.
 
