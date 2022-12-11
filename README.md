@@ -39,7 +39,7 @@ python3
 
 ## Documentation
 
-### [People, Person, Players, Coaches](#people-examples)
+### [People, Person, Players, Coaches](docs/people.md#class-mlb)
 * `Mlb.get_people_id(self, fullname: str, sport_id: int = 1, search_key: str = 'fullname', **params)` - Return Person Id(s) from fullname
 * `Mlb.get_person(self, player_id: int, **params)` - Return Person Object from Id
 * `Mlb.get_people(self, sport_id: int = 1, **params)` - Return all Players from Sport
@@ -47,7 +47,7 @@ python3
 * `Mlb.get_draft()` - Return a draft for a given year
 ### [Awards](#award-examples)
 * `Mlb.get_awards()` - Return rewards recipinets for a given award
-### [Teams](#team-examples)
+### [Teams](docs/teams.md#class-mlb)
 * `Mlb.get_team_id(self, team_name: str, search_key: str = 'name', **params)` - Return Team Id(s) from name
 * `Mlb.get_team(self, team_id: int, **params)` - Return Team Object from Team Id
 * `Mlb.get_teams(self, sport_id: int = 1, **params)` - Return all Teams for Sport
@@ -60,7 +60,7 @@ python3
 * `Mlb.get_players_stats_for_game(self, person_id: int, game_id: int, **params)` - Return player stats for a game
 ### [Gamepace](#gamepace-examples)
 * `Mlb.get_gamepace(self, season: str, sport_id=1, **params)` - Return pace of game metrics for specific sport, league or team.
-### [Venues](#venue-examples)
+### [Venues](docs/venues.md#class-mlb)
 * `Mlb.get_venue_id(self, venue_name: str, search_key: str = 'name', **params)` - Return Venue Id(s)
 * `Mlb.get_venue(self, venue_id: int, **params)` - Return Venue Object from venue Id
 * `Mlb.get_venues(self, **params)` - Return all Venues
