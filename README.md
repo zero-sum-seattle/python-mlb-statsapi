@@ -64,7 +64,7 @@ python3
 * `Mlb.get_venue_id(self, venue_name: str, search_key: str = 'name', **params)` - Return Venue Id(s)
 * `Mlb.get_venue(self, venue_id: int, **params)` - Return Venue Object from venue Id
 * `Mlb.get_venues(self, **params)` - Return all Venues
-### [Sports](#sport-examples)
+### [Sports](docs/sports.md#class-mlb)
 * `Mlb.get_sport(self, sport_id: int, **params)` - Return a Sport object from Id
 * `Mlb.get_sports(self, **params)` - Return all teams for Sport Id
 * `Mlb.get_sport_id(self, sport_name: str, search_key: str = 'name', **params)`- Return Sport Id from name
@@ -72,7 +72,7 @@ python3
 * `Mlb.get_division(self, division_id: int, **params)` - Return a Divison 
 * `Mlb.get_divisions(self, **params)` - Return all Divisions
 * `Mlb.get_division_id(self, division_name: str, search_key: str = 'name', **params)` - Return Division Id(s) from name
-### [Leagues](#league-examples)
+### [Leagues](docs/leagues.md#class-mlb)
 * `Mlb.get_league(self, league_id: int, **params)` - Return a League from Id
 * `Mlb.get_leagues(self, **params)` - Return all Leagues
 * `Mlb.get_league_id(self, league_name: str, search_key: str = 'name', **params)` - Return League Id(s)

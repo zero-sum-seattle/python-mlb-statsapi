@@ -1299,7 +1299,7 @@ class Mlb:
 
     def get_sport(self, sport_id: int, **params) -> Union[Sport, None]:
         """
-        return sport object from sportid
+        return sport object from sport_id
 
         Parameters
         ----------
@@ -1385,6 +1385,8 @@ class Mlb:
         ----------
         sport_name : str
             Sport name
+        search_key : str
+            search key name 
 
         Returns
         -------
@@ -1431,7 +1433,7 @@ class Mlb:
         Other Parameters
         ----------------
         fields : str
-            Format: Comma delimited list of specific fields to be returned. 
+            Comma delimited list of specific fields to be returned. 
             Format: topLevelNode, childNode, attribute    
 
         Returns
@@ -1468,7 +1470,7 @@ class Mlb:
 
         Other Parameters
         ----------------
-        league_id : str
+        leagueId : str
             leagueId(s) to return league information for specific leagues.
             Format '103,104'
         sportId : int
@@ -1478,7 +1480,7 @@ class Mlb:
             Insert year(s) to return league information for a specific season. 
             Format '2017,2018'
         fields : str
-            Format: Comma delimited list of specific fields to be returned. 
+            Comma delimited list of specific fields to be returned. 
             Format: topLevelNode, childNode, attribute    
 
         See Also
