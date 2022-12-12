@@ -1922,7 +1922,7 @@ class Mlb:
         if 'records' in mlb_data.data and mlb_data.data['records']:
             return Attendance(**mlb_data.data)
 
-    def get_draft(self, year_id, **params) -> List[Round]:
+    def get_draft(self, year_id: int, **params) -> List[Round]:
         """
         return a draft object for year_id
 
