@@ -44,9 +44,9 @@ python3
 * `Mlb.get_person(self, player_id: int, **params)` - Return Person Object from Id
 * `Mlb.get_people(self, sport_id: int = 1, **params)` - Return all Players from Sport
 ### [Draft](#draft-examples)
-* `Mlb.get_draft()` - Return a draft for a given year
+* `Mlb.get_draft(self, year_id: int, **params)` - Return a draft for a given year
 ### [Awards](docs/awards.md#class-mlb)
-* `Mlb.get_awards()` - Return rewards recipinets for a given award
+* `Mlb.get_awards(self, award_id: int, **params)` - Return rewards recipinets for a given award
 ### [Teams](docs/teams.md#class-mlb)
 * `Mlb.get_team_id(self, team_name: str, search_key: str = 'name', **params)` - Return Team Id(s) from name
 * `Mlb.get_team(self, team_id: int, **params)` - Return Team Object from Team Id
