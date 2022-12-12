@@ -1856,7 +1856,7 @@ class Mlb:
 
     def get_attendance(self, team_id: int = None, league_id: int = None,
                        league_list_id: int = None, 
-                       params: dict = {}) -> Union[Attendance, None]:
+                       **params) -> Union[Attendance, None]:
         """
         returns attendance data based on teamId, leagueId, or leagueListId.
 
@@ -1974,7 +1974,7 @@ class Mlb:
                     round_list.append(Round(**round))
         return round_list
 
-    def get_awards(self, award_id, **params) -> List[Award]:
+    def get_awards(self, award_id: int, **params) -> List[Award]:
         """
         return a list of awards for award_id
 
