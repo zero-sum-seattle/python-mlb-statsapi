@@ -1553,7 +1553,7 @@ class Mlb:
 
         Parameters
         ----------
-        divisonid : int
+        divison_id : int
             divisionId to return a directory of division(s) for a specific division.
 
         Returns
@@ -1634,6 +1634,8 @@ class Mlb:
         ----------
         division_name : str
             Division name
+        search_key : str
+            search key name
 
         Returns
         -------
@@ -1673,9 +1675,9 @@ class Mlb:
 
         Parameters
         ----------
-        sportid : int
+        sport_id : int
             Insert a sportId to return a directory of seasons for a specific sport.
-        seasonid : str
+        season_id : str
             Insert year to return season information for a particular season.
         
         Other Parameters
@@ -1718,7 +1720,7 @@ class Mlb:
 
         Parameters
         ----------
-        sportid : int
+        sport_id : int
             Insert a sportId to return a directory of seasons for a specific 
             sport.
 
