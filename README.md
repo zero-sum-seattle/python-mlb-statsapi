@@ -14,13 +14,21 @@
 
 ![MLB Stats API](https://user-images.githubusercontent.com/2068393/203456246-dfdbdf0f-1e43-4329-aaa9-1c4008f9800d.jpg)
 
+## Getting Started
 
-*Python-mlb-statsapi* is an unofficial MLB Stats API written in python 3.7+. It provides developers access to the MLB Stats API endpoint to pull information related to MLB Rosters, Teams, Players, and stats. 
-
-This is a educational project so no commercial use. 
-
-*Copyright Notice*
+##### *Copyright Notice*  
 This package and its authors are not affiliated with MLB or any MLB team. This API wrapper interfaces with MLB's Stats API. Use of MLB data is subject to the notice posted at http://gdx.mlb.com/components/copyright.txt.
+
+##### This is a educational project so no commercial use. 
+
+*Python-mlb-statsapi* is an unofficial MLB Stats API written in python 3.7+. It provides developers access to the MLB Stats API endpoint to pull information related to MLB Rosters, Teams, Players, stats and much more. All the information for getting started can be found in this README. However, a more detailed explanation can be found in our Docs section or in our Wiki.
+
+
+<div align="center">
+
+### [Docs](https://github.com/zero-sum-seattle/python-mlb-statsapi/tree/development/docs) | [Examples](#examples) | [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | [API](https://statsapi.mlb.com/) 
+
+<div align="left">
 
 ## Installation
 ```python
