@@ -1958,6 +1958,7 @@ class Mlb:
         -------
         list of DraftPicks
             returns a list of DraftPicks
+            
         See Also
         --------
 
@@ -2062,63 +2063,14 @@ class Mlb:
         team_id : int
             the team id 
         stats : list
-            list of stat types.
-            List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
+            list of stat types. List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
         groups : list
-            list of stat grous.
-            List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
+            list of stat grous. List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
 
-    
         Other Parameters
         ----------------
         season : str
             Insert year to return team stats for a particular season, season=2018
-
-        Stats
-        -----
-        season : str
-            a season stat, supports stat groups hitting, pitching, fielding, and catching
-        seasonAdvanced : str
-            a seasonAdvanced stat, supports stat groups hitting, pitching, fielding, and catching
-        career : str
-            a career stat, supports stat groups hitting, pitching, fielding, and catching
-        winLoss : str
-            a winLoss stat, supports stat groups hitting, pitching
-        winLossPlayoffs : str
-            a winloss playoff stat, supports stat groups hitting, pitching
-        homeAndAway : str
-            a homeandaway stat, supports stat groups hitting, pitching
-        homeAndAwayPlayoffs : str
-            a homeandaway playoffs stat, supports stat groups hitting, pitching
-        careerRegularSeason : str
-            a career stat, supports stat groups hitting, pitching
-        careerPlayoffs : str
-            a career playoff stat, supports stat groups hitting, pitching
-        statsSingleSeason : str 
-            a careeer playoff stat, supports stat groups hitting, pitching
-        careerAdvanced : str
-            a careerAdvanced  stat, supports stat groups hitting, pitching
-        yearByYear : str
-            a yearbyyear  stat, supports stat groups hitting, pitching
-        yearByYearPlayoffs : str
-            a yearbyyear playoff stat, supports stat groups hitting, pitching
-        opponentsFaced : str
-            a opponentsFace stat, supports stat groups hitting, pitching
-        sabermetrics : str
-            a sabermetrics stat
-        gameLog : str
-            a gamelog stat, supports stat groups hitting, pitching
-
-        Groups
-        ------
-        hitting : str
-            stat group hitting
-        pitching : str
-            stat group pitching
-        fielding : str
-            stat group fielding
-        catching : str
-            stat group catching
 
         Returns
         -------
@@ -2213,11 +2165,9 @@ class Mlb:
         person_id : int
             the person id
         stats : list
-            list of stat types.
-            List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
+            list of stat types. List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
         groups : list
-            list of stat grous.
-            List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
+            list of stat grous. List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
 
         Other Parameters
         ----------------
@@ -2226,52 +2176,6 @@ class Mlb:
         eventType : str
             Notes for individual events for playLog, playlog can be filered by individual events.
             List of eventTypes can be found at https://statsapi.mlb.com/api/v1/eventTypes
-
-        Stats
-        -----
-        season : str
-            a season stat, supports stat groups hitting, pitching, fielding, and catching
-        seasonAdvanced : str
-            a seasonAdvanced stat, supports stat groups hitting, pitching, fielding, and catching
-        career : str
-            a career stat, supports stat groups hitting, pitching, fielding, and catching
-        winLoss : str
-            a winLoss stat, supports stat groups hitting, pitching
-        winLossPlayoffs : str
-            a winloss playoff stat, supports stat groups hitting, pitching
-        homeAndAway : str
-            a homeandaway stat, supports stat groups hitting, pitching
-        homeAndAwayPlayoffs : str
-            a homeandaway playoffs stat, supports stat groups hitting, pitching
-        careerRegularSeason : str
-            a career stat, supports stat groups hitting, pitching
-        careerPlayoffs : str
-            a career playoff stat, supports stat groups hitting, pitching
-        statsSingleSeason : str 
-            a careeer playoff stat, supports stat groups hitting, pitching
-        careerAdvanced : str
-            a careerAdvanced  stat, supports stat groups hitting, pitching
-        yearByYear : str
-            a yearbyyear  stat, supports stat groups hitting, pitching
-        yearByYearPlayoffs : str
-            a yearbyyear playoff stat, supports stat groups hitting, pitching
-        opponentsFaced : str
-            a opponentsFace stat, supports stat groups hitting, pitching
-        sabermetrics : str
-            a sabermetrics stat
-        gameLog : str
-            a gamelog stat, supports stat groups hitting, pitching
-
-        Groups
-        ------
-        hitting : str
-            stat group hitting
-        pitching : str
-            stat group pitching
-        fielding : str
-            stat group fielding
-        catching : str
-            stat group catching
 
         Returns
         -------
@@ -2314,11 +2218,9 @@ class Mlb:
         params : dict
             dict of params to pass
         stats : list
-            list of stat types.
-            List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
+            list of stat types. List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
         groups : list
-            list of stat grous.
-            List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
+            list of stat grous. List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
 
         Other Parameters
         ----------------
@@ -2337,51 +2239,6 @@ class Mlb:
             Insert sportId to return statistics for a given sport.
             For a list of all sportIds : Mlb.get_sports()
 
-        Stats
-        -----
-        season : str
-            a season stat, supports stat groups hitting, pitching, fielding, and catching
-        seasonAdvanced : str
-            a seasonAdvanced stat, supports stat groups hitting, pitching, fielding, and catching
-        career : str
-            a career stat, supports stat groups hitting, pitching, fielding, and catching
-        winLoss : str
-            a winLoss stat, supports stat groups hitting, pitching
-        winLossPlayoffs : str
-            a winloss playoff stat, supports stat groups hitting, pitching
-        homeAndAway : str
-            a homeandaway stat, supports stat groups hitting, pitching
-        homeAndAwayPlayoffs : str
-            a homeandaway playoffs stat, supports stat groups hitting, pitching
-        careerRegularSeason : str
-            a career stat, supports stat groups hitting, pitching
-        careerPlayoffs : str
-            a career playoff stat, supports stat groups hitting, pitching
-        statsSingleSeason : str 
-            a careeer playoff stat, supports stat groups hitting, pitching
-        careerAdvanced : str
-            a careerAdvanced  stat, supports stat groups hitting, pitching
-        yearByYear : str
-            a yearbyyear  stat, supports stat groups hitting, pitching
-        yearByYearPlayoffs : str
-            a yearbyyear playoff stat, supports stat groups hitting, pitching
-        opponentsFaced : str
-            a opponentsFace stat, supports stat groups hitting, pitching
-        sabermetrics : str
-            a sabermetrics stat
-        gameLog : str
-            a gamelog stat, supports stat groups hitting, pitching
-
-        Groups
-        ------
-        hitting : str
-            stat group hitting
-        pitching : str
-            stat group pitching
-        fielding : str
-            stat group fielding
-        catching : str
-            stat group catching
         Returns
         -------
         splits : dict
