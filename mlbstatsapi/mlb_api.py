@@ -1555,7 +1555,7 @@ class Mlb:
 
         Parameters
         ----------
-        divisonid : int
+        divison_id : int
             divisionId to return a directory of division(s) for a specific division.
 
         Returns
@@ -1636,6 +1636,8 @@ class Mlb:
         ----------
         division_name : str
             Division name
+        search_key : str
+            search key name
 
         Returns
         -------
@@ -1675,9 +1677,9 @@ class Mlb:
 
         Parameters
         ----------
-        sportid : int
+        sport_id : int
             Insert a sportId to return a directory of seasons for a specific sport.
-        seasonid : str
+        season_id : str
             Insert year to return season information for a particular season.
         
         Other Parameters
@@ -1720,7 +1722,7 @@ class Mlb:
 
         Parameters
         ----------
-        sportid : int
+        sport_id : int
             Insert a sportId to return a directory of seasons for a specific 
             sport.
 
@@ -1856,7 +1858,7 @@ class Mlb:
 
     def get_attendance(self, team_id: int = None, league_id: int = None,
                        league_list_id: int = None, 
-                       params: dict = {}) -> Union[Attendance, None]:
+                       **params) -> Union[Attendance, None]:
         """
         returns attendance data based on teamId, leagueId, or leagueListId.
 
@@ -1922,7 +1924,7 @@ class Mlb:
         if 'records' in mlb_data.data and mlb_data.data['records']:
             return Attendance(**mlb_data.data)
 
-    def get_draft(self, year_id, **params) -> List[Round]:
+    def get_draft(self, year_id: int, **params) -> List[Round]:
         """
         return a draft object for year_id
 
@@ -1974,7 +1976,7 @@ class Mlb:
                     round_list.append(Round(**round))
         return round_list
 
-    def get_awards(self, award_id, **params) -> List[Award]:
+    def get_awards(self, award_id: int, **params) -> List[Award]:
         """
         return a list of awards for award_id
 

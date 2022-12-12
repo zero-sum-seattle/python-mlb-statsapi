@@ -1,54 +1,45 @@
 ﻿Class: `Mlb`
 ===================
 
-`get_template`
+`get_season`
 ----------
 
-Description: Returns 
+Description: Returns a Season
 
 **Parameters:**
 
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
+| `season_id` | string/int | Yes      | Insert year to return season information for a particular season. |
+| `sport_id` | string/int | No      | Insert a sportId to return a directory of seasons for a specific sport. | 1
+
 
 **Other Parameters:**
 
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
+| `withGameTypeDates` | bool | No      | Insert a withGameTypeDates to return season information for all gameTypes. |
+| `fields` | string/int | No      | Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute  | 
 
-`get_template`
+
+`get_seasons`
 ----------
 
-Description: Return
+Description: Return a list of Seasons
 
 **Parameters:**
 
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
+| `sport_id` | string/int | Yes      | Insert a sportId to return a directory of seasons for a specific sport. | 1
 
 **Other Parameters:**
 
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
+| `divisionId` | string/int | No      | Insert divisionId to return a directory of seasons for a specific division. |
+| `leagueId` | string/int | No      |  Insert leagueId to return a directory of seasons in a specific league. |
+| `withGameTypeDates` | bool | No      | Insert a withGameTypeDates to return season information for all gameTypes. |
+| `fields` | string/int | No      | Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute |
 
-`get_template`
-----------
-
-Description: Return
-
-
-**Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
-
-**Other Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
+            
