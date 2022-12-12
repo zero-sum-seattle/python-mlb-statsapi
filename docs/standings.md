@@ -1,41 +1,7 @@
 ﻿Class: `Mlb`
 ===================
 
-`get_template`
-----------
-
-Description: Returns 
-
-**Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
-
-**Other Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
-
-`get_template`
-----------
-
-Description: Return
-
-**Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
-
-**Other Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
-
-`get_template`
+`get_standings`
 ----------
 
 Description: Return
@@ -45,10 +11,14 @@ Description: Return
 
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
+| `league_id` | string/int | Yes      | Insert leagueId to return all standings based on a particular standingType for a specific league. |
+| `season` | string | Yes      | Insert year to return all standings based on a particular year. |
 
 **Other Parameters:**
 
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
+| `standingsTypes` | string | No      | Insert standingType to return all standings based on a particular year. Find standingTypes at https://statsapi.mlb.com/api/v1/standingsTypes |
+| `date` | string | Yes      | Insert date to return standing information for on a particular date. Format: MM/DD/YYYY  |
+            
+            
