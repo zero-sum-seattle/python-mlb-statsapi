@@ -79,7 +79,7 @@ python3
 ### [Seasons](docs/seasons.md#class-mlb)
 * `Mlb.get_season(self, season_id: str, sport_id: int = None, **params)` - Return a season
 * `Mlb.get_seasons(self, sportid: int = None, **params)` - Return all seasons
-### [Standings](#standings-examples)
+### [Standings](docs/standings.md#class-mlb)
 * `Mlb.get_standings(self, league_id: int, season: str, **params)` - Return standings
 ### [Schedules](#schedule-examples)
 * `Mlb.get_schedule(self, date: str = None, start_date: str = None, end_date: str = None, sport_id: int = 1, team_id: int = None, **params)` - Return a Schedule from dates
