@@ -78,8 +78,7 @@ python3
 * `Mlb.get_league_id(self, league_name: str, search_key: str = 'name', **params)` - Return League Id(s)
 ### [Seasons](docs/seasons.md#class-mlb)
 * `Mlb.get_season(self, season_id: str, sport_id: int = None, **params)` - Return a season
-* `Mlb.get_current_season(self, sport_id: int = None, **params)` - Return current season
-* `Mlb.get_all_seasons(self, sportid: int = None, **params)` - Return all seasons
+* `Mlb.get_seasons(self, sportid: int = None, **params)` - Return all seasons
 ### [Standings](#standings-examples)
 * `Mlb.get_standings(self, league_id: int, season: str, **params)` - Return standings
 ### [Schedules](#schedule-examples)
