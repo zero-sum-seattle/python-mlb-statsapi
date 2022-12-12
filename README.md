@@ -1,16 +1,35 @@
-# Python MLB Stats API - Unofficial MLB Stats API
+<div align="center">
 
-![Development Branch Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test-mlbstatsapi-test.yml/badge.svg?event=push)  ![Periodic External Test Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/catch-and-report.yml/badge.svg?event=schedule)
+# Python MLB Stats API
+
+**The Unofficial Python Wrapper for the MLB Stats API**
+
+[![PyPI version](https://badge.fury.io/py/python-mlb-statsapi.svg)](https://badge.fury.io/py/python-mlb-statsapi)
+![Development Branch Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test-mlbstatsapi-test.yml/badge.svg?event=push)
+![Periodic External Test Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/catch-and-report.yml/badge.svg?event=schedule)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-mlb-statsapi)
+![GitHub](https://img.shields.io/github/license/zero-sum-seattle/python-mlb-statsapi)
+
+<div align="left">
+
+### *Copyright Notice*  
+This package and its authors are not affiliated with MLB or any MLB team. This API wrapper interfaces with MLB's Stats API. Use of MLB data is subject to the notice posted at http://gdx.mlb.com/components/copyright.txt.
+
+###### This is an educational project so no commercial use. 
+
 
 ![MLB Stats API](https://user-images.githubusercontent.com/2068393/203456246-dfdbdf0f-1e43-4329-aaa9-1c4008f9800d.jpg)
 
+## Getting Started
 
-*Python-mlb-statsapi* is an unffocial MLB Stats API written in python 3.7+. It provides developers access to the MLB Stats API endpoint to pull information related to MLB Rosters, Teams, Players, and stats. 
+*Python-mlb-statsapi* is an unofficial MLB Stats API written in python 3.7+. It provides developers access to the MLB Stats API endpoint to pull information related to MLB Rosters, Teams, Players, stats and much more. All the information for getting started can be found in this README. However, a more detailed explanation can be found in our Docs section or in our Wiki.
 
-This is a educational project so no commercial use. 
 
-*Copyright Notice*
-This package and its authors are not affiliated with MLB or any MLB team. This API wrapper interfaces with MLB's Stats API. Use of MLB data is subject to the notice posted at http://gdx.mlb.com/components/copyright.txt.
+<div align="center">
+
+### [Docs](https://github.com/zero-sum-seattle/python-mlb-statsapi/tree/development/docs) | [Examples](#examples) | [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | [API](https://statsapi.mlb.com/) 
+
+<div align="left">
 
 ## Installation
 ```python
