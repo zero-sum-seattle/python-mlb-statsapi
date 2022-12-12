@@ -83,10 +83,10 @@ Return standard statistics.
 | `teamId` | string | No      | Insert teamId to return statistics for a given team. Default to "Qualified" playerPool. |
 | `leagueId` | string | No      | Insert leagueId to return statistics for a given team. Default to "Qualified" playerPool. |
 
-`stattypes`
+`Stats`
 -----------
 
-Return stat types.
+Stat types.
 
 **Stats:**
 
@@ -112,10 +112,10 @@ Return stat types.
 | `playLog` | string | No      | A playLog stat, supports stat groups hitting, pitching. |
 | `vsPlayer` | string | No      | A playLog stat, supports stat groups hitting, pitching. Requires use of opposingPlayerId param. |
 
-`statgroups`
+`Groups`
 -----------
 
-Return stat types.
+Stat Groups.
 
 **Groups:**
 
