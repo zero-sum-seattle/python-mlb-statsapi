@@ -1,4 +1,4 @@
-name: Python Build MLBstats API 
+name: Build
 
 on:
   push:

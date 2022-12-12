@@ -1,6 +1,16 @@
-# Python MLB Stats API - Unofficial MLB Stats API
+<div align="center">
 
-![Development Branch Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test-mlbstatsapi-test.yml/badge.svg?event=push)  ![Periodic External Test Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/catch-and-report.yml/badge.svg?event=schedule)
+# Python MLB Stats API
+
+**The Unofficial Python Wrapper for the MLB Stats API**
+
+[![PyPI version](https://badge.fury.io/py/python-mlb-statsapi.svg)](https://badge.fury.io/py/python-mlb-statsapi)
+![Development Branch Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test-mlbstatsapi-test.yml/badge.svg?event=push)
+![Periodic External Test Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/catch-and-report.yml/badge.svg?event=schedule)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-mlb-statsapi)
+![GitHub](https://img.shields.io/github/license/zero-sum-seattle/python-mlb-statsapi)
+
+<div align="left">
 
 ![MLB Stats API](https://user-images.githubusercontent.com/2068393/203456246-dfdbdf0f-1e43-4329-aaa9-1c4008f9800d.jpg)
 
