@@ -1,0 +1,50 @@
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "leagues": [
+    {
+    "id": 103,
+    "name": "American League",
+    "link": "/api/v1/league/103",
+    "abbreviation": "AL",
+    "nameShort": "American",
+    "seasonState": "offseason",
+    "hasWildCard": true,
+    "hasSplitSeason": false,
+    "numGames": 162,
+    "hasPlayoffPoints": false,
+    "numTeams": 15,
+    "numWildcardTeams": 3,
+    "seasonDateInfo": {
+        "seasonId": "2022",
+        "preSeasonStartDate": "2022-01-01",
+        "preSeasonEndDate": "2022-03-16",
+        "seasonStartDate": "2022-03-17",
+        "springStartDate": "2022-03-17",
+        "springEndDate": "2022-04-06",
+        "regularSeasonStartDate": "2022-04-07",
+        "lastDate1stHalf": "2022-07-17",
+        "allStarDate": "2022-07-19",
+        "firstDate2ndHalf": "2022-07-21",
+        "regularSeasonEndDate": "2022-10-05",
+        "postSeasonStartDate": "2022-10-07",
+        "postSeasonEndDate": "2022-11-05",
+        "seasonEndDate": "2022-11-05",
+        "offseasonStartDate": "2022-11-06",
+        "offSeasonEndDate": "2022-12-31",
+        "seasonLevelGamedayType": "P",
+        "gameLevelGamedayType": "P",
+        "qualifierPlateAppearances": 3.1,
+        "qualifierOutsPitched": 3
+    },
+    "season": "2022",
+    "orgCode": "AL",
+    "conferencesInUse": false,
+    "divisionsInUse": true,
+    "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1"
+    },
+    "sortOrder": 21,
+    "active": true
+    }]
+}

@@ -1,0 +1,105 @@
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "divisions": [
+    {
+    "id": 205,
+    "name": "National League Central",
+    "season": "2022",
+    "nameShort": "NL Central",
+    "link": "/api/v1/divisions/205",
+    "abbreviation": "NLC",
+    "league": {
+        "id": 104,
+        "link": "/api/v1/league/104"
+    },
+    "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1"
+    },
+    "hasWildcard": false,
+    "sortOrder": 33,
+    "numPlayoffTeams": 1,
+    "active": true
+    },
+    {
+    "id": 200,
+    "name": "American League West",
+    "season": "2022",
+    "nameShort": "AL West",
+    "link": "/api/v1/divisions/200",
+    "abbreviation": "ALW",
+    "league": {
+        "id": 103,
+        "link": "/api/v1/league/103"
+    },
+    "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1"
+    },
+    "hasWildcard": false,
+    "sortOrder": 24,
+    "numPlayoffTeams": 1,
+    "active": true
+    },
+    {
+    "id": 233,
+    "name": "Pacific Coast League East",
+    "season": "2022",
+    "nameShort": "PCL East",
+    "link": "/api/v1/divisions/233",
+    "abbreviation": "PCLE",
+    "league": {
+        "id": 112,
+        "link": "/api/v1/league/112"
+    },
+    "sport": {
+        "id": 11,
+        "link": "/api/v1/sports/11"
+    },
+    "hasWildcard": false,
+    "sortOrder": 122,
+    "numPlayoffTeams": 1,
+    "active": true
+    },
+    {
+    "id": 212,
+    "name": "Eastern League Northeast",
+    "season": "2022",
+    "nameShort": "EAS Northeast",
+    "link": "/api/v1/divisions/212",
+    "abbreviation": "EASNE",
+    "league": {
+        "id": 113,
+        "link": "/api/v1/league/113"
+    },
+    "sport": {
+        "id": 12,
+        "link": "/api/v1/sports/12"
+    },
+    "hasWildcard": false,
+    "sortOrder": 213,
+    "numPlayoffTeams": 1,
+    "active": true
+    },
+    {
+    "id": 201,
+    "name": "American League East",
+    "season": "2022",
+    "nameShort": "AL East",
+    "link": "/api/v1/divisions/201",
+    "abbreviation": "ALE",
+    "league": {
+        "id": 103,
+        "link": "/api/v1/league/103"
+    },
+    "sport": {
+        "id": 1,
+        "link": "/api/v1/sports/1"
+    },
+    "hasWildcard": false,
+    "sortOrder": 22,
+    "numPlayoffTeams": 1,
+    "active": true
+    }
+    ]
+}
