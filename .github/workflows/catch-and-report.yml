@@ -1,0 +1,32 @@
+name: External tests - Bidaily 
+
+on:
+  schedule:
+    # Run every day at 10:25 am and 4:25 pm PST
+    - cron:  '25 17,23 * * *'
+
+jobs:
+  catch_errors_and_report:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip       
+          python3 -m pip install --upgrade pytest       
+          python3 -m pip install --upgrade requests      
+          python3 -m pip install --upgrade slack_sdk
+          python3 -m pip install --upgrade requests_mock
+      - name: Test and report
+        run: |
+          script -q -c 'python3 -m pytest --tb=no tests/*' /dev/null | python3 ./.github/scripts/pytest_report_issues.py ${{ secrets.BOT_CHANNEL }} ${{ secrets.SLACK_WEBCLIENT_TOKEN }}

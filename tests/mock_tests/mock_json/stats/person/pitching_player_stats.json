@@ -1,0 +1,363 @@
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "stats": [
+        {
+            "type": {
+                "displayName": "career"
+            },
+            "group": {
+                "displayName": "pitching"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "stat": {
+                        "gamesPlayed": 63,
+                        "gamesStarted": 63,
+                        "groundOuts": 279,
+                        "airOuts": 305,
+                        "runs": 119,
+                        "doubles": 52,
+                        "triples": 2,
+                        "homeRuns": 35,
+                        "strikeOuts": 441,
+                        "baseOnBalls": 118,
+                        "intentionalWalks": 2,
+                        "hits": 263,
+                        "hitByPitch": 13,
+                        "avg": ".206",
+                        "atBats": 1278,
+                        "obp": ".278",
+                        "slg": ".332",
+                        "ops": ".610",
+                        "caughtStealing": 4,
+                        "stolenBases": 7,
+                        "stolenBasePercentage": ".636",
+                        "groundIntoDoublePlay": 20,
+                        "numberOfPitches": 5589,
+                        "era": "2.96",
+                        "inningsPitched": "349.2",
+                        "wins": 28,
+                        "losses": 14,
+                        "saves": 0,
+                        "saveOpportunities": 0,
+                        "holds": 0,
+                        "blownSaves": 0,
+                        "earnedRuns": 115,
+                        "whip": "1.09",
+                        "battersFaced": 1420,
+                        "outs": 1049,
+                        "gamesPitched": 63,
+                        "completeGames": 0,
+                        "shutouts": 0,
+                        "strikes": 3585,
+                        "strikePercentage": ".640",
+                        "hitBatsmen": 13,
+                        "balks": 2,
+                        "wildPitches": 30,
+                        "pickoffs": 0,
+                        "totalBases": 424,
+                        "groundOutsToAirouts": "0.91",
+                        "winPercentage": ".667",
+                        "pitchesPerInning": "15.98",
+                        "gamesFinished": 0,
+                        "strikeoutWalkRatio": "3.74",
+                        "strikeoutsPer9Inn": "11.35",
+                        "walksPer9Inn": "3.04",
+                        "hitsPer9Inn": "6.77",
+                        "runsScoredPer9": "3.06",
+                        "homeRunsPer9": "0.90",
+                        "inheritedRunners": 0,
+                        "inheritedRunnersScored": 0,
+                        "catchersInterference": 1,
+                        "sacBunts": 2,
+                        "sacFlies": 8
+                    },
+                    "team": {
+                        "id": 108,
+                        "name": "Los Angeles Angels",
+                        "link": "/api/v1/teams/108"
+                    },
+                    "player": {
+                        "id": 660271,
+                        "fullName": "Shohei Ohtani",
+                        "link": "/api/v1/people/660271"
+                    },
+                    "league": {
+                        "id": 103,
+                        "name": "American League",
+                        "link": "/api/v1/league/103"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R"
+                }
+            ]
+        },
+        {
+            "type": {
+                "displayName": "careerAdvanced"
+            },
+            "group": {
+                "displayName": "pitching"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "stat": {
+                        "winningPercentage": ".667",
+                        "runsScoredPer9": "3.06",
+                        "battersFaced": 1420,
+                        "babip": ".281",
+                        "obp": ".278",
+                        "slg": ".332",
+                        "ops": ".610",
+                        "strikeoutsPer9": "11.35",
+                        "baseOnBallsPer9": "3.04",
+                        "homeRunsPer9": "0.90",
+                        "hitsPer9": "6.77",
+                        "strikesoutsToWalks": "3.74",
+                        "inheritedRunners": 0,
+                        "inheritedRunnersScored": 0,
+                        "bequeathedRunners": 30,
+                        "bequeathedRunnersScored": 11,
+                        "stolenBases": 7,
+                        "caughtStealing": 4,
+                        "qualityStarts": 35,
+                        "gamesFinished": 0,
+                        "doubles": 52,
+                        "triples": 2,
+                        "gidp": 20,
+                        "gidpOpp": 150,
+                        "wildPitches": 30,
+                        "balks": 2,
+                        "pickoffs": 0,
+                        "totalSwings": 2656,
+                        "swingAndMisses": 844,
+                        "ballsInPlay": 847,
+                        "runSupport": 172,
+                        "strikePercentage": ".640",
+                        "pitchesPerInning": "15.98",
+                        "pitchesPerPlateAppearance": "3.936",
+                        "walksPerPlateAppearance": ".083",
+                        "strikeoutsPerPlateAppearance": ".311",
+                        "homeRunsPerPlateAppearance": ".025",
+                        "walksPerStrikeout": ".268",
+                        "iso": ".126",
+                        "flyOuts": 163,
+                        "popOuts": 71,
+                        "lineOuts": 71,
+                        "groundOuts": 279,
+                        "flyHits": 50,
+                        "popHits": 1,
+                        "lineHits": 124,
+                        "groundHits": 88
+                    },
+                    "team": {
+                        "id": 108,
+                        "name": "Los Angeles Angels",
+                        "link": "/api/v1/teams/108"
+                    },
+                    "player": {
+                        "id": 660271,
+                        "fullName": "Shohei Ohtani",
+                        "link": "/api/v1/people/660271"
+                    },
+                    "league": {
+                        "id": 103,
+                        "name": "American League",
+                        "link": "/api/v1/league/103"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R"
+                }
+            ]
+        },
+        {
+            "type": {
+                "displayName": "season"
+            },
+            "group": {
+                "displayName": "pitching"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "season": "2022",
+                    "stat": {
+                        "gamesPlayed": 28,
+                        "gamesStarted": 28,
+                        "groundOuts": 129,
+                        "airOuts": 141,
+                        "runs": 45,
+                        "doubles": 23,
+                        "triples": 2,
+                        "homeRuns": 14,
+                        "strikeOuts": 219,
+                        "baseOnBalls": 44,
+                        "intentionalWalks": 0,
+                        "hits": 124,
+                        "hitByPitch": 2,
+                        "avg": ".203",
+                        "atBats": 610,
+                        "obp": ".258",
+                        "slg": ".316",
+                        "ops": ".574",
+                        "caughtStealing": 1,
+                        "stolenBases": 4,
+                        "stolenBasePercentage": ".800",
+                        "groundIntoDoublePlay": 10,
+                        "numberOfPitches": 2629,
+                        "era": "2.33",
+                        "inningsPitched": "166.0",
+                        "wins": 15,
+                        "losses": 9,
+                        "saves": 0,
+                        "saveOpportunities": 0,
+                        "holds": 0,
+                        "blownSaves": 0,
+                        "earnedRuns": 43,
+                        "whip": "1.01",
+                        "battersFaced": 660,
+                        "outs": 498,
+                        "gamesPitched": 28,
+                        "completeGames": 0,
+                        "shutouts": 0,
+                        "strikes": 1724,
+                        "strikePercentage": ".660",
+                        "hitBatsmen": 2,
+                        "balks": 0,
+                        "wildPitches": 14,
+                        "pickoffs": 0,
+                        "totalBases": 193,
+                        "groundOutsToAirouts": "0.91",
+                        "winPercentage": ".625",
+                        "pitchesPerInning": "15.84",
+                        "gamesFinished": 0,
+                        "strikeoutWalkRatio": "4.98",
+                        "strikeoutsPer9Inn": "11.87",
+                        "walksPer9Inn": "2.39",
+                        "hitsPer9Inn": "6.72",
+                        "runsScoredPer9": "2.44",
+                        "homeRunsPer9": "0.76",
+                        "inheritedRunners": 0,
+                        "inheritedRunnersScored": 0,
+                        "catchersInterference": 1,
+                        "sacBunts": 0,
+                        "sacFlies": 3
+                    },
+                    "team": {
+                        "id": 108,
+                        "name": "Los Angeles Angels",
+                        "link": "/api/v1/teams/108"
+                    },
+                    "player": {
+                        "id": 660271,
+                        "fullName": "Shohei Ohtani",
+                        "link": "/api/v1/people/660271"
+                    },
+                    "league": {
+                        "id": 103,
+                        "name": "American League",
+                        "link": "/api/v1/league/103"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R"
+                }
+            ]
+        },
+        {
+            "type": {
+                "displayName": "seasonAdvanced"
+            },
+            "group": {
+                "displayName": "pitching"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "season": "2022",
+                    "stat": {
+                        "winningPercentage": ".625",
+                        "runsScoredPer9": "2.44",
+                        "battersFaced": 660,
+                        "babip": ".289",
+                        "obp": ".258",
+                        "slg": ".316",
+                        "ops": ".574",
+                        "strikeoutsPer9": "11.87",
+                        "baseOnBallsPer9": "2.39",
+                        "homeRunsPer9": "0.76",
+                        "hitsPer9": "6.72",
+                        "strikesoutsToWalks": "4.98",
+                        "inheritedRunners": 0,
+                        "inheritedRunnersScored": 0,
+                        "bequeathedRunners": 10,
+                        "bequeathedRunnersScored": 2,
+                        "stolenBases": 4,
+                        "caughtStealing": 1,
+                        "qualityStarts": 16,
+                        "gamesFinished": 0,
+                        "doubles": 23,
+                        "triples": 2,
+                        "gidp": 10,
+                        "gidpOpp": 69,
+                        "wildPitches": 14,
+                        "balks": 0,
+                        "pickoffs": 0,
+                        "totalSwings": 1282,
+                        "swingAndMisses": 425,
+                        "ballsInPlay": 394,
+                        "runSupport": 79,
+                        "strikePercentage": ".660",
+                        "pitchesPerInning": "15.84",
+                        "pitchesPerPlateAppearance": "3.983",
+                        "walksPerPlateAppearance": ".067",
+                        "strikeoutsPerPlateAppearance": ".332",
+                        "homeRunsPerPlateAppearance": ".021",
+                        "walksPerStrikeout": ".201",
+                        "iso": ".113",
+                        "flyOuts": 81,
+                        "popOuts": 33,
+                        "lineOuts": 27,
+                        "groundOuts": 129,
+                        "flyHits": 24,
+                        "popHits": 1,
+                        "lineHits": 63,
+                        "groundHits": 36
+                    },
+                    "team": {
+                        "id": 108,
+                        "name": "Los Angeles Angels",
+                        "link": "/api/v1/teams/108"
+                    },
+                    "player": {
+                        "id": 660271,
+                        "fullName": "Shohei Ohtani",
+                        "link": "/api/v1/people/660271"
+                    },
+                    "league": {
+                        "id": 103,
+                        "name": "American League",
+                        "link": "/api/v1/league/103"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R"
+                } ]
+        } ]
+}

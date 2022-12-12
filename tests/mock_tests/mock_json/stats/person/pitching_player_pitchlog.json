@@ -1,0 +1,182 @@
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "stats": [
+        {
+            "type": {
+                "displayName": "pitchLog"
+            },
+            "group": {
+                "displayName": "pitching"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "season": "2022",
+                    "stat": {
+                        "play": {
+                            "details": {
+                                "call": {
+                                    "code": "B",
+                                    "description": "Ball - Called"
+                                },
+                                "event": "ball",
+                                "eventType": "ball",
+                                "isInPlay": false,
+                                "isStrike": false,
+                                "isBall": true,
+                                "isBaseHit": false,
+                                "isAtBat": false,
+                                "isPlateAppearance": false,
+                                "type": {
+                                    "code": "FF",
+                                    "description": "Four-seam FB"
+                                },
+                                "batSide": {
+                                    "code": "R",
+                                    "description": "Right"
+                                },
+                                "pitchHand": {
+                                    "code": "R",
+                                    "description": "Right"
+                                }
+                            },
+                            "count": {
+                                "balls": 0,
+                                "strikes": 0,
+                                "outs": 0,
+                                "inning": 1,
+                                "isTopInning": true,
+                                "runnerOn1b": false,
+                                "runnerOn2b": false,
+                                "runnerOn3b": false
+                            },
+                            "playId": "223aeedc-89db-49cf-8d29-43745ea41933",
+                            "pitchNumber": 1,
+                            "atBatNumber": 1,
+                            "isPitch": true
+                        }
+                    },
+                    "team": {
+                        "id": 108,
+                        "name": "Los Angeles Angels",
+                        "link": "/api/v1/teams/108"
+                    },
+                    "player": {
+                        "id": 660271,
+                        "fullName": "Shohei Ohtani",
+                        "link": "/api/v1/people/660271"
+                    },
+                    "opponent": {
+                        "id": 117,
+                        "name": "Houston Astros",
+                        "link": "/api/v1/teams/117"
+                    },
+                    "date": "2022-04-07",
+                    "gameType": "R",
+                    "isHome": true,
+                    "pitcher": {
+                        "id": 660271,
+                        "fullName": "Shohei Ohtani",
+                        "link": "/api/v1/people/660271"
+                    },
+                    "batter": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "game": {
+                        "gamePk": 661042,
+                        "link": "/api/v1.1/game/661042/feed/live",
+                        "content": {
+                            "link": "/api/v1/game/661042/content"
+                        },
+                        "gameNumber": 1,
+                        "dayNight": "day"
+                    }
+                },
+                {
+                    "season": "2022",
+                    "stat": {
+                        "play": {
+                            "details": {
+                                "call": {
+                                    "code": "C",
+                                    "description": "Strike - Called"
+                                },
+                                "event": "called_strike",
+                                "eventType": "called_strike",
+                                "isInPlay": false,
+                                "isStrike": true,
+                                "isBall": false,
+                                "isBaseHit": false,
+                                "isAtBat": false,
+                                "isPlateAppearance": false,
+                                "type": {
+                                    "code": "FF",
+                                    "description": "Four-seam FB"
+                                },
+                                "batSide": {
+                                    "code": "R",
+                                    "description": "Right"
+                                },
+                                "pitchHand": {
+                                    "code": "R",
+                                    "description": "Right"
+                                }
+                            },
+                            "count": {
+                                "balls": 1,
+                                "strikes": 0,
+                                "outs": 0,
+                                "inning": 1,
+                                "isTopInning": true,
+                                "runnerOn1b": false,
+                                "runnerOn2b": false,
+                                "runnerOn3b": false
+                            },
+                            "playId": "3f4c48c9-19ad-40a8-946b-273183106e69",
+                            "pitchNumber": 2,
+                            "atBatNumber": 1,
+                            "isPitch": true
+                        }
+                    },
+                    "team": {
+                        "id": 108,
+                        "name": "Los Angeles Angels",
+                        "link": "/api/v1/teams/108"
+                    },
+                    "player": {
+                        "id": 660271,
+                        "fullName": "Shohei Ohtani",
+                        "link": "/api/v1/people/660271"
+                    },
+                    "opponent": {
+                        "id": 117,
+                        "name": "Houston Astros",
+                        "link": "/api/v1/teams/117"
+                    },
+                    "date": "2022-04-07",
+                    "gameType": "R",
+                    "isHome": true,
+                    "pitcher": {
+                        "id": 660271,
+                        "fullName": "Shohei Ohtani",
+                        "link": "/api/v1/people/660271"
+                    },
+                    "batter": {
+                        "id": 514888,
+                        "fullName": "Jose Altuve",
+                        "link": "/api/v1/people/514888"
+                    },
+                    "game": {
+                        "gamePk": 661042,
+                        "link": "/api/v1.1/game/661042/feed/live",
+                        "content": {
+                            "link": "/api/v1/game/661042/content"
+                        },
+                        "gameNumber": 1,
+                        "dayNight": "day"
+                    }
+                } ]
+        } ]
+}

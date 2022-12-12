@@ -1,0 +1,465 @@
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "stats": [
+        {
+            "type": {
+                "displayName": "career"
+            },
+            "group": {
+                "displayName": "hitting"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "stat": {
+                        "gamesPlayed": 617,
+                        "groundOuts": 627,
+                        "airOuts": 461,
+                        "runs": 430,
+                        "doubles": 116,
+                        "triples": 10,
+                        "homeRuns": 125,
+                        "strikeOuts": 448,
+                        "baseOnBalls": 508,
+                        "intentionalWalks": 54,
+                        "hits": 612,
+                        "hitByPitch": 10,
+                        "avg": ".287",
+                        "atBats": 2136,
+                        "obp": ".424",
+                        "slg": ".526",
+                        "ops": ".950",
+                        "caughtStealing": 14,
+                        "stolenBases": 38,
+                        "stolenBasePercentage": ".731",
+                        "groundIntoDoublePlay": 56,
+                        "numberOfPitches": 11012,
+                        "plateAppearances": 2667,
+                        "totalBases": 1123,
+                        "rbi": 374,
+                        "leftOnBase": 898,
+                        "sacBunts": 1,
+                        "sacFlies": 11,
+                        "babip": ".309",
+                        "groundOutsToAirouts": "1.36",
+                        "catchersInterference": 1,
+                        "atBatsPerHomeRun": "17.09"
+                    },
+                    "player": {
+                        "id": 665742,
+                        "fullName": "Juan Soto",
+                        "link": "/api/v1/people/665742"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R",
+                    "numTeams": 2
+                }
+            ]
+        },
+        {
+            "type": {
+                "displayName": "careerAdvanced"
+            },
+            "group": {
+                "displayName": "hitting"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "stat": {
+                        "plateAppearances": 2667,
+                        "totalBases": 1123,
+                        "leftOnBase": 898,
+                        "sacBunts": 1,
+                        "sacFlies": 11,
+                        "babip": ".309",
+                        "extraBaseHits": 251,
+                        "hitByPitch": 10,
+                        "gidp": 56,
+                        "gidpOpp": 383,
+                        "numberOfPitches": 11012,
+                        "pitchesPerPlateAppearance": "4.129",
+                        "walksPerPlateAppearance": ".190",
+                        "strikeoutsPerPlateAppearance": ".168",
+                        "homeRunsPerPlateAppearance": ".047",
+                        "walksPerStrikeout": "1.134",
+                        "iso": ".239",
+                        "reachedOnError": 16,
+                        "walkOffs": 1,
+                        "flyOuts": 262,
+                        "totalSwings": 4109,
+                        "swingAndMisses": 881,
+                        "ballsInPlay": 1700,
+                        "popOuts": 76,
+                        "lineOuts": 123,
+                        "groundOuts": 627,
+                        "flyHits": 139,
+                        "popHits": 1,
+                        "lineHits": 259,
+                        "groundHits": 213
+                    },
+                    "player": {
+                        "id": 665742,
+                        "fullName": "Juan Soto",
+                        "link": "/api/v1/people/665742"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R",
+                    "numTeams": 2
+                }
+            ]
+        },
+        {
+            "type": {
+                "displayName": "season"
+            },
+            "group": {
+                "displayName": "hitting"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "season": "2022",
+                    "stat": {
+                        "gamesPlayed": 153,
+                        "groundOuts": 162,
+                        "airOuts": 139,
+                        "runs": 93,
+                        "doubles": 25,
+                        "triples": 2,
+                        "homeRuns": 27,
+                        "strikeOuts": 96,
+                        "baseOnBalls": 135,
+                        "intentionalWalks": 6,
+                        "hits": 127,
+                        "hitByPitch": 4,
+                        "avg": ".242",
+                        "atBats": 524,
+                        "obp": ".401",
+                        "slg": ".452",
+                        "ops": ".853",
+                        "caughtStealing": 2,
+                        "stolenBases": 6,
+                        "stolenBasePercentage": ".750",
+                        "groundIntoDoublePlay": 12,
+                        "numberOfPitches": 2765,
+                        "plateAppearances": 664,
+                        "totalBases": 237,
+                        "rbi": 62,
+                        "leftOnBase": 203,
+                        "sacBunts": 0,
+                        "sacFlies": 0,
+                        "babip": ".249",
+                        "groundOutsToAirouts": "1.17",
+                        "catchersInterference": 1,
+                        "atBatsPerHomeRun": "19.41"
+                    },
+                    "player": {
+                        "id": 665742,
+                        "fullName": "Juan Soto",
+                        "link": "/api/v1/people/665742"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R",
+                    "numTeams": 2
+                },
+                {
+                    "season": "2022",
+                    "stat": {
+                        "gamesPlayed": 101,
+                        "groundOuts": 109,
+                        "airOuts": 87,
+                        "runs": 62,
+                        "doubles": 17,
+                        "triples": 1,
+                        "homeRuns": 21,
+                        "strikeOuts": 62,
+                        "baseOnBalls": 91,
+                        "intentionalWalks": 4,
+                        "hits": 84,
+                        "hitByPitch": 3,
+                        "avg": ".246",
+                        "atBats": 342,
+                        "obp": ".408",
+                        "slg": ".485",
+                        "ops": ".893",
+                        "caughtStealing": 2,
+                        "stolenBases": 6,
+                        "stolenBasePercentage": ".750",
+                        "groundIntoDoublePlay": 11,
+                        "numberOfPitches": 1819,
+                        "plateAppearances": 436,
+                        "totalBases": 166,
+                        "rbi": 46,
+                        "leftOnBase": 137,
+                        "sacBunts": 0,
+                        "sacFlies": 0,
+                        "babip": ".243",
+                        "groundOutsToAirouts": "1.25",
+                        "catchersInterference": 0,
+                        "atBatsPerHomeRun": "16.29"
+                    },
+                    "team": {
+                        "id": 120,
+                        "name": "Washington Nationals",
+                        "link": "/api/v1/teams/120"
+                    },
+                    "player": {
+                        "id": 665742,
+                        "fullName": "Juan Soto",
+                        "link": "/api/v1/people/665742"
+                    },
+                    "league": {
+                        "id": 104,
+                        "name": "National League",
+                        "link": "/api/v1/league/104"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R"
+                },
+                {
+                    "season": "2022",
+                    "stat": {
+                        "gamesPlayed": 52,
+                        "groundOuts": 53,
+                        "airOuts": 52,
+                        "runs": 31,
+                        "doubles": 8,
+                        "triples": 1,
+                        "homeRuns": 6,
+                        "strikeOuts": 34,
+                        "baseOnBalls": 44,
+                        "intentionalWalks": 2,
+                        "hits": 43,
+                        "hitByPitch": 1,
+                        "avg": ".236",
+                        "atBats": 182,
+                        "obp": ".388",
+                        "slg": ".390",
+                        "ops": ".778",
+                        "caughtStealing": 0,
+                        "stolenBases": 0,
+                        "stolenBasePercentage": ".---",
+                        "groundIntoDoublePlay": 1,
+                        "numberOfPitches": 946,
+                        "plateAppearances": 228,
+                        "totalBases": 71,
+                        "rbi": 16,
+                        "leftOnBase": 66,
+                        "sacBunts": 0,
+                        "sacFlies": 0,
+                        "babip": ".261",
+                        "groundOutsToAirouts": "1.02",
+                        "catchersInterference": 1,
+                        "atBatsPerHomeRun": "30.33"
+                    },
+                    "team": {
+                        "id": 135,
+                        "name": "San Diego Padres",
+                        "link": "/api/v1/teams/135"
+                    },
+                    "player": {
+                        "id": 665742,
+                        "fullName": "Juan Soto",
+                        "link": "/api/v1/people/665742"
+                    },
+                    "league": {
+                        "id": 104,
+                        "name": "National League",
+                        "link": "/api/v1/league/104"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R"
+                }
+            ]
+        },
+        {
+            "type": {
+                "displayName": "seasonAdvanced"
+            },
+            "group": {
+                "displayName": "hitting"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "season": "2022",
+                    "stat": {
+                        "plateAppearances": 664,
+                        "totalBases": 237,
+                        "leftOnBase": 203,
+                        "sacBunts": 0,
+                        "sacFlies": 0,
+                        "babip": ".249",
+                        "extraBaseHits": 54,
+                        "hitByPitch": 4,
+                        "gidp": 12,
+                        "gidpOpp": 86,
+                        "numberOfPitches": 2765,
+                        "pitchesPerPlateAppearance": "4.164",
+                        "walksPerPlateAppearance": ".203",
+                        "strikeoutsPerPlateAppearance": ".145",
+                        "homeRunsPerPlateAppearance": ".041",
+                        "walksPerStrikeout": "1.406",
+                        "iso": ".210",
+                        "reachedOnError": 6,
+                        "walkOffs": 0,
+                        "flyOuts": 82,
+                        "totalSwings": 976,
+                        "swingAndMisses": 187,
+                        "ballsInPlay": 428,
+                        "popOuts": 26,
+                        "lineOuts": 31,
+                        "groundOuts": 162,
+                        "flyHits": 34,
+                        "popHits": 1,
+                        "lineHits": 51,
+                        "groundHits": 41
+                    },
+                    "player": {
+                        "id": 665742,
+                        "fullName": "Juan Soto",
+                        "link": "/api/v1/people/665742"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R",
+                    "numTeams": 2
+                },
+                {
+                    "season": "2022",
+                    "stat": {
+                        "plateAppearances": 436,
+                        "totalBases": 166,
+                        "leftOnBase": 137,
+                        "sacBunts": 0,
+                        "sacFlies": 0,
+                        "babip": ".243",
+                        "extraBaseHits": 39,
+                        "hitByPitch": 3,
+                        "gidp": 11,
+                        "gidpOpp": 59,
+                        "numberOfPitches": 1819,
+                        "pitchesPerPlateAppearance": "4.172",
+                        "walksPerPlateAppearance": ".209",
+                        "strikeoutsPerPlateAppearance": ".142",
+                        "homeRunsPerPlateAppearance": ".048",
+                        "walksPerStrikeout": "1.468",
+                        "iso": ".240",
+                        "reachedOnError": 3,
+                        "walkOffs": 0,
+                        "flyOuts": 50,
+                        "totalSwings": 645,
+                        "swingAndMisses": 130,
+                        "ballsInPlay": 280,
+                        "popOuts": 16,
+                        "lineOuts": 21,
+                        "groundOuts": 109,
+                        "flyHits": 27,
+                        "popHits": 1,
+                        "lineHits": 33,
+                        "groundHits": 23
+                    },
+                    "team": {
+                        "id": 120,
+                        "name": "Washington Nationals",
+                        "link": "/api/v1/teams/120"
+                    },
+                    "player": {
+                        "id": 665742,
+                        "fullName": "Juan Soto",
+                        "link": "/api/v1/people/665742"
+                    },
+                    "league": {
+                        "id": 104,
+                        "name": "National League",
+                        "link": "/api/v1/league/104"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R"
+                },
+                {
+                    "season": "2022",
+                    "stat": {
+                        "plateAppearances": 228,
+                        "totalBases": 71,
+                        "leftOnBase": 66,
+                        "sacBunts": 0,
+                        "sacFlies": 0,
+                        "babip": ".261",
+                        "extraBaseHits": 15,
+                        "hitByPitch": 1,
+                        "gidp": 1,
+                        "gidpOpp": 27,
+                        "numberOfPitches": 946,
+                        "pitchesPerPlateAppearance": "4.149",
+                        "walksPerPlateAppearance": ".193",
+                        "strikeoutsPerPlateAppearance": ".149",
+                        "homeRunsPerPlateAppearance": ".026",
+                        "walksPerStrikeout": "1.294",
+                        "iso": ".154",
+                        "reachedOnError": 3,
+                        "walkOffs": 0,
+                        "flyOuts": 32,
+                        "totalSwings": 331,
+                        "swingAndMisses": 57,
+                        "ballsInPlay": 148,
+                        "popOuts": 10,
+                        "lineOuts": 10,
+                        "groundOuts": 53,
+                        "flyHits": 7,
+                        "popHits": 0,
+                        "lineHits": 18,
+                        "groundHits": 18
+                    },
+                    "team": {
+                        "id": 135,
+                        "name": "San Diego Padres",
+                        "link": "/api/v1/teams/135"
+                    },
+                    "player": {
+                        "id": 665742,
+                        "fullName": "Juan Soto",
+                        "link": "/api/v1/people/665742"
+                    },
+                    "league": {
+                        "id": 104,
+                        "name": "National League",
+                        "link": "/api/v1/league/104"
+                    },
+                    "sport": {
+                        "id": 1,
+                        "link": "/api/v1/sports/1",
+                        "abbreviation": "MLB"
+                    },
+                    "gameType": "R"
+                } ]
+        } ]
+}
