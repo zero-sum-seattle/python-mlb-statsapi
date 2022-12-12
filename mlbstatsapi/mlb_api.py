@@ -1297,9 +1297,9 @@ class Mlb:
                     continue
         return venue_ids
 
-    def get_sport(self, sport_id: int, **params) -> Union[Sport, None]:
+    def get_sport(self, get_sport_id: int, **params) -> Union[Sport, None]:
         """
-        return sport object from sportid
+        return sport object from sport_id
 
         Parameters
         ----------
@@ -1350,8 +1350,7 @@ class Mlb:
         Other Parameters
         ----------------
         fields : str
-            Comma delimited list of specific fields to be returned. 
-            Format: topLevelNode, childNode, attribute
+            Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute
 
         See Also
         --------
@@ -1385,6 +1384,8 @@ class Mlb:
         ----------
         sport_name : str
             Sport name
+        search_key : str
+            search key name 
 
         Returns
         -------
