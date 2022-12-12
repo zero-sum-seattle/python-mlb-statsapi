@@ -1,0 +1,2682 @@
+﻿// https://statsapi.mlb.com/api/v1/people/665742?hydrate=stats(group=[hitting,pitching,fielding,catching,running],type=[season,seasonAdvanced,career,careerAdvanced,yearByYear,yearByYearAdvanced,sabermetrics,expectedStatistics,sprayChart,hotColdZones])
+{
+    "copyright" : "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "people" : [ {
+      "id" : 665742,
+      "fullName" : "Juan Soto",
+      "link" : "/api/v1/people/665742",
+      "firstName" : "Juan",
+      "lastName" : "Soto",
+      "primaryNumber" : "22",
+      "birthDate" : "1998-10-25",
+      "currentAge" : 23,
+      "birthCity" : "Santo Domingo",
+      "birthCountry" : "Dominican Republic",
+      "height" : "6' 2\"",
+      "weight" : 224,
+      "active" : true,
+      "primaryPosition" : {
+        "code" : "9",
+        "name" : "Outfielder",
+        "type" : "Outfielder",
+        "abbreviation" : "RF"
+      },
+      "useName" : "Juan",
+      "middleName" : "Jose",
+      "boxscoreName" : "Soto, J",
+      "nickName" : "Soto Pacheco",
+      "gender" : "M",
+      "nameMatrilineal" : "Pacheco",
+      "isPlayer" : true,
+      "isVerified" : true,
+      "stats" : [ {
+        "type" : {
+          "displayName" : "season"
+        },
+        "group" : {
+          "displayName" : "fielding"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 138,
+            "gamesStarted" : 138,
+            "assists" : 3,
+            "putOuts" : 275,
+            "errors" : 3,
+            "chances" : 281,
+            "fielding" : ".989",
+            "position" : {
+              "code" : "9",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "RF"
+            },
+            "rangeFactorPerGame" : "2.01",
+            "rangeFactorPer9Inn" : "2.11",
+            "innings" : "1184.0",
+            "games" : 138,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 1
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "numTeams" : 2,
+          "position" : {
+            "code" : "9",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "RF"
+          }
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 99,
+            "gamesStarted" : 99,
+            "assists" : 2,
+            "putOuts" : 192,
+            "errors" : 2,
+            "chances" : 196,
+            "fielding" : ".990",
+            "position" : {
+              "code" : "9",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "RF"
+            },
+            "rangeFactorPerGame" : "1.96",
+            "rangeFactorPer9Inn" : "2.04",
+            "innings" : "857.0",
+            "games" : 99,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 1
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "9",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "RF"
+          }
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 39,
+            "gamesStarted" : 39,
+            "assists" : 1,
+            "putOuts" : 83,
+            "errors" : 1,
+            "chances" : 85,
+            "fielding" : ".988",
+            "position" : {
+              "code" : "9",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "RF"
+            },
+            "rangeFactorPerGame" : "2.15",
+            "rangeFactorPer9Inn" : "2.31",
+            "innings" : "327.0",
+            "games" : 39,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 135,
+            "name" : "San Diego Padres",
+            "link" : "/api/v1/teams/135"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "9",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "RF"
+          }
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 1,
+            "gamesStarted" : 1,
+            "assists" : 0,
+            "putOuts" : 0,
+            "errors" : 0,
+            "chances" : 0,
+            "fielding" : ".000",
+            "position" : {
+              "code" : "10",
+              "name" : "Designated Hitter",
+              "type" : "Hitter",
+              "abbreviation" : "DH"
+            },
+            "rangeFactorPerGame" : "0.00",
+            "rangeFactorPer9Inn" : "-.--",
+            "innings" : "0.0",
+            "games" : 1,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "10",
+            "name" : "Designated Hitter",
+            "type" : "Hitter",
+            "abbreviation" : "DH"
+          }
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "season"
+        },
+        "group" : {
+          "displayName" : "hitting"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 140,
+            "groundOuts" : 147,
+            "airOuts" : 129,
+            "runs" : 87,
+            "doubles" : 22,
+            "triples" : 2,
+            "homeRuns" : 25,
+            "strikeOuts" : 85,
+            "baseOnBalls" : 126,
+            "intentionalWalks" : 4,
+            "hits" : 115,
+            "hitByPitch" : 4,
+            "avg" : ".242",
+            "atBats" : 476,
+            "obp" : ".404",
+            "slg" : ".454",
+            "ops" : ".858",
+            "caughtStealing" : 2,
+            "stolenBases" : 6,
+            "stolenBasePercentage" : ".750",
+            "groundIntoDoublePlay" : 12,
+            "numberOfPitches" : 2549,
+            "plateAppearances" : 607,
+            "totalBases" : 216,
+            "rbi" : 59,
+            "leftOnBase" : 187,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".246",
+            "groundOutsToAirouts" : "1.14",
+            "catchersInterference" : 1,
+            "atBatsPerHomeRun" : "19.04"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "numTeams" : 2
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 101,
+            "groundOuts" : 109,
+            "airOuts" : 87,
+            "runs" : 62,
+            "doubles" : 17,
+            "triples" : 1,
+            "homeRuns" : 21,
+            "strikeOuts" : 62,
+            "baseOnBalls" : 91,
+            "intentionalWalks" : 4,
+            "hits" : 84,
+            "hitByPitch" : 3,
+            "avg" : ".246",
+            "atBats" : 342,
+            "obp" : ".408",
+            "slg" : ".485",
+            "ops" : ".893",
+            "caughtStealing" : 2,
+            "stolenBases" : 6,
+            "stolenBasePercentage" : ".750",
+            "groundIntoDoublePlay" : 11,
+            "numberOfPitches" : 1819,
+            "plateAppearances" : 436,
+            "totalBases" : 166,
+            "rbi" : 46,
+            "leftOnBase" : 137,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".243",
+            "groundOutsToAirouts" : "1.25",
+            "catchersInterference" : 0,
+            "atBatsPerHomeRun" : "16.29"
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 39,
+            "groundOuts" : 38,
+            "airOuts" : 42,
+            "runs" : 25,
+            "doubles" : 5,
+            "triples" : 1,
+            "homeRuns" : 4,
+            "strikeOuts" : 23,
+            "baseOnBalls" : 35,
+            "intentionalWalks" : 0,
+            "hits" : 31,
+            "hitByPitch" : 1,
+            "avg" : ".231",
+            "atBats" : 134,
+            "obp" : ".394",
+            "slg" : ".373",
+            "ops" : ".767",
+            "caughtStealing" : 0,
+            "stolenBases" : 0,
+            "stolenBasePercentage" : ".---",
+            "groundIntoDoublePlay" : 1,
+            "numberOfPitches" : 730,
+            "plateAppearances" : 171,
+            "totalBases" : 50,
+            "rbi" : 13,
+            "leftOnBase" : 50,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".252",
+            "groundOutsToAirouts" : "0.90",
+            "catchersInterference" : 1,
+            "atBatsPerHomeRun" : "33.50"
+          },
+          "team" : {
+            "id" : 135,
+            "name" : "San Diego Padres",
+            "link" : "/api/v1/teams/135"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "seasonAdvanced"
+        },
+        "group" : {
+          "displayName" : "hitting"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "season" : "2022",
+          "stat" : {
+            "plateAppearances" : 607,
+            "totalBases" : 216,
+            "leftOnBase" : 187,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".246",
+            "extraBaseHits" : 49,
+            "hitByPitch" : 4,
+            "gidp" : 12,
+            "gidpOpp" : 79,
+            "numberOfPitches" : 2549,
+            "pitchesPerPlateAppearance" : "4.199",
+            "walksPerPlateAppearance" : ".208",
+            "strikeoutsPerPlateAppearance" : ".140",
+            "homeRunsPerPlateAppearance" : ".041",
+            "walksPerStrikeout" : "1.482",
+            "iso" : ".212",
+            "reachedOnError" : 6,
+            "walkOffs" : 0,
+            "flyOuts" : 73,
+            "totalSwings" : 889,
+            "swingAndMisses" : 171,
+            "ballsInPlay" : 391,
+            "popOuts" : 26,
+            "lineOuts" : 30,
+            "groundOuts" : 147,
+            "flyHits" : 32,
+            "popHits" : 1,
+            "lineHits" : 46,
+            "groundHits" : 36
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "numTeams" : 2
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "plateAppearances" : 436,
+            "totalBases" : 166,
+            "leftOnBase" : 137,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".243",
+            "extraBaseHits" : 39,
+            "hitByPitch" : 3,
+            "gidp" : 11,
+            "gidpOpp" : 59,
+            "numberOfPitches" : 1819,
+            "pitchesPerPlateAppearance" : "4.172",
+            "walksPerPlateAppearance" : ".209",
+            "strikeoutsPerPlateAppearance" : ".142",
+            "homeRunsPerPlateAppearance" : ".048",
+            "walksPerStrikeout" : "1.468",
+            "iso" : ".240",
+            "reachedOnError" : 3,
+            "walkOffs" : 0,
+            "flyOuts" : 50,
+            "totalSwings" : 645,
+            "swingAndMisses" : 130,
+            "ballsInPlay" : 280,
+            "popOuts" : 16,
+            "lineOuts" : 21,
+            "groundOuts" : 109,
+            "flyHits" : 27,
+            "popHits" : 1,
+            "lineHits" : 33,
+            "groundHits" : 23
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "plateAppearances" : 171,
+            "totalBases" : 50,
+            "leftOnBase" : 50,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".252",
+            "extraBaseHits" : 10,
+            "hitByPitch" : 1,
+            "gidp" : 1,
+            "gidpOpp" : 20,
+            "numberOfPitches" : 730,
+            "pitchesPerPlateAppearance" : "4.269",
+            "walksPerPlateAppearance" : ".205",
+            "strikeoutsPerPlateAppearance" : ".135",
+            "homeRunsPerPlateAppearance" : ".023",
+            "walksPerStrikeout" : "1.522",
+            "iso" : ".142",
+            "reachedOnError" : 3,
+            "walkOffs" : 0,
+            "flyOuts" : 23,
+            "totalSwings" : 244,
+            "swingAndMisses" : 41,
+            "ballsInPlay" : 111,
+            "popOuts" : 10,
+            "lineOuts" : 9,
+            "groundOuts" : 38,
+            "flyHits" : 5,
+            "popHits" : 0,
+            "lineHits" : 13,
+            "groundHits" : 13
+          },
+          "team" : {
+            "id" : 135,
+            "name" : "San Diego Padres",
+            "link" : "/api/v1/teams/135"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "career"
+        },
+        "group" : {
+          "displayName" : "fielding"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "stat" : {
+            "gamesPlayed" : 300,
+            "gamesStarted" : 298,
+            "assists" : 5,
+            "putOuts" : 536,
+            "errors" : 4,
+            "chances" : 545,
+            "fielding" : ".993",
+            "position" : {
+              "code" : "7",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "LF"
+            },
+            "rangeFactorPerGame" : "1.80",
+            "rangeFactorPer9Inn" : "1.87",
+            "innings" : "2603.2",
+            "games" : 300,
+            "doublePlays" : 2,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "7",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "LF"
+          }
+        }, {
+          "stat" : {
+            "gamesPlayed" : 288,
+            "gamesStarted" : 288,
+            "assists" : 8,
+            "putOuts" : 578,
+            "errors" : 9,
+            "chances" : 595,
+            "fielding" : ".985",
+            "position" : {
+              "code" : "9",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "RF"
+            },
+            "rangeFactorPerGame" : "2.03",
+            "rangeFactorPer9Inn" : "2.15",
+            "innings" : "2453.0",
+            "games" : 288,
+            "doublePlays" : 1,
+            "triplePlays" : 0,
+            "throwingErrors" : 2
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "numTeams" : 2,
+          "position" : {
+            "code" : "9",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "RF"
+          }
+        }, {
+          "stat" : {
+            "gamesPlayed" : 8,
+            "gamesStarted" : 8,
+            "assists" : 0,
+            "putOuts" : 0,
+            "errors" : 0,
+            "chances" : 0,
+            "fielding" : ".000",
+            "position" : {
+              "code" : "10",
+              "name" : "Designated Hitter",
+              "type" : "Hitter",
+              "abbreviation" : "DH"
+            },
+            "rangeFactorPerGame" : "0.00",
+            "rangeFactorPer9Inn" : "-.--",
+            "innings" : "0.0",
+            "games" : 8,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "10",
+            "name" : "Designated Hitter",
+            "type" : "Hitter",
+            "abbreviation" : "DH"
+          }
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "career"
+        },
+        "group" : {
+          "displayName" : "hitting"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "stat" : {
+            "gamesPlayed" : 604,
+            "groundOuts" : 612,
+            "airOuts" : 451,
+            "runs" : 424,
+            "doubles" : 113,
+            "triples" : 10,
+            "homeRuns" : 123,
+            "strikeOuts" : 437,
+            "baseOnBalls" : 499,
+            "intentionalWalks" : 52,
+            "hits" : 600,
+            "hitByPitch" : 10,
+            "avg" : ".287",
+            "atBats" : 2088,
+            "obp" : ".425",
+            "slg" : ".528",
+            "ops" : ".953",
+            "caughtStealing" : 14,
+            "stolenBases" : 38,
+            "stolenBasePercentage" : ".731",
+            "groundIntoDoublePlay" : 56,
+            "numberOfPitches" : 10796,
+            "plateAppearances" : 2610,
+            "totalBases" : 1102,
+            "rbi" : 371,
+            "leftOnBase" : 882,
+            "sacBunts" : 1,
+            "sacFlies" : 11,
+            "babip" : ".310",
+            "groundOutsToAirouts" : "1.36",
+            "catchersInterference" : 1,
+            "atBatsPerHomeRun" : "16.98"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "numTeams" : 2
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "careerAdvanced"
+        },
+        "group" : {
+          "displayName" : "hitting"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "stat" : {
+            "plateAppearances" : 2610,
+            "totalBases" : 1102,
+            "leftOnBase" : 882,
+            "sacBunts" : 1,
+            "sacFlies" : 11,
+            "babip" : ".310",
+            "extraBaseHits" : 246,
+            "hitByPitch" : 10,
+            "gidp" : 56,
+            "gidpOpp" : 376,
+            "numberOfPitches" : 10796,
+            "pitchesPerPlateAppearance" : "4.136",
+            "walksPerPlateAppearance" : ".191",
+            "strikeoutsPerPlateAppearance" : ".167",
+            "homeRunsPerPlateAppearance" : ".047",
+            "walksPerStrikeout" : "1.142",
+            "iso" : ".240",
+            "reachedOnError" : 16,
+            "walkOffs" : 1,
+            "flyOuts" : 253,
+            "totalSwings" : 4022,
+            "swingAndMisses" : 865,
+            "ballsInPlay" : 1663,
+            "popOuts" : 76,
+            "lineOuts" : 122,
+            "groundOuts" : 612,
+            "flyHits" : 137,
+            "popHits" : 1,
+            "lineHits" : 254,
+            "groundHits" : 208
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "numTeams" : 2
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "yearByYear"
+        },
+        "group" : {
+          "displayName" : "fielding"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "season" : "2018",
+          "stat" : {
+            "gamesPlayed" : 114,
+            "gamesStarted" : 112,
+            "assists" : 4,
+            "putOuts" : 207,
+            "errors" : 2,
+            "chances" : 213,
+            "fielding" : ".991",
+            "position" : {
+              "code" : "7",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "LF"
+            },
+            "rangeFactorPerGame" : "1.85",
+            "rangeFactorPer9Inn" : "1.92",
+            "innings" : "987.0",
+            "games" : 114,
+            "doublePlays" : 2,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "7",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "LF"
+          }
+        }, {
+          "season" : "2019",
+          "stat" : {
+            "gamesPlayed" : 150,
+            "gamesStarted" : 150,
+            "assists" : 0,
+            "putOuts" : 273,
+            "errors" : 2,
+            "chances" : 275,
+            "fielding" : ".993",
+            "position" : {
+              "code" : "7",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "LF"
+            },
+            "rangeFactorPerGame" : "1.82",
+            "rangeFactorPer9Inn" : "1.85",
+            "innings" : "1327.1",
+            "games" : 150,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "7",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "LF"
+          }
+        }, {
+          "season" : "2020",
+          "stat" : {
+            "gamesPlayed" : 36,
+            "gamesStarted" : 36,
+            "assists" : 1,
+            "putOuts" : 56,
+            "errors" : 0,
+            "chances" : 57,
+            "fielding" : "1.000",
+            "position" : {
+              "code" : "7",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "LF"
+            },
+            "rangeFactorPerGame" : "1.58",
+            "rangeFactorPer9Inn" : "1.78",
+            "innings" : "289.1",
+            "games" : 36,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "7",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "LF"
+          }
+        }, {
+          "season" : "2020",
+          "stat" : {
+            "gamesPlayed" : 6,
+            "gamesStarted" : 6,
+            "assists" : 0,
+            "putOuts" : 8,
+            "errors" : 0,
+            "chances" : 8,
+            "fielding" : "1.000",
+            "position" : {
+              "code" : "9",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "RF"
+            },
+            "rangeFactorPerGame" : "1.33",
+            "rangeFactorPer9Inn" : "1.67",
+            "innings" : "43.0",
+            "games" : 6,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "9",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "RF"
+          }
+        }, {
+          "season" : "2020",
+          "stat" : {
+            "gamesPlayed" : 5,
+            "gamesStarted" : 5,
+            "assists" : 0,
+            "putOuts" : 0,
+            "errors" : 0,
+            "chances" : 0,
+            "fielding" : ".000",
+            "position" : {
+              "code" : "10",
+              "name" : "Designated Hitter",
+              "type" : "Hitter",
+              "abbreviation" : "DH"
+            },
+            "rangeFactorPerGame" : "0.00",
+            "rangeFactorPer9Inn" : "-.--",
+            "innings" : "0.0",
+            "games" : 5,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "10",
+            "name" : "Designated Hitter",
+            "type" : "Hitter",
+            "abbreviation" : "DH"
+          }
+        }, {
+          "season" : "2021",
+          "stat" : {
+            "gamesPlayed" : 144,
+            "gamesStarted" : 144,
+            "assists" : 5,
+            "putOuts" : 295,
+            "errors" : 6,
+            "chances" : 306,
+            "fielding" : ".980",
+            "position" : {
+              "code" : "9",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "RF"
+            },
+            "rangeFactorPerGame" : "2.08",
+            "rangeFactorPer9Inn" : "2.20",
+            "innings" : "1226.0",
+            "games" : 144,
+            "doublePlays" : 1,
+            "triplePlays" : 0,
+            "throwingErrors" : 1
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "9",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "RF"
+          }
+        }, {
+          "season" : "2021",
+          "stat" : {
+            "gamesPlayed" : 2,
+            "gamesStarted" : 2,
+            "assists" : 0,
+            "putOuts" : 0,
+            "errors" : 0,
+            "chances" : 0,
+            "fielding" : ".000",
+            "position" : {
+              "code" : "10",
+              "name" : "Designated Hitter",
+              "type" : "Hitter",
+              "abbreviation" : "DH"
+            },
+            "rangeFactorPerGame" : "0.00",
+            "rangeFactorPer9Inn" : "-.--",
+            "innings" : "0.0",
+            "games" : 2,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "10",
+            "name" : "Designated Hitter",
+            "type" : "Hitter",
+            "abbreviation" : "DH"
+          }
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 99,
+            "gamesStarted" : 99,
+            "assists" : 2,
+            "putOuts" : 192,
+            "errors" : 2,
+            "chances" : 196,
+            "fielding" : ".990",
+            "position" : {
+              "code" : "9",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "RF"
+            },
+            "rangeFactorPerGame" : "1.96",
+            "rangeFactorPer9Inn" : "2.04",
+            "innings" : "857.0",
+            "games" : 99,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 1
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "9",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "RF"
+          }
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 1,
+            "gamesStarted" : 1,
+            "assists" : 0,
+            "putOuts" : 0,
+            "errors" : 0,
+            "chances" : 0,
+            "fielding" : ".000",
+            "position" : {
+              "code" : "10",
+              "name" : "Designated Hitter",
+              "type" : "Hitter",
+              "abbreviation" : "DH"
+            },
+            "rangeFactorPerGame" : "0.00",
+            "rangeFactorPer9Inn" : "-.--",
+            "innings" : "0.0",
+            "games" : 1,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "10",
+            "name" : "Designated Hitter",
+            "type" : "Hitter",
+            "abbreviation" : "DH"
+          }
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 39,
+            "gamesStarted" : 39,
+            "assists" : 1,
+            "putOuts" : 83,
+            "errors" : 1,
+            "chances" : 85,
+            "fielding" : ".988",
+            "position" : {
+              "code" : "9",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "RF"
+            },
+            "rangeFactorPerGame" : "2.15",
+            "rangeFactorPer9Inn" : "2.31",
+            "innings" : "327.0",
+            "games" : 39,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 0
+          },
+          "team" : {
+            "id" : 135,
+            "name" : "San Diego Padres",
+            "link" : "/api/v1/teams/135"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "position" : {
+            "code" : "9",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "RF"
+          }
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 138,
+            "gamesStarted" : 138,
+            "assists" : 3,
+            "putOuts" : 275,
+            "errors" : 3,
+            "chances" : 281,
+            "fielding" : ".989",
+            "position" : {
+              "code" : "9",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "RF"
+            },
+            "rangeFactorPerGame" : "2.01",
+            "rangeFactorPer9Inn" : "2.11",
+            "innings" : "1184.0",
+            "games" : 138,
+            "doublePlays" : 0,
+            "triplePlays" : 0,
+            "throwingErrors" : 1
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "numTeams" : 2,
+          "position" : {
+            "code" : "9",
+            "name" : "Outfielder",
+            "type" : "Outfielder",
+            "abbreviation" : "RF"
+          }
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "yearByYear"
+        },
+        "group" : {
+          "displayName" : "hitting"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "season" : "2018",
+          "stat" : {
+            "gamesPlayed" : 116,
+            "groundOuts" : 125,
+            "airOuts" : 70,
+            "runs" : 77,
+            "doubles" : 25,
+            "triples" : 1,
+            "homeRuns" : 22,
+            "strikeOuts" : 99,
+            "baseOnBalls" : 79,
+            "intentionalWalks" : 10,
+            "hits" : 121,
+            "hitByPitch" : 0,
+            "avg" : ".292",
+            "atBats" : 414,
+            "obp" : ".406",
+            "slg" : ".517",
+            "ops" : ".923",
+            "caughtStealing" : 2,
+            "stolenBases" : 5,
+            "stolenBasePercentage" : ".714",
+            "groundIntoDoublePlay" : 9,
+            "numberOfPitches" : 2031,
+            "plateAppearances" : 494,
+            "totalBases" : 214,
+            "rbi" : 70,
+            "leftOnBase" : 187,
+            "sacBunts" : 1,
+            "sacFlies" : 0,
+            "babip" : ".338",
+            "groundOutsToAirouts" : "1.79",
+            "catchersInterference" : 0,
+            "atBatsPerHomeRun" : "18.82"
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2019",
+          "stat" : {
+            "gamesPlayed" : 150,
+            "groundOuts" : 131,
+            "airOuts" : 132,
+            "runs" : 110,
+            "doubles" : 32,
+            "triples" : 5,
+            "homeRuns" : 34,
+            "strikeOuts" : 132,
+            "baseOnBalls" : 108,
+            "intentionalWalks" : 3,
+            "hits" : 153,
+            "hitByPitch" : 3,
+            "avg" : ".282",
+            "atBats" : 542,
+            "obp" : ".401",
+            "slg" : ".548",
+            "ops" : ".949",
+            "caughtStealing" : 1,
+            "stolenBases" : 12,
+            "stolenBasePercentage" : ".923",
+            "groundIntoDoublePlay" : 11,
+            "numberOfPitches" : 2788,
+            "plateAppearances" : 659,
+            "totalBases" : 297,
+            "rbi" : 110,
+            "leftOnBase" : 257,
+            "sacBunts" : 0,
+            "sacFlies" : 6,
+            "babip" : ".312",
+            "groundOutsToAirouts" : "0.99",
+            "catchersInterference" : 0,
+            "atBatsPerHomeRun" : "15.94"
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2020",
+          "stat" : {
+            "gamesPlayed" : 47,
+            "groundOuts" : 49,
+            "airOuts" : 23,
+            "runs" : 39,
+            "doubles" : 14,
+            "triples" : 0,
+            "homeRuns" : 13,
+            "strikeOuts" : 28,
+            "baseOnBalls" : 41,
+            "intentionalWalks" : 12,
+            "hits" : 54,
+            "hitByPitch" : 1,
+            "avg" : ".351",
+            "atBats" : 154,
+            "obp" : ".490",
+            "slg" : ".695",
+            "ops" : "1.185",
+            "caughtStealing" : 2,
+            "stolenBases" : 6,
+            "stolenBasePercentage" : ".750",
+            "groundIntoDoublePlay" : 1,
+            "numberOfPitches" : 827,
+            "plateAppearances" : 196,
+            "totalBases" : 107,
+            "rbi" : 37,
+            "leftOnBase" : 54,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".363",
+            "groundOutsToAirouts" : "2.13",
+            "catchersInterference" : 0,
+            "atBatsPerHomeRun" : "11.85"
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2021",
+          "stat" : {
+            "gamesPlayed" : 151,
+            "groundOuts" : 160,
+            "airOuts" : 97,
+            "runs" : 111,
+            "doubles" : 20,
+            "triples" : 2,
+            "homeRuns" : 29,
+            "strikeOuts" : 93,
+            "baseOnBalls" : 145,
+            "intentionalWalks" : 23,
+            "hits" : 157,
+            "hitByPitch" : 2,
+            "avg" : ".313",
+            "atBats" : 502,
+            "obp" : ".465",
+            "slg" : ".534",
+            "ops" : ".999",
+            "caughtStealing" : 7,
+            "stolenBases" : 9,
+            "stolenBasePercentage" : ".563",
+            "groundIntoDoublePlay" : 23,
+            "numberOfPitches" : 2601,
+            "plateAppearances" : 654,
+            "totalBases" : 268,
+            "rbi" : 95,
+            "leftOnBase" : 197,
+            "sacBunts" : 0,
+            "sacFlies" : 5,
+            "babip" : ".332",
+            "groundOutsToAirouts" : "1.65",
+            "catchersInterference" : 0,
+            "atBatsPerHomeRun" : "17.31"
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 101,
+            "groundOuts" : 109,
+            "airOuts" : 87,
+            "runs" : 62,
+            "doubles" : 17,
+            "triples" : 1,
+            "homeRuns" : 21,
+            "strikeOuts" : 62,
+            "baseOnBalls" : 91,
+            "intentionalWalks" : 4,
+            "hits" : 84,
+            "hitByPitch" : 3,
+            "avg" : ".246",
+            "atBats" : 342,
+            "obp" : ".408",
+            "slg" : ".485",
+            "ops" : ".893",
+            "caughtStealing" : 2,
+            "stolenBases" : 6,
+            "stolenBasePercentage" : ".750",
+            "groundIntoDoublePlay" : 11,
+            "numberOfPitches" : 1819,
+            "plateAppearances" : 436,
+            "totalBases" : 166,
+            "rbi" : 46,
+            "leftOnBase" : 137,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".243",
+            "groundOutsToAirouts" : "1.25",
+            "catchersInterference" : 0,
+            "atBatsPerHomeRun" : "16.29"
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 39,
+            "groundOuts" : 38,
+            "airOuts" : 42,
+            "runs" : 25,
+            "doubles" : 5,
+            "triples" : 1,
+            "homeRuns" : 4,
+            "strikeOuts" : 23,
+            "baseOnBalls" : 35,
+            "intentionalWalks" : 0,
+            "hits" : 31,
+            "hitByPitch" : 1,
+            "avg" : ".231",
+            "atBats" : 134,
+            "obp" : ".394",
+            "slg" : ".373",
+            "ops" : ".767",
+            "caughtStealing" : 0,
+            "stolenBases" : 0,
+            "stolenBasePercentage" : ".---",
+            "groundIntoDoublePlay" : 1,
+            "numberOfPitches" : 730,
+            "plateAppearances" : 171,
+            "totalBases" : 50,
+            "rbi" : 13,
+            "leftOnBase" : 50,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".252",
+            "groundOutsToAirouts" : "0.90",
+            "catchersInterference" : 1,
+            "atBatsPerHomeRun" : "33.50"
+          },
+          "team" : {
+            "id" : 135,
+            "name" : "San Diego Padres",
+            "link" : "/api/v1/teams/135"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "gamesPlayed" : 140,
+            "groundOuts" : 147,
+            "airOuts" : 129,
+            "runs" : 87,
+            "doubles" : 22,
+            "triples" : 2,
+            "homeRuns" : 25,
+            "strikeOuts" : 85,
+            "baseOnBalls" : 126,
+            "intentionalWalks" : 4,
+            "hits" : 115,
+            "hitByPitch" : 4,
+            "avg" : ".242",
+            "atBats" : 476,
+            "obp" : ".404",
+            "slg" : ".454",
+            "ops" : ".858",
+            "caughtStealing" : 2,
+            "stolenBases" : 6,
+            "stolenBasePercentage" : ".750",
+            "groundIntoDoublePlay" : 12,
+            "numberOfPitches" : 2549,
+            "plateAppearances" : 607,
+            "totalBases" : 216,
+            "rbi" : 59,
+            "leftOnBase" : 187,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".246",
+            "groundOutsToAirouts" : "1.14",
+            "catchersInterference" : 1,
+            "atBatsPerHomeRun" : "19.04"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "numTeams" : 2
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "yearByYearAdvanced"
+        },
+        "group" : {
+          "displayName" : "hitting"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "season" : "2018",
+          "stat" : {
+            "plateAppearances" : 494,
+            "totalBases" : 214,
+            "leftOnBase" : 187,
+            "sacBunts" : 1,
+            "sacFlies" : 0,
+            "babip" : ".338",
+            "extraBaseHits" : 48,
+            "hitByPitch" : 0,
+            "gidp" : 9,
+            "gidpOpp" : 66,
+            "numberOfPitches" : 2031,
+            "pitchesPerPlateAppearance" : "4.111",
+            "walksPerPlateAppearance" : ".160",
+            "strikeoutsPerPlateAppearance" : ".200",
+            "homeRunsPerPlateAppearance" : ".045",
+            "walksPerStrikeout" : ".798",
+            "iso" : ".225",
+            "reachedOnError" : 1,
+            "walkOffs" : 0,
+            "flyOuts" : 38,
+            "totalSwings" : 788,
+            "swingAndMisses" : 175,
+            "ballsInPlay" : 316,
+            "popOuts" : 16,
+            "lineOuts" : 16,
+            "groundOuts" : 125,
+            "flyHits" : 22,
+            "popHits" : 0,
+            "lineHits" : 51,
+            "groundHits" : 48
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2019",
+          "stat" : {
+            "plateAppearances" : 659,
+            "totalBases" : 297,
+            "leftOnBase" : 257,
+            "sacBunts" : 0,
+            "sacFlies" : 6,
+            "babip" : ".312",
+            "extraBaseHits" : 71,
+            "hitByPitch" : 3,
+            "gidp" : 11,
+            "gidpOpp" : 81,
+            "numberOfPitches" : 2788,
+            "pitchesPerPlateAppearance" : "4.231",
+            "walksPerPlateAppearance" : ".164",
+            "strikeoutsPerPlateAppearance" : ".200",
+            "homeRunsPerPlateAppearance" : ".052",
+            "walksPerStrikeout" : ".818",
+            "iso" : ".266",
+            "reachedOnError" : 3,
+            "walkOffs" : 0,
+            "flyOuts" : 74,
+            "totalSwings" : 1136,
+            "swingAndMisses" : 273,
+            "ballsInPlay" : 416,
+            "popOuts" : 15,
+            "lineOuts" : 43,
+            "groundOuts" : 131,
+            "flyHits" : 38,
+            "popHits" : 0,
+            "lineHits" : 68,
+            "groundHits" : 47
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2020",
+          "stat" : {
+            "plateAppearances" : 196,
+            "totalBases" : 107,
+            "leftOnBase" : 54,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".363",
+            "extraBaseHits" : 27,
+            "hitByPitch" : 1,
+            "gidp" : 1,
+            "gidpOpp" : 29,
+            "numberOfPitches" : 827,
+            "pitchesPerPlateAppearance" : "4.219",
+            "walksPerPlateAppearance" : ".209",
+            "strikeoutsPerPlateAppearance" : ".143",
+            "homeRunsPerPlateAppearance" : ".066",
+            "walksPerStrikeout" : "1.464",
+            "iso" : ".344",
+            "reachedOnError" : 3,
+            "walkOffs" : 0,
+            "flyOuts" : 12,
+            "totalSwings" : 298,
+            "swingAndMisses" : 64,
+            "ballsInPlay" : 126,
+            "popOuts" : 3,
+            "lineOuts" : 8,
+            "groundOuts" : 49,
+            "flyHits" : 15,
+            "popHits" : 0,
+            "lineHits" : 21,
+            "groundHits" : 18
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2021",
+          "stat" : {
+            "plateAppearances" : 654,
+            "totalBases" : 268,
+            "leftOnBase" : 197,
+            "sacBunts" : 0,
+            "sacFlies" : 5,
+            "babip" : ".332",
+            "extraBaseHits" : 51,
+            "hitByPitch" : 2,
+            "gidp" : 23,
+            "gidpOpp" : 121,
+            "numberOfPitches" : 2601,
+            "pitchesPerPlateAppearance" : "3.977",
+            "walksPerPlateAppearance" : ".222",
+            "strikeoutsPerPlateAppearance" : ".142",
+            "homeRunsPerPlateAppearance" : ".044",
+            "walksPerStrikeout" : "1.559",
+            "iso" : ".221",
+            "reachedOnError" : 3,
+            "walkOffs" : 1,
+            "flyOuts" : 56,
+            "totalSwings" : 911,
+            "swingAndMisses" : 182,
+            "ballsInPlay" : 414,
+            "popOuts" : 16,
+            "lineOuts" : 25,
+            "groundOuts" : 160,
+            "flyHits" : 30,
+            "popHits" : 0,
+            "lineHits" : 68,
+            "groundHits" : 59
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "plateAppearances" : 436,
+            "totalBases" : 166,
+            "leftOnBase" : 137,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".243",
+            "extraBaseHits" : 39,
+            "hitByPitch" : 3,
+            "gidp" : 11,
+            "gidpOpp" : 59,
+            "numberOfPitches" : 1819,
+            "pitchesPerPlateAppearance" : "4.172",
+            "walksPerPlateAppearance" : ".209",
+            "strikeoutsPerPlateAppearance" : ".142",
+            "homeRunsPerPlateAppearance" : ".048",
+            "walksPerStrikeout" : "1.468",
+            "iso" : ".240",
+            "reachedOnError" : 3,
+            "walkOffs" : 0,
+            "flyOuts" : 50,
+            "totalSwings" : 645,
+            "swingAndMisses" : 130,
+            "ballsInPlay" : 280,
+            "popOuts" : 16,
+            "lineOuts" : 21,
+            "groundOuts" : 109,
+            "flyHits" : 27,
+            "popHits" : 1,
+            "lineHits" : 33,
+            "groundHits" : 23
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "plateAppearances" : 171,
+            "totalBases" : 50,
+            "leftOnBase" : 50,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".252",
+            "extraBaseHits" : 10,
+            "hitByPitch" : 1,
+            "gidp" : 1,
+            "gidpOpp" : 20,
+            "numberOfPitches" : 730,
+            "pitchesPerPlateAppearance" : "4.269",
+            "walksPerPlateAppearance" : ".205",
+            "strikeoutsPerPlateAppearance" : ".135",
+            "homeRunsPerPlateAppearance" : ".023",
+            "walksPerStrikeout" : "1.522",
+            "iso" : ".142",
+            "reachedOnError" : 3,
+            "walkOffs" : 0,
+            "flyOuts" : 23,
+            "totalSwings" : 244,
+            "swingAndMisses" : 41,
+            "ballsInPlay" : 111,
+            "popOuts" : 10,
+            "lineOuts" : 9,
+            "groundOuts" : 38,
+            "flyHits" : 5,
+            "popHits" : 0,
+            "lineHits" : 13,
+            "groundHits" : 13
+          },
+          "team" : {
+            "id" : 135,
+            "name" : "San Diego Padres",
+            "link" : "/api/v1/teams/135"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "plateAppearances" : 607,
+            "totalBases" : 216,
+            "leftOnBase" : 187,
+            "sacBunts" : 0,
+            "sacFlies" : 0,
+            "babip" : ".246",
+            "extraBaseHits" : 49,
+            "hitByPitch" : 4,
+            "gidp" : 12,
+            "gidpOpp" : 79,
+            "numberOfPitches" : 2549,
+            "pitchesPerPlateAppearance" : "4.199",
+            "walksPerPlateAppearance" : ".208",
+            "strikeoutsPerPlateAppearance" : ".140",
+            "homeRunsPerPlateAppearance" : ".041",
+            "walksPerStrikeout" : "1.482",
+            "iso" : ".212",
+            "reachedOnError" : 6,
+            "walkOffs" : 0,
+            "flyOuts" : 73,
+            "totalSwings" : 889,
+            "swingAndMisses" : 171,
+            "ballsInPlay" : 391,
+            "popOuts" : 26,
+            "lineOuts" : 30,
+            "groundOuts" : 147,
+            "flyHits" : 32,
+            "popHits" : 1,
+            "lineHits" : 46,
+            "groundHits" : 36
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "numTeams" : 2
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "sabermetrics"
+        },
+        "group" : {
+          "displayName" : "hitting"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "season" : "2022",
+          "stat" : {
+            "woba" : 0.38952,
+            "wRc" : 77.6506,
+            "wRcPlus" : 151.524,
+            "rar" : 26.0164,
+            "war" : 2.72339
+          },
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "numTeams" : 1
+        }, {
+          "season" : "2022",
+          "stat" : {
+            "woba" : 0.350289,
+            "wRc" : 25.1092,
+            "wRcPlus" : 129.431,
+            "rar" : 6.42756,
+            "war" : 0.67284
+          },
+          "team" : {
+            "id" : 135,
+            "name" : "San Diego Padres",
+            "link" : "/api/v1/teams/135"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          },
+          "league" : {
+            "id" : 104,
+            "name" : "National League",
+            "link" : "/api/v1/league/104"
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R",
+          "numTeams" : 1
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "expectedStatistics"
+        },
+        "group" : {
+          "displayName" : "hitting"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "season" : "2022",
+          "stat" : {
+            "avg" : ".268",
+            "slg" : ".507",
+            "woba" : ".408",
+            "wobaCon" : ".406"
+          },
+          "player" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742",
+            "firstName" : "Juan",
+            "lastName" : "Soto",
+            "primaryPosition" : {
+              "code" : "9",
+              "name" : "Outfielder",
+              "type" : "Outfielder",
+              "abbreviation" : "RF"
+            }
+          },
+          "sport" : {
+            "id" : 1,
+            "link" : "/api/v1/sports/1",
+            "name" : "Major League Baseball",
+            "abbreviation" : "MLB"
+          },
+          "gameType" : "R"
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "sprayChart"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "stat" : {
+            "leftField" : 5.0,
+            "leftCenterField" : 12.0,
+            "centerField" : 24.0,
+            "rightCenterField" : 37.0,
+            "rightField" : 22.0
+          },
+          "gameType" : "R",
+          "batter" : {
+            "id" : 665742,
+            "fullName" : "Juan Soto",
+            "link" : "/api/v1/people/665742"
+          }
+        } ]
+      }, {
+        "type" : {
+          "displayName" : "hotColdZones"
+        },
+        "exemptions" : [ ],
+        "splits" : [ {
+          "stat" : {
+            "name" : "onBasePercentage",
+            "zones" : [ {
+              "zone" : "01",
+              "color" : "rgba(234, 147, 153, .55)",
+              "temp" : "warm",
+              "value" : ".320"
+            }, {
+              "zone" : "02",
+              "color" : "rgba(214, 41, 52, .55)",
+              "temp" : "hot",
+              "value" : ".389"
+            }, {
+              "zone" : "03",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".167"
+            }, {
+              "zone" : "04",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".256"
+            }, {
+              "zone" : "05",
+              "color" : "rgba(234, 147, 153, .55)",
+              "temp" : "warm",
+              "value" : ".327"
+            }, {
+              "zone" : "06",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".268"
+            }, {
+              "zone" : "07",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".148"
+            }, {
+              "zone" : "08",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".263"
+            }, {
+              "zone" : "09",
+              "color" : "rgba(150, 188, 255, .55)",
+              "temp" : "cool",
+              "value" : ".222"
+            }, {
+              "zone" : "11",
+              "color" : "rgba(214, 41, 52, .55)",
+              "temp" : "hot",
+              "value" : ".554"
+            }, {
+              "zone" : "12",
+              "color" : "rgba(214, 41, 52, .55)",
+              "temp" : "hot",
+              "value" : ".412"
+            }, {
+              "zone" : "13",
+              "color" : "rgba(214, 41, 52, .55)",
+              "temp" : "hot",
+              "value" : ".411"
+            }, {
+              "zone" : "14",
+              "color" : "rgba(214, 41, 52, .55)",
+              "temp" : "hot",
+              "value" : ".754"
+            } ]
+          }
+        }, {
+          "stat" : {
+            "name" : "sluggingPercentage",
+            "zones" : [ {
+              "zone" : "01",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".480"
+            }, {
+              "zone" : "02",
+              "color" : "rgba(234, 147, 153, .55)",
+              "temp" : "warm",
+              "value" : ".694"
+            }, {
+              "zone" : "03",
+              "color" : "rgba(150, 188, 255, .55)",
+              "temp" : "cool",
+              "value" : ".222"
+            }, {
+              "zone" : "04",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".419"
+            }, {
+              "zone" : "05",
+              "color" : "rgba(234, 147, 153, .55)",
+              "temp" : "warm",
+              "value" : ".654"
+            }, {
+              "zone" : "06",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".585"
+            }, {
+              "zone" : "07",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".111"
+            }, {
+              "zone" : "08",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".553"
+            }, {
+              "zone" : "09",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".500"
+            }, {
+              "zone" : "11",
+              "color" : "rgba(150, 188, 255, .55)",
+              "temp" : "cool",
+              "value" : ".317"
+            }, {
+              "zone" : "12",
+              "color" : "rgba(150, 188, 255, .55)",
+              "temp" : "cool",
+              "value" : ".235"
+            }, {
+              "zone" : "13",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".116"
+            }, {
+              "zone" : "14",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".193"
+            } ]
+          }
+        }, {
+          "stat" : {
+            "name" : "onBasePlusSlugging",
+            "zones" : [ {
+              "zone" : "01",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".800"
+            }, {
+              "zone" : "02",
+              "color" : "rgba(234, 147, 153, .55)",
+              "temp" : "warm",
+              "value" : "1.083"
+            }, {
+              "zone" : "03",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".389"
+            }, {
+              "zone" : "04",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".674"
+            }, {
+              "zone" : "05",
+              "color" : "rgba(234, 147, 153, .55)",
+              "temp" : "warm",
+              "value" : ".981"
+            }, {
+              "zone" : "06",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".854"
+            }, {
+              "zone" : "07",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".259"
+            }, {
+              "zone" : "08",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".816"
+            }, {
+              "zone" : "09",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".722"
+            }, {
+              "zone" : "11",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".871"
+            }, {
+              "zone" : "12",
+              "color" : "rgba(150, 188, 255, .55)",
+              "temp" : "cool",
+              "value" : ".647"
+            }, {
+              "zone" : "13",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".526"
+            }, {
+              "zone" : "14",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".947"
+            } ]
+          }
+        }, {
+          "stat" : {
+            "name" : "exitVelocity",
+            "zones" : [ {
+              "zone" : "01",
+              "color" : "rgba(214, 41, 52, .55)",
+              "temp" : "hot",
+              "value" : "96.56"
+            }, {
+              "zone" : "02",
+              "color" : "rgba(214, 41, 52, .55)",
+              "temp" : "hot",
+              "value" : "97.21"
+            }, {
+              "zone" : "03",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : "89.95"
+            }, {
+              "zone" : "04",
+              "color" : "rgba(234, 147, 153, .55)",
+              "temp" : "warm",
+              "value" : "91.97"
+            }, {
+              "zone" : "05",
+              "color" : "rgba(214, 41, 52, .55)",
+              "temp" : "hot",
+              "value" : "96.78"
+            }, {
+              "zone" : "06",
+              "color" : "rgba(234, 147, 153, .55)",
+              "temp" : "warm",
+              "value" : "91.94"
+            }, {
+              "zone" : "07",
+              "color" : "rgba(150, 188, 255, .55)",
+              "temp" : "cool",
+              "value" : "87.67"
+            }, {
+              "zone" : "08",
+              "color" : "rgba(214, 41, 52, .55)",
+              "temp" : "hot",
+              "value" : "94.58"
+            }, {
+              "zone" : "09",
+              "color" : "rgba(214, 41, 52, .55)",
+              "temp" : "hot",
+              "value" : "95.19"
+            }, {
+              "zone" : "11",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : "89.40"
+            }, {
+              "zone" : "12",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : "80.97"
+            }, {
+              "zone" : "13",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : "78.51"
+            }, {
+              "zone" : "14",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : "89.99"
+            } ]
+          }
+        }, {
+          "stat" : {
+            "name" : "battingAverage",
+            "zones" : [ {
+              "zone" : "01",
+              "color" : "rgba(234, 147, 153, .55)",
+              "temp" : "warm",
+              "value" : ".320"
+            }, {
+              "zone" : "02",
+              "color" : "rgba(214, 41, 52, .55)",
+              "temp" : "hot",
+              "value" : ".389"
+            }, {
+              "zone" : "03",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".167"
+            }, {
+              "zone" : "04",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".256"
+            }, {
+              "zone" : "05",
+              "color" : "rgba(234, 147, 153, .55)",
+              "temp" : "warm",
+              "value" : ".327"
+            }, {
+              "zone" : "06",
+              "color" : "rgba(150, 188, 255, .55)",
+              "temp" : "cool",
+              "value" : ".250"
+            }, {
+              "zone" : "07",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".115"
+            }, {
+              "zone" : "08",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".263"
+            }, {
+              "zone" : "09",
+              "color" : "rgba(150, 188, 255, .55)",
+              "temp" : "cool",
+              "value" : ".222"
+            }, {
+              "zone" : "11",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".274"
+            }, {
+              "zone" : "12",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".143"
+            }, {
+              "zone" : "13",
+              "color" : "rgba(6, 90, 238, .55)",
+              "temp" : "cold",
+              "value" : ".125"
+            }, {
+              "zone" : "14",
+              "color" : "rgba(255, 255, 255, 0.55)",
+              "temp" : "lukewarm",
+              "value" : ".263"
+            } ]
+          }
+        } ]
+      } ],
+      "mlbDebutDate" : "2018-05-15",
+      "batSide" : {
+        "code" : "L",
+        "description" : "Left"
+      },
+      "pitchHand" : {
+        "code" : "L",
+        "description" : "Left"
+      },
+      "nameFirstLast" : "Juan Soto",
+      "nameSlug" : "juan-soto-665742",
+      "firstLastName" : "Juan Soto",
+      "lastFirstName" : "Soto, Juan",
+      "lastInitName" : "Soto, J",
+      "initLastName" : "J Soto",
+      "fullFMLName" : "Juan Jose Soto",
+      "fullLFMName" : "Soto, Juan Jose",
+      "strikeZoneTop" : 3.11,
+      "strikeZoneBottom" : 1.45
+    } ]
+  }
