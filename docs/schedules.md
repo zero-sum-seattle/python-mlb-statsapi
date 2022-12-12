@@ -4,7 +4,7 @@
 `get_schedule`
 ----------
 
-Description: Returns 
+Description: Returns a schedule object
 
 **Parameters:**
 

@@ -68,6 +68,8 @@ python3
 * `Mlb.get_sport(self, sport_id: int, **params)` - Return a Sport object from Id
 * `Mlb.get_sports(self, **params)` - Return all teams for Sport Id
 * `Mlb.get_sport_id(self, sport_name: str, search_key: str = 'name', **params)`- Return Sport Id from name
+### [Schedules](docs/schedules.md#class-mlb)
+* `Mlb.get_schedule(self, date: str, start_date: str, end_date: str, sport_id: int, team_id: int, **params)` - Return a Schedule
 ### [Divisions](#division-examples)
 * `Mlb.get_division(self, division_id: int, **params)` - Return a Divison 
 * `Mlb.get_divisions(self, **params)` - Return all Divisions
