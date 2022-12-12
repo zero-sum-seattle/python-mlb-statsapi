@@ -68,7 +68,7 @@ python3
 * `Mlb.get_sport(self, sport_id: int, **params)` - Return a Sport object from Id
 * `Mlb.get_sports(self, **params)` - Return all teams for Sport Id
 * `Mlb.get_sport_id(self, sport_name: str, search_key: str = 'name', **params)`- Return Sport Id from name
-### [Divisions](#division-examples)
+### [Divisions](docs/divisions.md#class-mlb)
 * `Mlb.get_division(self, division_id: int, **params)` - Return a Divison 
 * `Mlb.get_divisions(self, **params)` - Return all Divisions
 * `Mlb.get_division_id(self, division_name: str, search_key: str = 'name', **params)` - Return Division Id(s) from name
