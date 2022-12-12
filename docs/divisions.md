@@ -1,54 +1,44 @@
 ﻿Class: `Mlb`
 ===================
 
-`get_template`
+`get_division`
 ----------
 
-Description: Returns 
+Description: Returns a Division
 
 **Parameters:**
 
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
+| `divison_id` | string/int | Yes      | divisionId to return a directory of division(s) for a specific division. |
+
+
+`get_divisions`
+----------
+
+Description: Return all divisons
 
 **Other Parameters:**
 
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
+| `divisionId` | string/int | No      | Insert divisionId(s) to return a directory of division(s) for a specific division. Format '200,201' |
+| `leagueId` | string/int | No      | Insert leagueId to return a directory of division(s) for all divisions in a specific league. |
+| `sportId` | string/int | No      | Insert a sportId to return a directory of division(s) for all divisions in a specific sport. |
 
-`get_template`
+`get_division_id`
 ----------
 
-Description: Return
+Description: Return division ids
 
 **Parameters:**
 
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
+| `division_name` | string | Yes      | Division name |
 
 **Other Parameters:**
 
 | Name       | Type      | Required | Description                         | Default
 | ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
-
-`get_template`
-----------
-
-Description: Return
-
-
-**Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
-
-**Other Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `template` | string | Yes      | description |
+| `search_key` | string | No      | description | 'name'
