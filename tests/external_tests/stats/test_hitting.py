@@ -187,6 +187,24 @@ class TestHittingStats(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['hitting']['vsplayer'])
 
+    def test_hitting_vsteam_stats_player(self):
+        """mlb get stats should return hitting stats"""
+        self.stats = ['vsTeam']
+        self.group = ['hitting']
+        self.params = {'opposingTeamId': 133}
+
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.ty_france, stats=self.stats, groups=self.group, **self.params)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('hitting' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['hitting']['vsteam'])
+
     def test_hitting_pitchlog_stats_player(self):
         """mlb get stats should return hitting stats"""
         self.stats = ['pitchLog']

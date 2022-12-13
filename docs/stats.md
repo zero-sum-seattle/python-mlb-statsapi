@@ -57,6 +57,8 @@ Description: Return stats for a player
 | `season` | string | No      | Insert year to return player stats for a particular season. |
 | `sportIds` | string | No      | Insert sportId to return player stats for a particular sportId. |
 | `gameType` | string | No      | Insert gameType to return player stats for a particular gameType. |
+| `opposingTeamId` | string | No      | Insert team id to return stats against a team. Used with vsTeam stat type. |
+| `opposingPlayerId` | string | No      | Insert person id to return player stats for against a player. Used with vsPlayer stat type.
 
 `get_stats`
 ----------
