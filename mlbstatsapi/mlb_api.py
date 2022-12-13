@@ -1857,7 +1857,7 @@ class Mlb:
 
 
     def get_attendance(self, team_id: int = None, league_id: int = None,
-                       league_list_id: int = None, 
+                       league_list_id: str = None, 
                        **params) -> Union[Attendance, None]:
         """
         returns attendance data based on teamId, leagueId, or leagueListId.
@@ -1869,7 +1869,7 @@ class Mlb:
         league_id : int
             Insert leagueId(s) to return a directory of attendanace for a 
             specific league. Format '103,104'
-        league_list_id : int
+        league_list_id : str
             Insert a unique League List Identifier to return a directory of 
             attendanace for a specific league listId.
             Available values : milb_full, milb_short, milb_complex, milb_all, 
@@ -1977,7 +1977,7 @@ class Mlb:
                     round_list.append(Round(**round))
         return round_list
 
-    def get_awards(self, award_id: int, **params) -> List[Award]:
+    def get_awards(self, award_id: str, **params) -> List[Award]:
         """
         return a list of awards for award_id
 
