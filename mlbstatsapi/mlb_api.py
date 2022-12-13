@@ -1990,9 +1990,9 @@ class Mlb:
         ----------------
         sportId : int
             Insert a sportId to return a directory of players for a given award in a specific sport.
-        leagueId : 
+        leagueId : int, List[int]
             Insert leagueId(s) to return a directory of players for a given award in a specific league. Format '103,104'
-        season : int
+        season : int, List[int]
             Insert year(s) to return a directory of players for a given award in a given season. Format '2016,2017'
 
         Returns
