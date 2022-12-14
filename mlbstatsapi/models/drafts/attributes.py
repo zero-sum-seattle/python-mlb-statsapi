@@ -24,7 +24,7 @@ class Home:
     country: str
 
 @dataclass
-class College:
+class School:
     """
     Represents the school the draft player is from.
 
