@@ -1,10 +1,10 @@
 ﻿from dataclasses import dataclass, field, InitVar
 from typing import Union, Dict, Any, Optional
 
-from .attributes import BatSide, Position, PitchHand, Status
+from .attributes import BatSide, Position, PitchHand, Status, Home, School
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.data import CodeDesc
-from mlbstatsapi.models.drafts import Home, College
+# from mlbstatsapi.models.drafts import Home, College
 
 
 @dataclass
@@ -249,7 +249,7 @@ class DraftPick(Person):
         Information about the player's home location.
     scoutingreport : str
     A   scouting report on the player's abilities.
-    school : College
+    school : School
         Information about the player's school or college.
     blurb : str
         A   brief summary of the player's background and accomplishments.
@@ -276,7 +276,7 @@ class DraftPick(Person):
     signingbonus:  str
     home: Union[Home , dict]
     scoutingreport: Optional[str] = None
-    school: Union[College , dict] 
+    school: Union[School , dict] 
     blurb: Optional[str] = None
     headshotlink: str
     team: Union[Team, dict]
