@@ -99,5 +99,5 @@ class Team:
         self.springvenue = Venue(**self.springvenue) if self.springvenue else self.springvenue        
         self.league = League(**self.league) if self.league else self.league
         self.division = Division(**self.division) if self.division else self.division
-        self.record = TeamRecord(**self.record) if self.record else self.record
+        self.record = TeamRecords(**self.record) if self.record else self.record
         self.sport = Sport(**self.sport) if self.sport else self.sport
