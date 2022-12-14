@@ -55,9 +55,9 @@ class Sabermetrics:
 
 
 @dataclass(kw_only=True)
-class Stat:
+class Split:
     """
-    Base class for stats
+    Base class for splits
 
     Attributes
     ----------
@@ -75,15 +75,11 @@ class Stat:
         bool to hold if stat is at home
     date : str
         date of game
-    group : str 
-        type of stat group
-    _group : str
+    group : str
         type of the stat group
-    _type : str
+    type : str
         type of the stat 
     """
-    group: str
-    type: str
     season: Optional[str] = None
     numteams: Optional[int] = None
     gametype: Optional[str] = None
@@ -96,6 +92,30 @@ class Stat:
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
+
+@dataclass(kw_only=True)
+class Stat:
+    """
+    Base class for stats
+
+    Attributes
+    ----------
+    group : str
+        type of the stat group
+    type : str
+        type of the stat 
+    totalsplits : int
+        The number of split objects
+    exemptions : list
+        not sure what this is
+    splits : list
+        a list of split objects
+    """
+    group: str
+    type: str
+    totalsplits: int
+    exemptions: Optional[List] = field(default_factory=list)
+    splits: Optional[List] = field(default_factory=list)
 
 
 @dataclass(kw_only=True)

@@ -1,5 +1,6 @@
 from .stats import (
-    Stat, 
+    Stat,
+    Split,
     PitchArsenal,
     HotColdZones,
     ZoneCodes,

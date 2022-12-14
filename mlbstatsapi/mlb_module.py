@@ -2,6 +2,8 @@ from typing import Union, List, Dict
 import importlib
 import inspect
 
+from mlbstatsapi.models.stats import Stat
+
 
 def merge_keys(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -> dict:
     """
@@ -118,39 +120,32 @@ def create_split_data(stat_data: dict, param_groups: list):
     dict
         returns a dict of stats
     """
-    stat_splits = {}
+    stats = {}
 
     for stat in stat_data:
+        # get that stat types
         stat_type, stat_group = get_stat_attributes(stat)
+        # not sure if we need this yet
 
-        # if stat_type is None and stat_group is None
-        # we are assumming this is a call to the game player stats
-        # endpoint. Build gamelog stats
-        # URL: https://statsapi.mlb.com/api/v1/people/664034/stats/game/715757
-        if stat_type is None and stat_group is None:
-            split = return_splits_no_groups(stat['splits'])
+        if 'splits' in stat and stat['splits']:
+            if (stat_type and stat_group ) is None:
 
-            stat_group = 'stats'
-            stat_type = 'gameLog'
-
-            if stat_group not in stat_splits:
-                    stat_splits[stat_group] = {}   
-            stat_splits[stat_group][stat_type.lower()] = split
+                # this is to handle the player game stat endpoint
+                stat_group = 'stats'
+                stat_type = 'gameLog'
+                split_data = return_splits_no_groups(stat['splits'])
+            else:
+                split_data = create_split_data(stat['splits'], stat_type, stat_group)
             
-            continue
+        split_data = create_split_data(stat['splits'], stat_type, stat_group)
 
-        # build stat classes that have stat groups and stat types set
-        for group in param_groups:
-            if stat_group == group:
-                # checking if we need to init stat group key
-                if stat_group not in stat_splits:
-                    stat_splits[stat_group] = {}        
-                    # get splits from stats
-                if 'splits' in stat and stat['splits']:
-                    split = return_splits(stat['splits'], stat_type, stat_group)
-                    stat_splits[stat_group][stat_type.lower()] = split
+        stat_object = Stat(group=stat_group, type=stat_type,
+                        totalsplits=stat['totalsplits'], splits=split_data)
 
-    return stat_splits
+        stats[stat_group][stat_type.lower()] = stat_object
+
+    return stats
+
 
 
 def build_group_list(params) -> List[str]:
