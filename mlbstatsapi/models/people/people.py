@@ -3,6 +3,8 @@ from typing import Union, Dict, Any, Optional
 
 from .attributes import BatSide, Position, PitchHand, Status
 from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.data import CodeDesc
+from mlbstatsapi.models.drafts import Home, College
 
 
 @dataclass
@@ -243,11 +245,11 @@ class DraftPick(Person):
         The value of the pick, if known.
     signingbonus : str
         The signing bonus associated with this pick, if known.
-    home : dict
+    home : Home
         Information about the player's home location.
     scoutingreport : str
     A   scouting report on the player's abilities.
-    school : dict
+    school : College
         Information about the player's school or college.
     blurb : str
         A   brief summary of the player's background and accomplishments.
@@ -255,7 +257,7 @@ class DraftPick(Person):
         A   link to a headshot image of the player.
     team : Team or dict
         The team that made this draft pick.
-    drafttype : dict
+    drafttype : CodeDesc
         Information about the type of draft in which this pick was made.
     isdrafted : bool
         Whether or not the player associated with this pick has been drafted.
@@ -272,13 +274,13 @@ class DraftPick(Person):
     rank: Optional[int] = None
     pickvalue: Optional[str] = None
     signingbonus:  str
-    home: dict
+    home: Union[Home , dict]
     scoutingreport: Optional[str] = None
-    school: dict 
+    school: Union[College , dict] 
     blurb: Optional[str] = None
     headshotlink: str
     team: Union[Team, dict]
-    drafttype: dict
+    drafttype: Union[CodeDesc, dict]
     isdrafted: bool
     ispass: bool
     year: str
