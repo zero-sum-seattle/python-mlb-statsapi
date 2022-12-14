@@ -1,5 +1,5 @@
 ﻿from dataclasses import dataclass, field, InitVar
-from typing import List, Union, Dict, Any, Optional
+from typing import Union, Dict, Any, Optional
 
 from .attributes import BatSide, Position, PitchHand, Status
 from mlbstatsapi.models.teams import Team
@@ -225,24 +225,44 @@ class Pitcher(Person):
 @dataclass(kw_only=True)
 class DraftPick(Person):
     """
+    Represents a pick made in the MLB draft.
+
+    Attributes
+    ----------
     bisplayerid : int
-    pickround :  str
-    picknumber :  int
-    roundpicknumber :  int
-    rank :  int
+        The unique identifier of the player associated with this draft pick.
+    pickround : str
+        The round of the draft in which this pick was made.
+    picknumber : int
+        The number of the pick in the round.
+    roundpicknumber : int
+        The number of the pick overall in the draft.
+    rank : int
+        The rank of the player among all players eligible for the draft.
     pickvalue : str
-    signingbonus :  str
+        The value of the pick, if known.
+    signingbonus : str
+        The signing bonus associated with this pick, if known.
     home : dict
+        Information about the player's home location.
     scoutingreport : str
-    school : dict 
+    A   scouting report on the player's abilities.
+    school : dict
+        Information about the player's school or college.
     blurb : str
+        A   brief summary of the player's background and accomplishments.
     headshotlink : str
-    person : Person
-    team : Team
+        A   link to a headshot image of the player.
+    team : Team or dict
+        The team that made this draft pick.
     drafttype : dict
+        Information about the type of draft in which this pick was made.
     isdrafted : bool
+        Whether or not the player associated with this pick has been drafted.
     ispass : bool
+        Whether or not the team passed on making a pick in this round.
     year : str
+        The year in which the draft took place.
     """
 
     bisplayerid: Optional[int] = None
