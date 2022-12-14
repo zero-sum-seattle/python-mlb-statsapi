@@ -7,7 +7,7 @@ from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.sports import Sport
 
 # from .attributes import TeamRecord
-from mlbstatsapi.models.standings import TeamRecords
+from mlbstatsapi.models.standings import Teamrecords
 
 
 @dataclass
@@ -86,7 +86,7 @@ class Team:
     division: Union[Division, dict] = field(default_factory=dict)
     sport: Union[Sport, dict] = field(default_factory=dict)
     shortname: Optional[str] = None
-    record: Union[TeamRecords, dict] = None
+    record: Union[Teamrecords, dict] = None
     franchisename: Optional[str] = None
     clubname: Optional[str] = None
     active: Optional[str] = None
@@ -99,5 +99,5 @@ class Team:
         self.springvenue = Venue(**self.springvenue) if self.springvenue else self.springvenue        
         self.league = League(**self.league) if self.league else self.league
         self.division = Division(**self.division) if self.division else self.division
-        self.record = TeamRecords(**self.record) if self.record else self.record
+        self.record = Teamrecords(**self.record) if self.record else self.record
         self.sport = Sport(**self.sport) if self.sport else self.sport
