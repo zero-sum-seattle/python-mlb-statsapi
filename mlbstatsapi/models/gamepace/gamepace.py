@@ -10,11 +10,11 @@ class Gamepace:
 
     Attributes:
     ----------
-    teams : List[Gamepaceteams]
+    teams : List[Gamepacedata]
         A list of teams in the gamepace.
-    leagues : List[Gamepaceleagues]
+    leagues : List[Gamepacedata]
         A list of leagues in the gamepace.
-    sports : List[Gamepacesports]
+    sports : List[Gamepacedata]
         A list of sports in the gamepace.
     """
     teams: Optional[List[Gamepacedata]] = None

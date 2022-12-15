@@ -7,6 +7,7 @@ from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.sports import Sport
 
 from .attributes import TeamRecord
+# from mlbstatsapi.models.standings import Teamrecords
 
 
 @dataclass
@@ -22,17 +23,15 @@ class Team:
         name of the team
     link : str
         The API link for the team
-    name : str
-        The name of the team
-    springleague : dict
+    springleague : League
         The spring league of the team
     allstarstatus : str
         The all status status of the team
     season : str
         The team's current season
-    venue : dict
+    venue : Venue
         The team's home venue
-    springvenue : dict
+    springvenue : League
         The team's spring venue
     teamcode : str
         team code 
@@ -46,15 +45,15 @@ class Team:
         The location of the team
     firstyearofplay : str
         The first year the team began play
-    league : dict
+    league : League
         The league of the team
-    division : dict
+    division : Division
         The division the team is in
-    sport : dict
+    sport : Sport
         The sport of the team
     shortname : str
         The shortname of the team
-    record : dict
+    record : TeamRecord
         The record of the team
     franchisename : str
         The franchisename of the team

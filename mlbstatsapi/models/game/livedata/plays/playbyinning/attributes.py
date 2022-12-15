@@ -34,7 +34,7 @@ class HitsByTeam:
         The pitcher
     batter : Person
         The batter
-    coordinates : HitsByTeamHitCoordinates
+    coordinates : HitCoordinates
         Hit coordinates
     type : str
         Type

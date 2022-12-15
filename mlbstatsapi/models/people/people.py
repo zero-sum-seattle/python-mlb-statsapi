@@ -1,8 +1,10 @@
 ﻿from dataclasses import dataclass, field, InitVar
-from typing import List, Union, Dict, Any, Optional
+from typing import Union, Dict, Any, Optional
 
-from .attributes import BatSide, Position, PitchHand, Status
+from .attributes import BatSide, Position, PitchHand, Status, Home, School
 from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.data import CodeDesc
+# from mlbstatsapi.models.drafts import Home, College
 
 
 @dataclass
@@ -225,24 +227,44 @@ class Pitcher(Person):
 @dataclass(kw_only=True)
 class DraftPick(Person):
     """
+    Represents a pick made in the MLB draft.
+
+    Attributes
+    ----------
     bisplayerid : int
-    pickround :  str
-    picknumber :  int
-    roundpicknumber :  int
-    rank :  int
+        The unique identifier of the player associated with this draft pick.
+    pickround : str
+        The round of the draft in which this pick was made.
+    picknumber : int
+        The number of the pick in the round.
+    roundpicknumber : int
+        The number of the pick overall in the draft.
+    rank : int
+        The rank of the player among all players eligible for the draft.
     pickvalue : str
-    signingbonus :  str
-    home : dict
+        The value of the pick, if known.
+    signingbonus : str
+        The signing bonus associated with this pick, if known.
+    home : Home
+        Information about the player's home location.
     scoutingreport : str
-    school : dict 
+    A   scouting report on the player's abilities.
+    school : School
+        Information about the player's school or college.
     blurb : str
+        A   brief summary of the player's background and accomplishments.
     headshotlink : str
-    person : Person
-    team : Team
-    drafttype : dict
+        A   link to a headshot image of the player.
+    team : Team or dict
+        The team that made this draft pick.
+    drafttype : CodeDesc
+        Information about the type of draft in which this pick was made.
     isdrafted : bool
+        Whether or not the player associated with this pick has been drafted.
     ispass : bool
+        Whether or not the team passed on making a pick in this round.
     year : str
+        The year in which the draft took place.
     """
 
     bisplayerid: Optional[int] = None
@@ -252,13 +274,13 @@ class DraftPick(Person):
     rank: Optional[int] = None
     pickvalue: Optional[str] = None
     signingbonus:  str
-    home: dict
+    home: Union[Home , dict]
     scoutingreport: Optional[str] = None
-    school: dict 
+    school: Union[School , dict] 
     blurb: Optional[str] = None
     headshotlink: str
     team: Union[Team, dict]
-    drafttype: dict
+    drafttype: Union[CodeDesc, dict]
     isdrafted: bool
     ispass: bool
     year: str

@@ -15,11 +15,11 @@ class Venue:
         Name for this venue
     link : str
         Link to venues endpoint
-    location : VenueLocation = None
+    location : Location = None
         Location for this venue
-    timezone : VenueTimeZone = None
+    timezone : TimeZone = None
         Timezone for this venue
-    fieldinfo :  VenueFieldInfo = None
+    fieldinfo :  FieldInfo = None
         Info on this venue's field
     active : bool = None
         Is this field currently active

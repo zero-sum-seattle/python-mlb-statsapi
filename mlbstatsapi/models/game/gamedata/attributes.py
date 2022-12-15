@@ -113,9 +113,9 @@ class GameTeams:
 
     Attributes
     ----------
-    away : GameTeam
+    away : Team
         Away team
-    home : GameTeam
+    home : Team
         Home team
     """
     away: Union[Team, dict]
