@@ -4,7 +4,7 @@ from typing import Optional, Union
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 
-from .stats import Stat
+from .stats import Split
 
 
 @dataclass
@@ -101,7 +101,7 @@ class SimpleCatchingSplit:
 
 
 @dataclass(kw_only=True)
-class CatchingSeason(Stat):
+class CatchingSeason(Split):
     """
     A class to represent a catching season statistic
 
@@ -116,7 +116,7 @@ class CatchingSeason(Stat):
 
 
 @dataclass(kw_only=True)
-class CatchingSingleSeason(Stat):
+class CatchingSingleSeason(Split):
     """
     A class to represent a catching statsSingleSeason statistic
 
@@ -130,7 +130,7 @@ class CatchingSingleSeason(Stat):
         self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingYearByYearPlayoffs(Stat):
+class CatchingYearByYearPlayoffs(Split):
     """
     A class to represent a catching yearByYearPlayoffs statistic
 
@@ -144,7 +144,7 @@ class CatchingYearByYearPlayoffs(Stat):
         self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingYearByYear(Stat):
+class CatchingYearByYear(Split):
     """
     A class to represent a catching yearByYear statistic
 
@@ -158,7 +158,7 @@ class CatchingYearByYear(Stat):
         self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingProjected(Stat):
+class CatchingProjected(Split):
     """
     A class to represent a catching projectedRos statistic
 
@@ -172,7 +172,7 @@ class CatchingProjected(Stat):
         self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingCareer(Stat):
+class CatchingCareer(Split):
     """
     A class to represent a catching career statistic
 
@@ -186,7 +186,7 @@ class CatchingCareer(Stat):
         self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingCareerRegularSeason(Stat):
+class CatchingCareerRegularSeason(Split):
     """
     A class to represent a catching careerRegularSeason statistic
 
@@ -200,7 +200,7 @@ class CatchingCareerRegularSeason(Stat):
         self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingGameLog(Stat):
+class CatchingGameLog(Split):
     """
     A class to represent a catching gameLog statistic
 
@@ -215,7 +215,7 @@ class CatchingGameLog(Stat):
     opponent: Union[Team, dict]
 
 @dataclass(kw_only=True)
-class CatchingLastXGames(Stat):
+class CatchingLastXGames(Split):
     """
     A class to represent a catching lastXGames statistic
 
@@ -229,7 +229,7 @@ class CatchingLastXGames(Stat):
         self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingByDateRange(Stat, SimpleCatchingSplit):
+class CatchingByDateRange(Split):
     """
     A class to represent a catching byDateRange statistic
 
@@ -243,7 +243,7 @@ class CatchingByDateRange(Stat, SimpleCatchingSplit):
         self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingByDayOfWeek(Stat):
+class CatchingByDayOfWeek(Split):
     """
     A class to represent a catching byDayOfWeek statistic
 
@@ -258,7 +258,7 @@ class CatchingByDayOfWeek(Stat):
         self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingHomeAndAway(Stat):
+class CatchingHomeAndAway(Split):
     """
     A class to represent a catching homeAndAway statistic
 
@@ -273,7 +273,7 @@ class CatchingHomeAndAway(Stat):
         self.stat = SimpleCatchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class CatchingWinLoss(Stat):
+class CatchingWinLoss(Split):
     """
     A class to represent a catching winLoss statistic
 

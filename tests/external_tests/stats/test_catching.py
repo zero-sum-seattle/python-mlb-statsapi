@@ -49,14 +49,16 @@ class TestCatchingStats(unittest.TestCase):
         self.assertTrue(stats['catching']['season'])
         self.assertTrue(stats['catching']['career'])
 
-        # let's pull out a object and test it
-        season = stats['catching']['season'][0]
-        career = stats['catching']['career'][0]
+        season = stats['catching']['season']
+        career = stats['catching']['career']
 
-        # check that attrs exist and contain data
-        self.assertTrue(season.season)
-        self.assertTrue(season.stat.baseonballs)
-        self.assertTrue(career.player)
+        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.group, 'catching')
+        self.assertEqual(season.type, 'season')
+
+        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.group, 'catching')
+        self.assertEqual(career.type, 'career')
 
     def test_catching_stat_attributes_team(self):
         """mlb get stats should return pitching stats"""
@@ -77,11 +79,13 @@ class TestCatchingStats(unittest.TestCase):
         self.assertTrue(stats['catching']['season'])
         self.assertTrue(stats['catching']['career'])
 
-        # let's pull out a object and test it
-        season = stats['catching']['season'][0]
-        career = stats['catching']['career'][0]
+        season = stats['catching']['season']
+        career = stats['catching']['career']
 
-        # check that attrs exist and contain data
-        self.assertTrue(season.season)
-        self.assertTrue(season.stat.baseonballs)
-        self.assertTrue(career.team)
+        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.group, 'catching')
+        self.assertEqual(season.type, 'season')
+
+        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.group, 'catching')
+        self.assertEqual(career.type, 'career')

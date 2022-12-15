@@ -1,5 +1,6 @@
 from .stats import (
-    Stat, 
+    Stat,
+    Split,
     PitchArsenal,
     HotColdZones,
     ZoneCodes,
@@ -39,7 +40,6 @@ from .hitting import (
     HittingVsTeam,
     HittingVsTeam5Y,
     HittingVsTeamTotal,
-    HittingGameLogStat
 )
 
 from .pitching import (
@@ -114,7 +114,6 @@ from .fielding import (
     FieldingSeasonAdvanced,
     FieldingSingleSeasonAdvanced,
     FieldingSingleSeason,
-    FieldingGameLogStat
 )
 
 from .game import (

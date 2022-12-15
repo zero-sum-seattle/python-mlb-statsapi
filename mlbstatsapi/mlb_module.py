@@ -2,6 +2,8 @@ from typing import Union, List, Dict
 import importlib
 import inspect
 
+from mlbstatsapi.models.stats import Stat
+
 
 def merge_keys(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -> dict:
     """
@@ -37,42 +39,7 @@ def merge_keys(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -> dict:
 
     return mlb_dict
 
-def return_splits_no_groups(split_data: dict):
-    """
-    function that loops through split information
-
-    Parameters
-    ----------
-    split_data : dict
-        dict of params to pass
-    Returns
-    -------
-    dict
-        returns a dict of stats
-    """
-
-    splits = []
-    
-    for split in split_data:
-        if split['stat']:
-            if 'group' in split:
-                stat_group = split['group']
-        else: # if no stat skip
-            continue
-
-        # get stat_module file to build a stat object
-        stat_type = 'gameLog'
-        stat_module = f"mlbstatsapi.models.stats.{stat_group}"
-        stat_module = importlib.import_module(stat_module)
-
-        # match stat object to stat_group
-        for name, obj in inspect.getmembers(stat_module, predicate=inspect.isclass):
-            if hasattr(obj, '_stat') and stat_group in obj._stat:
-                splits.append(obj(**split))
-
-    return splits
-
-def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Splits']:
+def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Split']:
     """
     The split objects are built using the group name and split data. The stat group name is used to source the correct
     stat group classes.
@@ -102,85 +69,61 @@ def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Sp
     for name, obj in inspect.getmembers(stat_module, predicate=inspect.isclass):
         if hasattr(obj, '_stat') and stat_type in obj._stat:
             for split in split_data:
-                splits.append(obj(type=stat_type, group=stat_group, **split))
+                if split['stat']:
+                    splits.append(obj(**split))
 
     return splits
 
-
-def create_split_data(stat_data: dict, param_groups: list):
+def get_split_count(stat: dict) -> int:
     """
-    function that loops through stat information
+    function that returns split count from stats
+
     Parameters
     ----------
-    params: dict
+    stat: dict
+        dict of stats
+
+    Returns
+    -------
+    int
+        returns number of splits
+    """
+
+
+
+def create_split_data(stat_data: dict) -> dict:
+    """
+    function that loops through stat information, creates splits, and return stat dict
+
+    Parameters
+    ----------
+    stat_data: dict
         dict of params to pass
+
     Returns
     -------
     dict
         returns a dict of stats
     """
-    stat_splits = {}
+    stats = {}
 
     for stat in stat_data:
-        stat_type, stat_group = get_stat_attributes(stat)
+        # get type and group of stat
+        stat_type, stat_group, total_splits = get_stat_attributes(stat)
 
-        # if stat_type is None and stat_group is None
-        # we are assumming this is a call to the game player stats
-        # endpoint. Build gamelog stats
-        # URL: https://statsapi.mlb.com/api/v1/people/664034/stats/game/715757
-        if stat_type is None and stat_group is None:
-            split = return_splits_no_groups(stat['splits'])
-
-            stat_group = 'stats'
-            stat_type = 'gameLog'
-
-            if stat_group not in stat_splits:
-                    stat_splits[stat_group] = {}   
-            stat_splits[stat_group][stat_type.lower()] = split
-            
+        if 'splits' in stat and stat['splits']:
+            split_data = return_splits(stat['splits'], stat_type, stat_group)
+            stat_object = Stat(group=stat_group, type=stat_type,
+                        totalsplits=total_splits, splits=split_data)
+        else:
             continue
+    
+        if stat_group not in stats:
+            stats[stat_group] = {}
+    
+        stats[stat_group][stat_type.lower()] = stat_object
 
-        # build stat classes that have stat groups and stat types set
-        for group in param_groups:
-            if stat_group == group:
-                # checking if we need to init stat group key
-                if stat_group not in stat_splits:
-                    stat_splits[stat_group] = {}        
-                    # get splits from stats
-                if 'splits' in stat and stat['splits']:
-                    split = return_splits(stat['splits'], stat_type, stat_group)
-                    stat_splits[stat_group][stat_type.lower()] = split
-
-    return stat_splits
-
-
-def build_group_list(params) -> List[str]:
-    """
-    return groups with stats key
-    Parameters
-    ----------
-    params : dict
-        params is a dictionary of params sent to requests
-
-    Returns
-    -------
-    list
-        returns a list of stat groups
-    """
-    no_group_types = ('hotColdZones', 'sprayChart', 'pitchArsenal')
-
-    if params['group'] is list:
-        group_list = params['group'].copy()
-    else:
-        group_list = list(params['group'])
-
-    for _type in no_group_types:
-        if _type in params['stats']:
-            group_list.append('stats')
-            break
-
-    return group_list
-
+    return stats
 
 def get_stat_attributes(stats) -> str:
     """
@@ -197,7 +140,7 @@ def get_stat_attributes(stats) -> str:
     if 'type' in stats and 'displayname' in stats['type']:
         stat_type = stats['type']['displayname']
     else:
-        stat_type = None
+        stat_type = 'gameLog'
 
     # default to stats if no group returned
     if 'group' in stats and 'displayname' in stats['group']:
@@ -208,7 +151,12 @@ def get_stat_attributes(stats) -> str:
             stat_group = 'stats'
         else: 
             stat_group = None
+    
+    if 'totalsplits' in stats:
+        total_splits = stats['totalsplits']
+    else:
+        total_splits = len(stats['splits'])
 
-    return (stat_type, stat_group)
+    return (stat_type, stat_group, total_splits)
 
 

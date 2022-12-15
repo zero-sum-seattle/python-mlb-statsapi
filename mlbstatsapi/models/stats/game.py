@@ -1,7 +1,7 @@
 ﻿from dataclasses import dataclass, field
 from typing import Optional, Union, List
 
-from .stats import Stat
+from .stats import Split
 
 @dataclass
 class SimpleGameStats:
@@ -26,7 +26,7 @@ class SimpleGameStats:
 
 
 @dataclass(kw_only=True)
-class SeasonGame(Stat, SimpleGameStats):
+class SeasonGame(Split):
     """
     A class to represent a game statistic
 
@@ -37,7 +37,7 @@ class SeasonGame(Stat, SimpleGameStats):
 
 
 @dataclass(kw_only=True)
-class CareerGame(Stat, SimpleGameStats):
+class CareerGame(Split):
     """
     A class to represent a game statistic
     """
@@ -45,7 +45,7 @@ class CareerGame(Stat, SimpleGameStats):
 
 
 @dataclass(kw_only=True)
-class CareerRegularSeasonGame(Stat, SimpleGameStats):
+class CareerRegularSeasonGame(Split, SimpleGameStats):
     """
     A class to represent a game statistic
     """
@@ -53,7 +53,7 @@ class CareerRegularSeasonGame(Stat, SimpleGameStats):
 
 
 @dataclass(kw_only=True)
-class CareerPlayoffsGame(Stat, SimpleGameStats):
+class CareerPlayoffsGame(Split, SimpleGameStats):
     """
     A class to represent a game statistic
 

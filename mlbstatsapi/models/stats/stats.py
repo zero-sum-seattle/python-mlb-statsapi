@@ -55,9 +55,9 @@ class Sabermetrics:
 
 
 @dataclass(kw_only=True)
-class Stat:
+class Split:
     """
-    Base class for stats
+    Base class for splits
 
     Attributes
     ----------
@@ -75,15 +75,11 @@ class Stat:
         bool to hold if stat is at home
     date : str
         date of game
-    group : str 
-        type of stat group
-    _group : str
+    group : str
         type of the stat group
-    _type : str
+    type : str
         type of the stat 
     """
-    group: str
-    type: str
     season: Optional[str] = None
     numteams: Optional[int] = None
     gametype: Optional[str] = None
@@ -97,9 +93,33 @@ class Stat:
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
+@dataclass(kw_only=True)
+class Stat:
+    """
+    Base class for stats
+
+    Attributes
+    ----------
+    group : str
+        type of the stat group
+    type : str
+        type of the stat 
+    totalsplits : int
+        The number of split objects
+    exemptions : list
+        not sure what this is
+    splits : list
+        a list of split objects
+    """
+    group: str
+    type: str
+    totalsplits: int
+    exemptions: Optional[List] = field(default_factory=list)
+    splits: Optional[List] = field(default_factory=list)
+
 
 @dataclass(kw_only=True)
-class PitchArsenal(Stat):
+class PitchArsenal(Split):
     """
     A class to represent a pitcharsenal stat for a hitter and pitcher
 
@@ -153,7 +173,7 @@ class Zones:
         self.zones = [ZoneCodes(**zone) for zone in self.zones]
 
 @dataclass(kw_only=True)
-class HotColdZones(Stat):
+class HotColdZones(Split):
     """
     A class to represent a hotcoldzone statistic
 
@@ -193,7 +213,7 @@ class Chart:
     rightfield: int
 
 @dataclass(kw_only=True)
-class SprayCharts(Stat):
+class SprayCharts(Split):
 
 
     _stat = ['sprayChart']
@@ -205,7 +225,7 @@ class SprayCharts(Stat):
         self.stat = Chart(**self.stat)
 
 @dataclass(kw_only=True)
-class OutsAboveAverage(Stat):
+class OutsAboveAverage(Split):
     """
     A class to represent a outs above average statistic
 
@@ -231,3 +251,24 @@ class OutsAboveAverage(Stat):
     outsaboveaverageinrightunrounded: int
     player: Union[Person, dict]
     gametype: str
+
+
+#
+# These dataclasses are for the game stats end point only
+# url: https://statsapi.mlb.com/api/v1/people/663728/stats/game/715757
+# The gamelog stats in this JSON have different keys set for their stat
+# and group. This breaks my logic of handling stat classes
+#
+
+@dataclass
+class PlayerGameLogStat(Split):
+    """
+    A class to represent a chart for SprayCharts
+
+    Attributes
+    ----------
+    """
+    type: str
+    group: str
+    stat: dict
+    _stat = ['gameLog']
