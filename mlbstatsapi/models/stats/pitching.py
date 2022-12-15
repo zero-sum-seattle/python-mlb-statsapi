@@ -8,10 +8,10 @@ from mlbstatsapi.mlb_module import merge_keys
 from mlbstatsapi.models.data import (
     Count,
     PlayDetails,
-    CodeDesc
+    
 )
 
-from .stats import Stat, Sabermetrics, ExpectedStatistics
+from .stats import Sabermetrics, ExpectedStatistics, Split
 from .hitting import SimpleHittingSplit
 
 
@@ -368,7 +368,7 @@ class AdvancedPitchingSplit:
 
 
 @dataclass(kw_only=True)
-class PitchingSabermetrics(Stat):
+class PitchingSabermetrics(Split):
     """
     A class to represent a pitching sabermetric statistics
 
@@ -397,7 +397,7 @@ class PitchingSabermetrics(Stat):
 
 
 @dataclass(kw_only=True)
-class PitchingSeason(Stat):
+class PitchingSeason(Split):
     """
     A class to represent a pitching season statistic
 
@@ -411,7 +411,7 @@ class PitchingSeason(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingCareer(Stat):
+class PitchingCareer(Split):
     """
     A class to represent a pitching season statistic
 
@@ -425,7 +425,7 @@ class PitchingCareer(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingCareerAdvanced(Stat):
+class PitchingCareerAdvanced(Split):
     """
     A class to represent a pitching season statistic
 
@@ -440,7 +440,7 @@ class PitchingCareerAdvanced(Stat):
 
 
 @dataclass(kw_only=True)
-class PitchingYearByYear(Stat):
+class PitchingYearByYear(Split):
     """
     A class to represent a yearByYear season statistic
 
@@ -454,7 +454,7 @@ class PitchingYearByYear(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingYearByYearPlayoffs(Stat):
+class PitchingYearByYearPlayoffs(Split):
     """
     A class to represent a yearByYear season statistic
 
@@ -468,7 +468,7 @@ class PitchingYearByYearPlayoffs(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingYearByYearAdvanced(Stat):
+class PitchingYearByYearAdvanced(Split):
     """
     A class to represent a pitching yearByYear statistic
 
@@ -482,7 +482,7 @@ class PitchingYearByYearAdvanced(Stat):
         self.stat = AdvancedPitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingSeasonAdvanced(Stat):
+class PitchingSeasonAdvanced(Split):
     """
     A class to represent a pitching seasonAdvanced statistic
 
@@ -496,7 +496,7 @@ class PitchingSeasonAdvanced(Stat):
         self.stat = AdvancedPitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingSingleSeasonAdvanced(Stat):
+class PitchingSingleSeasonAdvanced(Split):
     """
     A class to represent a pitching seasonAdvanced statistic
 
@@ -510,7 +510,7 @@ class PitchingSingleSeasonAdvanced(Stat):
         self.stat = AdvancedPitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingGameLog(Stat):
+class PitchingGameLog(Split):
     """
     A class to represent a gamelog stat for a pitcher
 
@@ -572,7 +572,7 @@ class PitchingPlay:
         self.count = Count(**self.count)
 
 @dataclass(kw_only=True)
-class PitchingLog(Stat):
+class PitchingLog(Split):
     """
     A class to represent a pitchLog stat for a pitcher.
 
@@ -613,10 +613,10 @@ class PitchingLog(Stat):
     game: Union[Game, dict]
 
     def __post_init__(self):
-        self.stat = PitchingPlay(**merge_keys(self.stat, 'play'))
+        self.stat = PitchingPlay(**self.stat['play'])
 
 @dataclass(kw_only=True)
-class PitchingPlayLog(Stat):
+class PitchingPlayLog(Split):
     """
     A class to represent a playLog stat for a pitcher.
 
@@ -657,10 +657,10 @@ class PitchingPlayLog(Stat):
     game: Union[Game, dict]
 
     def __post_init__(self):
-        self.stat = PitchingPlay(**merge_keys(self.stat, 'play'))
+        self.stat = PitchingPlay(**self.stat['play'])
 
 @dataclass(kw_only=True)
-class PitchingByDateRange(Stat):
+class PitchingByDateRange(Split):
     """
     A class to represent a byDateRange stat for a pitcher.
 
@@ -676,7 +676,7 @@ class PitchingByDateRange(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingByDateRangeAdvanced(Stat):
+class PitchingByDateRangeAdvanced(Split):
     """
     A class to represent a byDateRangeAdvanced stat for a pitcher.
 
@@ -692,7 +692,7 @@ class PitchingByDateRangeAdvanced(Stat):
         self.stat = AdvancedPitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingByMonth(Stat):
+class PitchingByMonth(Split):
     """
     A class to represent a byMonth stat for a pitcher.
 
@@ -708,7 +708,7 @@ class PitchingByMonth(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingByMonthPlayoffs(Stat):
+class PitchingByMonthPlayoffs(Split):
     """
     A class to represent a byMonthPlayoffs stat for a pitcher.
 
@@ -724,7 +724,7 @@ class PitchingByMonthPlayoffs(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingByDayOfWeek(Stat):
+class PitchingByDayOfWeek(Split):
     """
     A class to represent a byDayOfWeek stat for a pitcher.
 
@@ -740,7 +740,7 @@ class PitchingByDayOfWeek(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingByDayOfWeekPlayOffs(Stat):
+class PitchingByDayOfWeekPlayOffs(Split):
     """
     A class to represent a byDayOfWeekPlayoffs stat for a pitcher.
 
@@ -756,7 +756,7 @@ class PitchingByDayOfWeekPlayOffs(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingHomeAndAway(Stat):
+class PitchingHomeAndAway(Split):
     """
     A class to represent a homeAndAway stat for a pitcher.
 
@@ -772,7 +772,7 @@ class PitchingHomeAndAway(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingHomeAndAwayPlayoffs(Stat):
+class PitchingHomeAndAwayPlayoffs(Split):
     """
     A class to represent a homeAndAwayPlayoffs stat for a pitcher.
 
@@ -788,7 +788,7 @@ class PitchingHomeAndAwayPlayoffs(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingWinLoss(Stat):
+class PitchingWinLoss(Split):
     """
     A class to represent a winLoss stat for a pitcher.
 
@@ -804,7 +804,7 @@ class PitchingWinLoss(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingWinLossPlayoffs(Stat):
+class PitchingWinLossPlayoffs(Split):
     """
     A class to represent a winLossPlayoffs stat for a pitcher.
 
@@ -820,7 +820,7 @@ class PitchingWinLossPlayoffs(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingRankings(Stat):
+class PitchingRankings(Split):
     """
     A class to represent a rankingsByYear stat for a pitcher.
 
@@ -835,7 +835,7 @@ class PitchingRankings(Stat):
         self.stat = SimplePitchingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingOpponentsFaced(Stat):
+class PitchingOpponentsFaced(Split):
     """
     A class to represent an opponentsFaced stat for a pitcher.
 
@@ -854,7 +854,7 @@ class PitchingOpponentsFaced(Stat):
 
 
 @dataclass(kw_only=True)
-class PitchingExpectedStatistics(Stat):
+class PitchingExpectedStatistics(Split):
     """
     A class to represent an expectedStatistics stat for a pitcher.
 
@@ -872,7 +872,7 @@ class PitchingExpectedStatistics(Stat):
 
 
 @dataclass(kw_only=True)
-class PitchingVsPlayer5Y(Stat):
+class PitchingVsPlayer5Y(Split):
     """
     A class to represent a vsPlayer5Y pitching statistic
 
@@ -892,7 +892,7 @@ class PitchingVsPlayer5Y(Stat):
 
 
 @dataclass(kw_only=True)
-class PitchingVsPlayer(Stat):
+class PitchingVsPlayer(Split):
     """
     A class to represent a vsPlayer pitching statistic
 
@@ -912,7 +912,7 @@ class PitchingVsPlayer(Stat):
 
 
 @dataclass(kw_only=True)
-class PitchingVsPlayerTotal(Stat):
+class PitchingVsPlayerTotal(Split):
     """
     A class to represent a vsPlayerTotal pitching statistic
 
@@ -934,7 +934,7 @@ class PitchingVsPlayerTotal(Stat):
 # These stat_types return a hitting stat for a pitching stat group
 # odd, but need to deal with it.
 @dataclass(kw_only=True)
-class PitchingVsTeam(Stat):
+class PitchingVsTeam(Split):
     """
     A class to represent a vsTeam pitching statistic
 
@@ -951,7 +951,7 @@ class PitchingVsTeam(Stat):
         self.stat = SimpleHittingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingVsTeamTotal(Stat):
+class PitchingVsTeamTotal(Split):
     """
     A class to represent a vsTeamTotal pitching statistic
 
@@ -968,7 +968,7 @@ class PitchingVsTeamTotal(Stat):
         self.stat = SimpleHittingSplit(**self.stat)
 
 @dataclass(kw_only=True)
-class PitchingVsTeam5Y(Stat):
+class PitchingVsTeam5Y(Split):
     """
     A class to represent a vsTeam5Y pitching statistic
 
@@ -983,78 +983,3 @@ class PitchingVsTeam5Y(Stat):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
-
-#
-# These dataclasses are for the game stats end point only
-# url: https://statsapi.mlb.com/api/v1/people/663728/stats/game/715757
-# The gamelog stats in this JSON have different keys set for their stat
-# and group. This breaks my logic of handling stat classes
-#
-
-
-
-@dataclass
-class PitchingSplit:
-    gamesplayed: int
-    gamesstarted: int
-    flyouts: int
-    groundouts : int
-    airouts: int
-    runs: int
-    doubles: int
-    triples : int
-    homeruns: int
-    strikeouts: int
-    baseonballs: int
-    intentionalwalks: int
-    hits: int
-    hitbypitch: int
-    atbats: int
-    caughtstealing : int
-    stolenbases : int
-    stolenbasepercentage: str
-    numberofpitches: int
-    inningspitched: str
-    wins: int
-    losses: int
-    saves: int
-    saveopportunities: int
-    holds: int
-    blownsaves : int
-    earnedruns: int
-    battersfaced: int
-    outs: int
-    gamespitched: int
-    completegames: int
-    shutouts: int
-    pitchesthrown: int
-    balls: int
-    strikes: int
-    strikepercentage: str
-    hitbatsmen: int
-    balks: int
-    wildpitches: int
-    pickoffs: int
-    rbi: int
-    gamesfinished: int
-    runsscoredper9: str 
-    homerunsper9: str
-    inheritedrunners: int
-    inheritedrunnersscored: int
-    catchersinterference: int
-    sacbunts: int
-    sacflies: int
-    passedball: int
-
-
-@dataclass
-class PitchingGameLogStat:
-    type: str
-    group: str
-    stat: Union[PitchingSplit, dict]
-    _stat = ['pitching']
-
-    def __post_init__(self):
-        self.stat = PitchingSplit(**self.stat)
-
-

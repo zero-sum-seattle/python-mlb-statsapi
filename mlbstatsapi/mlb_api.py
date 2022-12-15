@@ -2100,8 +2100,7 @@ class Mlb:
             return {}
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            groups = mlb_module.build_group_list(params)
-            splits = mlb_module.create_split_data(mlb_data.data['stats'], groups)
+            splits = mlb_module.create_split_data(mlb_data.data['stats'])
 
         return splits
 
@@ -2151,8 +2150,7 @@ class Mlb:
             return {}
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            groups = mlb_module.build_group_list(params)
-            splits = mlb_module.create_split_data(mlb_data.data['stats'], groups)
+            splits = mlb_module.create_split_data(mlb_data.data['stats'])
 
         return splits
         
@@ -2204,8 +2202,7 @@ class Mlb:
             return {}
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            groups = mlb_module.build_group_list(params)
-            splits = mlb_module.create_split_data(mlb_data.data['stats'], groups)
+            splits = mlb_module.create_split_data(mlb_data.data['stats'])
 
         return splits
 
@@ -2261,8 +2258,7 @@ class Mlb:
             return {}
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            groups = mlb_module.build_group_list(params)
-            splits = mlb_module.create_split_data(mlb_data, groups)
+            splits = mlb_module.create_split_data(mlb_data)
 
         return splits
 

@@ -38,41 +38,6 @@ def merge_keys(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -> dict:
 
     return mlb_dict
 
-def return_splits_no_groups(split_data: dict):
-    """
-    function that loops through split information
-
-    Parameters
-    ----------
-    split_data : dict
-        dict of params to pass
-    Returns
-    -------
-    dict
-        returns a dict of stats
-    """
-
-    splits = []
-    
-    for split in split_data:
-        if split['stat']:
-            if 'group' in split:
-                stat_group = split['group']
-        else: # if no stat skip
-            continue
-
-        # get stat_module file to build a stat object
-        stat_type = 'gameLog'
-        stat_module = f"mlbstatsapi.models.stats.{stat_group}"
-        stat_module = importlib.import_module(stat_module)
-
-        # match stat object to stat_group
-        for name, obj in inspect.getmembers(stat_module, predicate=inspect.isclass):
-            if hasattr(obj, '_stat') and stat_group in obj._stat:
-                splits.append(obj(**split))
-
-    return splits
-
 def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Splits']:
     """
     The split objects are built using the group name and split data. The stat group name is used to source the correct
@@ -103,12 +68,13 @@ def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Sp
     for name, obj in inspect.getmembers(stat_module, predicate=inspect.isclass):
         if hasattr(obj, '_stat') and stat_type in obj._stat:
             for split in split_data:
-                splits.append(obj(type=stat_type, group=stat_group, **split))
+                if split['stat']:
+                    splits.append(obj(**split))
 
     return splits
 
 
-def create_split_data(stat_data: dict, param_groups: list):
+def create_split_data(stat_data: dict):
     """
     function that loops through stat information
     Parameters
@@ -123,25 +89,26 @@ def create_split_data(stat_data: dict, param_groups: list):
     stats = {}
 
     for stat in stat_data:
-        # get that stat types
+        # get type and group of stat
         stat_type, stat_group = get_stat_attributes(stat)
-        # not sure if we need this yet
+
+        print(stat_type + " " + stat_group)
+        if 'totalsplits' in stat:
+            total_splits = stat['totalsplits']
+        else:
+            total_splits = len(stat['splits'])
 
         if 'splits' in stat and stat['splits']:
-            if (stat_type and stat_group ) is None:
+            split_data = return_splits(stat['splits'], stat_type, stat_group)
 
-                # this is to handle the player game stat endpoint
-                stat_group = 'stats'
-                stat_type = 'gameLog'
-                split_data = return_splits_no_groups(stat['splits'])
-            else:
-                split_data = create_split_data(stat['splits'], stat_type, stat_group)
-            
-        split_data = create_split_data(stat['splits'], stat_type, stat_group)
-
-        stat_object = Stat(group=stat_group, type=stat_type,
-                        totalsplits=stat['totalsplits'], splits=split_data)
-
+            stat_object = Stat(group=stat_group, type=stat_type,
+                        totalsplits=total_splits, splits=split_data)
+        else:
+            continue
+    
+        if stat_group not in stats:
+            stats[stat_group] = {}
+    
         stats[stat_group][stat_type.lower()] = stat_object
 
     return stats
@@ -191,7 +158,7 @@ def get_stat_attributes(stats) -> str:
     if 'type' in stats and 'displayname' in stats['type']:
         stat_type = stats['type']['displayname']
     else:
-        stat_type = None
+        stat_type = 'gameLog'
 
     # default to stats if no group returned
     if 'group' in stats and 'displayname' in stats['group']:

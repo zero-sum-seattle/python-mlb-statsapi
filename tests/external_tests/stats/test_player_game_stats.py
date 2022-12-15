@@ -35,15 +35,16 @@ class TestHittingStats(unittest.TestCase):
         # game_stats should be a dict
         self.assertIsInstance(game_stats, dict)
 
+        print(game_stats)
         # game_stats should have hitting stats
         self.assertTrue(game_stats['pitching'])
 
         # game_stats should have vsplayer5y and playlog stats
         self.assertTrue(game_stats['pitching']['vsplayer5y'])
 
-        splits = game_stats['pitching']['vsplayer5y']
+        stat = game_stats['pitching']['vsplayer5y']
 
-        for split in splits:
+        for split in stat.splits:
             self.assertTrue(split.team)
             self.assertTrue(split.stat)
 
@@ -67,9 +68,9 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue(game_stats['hitting']['playlog'])
         self.assertTrue(game_stats['stats']['gamelog'])
 
-        splits = game_stats['hitting']['vsplayer5y']
+        stat = game_stats['hitting']['vsplayer5y']
 
-        for split in splits:
+        for split in stat.splits:
             self.assertTrue(split.team)
             self.assertTrue(split.stat)
 
@@ -92,12 +93,9 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue(game_stats['hitting']['vsplayer5y'])
         self.assertTrue(game_stats['hitting']['playlog'])
         self.assertTrue(game_stats['stats']['gamelog'])
-        
-        splits = game_stats['hitting']['vsplayer5y']
 
-        for split in splits:
-            self.assertTrue(split.team)
-            self.assertTrue(split.stat)
+        stat = game_stats['stats']['gamelog']
+
 
     def test_get_players_stats_for_archie(self):
         """return player stat objects"""
@@ -118,11 +116,10 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue(self.game_stats['pitching']['vsplayer5y'])
         self.assertTrue(self.game_stats['stats']['gamelog'])
 
-        self.assertNotEqual(self.game_stats['stats']['gamelog'], [])
-        print(self.game_stats['stats']['gamelog'])
-        self.assertTrue(len(self.game_stats['stats']['gamelog']) == 3)
-        splits = self.game_stats['pitching']['vsplayer5y']
+        game_log_stat = self.game_stats['stats']['gamelog']
+        self.assertTrue(len(game_log_stat.splits) == 3)
+        stat = self.game_stats['pitching']['vsplayer5y']
 
-        for split in splits:
+        for split in stat.splits:
             self.assertTrue(split.team)
             self.assertTrue(split.stat)

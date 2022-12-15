@@ -119,7 +119,7 @@ class Stat:
 
 
 @dataclass(kw_only=True)
-class PitchArsenal(Stat):
+class PitchArsenal(Split):
     """
     A class to represent a pitcharsenal stat for a hitter and pitcher
 
@@ -173,7 +173,7 @@ class Zones:
         self.zones = [ZoneCodes(**zone) for zone in self.zones]
 
 @dataclass(kw_only=True)
-class HotColdZones(Stat):
+class HotColdZones(Split):
     """
     A class to represent a hotcoldzone statistic
 
@@ -225,7 +225,7 @@ class SprayCharts(Stat):
         self.stat = Chart(**self.stat)
 
 @dataclass(kw_only=True)
-class OutsAboveAverage(Stat):
+class OutsAboveAverage(Split):
     """
     A class to represent a outs above average statistic
 
@@ -251,3 +251,18 @@ class OutsAboveAverage(Stat):
     outsaboveaverageinrightunrounded: int
     player: Union[Person, dict]
     gametype: str
+
+
+#
+# These dataclasses are for the game stats end point only
+# url: https://statsapi.mlb.com/api/v1/people/663728/stats/game/715757
+# The gamelog stats in this JSON have different keys set for their stat
+# and group. This breaks my logic of handling stat classes
+#
+
+@dataclass
+class PlayerGameLogStat(Split):
+    type: str
+    group: str
+    stat: dict
+    _stat = ['gameLog']

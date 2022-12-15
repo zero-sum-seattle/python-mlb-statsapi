@@ -50,13 +50,20 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue(stats['fielding']['career'])
 
         # let's pull out a object and test it
-        season = stats['fielding']['season'][0]
-        career = stats['fielding']['career'][0]
+        # check for split objects
+        self.assertTrue(stats['fielding']['season'])
+        self.assertTrue(stats['fielding']['career'])
 
-        # check that attrs exist and contain data
-        self.assertTrue(season.season)
-        self.assertTrue(season.stat.fielding)
-        self.assertTrue(career.player)
+        season = stats['fielding']['season']
+        career = stats['fielding']['career']
+
+        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.group, 'fielding')
+        self.assertEqual(season.type, 'season')
+
+        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.group, 'fielding')
+        self.assertEqual(career.type, 'career')
 
     def test_fielding_stat_attributes_team(self):
         """mlb get stats should return pitching stats"""
@@ -72,22 +79,29 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue('fielding' in stats)
         self.assertFalse('hitting' in stats)
         self.assertEqual(len(stats['fielding']), 4)
-
         # check for split objects
         self.assertTrue(stats['fielding']['season'])
         self.assertTrue(stats['fielding']['career'])
         self.assertTrue(stats['fielding']['seasonadvanced'])
         self.assertTrue(stats['fielding']['careeradvanced'])
 
-        # let's pull out a object and test it
-        season = stats['fielding']['season'][0]
-        career = stats['fielding']['career'][0]
-        season_advanced = stats['fielding']['seasonadvanced'][0]
-        career_advanced = stats['fielding']['careeradvanced'][0]
-        # check that attrs exist and contain data
-        self.assertTrue(season.season)
-        self.assertTrue(season.stat.fielding)
-        self.assertTrue(career.team)
-        self.assertTrue(season_advanced.season)
-        self.assertTrue(season_advanced.stat.fielding)
-        self.assertTrue(career_advanced.team)
+        season = stats['fielding']['season']
+        career = stats['fielding']['career']
+        season_advanced = stats['fielding']['seasonadvanced']
+        career_advanced = stats['fielding']['careeradvanced']
+
+        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.group, 'fielding')
+        self.assertEqual(season.type, 'season')
+
+        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.group, 'fielding')
+        self.assertEqual(career.type, 'career')
+
+        self.assertEqual(season_advanced.totalsplits, len(season_advanced.splits))
+        self.assertEqual(season_advanced.group, 'fielding')
+        self.assertEqual(season_advanced.type, 'seasonAdvanced')
+
+        self.assertEqual(career_advanced.totalsplits, len(career_advanced.splits))
+        self.assertEqual(career_advanced.group, 'fielding')
+        self.assertEqual(career_advanced.type, 'careerAdvanced')
