@@ -196,7 +196,7 @@ class Hits:
         A boolean indicating whether the hit was a homerun.
     tiebreaker : bool
         A boolean indicating whether the hit occurred during a tiebreaker.
-    hitdata : Union[Hitdata, dict]
+    hitdata : Hitdata
         An object containing the data for the hit. This can either be a 
         Hitdata object or a dictionary.
     ishomerun : bool
