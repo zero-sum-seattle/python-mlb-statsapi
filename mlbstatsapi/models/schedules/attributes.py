@@ -17,7 +17,7 @@ class ScheduleGameTeam:
         League record for this team
     score : int
         Current score for this team in this game
-    team : ScheduleGameTeamInfo
+    team : Team
         Team info for this game
     iswinner : bool
         If this team is the winner of this game
