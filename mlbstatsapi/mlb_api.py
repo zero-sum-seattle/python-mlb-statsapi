@@ -2101,7 +2101,9 @@ class Mlb:
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
             splits = mlb_module.create_split_data(mlb_data.data['stats'])
-
+        else:
+            return {}
+            
         return splits
 
     def get_players_stats_for_game(self, person_id: int, game_id: int, **params) -> dict:
@@ -2137,21 +2139,15 @@ class Mlb:
         >>> print(stats['stats']['gamelog'])
         >>> print(stats['hitting']['playlog'])
         """
-        # this endpoint is very inconsitent
-        # so we'll just make it work
-        
-        # set stat groups
-        # game stats should return a playlog, vsplayer5y, or gameLog stat objects
-        params['group'] = ['hitting', 'pitching', 'stats']
-        params['stats'] = ['playLog', 'vsPlayer5Y', 'gameLog']
-
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats/game/{game_id}')
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
             splits = mlb_module.create_split_data(mlb_data.data['stats'])
-
+        else:
+            return {}
+            
         return splits
         
     def get_player_stats(self, person_id: int, stats: list, groups: list, **params) -> dict:
@@ -2203,6 +2199,8 @@ class Mlb:
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
             splits = mlb_module.create_split_data(mlb_data.data['stats'])
+        else:
+            return {}
 
         return splits
 
@@ -2253,13 +2251,16 @@ class Mlb:
         """
         params['stats'] = stats
         params['group'] = groups
+
         mlb_data = self._mlb_adapter_v1.get(endpoint='stats', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
             splits = mlb_module.create_split_data(mlb_data)
-
+        else:
+            return {}
+            
         return splits
 
 

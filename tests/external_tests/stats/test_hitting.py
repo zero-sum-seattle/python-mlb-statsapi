@@ -13,6 +13,7 @@ class TestHittingStats(unittest.TestCase):
         cls.catching_player = 663728
         cls.ty_france = 664034
         cls.utility_player = 647351
+        cls.soto = 665742
         cls.stats_200_blank = ('projected', 'projectedRos', 'standard', 'advanced', 'firstYearStats', 'lastYearStats',
         'vsOpponents', 'outsAboveAverage', 'tracking', 'availableStats', 'gameTypeStats', 'vsOpponents')
         cls.hitting = 'hitting'
@@ -122,6 +123,27 @@ class TestHittingStats(unittest.TestCase):
         self.assertEqual(career_advanced.totalsplits, len(career_advanced.splits))
         self.assertEqual(career_advanced.group, 'hitting')
         self.assertEqual(career_advanced.type, 'careerAdvanced')
+
+
+
+    def test_hitting_traded_stats_player(self):
+        """mlb get stats should return multiple splits for being a traded player"""
+        self.stats = ['season']
+        self.group = ['hitting']
+        self.params = {'season': 2022}
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.soto, stats=self.stats, groups=self.group, **self.params)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('hitting' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['hitting']['season'])
+
+        season = stats['hitting']['season']
 
     def test_hitting_excepected_stats_player(self):
         """mlb get stats should return pitching stats"""
@@ -257,6 +279,11 @@ class TestHittingStats(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['hitting']['pitchlog'])
 
+        pitchlog = stats['hitting']['pitchlog']
+        self.assertTrue(len(pitchlog.splits) > 1)
+        self.assertEqual(pitchlog.totalsplits, len(pitchlog.splits))
+
+
     def test_hitting_pitchlog_stats_player(self):
         """mlb get stats should return hitting stats"""
         self.stats = ['playLog']
@@ -272,6 +299,12 @@ class TestHittingStats(unittest.TestCase):
 
         # check for split objects
         self.assertTrue(stats['hitting']['playlog'])
+
+        # playlogs should return multiple splits
+        playlogs = stats['hitting']['playlog']
+        self.assertTrue(len(playlogs.splits) > 1)
+        self.assertEqual(playlogs.totalsplits, len(playlogs.splits))
+
 
     def test_hitting_pitchArsenal_stats_player(self):
         """mlb get stats should return hitting stats"""
@@ -289,6 +322,10 @@ class TestHittingStats(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['stats']['pitcharsenal'])
 
+        pitcharsenal = stats['stats']['pitcharsenal']
+        self.assertTrue(len(pitcharsenal.splits) > 1)
+        self.assertEqual(pitcharsenal.totalsplits, len(pitcharsenal.splits))
+
     def test_hitting_hotcoldzones_stats_player(self):
         """mlb get stats should return hitting stats"""
         self.stats = ['hotColdZones']
@@ -304,3 +341,8 @@ class TestHittingStats(unittest.TestCase):
 
         # check for split objects
         self.assertTrue(stats['stats']['hotcoldzones'])
+
+        # hotcoldzone should return 5 splits
+        hotcoldzone = stats['stats']['hotcoldzones']
+        self.assertEqual(len(hotcoldzone.splits), 5)
+        self.assertEqual(hotcoldzone.totalsplits, len(hotcoldzone.splits))

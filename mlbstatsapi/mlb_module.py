@@ -38,7 +38,7 @@ def merge_keys(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -> dict:
 
     return mlb_dict
 
-def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Splits']:
+def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Split']:
     """
     The split objects are built using the group name and split data. The stat group name is used to source the correct
     stat group classes.
@@ -73,14 +73,32 @@ def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Sp
 
     return splits
 
-
-def create_split_data(stat_data: dict):
+def get_split_count(stat: dict) -> int:
     """
-    function that loops through stat information
+    function that returns split count from stats
+
     Parameters
     ----------
-    params: dict
+    stat: dict
+        dict of stats
+
+    Returns
+    -------
+    int
+        returns number of splits
+    """
+
+
+
+def create_split_data(stat_data: dict) -> dict:
+    """
+    function that loops through stat information, creates splits, and return stat dict
+
+    Parameters
+    ----------
+    stat_data: dict
         dict of params to pass
+
     Returns
     -------
     dict
@@ -90,17 +108,10 @@ def create_split_data(stat_data: dict):
 
     for stat in stat_data:
         # get type and group of stat
-        stat_type, stat_group = get_stat_attributes(stat)
-
-        print(stat_type + " " + stat_group)
-        if 'totalsplits' in stat:
-            total_splits = stat['totalsplits']
-        else:
-            total_splits = len(stat['splits'])
+        stat_type, stat_group, total_splits = get_stat_attributes(stat)
 
         if 'splits' in stat and stat['splits']:
             split_data = return_splits(stat['splits'], stat_type, stat_group)
-
             stat_object = Stat(group=stat_group, type=stat_type,
                         totalsplits=total_splits, splits=split_data)
         else:
@@ -112,36 +123,6 @@ def create_split_data(stat_data: dict):
         stats[stat_group][stat_type.lower()] = stat_object
 
     return stats
-
-
-
-def build_group_list(params) -> List[str]:
-    """
-    return groups with stats key
-    Parameters
-    ----------
-    params : dict
-        params is a dictionary of params sent to requests
-
-    Returns
-    -------
-    list
-        returns a list of stat groups
-    """
-    no_group_types = ('hotColdZones', 'sprayChart', 'pitchArsenal')
-
-    if params['group'] is list:
-        group_list = params['group'].copy()
-    else:
-        group_list = list(params['group'])
-
-    for _type in no_group_types:
-        if _type in params['stats']:
-            group_list.append('stats')
-            break
-
-    return group_list
-
 
 def get_stat_attributes(stats) -> str:
     """
@@ -169,7 +150,12 @@ def get_stat_attributes(stats) -> str:
             stat_group = 'stats'
         else: 
             stat_group = None
+    
+    if 'totalsplits' in stats:
+        total_splits = stats['totalsplits']
+    else:
+        total_splits = len(stats['splits'])
 
-    return (stat_type, stat_group)
+    return (stat_type, stat_group, total_splits)
 
 

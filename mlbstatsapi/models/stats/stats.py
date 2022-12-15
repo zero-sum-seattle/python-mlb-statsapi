@@ -262,6 +262,12 @@ class OutsAboveAverage(Split):
 
 @dataclass
 class PlayerGameLogStat(Split):
+    """
+    A class to represent a chart for SprayCharts
+
+    Attributes
+    ----------
+    """
     type: str
     group: str
     stat: dict
