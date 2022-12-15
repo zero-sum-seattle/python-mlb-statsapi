@@ -163,9 +163,9 @@ class CodeDesc:
     Attributes
     ----------
     code : str
-        the pitch code to reference the pitch
+        the code to reference the attribute using this
     description : str
-        the description of the pitch
+        the description of the attribute using this
     """
     code: str
     description: Optional[str] = None
