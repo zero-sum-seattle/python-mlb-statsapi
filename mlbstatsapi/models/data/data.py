@@ -213,7 +213,7 @@ class PlayDetails:
 
     Attributes
     ----------
-    call : dict
+    call : CodeDesc
         play call code and description
     description : str
         description of the play
@@ -233,11 +233,11 @@ class PlayDetails:
         is the event at bat true or false
     isplateappearance : bool
         is the event a at play appears true or false
-    type : dict
+    type : CodeDesc
         type of pitch code and description
-    batside : dict
+    batside : CodeDesc
         bat side code and description
-    pitchhand : dict
+    pitchhand : CodeDesc
         pitch hand code and description
     fromcatcher : bool
     """
