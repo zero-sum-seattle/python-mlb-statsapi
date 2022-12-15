@@ -84,6 +84,10 @@ class PlayersDictPerson:
         A dictionary of the person's season stats.
     gameStatus : GameStatus
         The person's game status.
+    battingorder : int
+        The persons place in the batting order if avaliable.
+    allpositions : Position
+        All of the person's positions if avaliable.
     """
     person: Union[Person, dict]
     jerseynumber: str
