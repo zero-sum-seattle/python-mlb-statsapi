@@ -20,7 +20,7 @@ class Person:
         full_name of the person
     link : str
         Api link to person
-    primaryposition : str
+    primaryposition : Position
         PrimaryPosition of the Person
     pitchhand : str
         PitchHand of the Person
