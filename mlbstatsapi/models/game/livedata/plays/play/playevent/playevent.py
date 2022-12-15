@@ -42,7 +42,7 @@ class PlayEvent:
         Hit data
     player : Person
         Player
-    position : PrimaryPosition
+    position : Position
         Position
     replacedplayer : Person
         Replaced player
