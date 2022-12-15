@@ -12,8 +12,10 @@ class Eventtype:
 
     Attributes:
     ___________
-    code (str): The unique code of the event type.
-    name (str): The name of the event type.
+    code : str
+        The unique code of the event type.
+    name : str
+        The name of the event type.
     """
     code: str
     name: str
