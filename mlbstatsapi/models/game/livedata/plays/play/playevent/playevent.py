@@ -10,7 +10,7 @@ class PlayEvent:
 
     Attributes
     ----------
-    details : PlayEventDetails
+    details : PlayDetails
         Event details
     index : int
         Event index
@@ -42,7 +42,7 @@ class PlayEvent:
         Hit data
     player : Person
         Player
-    position : PrimaryPosition
+    position : Position
         Position
     replacedplayer : Person
         Replaced player

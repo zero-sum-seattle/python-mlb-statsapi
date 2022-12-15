@@ -7,7 +7,8 @@ from mlbstatsapi.models.stats import Stat
 
 def merge_keys(mlb_dict, mlb_keys: Union[List[Union[dict, str]], str]) -> dict:
     """
-    merge requested nested dicts inside mlb_dict into mlb_dict base.
+    A recursive function that merges requested nested dicts inside mlb_dict into mlb_dict base.
+    
     Parameters
     ----------
     mlb_dict : dict

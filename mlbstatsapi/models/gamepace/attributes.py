@@ -121,11 +121,13 @@ class Gamepacedata():
         Number of pitches thrown per pitcher
     season : str
         Season number
-    league : Union[League, dict]
+    team: Team
+        Team
+    league : League
         League
-    sport : Union[Sport, dict]
+    sport : Sport
         Sport`
-    prportalcalculatedfields : Union[Prportalcalculatedfields, dict]
+    prportalcalculatedfields : Prportalcalculatedfields
         calculated fields for a league
     """
     hitsper9inn: Optional[float] = None

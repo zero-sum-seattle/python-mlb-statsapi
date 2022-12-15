@@ -30,7 +30,7 @@ class GameData:
         Our two teams for this game, home and away
     players : List[Person]
         A list of all the players for this game
-    venue : GameVenue
+    venue : Venue
         Venue information for this game
     officialvenue : Venue
         The official venue for this game

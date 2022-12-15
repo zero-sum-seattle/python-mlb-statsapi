@@ -12,10 +12,17 @@ class PitchBreak:
     Attributes
     ----------
     breakangle : float
+        Degrees clockwise (batter's view) that the plane of 
+        the pitch deviates from the vertical
     breaklength : float
-    breaky : float
-    spinrate : float
-    spindirection : float
+        Max distance that the pitch separates from the straight
+        line between pitch start and pitch end
+    breaky : int
+        Distance from home plate where the break is greatest
+    spinrate : int
+        Pitch spinRate
+    spindirection : int
+        Pitch spinDirection
     """
     breakangle: float
     breaklength: float
@@ -31,21 +38,43 @@ class PitchCoordinates:
 
     Attributes
     ----------
-    ay : float
-    az : float
-    pfxx : float
-    pfxz : float
-    px : float
-    pz : float
-    vx0 : float
-    vy0 : float
-    vz0 : float
-    x : float
-    y : float
-    x0 : float
-    y0 : float
-    z0 : float
-    ax : float
+    ay : float, default=None
+        Ball acceleration on the y axis
+    az : float, default=None
+        Ball acceleration on the z axis
+    pfxx : float, default=None
+        horizontal movement of the ball in inches
+    pfxz : float, default=None
+        Vertical movement of the ball in inches
+    px : float, default=None
+        Horizontal position in feet of the ball as it 
+        crosses the front axis of home plate
+    pz : float, default=None
+        Vertical position in feet of the ball as it 
+        crosses the front axis of home plate
+    vx0 : float, default=None
+        Velocity of the ball from the x-axis
+    vy0 : float, default=None
+        Velocity of the ball from the y axis, this
+        is negative becuase 0,0,0 is behind the batter
+        and the ball travels from pitcher mound towards 0,0,0
+    vz0 : float, default=None
+        Velocity of the ball from the z axis
+    x0 : float, default=None
+        Coordinate location of the ball at the point it was
+        reeased from pitchers hand on the x axis (time=0)
+    y0 : float, default=None
+        Coordinate location of the ball at the point it was
+        reeased from pitchers hand on the y axis (time=0)
+    z0 : float, default=None
+        Coordinate location of the ball at the point it was
+        reeased from pitchers hand on the z axis (time=0)
+    ax : float, default=None
+        Ball acceleration on the x axis
+    x : float, default=None
+        X coordinate where pitch crossed front of home plate
+    y : float, default=None
+        Y coordinate where pitch crossed front of home plate
     """
     ay: Optional[float] = None
     az: Optional[float] = None
@@ -66,20 +95,30 @@ class PitchCoordinates:
 @dataclass
 class PitchData:
     """
-    A class to hold pitch pitch break data
+    A class to hold data on a pitch
     
     Attributes
     ----------
     startspeed : float
+        The starting speed of the pitch.
     endspeed : float
+        The ending speed of the pitch.
     strikezonetop : float
+        The top of the strike zone.
     strikezonebottom : float
-    coordinates : Union[PitchCoordinates, dict]
-    breaks : Union[PitchBreak, dict] 
+        The bottom of the strike zone.
+    coordinates : PitchCoordinates
+        The coordinates of the pitch.
+    breaks : PitchBreak
+        The break data of the pitch.
     zone : float
+        The zone in which the pitch was thrown.
     typeconfidence : float
+        The confidence in the type of pitch thrown.
     platetime : float
+        The amount of time the pitch was in the air.
     extension : float
+        The extension of the pitch.
     """
     strikezonetop: float
     strikezonebottom: float
@@ -163,9 +202,9 @@ class CodeDesc:
     Attributes
     ----------
     code : str
-        the pitch code to reference the pitch
+        the code to reference the attribute using this
     description : str
-        the description of the pitch
+        the description of the attribute using this
     """
     code: str
     description: Optional[str] = None
@@ -213,7 +252,7 @@ class PlayDetails:
 
     Attributes
     ----------
-    call : dict
+    call : CodeDesc
         play call code and description
     description : str
         description of the play
@@ -233,11 +272,11 @@ class PlayDetails:
         is the event at bat true or false
     isplateappearance : bool
         is the event a at play appears true or false
-    type : dict
+    type : CodeDesc
         type of pitch code and description
-    batside : dict
+    batside : CodeDesc
         bat side code and description
-    pitchhand : dict
+    pitchhand : CodeDesc
         pitch hand code and description
     fromcatcher : bool
     """

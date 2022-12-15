@@ -7,6 +7,16 @@ from mlbstatsapi import mlb_module
 
 @dataclass
 class Round:
+    """
+    Represents a round of the MLB draft.
+
+    Attributes
+    ----------
+    round : str
+        The round number of the draft, represented as a string.
+    picks : List[DraftPick]
+        A list of DraftPick objects representing the picks made in this round of the draft.
+    """
     round: str
     picks: List[DraftPick]
 

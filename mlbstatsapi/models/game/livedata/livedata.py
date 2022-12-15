@@ -21,10 +21,10 @@ class LiveData:
         This games linescore
     boxscore : BoxScore
         This games boxscore
-    leaders : LiveDataLeaders
+    leaders : GameLeaders
         The data leaders for this game
-    decisions : LiveDataDecisions = None
-        Decisions for this game, Ie a winner or a loosers
+    decisions : GameDecisions = None
+        Decisions for this game, Ie a winner or a loser
     """
     plays: Union[Plays, dict]
     boxscore: Union[BoxScore, dict]
