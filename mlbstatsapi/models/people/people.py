@@ -18,6 +18,8 @@ class Person:
         id number of the person
     full_name : str
         full_name of the person
+    link : str
+        Api link to person
     primaryposition : str
         PrimaryPosition of the Person
     pitchhand : str
