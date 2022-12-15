@@ -10,7 +10,7 @@ class PlayEvent:
 
     Attributes
     ----------
-    details : PlayEventDetails
+    details : PlayDetails
         Event details
     index : int
         Event index
