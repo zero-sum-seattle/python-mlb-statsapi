@@ -66,20 +66,30 @@ class PitchCoordinates:
 @dataclass
 class PitchData:
     """
-    A class to hold pitch pitch break data
+    A class to hold data on a pitch
     
     Attributes
     ----------
     startspeed : float
+        The starting speed of the pitch.
     endspeed : float
+        The ending speed of the pitch.
     strikezonetop : float
+        The top of the strike zone.
     strikezonebottom : float
-    coordinates : Union[PitchCoordinates, dict]
-    breaks : Union[PitchBreak, dict] 
+        The bottom of the strike zone.
+    coordinates : PitchCoordinates
+        The coordinates of the pitch.
+    breaks : PitchBreak
+        The break data of the pitch.
     zone : float
+        The zone in which the pitch was thrown.
     typeconfidence : float
+        The confidence in the type of pitch thrown.
     platetime : float
+        The amount of time the pitch was in the air.
     extension : float
+        The extension of the pitch.
     """
     strikezonetop: float
     strikezonebottom: float
