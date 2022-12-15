@@ -213,7 +213,7 @@ class Chart:
     rightfield: int
 
 @dataclass(kw_only=True)
-class SprayCharts(Stat):
+class SprayCharts(Split):
 
 
     _stat = ['sprayChart']

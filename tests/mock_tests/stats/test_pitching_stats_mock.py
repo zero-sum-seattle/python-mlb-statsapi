@@ -73,18 +73,26 @@ class TestPitchingStatsMock(unittest.TestCase):
         self.assertTrue(stats['pitching']['seasonadvanced'])
         self.assertTrue(stats['pitching']['careeradvanced'])
 
-        # let's pull out a object and test it
-        season = stats['pitching']['season'][0]
-        career = stats['pitching']['career'][0]
-        season_advanced = stats['pitching']['seasonadvanced'][0]
-        career_advanced = stats['pitching']['careeradvanced'][0]
-        # check that attrs exist and contain data
-        self.assertTrue(season.season)
-        self.assertTrue(career.player)
-        self.assertTrue(season.stat.strikeoutsper9inn)
-        self.assertTrue(season_advanced.season)
-        self.assertTrue(season_advanced.stat.strikeoutsper9)
-        self.assertTrue(career_advanced.player)
+        season = stats['pitching']['season']
+        career = stats['pitching']['career']
+        season_advanced = stats['pitching']['seasonadvanced']
+        career_advanced = stats['pitching']['careeradvanced']
+
+        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.group, 'pitching')
+        self.assertEqual(season.type, 'season')
+
+        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.group, 'pitching')
+        self.assertEqual(career.type, 'career')
+
+        self.assertEqual(season_advanced.totalsplits, len(season_advanced.splits))
+        self.assertEqual(season_advanced.group, 'pitching')
+        self.assertEqual(season_advanced.type, 'seasonAdvanced')
+
+        self.assertEqual(career_advanced.totalsplits, len(career_advanced.splits))
+        self.assertEqual(career_advanced.group, 'pitching')
+        self.assertEqual(career_advanced.type, 'careerAdvanced')
 
     def test_pitching_stat_attributes_team(self, m):
         """mlb get stats should return pitching stats"""
@@ -109,19 +117,26 @@ class TestPitchingStatsMock(unittest.TestCase):
         self.assertTrue(stats['pitching']['seasonadvanced'])
         self.assertTrue(stats['pitching']['careeradvanced'])
 
-        # let's pull out a object and test it
-        season = stats['pitching']['season'][0]
-        career = stats['pitching']['career'][0]
-        season_advanced = stats['pitching']['seasonadvanced'][0]
-        career_advanced = stats['pitching']['careeradvanced'][0]
+        season = stats['pitching']['season']
+        career = stats['pitching']['career']
+        season_advanced = stats['pitching']['seasonadvanced']
+        career_advanced = stats['pitching']['careeradvanced']
 
-        # check that attrs exist and contain data
-        self.assertTrue(season.season)
-        self.assertTrue(career.team)
-        self.assertTrue(season.stat.strikeoutsper9inn)
-        self.assertTrue(season_advanced.season)
-        self.assertTrue(season_advanced.stat.strikeoutsper9)
-        self.assertTrue(career_advanced.team)
+        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.group, 'pitching')
+        self.assertEqual(season.type, 'season')
+
+        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.group, 'pitching')
+        self.assertEqual(career.type, 'career')
+
+        self.assertEqual(season_advanced.totalsplits, len(season_advanced.splits))
+        self.assertEqual(season_advanced.group, 'pitching')
+        self.assertEqual(season_advanced.type, 'seasonAdvanced')
+
+        self.assertEqual(career_advanced.totalsplits, len(career_advanced.splits))
+        self.assertEqual(career_advanced.group, 'pitching')
+        self.assertEqual(career_advanced.type, 'careerAdvanced')
 
     def test_pitching_play_log_for_player(self, m):
         """get_player_game_stats should return a dict with stats"""
@@ -140,13 +155,20 @@ class TestPitchingStatsMock(unittest.TestCase):
         # should not be empty
         self.assertTrue(stats['stats']['hotcoldzones'])
 
-        hotcoldzone = stats['stats']['hotcoldzones'][0]
+        hotcoldzone = stats['stats']['hotcoldzones']
 
-        # should not be empty
-        self.assertTrue(hotcoldzone.stat)
+        # check for split objects
+        self.assertTrue(stats['stats']['hotcoldzones'])
 
-        for zone in hotcoldzone.stat.zones:
-            self.assertTrue(zone.zone)
+        # hotcoldzone should return 5 splits
+        hotcoldzone = stats['stats']['hotcoldzones']
+        self.assertEqual(len(hotcoldzone.splits), 5)
+        self.assertEqual(hotcoldzone.totalsplits, len(hotcoldzone.splits))
+
+        # hot cold zone should have 13 zones for each zone type
+        for split in hotcoldzone.splits:
+            self.assertTrue(split.stat.name)
+            self.assertEqual(len(split.stat.zones), 13)
 
     def test_pitching_pitchlog_for_pitcher(self, m):
         """get_player_game_stats should return a dict with stats"""
@@ -166,11 +188,15 @@ class TestPitchingStatsMock(unittest.TestCase):
         self.assertTrue('pitching' in stats)
         self.assertTrue(stats['pitching']['pitchlog'])
 
-        # pitchlog items should have attr set
+        # pitchlog should have 2 splits from mock
         pitchlogs = stats['pitching']['pitchlog']
+        self.assertEqual(len(pitchlogs.splits), 2)
+        self.assertEqual(pitchlogs.totalsplits, len(pitchlogs.splits))
 
-        for pitchlog in pitchlogs:
-            self.assertTrue(pitchlog.stat)
+        for pitchlog in pitchlogs.splits:
+            self.assertTrue(pitchlog.stat.details)
+            self.assertTrue(pitchlog.stat.count)
+
     
     def test_pitching_playlog_for_pitcher(self, m):
         """get_player_game_stats should return a dict with stats"""
@@ -190,10 +216,12 @@ class TestPitchingStatsMock(unittest.TestCase):
         self.assertTrue('pitching' in stats)
         self.assertTrue(stats['pitching']['playlog'])
 
-        # pitchlog items should have attr set
+        # pitchlog items should have 2 splits
         pitchlogs = stats['pitching']['playlog']
+        self.assertEqual(len(pitchlogs.splits), 2)
+        self.assertEqual(pitchlogs.totalsplits, len(pitchlogs.splits))
 
-        for pitchlog in pitchlogs:
+        for pitchlog in pitchlogs.splits:
             self.assertTrue(pitchlog.stat)
     
     def test_pitching_play_log_for_player(self, m):
@@ -211,3 +239,11 @@ class TestPitchingStatsMock(unittest.TestCase):
         self.assertNotEqual(spraychart, {})
 
         self.assertTrue(spraychart['stats']['spraychart'])
+
+
+        spraychart = spraychart['stats']['spraychart']
+        self.assertEqual(len(spraychart.splits), 1)
+        self.assertEqual(spraychart.totalsplits, len(spraychart.splits))
+
+        for pitchlog in spraychart.splits:
+            self.assertTrue(pitchlog.stat)
