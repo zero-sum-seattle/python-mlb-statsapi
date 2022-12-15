@@ -79,7 +79,7 @@ class ScheduleGames:
         The official date for this game
     status : GameStatus
         The status of this game
-    teams : ScheduleGameTeams
+    teams : ScheduleHomeAndAway
         Holds teams and thier info for this game
     venue : Venue  
         The venue this game takes place in
