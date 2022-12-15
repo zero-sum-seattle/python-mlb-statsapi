@@ -8,11 +8,11 @@ class PlayMatchupSplits:
     Attributes
     ----------
     batter : str
-
+        Batter matchup split
     pitcher : str
-
+        Pitcher matchup split
     menonbase : str
-
+        Menonbase matchup split
     """
     batter: str
     pitcher: str
