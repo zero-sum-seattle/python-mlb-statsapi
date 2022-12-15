@@ -24,7 +24,7 @@ class LiveData:
     leaders : LiveDataLeaders
         The data leaders for this game
     decisions : LiveDataDecisions = None
-        Decisions for this game, Ie a winner or a loosers
+        Decisions for this game, Ie a winner or a loser
     """
     plays: Union[Plays, dict]
     boxscore: Union[BoxScore, dict]
