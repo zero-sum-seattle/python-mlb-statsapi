@@ -98,13 +98,14 @@ class PlayersDictPerson:
     seasonstats: dict
     gamestatus: Union[GameStatus, dict]
     battingorder: Optional[int] = None
-    allpositions: Optional[Union[Position, dict]] = field(default_factory=dict)
+    allpositions: Optional[Union[List[Position], List[dict]]] = None
 
     def __post_init__(self):
         self.person = Person(**self.person)
         self.position = Position(**self.position)
         self.status = CodeDesc(**self.status)
         self.gamestatus = GameStatus(**self.gamestatus)
+        self.allpositions = [Position(**allposition) for allposition in self.allpositions] if self.allpositions else self.allpositions
 
 @dataclass
 class BoxScoreTeam:
