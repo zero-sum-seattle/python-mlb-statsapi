@@ -23,8 +23,6 @@ class Team:
         name of the team
     link : str
         The API link for the team
-    name : str
-        The name of the team
     springleague : League
         The spring league of the team
     allstarstatus : str
