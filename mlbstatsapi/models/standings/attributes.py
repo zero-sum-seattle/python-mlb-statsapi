@@ -1,7 +1,7 @@
 from typing import Union, Optional, List
 from dataclasses import dataclass
 
-from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.teams import Team, TeamRecord
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.leagues import League
 
@@ -24,127 +24,7 @@ class Streak:
     streakcode: str
 
 @dataclass
-class Record:
-    """
-    Record
-
-    Attributes:
-    ___________
-    wins : int
-        Number of wins
-    losses : int
-        Number of losses
-    pct : str
-        Percentage
-    """
-    wins: int
-    losses: int
-    pct: str
-
-@dataclass
-class OverallleagueRecord(Record):
-    """
-    Overall League Record
-    
-
-    Attributes:
-    ___________
-    wins : int
-        Overall number of wins in league
-    losses : int
-        Overall number of losses in league
-    pct : str
-        Overall percentage in league
-    """
-    ties: int
-
-@dataclass
-class Typerecords(Record):
-    """
-    Type records
-
-    Attributes:
-    ___________
-    wins : int
-        Number of wins in type
-    losses : int
-        Number of losses in type
-    pct : str
-        Percentage in type
-    type : str
-        Type of record
-    """
-    type: str
-
-@dataclass
-class Divisionrecords(Record):
-    """
-    Division records
-
-    Attributes:
-    ___________
-    wins : int
-        Number of wins in division
-    losses : int
-        Number of losses in division
-    pct : str
-        Percentage in division
-    division : Divison
-        Division
-    """
-    division: Union[Division, dict]
-
-@dataclass
-class Leaguerecords(Record):
-    """
-    League records
-
-    Attributes:
-    ___________
-    wins : int
-        Number of wins in league
-    losses : int
-        Number of losses in league
-    pct : str
-        Percentage in league
-    league : League
-        League
-    """
-    league: Union[League, dict]
-
-@dataclass
-class Records:
-    """"
-    A class representing the records of a team.
-
-    Attributes:
-    ___________
-    splitrecords : Typerecords
-        A list of split records
-    divisionrecords : Divisionrecords
-        A list of division records
-    overallrecords : Typerecords
-        A list of overall records
-    leaguerecords : Leaguerecords
-        A list of league records
-    expectedrecords : Typerecords
-        A list of expected records
-    """
-    splitrecords: List[Union[Typerecords, dict]]
-    divisionrecords: List[Union[Divisionrecords, dict]]
-    overallrecords: List[Union[Typerecords, dict]]
-    leaguerecords: List[Union[Leaguerecords, dict]]
-    expectedrecords: List[Union[Typerecords, dict]]
-
-    def __post_init__(self):
-        self.splitrecords = [Typerecords(**splitrecord) for splitrecord in self.splitrecords]
-        self.divisionrecords = [Divisionrecords(**divisionrecord) for divisionrecord in self.divisionrecords]
-        self.overallrecords = [Typerecords(**overallrecord) for overallrecord in self.overallrecords]
-        self.leaguerecords = [Leaguerecords(**leaguerecord) for leaguerecord in self.leaguerecords]
-        self.expectedrecords = [Typerecords(**expectedrecord) for expectedrecord in self.expectedrecords]
-
-@dataclass
-class Teamrecords:
+class Teamrecords(TeamRecord):
     """
     Team Records
 
@@ -223,29 +103,29 @@ class Teamrecords:
     divisionrank: str
     leaguerank: str
     sportrank: str
-    gamesplayed: int
+    # gamesplayed: int
     gamesback: str
-    wildcardgamesback: str
-    leaguegamesback: str
-    springleaguegamesback: str
-    sportgamesback: str
-    divisiongamesback: str
-    conferencegamesback: str
-    leaguerecord: Union[OverallleagueRecord, dict]
+    # wildcardgamesback: str
+    # leaguegamesback: str
+    # springleaguegamesback: str
+    # sportgamesback: str
+    # divisiongamesback: str
+    # conferencegamesback: str
+    # leaguerecord: Union[OverallleagueRecord, dict]
     lastupdated: str
-    records: Union[Records, dict]
+    # records: Union[Records, dict]
     runsallowed: int
     runsscored: int
     divisionchamp: bool
-    divisionleader: bool
+    # divisionleader: bool
     haswildcard: bool
     clinched: bool
     eliminationnumber: str
     wildcardeliminationnumber: str    
-    wins: int
-    losses: int
+    # wins: int
+    # losses: int
     rundifferential: int
-    winningpercentage: str
+    # winningpercentage: str
     wildcardrank: Optional[str] = None
     wildcardleader: Optional[bool] = None
     magicnumber: Optional[str] = None
@@ -254,5 +134,5 @@ class Teamrecords:
     def __post_init__(self):
         self.team = Team(**self.team)
         self.streak = Streak(**self.streak)
-        self.leaguerecord = OverallleagueRecord(**self.leaguerecord)
-        self.records = Records(**self.records)
+        # self.leaguerecord = OverallleagueRecord(**self.leaguerecord)
+        # self.records = Records(**self.records)
