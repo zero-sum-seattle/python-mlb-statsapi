@@ -41,7 +41,30 @@ _To be added_
 <details>
 <summary>division : Division   </summary>
 
-* An object containing information about the division. Dataclass: [Sport](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/sports/sport.py) 
+* An object containing information about the division. Dataclass: [Sport](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/divisions/division.py) 
+
+<blockquote>
+
+<details>
+<summary>id : int   </summary>
+
+* id number of the division  
+</details>
+
+<details>
+<summary>link : str   </summary>
+
+* link of the divison  
+</details>
+
+</blockquote>
+
+</details>
+
+<details>
+<summary>sport : Sport   </summary>
+
+* An object containing information about the sport. Dataclass: [Sport](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/sports/sport.py) 
 
 <blockquote>
 
@@ -62,12 +85,6 @@ _To be added_
 </details>
 
 <details>
-<summary>sport : Sport   </summary>
-
-* An object containing information about the sport.  
-</details>
-
-<details>
 <summary>lastupdated : str   </summary>
 
 * A string indicating the last time the standing was updated.  
@@ -76,7 +93,14 @@ _To be added_
 <details>
 <summary>teamrecords : List[Teamrecords]   </summary>
 
-* A list of Teamrecord objects containing the data for the teams standings.  
+* A list of Teamrecord objects containing the data for the teams standings. Dataclass: [Teamrecords](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/standings/attributes.py)
+
+<blockquote>
+
+
+
+</blockquote>
+
 </details>
 
 
