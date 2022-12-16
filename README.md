@@ -177,10 +177,8 @@ python3
 * `Mlb.get_schedule(self, date: str = None, start_date: str = None, end_date: str = None, sport_id: int = 1, team_id: int = None, **params)` - Return a Schedule from dates
 * `Mlb.get_scheduled_games_by_date(self, date: str = None,start_date: str = None, end_date: str = None, sport_id: int = 1, **params)` - Return game ids from dates
 ### [Games](docs/games.md#class-mlb)
-<blockquote>
-
 ###### [Return structure](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Game)
-</blockquote>
+
 
 * `Mlb.get_game(self, game_id: int, **params)` - Return the Game for a specific Game Id
 * `Mlb.get_game_play_by_play(self, game_id: int, **params)` - Return Play by play data for a game
