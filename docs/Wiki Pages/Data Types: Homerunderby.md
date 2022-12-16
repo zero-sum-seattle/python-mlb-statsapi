@@ -1,7 +1,3 @@
-## Usage that returns Homerunderby objects
-
-_To be added_
-
 ## Homerunderby Structure
 
 **Attributes are expandable and collapsable - [Link to Homerunderby dataclass](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/homerunderby/homerunderby.py)**
@@ -1288,7 +1284,23 @@ _To be added_
 
 </blockquote>
 
+## Usage that returns Homerunderby objects
 
+### `get_homerun_derby`
+
+Description: Return a Homerunderby
+
+**Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `award_id` | string | Yes      | Insert gamePk to return HomerunDerby data for a specific gamepk. | None
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `fields` | string | No      | Format: Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute | None
 
 ## Example output from MLB stats api endpoint
 

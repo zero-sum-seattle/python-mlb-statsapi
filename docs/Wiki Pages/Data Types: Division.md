@@ -1,31 +1,3 @@
-## Usage that returns Division objects
-
-`get_division`
-----------
-
-Description: Returns a Division
-
-**Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `divison_id` | string/int | Yes      | divisionId to return a directory of division(s) for a specific division. | None
-
-
-`get_divisions`
-----------
-
-Description: Return all divisons
-
-**Other Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `divisionId` | string/int | No      | Insert divisionId(s) to return a directory of division(s) for a specific division. Format '200,201' | None
-| `leagueId` | string/int | No      | Insert leagueId to return a directory of division(s) for all divisions in a specific league. | None
-| `sportId` | string/int | No      | Insert a sportId to return a directory of division(s) for all divisions in a specific sport. | None
-
-
 ## Division Structure
 
 **Attributes are expandable and collapsable - [Link to Division dataclass](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/divisions/division.py)**
@@ -142,6 +114,33 @@ Description: Return all divisons
 </details>
 
 </blockquote>
+
+
+## Usage that returns Division objects
+
+### `get_division`
+
+Description: Returns a Division
+
+**Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `divison_id` | string/int | Yes      | divisionId to return a directory of division(s) for a specific division. | None
+
+
+### `get_divisions`
+
+Description: Return all divisons
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `divisionId` | string/int | No      | Insert divisionId(s) to return a directory of division(s) for a specific division. Format '200,201' | None
+| `leagueId` | string/int | No      | Insert leagueId to return a directory of division(s) for all divisions in a specific league. | None
+| `sportId` | string/int | No      | Insert a sportId to return a directory of division(s) for all divisions in a specific sport. | None
+
 
 
 ## Example output from MLB stats api endpoint

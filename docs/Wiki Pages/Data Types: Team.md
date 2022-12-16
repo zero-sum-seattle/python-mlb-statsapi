@@ -1,7 +1,3 @@
-## Usage that returns Team objects
-
-_To be added_
-
 ## Team Structure
 
 **Attributes are expandable and collapsable - [Link to Team dataclass](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/teams/team.py)**
@@ -375,6 +371,50 @@ _To be added_
 </details>
 
 </blockquote>
+
+
+## Usage that returns Team objects
+
+### `get_team`
+
+Description: Return Team Object from Id
+
+**Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `team_id`  | string/int| Yes      | unique team id | 
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `sportId`  | string/int| No       | Insert a sportId to return a directory of team information for a particular club in a sport. |
+| `season`   | string/int| No       | Insert year to return a directory of team information for a particular club in a specific season. |
+| `fields`   | string    | No       | Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute |
+
+### `get_teams`
+
+Description: Return all Team Objects from sportId
+
+**Parameters:**
+
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `sport_id`  | string/int| Yes      | unique sport id of teams | 1
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `sportId`  | string/int| No       | Insert a sportId to return a directory of team information for a particular club in a sport. |
+| `season`   | string/int| No       | Insert year to return a directory of team information for a particular club in a specific season. |
+| `fields`   | string    | No       | Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute |
+| `leagueIds` | string/int| No      | Insert leagueId to return team information for particular league. |
+| `activeStatus` | string | No      | Insert activeStatus to populate a teams based on active/inactive status for a given season. There are three status types: Y, N, B |
+| `allStarStatuses` | string    | No       | Insert allStarStatuses to populate a teams based on Allstar status for a given season. There are two status types: Y and N |
+| `gameType`   | string    | No       | Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute |
 
 
 ## Example output from MLB stats api endpoint

@@ -1,26 +1,3 @@
-## Usage that returns Award objects
-
-`get_awards`
-----------
-
-Description: Return a list of awards
-
-**Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `award_id` | string | Yes      | Insert a awardId to return a directory of players for a given award. | None
-
-**Other Parameters:**
-
-| Name       | Type      | Required | Description                         | Default
-| ---------- | --------- | -------- | ----------------------------------- | -------
-| `sportId` | string/int | No      | Insert a sportId to return a directory of players for a given award in a specific sport. | None
-| `leagueId` | string/int | No      | Insert leagueId(s) to return a directory of players for a given award in a specific league. Format '103,104' | None
-| `season` | string/int | No      | Insert year(s) to return a directory of players for a given award in a given season. Format '2016,2017' | None
-
-
-
 ## Award Structure
 
 **Attributes are expandable and collapsable - [Link to award dataclass](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/awards/attributes.py)**
@@ -146,6 +123,28 @@ Description: Return a list of awards
 </details>
 
 </blockquote>
+
+
+## Usage that returns Award objects
+
+### `get_awards`
+
+Description: Return a list of awards
+
+**Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `award_id` | string | Yes      | Insert a awardId to return a directory of players for a given award. | None
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `sportId` | string/int | No      | Insert a sportId to return a directory of players for a given award in a specific sport. | None
+| `leagueId` | string/int | No      | Insert leagueId(s) to return a directory of players for a given award in a specific league. Format '103,104' | None
+| `season` | string/int | No      | Insert year(s) to return a directory of players for a given award in a given season. Format '2016,2017' | None
+
 
 
 ## Example output from MLB stats api endpoint

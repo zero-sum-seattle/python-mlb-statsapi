@@ -1,7 +1,3 @@
-## Usage that returns Game objects
-
-_To be added_
-
 ## Game Structure
 
 **Attributes are expandable and collapsable - [Link to Game dataclass](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/game/game.py)**
@@ -6593,6 +6589,77 @@ _To be added_
 </details>
 
 </blockquote>
+
+## Usage that returns Game objects
+
+### `get_game`
+
+Description: Returns a Game
+
+**Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `game_id` | string/int | Yes      | Game id number |
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `timecode` | string | No      | Use this parameter to return a snapshot of the data at the specified time. Format: YYYYMMDD_HHMMSS |
+| `fields` | string | No      | Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute |
+
+### `get_game_play_by_play`
+
+Description: Return the playbyplay of a game for a specific game id
+
+**Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `game_id` | string/int | Yes      | Game id number | None
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `timecode` | string | No      | Use this parameter to return a snapshot of the data at the specified time. Format: YYYYMMDD_HHMMSS | None
+| `fields` | string | No      | Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute | None
+
+### `get_game_line_score`
+
+Description: Return the Linescore of a game for a specific game id
+
+**Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `game_id` | string/int | Yes      | Game id number | None
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `timecode` | string | No      | Use this parameter to return a snapshot of the data at the specified time. Format: YYYYMMDD_HHMMSS | None
+| `fields` | string | No      | Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute | None
+
+
+### `get_game_box_score`
+
+Description: Return the boxscore of a game for a specific game id
+
+**Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `game_id` | string/int | Yes      | Game id number | None
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `timecode` | string | No      | Use this parameter to return a snapshot of the data at the specified time. Format: YYYYMMDD_HHMMSS | None
+| `fields` | string | No      | Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute | None
 
 
 ## Example output from MLB stats api endpoint

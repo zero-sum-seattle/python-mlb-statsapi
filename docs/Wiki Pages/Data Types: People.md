@@ -1,7 +1,3 @@
-## Usage that returns League objects
-
-_To be added_
-
 ## People Structure
 
 **People are expandable and collapsable - [Link to people dataclass](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/people/people.py)**
@@ -354,6 +350,39 @@ _To be added_
 </details>
 
 </blockquote>
+
+## Usage that returns League objects
+
+### `get_person`
+
+Description: Return Person Object from Id
+
+**Parameters:**
+
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `person_id`  | string/int| Yes      | Insert personId for a specific player, coach or umpire based on playerId. | 
+
+### `get_people`
+
+Description: Return list of all people for sport_id
+
+**Parameters:**
+
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `sport_id`  | string/int| Yes      | Insert a sportId to return player information for a particular sport. For a list of all sportIds: http://statsapi.mlb.com/api/v1/sports | 1
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `season`  | string/int| Yes      | Insert year to return player information for a particular season. | 
+| `gameType`   | string| Yes       | Insert gameType to return player information for a particular gameType. Find available game types at https://statsapi.mlb.com/api/v1/gameTypes | 
+
+
 
 ## Example output from MLB stats api endpoint
 

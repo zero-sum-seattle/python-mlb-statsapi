@@ -1,7 +1,3 @@
-## Usage that returns Sport objects
-
-_To be added_
-
 ## Sport Structure
 
 **Attributes are expandable and collapsable - [Link to Sport dataclass](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/sports/sport.py)**
@@ -52,6 +48,37 @@ _To be added_
 </details>
 
 </blockquote>
+
+
+## Usage that returns Sport objects
+
+### `get_sport`
+
+Description: Returns sport object from sport_id
+
+**Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `sport_id` | string/int | Yes      | description |
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `fields` | string | No      | Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute |
+
+### `get_sports`
+
+Description: Return all sports
+
+
+**Other Parameters:**
+
+| Name       | Type      | Required | Description                         | Default
+| ---------- | --------- | -------- | ----------------------------------- | -------
+| `fields` | string | No      | Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute |
+
 
 
 ## Example output from MLB stats api endpoint
