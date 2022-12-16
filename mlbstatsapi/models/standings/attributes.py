@@ -90,7 +90,7 @@ class Divisionrecords(Record):
     pct : str
         Percentage in division
     division : Divison
-
+        Division
     """
     division: Union[Division, dict]
 

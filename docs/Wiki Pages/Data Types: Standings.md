@@ -273,32 +273,222 @@ _To be added_
 <summary>splitrecords : Typerecords   </summary>
 
 * A list of split records. Dataclass: [Typerecords](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/standings/attributes.py)  
+
+<blockquote>
+
+<details>
+<summary>wins : int   </summary>
+
+* Number of wins in type  
+</details>
+
+<details>
+<summary>losses : int   </summary>
+
+* Number of losses in type  
+</details>
+
+<details>
+<summary>pct : str   </summary>
+
+* Percentage in type  
+</details>
+
+<details>
+<summary>type : str   </summary>
+
+* Type of record  
+</details>
+
+</blockquote>
+
 </details>
 
 <details>
 <summary>divisionrecords : Divisionrecords   </summary>
 
 * A list of division records. Dataclass: [Divisionrecords](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/standings/attributes.py)  
+
+<blockquote>
+
+<details>
+<summary>wins : int   </summary>
+
+* Number of wins in division
+</details>
+
+<details>
+<summary>losses : int   </summary>
+
+* Number of losses in division
+</details>
+
+<details>
+<summary>pct : str   </summary>
+
+* Percentage in division
+</details>
+
+<details>
+<summary>division : Divison   </summary>
+
+* Division. Dataclass: [Division](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/divisions/division.py)
+
+<blockquote>
+
+<details>
+<summary>id : int   </summary>
+
+* id number of the divison
+</details>
+
+<details>
+<summary>name : str   </summary>
+
+* name of the division
+</details>
+
+<details>
+<summary>link : str   </summary>
+
+* link of the division
+</details>
+
+</blockquote>
+
+</details>
+
+</blockquote>
+
 </details>
 
 <details>
 <summary>overallrecords : Typerecords   </summary>
 
 * A list of overall records. Dataclass: [Typerecords](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/standings/attributes.py)  
+
+<blockquote>
+
+<details>
+<summary>wins : int   </summary>
+
+* Number of wins in type  
+</details>
+
+<details>
+<summary>losses : int   </summary>
+
+* Number of losses in type  
+</details>
+
+<details>
+<summary>pct : str   </summary>
+
+* Percentage in type  
+</details>
+
+<details>
+<summary>type : str   </summary>
+
+* Type of record  
+</details>
+
+</blockquote>
+
 </details>
 
 <details>
 <summary>leaguerecords : Leaguerecords   </summary>
 
 * A list of league records. Dataclass: [Leaguerecords](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/standings/attributes.py)  
+
+<blockquote>
+
+<details>
+<summary>wins : int   </summary>
+
+* Number of wins in league  
+</details>
+
+<details>
+<summary>losses : int   </summary>
+
+* Number of losses in league  
+</details>
+
+<details>
+<summary>pct : str   </summary>
+
+* Percentage in league  
+</details>
+
+<details>
+<summary>league : League   </summary>
+
+* League. Dataclass: [League](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/leagues/league.py)
+
+<blockquote>
+
+<details>
+<summary>id : int   </summary>
+
+* id number of the league  
+</details>
+
+<details>
+<summary>name : str   </summary>
+
+* name of the league  
+</details>
+
+<details>
+<summary>link : str   </summary>
+
+* link of the league  
+</details>
+
+</blockquote>
+
+</details>
+
+</blockquote>
+
 </details>
 
 <details>
 <summary>expectedrecords : Typerecords   </summary>
 
 * A list of expected records. Dataclass: [Typerecords](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/standings/attributes.py)  
+
+<blockquote>
+
+<details>
+<summary>wins : int   </summary>
+
+* Number of wins in type  
 </details>
 
+<details>
+<summary>losses : int   </summary>
+
+* Number of losses in type  
+</details>
+
+<details>
+<summary>pct : str   </summary>
+
+* Percentage in type  
+</details>
+
+<details>
+<summary>type : str   </summary>
+
+* Type of record  
+</details>
+
+</blockquote>
+
+</details>
 
 </blockquote>
 
@@ -400,11 +590,9 @@ _To be added_
 * Clinch indicator.  
 </details>
 
-
 </blockquote>
 
 </details>
-
 
 </blockquote>
 
