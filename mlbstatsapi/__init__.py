@@ -4,6 +4,5 @@ from .exceptions import TheMlbStatsApiException
 
 from .mlb_module import (
     return_splits,
-    build_group_list,
     get_stat_attributes
     )

@@ -13,6 +13,7 @@ class TestHittingStats(unittest.TestCase):
         cls.catching_player = 663728
         cls.ty_france = 664034
         cls.utility_player = 647351
+        cls.soto = 665742
         cls.stats_200_blank = ('projected', 'projectedRos', 'standard', 'advanced', 'firstYearStats', 'lastYearStats',
         'vsOpponents', 'outsAboveAverage', 'tracking', 'availableStats', 'gameTypeStats', 'vsOpponents')
         cls.hitting = 'hitting'
@@ -57,19 +58,29 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue(stats['hitting']['careeradvanced'])
 
         # let's pull out a object and test it
-        season = stats['hitting']['season'][0]
-        career = stats['hitting']['career'][0]
-        season_advanced = stats['hitting']['seasonadvanced'][0]
-        career_advanced = stats['hitting']['careeradvanced'][0]
+        season = stats['hitting']['season']
+        career = stats['hitting']['career']
+        season_advanced = stats['hitting']['seasonadvanced']
+        career_advanced = stats['hitting']['careeradvanced']
         # check that attrs exist and contain data
-        self.assertTrue(season.season)
-        self.assertTrue(season.stat.avg)
-        self.assertTrue(career.player)
-        self.assertTrue(season_advanced.season)
-        self.assertTrue(season_advanced.stat.plateappearances)
-        self.assertTrue(career_advanced.player)
 
-    def test_pitching_stat_attributes_team(self):
+        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.group, 'hitting')
+        self.assertEqual(season.type, 'season')
+
+        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.group, 'hitting')
+        self.assertEqual(career.type, 'career')
+
+        self.assertEqual(season_advanced.totalsplits, len(season_advanced.splits))
+        self.assertEqual(season_advanced.group, 'hitting')
+        self.assertEqual(season_advanced.type, 'seasonAdvanced')
+
+        self.assertEqual(career_advanced.totalsplits, len(career_advanced.splits))
+        self.assertEqual(career_advanced.group, 'hitting')
+        self.assertEqual(career_advanced.type, 'careerAdvanced')
+
+    def test_hitting_stat_attributes_team(self):
         """mlb get stats should return pitching stats"""
         self.stats = ['season', 'career', 'seasonAdvanced', 'careerAdvanced']
         self.group = ['hitting']
@@ -92,18 +103,47 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue(stats['hitting']['careeradvanced'])
 
         # let's pull out a object and test it
-        season = stats['hitting']['season'][0]
-        career = stats['hitting']['career'][0]
-        season_advanced = stats['hitting']['seasonadvanced'][0]
-        career_advanced = stats['hitting']['careeradvanced'][0]
+        season = stats['hitting']['season']
+        career = stats['hitting']['career']
+        season_advanced = stats['hitting']['seasonadvanced']
+        career_advanced = stats['hitting']['careeradvanced']
 
-        # check that attrs exist and contain data
-        self.assertTrue(season.season)
-        self.assertTrue(season.stat.avg)
-        self.assertTrue(career.team)
-        self.assertTrue(season_advanced.season)
-        self.assertTrue(season_advanced.stat.plateappearances)
-        self.assertTrue(career_advanced.team)
+        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.group, 'hitting')
+        self.assertEqual(season.type, 'season')
+
+        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.group, 'hitting')
+        self.assertEqual(career.type, 'career')
+
+        self.assertEqual(season_advanced.totalsplits, len(season_advanced.splits))
+        self.assertEqual(season_advanced.group, 'hitting')
+        self.assertEqual(season_advanced.type, 'seasonAdvanced')
+
+        self.assertEqual(career_advanced.totalsplits, len(career_advanced.splits))
+        self.assertEqual(career_advanced.group, 'hitting')
+        self.assertEqual(career_advanced.type, 'careerAdvanced')
+
+
+
+    def test_hitting_traded_stats_player(self):
+        """mlb get stats should return multiple splits for being a traded player"""
+        self.stats = ['season']
+        self.group = ['hitting']
+        self.params = {'season': 2022}
+        # let's get some stats
+        stats = self.mlb.get_player_stats(self.soto, stats=self.stats, groups=self.group, **self.params)
+
+        # check for empty dict
+        self.assertNotEqual(stats, {})
+
+        # the end point should give us 2 hitting
+        self.assertTrue('hitting' in stats)
+
+        # check for split objects
+        self.assertTrue(stats['hitting']['season'])
+
+        season = stats['hitting']['season']
 
     def test_hitting_excepected_stats_player(self):
         """mlb get stats should return pitching stats"""
@@ -239,6 +279,11 @@ class TestHittingStats(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['hitting']['pitchlog'])
 
+        pitchlog = stats['hitting']['pitchlog']
+        self.assertTrue(len(pitchlog.splits) > 1)
+        self.assertEqual(pitchlog.totalsplits, len(pitchlog.splits))
+
+
     def test_hitting_pitchlog_stats_player(self):
         """mlb get stats should return hitting stats"""
         self.stats = ['playLog']
@@ -254,6 +299,12 @@ class TestHittingStats(unittest.TestCase):
 
         # check for split objects
         self.assertTrue(stats['hitting']['playlog'])
+
+        # playlogs should return multiple splits
+        playlogs = stats['hitting']['playlog']
+        self.assertTrue(len(playlogs.splits) > 1)
+        self.assertEqual(playlogs.totalsplits, len(playlogs.splits))
+
 
     def test_hitting_pitchArsenal_stats_player(self):
         """mlb get stats should return hitting stats"""
@@ -271,6 +322,10 @@ class TestHittingStats(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['stats']['pitcharsenal'])
 
+        pitcharsenal = stats['stats']['pitcharsenal']
+        self.assertTrue(len(pitcharsenal.splits) > 1)
+        self.assertEqual(pitcharsenal.totalsplits, len(pitcharsenal.splits))
+
     def test_hitting_hotcoldzones_stats_player(self):
         """mlb get stats should return hitting stats"""
         self.stats = ['hotColdZones']
@@ -286,3 +341,8 @@ class TestHittingStats(unittest.TestCase):
 
         # check for split objects
         self.assertTrue(stats['stats']['hotcoldzones'])
+
+        # hotcoldzone should return 5 splits
+        hotcoldzone = stats['stats']['hotcoldzones']
+        self.assertEqual(len(hotcoldzone.splits), 5)
+        self.assertEqual(hotcoldzone.totalsplits, len(hotcoldzone.splits))
