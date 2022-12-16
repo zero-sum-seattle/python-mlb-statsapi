@@ -72,7 +72,7 @@ class Typerecords(Record):
     pct : str
         Percentage in type
     type : str
-
+        Type of record
     """
     type: str
 
