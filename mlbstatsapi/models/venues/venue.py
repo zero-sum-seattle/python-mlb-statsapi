@@ -11,17 +11,17 @@ class Venue:
     ----------
     id : int
         id for this venue
-    name : str = None
+    name : str
         Name for this venue
     link : str
         Link to venues endpoint
-    location : Location = None
+    location : Location
         Location for this venue
-    timezone : TimeZone = None
+    timezone : TimeZone
         Timezone for this venue
-    fieldinfo :  FieldInfo = None
+    fieldinfo :  FieldInfo
         Info on this venue's field
-    active : bool = None
+    active : bool
         Is this field currently active
     """
     id:         int
