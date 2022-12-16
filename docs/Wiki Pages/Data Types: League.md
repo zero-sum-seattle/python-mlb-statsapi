@@ -4,7 +4,7 @@ _To be added_
 
 ## League Structure
 
-**Attributes are expandable and collapsable - [Link to League dataclass](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/ef5c8bd1d59a30345ab6a70fa0aa6f5910489a9a/mlbstatsapi/models/leagues/league.py#L31)**
+**Attributes are expandable and collapsable - [Link to League dataclass](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/leagues/league.py)**
 
 <blockquote>
 
