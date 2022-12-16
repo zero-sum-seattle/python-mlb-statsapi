@@ -38,6 +38,7 @@ python3 -m pip install -i https://test.pypi.org/simple/ python-mlb-statsapi
 ## Usage
 ```python
 python3
+>>> import mlbstatsapi
 >>> mlb = mlbstatsapi.Mlb()
 >>> mlb.get_people_id("Ty France")
 [664034]
