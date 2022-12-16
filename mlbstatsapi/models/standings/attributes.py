@@ -1,9 +1,7 @@
-from typing import Union, Optional, List
+from typing import Union, Optional
 from dataclasses import dataclass
 
 from mlbstatsapi.models.teams import Team, TeamRecord
-from mlbstatsapi.models.divisions import Division
-from mlbstatsapi.models.leagues import League
 
 @dataclass
 class Streak:
