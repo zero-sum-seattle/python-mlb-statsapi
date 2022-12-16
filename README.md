@@ -99,12 +99,8 @@ python3
 * `Mlb.get_leagues(self, **params)` - Return all Leagues
 * `Mlb.get_league_id(self, league_name: str, search_key: str = 'name', **params)` - Return League Id(s)
 ### [Seasons](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Season)
-<blockquote>
-
 * `Mlb.get_season(self, season_id: str, sport_id: int = None, **params)` - Return a season
 * `Mlb.get_seasons(self, sportid: int = None, **params)` - Return all seasons
-</blockquote>
-
 ### [Standings](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Standings)
 * `Mlb.get_standings(self, league_id: int, season: str, **params)` - Return standings
 ### [Schedules](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Schedule)
