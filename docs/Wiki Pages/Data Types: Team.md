@@ -106,7 +106,7 @@ _To be added_
 <details>
 <summary>springvenue : Venue   </summary>
 
-* The team's spring venue. Dataclass: [Venue]()
+* The team's spring venue. Dataclass: [Venue](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/venues/venue.py)
 
 <blockquote>
 
@@ -121,7 +121,6 @@ _To be added_
 
 * Link to venues endpoint  
 </details>
-
 
 </blockquote>
 
@@ -166,19 +165,88 @@ _To be added_
 <details>
 <summary>league : League   </summary>
 
-* The league of the team  
+* The league of the team. Dataclass: [League](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/leagues/league.py)  
+
+<blockquote>
+
+<details>
+<summary>id : int   </summary>
+
+* id number of the league  
+</details>
+
+<details>
+<summary>name : str   </summary>
+
+* name of the league  
+</details>
+
+<details>
+<summary>link : str   </summary>
+
+* link of the league  
+</details>
+
+</blockquote>
+
 </details>
 
 <details>
 <summary>division : Division   </summary>
 
-* The division the team is in  
+* The division the team is in. Dataclass: [Division](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/divisions/division.py)
+
+<blockquote>
+
+<details>
+<summary>id : int   </summary>
+
+* id number of the divison  
+</details>
+
+<details>
+<summary>name : str   </summary>
+
+* name of the division  
+</details>
+
+<details>
+<summary>link : str   </summary>
+
+* link of the division  
+</details>
+
+</blockquote>
+
 </details>
 
 <details>
 <summary>sport : Sport   </summary>
 
-* The sport of the team  
+* The sport of the team. Dataclass: [Sport](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/sports/sport.py)  
+
+<blockquote>
+
+<details>
+<summary>id : int   </summary>
+
+* id number of the sport  
+</details>
+
+<details>
+<summary>name : str    </summary>
+
+* name the sport  
+</details>
+
+<details>
+<summary>link : str   </summary>
+
+* link of the sport  
+</details>
+
+</blockquote>
+
 </details>
 
 <details>
@@ -190,7 +258,90 @@ _To be added_
 <details>
 <summary>record : TeamRecord   </summary>
 
-* The record of the team  
+* The record of the team. Dataclass: [TeamRecord](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/teams/attributes.py)  
+
+<blockquote>
+
+<details>
+<summary>gamesplayed : int   </summary>
+
+* Number of game played by team  
+</details>
+
+<details>
+<summary>wildcardgamesback : str   </summary>
+
+* Number of game back from wildcard  
+</details>
+
+<details>
+<summary>leaguegamesback : str   </summary>
+
+* Number of league games back  
+</details>
+
+<details>
+<summary>springleaguegamesback : str   </summary>
+
+* Number of game back in spring league  
+</details>
+
+<details>
+<summary>sportgamesback : str   </summary>
+
+* Number of games back in sport  
+</details>
+
+<details>
+<summary>divisiongamesback : str   </summary>
+
+* Number of games back in division  
+</details>
+
+<details>
+<summary>conferencegamesback : str   </summary>
+
+* Number of games back in conference  
+</details>
+
+<details>
+<summary>leaguerecord : Dict   </summary>
+
+* Record in league  
+</details>
+
+<details>
+<summary>records : Dict   </summary>
+
+* Records  
+</details>
+
+<details>
+<summary>divisionleader : bool   </summary>
+
+* Is this team a divison leader  
+</details>
+
+<details>
+<summary>wins : int   </summary>
+
+* Number of wins  
+</details>
+
+<details>
+<summary>losses : int   </summary>
+
+* Number of losses  
+</details>
+
+<details>
+<summary>winningpercentage : str   </summary>
+
+* Winning percentage  
+</details>
+
+</blockquote>
+
 </details>
 
 <details>
@@ -222,7 +373,6 @@ _To be added_
 
 * The id of the partent team or org  
 </details>
-
 
 </blockquote>
 
