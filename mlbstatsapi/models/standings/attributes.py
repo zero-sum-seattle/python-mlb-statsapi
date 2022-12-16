@@ -108,6 +108,7 @@ class Leaguerecords(Record):
     pct : str
         Percentage in league
     league : League
+        League
     """
     league: Union[League, dict]
 
