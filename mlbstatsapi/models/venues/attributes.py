@@ -35,7 +35,7 @@ class Location:
         The staes abbreviation
     postalCode : str
         Postal code for this venue
-    defaultCoordinates : Union[VenueDefaultCoordinates, Dict[str, Any]]
+    defaultCoordinates : VenueDefaultCoordinates
         Long and lat for this venues location
     country : str
         What country this venue is in
