@@ -30,27 +30,189 @@ _To be added_
 <details>
 <summary>location : Location   </summary>
 
-* Location for this venue  
+* Location for this venue. Dataclass: [Location](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/venues/attributes.py)
+
+<blockquote>
+
+<details>
+<summary>address1 : str   </summary>
+
+* Venues first address line  
+</details>
+
+<details>
+<summary>address2 : str   </summary>
+
+* Venues second address line  
+</details>
+
+<details>
+<summary>city : str   </summary>
+
+* City the venue is in  
+</details>
+
+<details>
+<summary>state : str   </summary>
+
+* The State the venue is in  
+</details>
+
+<details>
+<summary>stateAbbrev : str   </summary>
+
+* The staes abbreviation  
+</details>
+
+<details>
+<summary>postalCode : str   </summary>
+
+* Postal code for this venue  
+</details>
+
+<details>
+<summary>defaultCoordinates : VenueDefaultCoordinates   </summary>
+
+* Long and lat for this venues location. Dataclass: [VenueDefaultCoordinates](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/venues/attributes.py)  
+
+<blockquote>
+
+<details>
+<summary>latitude : float   </summary>
+
+* The latatude coordinate for this venue  
+</details>
+
+<details>
+<summary>longitude : float   </summary>
+
+* The longitude coordinate for this venue  
+</details>
+
+</blockquote>
+
+</details>
+
+<details>
+<summary>country : str   </summary>
+
+* What country this venue is in  
+</details>
+
+<details>
+<summary>phone : str   </summary>
+
+* Phone number for this venue  
+</details>
+
+</blockquote>
 </details>
 
 <details>
 <summary>timezone : TimeZone   </summary>
 
-* Timezone for this venue  
+* Timezone for this venue. Dataclass: [TimeZone](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/venues/attributes.py)  
+
+<blockquote>
+
+<details>
+<summary>id : str   </summary>
+
+* id string for a venues timezone  
+</details>
+
+<details>
+<summary>offset : int   </summary>
+
+* The offset for this timezone from  
+</details>
+
+<details>
+<summary>tz : str   </summary>
+
+* Timezone string  
+</details>
+
+</blockquote>
+
 </details>
 
 <details>
 <summary>fieldinfo :  FieldInfo   </summary>
 
-* Info on this venue's field  
+* Info on this venue's field. Dataclass: [FieldInfo](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/venues/attributes.py)
+
+<blockquote>
+
+<details>
+<summary>capacity : int   </summary>
+
+* Capacity for this venue  
 </details>
 
 <details>
-<summary>active : bool = None   </summary>
+<summary>turfType : str   </summary>
+
+* The type of turf in this venue  
+</details>
+
+<details>
+<summary>roofType : str   </summary>
+
+* What kind of roof for this venue  
+</details>
+
+<details>
+<summary>leftLine : int   </summary>
+
+* Distance down the left line  
+</details>
+
+<details>
+<summary>left : int   </summary>
+
+* Distance to left  
+</details>
+
+<details>
+<summary>leftCenter : int   </summary>
+
+* Distance to left center  
+</details>
+
+<details>
+<summary>center : int   </summary>
+
+* Distance to center  
+</details>
+
+<details>
+<summary>rightCenter : int   </summary>
+
+* Distance to right center  
+</details>
+
+<details>
+<summary>right : int   </summary>
+
+* Distance to right  
+</details>
+
+<details>
+<summary>rightLine : int   </summary>
+
+* Distance to right line  
+</details>
+
+</blockquote>
+
+</details>
+
+<details>
+<summary>active : bool   </summary>
 
 * Is this field currently active  
 </details>
-
 
 </blockquote>
 
