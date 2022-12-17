@@ -25,7 +25,7 @@ class Location:
     ----------
     address1 : str
         Venues first address line
-    address2 : str = None
+    address2 : str
         Venues second address line
     city : str
         City the venue is in
@@ -35,7 +35,7 @@ class Location:
         The staes abbreviation
     postalCode : str
         Postal code for this venue
-    defaultCoordinates : Union[VenueDefaultCoordinates, Dict[str, Any]]
+    defaultCoordinates : VenueDefaultCoordinates
         Long and lat for this venues location
     country : str
         What country this venue is in
@@ -87,19 +87,19 @@ class FieldInfo:
         The type of turf in this venue
     roofType : str
         What kind of roof for this venue
-    leftLine : int = None
+    leftLine : int
         Distance down the left line
-    left : int = None
+    left : int
         Distance to left
-    leftCenter : int = None
+    leftCenter : int
         Distance to left center
-    center : int = None
+    center : int
         Distance to center
-    rightCenter : int = None
+    rightCenter : int
         Distance to right center
-    right : int = None
+    right : int
         Distance to right
-    rightLine : int = None
+    rightLine : int
         Distance to right line
     """
     capacity: Optional[int] = None

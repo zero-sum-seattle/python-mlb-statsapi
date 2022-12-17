@@ -20,7 +20,7 @@ class Standings:
         A string indicating the type of standings.
     league : league
         An object containing information about the league.
-    division : Sport
+    division : Division
         An object containing information about the division
     sport : Sport
         An object containing information about the sport.

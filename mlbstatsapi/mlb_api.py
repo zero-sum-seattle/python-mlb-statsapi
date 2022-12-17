@@ -35,8 +35,6 @@ class Mlb:
     ----------
     hostname: str
         hostname of statsapi.mlb.com
-    ver: str
-        api version
     logger: logging.Loger
         logger
     """
