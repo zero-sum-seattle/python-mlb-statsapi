@@ -44,7 +44,7 @@ python3
 >>> stats = ['season', 'seasonAdvanced']
 >>> groups = ['hitting']
 >>> mlb.get_player_stats(664034, stats=stats, groups=groups)
-{'hitting': {'season': [HittingSeason], 'seasonadvanced': [HittingSeasonAdvanced] }}
+{'hitting': {'season': Stat, 'seasonadvanced': Stat }}
 
 >>> mlb.get_team_id("Oakland Athletics")
 [133]
@@ -52,7 +52,7 @@ python3
 >>> stats = ['season', 'seasonAdvanced']
 >>> groups = ['pitching']
 >>> mlb.get_team_stats(133, stats, groups)
-{'pitching': {'season': [PitchingSeason], 'seasonadvanced': [PitchingSeasonAdvanced] }}
+{'pitching': {'season': Stat, 'seasonadvanced': Stat }}
 ```
 
 
@@ -121,7 +121,7 @@ Let's show some examples of getting stat objects from the API. What is baseball 
 Get the Id(s) of the players you want stats for and set stat types and groups.
 ```python
 >>> mlb = mlbstatsapi.Mlb()
->>> player = mlb.get_player_id("Ty France")
+>>> player = mlb.get_people_id("Ty France")
 >>> types = ['season', 'career']
 >>> groups = ['hitting', 'pitching']
 ```
@@ -133,7 +133,7 @@ Use player.id and stat types and groups to return a stats dictionary
 ```
 Print season hitting stats
 ```python
->>> for attribute, value in season_hitting_stat.stat.__dict__.items():
+>>> for attribute, value in season_hitting_stat.splits.stat.__dict__.items():
 ...     print(attribute, value)
 >>>
 ```
@@ -159,17 +159,17 @@ advanced_hitting = stats['hitting']['seasonadvanced']
 ```
 Print season and seasonadvanced stats
 ```python
->>> for attribute, value in season_hitting.stat.__dict__.items():
+>>> for attribute, value in season_hitting.splits[0].stat.__dict__.items():
 ...     print(attribute, value)
 >>>
-... for attribute, value in advanced_hitting.stat.__dict__.items():
+... for attribute, value in advanced_hitting.splits[0].stat.__dict__.items():
 >>>     print(attribute, value)
 ```
 ### More stats examples
 #### Expected Stats
 Get player Id's
 ```python
->>> player = mlb.get_player_id('Ty France')
+>>> player = mlb.get_people_id('Ty France')
 ```
 Set the stat type and group
 ```python
@@ -184,8 +184,8 @@ Get Stats
 #### vsPlayer
 Get pitcher and batter player Ids
 ```
->>> hitter = mlb.get_player_id('Ty France')
->>> pitcher = mlb.get_player_id('Shoei Ohtani')
+>>> hitter = mlb.get_people_id('Ty France')
+>>> pitcher = mlb.get_people_id('Shoei Ohtani')
 ```
 Set stat type, stat groups, and params
 ```
@@ -200,8 +200,8 @@ Get stats
 #### hotColdZones
 Get player Id's
 ```python
->>> hitter = mlb.get_player_id('Ty France')
->>> pitcher = mlb.get_player_id('Shoei Ohtani')
+>>> hitter = mlb.get_people_id('Ty France')
+>>> pitcher = mlb.get_people_id('Shoei Ohtani')
 ```
 Set the stat types and groups
 ```python
@@ -217,22 +217,18 @@ stat group because of issues related to the REST API. So hotColdZones will be as
 ```
 hotColdZones returns a list of the HotColdZones
 ```python
->>> ty_france_hotcoldzones = hitting_hotcoldzones['stats']['hotcoldzones'][0]
->>> shoei_ohtani_hotcoldzones = pitching_hotcoldzones['stats']['hotcoldzones'][0]
+>>> ty_france_hotcoldzones = hitting_hotcoldzones['stats']['hotcoldzones']
+>>> shoei_ohtani_hotcoldzones = pitching_hotcoldzones['stats']['hotcoldzones']
 ```
 Loop through the hotColdZone objects for Ty France
 ```python
->>> for zone in ty_france_hotcoldzones:
->>>     print(zone.zone)
->>>     print(zone.value)
->>>             
+>>> for zone in ty_france_hotcoldzones.splits:
+>>>     print(zone.stat.zones)
 ```
 Loop through the hotColdZone objects for Shoei Ohtani
 ```python
->>> for zone in shoei_ohtani_hotcoldzones:
->>>     print(zonecodes.zone)
->>>     print(zonecodes.value)
->>>
+>>> for zone in shoei_ohtani_hotcoldzones.splits:
+>>>     print(zone.stat.zones)
 ```
 #### Passing params
 Get Team Ids
@@ -255,8 +251,8 @@ advanced_hitting = stats['hitting']['seasonadvanced']
 ```
 season should be 2018
 ```python
-assertEqual(season_hitting.season == 2018)
-assertEqual(advanced_hitting.season == 2018)
+assertEqual(season_hitting.splits[0].season == 2018)
+assertEqual(advanced_hitting.splits[0].season == 2018)
 ```
 
 ### Gamepace examples
