@@ -46,13 +46,40 @@ class Sabermetrics:
 
     Attributes
     ----------
+    woba : float
+    wRaa : float
+    wRc : float
+    wRcPlus : float
+    rar : float
+    war : float
+    batting : float
+    fielding : float
+    baseRunning : float
+    positional : float
+    wLeague : float
+    replacement : float
+    spd : float
+    ubr : float
+    wGdp : float
+    wSb : float
     """
-    woba: float
-    wrc: float
-    wrcplus: float
-    rar: float
-    war: float
 
+    woba: Optional[float] = None
+    wraa: Optional[float] = None
+    wrc: Optional[float] = None
+    wrcplus: Optional[float] = None
+    rar: Optional[float] = None
+    war: Optional[float] = None
+    batting: Optional[float] = None
+    fielding: Optional[float] = None
+    baserunning: Optional[float] = None
+    positional: Optional[float] = None
+    wleague: Optional[float] = None
+    replacement: Optional[float] = None
+    spd: Optional[float] = None
+    ubr: Optional[float] = None
+    wgdp: Optional[float] = None
+    wsb: Optional[float] = None
 
 @dataclass(kw_only=True)
 class Split:
