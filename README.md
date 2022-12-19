@@ -15,7 +15,7 @@
 ### *Copyright Notice*  
 This package and its authors are not affiliated with MLB or any MLB team. This API wrapper interfaces with MLB's Stats API. Use of MLB data is subject to the notice posted at http://gdx.mlb.com/components/copyright.txt.
 
-###### This is an educational project. Not for commercial use. 
+###### This is an educational project - Not for commercial use. 
 
 
 ![MLB Stats API](https://user-images.githubusercontent.com/2068393/203456246-dfdbdf0f-1e43-4329-aaa9-1c4008f9800d.jpg)
