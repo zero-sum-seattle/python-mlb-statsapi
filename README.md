@@ -22,7 +22,9 @@ This package and its authors are not affiliated with MLB or any MLB team. This A
 
 ## Getting Started
 
-*Python-mlb-statsapi* is an unofficial MLB Stats API written in python 3.7+. It provides developers access to the MLB Stats API endpoint to pull information related to MLB Rosters, Teams, Players, stats and much more. All the information for getting started can be found in this README. However, a more detailed explanation can be found in our Docs section or in our Wiki.
+*Python-mlb-statsapi* is a Python library that provides developers with access to the MLB Stats API. *Python-mlb-statsapi* allows developers to retrieve information related to MLB teams, players, stats, and more. The library is compatible with Python 3.7 and higher.
+
+To get started with the library, refer to the information provided in this README. For a more detailed explanation, check out the documentation and the Wiki section. The Wiki contains information on return objects, endpoint structure, usage examples, and more. It is a valuable resource for getting started, working with the library, and finding the information you need.
 
 
 <div align="center">
