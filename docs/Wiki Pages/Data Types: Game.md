@@ -2170,6 +2170,93 @@
 
 </details>
 
+<details>
+<summary>postonfirst : Person </summary>
+
+* Runner on first if on base. Dataclass: [Person](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/people/people.py)
+
+<blockquote>
+
+<details>
+<summary>id : int </summary>
+
+* Id number of the person  
+</details>
+
+<details>
+<summary>full_name : str </summary>
+
+* Full_name of the person  
+</details>
+
+<details>
+<summary>link: str </summary>
+
+* Persons link  
+</details>
+
+</blockquote>
+
+</details>
+
+<details>
+<summary>postonsecond : Person </summary>
+
+* Runner on second if on base. Dataclass: [Person](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/people/people.py)
+
+<blockquote>
+
+<details>
+<summary>id : int </summary>
+
+* Id number of the person  
+</details>
+
+<details>
+<summary>full_name : str </summary>
+
+* Full_name of the person  
+</details>
+
+<details>
+<summary>link: str </summary>
+
+* Persons link  
+</details>
+
+</blockquote>
+
+</details>
+
+<details>
+<summary>postonthird : Person </summary>
+
+* Runner on third if on base. Dataclass: [Person](https://github.com/zero-sum-seattle/python-mlb-statsapi/blob/development/mlbstatsapi/models/people/people.py)
+
+<blockquote>
+
+<details>
+<summary>id : int </summary>
+
+* Id number of the person  
+</details>
+
+<details>
+<summary>full_name : str </summary>
+
+* Full_name of the person  
+</details>
+
+<details>
+<summary>link: str </summary>
+
+* Persons link  
+</details>
+
+</blockquote>
+  
+</details>
+
 </blockquote>
 
 
@@ -3434,6 +3521,8 @@
 
 </blockquote>
 
+</details>
+
 <details>
 <summary>postonfirst : Person </summary>
 
@@ -3519,9 +3608,6 @@
 
 </blockquote>
   
-</details>
-
-
 </details>
 
 </blockquote>
