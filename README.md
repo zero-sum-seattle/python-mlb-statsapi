@@ -170,18 +170,16 @@ Get the Team Id(s)
 ```python
 python3
 >>> mlb = mlbstatsapi.Mlb()
->>> team = mlb.get_team_id('Seattle Mariners')[0]
->>> print(team)
-136
+>>> team_id = mlb.get_team_id('Seattle Mariners')[0]
 ```
 Set the stat types and groups.
 ```python
->>> types = ['season', 'seasonAdvanced']
+>>> stats = ['season', 'seasonAdvanced']
 >>> groups = ['hitting']
 ```
 Use team.id and the stat types and groups to return season hitting stats
 ```python
-stats = mlb.get_team_stats(team.id, stats=types, groups=groups)
+stats = mlb.get_team_stats(team_id, stats=stats, groups=groups)
 season_hitting = stats['hitting']['season']
 advanced_hitting = stats['hitting']['seasonadvanced']
 ```
@@ -190,10 +188,22 @@ Print season and seasonadvanced stats
 >>> for split in season_hitting.splits:
 ...     for k, v in split.stat.__dict__.items():
 ...         print(k, v)
+gamesplayed 162
+groundouts 1273
+airouts 1523
+runs 690
+doubles 229
+triples 19
 >>>
 >>> for split in advanced_hitting.splits:
 ...     for k, v in split.stat.__dict__.items():
 ...         print(k, v)
+...
+plateappearances 6117
+totalbases 2094
+leftonbase 1129
+sacbunts 9
+sacflies 45
 ```
 ### More stats examples
 #### Expected Stats
