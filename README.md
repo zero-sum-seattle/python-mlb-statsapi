@@ -121,30 +121,58 @@ Let's show some examples of getting stat objects from the API. What is baseball 
 Get the Id(s) of the players you want stats for and set stat types and groups.
 ```python
 >>> mlb = mlbstatsapi.Mlb()
->>> player = mlb.get_people_id("Ty France")
->>> types = ['season', 'career']
+>>> player_id = mlb.get_people_id("Ty France")[0]
+>>> stats = ['season', 'career']
 >>> groups = ['hitting', 'pitching']
 ```
 Use player.id and stat types and groups to return a stats dictionary
 ```python
->>> stat_dict = mlb.get_player_stats(player.id, stats=types, groups=groups )
+>>> stat_dict = mlb.get_player_stats(player_id, stats=stats, groups=groups )
 >>> season_hitting_stat = stat_dict['hitting']['season']
 >>> career_pitching_stat = stat_dict['pitching']['career']
 ```
 Print season hitting stats
 ```python
->>> for attribute, value in season_hitting_stat.splits.stat.__dict__.items():
-...     print(attribute, value)
->>>
+>>> for split in season_hitting_stat.splits:
+...     for k, v in split.stat.__dict__.items():
+...             print(k, v)
+gamesplayed 140
+groundouts 163
+airouts 148
+runs 65
+doubles 27
+triples 1
+homeruns 20
+strikeouts 94
+baseonballs 35
+...
+>>> for split in career_pitching_stat.splits:
+...     for k, v in split.stat.__dict__.items():
+...             print(k, v)
+gamesplayed 2
+gamesstarted 0
+groundouts 2
+airouts 4
+runs 1
+doubles 0
+triples 0
+homeruns 1
+strikeouts 0
+baseonballs 0
+intentionalwalks 0
+hits 2
+hitbypitch 0
+...
+
 ```
 #### Team stats
 Get the Team Id(s)
 ```python
 python3
 >>> mlb = mlbstatsapi.Mlb()
->>> team = mlb.get_team_id('Seattle Mariners')
->>> print(team.id)
-[136]
+>>> team = mlb.get_team_id('Seattle Mariners')[0]
+>>> print(team)
+136
 ```
 Set the stat types and groups.
 ```python
@@ -159,17 +187,19 @@ advanced_hitting = stats['hitting']['seasonadvanced']
 ```
 Print season and seasonadvanced stats
 ```python
->>> for attribute, value in season_hitting.splits[0].stat.__dict__.items():
-...     print(attribute, value)
+>>> for split in season_hitting.splits:
+...     for k, v in split.stat.__dict__.items():
+...         print(k, v)
 >>>
-... for attribute, value in advanced_hitting.splits[0].stat.__dict__.items():
->>>     print(attribute, value)
+>>> for split in advanced_hitting.splits:
+...     for k, v in split.stat.__dict__.items():
+...         print(k, v)
 ```
 ### More stats examples
 #### Expected Stats
 Get player Id's
 ```python
->>> player = mlb.get_people_id('Ty France')
+>>> player = mlb.get_people_id('Ty France')[0]
 ```
 Set the stat type and group
 ```python
@@ -180,79 +210,156 @@ Get Stats
 ```python
 >>> stats = mlb.get_player_stats(player, stats=stats, groups=group)
 >>> expectedstats = stats['hitting']['expectedstatistics']
+>>> for split in expectedstats.splits:
+...     for k, v in split.stat.__dict__.items():
+...         print(k, v)
+avg .259
+slg .394
+woba .317
+wobacon .338
 ```
 #### vsPlayer
 Get pitcher and batter player Ids
-```
->>> hitter = mlb.get_people_id('Ty France')
->>> pitcher = mlb.get_people_id('Shoei Ohtani')
+```python
+>>> ty_france_id = mlb.get_people_id('Ty France')[0]
+>>> shohei_ohtani_id = mlb.get_people_id('Shohei Ohtani')[0]
 ```
 Set stat type, stat groups, and params
-```
+```python
 >>> stats = ['vsPlayer']
 >>> group = ['hitting']
->>> params = {'opposingPlayerId': pitcher.id}
+>>> params = {'opposingPlayerId': shohei_ohtani_id}
 ```
 Get stats
-```
->>> stats = self.mlb.get_player_stats(self.ty_france, stats=self.stats, groups=self.group, **self.params)
+```python
+>>> stats = mlb.get_player_stats(ty_france_id, stats=self.stats, groups=self.group, **self.params)
+>>> vs_player_total = stats['hitting']['vsplayertotal']
+>>> for split in vs_player_total.splits:
+...     for k, v in split.stat.__dict__.items():
+...             print(k, v)
+gamesplayed 4
+groundouts 3
+airouts 4
+runs None
+doubles 1
+triples 0
+homeruns 0
+...
+>>> vs_player = stats['hitting']['vsplayer']
+>>> for split in vs_player.splits:
+...     for k, v in split.stat.__dict__.items():
+...             print(k, v)
+gamesplayed 2
+groundouts 1
+airouts 2
+runs None
+doubles 1
+triples 0
+homeruns 0
 ```
 #### hotColdZones
 Get player Id's
 ```python
->>> hitter = mlb.get_people_id('Ty France')
->>> pitcher = mlb.get_people_id('Shoei Ohtani')
+>>> ty_france_id = mlb.get_people_id('Ty France')[0]
+>>> shohei_ohtani_id = mlb.get_people_id('Shohei Ohtani')[0]
 ```
 Set the stat types and groups
 ```python
->>> type = ['hotColdZones']
+>>> stats = ['hotColdZones']
 >>> hitting_group = ['hitting']
 >>> pitching_group = ['pitching']
 ```
 The stat groups pitching and hitting both return hotColdZones for a pitcher and hitter. hotColdZones are not assigned to a
 stat group because of issues related to the REST API. So hotColdZones will be assigned to the stat key in stats return dict.
 ```python
->>> hitting_hotcoldzones = mlb.get_player_stats(hitter.id, stats=type, groups=hitting_group)
->>> pitching_hotcoldzones = mlb.get_player_stats(pitcher.id, stats=type, groups=pitching_group)
+>>> hitting_hotcoldzones = mlb.get_player_stats(ty_france_id stats=type, groups=hitting_group)
+>>> pitching_hotcoldzones = mlb.get_player_stats(shohei_ohtani_id, stats=type, groups=pitching_group)
 ```
 hotColdZones returns a list of the HotColdZones
 ```python
 >>> ty_france_hotcoldzones = hitting_hotcoldzones['stats']['hotcoldzones']
->>> shoei_ohtani_hotcoldzones = pitching_hotcoldzones['stats']['hotcoldzones']
+>>> shohei_ohtani_hotcoldzones = pitching_hotcoldzones['stats']['hotcoldzones']
 ```
-Loop through the hotColdZone objects for Ty France
+Loop through hotColdZone objects for Ty France
 ```python
->>> for zone in ty_france_hotcoldzones.splits:
->>>     print(zone.stat.zones)
+>>> for split in ty_france_hotcoldzones.splits:
+...     print(split.stat.name)
+...
+onBasePercentage
+onBasePlusSlugging
+sluggingPercentage
+exitVelocity
+battingAverage
 ```
-Loop through the hotColdZone objects for Shoei Ohtani
+Loop through hotColdZone objects for Shoei Ohtani
 ```python
->>> for zone in shoei_ohtani_hotcoldzones.splits:
->>>     print(zone.stat.zones)
+>>> for split in shohei_ohtani_hotcoldzones.splits:
+...     print(split.stat.name)
+...
+onBasePercentage
+onBasePlusSlugging
+sluggingPercentage
+exitVelocity
+battingAverage
+```
+Print zone information for obp
+```python
+>>> for split in ty_france_hotcoldzones.splits:
+...     if split.stat.name == 'onBasePercentage':
+...             for zone in split.stat.zones:
+...                 print('zone: ', zone.zone)
+...                 print('value: ', zone.value)
+zone:  01
+value:  .226
+zone:  02
+value:  .400
+zone:  03
+value:  .375
+zone:  04
 ```
 #### Passing params
 Get Team Ids
 ```python
 python3
 >>> mlb = mlbstatsapi.Mlb()
->>> team = mlb.get_team_id('Seattle Mariners')
+>>> team_id = mlb.get_team_id('Seattle Mariners')[0]
 ```
 Set the stat types and groups.
 ```python
->>> types = ['season', 'seasonAdvanced']
+>>> stats = ['season', 'seasonAdvanced']
 >>> groups = ['hitting']
 ```
 Pass season to get_team_stats()
 ```python
-stats = mlb.get_team_stats(team.id, stats=types, groups=groups, season=2018)
-
+stats = mlb.get_team_stats(team_id, stats=stats, groups=groups, season=2018)
 season_hitting = stats['hitting']['season']
 advanced_hitting = stats['hitting']['seasonadvanced']
 ```
 season should be 2018
 ```python
-assertEqual(season_hitting.splits[0].season == 2018)
-assertEqual(advanced_hitting.splits[0].season == 2018)
+>>> for split in season_hitting.splits:
+...     print('Season: ', split.season)
+...     for k, v in split.stat.__dict__.items():
+...         print(k, v)
+...
+Season:  2018
+gamesplayed 162
+groundouts 1535
+airouts 1425
+runs 677
+...
+>>> for split in advanced_hitting.splits:
+...     print('Season: ', split.season)
+...     for k, v in split.stat.__dict__.items():
+...         print(k, v)
+...
+Season:  2018
+plateappearances 6087
+totalbases 2250
+leftonbase 1084
+sacbunts 29
+sacflies 41
+...
 ```
 
 ### Gamepace examples
