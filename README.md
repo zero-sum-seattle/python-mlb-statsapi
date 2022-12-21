@@ -209,7 +209,7 @@ sacflies 45
 #### Expected Stats
 Get player Id's
 ```python
->>> player = mlb.get_people_id('Ty France')[0]
+>>> player_id = mlb.get_people_id('Ty France')[0]
 ```
 Set the stat type and group
 ```python
@@ -218,7 +218,7 @@ Set the stat type and group
 ```
 Get Stats
 ```python
->>> stats = mlb.get_player_stats(player, stats=stats, groups=group)
+>>> stats = mlb.get_player_stats(player_id, stats=stats, groups=group)
 >>> expectedstats = stats['hitting']['expectedstatistics']
 >>> for split in expectedstats.splits:
 ...     for k, v in split.stat.__dict__.items():
