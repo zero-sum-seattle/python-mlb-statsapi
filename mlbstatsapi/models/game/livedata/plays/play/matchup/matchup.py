@@ -21,20 +21,18 @@ class PlayMatchup:
         Matchup pitcher
     pitchhand : PlayMatchupSide
         Pitchers side
-    batterhotcoldzones : List
-
     pitcherhotcoldzones : List
-
+        Pitcher hot cold zone stats
     splits : PlayMatchupSplits
         PlayMatchupSplits
-    batterhotcoldzonestats : List = None
-
-    postonfirst : Person = None
+    batterhotcoldzonestats : List
+        Batter hot cold zone stats
+    postonfirst : Person
         Runner on first
-    postonsecond : Person = None
+    postonsecond : Person
         Runner on second
-    postonthird : Person = None
-        Runner on third
+    postonthird : Person
+        Runner on third 
     """
     batter: Union[Person, dict]
     batside: Union[CodeDesc, dict]
