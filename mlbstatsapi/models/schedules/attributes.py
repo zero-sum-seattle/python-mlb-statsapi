@@ -17,7 +17,7 @@ class ScheduleGameTeam:
         League record for this team
     score : int
         Current score for this team in this game
-    team : ScheduleGameTeamInfo
+    team : Team
         Team info for this game
     iswinner : bool
         If this team is the winner of this game
@@ -79,7 +79,7 @@ class ScheduleGames:
         The official date for this game
     status : GameStatus
         The status of this game
-    teams : ScheduleGameTeams
+    teams : ScheduleHomeAndAway
         Holds teams and thier info for this game
     venue : Venue  
         The venue this game takes place in

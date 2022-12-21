@@ -31,7 +31,7 @@ class Team:
         The team's current season
     venue : Venue
         The team's home venue
-    springvenue : League
+    springvenue : Venue
         The team's spring venue
     teamcode : str
         team code 

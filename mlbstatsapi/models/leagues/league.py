@@ -58,8 +58,8 @@ class League:
         Total number of team in league
     numwildcardteams : int
         Total number of wildcard teams in league
-    seasondateinfo : LeagueSeasonDateInfo
-        LeagueSeasonDateInfo attribue
+    seasondateinfo : Season
+        Season obj
     season : str
         League season
     orgcode : str

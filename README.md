@@ -15,14 +15,16 @@
 ### *Copyright Notice*  
 This package and its authors are not affiliated with MLB or any MLB team. This API wrapper interfaces with MLB's Stats API. Use of MLB data is subject to the notice posted at http://gdx.mlb.com/components/copyright.txt.
 
-###### This is an educational project so no commercial use. 
+###### This is an educational project - Not for commercial use. 
 
 
 ![MLB Stats API](https://user-images.githubusercontent.com/2068393/203456246-dfdbdf0f-1e43-4329-aaa9-1c4008f9800d.jpg)
 
 ## Getting Started
 
-*Python-mlb-statsapi* is an unofficial MLB Stats API written in python 3.7+. It provides developers access to the MLB Stats API endpoint to pull information related to MLB Rosters, Teams, Players, stats and much more. All the information for getting started can be found in this README. However, a more detailed explanation can be found in our Docs section or in our Wiki.
+*Python-mlb-statsapi* is a Python library that provides developers with access to the MLB Stats API which allows developers to retrieve information related to MLB teams, players, stats, and more. *Python-mlb-statsapi* written in python 3.7+.
+
+To get started with the library, refer to the information provided in this README. For a more detailed explanation, check out the documentation and the Wiki section. The Wiki contains information on return objects, endpoint structure, usage examples, and more. It is a valuable resource for getting started, working with the library, and finding the information you need.
 
 
 <div align="center">
@@ -38,6 +40,7 @@ python3 -m pip install -i https://test.pypi.org/simple/ python-mlb-statsapi
 ## Usage
 ```python
 python3
+>>> import mlbstatsapi
 >>> mlb = mlbstatsapi.Mlb()
 >>> mlb.get_people_id("Ty France")
 [664034]
@@ -58,58 +61,59 @@ python3
 
 ## Documentation
 
-### [People, Person, Players, Coaches](docs/people.md#class-mlb)
+### [People, Person, Players, Coaches](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-People)
 * `Mlb.get_people_id(self, fullname: str, sport_id: int = 1, search_key: str = 'fullname', **params)` - Return Person Id(s) from fullname
 * `Mlb.get_person(self, player_id: int, **params)` - Return Person Object from Id
 * `Mlb.get_people(self, sport_id: int = 1, **params)` - Return all Players from Sport
-### [Draft](docs/drafts.md#class-mlb)
+### [Draft](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Draft(round))
 * `Mlb.get_draft(self, year_id: int, **params)` - Return a draft for a given year
-### [Awards](docs/awards.md#class-mlb)
+### [Awards](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Award)
 * `Mlb.get_awards(self, award_id: int, **params)` - Return rewards recipinets for a given award
-### [Teams](docs/teams.md#class-mlb)
+### [Teams](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Team)
 * `Mlb.get_team_id(self, team_name: str, search_key: str = 'name', **params)` - Return Team Id(s) from name
 * `Mlb.get_team(self, team_id: int, **params)` - Return Team Object from Team Id
 * `Mlb.get_teams(self, sport_id: int = 1, **params)` - Return all Teams for Sport
 * `Mlb.get_team_coaches(self, team_id: int, **params)` - Return coaching roster for team for current or specified season
 * `Mlb.get_team_roster(self, team_id: int, **params)` - Return player roster for team for current or specified season
-### [Stats](docs/stats.md#class-mlb)
+### [Stats](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Stats)
 * `Mlb.get_player_stats(self, person_id: int, stats: list, groups: list, **params)` - Return stats by player id, stat type and groups
 * `Mlb.get_team_stats(self, team_id: int, stats: list, groups: list, **params)` - Return stats by team id, stat types and groups
 * `Mlb.get_stats(self, stats: list, groups: list, **params: dict)` - Return stats by stat type and group args
 * `Mlb.get_players_stats_for_game(self, person_id: int, game_id: int, **params)` - Return player stats for a game
-### [Gamepace](#gamepace-examples)
+### [Gamepace](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Gamepace)
 * `Mlb.get_gamepace(self, season: str, sport_id=1, **params)` - Return pace of game metrics for specific sport, league or team.
-### [Venues](docs/venues.md#class-mlb)
+### [Venues](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Venue)
 * `Mlb.get_venue_id(self, venue_name: str, search_key: str = 'name', **params)` - Return Venue Id(s)
 * `Mlb.get_venue(self, venue_id: int, **params)` - Return Venue Object from venue Id
 * `Mlb.get_venues(self, **params)` - Return all Venues
-### [Sports](docs/sports.md#class-mlb)
+### [Sports](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Sport)
 * `Mlb.get_sport(self, sport_id: int, **params)` - Return a Sport object from Id
 * `Mlb.get_sports(self, **params)` - Return all teams for Sport Id
 * `Mlb.get_sport_id(self, sport_name: str, search_key: str = 'name', **params)`- Return Sport Id from name
-### [Schedules](docs/schedules.md#class-mlb)
+### [Schedules](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Schedule)
 * `Mlb.get_schedule(self, date: str, start_date: str, end_date: str, sport_id: int, team_id: int, **params)` - Return a Schedule
-### [Divisions](docs/divisions.md#class-mlb)
+### [Divisions](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Division)
 * `Mlb.get_division(self, division_id: int, **params)` - Return a Divison 
 * `Mlb.get_divisions(self, **params)` - Return all Divisions
 * `Mlb.get_division_id(self, division_name: str, search_key: str = 'name', **params)` - Return Division Id(s) from name
-### [Leagues](docs/leagues.md#class-mlb)
+### [Leagues](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-League)
 * `Mlb.get_league(self, league_id: int, **params)` - Return a League from Id
 * `Mlb.get_leagues(self, **params)` - Return all Leagues
 * `Mlb.get_league_id(self, league_name: str, search_key: str = 'name', **params)` - Return League Id(s)
-### [Seasons](docs/seasons.md#class-mlb)
+### [Seasons](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Season)
 * `Mlb.get_season(self, season_id: str, sport_id: int = None, **params)` - Return a season
 * `Mlb.get_seasons(self, sportid: int = None, **params)` - Return all seasons
-### [Standings](docs/standings.md#class-mlb)
+### [Standings](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Standings)
 * `Mlb.get_standings(self, league_id: int, season: str, **params)` - Return standings
-### [Schedules](#schedule-examples)
+### [Schedules](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Schedule)
 * `Mlb.get_schedule(self, date: str = None, start_date: str = None, end_date: str = None, sport_id: int = 1, team_id: int = None, **params)` - Return a Schedule from dates
 * `Mlb.get_scheduled_games_by_date(self, date: str = None,start_date: str = None, end_date: str = None, sport_id: int = 1, **params)` - Return game ids from dates
-### [Games](docs/games.md#class-mlb)
+### [Games](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Game)
 * `Mlb.get_game(self, game_id: int, **params)` - Return the Game for a specific Game Id
 * `Mlb.get_game_play_by_play(self, game_id: int, **params)` - Return Play by play data for a game
 * `Mlb.get_game_line_score(self, game_id: int, **params)` - Return a Linescore for a game
 * `Mlb.get_game_box_score(self, game_id: int, **params)` - Return a Boxscore for a game
+
 
 ## Examples
 

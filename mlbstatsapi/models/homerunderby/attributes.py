@@ -12,8 +12,10 @@ class Eventtype:
 
     Attributes:
     ___________
-    code (str): The unique code of the event type.
-    name (str): The name of the event type.
+    code : str
+        The unique code of the event type.
+    name : str
+        The name of the event type.
     """
     code: str
     name: str
@@ -194,7 +196,7 @@ class Hits:
         A boolean indicating whether the hit was a homerun.
     tiebreaker : bool
         A boolean indicating whether the hit occurred during a tiebreaker.
-    hitdata : Union[Hitdata, dict]
+    hitdata : Hitdata
         An object containing the data for the hit. This can either be a 
         Hitdata object or a dictionary.
     ishomerun : bool
@@ -240,13 +242,13 @@ class Seed:
     winner : bool
         A boolean indicating whether the player for this seed is the winner 
         of the game.
-    player : Union[Person, dict]
+    player : Person
         An object containing the data for the player associated with this 
         seed. This can either be a Person object or a dictionary.
-    topderbyhitdata : Union[Hitdata, dict]
+    topderbyhitdata : Hitdata
         An object containing the data for the top hit in the seed. This can 
         either be a Hitdata object or a dictionary.
-    hits : Union[Hits, dict]
+    hits : Hits
         An object containing the data for the hits in the seed. This can 
         either be a Hits object or a dictionary.
     seed : int
