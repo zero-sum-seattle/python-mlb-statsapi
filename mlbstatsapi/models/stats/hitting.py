@@ -458,7 +458,7 @@ class HittingSabermetrics(Split):
 
     """
     _stat = ['sabermetrics']
-    stat = Union[Sabermetrics, dict]
+    stat: Union[Sabermetrics, dict]
 
     def __post_init__(self):
         self.stat = Sabermetrics(**self.stat)
@@ -498,12 +498,12 @@ class HittingGameLog(Split):
     opponent: Union[Team, dict]
     _stat = ['gameLog']
     positionsplayed: Optional[List[Position]] = field(default_factory=list)
-    stat: Union[SimpleHittingSplit, dict]
+    stat: Union[SimpleHittingSplit, dict] = field(default_factory=dict)
     
     def __post_init__(self):
         if self.positionsplayed:
             self.positionsplayed = [Position(**position) for position in self.positionsplayed]
-        self.stat = [SimpleHittingSplit(**stat) for stat in self.stat]
+        self.stat = SimpleHittingSplit(**self.stat) if self.stat else self.stat
 
 
 
@@ -756,6 +756,9 @@ class HittingExpectedStatistics(Split):
     """
     _stat = ['expectedStatistics']
     stat: Union[ExpectedStatistics, dict]
+
+    def __post_init__(self):
+        self.stat = ExpectedStatistics(**self.stat)
 
 
 @dataclass(kw_only=True)

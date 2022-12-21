@@ -69,7 +69,7 @@ def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Sp
     for name, obj in inspect.getmembers(stat_module, predicate=inspect.isclass):
         if hasattr(obj, '_stat') and stat_type in obj._stat:
             for split in split_data:
-                if split['stat']:
+                if 'stat' in split and split['stat']:
                     splits.append(obj(**split))
 
     return splits

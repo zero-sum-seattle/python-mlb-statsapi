@@ -868,7 +868,9 @@ class PitchingExpectedStatistics(Split):
     """
     _stat = ['expectedStatistics']
     stat: Union[ExpectedStatistics, dict]
-
+    
+    def __post_init__(self):
+        self.stat = ExpectedStatistics(**self.stat)
 
 
 @dataclass(kw_only=True)
