@@ -7,7 +7,7 @@ from mlbstatsapi.models.data import CodeDesc
 # from mlbstatsapi.models.drafts import Home, College
 
 
-@dataclass
+@dataclass(repr=False)
 class Person:
     """
     A class to represent a Person.
@@ -163,6 +163,8 @@ class Person:
         self.pitchhand = PitchHand(**self.pitchhand) if self.pitchhand else self.pitchhand
         self.batside = BatSide(**self.batside) if self.batside else self.batside
 
+    def __repr__(self):
+        return f'Person(id={self.id}, link={self.link}, fullname={self.fullname})'
 
 @dataclass(kw_only=True)
 class Player(Person):
@@ -286,3 +288,6 @@ class DraftPick(Person):
     isdrafted: bool
     ispass: bool
     year: str
+
+    def __repr__(self):
+        return f'DraftPick(bisplayerid={self.bisplayerid}, pickround={self.pickround}, picknumber={self.picknumber})'

@@ -81,7 +81,7 @@ class Sabermetrics:
     wgdp: Optional[float] = None
     wsb: Optional[float] = None
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class Split:
     """
     Base class for splits
@@ -120,7 +120,16 @@ class Split:
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
 
-@dataclass(kw_only=True)
+    def __repr__(self):
+        attrs = {}
+        for a in dir(self):
+            if not a.startswith('__') and self.a is not None:
+                attrs[a] = self.a
+
+
+        return f'Stat(group={self.group}, type={self.type})'
+
+@dataclass(kw_only=True, repr=False)
 class Stat:
     """
     Base class for stats
@@ -144,6 +153,8 @@ class Stat:
     exemptions: Optional[List] = field(default_factory=list)
     splits: Optional[List] = field(default_factory=list)
 
+    def __repr__(self):
+        return f'Stat(group={self.group}, type={self.type})'
 
 @dataclass(kw_only=True)
 class PitchArsenal(Split):

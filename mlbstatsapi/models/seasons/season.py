@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(repr=False)
 class Season:
     """
     This class represents a season object
@@ -74,3 +74,6 @@ class Season:
     gamelevelgamedaytype: Optional[str] = None
     qualifierplateappearances: Optional[float] = None
     qualifieroutspitched: Optional[int] = None
+
+    def __repr__(self):
+        return f'Season(seasonid={self.seasonid})'

@@ -6,7 +6,7 @@ from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.leagues import LeagueRecord
 
 
-@dataclass
+@dataclass(repr=False)
 class ScheduleGameTeam:
     """
     A class to represent the sheduled games teams shedule information in a Scheduled Dates game.
@@ -37,6 +37,8 @@ class ScheduleGameTeam:
         self.leaguerecord = LeagueRecord(**self.leaguerecord)
         self.team = Team(**self.team)
 
+    def __repr__(self):
+        return f'ScheduleGameTeam(gamepk={self.leaguerecord}, team={self.team})'
 
 @dataclass
 class ScheduleHomeAndAway:
@@ -58,7 +60,7 @@ class ScheduleHomeAndAway:
         self.away = ScheduleGameTeam(**self.away)
 
 
-@dataclass
+@dataclass(repr=False)
 class ScheduleGames:
     """
     A class to represent a Game in a Schedules Dates.
@@ -174,8 +176,10 @@ class ScheduleGames:
         self.status = GameStatus(**self.status) if self.status else self.status
         self.teams = ScheduleHomeAndAway(**self.teams) if self.teams else self.teams
 
+    def __repr__(self):
+        return f'ScheduleGames(gamepk={self.gamepk}, link={self.link})'
 
-@dataclass
+@dataclass(repr=False)
 class ScheduleDates:
     """
     A class to represent a Schedules Dates.
@@ -208,3 +212,6 @@ class ScheduleDates:
 
     def __post_init__(self):
         self.games = [ScheduleGames(**game) for game in self.games ] if self.games else self.games
+
+    def __repr__(self):
+        return f'ScheduleDates(date={self.date}, totalgames={self.totalgames})'
