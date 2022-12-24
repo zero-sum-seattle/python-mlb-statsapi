@@ -103,7 +103,6 @@ class FieldingSeasonAdvanced(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
         super().__post_init__()
 
 
@@ -122,7 +121,6 @@ class FieldingCareerAdvanced(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
         super().__post_init__()
 
 
@@ -142,7 +140,6 @@ class FieldingSingleSeasonAdvanced(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
         super().__post_init__()
 
 
@@ -162,7 +159,6 @@ class FieldingSeason(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
         super().__post_init__()
 
 
@@ -182,7 +178,6 @@ class FieldingSingleSeason(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
         super().__post_init__()
 
 
@@ -202,7 +197,6 @@ class FieldingCareer(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
         super().__post_init__()
 
 
@@ -222,7 +216,6 @@ class FieldingCareerPlayoffs(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
         super().__post_init__()
 
 
