@@ -27,7 +27,7 @@ class RunnerCredits:
         self.position = Position(**self.position)
 
 
-@dataclass
+@dataclass(repr=False)
 class RunnerMovement:
     """
     A class to represent a play runner.
@@ -54,8 +54,11 @@ class RunnerMovement:
     end: Optional[str] = None
     outbase: Optional[str] = None
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass
+@dataclass(repr=False)
 class RunnerDetails:
     """
     A class to represent a play runner.
@@ -97,3 +100,7 @@ class RunnerDetails:
     def __post_init__(self):
         self.runner = Person(**self.runner)
         self.responsiblepitcher = Person(**self.responsiblepitcher) if self.responsiblepitcher else self.responsiblepitcher
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

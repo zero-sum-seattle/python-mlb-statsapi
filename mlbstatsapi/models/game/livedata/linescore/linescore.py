@@ -6,7 +6,7 @@ from .attributes import LinescoreTeams
 from .attributes import LinescoreDefense
 from .attributes import LinescoreOffense
 
-@dataclass
+@dataclass(repr=False)
 class Linescore:
     """
     A class to represent a games Linescore
@@ -61,3 +61,7 @@ class Linescore:
         self.teams = LinescoreTeams(**self.teams)
         self.defense = LinescoreDefense(**self.defense)
         self.offense = LinescoreOffense(**self.offense)
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

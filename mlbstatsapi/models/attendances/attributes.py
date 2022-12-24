@@ -54,7 +54,7 @@ class AttendenceGameType:
     description: str
 
 
-@dataclass
+@dataclass(repr=False)
 class AttendanceRecords:
     """
     A class to represent attendance records.
@@ -137,8 +137,11 @@ class AttendanceRecords:
         self.gameType = AttendenceGameType(**self.gametype)
         self.team = Team(**self.team)
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass
+@dataclass(repr=False)
 class AttendanceTotals:
     """
     A class to represent attendance aggregate toatls.
@@ -181,3 +184,7 @@ class AttendanceTotals:
     attendancetotalhome: int
     attendanceaverageaway: Optional[int] = None
     attendanceaveragehome: Optional[int] = None
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

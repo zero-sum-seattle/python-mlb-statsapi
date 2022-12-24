@@ -6,7 +6,7 @@ from mlbstatsapi.models.data import CodeDesc
 
 from .attributes import PlayMatchupSplits
 
-@dataclass
+@dataclass(repr=False)
 class PlayMatchup:
     """
     A class to represent a play Matchup.
@@ -56,3 +56,7 @@ class PlayMatchup:
         self.postonfirst = Person(**self.postonfirst) if self.postonfirst else self.postonfirst
         self.postonsecond = Person(**self.postonsecond) if self.postonsecond else self.postonsecond
         self.postonthird = Person(**self.postonthird) if self.postonthird else self.postonthird
+    
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

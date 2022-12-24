@@ -16,7 +16,7 @@ class VenueDefaultCoordinates:
     latitude: float
     longitude: float
 
-@dataclass
+@dataclass(repr=False)
 class Location:
     """
     A class to represent a Location used by venue.
@@ -56,6 +56,10 @@ class Location:
     def __post_init__(self):
         self.defaultcoordinates = VenueDefaultCoordinates(**self.defaultcoordinates) if self.defaultcoordinates else self.defaultcoordinates
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
+
 @dataclass
 class TimeZone:
     """
@@ -74,7 +78,7 @@ class TimeZone:
     offset: int
     tz: str
 
-@dataclass
+@dataclass(repr=False)
 class FieldInfo:
     """
     A class to represent a venue Field info.
@@ -112,3 +116,7 @@ class FieldInfo:
     rightcenter: Optional[int] = None
     right: Optional[int] = None
     rightline: Optional[int] = None
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

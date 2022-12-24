@@ -163,8 +163,9 @@ class Person:
         self.pitchhand = PitchHand(**self.pitchhand) if self.pitchhand else self.pitchhand
         self.batside = BatSide(**self.batside) if self.batside else self.batside
 
-    def __repr__(self):
-        return f'Person(id={self.id}, link={self.link}, fullname={self.fullname})'
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
 @dataclass(kw_only=True)
 class Player(Person):
@@ -289,5 +290,6 @@ class DraftPick(Person):
     ispass: bool
     year: str
 
-    def __repr__(self):
-        return f'DraftPick(bisplayerid={self.bisplayerid}, pickround={self.pickround}, picknumber={self.picknumber})'
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from mlbstatsapi.models.people import Person, Position
 from mlbstatsapi.models.data import Count, HitData, PitchData, PlayDetails
 
-@dataclass
+@dataclass(repr=False)
 class PlayEvent:
     """
     A class to represent a information about a play.
@@ -79,3 +79,7 @@ class PlayEvent:
         self.player = Person(**self.player) if self.player else self.player
         self.position = Position(**self.position) if self.position else self.position
         self.replacedplayer = Person(**self.replacedplayer) if self.replacedplayer else self.replacedplayer
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

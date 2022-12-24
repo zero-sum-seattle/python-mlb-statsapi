@@ -10,7 +10,7 @@ from .attributes import TeamRecord
 # from mlbstatsapi.models.standings import Teamrecords
 
 
-@dataclass
+@dataclass(repr=False)
 class Team:
     """
     A class to represent a Team.
@@ -99,3 +99,7 @@ class Team:
         self.division = Division(**self.division) if self.division else self.division
         self.record = TeamRecord(**self.record) if self.record else self.record
         self.sport = Sport(**self.sport) if self.sport else self.sport
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

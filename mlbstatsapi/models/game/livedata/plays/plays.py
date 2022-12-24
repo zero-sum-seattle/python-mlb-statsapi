@@ -5,7 +5,7 @@ from mlbstatsapi.models.game.livedata.plays.play import Play
 from mlbstatsapi.models.game.livedata.plays.playbyinning import PlayByInning
 
 
-@dataclass
+@dataclass(repr=False)
 class Plays:
     """
     A class to represent the plays in this game.
@@ -31,3 +31,7 @@ class Plays:
         self.allplays = [Play(**play) for play in self.allplays if play]
         self.currentplay = Play(**self.currentplay) if self.currentplay else self.currentplay
         self.playsbyinning = [PlayByInning(**inning) for inning in self.playsbyinning if inning]
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

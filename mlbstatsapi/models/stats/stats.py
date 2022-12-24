@@ -39,7 +39,7 @@ class ExpectedStatistics:
     woba: str
     wobacon: str
 
-@dataclass
+@dataclass(repr=False)
 class Sabermetrics:
     """
     a class to hold a code and a description
@@ -81,6 +81,11 @@ class Sabermetrics:
     wgdp: Optional[float] = None
     wsb: Optional[float] = None
 
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
+
 @dataclass(kw_only=True, repr=False)
 class Split:
     """
@@ -119,19 +124,19 @@ class Split:
 
     def __post_init__(self):
         self.position = Position(**self.position) if self.position else self.position
+        self.team = Team(**self.team) if self.team else self.team
+        self.sport = Sport(**self.sport) if self.sport else self.sport
+        self.league = League(**self.league) if self.league else self.league
+        self.player = Person(**self.player) if self.player else self.player
 
-    def __repr__(self):
-        attrs = {}
-        for a in dir(self):
-            if not a.startswith('__') and self.a is not None:
-                attrs[a] = self.a
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-
-        return f'Stat(group={self.group}, type={self.type})'
 
 @dataclass(kw_only=True, repr=False)
 class Stat:
-    """
+    """ß
     Base class for stats
 
     Attributes

@@ -21,7 +21,7 @@ class Streak:
     streaknumber: int
     streakcode: str
 
-@dataclass
+@dataclass(repr=False)
 class Teamrecords(TeamRecord):
     """
     Team Records
@@ -134,3 +134,7 @@ class Teamrecords(TeamRecord):
         self.streak = Streak(**self.streak)
         # self.leaguerecord = OverallleagueRecord(**self.leaguerecord)
         # self.records = Records(**self.records)
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

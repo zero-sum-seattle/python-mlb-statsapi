@@ -75,5 +75,6 @@ class Season:
     qualifierplateappearances: Optional[float] = None
     qualifieroutspitched: Optional[int] = None
 
-    def __repr__(self):
-        return f'Season(seasonid={self.seasonid})'
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

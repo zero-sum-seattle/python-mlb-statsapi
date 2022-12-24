@@ -32,5 +32,6 @@ class Sport:
     sortorder: Optional[int] = None
     activestatus: Optional[bool] = None
 
-    def __repr__(self):
-        return f'Sport(id={self.id}, link={self.link})'
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

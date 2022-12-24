@@ -33,5 +33,6 @@ class Schedule:
     def __post_init__(self):
         self.dates = [ScheduleDates(**date) for date in self.dates if self.dates]
 
-    def __repr__(self):
-        return f'Schedule(totalitems={self.totalitems}, totalevents={self.totalevents})'
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

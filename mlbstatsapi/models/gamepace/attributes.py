@@ -7,7 +7,7 @@ from mlbstatsapi.models.sports import Sport
 
 
 @dataclass(kw_only=True)
-class Prportalcalculatedfields():
+class Prportalcalculatedfields:
     """
     This dataclass represents the calculated fields for a baseball game.
 
@@ -34,8 +34,8 @@ class Prportalcalculatedfields():
     timeperextrainngame: str
 
 
-@dataclass(kw_only=True)
-class Gamepacedata():
+@dataclass(kw_only=True, repr=False)
+class Gamepacedata:
     """
     This dataclass represents a league in a sport, with various statistics and metrics related to its games and performances.
 
@@ -179,4 +179,8 @@ class Gamepacedata():
         self.team = Team(**self.team) if self.team else None
         self.league = League(**self.league) if self.league else None   
         self.sport = Sport(**self.sport) if self.sport else None
-        self.prportalcalculatedfields = Prportalcalculatedfields(**self.prportalcalculatedfields) if self.prportalcalculatedfields else None  
+        self.prportalcalculatedfields = Prportalcalculatedfields(**self.prportalcalculatedfields) if self.prportalcalculatedfields else None
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws)) 

@@ -15,7 +15,7 @@ from .stats import Sabermetrics, ExpectedStatistics, Split
 from .hitting import SimpleHittingSplit
 
 
-@dataclass
+@dataclass(repr=False)
 class SimplePitchingSplit:
     """
     A class to represent a advanced pitching statistics
@@ -211,7 +211,12 @@ class SimplePitchingSplit:
     outspitched: Optional[int] = None
     rbi: Optional[int] = None
 
-@dataclass
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
+
+
+@dataclass(repr=False)
 class AdvancedPitchingSplit:
     """
     A class to represent a advanced pitching statistics 
@@ -364,10 +369,12 @@ class AdvancedPitchingSplit:
     bequeathedrunners: Optional[int] = None
     bequeathedrunnersscored: Optional[int] = None
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
 
-
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingSabermetrics(Split):
     """
     A class to represent a pitching sabermetric statistics
@@ -394,9 +401,10 @@ class PitchingSabermetrics(Split):
 
     def __post_init__(self):
         self.stat = Sabermetrics(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingSeason(Split):
     """
     A class to represent a pitching season statistic
@@ -409,8 +417,10 @@ class PitchingSeason(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class PitchingCareer(Split):
     """
     A class to represent a pitching season statistic
@@ -423,8 +433,10 @@ class PitchingCareer(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class PitchingCareerAdvanced(Split):
     """
     A class to represent a pitching season statistic
@@ -437,9 +449,10 @@ class PitchingCareerAdvanced(Split):
     
     def __post_init__(self):
         self.stat = AdvancedPitchingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingYearByYear(Split):
     """
     A class to represent a yearByYear season statistic
@@ -452,8 +465,9 @@ class PitchingYearByYear(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingYearByYearPlayoffs(Split):
     """
     A class to represent a yearByYear season statistic
@@ -466,8 +480,9 @@ class PitchingYearByYearPlayoffs(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingYearByYearAdvanced(Split):
     """
     A class to represent a pitching yearByYear statistic
@@ -480,8 +495,9 @@ class PitchingYearByYearAdvanced(Split):
     
     def __post_init__(self):
         self.stat = AdvancedPitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingSeasonAdvanced(Split):
     """
     A class to represent a pitching seasonAdvanced statistic
@@ -494,8 +510,9 @@ class PitchingSeasonAdvanced(Split):
     
     def __post_init__(self):
         self.stat = AdvancedPitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingSingleSeasonAdvanced(Split):
     """
     A class to represent a pitching seasonAdvanced statistic
@@ -508,8 +525,9 @@ class PitchingSingleSeasonAdvanced(Split):
     
     def __post_init__(self):
         self.stat = AdvancedPitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingGameLog(Split):
     """
     A class to represent a gamelog stat for a pitcher
@@ -539,6 +557,7 @@ class PitchingGameLog(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
 @dataclass
 class PitchingPlay:
@@ -571,7 +590,7 @@ class PitchingPlay:
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingLog(Split):
     """
     A class to represent a pitchLog stat for a pitcher.
@@ -614,8 +633,9 @@ class PitchingLog(Split):
 
     def __post_init__(self):
         self.stat = PitchingPlay(**self.stat['play'])
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingPlayLog(Split):
     """
     A class to represent a playLog stat for a pitcher.
@@ -658,8 +678,9 @@ class PitchingPlayLog(Split):
 
     def __post_init__(self):
         self.stat = PitchingPlay(**self.stat['play'])
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingByDateRange(Split):
     """
     A class to represent a byDateRange stat for a pitcher.
@@ -674,8 +695,9 @@ class PitchingByDateRange(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingByDateRangeAdvanced(Split):
     """
     A class to represent a byDateRangeAdvanced stat for a pitcher.
@@ -690,8 +712,9 @@ class PitchingByDateRangeAdvanced(Split):
     
     def __post_init__(self):
         self.stat = AdvancedPitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingByMonth(Split):
     """
     A class to represent a byMonth stat for a pitcher.
@@ -706,8 +729,9 @@ class PitchingByMonth(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingByMonthPlayoffs(Split):
     """
     A class to represent a byMonthPlayoffs stat for a pitcher.
@@ -722,8 +746,9 @@ class PitchingByMonthPlayoffs(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingByDayOfWeek(Split):
     """
     A class to represent a byDayOfWeek stat for a pitcher.
@@ -738,8 +763,9 @@ class PitchingByDayOfWeek(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingByDayOfWeekPlayOffs(Split):
     """
     A class to represent a byDayOfWeekPlayoffs stat for a pitcher.
@@ -754,8 +780,9 @@ class PitchingByDayOfWeekPlayOffs(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingHomeAndAway(Split):
     """
     A class to represent a homeAndAway stat for a pitcher.
@@ -770,8 +797,9 @@ class PitchingHomeAndAway(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingHomeAndAwayPlayoffs(Split):
     """
     A class to represent a homeAndAwayPlayoffs stat for a pitcher.
@@ -786,8 +814,9 @@ class PitchingHomeAndAwayPlayoffs(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingWinLoss(Split):
     """
     A class to represent a winLoss stat for a pitcher.
@@ -802,8 +831,9 @@ class PitchingWinLoss(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingWinLossPlayoffs(Split):
     """
     A class to represent a winLossPlayoffs stat for a pitcher.
@@ -818,8 +848,9 @@ class PitchingWinLossPlayoffs(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingRankings(Split):
     """
     A class to represent a rankingsByYear stat for a pitcher.
@@ -833,8 +864,9 @@ class PitchingRankings(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingOpponentsFaced(Split):
     """
     A class to represent an opponentsFaced stat for a pitcher.
@@ -852,8 +884,13 @@ class PitchingOpponentsFaced(Split):
     batter: Union[Batter, dict]
     battingteam: Union[Team, dict]
 
+    def __post_init__(self):
+        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
+        self.batter = Batter(**self.batter) if self.batter else self.batter
+        self.battingteam = Team(**self.battingteam) if self.battingteam else self.battingteam
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingExpectedStatistics(Split):
     """
     A class to represent an expectedStatistics stat for a pitcher.
@@ -871,9 +908,11 @@ class PitchingExpectedStatistics(Split):
     
     def __post_init__(self):
         self.stat = ExpectedStatistics(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class PitchingVsPlayer5Y(Split):
     """
     A class to represent a vsPlayer5Y pitching statistic
@@ -891,9 +930,13 @@ class PitchingVsPlayer5Y(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
+        self.batter = Batter(**self.batter) if self.batter else self.batter
+        self.opponent = Team(**self.opponent) if self.opponent else self.opponent
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingVsPlayer(Split):
     """
     A class to represent a vsPlayer pitching statistic
@@ -911,9 +954,13 @@ class PitchingVsPlayer(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
+        self.batter = Batter(**self.batter) if self.batter else self.batter
+        self.opponent = Team(**self.opponent) if self.opponent else self.opponent
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingVsPlayerTotal(Split):
     """
     A class to represent a vsPlayerTotal pitching statistic
@@ -931,11 +978,15 @@ class PitchingVsPlayerTotal(Split):
     
     def __post_init__(self):
         self.stat = SimplePitchingSplit(**self.stat)
+        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
+        self.batter = Batter(**self.batter) if self.batter else self.batter
+        self.opponent = Team(**self.opponent) if self.opponent else self.opponent
+        super().__post_init__()
 
 
 # These stat_types return a hitting stat for a pitching stat group
 # odd, but need to deal with it.
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingVsTeam(Split):
     """
     A class to represent a vsTeam pitching statistic
@@ -950,9 +1001,14 @@ class PitchingVsTeam(Split):
     stat: Union[SimpleHittingSplit, dict]
     
     def __post_init__(self):
+        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
+        self.batter = Batter(**self.batter) if self.batter else self.batter
+        self.opponent = Team(**self.opponent) if self.opponent else self.opponent
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class PitchingVsTeamTotal(Split):
     """
     A class to represent a vsTeamTotal pitching statistic
@@ -968,8 +1024,12 @@ class PitchingVsTeamTotal(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
+        self.batter = Batter(**self.batter) if self.batter else self.batter
+        self.opponent = Team(**self.opponent) if self.opponent else self.opponent
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class PitchingVsTeam5Y(Split):
     """
     A class to represent a vsTeam5Y pitching statistic
@@ -985,3 +1045,7 @@ class PitchingVsTeam5Y(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        self.pitcher = Pitcher(**self.pitcher) if self.pitcher else self.pitcher
+        self.batter = Batter(**self.batter) if self.batter else self.batter
+        self.opponent = Team(**self.opponent) if self.opponent else self.opponent
+        super().__post_init__()

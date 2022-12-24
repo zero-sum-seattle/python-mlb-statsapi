@@ -7,7 +7,7 @@ from mlbstatsapi.models.game import Game
 from .stats import Split
 
 
-@dataclass
+@dataclass(repr=False)
 class SimpleCatchingSplit:
     """
     A class to represent a simple catching split
@@ -99,8 +99,11 @@ class SimpleCatchingSplit:
     sacflies: Optional[int] = None
     passedball: Optional[int] = None
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingSeason(Split):
     """
     A class to represent a catching season statistic
@@ -113,9 +116,10 @@ class CatchingSeason(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingSingleSeason(Split):
     """
     A class to represent a catching statsSingleSeason statistic
@@ -128,8 +132,9 @@ class CatchingSingleSeason(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingYearByYearPlayoffs(Split):
     """
     A class to represent a catching yearByYearPlayoffs statistic
@@ -142,8 +147,9 @@ class CatchingYearByYearPlayoffs(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingYearByYear(Split):
     """
     A class to represent a catching yearByYear statistic
@@ -156,8 +162,9 @@ class CatchingYearByYear(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingProjected(Split):
     """
     A class to represent a catching projectedRos statistic
@@ -170,8 +177,9 @@ class CatchingProjected(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingCareer(Split):
     """
     A class to represent a catching career statistic
@@ -184,8 +192,9 @@ class CatchingCareer(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingCareerRegularSeason(Split):
     """
     A class to represent a catching careerRegularSeason statistic
@@ -198,8 +207,9 @@ class CatchingCareerRegularSeason(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingGameLog(Split):
     """
     A class to represent a catching gameLog statistic
@@ -214,7 +224,10 @@ class CatchingGameLog(Split):
     game: Union[Game, dict]
     opponent: Union[Team, dict]
 
-@dataclass(kw_only=True)
+    def __post_init__(self):
+        super().__post_init__()
+
+@dataclass(kw_only=True, repr=False)
 class CatchingLastXGames(Split):
     """
     A class to represent a catching lastXGames statistic
@@ -227,8 +240,9 @@ class CatchingLastXGames(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingByDateRange(Split):
     """
     A class to represent a catching byDateRange statistic
@@ -241,8 +255,9 @@ class CatchingByDateRange(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingByDayOfWeek(Split):
     """
     A class to represent a catching byDayOfWeek statistic
@@ -256,8 +271,9 @@ class CatchingByDayOfWeek(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingHomeAndAway(Split):
     """
     A class to represent a catching homeAndAway statistic
@@ -271,8 +287,9 @@ class CatchingHomeAndAway(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class CatchingWinLoss(Split):
     """
     A class to represent a catching winLoss statistic
@@ -286,3 +303,4 @@ class CatchingWinLoss(Split):
 
     def __post_init__(self):
         self.stat = SimpleCatchingSplit(**self.stat)
+        super().__post_init__()
