@@ -4,7 +4,7 @@ from typing import List, Union, Dict, Any, Optional
 
 
 
-@dataclass
+@dataclass(repr=False)
 class PitchBreak:
     """
     A class to hold pitch pitch break data
@@ -30,8 +30,11 @@ class PitchBreak:
     spinrate: Optional[float] = None
     spindirection: Optional[float] = None
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass
+@dataclass(repr=False)
 class PitchCoordinates:
     """
     A class to hold pitch coordinates for playLog
@@ -92,7 +95,11 @@ class PitchCoordinates:
     x: Optional[float] = None
     y: Optional[float] = None
 
-@dataclass
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
+
+@dataclass(repr=False)
 class PitchData:
     """
     A class to hold data on a pitch
@@ -136,6 +143,10 @@ class PitchData:
         self.coordinates = PitchCoordinates(**self.coordinates) if self.coordinates else self.coordinates
         self.breaks = PitchBreak(**self.breaks) if self.breaks else self.breaks
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
+
 @dataclass
 class HitCoordinates:
     """
@@ -159,7 +170,7 @@ class HitCoordinates:
     def y(self):
         return self.coordy
 
-@dataclass
+@dataclass(repr=False)
 class HitData:
     """
     A class to represent a play events hit data.
@@ -194,6 +205,10 @@ class HitData:
     def __post_init__(self):
         self.coordinates = HitCoordinates(**self.coordinates) if self.coordinates else self.coordinates
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
+
 @dataclass
 class CodeDesc:
     """
@@ -210,7 +225,7 @@ class CodeDesc:
     description: Optional[str] = None
 
 
-@dataclass
+@dataclass(repr=False)
 class Count:
     """
     a class to hold a pitch count and base runners
@@ -245,7 +260,11 @@ class Count:
     runneron3b: Optional[bool] = None
     istopinning: Optional[bool] = None
 
-@dataclass
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
+
+@dataclass(repr=False)
 class PlayDetails:
     """
     A class to represent a gamelog stat for a hitter
@@ -309,3 +328,7 @@ class PlayDetails:
         self.batside = CodeDesc(**self.batside) if self.batside else self.batside
         self.pitchhand = CodeDesc(**self.pitchhand) if self.pitchhand else self.pitchhand
         self.type = CodeDesc(**self.type) if self.type else self.type
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

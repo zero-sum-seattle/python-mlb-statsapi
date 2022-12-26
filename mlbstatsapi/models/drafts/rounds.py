@@ -5,7 +5,7 @@ from mlbstatsapi.models.people import DraftPick
 from mlbstatsapi import mlb_module
 
 
-@dataclass
+@dataclass(repr=False)
 class Round:
     """
     Represents a round of the MLB draft.
@@ -25,3 +25,7 @@ class Round:
         for pick in self.picks:
             picks.append(DraftPick(**(mlb_module.merge_keys(pick, ['person']))))
         self.picks = picks
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

@@ -125,7 +125,7 @@ class Records:
         self.expectedrecords = [Typerecords(**expectedrecord) for expectedrecord in self.expectedrecords] if self.expectedrecords else None
 
 
-@dataclass
+@dataclass(repr=False)
 class TeamRecord:
     """
     A class to represent a teams current record.
@@ -176,3 +176,6 @@ class TeamRecord:
     def __post_init__(self):
         self.leaguerecord = OverallleagueRecord(**self.leaguerecord)
         self.records = Records(**self.records)
+
+    def __repr__(self):
+        return f'TeamRecord(wins={self.wins}, losses={self.losses})'

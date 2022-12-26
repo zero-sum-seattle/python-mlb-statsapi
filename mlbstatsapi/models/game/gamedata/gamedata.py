@@ -13,7 +13,7 @@ from .attributes import GameReview
 from .attributes import GameFlags
 from .attributes import GameProbablePitchers
 
-@dataclass
+@dataclass(repr=False)
 class GameData:
     """
     A class to represent a games game data.
@@ -86,3 +86,7 @@ class GameData:
         self.officialscorer = Person(**self.officialscorer) if self.officialscorer else self.officialscorer
         self.primarydatacaster = Person(**self.primarydatacaster) if self.primarydatacaster else self.primarydatacaster
         self.secondarydatacaster = Person(**self.secondarydatacaster) if self.secondarydatacaster else self.secondarydatacaster
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

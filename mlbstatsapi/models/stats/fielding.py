@@ -8,7 +8,7 @@ from mlbstatsapi.models.game import Game
 from .stats import Stat, Split
 
 
-@dataclass
+@dataclass(repr=False)
 class SimpleFieldingSplit:
     """
     A class to represent a simple fielding split
@@ -84,8 +84,11 @@ class SimpleFieldingSplit:
     throwingerrors: Optional[int] = None
     pickoffs: Optional[int] = None
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class FieldingSeasonAdvanced(Split):
     """
     A class to represent a fielding season Advanced statistic
@@ -100,10 +103,10 @@ class FieldingSeasonAdvanced(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class FieldingCareerAdvanced(Split):
     """
     A class to represent a fielding career Advanced statistic
@@ -118,10 +121,10 @@ class FieldingCareerAdvanced(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class FieldingSingleSeasonAdvanced(Split):
     """
     A class to represent a fielding season statistic
@@ -137,10 +140,10 @@ class FieldingSingleSeasonAdvanced(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class FieldingSeason(Split):
     """
     A class to represent a fielding season statistic
@@ -156,10 +159,10 @@ class FieldingSeason(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class FieldingSingleSeason(Split):
     """
     A class to represent a fielding statsSingleSeason statistic
@@ -175,10 +178,10 @@ class FieldingSingleSeason(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class FieldingCareer(Split):
     """
     A class to represent a fielding career statistic
@@ -194,10 +197,10 @@ class FieldingCareer(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position   
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class FieldingCareerPlayoffs(Split):
     """
     A class to represent a fielding careerPlayoffs statistic
@@ -213,10 +216,10 @@ class FieldingCareerPlayoffs(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
-        self.position = Position(**self.position) if self.position else self.position
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class FieldingHomeAndAway(Split):
     """
     A class to represent a fielding homeAndAway statistic
@@ -232,8 +235,10 @@ class FieldingHomeAndAway(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class FieldingHomeAndAwayPlayoffs(Split):
     """
     A class to represent a fielding homeAndAwayPlayoffs statistic
@@ -249,8 +254,10 @@ class FieldingHomeAndAwayPlayoffs(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class FieldingYearByYear(Split):
     """
     A class to represent a fielding yearByYear statistic
@@ -263,8 +270,10 @@ class FieldingYearByYear(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class FieldingYearByYearAdvanced(Split):
     """
     A class to represent a fielding yearByYearAdvanced statistic
@@ -277,8 +286,10 @@ class FieldingYearByYearAdvanced(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class FieldingYearByYearPlayoffs(Split):
     """
     A class to represent a fielding yearByYearPlayoffs statistic
@@ -292,7 +303,7 @@ class FieldingYearByYearPlayoffs(Split):
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class FieldingWinLoss(Split):
     """
     A class to represent a fielding winLoss statistic
@@ -308,8 +319,10 @@ class FieldingWinLoss(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class FieldingWinLossPlayoffs(Split):
     """
     A class to represent a fielding winLossPlayoffs statistic
@@ -325,8 +338,10 @@ class FieldingWinLossPlayoffs(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class FieldingByDayOfWeek(Split):
     """
     A class to represent a fielding byDayOfWeek statistic
@@ -340,8 +355,10 @@ class FieldingByDayOfWeek(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class FieldingByDateRangeAdvanced(Split):
     """
     A class to represent a fielding byDateRangeAdvanced stat
@@ -358,8 +375,10 @@ class FieldingByDateRangeAdvanced(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class FieldingByMonth(Split):
     """
     A class to represent a fielding byMonth stat
@@ -375,8 +394,10 @@ class FieldingByMonth(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class FieldingByMonthPlayoffs(Split):
     """
     A class to represent a fielding byMonthPlayoffs stat
@@ -392,8 +413,10 @@ class FieldingByMonthPlayoffs(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class FieldingLastXGames(Split):
     """
     A class to represent a fielding lastXGames stat
@@ -406,8 +429,10 @@ class FieldingLastXGames(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class FieldingGameLog(Split):
     """
     A class to represent a fielding gameLog stats
@@ -426,4 +451,5 @@ class FieldingGameLog(Split):
 
     def __post_init__(self):
         self.stat = SimpleFieldingSplit(**self.stat)
+        super().__post_init__()
 

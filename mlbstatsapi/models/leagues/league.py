@@ -27,7 +27,7 @@ class LeagueRecord:
     ties: Optional[int] = None
 
 
-@dataclass
+@dataclass(repr=False)
 class League:
     """
     A class to represent a league.
@@ -99,3 +99,7 @@ class League:
     def __post_init__(self):
         self.seasondateinfo = Season(**self.seasondateinfo) if self.seasondateinfo else self.seasondateinfo
         self.sport = Sport(**self.sport) if self.sport else self.sport
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

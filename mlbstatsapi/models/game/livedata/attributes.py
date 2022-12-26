@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from mlbstatsapi.models.people import Person
 
 
-@dataclass
+@dataclass(repr=False)
 class GameDecisions:
     """
     A class to represent the winning and loosing pitcher for this game.
@@ -25,6 +25,9 @@ class GameDecisions:
         self.loser = Person(**self.loser)
         self.save = Person(**self.save) if self.save else self.save
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
 @dataclass
 class GameLeaders:

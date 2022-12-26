@@ -5,7 +5,7 @@ from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.sports import Sport
 
 
-@dataclass
+@dataclass(repr=False)
 class Division:
     """
     A class to represent a division.
@@ -53,3 +53,7 @@ class Division:
     def __post_init__(self):
         self.league = League(**self.league) if self.league else self.league
         self.sport = Sport(**self.sport) if self.sport else self.sport
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

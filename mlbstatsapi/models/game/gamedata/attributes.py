@@ -44,7 +44,7 @@ class GameDataGame:
     seasondisplay: str
 
 
-@dataclass
+@dataclass(repr=False)
 class GameDatetime:
     """
     A class to represent the date time for this game.
@@ -74,6 +74,10 @@ class GameDatetime:
     resumedatetime: Optional[str] = None
     resumedfromdate: Optional[str] = None
     resumedfromdatetime: Optional[str] = None
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
 @dataclass
 class GameStatus:

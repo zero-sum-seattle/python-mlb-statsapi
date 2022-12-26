@@ -2,7 +2,7 @@
 from dataclasses import dataclass, InitVar
 
 
-@dataclass
+@dataclass(repr=False)
 class Sport:
     """
     A class to represent a sport.
@@ -31,3 +31,7 @@ class Sport:
     abbreviation: Optional[str] = None
     sortorder: Optional[int] = None
     activestatus: Optional[bool] = None
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

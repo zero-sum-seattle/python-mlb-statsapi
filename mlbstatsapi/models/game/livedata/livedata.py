@@ -8,7 +8,7 @@ from mlbstatsapi.models.game.livedata.boxscore import BoxScore
 from .attributes import GameLeaders, GameDecisions
 
 
-@dataclass
+@dataclass(repr=False)
 class LiveData:
     """
     A class to represent this games live data.
@@ -39,3 +39,7 @@ class LiveData:
         self.boxscore = BoxScore(**self.boxscore)
         self.decisions = GameDecisions(**self.decisions) if self.decisions else self.decisions
         self.leaders = GameLeaders(**self.leaders)
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

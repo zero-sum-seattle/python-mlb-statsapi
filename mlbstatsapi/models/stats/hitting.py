@@ -16,7 +16,7 @@ from .stats import (
     ExpectedStatistics,
     Split
 )
-@dataclass
+@dataclass(repr=False)
 class AdvancedHittingSplit:
     """
     A class to represent a advanced hitting statistics
@@ -128,8 +128,11 @@ class AdvancedHittingSplit:
     groundhits: Optional[int] = None
     linehits: Optional[int] = None
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass
+@dataclass(repr=False)
 class SimpleHittingSplit:
     """
     A class to represent a simple hitting statistics
@@ -242,7 +245,11 @@ class SimpleHittingSplit:
     catchersinterference: Optional[int] = None
     atbatsperhomerun: Optional[int] = None
 
-@dataclass(kw_only=True)
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
+
+@dataclass(kw_only=True, repr=False)
 class HittingWinLoss(Split):
     """
     A class to represent a hitting winLoss statistic
@@ -260,9 +267,10 @@ class HittingWinLoss(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingWinLossPlayoffs(Split):
     """
     A class to represent a hitting winLossPlayoffs statistic
@@ -280,9 +288,10 @@ class HittingWinLossPlayoffs(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingHomeAndAway(Split):
     """
     A class to represent a hitting homeAndAway statistic
@@ -300,9 +309,10 @@ class HittingHomeAndAway(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingHomeAndAwayPlayoffs(Split):
     """
     A class to represent a hitting homeAndAway Playoff statistic
@@ -320,8 +330,9 @@ class HittingHomeAndAwayPlayoffs(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingCareer(Split):
     """
     A class to represent a hitting career, careerRegularSeason or careerPlayoffs statistic
@@ -335,9 +346,11 @@ class HittingCareer(Split):
     stat: Union[SimpleHittingSplit, dict]
     
     def __post_init__(self):
+        super().__post_init__()
         self.stat = SimpleHittingSplit(**self.stat)
 
-@dataclass(kw_only=True)
+
+@dataclass(kw_only=True, repr=False)
 class HittingSeason(Split):
     """
     A class to represent a hitting season statistic
@@ -351,9 +364,10 @@ class HittingSeason(Split):
     stat: Union[SimpleHittingSplit, dict]
     
     def __post_init__(self):
+        super().__post_init__()
         self.stat = SimpleHittingSplit(**self.stat)
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingSingleSeason(Split):
     """
     A class to represent a hitting statsSingleSeason statistic
@@ -367,9 +381,10 @@ class HittingSingleSeason(Split):
     stat: Union[SimpleHittingSplit, dict]
     
     def __post_init__(self):
+        super().__post_init__()
         self.stat = SimpleHittingSplit(**self.stat)
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingSeasonAdvanced(Split):
     """
     A class to represent a hitting seasonAdvanced statistic
@@ -383,9 +398,10 @@ class HittingSeasonAdvanced(Split):
     stat: Union[AdvancedHittingSplit, dict]
 
     def __post_init__(self):
+        super().__post_init__()
         self.stat = AdvancedHittingSplit(**self.stat)
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingCareerAdvanced(Split):
     """
     A class to represent a hitting season statistic
@@ -398,8 +414,9 @@ class HittingCareerAdvanced(Split):
 
     def __post_init__(self):
         self.stat = AdvancedHittingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingYearByYear(Split):
     """
     A class to represent a hitting yearbyyear or yearByYearPlayoffs statistic
@@ -412,9 +429,10 @@ class HittingYearByYear(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingYearByYearPlayoffs(Split):
     """
     A class to represent a hitting yearByYearPlayoffs statistic
@@ -427,9 +445,10 @@ class HittingYearByYearPlayoffs(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass
+@dataclass(kw_only=True, repr=False)
 class OpponentsFacedHitting(Split):
     """
     A class to represent a hitting opponentsFaced statistic
@@ -451,7 +470,10 @@ class OpponentsFacedHitting(Split):
     fieldingteam: Union[Team, dict]
     pitcher: Union[Pitcher, dict]
 
-@dataclass
+    def __post_init__(self):
+        super().__post_init__()
+
+@dataclass(kw_only=True, repr=False)
 class HittingSabermetrics(Split):
     """
     A class to represent a hitting sabermetric statistic
@@ -462,8 +484,9 @@ class HittingSabermetrics(Split):
 
     def __post_init__(self):
         self.stat = Sabermetrics(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingGameLog(Split):
     """
     A class to represent a gamelog stat for a hitter
@@ -504,11 +527,9 @@ class HittingGameLog(Split):
         if self.positionsplayed:
             self.positionsplayed = [Position(**position) for position in self.positionsplayed]
         self.stat = SimpleHittingSplit(**self.stat) if self.stat else self.stat
+        super().__post_init__()
 
-
-
-
-@dataclass
+@dataclass(kw_only=True, repr=False)
 class HittingPlay:
     """
     A class to represent a gamelog stat for a hitter
@@ -534,7 +555,11 @@ class HittingPlay:
         self.details = PlayDetails(**self.details)
         self.count = Count(**self.count)
 
-@dataclass(kw_only=True)
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
+        
+@dataclass(kw_only=True, repr=False)
 class HittingPlayLog(Split):
     """
     A class to represent a gamelog stat for a hitter
@@ -571,8 +596,9 @@ class HittingPlayLog(Split):
 
     def __post_init__(self):
         self.stat = HittingPlay(**self.stat['play'])
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingPitchLog(Split):
     """
     A class to represent a gamelog stat for a hitter
@@ -611,9 +637,10 @@ class HittingPitchLog(Split):
 
     def __post_init__(self):
         self.stat = HittingPlay(**self.stat['play'])
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingLastXGames(Split):
     """
     A class to represent a lastXGames statistic
@@ -626,9 +653,10 @@ class HittingLastXGames(Split):
 
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingDateRange(Split):
     """
     A class to represent a byDateRange statistic
@@ -641,9 +669,10 @@ class HittingDateRange(Split):
 
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingDateRangeAdvanced(Split):
     """
     A class to represent a byDateRangeAdvanced statistic
@@ -656,9 +685,10 @@ class HittingDateRangeAdvanced(Split):
     
     def __post_init__(self):
         self.stat = AdvancedHittingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingDateRangeAdvancedByMonth(Split):
     """
     A class to represent a byDateRangeAdvanced statistic
@@ -671,9 +701,10 @@ class HittingDateRangeAdvancedByMonth(Split):
     
     def __post_init__(self):
         self.stat = AdvancedHittingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingByMonth(Split):
     """
     A class to represent a byMonth hitting statistic
@@ -687,9 +718,10 @@ class HittingByMonth(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingByMonthPlayoffs(Split):
     """
     A class to represent a yearByYear hitting statistic
@@ -705,9 +737,10 @@ class HittingByMonthPlayoffs(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingDayOfWeek(Split):
     """
     A class to represent a yearByYear hitting statistic
@@ -725,7 +758,7 @@ class HittingDayOfWeek(Split):
         self.stat = SimpleHittingSplit(**self.stat)
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingDayOfWeekPlayoffs(Split):
     """
     A class to represent a yearByYear hitting statistic
@@ -741,8 +774,9 @@ class HittingDayOfWeekPlayoffs(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingExpectedStatistics(Split):
     """
     A class to represent a excepted statistics statType: expectedStatistics.
@@ -759,9 +793,10 @@ class HittingExpectedStatistics(Split):
 
     def __post_init__(self):
         self.stat = ExpectedStatistics(**self.stat)
+        super().__post_init__()
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingVsTeam(Split):
     """
     A class to represent a vsTeam hitting statistic
@@ -780,8 +815,9 @@ class HittingVsTeam(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingVsTeamTotal(Split):
     """
     A class to represent a vsTeamTotal hitting statistic
@@ -805,8 +841,9 @@ class HittingVsTeamTotal(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingVsTeam5Y(Split):
     """
     A class to represent a vsTeam5Y hitting statistic
@@ -824,8 +861,9 @@ class HittingVsTeam5Y(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingVsPlayer(Split):
     """
     A class to represent a yearByYear hitting statistic
@@ -851,8 +889,9 @@ class HittingVsPlayer(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingVsPlayerTotal(Split):
     """
     A class to represent a yearByYear hitting statistic
@@ -878,8 +917,9 @@ class HittingVsPlayerTotal(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class HittingVsPlayer5Y(Split):
     """
     A class to represent a yearByYear hitting statistic
@@ -905,3 +945,4 @@ class HittingVsPlayer5Y(Split):
     
     def __post_init__(self):
         self.stat = SimpleHittingSplit(**self.stat)
+        super().__post_init__()

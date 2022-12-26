@@ -71,7 +71,7 @@ class LinescoreTeams:
         self.home = LinescoreTeamScoreing(**self.home) if self.home else self.home
         self.away = LinescoreTeamScoreing(**self.away) if self.away else self.away
 
-@dataclass
+@dataclass(repr=False)
 class LinescoreOffense:
     """
     A class to represent a games current offense
@@ -108,7 +108,11 @@ class LinescoreOffense:
         self.pitcher = Person(**self.pitcher) if self.pitcher else self.pitcher
         self.team = Team(**self.team)
 
-@dataclass
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
+
+@dataclass(repr=False)
 class LinescoreDefense:
     """
     A class to represent a games current defense
@@ -174,3 +178,7 @@ class LinescoreDefense:
         self.ondeck = Person(**self.ondeck) if self.ondeck else self.ondeck
         self.inhole = Person(**self.inhole) if self.inhole else self.inhole
         self.team = Team(**self.team)
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

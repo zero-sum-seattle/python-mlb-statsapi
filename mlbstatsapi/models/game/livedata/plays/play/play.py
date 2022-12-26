@@ -8,7 +8,7 @@ from mlbstatsapi.models.data import Count
 from .attributes import PlayAbout, PlayResult, PlayReviewDetails
 
 
-@dataclass
+@dataclass(repr=False)
 class Play:
     """
     A class to represent a single play in this game.
@@ -61,3 +61,7 @@ class Play:
         self.runners = [PlayRunner(**runner) for runner in self.runners]
         self.playevents = [PlayEvent(**playevent) for playevent in self.playevents]
         self.reviewdetails = PlayReviewDetails(**self.reviewdetails) if self.reviewdetails else self.reviewdetails
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

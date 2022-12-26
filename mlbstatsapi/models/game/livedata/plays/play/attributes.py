@@ -1,7 +1,7 @@
 from typing import Optional
 from dataclasses import dataclass
 
-@dataclass
+@dataclass(repr=False)
 class PlayAbout:
     """
     A class to represent a information about a play.
@@ -43,8 +43,11 @@ class PlayAbout:
     starttime: Optional[str] = None
     hasreview: Optional[bool] = None
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass
+@dataclass(repr=False)
 class PlayResult:
     """
     A class to represent a play result.
@@ -77,8 +80,11 @@ class PlayResult:
     description: Optional[str] = None
     isout: Optional[bool] = None
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass
+@dataclass(repr=False)
 class PlayReviewDetails:
     """
     A class to represent play review details.
@@ -99,3 +105,7 @@ class PlayReviewDetails:
     reviewtype: str
     challengeteamid: Optional[int] = None
     additionalreviews: Optional[str] = None
+
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

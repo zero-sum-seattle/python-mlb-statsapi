@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from .attributes import ScheduleDates
 
 
-@dataclass
+@dataclass(repr=False)
 class Schedule:
     """
     A class to represent a Schedule.
@@ -33,3 +33,6 @@ class Schedule:
     def __post_init__(self):
         self.dates = [ScheduleDates(**date) for date in self.dates if self.dates]
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
