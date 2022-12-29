@@ -122,6 +122,12 @@
 * Any notes associated with award 
 </details>
 
+<details>
+<summary>votes : int  None  </summary>
+
+* Votes for award
+</details>
+
 </blockquote>
 
 
