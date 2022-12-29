@@ -23,6 +23,8 @@ class Award:
         Team award was to/ Player is from
     player : Person
         Person award is for
+    votes : int None
+        Any votes associated with award
     notes : str  None
         Any notes associated with award
     """
@@ -33,6 +35,7 @@ class Award:
     season: str
     team: Union[Team, dict]
     player: Union[Person, dict]
+    votes: Optional[int] = None
     notes: Optional[str] = None
 
     def __post_init__(self):
