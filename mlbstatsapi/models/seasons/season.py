@@ -76,5 +76,5 @@ class Season:
     qualifieroutspitched: Optional[int] = None
 
     def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
         return "{}({})".format(type(self).__name__, ", ".join(kws))

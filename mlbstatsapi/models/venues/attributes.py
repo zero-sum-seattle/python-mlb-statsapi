@@ -52,12 +52,11 @@ class Location:
     address2: Optional[str] = None
     defaultcoordinates: Optional[Union[VenueDefaultCoordinates, dict]] = field(default_factory=dict)
 
-
     def __post_init__(self):
         self.defaultcoordinates = VenueDefaultCoordinates(**self.defaultcoordinates) if self.defaultcoordinates else self.defaultcoordinates
 
     def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
         return "{}({})".format(type(self).__name__, ", ".join(kws))
 
 @dataclass
@@ -118,5 +117,5 @@ class FieldInfo:
     rightline: Optional[int] = None
 
     def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
         return "{}({})".format(type(self).__name__, ", ".join(kws))
