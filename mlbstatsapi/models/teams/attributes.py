@@ -124,6 +124,9 @@ class Records:
         self.leaguerecords = [Leaguerecords(**leaguerecord) for leaguerecord in self.leaguerecords] if self.leaguerecords else None
         self.expectedrecords = [Typerecords(**expectedrecord) for expectedrecord in self.expectedrecords] if self.expectedrecords else None
 
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
 @dataclass(repr=False)
 class TeamRecord:
@@ -177,5 +180,6 @@ class TeamRecord:
         self.leaguerecord = OverallleagueRecord(**self.leaguerecord)
         self.records = Records(**self.records)
 
-    def __repr__(self):
-        return f'TeamRecord(wins={self.wins}, losses={self.losses})'
+    def __repr__(self) -> str:
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        return "{}({})".format(type(self).__name__, ", ".join(kws))

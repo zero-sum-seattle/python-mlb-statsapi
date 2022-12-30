@@ -482,8 +482,9 @@ Get all Players for a given sport id
 ```
 Get a player id
 ```python
->>> player_id = mlb.get_player_id("Ty France")
+>>> player_id = mlb.get_people_id("Ty France")
 >>> print(player_id[0])
+>>> [664034]
 ```
 
 ### Team Examples

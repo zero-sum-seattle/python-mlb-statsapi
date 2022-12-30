@@ -164,10 +164,10 @@ class Person:
         self.batside = BatSide(**self.batside) if self.batside else self.batside
 
     def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
         return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class Player(Person):
     """
     A class to represent a Player.
@@ -190,7 +190,7 @@ class Player(Person):
         self.primaryposition = Position(**position)
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, repr=False)
 class Coach(Person):
     """
     A class to represent a Player.
@@ -211,7 +211,6 @@ class Coach(Person):
     job: str
     jobid: str
     title: str
-
 
 @dataclass(kw_only=True)
 class Batter(Person):
@@ -291,5 +290,5 @@ class DraftPick(Person):
     year: str
 
     def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
         return "{}({})".format(type(self).__name__, ", ".join(kws))

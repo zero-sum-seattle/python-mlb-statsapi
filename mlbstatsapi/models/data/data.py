@@ -261,7 +261,7 @@ class Count:
     istopinning: Optional[bool] = None
 
     def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
         return "{}({})".format(type(self).__name__, ", ".join(kws))
 
 @dataclass(repr=False)
@@ -330,5 +330,5 @@ class PlayDetails:
         self.type = CodeDesc(**self.type) if self.type else self.type
 
     def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
+        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
         return "{}({})".format(type(self).__name__, ", ".join(kws))

@@ -24,6 +24,8 @@ class SimpleGameStats:
     gamesstarted: int
     lastdateplayed: str
 
+    def __post_init__(self):
+        super().__post_init__()
 
 @dataclass(kw_only=True)
 class SeasonGame(Split):
@@ -35,6 +37,8 @@ class SeasonGame(Split):
     """
     type_ = ['season', 'statsSingleSeason']
 
+    def __post_init__(self):
+        super().__post_init__()
 
 @dataclass(kw_only=True)
 class CareerGame(Split):
@@ -43,6 +47,8 @@ class CareerGame(Split):
     """
     type_ = ['career']
 
+    def __post_init__(self):
+        super().__post_init__()
 
 @dataclass(kw_only=True)
 class CareerRegularSeasonGame(Split, SimpleGameStats):
@@ -51,6 +57,8 @@ class CareerRegularSeasonGame(Split, SimpleGameStats):
     """
     type_ = ['careerRegularSeason']
 
+    def __post_init__(self):
+        super().__post_init__()
 
 @dataclass(kw_only=True)
 class CareerPlayoffsGame(Split, SimpleGameStats):
@@ -59,3 +67,6 @@ class CareerPlayoffsGame(Split, SimpleGameStats):
 
     """
     type_ = ['careerPlayoffs']
+
+    def __post_init__(self):
+        super().__post_init__()
