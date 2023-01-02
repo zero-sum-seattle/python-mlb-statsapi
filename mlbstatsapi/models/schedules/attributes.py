@@ -175,6 +175,7 @@ class ScheduleGames:
     def __post_init__(self):
         self.status = GameStatus(**self.status) if self.status else self.status
         self.teams = ScheduleHomeAndAway(**self.teams) if self.teams else self.teams
+        self.venue = Venue(**self.venue) if self.venue else self.venue
 
     def __repr__(self):
         return f'ScheduleGames(gamepk={self.gamepk}, link={self.link})'
