@@ -2987,6 +2987,18 @@
 * The extension of the pitch.  
 </details>
 
+<details>
+<summary>strikezonewidth : float </summary>
+
+* The width of the strikezone.   
+</details>
+
+<details>
+<summary>strikezonedepth : float </summary>
+
+* The depth of the strikezone.   
+</details>
+
 </blockquote>
 
 </details>
@@ -4338,6 +4350,18 @@
 <summary>extension : float </summary>
 
 * The extension of the pitch.  
+</details>
+
+<details>
+<summary>strikezonewidth : float </summary>
+
+* The width of the strikezone.   
+</details>
+
+<details>
+<summary>strikezonedepth : float </summary>
+
+* The depth of the strikezone.   
 </details>
 
 </blockquote>
