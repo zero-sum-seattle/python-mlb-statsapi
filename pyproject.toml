@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "python-mlb-statsapi"
-version = "0.4.11"
+version = "0.4.12"
 
 authors = [
   { name="Matthew Spah", email="spahmatthew@gmail.com" },
@@ -13,7 +13,7 @@ authors = [
 description = "mlbstatsapi python wrapper"
 readme = "README.md"
 license = { file="LICENSE" }
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 dependencies = [
   "requests>=2", 
   "requests_mock>=1.10.0"

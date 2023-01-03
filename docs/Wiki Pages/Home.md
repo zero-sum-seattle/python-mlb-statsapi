@@ -4,7 +4,7 @@ Welcome to the python-mlb-statsapi wiki!
 
 ### The unofficial python wrapper for the MLB Stats API
 
-*Python-mlb-statsapi* is an unofficial python wrapper for the MLB Stats API written in python 3.7+ and provides developers access to the MLB Stats API endpoint, created and maintained by [Kristian Nilssen](https://github.com/KCNilssen) and [Matthew Spah](https://github.com/Mattsface).
+*Python-mlb-statsapi* is an unofficial python wrapper for the MLB Stats API written in python 3.10+ and provides developers access to the MLB Stats API endpoint, created and maintained by [Kristian Nilssen](https://github.com/KCNilssen) and [Matthew Spah](https://github.com/Mattsface).
 
 Get started at [https://github.com/zero-sum-seattle/python-mlb-statsapi](https://github.com/zero-sum-seattle/python-mlb-statsapi)!
 
