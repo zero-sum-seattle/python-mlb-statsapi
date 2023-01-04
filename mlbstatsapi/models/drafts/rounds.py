@@ -48,7 +48,6 @@ class DraftPick:
     year : str
         The year in which the draft took place.
     """
-    headshotlink: str
     team: Union[Team, dict]
     drafttype: Union[CodeDesc, dict]
     isdrafted: bool
@@ -59,6 +58,7 @@ class DraftPick:
     pickround:  str
     picknumber:  int
     roundpicknumber:  int
+    headshotlink: Optional[str] = None
     person: Optional[Union[Person, dict]] = None
     bisplayerid: Optional[int] = None
     rank: Optional[int] = None
