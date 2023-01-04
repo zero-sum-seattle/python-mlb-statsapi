@@ -126,6 +126,10 @@ class PitchData:
         The amount of time the pitch was in the air.
     extension : float
         The extension of the pitch.
+    strikezonewidth : float
+        The width of the strikezone
+    strikezonedepth : float
+        The depth of the strikezone
     """
     strikezonetop: float
     strikezonebottom: float
@@ -137,6 +141,8 @@ class PitchData:
     zone: Optional[float] = None
     typeconfidence: Optional[float] = None
     platetime: Optional[float] = None
+    strikezonewidth: Optional[float] = None
+    strikezonedepth: Optional[float] = None
 
 
     def __post_init__(self):
