@@ -29,7 +29,7 @@ To get started with the library, refer to the information provided in this READM
 
 <div align="center">
 
-### [Docs](https://github.com/zero-sum-seattle/python-mlb-statsapi/tree/development/docs) | [Examples](#examples) | [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | [API](https://statsapi.mlb.com/) 
+### [Examples](#examples) | [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | [API](https://statsapi.mlb.com/) 
 
 <div align="left">
 

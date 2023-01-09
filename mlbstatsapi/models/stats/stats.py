@@ -93,24 +93,15 @@ class Split:
 
     Attributes
     ----------
-    gametype : str
-        type of game for stat
-    numteams : str
-        number of teams inolved in this stat
     season : str
-        season of the stat
-    dayofweek : str
-        day of the week of the stat
-    iswin : bool
-        bool to hold if stat is a win
-    ishome : bool
-        bool to hold if stat is at home
-    date : str
-        date of game
-    group : str
-        type of the stat group
-    type : str
-        type of the stat 
+    numteams : int
+    gametype : str
+    rank : int
+    position : Position
+    team : Team
+    player : Person
+    sport : Sport
+    league : League
     """
     season: Optional[str] = None
     numteams: Optional[int] = None
@@ -136,7 +127,7 @@ class Split:
 
 @dataclass(kw_only=True, repr=False)
 class Stat:
-    """ß
+    """
     Base class for stats
 
     Attributes
