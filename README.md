@@ -35,7 +35,7 @@ To get started with the library, refer to the information provided in this READM
 
 ## Installation
 ```python
-python3 -m pip install -i https://test.pypi.org/simple/ python-mlb-statsapi
+python3 -m pip install python-mlb-statsapi==0.5.2
 ```
 ## Usage
 ```python
