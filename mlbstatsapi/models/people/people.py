@@ -277,7 +277,7 @@ class DraftPick(Person):
     roundpicknumber:  int
     rank: Optional[int] = None
     pickvalue: Optional[str] = None
-    signingbonus:  str
+    signingbonus:  Optional[str] = None
     home: Union[Home , dict]
     scoutingreport: Optional[str] = None
     school: Union[School , dict] 

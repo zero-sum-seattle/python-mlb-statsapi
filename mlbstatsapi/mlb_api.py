@@ -1714,7 +1714,7 @@ class Mlb:
             for season in mlb_data.data['seasons']:
                 return Season(**season)
 
-    def get_seasons(self, sport_id: int = None, **params) -> List[Season]:
+    def get_seasons(self, sport_id: int = 1, **params) -> List[Season]:
         """
         return a season object for sportid
 
