@@ -42,6 +42,7 @@ class PlayMatchup:
     pitcherhotcoldzones: List
     splits: Union[PlayMatchupSplits, dict]
     batterhotcoldzonestats: Optional[List] = None
+    pitcherhotcoldzonestats: Optional[List] = None
     postonfirst: Optional[Union[Person, dict]] = None
     postonsecond: Optional[Union[Person, dict]] = None
     postonthird: Optional[Union[Person, dict]] = None
@@ -53,6 +54,7 @@ class PlayMatchup:
         self.pitchhand = CodeDesc(**self.pitchhand)
         self.splits = PlayMatchupSplits(**self.splits)
         self.batterhotcoldzonestats = self.batterhotcoldzonestats['stats'] if self.batterhotcoldzonestats else self.batterhotcoldzonestats
+        self.pitcherhotcoldzonestats = self.pitcherhotcoldzonestats['stats'] if self.pitcherhotcoldzonestats else self.pitcherhotcoldzonestats
         self.postonfirst = Person(**self.postonfirst) if self.postonfirst else self.postonfirst
         self.postonsecond = Person(**self.postonsecond) if self.postonsecond else self.postonsecond
         self.postonthird = Person(**self.postonthird) if self.postonthird else self.postonthird
