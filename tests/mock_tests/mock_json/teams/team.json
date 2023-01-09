@@ -1,0 +1,51 @@
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "teams": [
+    {
+    "springLeague": {
+    "id": 114,
+    "name": "Cactus League",
+    "link": "/api/v1/league/114",
+    "abbreviation": "CL"
+    },
+    "allStarStatus": "N",
+    "id": 133,
+    "name": "Oakland Athletics",
+    "link": "/api/v1/teams/133",
+    "season": 2022,
+    "venue": {
+    "id": 10,
+    "name": "Oakland Coliseum",
+    "link": "/api/v1/venues/10"
+    },
+    "springVenue": {
+    "id": 2507,
+    "link": "/api/v1/venues/2507"
+    },
+    "teamCode": "oak",
+    "fileCode": "oak",
+    "abbreviation": "OAK",
+    "teamName": "Athletics",
+    "locationName": "Oakland",
+    "firstYearOfPlay": "1901",
+    "league": {
+    "id": 103,
+    "name": "American League",
+    "link": "/api/v1/league/103"
+    },
+    "division": {
+    "id": 200,
+    "name": "American League West",
+    "link": "/api/v1/divisions/200"
+    },
+    "sport": {
+    "id": 1,
+    "link": "/api/v1/sports/1",
+    "name": "Major League Baseball"
+    },
+    "shortName": "Oakland",
+    "franchiseName": "Oakland",
+    "clubName": "Athletics",
+    "active": true
+    } ]
+}

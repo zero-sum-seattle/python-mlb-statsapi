@@ -1,0 +1,489 @@
+﻿{
+    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "stats": [
+      {
+        "exemptions": [],
+        "splits": [
+          {
+            "stat": {
+              "gamesStarted": 1,
+              "caughtStealing": 0,
+              "stolenBases": 0,
+              "stolenBasePercentage": ".---",
+              "assists": 0,
+              "putOuts": 9,
+              "errors": 0,
+              "chances": 9,
+              "fielding": ".000",
+              "passedBall": 0,
+              "pickoffs": 0
+            },
+            "type": "gameLog",
+            "group": "fielding"
+          },
+          {
+            "stat": {},
+            "type": "gameLog",
+            "group": "pitching"
+          },
+          {
+            "stat": {
+              "gamesPlayed": 1,
+              "flyOuts": 0,
+              "groundOuts": 2,
+              "runs": 0,
+              "doubles": 0,
+              "triples": 0,
+              "homeRuns": 0,
+              "strikeOuts": 1,
+              "baseOnBalls": 0,
+              "intentionalWalks": 0,
+              "hits": 0,
+              "hitByPitch": 0,
+              "atBats": 4,
+              "caughtStealing": 0,
+              "stolenBases": 0,
+              "stolenBasePercentage": ".---",
+              "groundIntoDoublePlay": 0,
+              "groundIntoTriplePlay": 0,
+              "plateAppearances": 4,
+              "totalBases": 0,
+              "rbi": 0,
+              "leftOnBase": 5,
+              "sacBunts": 0,
+              "sacFlies": 0,
+              "catchersInterference": 0,
+              "pickoffs": 0,
+              "atBatsPerHomeRun": "-.--"
+            },
+            "type": "gameLog",
+            "group": "hitting"
+          }
+        ]
+      },
+      {
+        "type": {
+          "displayName": "vsPlayer5Y"
+        },
+        "group": {
+          "displayName": "hitting"
+        },
+        "totalSplits": 1,
+        "exemptions": [],
+        "splits": [
+          {
+            "stat": {
+              "gamesPlayed": 1,
+              "groundOuts": 1,
+              "airOuts": 0,
+              "doubles": 0,
+              "triples": 0,
+              "homeRuns": 0,
+              "strikeOuts": 0,
+              "baseOnBalls": 0,
+              "intentionalWalks": 0,
+              "hits": 0,
+              "hitByPitch": 0,
+              "avg": ".000",
+              "atBats": 1,
+              "obp": ".000",
+              "slg": ".000",
+              "ops": ".000",
+              "groundIntoDoublePlay": 0,
+              "groundIntoTriplePlay": 0,
+              "numberOfPitches": 2,
+              "plateAppearances": 1,
+              "totalBases": 0,
+              "rbi": 0,
+              "leftOnBase": 1,
+              "sacBunts": 0,
+              "sacFlies": 0,
+              "babip": ".000",
+              "groundOutsToAirouts": "1.00",
+              "catchersInterference": 0,
+              "atBatsPerHomeRun": "-.--"
+            },
+            "team": {
+              "id": 136,
+              "name": "Seattle Mariners",
+              "link": "/api/v1/teams/136"
+            },
+            "opponent": {
+              "id": 117,
+              "name": "Houston Astros",
+              "link": "/api/v1/teams/117"
+            },
+            "gameType": "D",
+            "numTeams": 1,
+            "pitcher": {
+              "id": 519151,
+              "fullName": "Ryan Pressly",
+              "link": "/api/v1/people/519151",
+              "firstName": "Ryan",
+              "lastName": "Pressly"
+            },
+            "batter": {
+              "id": 663728,
+              "fullName": "Cal Raleigh",
+              "link": "/api/v1/people/663728",
+              "firstName": "Cal",
+              "lastName": "Raleigh"
+            }
+          }
+        ]
+      },
+      {
+        "type": {
+          "displayName": "vsPlayer5Y"
+        },
+        "group": {
+          "displayName": "pitching"
+        },
+        "totalSplits": 0,
+        "exemptions": [],
+        "splits": []
+      },
+      {
+        "type": {
+          "displayName": "playLog"
+        },
+        "group": {
+          "displayName": "hitting"
+        },
+        "exemptions": [],
+        "splits": [
+          {
+            "stat": {
+              "play": {
+                "details": {
+                  "call": {
+                    "code": "X",
+                    "description": "In play, out(s)"
+                  },
+                  "description": "In play, out(s)",
+                  "code": "X",
+                  "ballColor": "rgba(26, 86, 190, 1.0)",
+                  "trailColor": "rgba(50, 0, 221, 1.0)",
+                  "isInPlay": true,
+                  "isStrike": false,
+                  "isBall": false,
+                  "type": {
+                    "code": "SI",
+                    "description": "Sinker"
+                  },
+                  "awayScore": 0,
+                  "homeScore": 1,
+                  "isOut": true,
+                  "hasReview": false
+                },
+                "count": {
+                  "balls": 0,
+                  "strikes": 0,
+                  "outs": 1,
+                  "inning": 3
+                },
+                "pitchData": {
+                  "startSpeed": 95.1,
+                  "endSpeed": 86.8,
+                  "strikeZoneTop": 3.51,
+                  "strikeZoneBottom": 1.68,
+                  "coordinates": {
+                    "aY": 32.2,
+                    "aZ": -21.2,
+                    "pfxX": 6.91,
+                    "pfxZ": 5.7,
+                    "pX": 0.24,
+                    "pZ": 1.93,
+                    "vX0": -3.83,
+                    "vY0": -138.23,
+                    "vZ0": -7.23,
+                    "x": 107.73,
+                    "y": 186.69,
+                    "x0": 0.75,
+                    "y0": 50.01,
+                    "z0": 6.01,
+                    "aX": 13.31
+                  },
+                  "breaks": {
+                    "breakAngle": 28.8,
+                    "breakLength": 6,
+                    "breakY": 24,
+                    "spinRate": 2182,
+                    "spinDirection": 149
+                  },
+                  "zone": 9,
+                  "typeConfidence": 2,
+                  "plateTime": 0.4,
+                  "extension": 5.68
+                },
+                "hitData": {
+                  "launchSpeed": 95.3,
+                  "launchAngle": -14,
+                  "totalDistance": 9,
+                  "trajectory": "ground_ball",
+                  "hardness": "medium",
+                  "location": "6",
+                  "coordinates": {
+                    "coordX": 115.68,
+                    "coordY": 157.25
+                  }
+                },
+                "index": 0,
+                "playId": "20aa507d-fad7-4386-a095-927440fa458a",
+                "pitchNumber": 1,
+                "startTime": "2022-10-13T20:12:55.414Z",
+                "endTime": "2022-10-13T20:13:03.006Z",
+                "isPitch": true,
+                "type": "pitch"
+              }
+            }
+          },
+          {
+            "stat": {
+              "play": {
+                "details": {
+                  "call": {
+                    "code": "X",
+                    "description": "In play, out(s)"
+                  },
+                  "description": "In play, out(s)",
+                  "code": "X",
+                  "ballColor": "rgba(26, 86, 190, 1.0)",
+                  "trailColor": "rgba(50, 0, 221, 1.0)",
+                  "isInPlay": true,
+                  "isStrike": false,
+                  "isBall": false,
+                  "type": {
+                    "code": "SI",
+                    "description": "Sinker"
+                  },
+                  "awayScore": 2,
+                  "homeScore": 1,
+                  "isOut": true,
+                  "hasReview": false,
+                  "runnerGoing": true
+                },
+                "count": {
+                  "balls": 2,
+                  "strikes": 1,
+                  "outs": 3,
+                  "inning": 4
+                },
+                "pitchData": {
+                  "startSpeed": 95.6,
+                  "endSpeed": 87.2,
+                  "strikeZoneTop": 3.51,
+                  "strikeZoneBottom": 1.68,
+                  "coordinates": {
+                    "aY": 32.62,
+                    "aZ": -18.67,
+                    "pfxX": 9.33,
+                    "pfxZ": 6.94,
+                    "pX": 0.18,
+                    "pZ": 1.7,
+                    "vX0": -4.59,
+                    "vY0": -138.91,
+                    "vZ0": -8.15,
+                    "x": 110.31,
+                    "y": 192.95,
+                    "x0": 0.64,
+                    "y0": 50,
+                    "z0": 5.92,
+                    "aX": 18.14
+                  },
+                  "breaks": {
+                    "breakAngle": 39.6,
+                    "breakLength": 6,
+                    "breakY": 24,
+                    "spinRate": 2174,
+                    "spinDirection": 142
+                  },
+                  "zone": 8,
+                  "typeConfidence": 2,
+                  "plateTime": 0.4,
+                  "extension": 5.76
+                },
+                "hitData": {
+                  "launchSpeed": 107.2,
+                  "launchAngle": 13,
+                  "totalDistance": 334,
+                  "trajectory": "line_drive",
+                  "hardness": "medium",
+                  "location": "8",
+                  "coordinates": {
+                    "coordX": 122.27,
+                    "coordY": 92.16
+                  }
+                },
+                "index": 6,
+                "playId": "6e0a125c-72e3-48b6-8748-c3fac153e673",
+                "pitchNumber": 4,
+                "startTime": "2022-10-13T20:44:19.661Z",
+                "endTime": "2022-10-13T20:44:26.045Z",
+                "isPitch": true,
+                "type": "pitch"
+              }
+            }
+          },
+          {
+            "stat": {
+              "play": {
+                "details": {
+                  "call": {
+                    "code": "X",
+                    "description": "In play, out(s)"
+                  },
+                  "description": "In play, out(s)",
+                  "code": "X",
+                  "ballColor": "rgba(26, 86, 190, 1.0)",
+                  "trailColor": "rgba(119, 0, 152, 1.0)",
+                  "isInPlay": true,
+                  "isStrike": false,
+                  "isBall": false,
+                  "type": {
+                    "code": "FS",
+                    "description": "Splitter"
+                  },
+                  "awayScore": 2,
+                  "homeScore": 1,
+                  "isOut": true,
+                  "hasReview": false
+                },
+                "count": {
+                  "balls": 1,
+                  "strikes": 2,
+                  "outs": 3,
+                  "inning": 6
+                },
+                "pitchData": {
+                  "startSpeed": 85.7,
+                  "endSpeed": 78,
+                  "strikeZoneTop": 3.51,
+                  "strikeZoneBottom": 1.68,
+                  "coordinates": {
+                    "aY": 28.14,
+                    "aZ": -32.75,
+                    "pfxX": -6.85,
+                    "pfxZ": -0.37,
+                    "pX": 0.96,
+                    "pZ": 1.28,
+                    "vX0": 7.59,
+                    "vY0": -124.41,
+                    "vZ0": -4.81,
+                    "x": 80.35,
+                    "y": 204.26,
+                    "x0": -1.26,
+                    "y0": 50.01,
+                    "z0": 5.99,
+                    "aX": -10.59
+                  },
+                  "breaks": {
+                    "breakAngle": 14.4,
+                    "breakLength": 9.6,
+                    "breakY": 24,
+                    "spinRate": 1204,
+                    "spinDirection": 249
+                  },
+                  "zone": 14,
+                  "typeConfidence": 0.92,
+                  "plateTime": 0.44,
+                  "extension": 6.29
+                },
+                "hitData": {
+                  "launchSpeed": 70.7,
+                  "launchAngle": -5,
+                  "totalDistance": 17,
+                  "trajectory": "ground_ball",
+                  "hardness": "medium",
+                  "location": "6",
+                  "coordinates": {
+                    "coordX": 139.53,
+                    "coordY": 163.02
+                  }
+                },
+                "index": 5,
+                "playId": "ed9db705-9f3f-4944-b035-4a0a2b579de7",
+                "pitchNumber": 4,
+                "startTime": "2022-10-13T21:28:55.099Z",
+                "endTime": "2022-10-13T21:29:02.520Z",
+                "isPitch": true,
+                "type": "pitch"
+              }
+            }
+          },
+          {
+            "stat": {
+              "play": {
+                "details": {
+                  "call": {
+                    "code": "C",
+                    "description": "Called Strike"
+                  },
+                  "description": "Called Strike",
+                  "code": "C",
+                  "ballColor": "rgba(170, 21, 11, 1.0)",
+                  "trailColor": "rgba(0, 85, 254, 1.0)",
+                  "isInPlay": false,
+                  "isStrike": true,
+                  "isBall": false,
+                  "type": {
+                    "code": "CH",
+                    "description": "Changeup"
+                  },
+                  "awayScore": 2,
+                  "homeScore": 3,
+                  "isOut": true,
+                  "hasReview": false
+                },
+                "count": {
+                  "balls": 2,
+                  "strikes": 3,
+                  "outs": 3,
+                  "inning": 8
+                },
+                "pitchData": {
+                  "startSpeed": 90.9,
+                  "endSpeed": 82.9,
+                  "strikeZoneTop": 3.49,
+                  "strikeZoneBottom": 1.65,
+                  "coordinates": {
+                    "aY": 29.91,
+                    "aZ": -26.31,
+                    "pfxX": -9.85,
+                    "pfxZ": 3.33,
+                    "pX": -0.58,
+                    "pZ": 1.46,
+                    "vX0": 5.09,
+                    "vY0": -132.26,
+                    "vZ0": -3.44,
+                    "x": 139.06,
+                    "y": 199.34,
+                    "x0": -1.25,
+                    "y0": 50,
+                    "z0": 4.72,
+                    "aX": -17.34
+                  },
+                  "breaks": {
+                    "breakAngle": 31.2,
+                    "breakLength": 7.2,
+                    "breakY": 24,
+                    "spinRate": 2093,
+                    "spinDirection": 241
+                  },
+                  "zone": 13,
+                  "typeConfidence": 0.9,
+                  "plateTime": 0.42,
+                  "extension": 6.08
+                },
+                "index": 4,
+                "playId": "69a72dee-3fdb-4790-845e-bdb7f01bf71a",
+                "pitchNumber": 5,
+                "startTime": "2022-10-13T22:28:07.930Z",
+                "endTime": "2022-10-13T22:28:12.844Z",
+                "isPitch": true,
+                "type": "pitch"
+              }
+            }
+          } ]
+      } ]
+  }
