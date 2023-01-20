@@ -23,6 +23,8 @@ class Venue:
         Info on this venue's field
     active : bool
         Is this field currently active
+    season : str
+        This field holds the season
     """
     id:         int
     link:       str
@@ -31,6 +33,7 @@ class Venue:
     timezone:   Optional[Union[TimeZone, dict]] = None
     fieldinfo:  Optional[Union[FieldInfo, dict]] = None
     active:     Optional[bool] = None
+    season:     Optional[str] = None
 
     def __post_init__(self):
         self.location = Location(**self.location) if self.location else self.location
