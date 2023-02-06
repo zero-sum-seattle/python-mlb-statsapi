@@ -1,2 +1,2 @@
 from .gamedata import GameData
-from .attributes import GameStatus
+from .attributes import GameStatus, MoundVisits

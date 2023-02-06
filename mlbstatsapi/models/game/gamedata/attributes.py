@@ -256,3 +256,18 @@ class GameProbablePitchers:
     def __post_init__(self):
         self.away = Person(**self.away) if self.away else self.away
         self.home = Person(**self.home) if self.home else self.home
+
+@dataclass
+class MoundVisits:
+    """
+    A class to represent the mound visits for a game
+    Attributes
+    ----------
+    home : Person
+        Home team probable pitcher
+    away : Person
+        Away team probable pitcher
+    """
+    away: dict = field(default_factory=dict)
+    home: dict = field(default_factory=dict)
+

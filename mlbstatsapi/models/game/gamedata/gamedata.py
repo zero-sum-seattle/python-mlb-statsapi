@@ -12,6 +12,7 @@ from .attributes import GameInfo
 from .attributes import GameReview
 from .attributes import GameFlags
 from .attributes import GameProbablePitchers
+from .attributes import MoundVisits
 
 @dataclass(repr=False)
 class GameData:
@@ -63,12 +64,12 @@ class GameData:
     flags: Union[GameFlags, dict]
     alerts: List
     probablepitchers: Union[GameProbablePitchers, dict]
+    moundvisits: Optional[Union[MoundVisits, dict]] = None
     gameinfo: Union[GameInfo, dict] = field(default_factory=dict)
     weather: Union[GameWeather, dict] = field(default_factory=dict)
     officialscorer: Optional[Union[Person, dict]] = field(default_factory=dict)
     primarydatacaster: Optional[Union[Person, dict]] = field(default_factory=dict)
     secondarydatacaster: Optional[Union[Person, dict]] = field(default_factory=dict)
-
 
     def __post_init__(self):
         self.game = GameDataGame(**self.game)
@@ -86,7 +87,9 @@ class GameData:
         self.officialscorer = Person(**self.officialscorer) if self.officialscorer else self.officialscorer
         self.primarydatacaster = Person(**self.primarydatacaster) if self.primarydatacaster else self.primarydatacaster
         self.secondarydatacaster = Person(**self.secondarydatacaster) if self.secondarydatacaster else self.secondarydatacaster
+        self.moundvisits = MoundVisits(**self.moundvisits) if self.moundvisits else self.moundvisits
 
     def __repr__(self) -> str:
         kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
         return "{}({})".format(type(self).__name__, ", ".join(kws))
+
