@@ -328,7 +328,8 @@ class PlayDetails:
     ballcolor: Optional[str] = None
     trailcolor: Optional[str] = None
     fromcatcher: Optional[bool] = None
-
+    disengagementnum: Optional[int] = None
+    
     def __post_init__(self):
         self.call = CodeDesc(**self.call) if self.call else self.call
         self.batside = CodeDesc(**self.batside) if self.batside else self.batside

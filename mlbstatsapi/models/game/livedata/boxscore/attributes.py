@@ -90,14 +90,14 @@ class PlayersDictPerson:
         All of the person's positions if avaliable.
     """
     person: Union[Person, dict]
-    jerseynumber: str
     position: Union[Position, dict]
     status: Union[CodeDesc, dict]
-    parentteamid: int
     stats: dict
     seasonstats: dict
     gamestatus: Union[GameStatus, dict]
     battingorder: Optional[int] = None
+    jerseynumber: Optional[str] = None
+    parentteamid: Optional[int] = None
     allpositions: Optional[Union[List[Position], List[dict]]] = None
 
     def __post_init__(self):
