@@ -60,7 +60,7 @@ class TestMlbAdapter(unittest.TestCase):
         """mlbadapter should accept params and parse them to the url"""
 
         # stat type season, stat group hitting
-        self.params = {"stats": "season", "group": "hitting"}
+        self.params = {"stats": "careerAdvanced", "group": "hitting"}
 
         # use team stats end point for params
         result = self.mlb_adapter.get(endpoint="teams/133/stats", ep_params=self.params)
