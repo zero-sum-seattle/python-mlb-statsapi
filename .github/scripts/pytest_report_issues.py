@@ -136,4 +136,14 @@ if __name__ == "__main__":
         statusmessage   = "Successful"
         statuscolor     = "#3ca553"
 
-    cronbot_post_uka(token, channelid, generate_outputstring(output_list), statusmessage, statuscolor)
+    outputbody = generate_outputstring(output_list)
+
+    cronbot_post_uka(token, channelid, outputbody, statusmessage, statuscolor)
+
+    # Once the slack message has been sent, if our periodic test fails, then 
+    # exit with exit code 1. In turn failing the actions job. Print the 
+    # result of the tests before so we have access in github actions to the
+    # tests results. 
+    if statusmessage == "failed":
+        print (outputbody)
+        sys.exit(1)
