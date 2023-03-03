@@ -14,15 +14,6 @@ class TestHittingStats(unittest.TestCase):
         cls.ty_france = 664034
         cls.utility_player = 647351
         cls.soto = 665742
-        cls.stats_200_blank = ('projected', 'projectedRos', 'standard', 'advanced', 'firstYearStats', 'lastYearStats',
-        'vsOpponents', 'outsAboveAverage', 'tracking', 'availableStats', 'gameTypeStats', 'vsOpponents')
-        cls.hitting = 'hitting'
-        cls.stats_500 = ('careerStatSplits', 'metricLog', 'metricAverages', 'statSplits', 'statSplitsAdvanced')
-        # these stat groups require a team with recent playoff appearences 
-        cls.stats_playoffs = ('byMonthPlayoffs', 'byDayOfWeekPlayoffs', 'homeAndAwayPlayoffs', 'winLossPlayoffs')
-        # These stat groups require addition params passed like playerid or teamid
-        cls.stats_require_params = ('vsTeam', 'vsTeam5Y', 'vsTeamTotal', 'vsPlayer', 'vsPlayerTotal', 'vsPlayer5Y')
-        # These stat types should all return a stat split object for hitting and pitching stat groups
 
                     
     @classmethod
