@@ -11,20 +11,6 @@ class TestPitchingStats(unittest.TestCase):
         cls.al_team = 133
         cls.shoei_ohtani = 660271
         cls.utility_player = 647351
-        cls.stats_200_blank = ('projected', 'projectedRos', 'standard', 'advanced', 'firstYearStats', 'lastYearStats',
-        'vsOpponents', 'outsAboveAverage', 'tracking', 'availableStats', 'gameTypeStats', 'vsOpponents')
-        cls.pitching = 'pitching'
-        cls.stats_500 = ('careerStatSplits', 'metricLog', 'metricAverages', 'statSplits', 'statSplitsAdvanced')
-        # these stat groups require a team with recent playoff appearences 
-        cls.stats_playoffs = ('byMonthPlayoffs', 'byDayOfWeekPlayoffs', 'homeAndAwayPlayoffs', 'winLossPlayoffs')
-        # These stat groups require addition params passed like playerid or teamid
-        cls.stats_require_params = ('vsTeam', 'vsTeam5Y', 'vsTeamTotal', 'vsPlayer', 'vsPlayerTotal', 'vsPlayer5Y')
-        # These stat types should all return a stat split object for hitting and pitching stat groups
-        cls.fielding = (
-                    "yearByYear", "yearByYearPlayoffs", "season", "career", "careerRegularSeason",
-                    "careerPlayoffs", "gameLog", "lastXGames", "byDateRange", "byDateRangeAdvanced",
-                    "byMonth", "byDayOfWeek", "homeAndAway", "winLoss", "opponentsFaced", "atGameStart",
-                    )
                     
     @classmethod
     def tearDownClass(cls) -> None:
@@ -34,8 +20,10 @@ class TestPitchingStats(unittest.TestCase):
         """mlb get stats should return pitching stats"""
         self.stats = ['season', 'career']
         self.group = ['fielding']
+        self.params = {'season': 2022}
+
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.utility_player, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_player_stats(self.utility_player, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -69,8 +57,9 @@ class TestPitchingStats(unittest.TestCase):
         """mlb get stats should return pitching stats"""
         self.stats = ['season', 'career', 'seasonAdvanced', 'careerAdvanced']
         self.group = ['fielding']
+        self.params = {'season': 2022}
         # let's get some stats
-        stats = self.mlb.get_team_stats(self.al_team, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_team_stats(self.al_team, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
