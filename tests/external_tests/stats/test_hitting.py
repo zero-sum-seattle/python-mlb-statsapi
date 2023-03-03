@@ -23,14 +23,7 @@ class TestHittingStats(unittest.TestCase):
         # These stat groups require addition params passed like playerid or teamid
         cls.stats_require_params = ('vsTeam', 'vsTeam5Y', 'vsTeamTotal', 'vsPlayer', 'vsPlayerTotal', 'vsPlayer5Y')
         # These stat types should all return a stat split object for hitting and pitching stat groups
-        cls.hitting = (
-                    "yearByYear", "yearByYearAdvanced", "yearByYearPlayoffs", "season",
-                    "career", "careerRegularSeason", "careerAdvanced", "seasonAdvanced", "careerPlayoffs",
-                    "gameLog", "playLog", "pitchLog", "pitchArsenal", "expectedStatistics", "sabermetrics",
-                    "sprayChart", "lastXGames", "byDateRange", "byDateRangeAdvanced", "byMonth", "byDayOfWeek",
-                    "homeAndAway", "winLoss", "rankings", "rankingsByYear", "statsSingleSeason", "statsSingleSeasonAdvanced",
-                    "hotColdZones", "opponentsFaced", "atGameStart"
-                    )
+
                     
     @classmethod
     def tearDownClass(cls) -> None:
@@ -40,8 +33,9 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return pitching stats"""
         self.stats = ['season', 'career','seasonAdvanced', 'careerAdvanced']
         self.group = ['hitting']
+        self.params = {'season': 2022}
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -84,9 +78,10 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return pitching stats"""
         self.stats = ['season', 'career', 'seasonAdvanced', 'careerAdvanced']
         self.group = ['hitting']
+        self.params = {'season': 2022}
         # let's get some stats
         # let's get some stats
-        stats = self.mlb.get_team_stats(self.al_team, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_team_stats(self.al_team, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -149,8 +144,9 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return pitching stats"""
         self.stats = ['expectedStatistics']
         self.group = ['hitting']
+        self.params = {'season': 2022}
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -165,8 +161,9 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return pitching stats"""
         self.stats = ['byDateRange', 'byDateRangeAdvanced']
         self.group = ['hitting']
+        self.params = {'season': 2022, 'startDate': '2022-05-07'}
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -182,8 +179,10 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return pitching stats"""
         self.stats = ['byMonth']
         self.group = ['hitting']
+        self.params = {'season': 2022}
+
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -198,8 +197,9 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return hitting stats"""
         self.stats = ['byDayOfWeek']
         self.group = ['hitting']
+        self.params = {'season': 2022}
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -214,7 +214,7 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return hitting stats"""
         self.stats = ['vsPlayer']
         self.group = ['hitting']
-        self.params = {'opposingPlayerId': 660271}
+        self.params = {'opposingPlayerId': 660271, 'season': 2022}
         # let's get some stats
         stats = self.mlb.get_player_stats(self.ty_france, stats=self.stats, groups=self.group, **self.params)
 
@@ -231,7 +231,7 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return hitting stats"""
         self.stats = ['vsTeam']
         self.group = ['hitting']
-        self.params = {'opposingTeamId': 133}
+        self.params = {'opposingTeamId': 133, 'season': 2022}
 
         # let's get some stats
         stats = self.mlb.get_player_stats(self.ty_france, stats=self.stats, groups=self.group, **self.params)
@@ -249,7 +249,7 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return hitting stats"""
         self.stats = ['vsTeam']
         self.group = ['hitting']
-        self.params = {'opposingTeamId': 136}
+        self.params = {'opposingTeamId': 136, 'season': 2022}
 
         # let's get some stats
         stats = self.mlb.get_team_stats(self.al_team, stats=self.stats, groups=self.group, **self.params)
@@ -267,8 +267,10 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return hitting stats"""
         self.stats = ['pitchLog']
         self.group = ['hitting']
+        self.params = {'season': 2022}
+
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -288,8 +290,10 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return hitting stats"""
         self.stats = ['playLog']
         self.group = ['hitting']
+        self.params = {'season': 2022}
+
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -310,8 +314,10 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return hitting stats"""
         self.stats = ['pitchArsenal']
         self.group = ['hitting']
+        self.params = {'season': 2022}
+
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -330,8 +336,10 @@ class TestHittingStats(unittest.TestCase):
         """mlb get stats should return hitting stats"""
         self.stats = ['hotColdZones']
         self.group = ['hitting']
+        self.params = {'season': 2022}
+
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group)
+        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
