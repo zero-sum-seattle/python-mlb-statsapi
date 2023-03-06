@@ -35,7 +35,7 @@ To get started with the library, refer to the information provided in this READM
 
 ## Installation
 ```python
-python3 -m pip install python-mlb-statsapi==0.5.7
+python3 -m pip install python-mlb-statsapi==0.5.8
 ```
 ## Usage
 ```python
@@ -46,7 +46,8 @@ python3
 [664034]
 >>> stats = ['season', 'seasonAdvanced']
 >>> groups = ['hitting']
->>> mlb.get_player_stats(664034, stats=stats, groups=groups)
+>>> params = {'season': 2022}
+>>> mlb.get_player_stats(664034, stats, groups, **params)
 {'hitting': {'season': Stat, 'seasonadvanced': Stat }}
 
 >>> mlb.get_team_id("Oakland Athletics")
@@ -54,7 +55,8 @@ python3
 
 >>> stats = ['season', 'seasonAdvanced']
 >>> groups = ['pitching']
->>> mlb.get_team_stats(133, stats, groups)
+>>> params = {'season': 2022}
+>>> mlb.get_team_stats(133, stats, groups, **params)
 {'pitching': {'season': Stat, 'seasonadvanced': Stat }}
 ```
 
@@ -128,10 +130,12 @@ Get the Id(s) of the players you want stats for and set stat types and groups.
 >>> player_id = mlb.get_people_id("Ty France")[0]
 >>> stats = ['season', 'career']
 >>> groups = ['hitting', 'pitching']
+>>> params = {'season': 2022}
+
 ```
 Use player.id and stat types and groups to return a stats dictionary
 ```python
->>> stat_dict = mlb.get_player_stats(player_id, stats=stats, groups=groups )
+>>> stat_dict = mlb.get_player_stats(player_id, stats=stats, groups=groups, **params)
 >>> season_hitting_stat = stat_dict['hitting']['season']
 >>> career_pitching_stat = stat_dict['pitching']['career']
 ```
@@ -180,10 +184,12 @@ Set the stat types and groups.
 ```python
 >>> stats = ['season', 'seasonAdvanced']
 >>> groups = ['hitting']
+>>> params = {'season': 2022}
+
 ```
 Use team.id and the stat types and groups to return season hitting stats
 ```python
-stats = mlb.get_team_stats(team_id, stats=stats, groups=groups)
+stats = mlb.get_team_stats(team_id, stats=stats, groups=groups, **params)
 season_hitting = stats['hitting']['season']
 advanced_hitting = stats['hitting']['seasonadvanced']
 ```
@@ -219,10 +225,12 @@ Set the stat type and group
 ```python
 >>> stats = ['expectedStatistics']
 >>> group = ['hitting']
+>>> params = {'season': 2022}
+
 ```
 Get Stats
 ```python
->>> stats = mlb.get_player_stats(player_id, stats=stats, groups=group)
+>>> stats = mlb.get_player_stats(player_id, stats=stats, groups=group, **params)
 >>> expectedstats = stats['hitting']['expectedstatistics']
 >>> for split in expectedstats.splits:
 ...     for k, v in split.stat.__dict__.items():
@@ -242,11 +250,11 @@ Set stat type, stat groups, and params
 ```python
 >>> stats = ['vsPlayer']
 >>> group = ['hitting']
->>> params = {'opposingPlayerId': shohei_ohtani_id}
+>>> params = {'opposingPlayerId': shohei_ohtani_id, 'season': 2022}
 ```
 Get stats
 ```python
->>> stats = mlb.get_player_stats(ty_france_id, stats=self.stats, groups=self.group, **self.params)
+>>> stats = mlb.get_player_stats(ty_france_id, stats=stats, groups=group, **params)
 >>> vs_player_total = stats['hitting']['vsplayertotal']
 >>> for split in vs_player_total.splits:
 ...     for k, v in split.stat.__dict__.items():
@@ -282,12 +290,13 @@ Set the stat types and groups
 >>> stats = ['hotColdZones']
 >>> hitting_group = ['hitting']
 >>> pitching_group = ['pitching']
+>>> params = {'season': 2022}
 ```
 The stat groups pitching and hitting both return hotColdZones for a pitcher and hitter. hotColdZones are not assigned to a
 stat group because of issues related to the REST API. So hotColdZones will be assigned to the stat key in stats return dict.
 ```python
->>> hitting_hotcoldzones = mlb.get_player_stats(ty_france_id stats=type, groups=hitting_group)
->>> pitching_hotcoldzones = mlb.get_player_stats(shohei_ohtani_id, stats=type, groups=pitching_group)
+>>> hitting_hotcoldzones = mlb.get_player_stats(ty_france_id stats=stats, groups=hitting_group, **params)
+>>> pitching_hotcoldzones = mlb.get_player_stats(shohei_ohtani_id, stats=stats, groups=pitching_group, **params)
 ```
 hotColdZones returns a list of the HotColdZones
 ```python
@@ -342,10 +351,12 @@ Set the stat types and groups.
 ```python
 >>> stats = ['season', 'seasonAdvanced']
 >>> groups = ['hitting']
+>>> params = {'season': 2022}
+
 ```
 Pass season to get_team_stats()
 ```python
-stats = mlb.get_team_stats(team_id, stats=stats, groups=groups, season=2018)
+stats = mlb.get_team_stats(team_id, stats=stats, groups=groups, **params)
 season_hitting = stats['hitting']['season']
 advanced_hitting = stats['hitting']['seasonadvanced']
 ```
