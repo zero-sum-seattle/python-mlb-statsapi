@@ -77,6 +77,7 @@ class TimeZone:
     id: str
     offset: int
     tz: str
+    offsetatgametime: Optional[int] = None
 
 @dataclass(repr=False)
 class FieldInfo:
