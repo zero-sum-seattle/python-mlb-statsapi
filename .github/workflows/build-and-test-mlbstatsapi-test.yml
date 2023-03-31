@@ -1,0 +1,46 @@
+name: Build
+
+on:
+  push:
+   branches:
+     - development
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade pytest
+          python3 -m pip install --upgrade build
+          python3 -m pip install --upgrade requests
+          python3 -m pip install --upgrade requests_mock
+      - name: Test with mocks with pytest
+        run: |
+          python3 -m pytest tests/mock_tests/*
+      - name: Test external tests with pytest
+        run: |
+          python3 -m pytest tests/external_tests/*
+      - name: build and install
+        run: |
+          python3 -m build
+          python3 -m pip install .
+      - name: Publish package to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+
+
+
