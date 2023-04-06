@@ -5,6 +5,9 @@ from typing import List, Union
 
 from .mlb_dataadapter import MlbDataAdapter
 
+from mlbstatsapi.models.people import Person
+
+
 class Mlb:
     """
     A class used to retrive MLB Stats API objects
@@ -107,7 +110,7 @@ class Mlb:
                 return Person(**person)
 
     def get_people_id(self, fullname: str, sport_id: int = 1, 
-                      search_key: str = 'fullname', **params) -> List[int]:
+                      search_key: str = 'fullName', **params) -> List[int]:
         """
         Returns specific player information based on players fullname
 
@@ -158,4 +161,5 @@ class Mlb:
                         player_ids.append(person['id'])
                 except KeyError:
                     continue
+
         return player_ids

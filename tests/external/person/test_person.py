@@ -22,7 +22,7 @@ class TestPerson(unittest.TestCase):
         # test player
         self.assertEqual(self.player.id, 664034)
         self.assertIsInstance(self.player, Person)
-        self.assertEqual(self.player.fullname, "Ty France")
+        self.assertEqual(self.player.fullName, "Ty France")
         self.assertEqual(self.player.link, "/api/v1/people/664034")
 
 
@@ -36,8 +36,7 @@ class TestPersonPrimaryPosition(unittest.TestCase):
         pass
 
     def test_player_position_player_position(self):
-
         self.position_player = self.mlb.get_person(664034)
 
-        self.assertIsInstance(self.position_player.primaryposition, Position)
-        self.assertTrue(hasattr(self.position_player.primaryposition, "code"))
+        self.assertIsInstance(self.position_player.primaryPosition, Position)
+        self.assertTrue(hasattr(self.position_player.primaryPosition, "code"))

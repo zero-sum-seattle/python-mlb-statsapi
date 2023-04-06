@@ -1,9 +1,6 @@
 ﻿from dataclasses import dataclass, field, InitVar
 from typing import List, Union, Dict, Any, Optional
 
-
-
-
 @dataclass(repr=False)
 class PitchBreak:
     """

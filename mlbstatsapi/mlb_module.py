@@ -74,23 +74,6 @@ def return_splits(split_data: dict, stat_type: str, stat_group: str) -> List['Sp
 
     return splits
 
-def get_split_count(stat: dict) -> int:
-    """
-    function that returns split count from stats
-
-    Parameters
-    ----------
-    stat: dict
-        dict of stats
-
-    Returns
-    -------
-    int
-        returns number of splits
-    """
-
-
-
 def create_split_data(stat_data: dict) -> dict:
     """
     function that loops through stat information, creates splits, and return stat dict

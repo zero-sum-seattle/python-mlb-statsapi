@@ -87,10 +87,6 @@ class MlbDataAdapter:
             self._logger.debug(msg=logline_post.format('success',
             response.status_code, response.reason, response.url))
 
-<<<<<<< HEAD
-=======
-            data = self._transform_keys_in_data(data)
->>>>>>> c283d96 (v0.5.2 main release)
             return MlbResult(response.status_code, message=response.reason, data=data)
 
         elif response.status_code >= 400 and response.status_code <= 499:  

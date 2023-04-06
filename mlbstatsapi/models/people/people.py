@@ -2,10 +2,7 @@
 from typing import Union, Dict, Any, Optional
 
 from .attributes import BatSide, Position, PitchHand, Status, Home, School
-from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.data import CodeDesc
-# from mlbstatsapi.models.drafts import Home, College
-
 
 @dataclass(repr=False)
 class Person:
@@ -111,57 +108,53 @@ class Person:
     """
 
     id: int
-    link: str
-    primaryposition: Union[Position, Dict[str, Any]] = field(default_factory=dict)
-    pitchhand: Union[PitchHand, Dict[str, Any]] = field(default_factory=dict)
-    batside: Union[BatSide, Dict[str, Any]] = field(default_factory=dict)
-    fullname: Optional[str] = None
-    firstname: Optional[str] = None
-    lastname: Optional[str] = None
-    primarynumber: Optional[str] = None
-    birthdate: Optional[str] = None
-    currentteam: Optional[str] = None
-    currentage: Optional[str] = None
-    birthcity: Optional[str] = None
-    birthstateprovince: Optional[str] = None
+    fullName: Optional[str] = None
+    link: Optional[str] = None
+    firstName: Optional[str] = None
+    lastName: Optional[str] = None
+    primaryNumber: Optional[str] = None
+    birthDate: Optional[str] = None
+    currentAge: Optional[str] = None
+    birthCity: Optional[str] = None
+    birthStateProvince: Optional[str] = None
+    birthCountry: Optional[str] = None
     height: Optional[str] = None
     weight: Optional[int] = None
     active: Optional[bool] = None
-    usename: Optional[str] = None
-    middlename: Optional[str] = None
-    boxscorename: Optional[str] = None
-    nickname: Optional[str] = None
-    draftyear: Optional[int] = None
-    mlbdebutdate: Optional[str] = None
-    namefirstlast: Optional[str] = None
-    nameslug: Optional[str] = None
-    firstlastname: Optional[str] = None
-    lastfirstname: Optional[str] = None
-    lastinitname: Optional[str] = None
-    initlastname: Optional[str] = None
-    fullfmlname: Optional[str] = None
-    fulllfmname: Optional[str] = None
-    birthcountry: Optional[str] = None
-    pronunciation: Optional[str] = None
-    strikezonetop: Optional[float] = None
-    strikezonebottom: Optional[float] = None
-    nametitle: Optional[str] = None
+    primaryPosition: Union[Position, Dict[str, Any]] = field(default_factory=dict)
+    useName: Optional[str] = None
+    useLastName: Optional[str] = None
+    middleName: Optional[str] = None
+    boxscoreName: Optional[str] = None
+    nickName: Optional[str] = None
     gender: Optional[str] = None
-    isplayer: Optional[bool] = None
-    isverified: Optional[bool] = None
-    namematrilineal: Optional[str] = None
-    deathdate: Optional[str] = None
-    deathcity: Optional[str] = None
-    deathcountry: Optional[str] = None
-    deathstateprovince: Optional[str] = None
-    lastplayeddate: Optional[str] = None
-    uselastname: Optional[str] = None
-    namesuffix: Optional[str] = None
+    isPlayer: Optional[bool] = None
+    isVerified: Optional[bool] = None
+    draftYear: Optional[int] = None
+    pronunciation: Optional[str] = None
+    mlbDebutDate: Optional[str] = None
+    batSide: Union[BatSide, Dict[str, Any]] = field(default_factory=dict)
+    pitchHand: Union[PitchHand, Dict[str, Any]] = field(default_factory=dict)
+    nameFirstLast: Optional[str] = None
+    nameSlug: Optional[str] = None
+    firstLastName: Optional[str] = None
+    lastFirstName: Optional[str] = None
+    lastInitName: Optional[str] = None
+    initLastName: Optional[str] = None
+    fullFMLName: Optional[str] = None
+    fullLFMName: Optional[str] = None
+    strikeZoneTop: Optional[float] = None
+    strikeZoneBottom: Optional[float] = None
+    currentTeam: Optional[str] = None
+    nameMatrilineal: Optional[str] = None
+    lastPlayedDate: Optional[str] = None
+    nameTitle: Optional[str] = None
+    nameSuffix: Optional[str] = None
 
     def __post_init__(self):
-        self.primaryposition = Position(**self.primaryposition) if self.primaryposition else self.primaryposition
-        self.pitchhand = PitchHand(**self.pitchhand) if self.pitchhand else self.pitchhand
-        self.batside = BatSide(**self.batside) if self.batside else self.batside
+        self.primaryPosition = Position(**self.primaryPosition) if self.primaryPosition else self.primaryPosition
+        self.pitchhand = PitchHand(**self.pitchHand) if self.pitchHand else self.pitchHand
+        self.batSide = BatSide(**self.batSide) if self.batSide else self.batSide
 
     def __repr__(self) -> str:
         kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
@@ -187,7 +180,7 @@ class Player(Person):
     status: Union[Status, dict]
 
     def __post_init__(self, position: dict):
-        self.primaryposition = Position(**position)
+        self.primaryPosition = Position(**position)
 
 
 @dataclass(kw_only=True, repr=False)
@@ -283,7 +276,7 @@ class DraftPick(Person):
     school: Union[School , dict] 
     blurb: Optional[str] = None
     headshotlink: str
-    team: Union[Team, dict]
+    team: dict # Add Team object here
     drafttype: Union[CodeDesc, dict]
     isdrafted: bool
     ispass: bool
