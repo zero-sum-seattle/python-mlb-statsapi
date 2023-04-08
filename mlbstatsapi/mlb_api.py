@@ -6,6 +6,7 @@ from typing import List, Union
 from .mlb_dataadapter import MlbDataAdapter
 
 from mlbstatsapi.models.people import Person
+from mlbstatsapi.models.teams import Team
 
 
 class Mlb:
@@ -366,4 +367,5 @@ class Mlb:
                         team_ids.append(team['id'])
                 except (KeyError):
                     continue
+                
         return team_ids

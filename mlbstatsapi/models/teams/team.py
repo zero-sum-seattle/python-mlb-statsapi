@@ -64,6 +64,7 @@ class Team:
     """
     id: int
     link: str
+    teamName: str
     name: Optional[str] = field(default_factory=dict) 
     springLeague: dict = field(default_factory=dict) # Update with League object
     allStarStatus: Optional[str] = None

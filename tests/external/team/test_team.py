@@ -1,8 +1,7 @@
 ﻿import unittest
+
 from mlbstatsapi.models.teams import Team
-from mlbstatsapi.models.venues import Venue
-from mlbstatsapi.models.divisions import Division
-from mlbstatsapi.models.sports import Sport
+
 from mlbstatsapi import Mlb
 
 
@@ -10,7 +9,6 @@ class TestTeam(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-
 
     @classmethod
     def tearDownClass(cls) -> None:
