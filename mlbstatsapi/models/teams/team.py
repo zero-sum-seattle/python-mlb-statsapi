@@ -74,7 +74,7 @@ class Team:
     fileCode: Optional[str] = None
     abbreviation: Optional[str] = None
     teamCode: Optional[str] = None
-    locationname: Optional[str] = None
+    locationName: Optional[str] = None
     firstYearOfPlay: Optional[str] = None
     league: dict = field(default_factory=dict) # Update with League object
     division: dict = field(default_factory=dict) # Update with Division object
@@ -84,8 +84,8 @@ class Team:
     franchiseName: Optional[str] = None
     clubName: Optional[str] = None
     active: Optional[str] = None
-    parentorgname: Optional[str] = None
-    parentorgid: Optional[str] = None
+    parentOrgName: Optional[str] = None
+    parentOrgId: Optional[str] = None
 
     def __post_init__(self):
         # self.springleague = League(**self.springleague) if self.springleague else self.springleague

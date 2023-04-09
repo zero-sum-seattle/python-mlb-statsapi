@@ -4,9 +4,12 @@ import datetime
 from typing import List, Union
 
 from .mlb_dataadapter import MlbDataAdapter
+from . import mlb_module
 
-from mlbstatsapi.models.people import Person
+from mlbstatsapi.models.people import Person, Player, Coach
 from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.divisions import Division
 
 
 class Mlb:
@@ -367,5 +370,389 @@ class Mlb:
                         team_ids.append(team['id'])
                 except (KeyError):
                     continue
-                
+
         return team_ids
+
+    def get_team_roster(self, team_id: int, **params) -> List[Player]:
+        """
+        return the team player roster
+
+        Parameters
+        ----------
+        team_id : int
+            teamId to return a directory of players based on roster status for
+            a particular club.
+
+        Other Parameters
+        ----------------
+        rosterType : str
+            Insert teamId to return a directory of players based on roster 
+            status for a particular club. rosterType's include 40Man, 
+            fullSeason, fullRoster, nonRosterInvitees, active, allTime,
+            depthChart, gameday, and coach.
+        season : str
+            Insert year to return a directory of players based on roster 
+            status for a particular club in a specific season.
+        date : str
+            Insert date to return a directory of players based on roster 
+            status for a particular club on a specific date.
+        hydrate : str
+            Insert Hydration(s) to return data for any available team 
+            hydration. The hydration for Teams contains "person" which has 
+            subhydrations Format "person(subHydration1, subHydrations2)"
+            Available Hydrations:
+                "person"
+                    Hydrations Available Through Person
+                    hydrations
+                    awards
+                    currentTeam
+                    team
+                    rosterEntries
+                    relatives
+                    transactions
+                    social
+                    education
+                    stats
+                    draft
+                    mixedFeed
+                    articles
+                    video
+                    xrefId
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        list of players
+
+        See Also
+        --------
+        Mlb.get_teams : Return a list of Teams from sport id.
+        Mlb.get_team : Return a Team from id
+        Mlb.get_team_coaches : Return a list of Coaches from team id
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_team_roster(133)
+        [Player, Player, Player]
+        >>> mlb.get_team_roster(133, rosterType=40Man, season=2018)
+        [Player, Player, Player]
+        >>> mlb.get_team_roster(133, date='06/05/2018')
+        [Player, Player, Player]
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/roster', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        players = []
+
+        if 'roster' in mlb_data.data and mlb_data.data['roster']:
+            for player in mlb_data.data['roster']:
+                players.append(Player(**mlb_module.merge_keys(player, ['person'])))
+
+        return players
+
+    def get_team_coaches(self, team_id: int, **params) -> List[Coach]:
+        """
+        Return a directory of coaches for a particular team.
+
+        Parameters
+        ----------
+        team_id : int
+            Insert teamId to return a directory of coaches for a given team.
+
+        Other Parameters
+        ----------------
+        season : str
+            Insert year to return a directory of players based on roster status for a particular club in a specific season.
+        date : str
+            Insert date to return a directory of players based on roster status for a particular club on a specific date.   
+        fields : str
+            Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        list of Coaches
+            returns a list of Coaches
+
+        See Also
+        --------
+        Mlb.get_teams : Return a list of Teams from sport id.
+        Mlb.get_team : Return a Team from id
+        Mlb.get_team_roster : Return a list of Players from team id
+        
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_team_coaches(133)
+        [Coach, Coach, Coach]
+        >>> mlb.get_team_coaches(133, season='2018')
+        [Coach, Coach, Coach]
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'teams/{team_id}/coaches', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        coaches = []
+
+        if 'roster' in mlb_data.data and mlb_data.data['roster']:
+            for coach in mlb_data.data['roster']:
+                coaches.append(Coach(**mlb_module.merge_keys(coach, ['person'])))
+
+        return coaches
+
+    def get_division(self, division_id: int, **params) -> Union[Division, None]:
+        """
+        Returns a division based on divisionId,
+
+        Parameters
+        ----------
+        divison_id : int
+            divisionId to return a directory of division(s) for a specific division.
+
+        Returns
+        -------
+        Division
+            returns a Division
+
+        See Also
+        --------
+        Mlb.get_divisions : return a list of Divisions
+        Mlb.get_division_id : return a list of matching division ids
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_division(200)
+        Division
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'divisions/{division_id}', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return None
+
+        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
+            for division in mlb_data.data['divisions']:
+                return Division(**division)
+
+    def get_divisions(self, **params) -> List[Division]:
+        """
+        return all divisons
+
+        Other Parameters
+        ----------------
+        divisionId : str
+            Insert divisionId(s) to return a directory of division(s) for a 
+            specific division. Format '200,201'
+        leagueId : int
+            Insert leagueId to return a directory of division(s) for all 
+            divisions in a specific league.
+        sportId : int
+            Insert a sportId to return a directory of division(s) for all 
+            divisions in a specific sport.
+
+        Returns
+        -------
+        list of Divisions
+            returns a list of all divisions
+
+        See Also
+        --------
+        Mlb.get_division : return a Division from id
+        Mlb.get_division_id : return a list of matching division ids
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_divisions()
+        [Divison, Division, Division]
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        divisions = []
+
+        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
+            divisions = [Division(**division) for division in mlb_data.data['divisions']]
+
+        return divisions
+
+    def get_division_id(self, division_name: str, 
+                        search_key: str = 'name', **params) -> List[Division]:
+        """
+        return divsion id
+
+        Parameters
+        ----------
+        division_name : str
+            Division name
+        search_key : str
+            search key name
+
+        Returns
+        -------
+        list of ints
+            returns a matching list of division ids
+
+        See Also
+        --------
+        Mlb.get_division : return a Division from id
+        Mlb.get_divisions : return a list of Divisions
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_division_id('American League West')
+        [200]
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint='divisions', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+        
+        division_ids = []
+
+        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
+            for division in mlb_data.data['divisions']:
+                try:
+                    if division[search_key].lower() == division_name.lower():
+                        division_ids.append(division['id'])
+                except KeyError:
+                    continue
+
+        return division_ids
+    
+    def get_league(self, league_id: int, **params) -> Union[League, None]:
+        """
+        return league
+
+        Parameters
+        ----------
+        league_id : int
+            leagueId to return league information for a specific league
+
+        Other Parameters
+        ----------------
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute    
+
+        Returns
+        -------
+        League
+
+        See Also
+        --------
+        Mlb.get_leagues : return a list of Leagues
+        Mlb.get_league_id : return a list of league ids that match name
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_league(103)
+        [League]
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'leagues/{league_id}', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return None
+
+        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
+            for league in mlb_data.data['leagues']:
+                return League(**league)
+
+    def get_leagues(self, **params) -> List[League]:
+        """
+        return all leagues
+
+        Returns
+        -------
+        list of Leagues
+
+        Other Parameters
+        ----------------
+        leagueId : str
+            leagueId(s) to return league information for specific leagues.
+            Format '103,104'
+        sportId : int
+            Insert sportId to return league information for a specific sport.
+            For a list of all sportIds: http://statsapi.mlb.com/api/v1/sports   
+        seasons : str
+            Insert year(s) to return league information for a specific season. 
+            Format '2017,2018'
+        fields : str
+            Comma delimited list of specific fields to be returned. 
+            Format: topLevelNode, childNode, attribute    
+
+        See Also
+        --------
+        Mlb.get_league : return a League from league id
+        Mlb.get_league_id : return a list of league ids that match name
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_leagues()
+        [League, League, League]
+        """
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint='leagues', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        leagues = []
+
+        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
+            leagues = [League(**league) for league in mlb_data.data['leagues']]
+
+        return leagues
+
+    def get_league_id(self, league_name: str,
+                      search_key: str = 'name', **params) -> List[int]:
+        """
+        return league id
+
+        Parameters
+        ----------
+        league_name : str
+            League name
+
+        Returns
+        -------
+        list of ints
+
+        See Also
+        --------
+        Mlb.get_league : return a League from league id
+        Mlb.get_leagues : return a list of Leagues
+
+        Examples
+        --------
+        >>> mlb = Mlb()
+        >>> mlb.get_league_id('American League')
+        [103]
+        """
+        # Used to reduce the amount of unneccessary data requested from api
+        params['fields'] = 'leagues,id,name'
+
+        mlb_data = self._mlb_adapter_v1.get(endpoint='leagues', ep_params=params)
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        league_ids = []
+
+        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
+            for league in mlb_data.data['leagues']:
+                try:
+                    if league[search_key].lower() == league_name.lower():
+                        league_ids.append(league['id'])
+                except KeyError:
+                    continue
+                
+        return league_ids

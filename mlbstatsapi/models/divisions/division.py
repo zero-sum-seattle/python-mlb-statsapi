@@ -1,7 +1,7 @@
 ﻿from dataclasses import dataclass
 from typing import Optional, Union
 
-# from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.leagues import League
 # from mlbstatsapi.models.sports import Sport
 
 
@@ -41,17 +41,17 @@ class Division:
     link: str
     name: Optional[str] = None
     season: Optional[str] = None
-    nameshort: Optional[str] = None
+    nameShort: Optional[str] = None
     abbreviation: Optional[str] = None
     league: dict = None
     sport: dict = None
-    haswildcard: Optional[bool] = None
-    sortorder: Optional[int] = None
-    numplayoffteams: Optional[int] = None
+    hasWildcard: Optional[bool] = None
+    sortOrder: Optional[int] = None
+    numPlayoffTeams: Optional[int] = None
     active: Optional[bool] = None
 
-    # def __post_init__(self):
-        # self.league = League(**self.league) if self.league else self.league
+    def __post_init__(self):
+        self.league = League(**self.league) if self.league else self.league
         # self.sport = Sport(**self.sport) if self.sport else self.sport
 
     def __repr__(self) -> str:

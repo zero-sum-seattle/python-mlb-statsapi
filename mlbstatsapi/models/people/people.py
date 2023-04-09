@@ -174,8 +174,8 @@ class Player(Person):
     parentteamid : int
         parent team id
     """
-    jerseynumber: str
-    parentteamid: int
+    jerseyNumber: str
+    parentTeamId: int
     position: InitVar[dict]
     status: Union[Status, dict]
 
@@ -200,9 +200,9 @@ class Coach(Person):
         title of the coach
     parentteamid : int
     """
-    jerseynumber: str
+    jerseyNumber: str
     job: str
-    jobid: str
+    jobId: str
     title: str
 
 @dataclass(kw_only=True)
@@ -219,69 +219,3 @@ class Pitcher(Person):
     A class to represent a Pitcher
     """
     pass
-
-
-@dataclass(kw_only=True)
-class DraftPick(Person):
-    """
-    Represents a pick made in the MLB draft.
-
-    Attributes
-    ----------
-    bisplayerid : int
-        The unique identifier of the player associated with this draft pick.
-    pickround : str
-        The round of the draft in which this pick was made.
-    picknumber : int
-        The number of the pick in the round.
-    roundpicknumber : int
-        The number of the pick overall in the draft.
-    rank : int
-        The rank of the player among all players eligible for the draft.
-    pickvalue : str
-        The value of the pick, if known.
-    signingbonus : str
-        The signing bonus associated with this pick, if known.
-    home : Home
-        Information about the player's home location.
-    scoutingreport : str
-    A   scouting report on the player's abilities.
-    school : School
-        Information about the player's school or college.
-    blurb : str
-        A   brief summary of the player's background and accomplishments.
-    headshotlink : str
-        A   link to a headshot image of the player.
-    team : Team or dict
-        The team that made this draft pick.
-    drafttype : CodeDesc
-        Information about the type of draft in which this pick was made.
-    isdrafted : bool
-        Whether or not the player associated with this pick has been drafted.
-    ispass : bool
-        Whether or not the team passed on making a pick in this round.
-    year : str
-        The year in which the draft took place.
-    """
-
-    bisplayerid: Optional[int] = None
-    pickround:  str
-    picknumber:  int
-    roundpicknumber:  int
-    rank: Optional[int] = None
-    pickvalue: Optional[str] = None
-    signingbonus:  Optional[str] = None
-    home: Union[Home , dict]
-    scoutingreport: Optional[str] = None
-    school: Union[School , dict] 
-    blurb: Optional[str] = None
-    headshotlink: str
-    team: dict # Add Team object here
-    drafttype: Union[CodeDesc, dict]
-    isdrafted: bool
-    ispass: bool
-    year: str
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
