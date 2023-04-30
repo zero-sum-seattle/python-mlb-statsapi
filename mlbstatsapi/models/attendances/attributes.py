@@ -130,7 +130,7 @@ class AttendanceRecords:
     attendancetotalaway: Optional[int] = None
     attendancetotalhome: Optional[int] = None
     attendanceopeningaverage: Optional[int] = None
-
+    
     def __post_init__(self):
         self.attendancehighgame = AttendanceHighLowGame(**self.attendancehighgame) if self.attendancehighgame else self.attendancehighgame
         self.attendancelowgame = AttendanceHighLowGame(**self.attendancelowgame) if self.attendancelowgame else self.attendancelowgame

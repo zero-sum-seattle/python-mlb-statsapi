@@ -51,6 +51,8 @@ class Location:
     phone: Optional[str] = None
     address2: Optional[str] = None
     address3: Optional[str] = None
+    azimuthangle: Optional[str] = None
+    elevation: Optional[str] = None
     defaultcoordinates: Optional[Union[VenueDefaultCoordinates, dict]] = field(default_factory=dict)
 
     def __post_init__(self):
