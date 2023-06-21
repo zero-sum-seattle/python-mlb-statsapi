@@ -179,7 +179,7 @@ class Player(Person):
     status : 
         Status of the player
     parentteamid : int
-        parent team id
+        parent team id        
     """
     jerseynumber: str
     parentteamid: int
@@ -187,7 +187,7 @@ class Player(Person):
     status: Union[Status, dict]
 
     def __post_init__(self, position: dict):
-        self.primaryposition = Position(**position)
+        self.primaryposition = Position(**position) if position else None
 
 
 @dataclass(kw_only=True, repr=False)

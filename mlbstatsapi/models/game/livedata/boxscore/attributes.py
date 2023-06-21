@@ -90,11 +90,11 @@ class PlayersDictPerson:
         All of the person's positions if avaliable.
     """
     person: Union[Person, dict]
-    position: Union[Position, dict]
     status: Union[CodeDesc, dict]
     stats: dict
     seasonstats: dict
     gamestatus: Union[GameStatus, dict]
+    position: Optional[Union[Position, dict]] = None
     battingorder: Optional[int] = None
     jerseynumber: Optional[str] = None
     parentteamid: Optional[int] = None
@@ -102,7 +102,7 @@ class PlayersDictPerson:
 
     def __post_init__(self):
         self.person = Person(**self.person)
-        self.position = Position(**self.position)
+        self.position = Position(**self.position) if self.position else self.position
         self.status = CodeDesc(**self.status)
         self.gamestatus = GameStatus(**self.gamestatus)
         self.allpositions = [Position(**allposition) for allposition in self.allpositions] if self.allpositions else self.allpositions
