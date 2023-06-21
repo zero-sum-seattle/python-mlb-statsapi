@@ -119,6 +119,10 @@ class Teamrecords(TeamRecord):
     haswildcard: bool
     clinched: bool
     eliminationnumber: str
+    eliminationnumbersport: str
+    eliminationnumberleague: str
+    eliminationnumberdivision: str
+    eliminationnumberconference: str
     wildcardeliminationnumber: str    
     # wins: int
     # losses: int
