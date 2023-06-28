@@ -57,6 +57,7 @@ class DraftPick:
     home: Union[Home, dict]
     pickround:  str
     picknumber:  int
+    displaypicknumber: int
     roundpicknumber:  int
     headshotlink: Optional[str] = None
     person: Optional[Union[Person, dict]] = None
