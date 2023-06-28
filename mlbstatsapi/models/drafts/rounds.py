@@ -19,6 +19,8 @@ class DraftPick:
         The round of the draft in which this pick was made.
     picknumber : int
         The number of the pick in the round.
+    displaypicknumber : int
+        The overall pick number displayed.
     roundpicknumber : int
         The number of the pick overall in the draft.
     rank : int
@@ -57,6 +59,7 @@ class DraftPick:
     home: Union[Home, dict]
     pickround:  str
     picknumber:  int
+    displaypicknumber: int
     roundpicknumber:  int
     headshotlink: Optional[str] = None
     person: Optional[Union[Person, dict]] = None
