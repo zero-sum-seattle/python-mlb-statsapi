@@ -29,6 +29,8 @@ class Info:
     ----------
     id : int
         The unique identifier of the event.
+    nongameguid : str
+        Guid of the event.
     name : str
         The name of the event.
     eventtype : Eventtype
@@ -55,6 +57,7 @@ class Info:
         for the Team class.
     """
     id: int
+    nongameguid: str
     name: str
     eventtype: Union[Eventtype, dict]
     eventdate: str

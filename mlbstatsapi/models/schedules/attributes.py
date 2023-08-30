@@ -109,6 +109,8 @@ class ScheduleGames:
         Number of scheduled inning for the game
     reversehomeawaystatus : bool
         If reverse home and away?
+    gameguid : str = None
+        The games guid
     inningbreaklength : int
         Length of break between innings
     gamesinseries : int
@@ -158,6 +160,7 @@ class ScheduleGames:
     ifnecessarydescription: str
     status: Union[GameStatus, dict] = field(default_factory=dict)
     teams: Union[ScheduleHomeAndAway, dict] = field(default_factory=dict)
+    gameguid: Optional[str] = None
     description: Optional[str] = None
     inningbreaklength: Optional[int] = None
     rescheduledate: Optional[str] = None

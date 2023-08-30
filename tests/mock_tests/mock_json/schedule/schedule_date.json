@@ -1,707 +1,1129 @@
 ﻿{
-    "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
-    "totalItems": 9,
-    "totalEvents": 0,
-    "totalGames": 9,
-    "totalGamesInProgress": 0,
-    "dates": [
-      {
-        "date": "2022-04-07",
-        "totalItems": 9,
-        "totalEvents": 0,
-        "totalGames": 9,
-        "totalGamesInProgress": 0,
-        "games": [
-          {
-            "gamePk": 663178,
-            "link": "/api/v1.1/game/663178/feed/live",
-            "gameType": "R",
-            "season": "2022",
-            "gameDate": "2022-04-07T18:20:00Z",
-            "officialDate": "2022-04-07",
-            "status": {
-              "abstractGameState": "Final",
-              "codedGameState": "F",
-              "detailedState": "Final",
-              "statusCode": "F",
-              "startTimeTBD": false,
-              "abstractGameCode": "F"
-            },
-            "teams": {
-              "away": {
-                "leagueRecord": {
-                  "wins": 0,
-                  "losses": 1,
-                  "pct": ".000"
-                },
-                "score": 4,
-                "team": {
-                  "id": 158,
-                  "name": "Milwaukee Brewers",
-                  "link": "/api/v1/teams/158"
-                },
-                "isWinner": false,
-                "splitSquad": false,
-                "seriesNumber": 1
-              },
-              "home": {
-                "leagueRecord": {
-                  "wins": 1,
-                  "losses": 0,
-                  "pct": "1.000"
-                },
-                "score": 5,
-                "team": {
-                  "id": 112,
-                  "name": "Chicago Cubs",
-                  "link": "/api/v1/teams/112"
-                },
-                "isWinner": true,
-                "splitSquad": false,
-                "seriesNumber": 1
-              }
-            },
-            "venue": {
-              "id": 17,
-              "name": "Wrigley Field",
-              "link": "/api/v1/venues/17"
-            },
-            "content": {
-              "link": "/api/v1/game/663178/content"
-            },
-            "isTie": false,
-            "gameNumber": 1,
-            "publicFacing": true,
-            "doubleHeader": "N",
-            "gamedayType": "P",
-            "tiebreaker": "N",
-            "calendarEventID": "14-663178-2022-04-07",
-            "seasonDisplay": "2022",
-            "dayNight": "day",
-            "description": "Cubs home opener",
-            "scheduledInnings": 9,
-            "reverseHomeAwayStatus": false,
-            "inningBreakLength": 120,
-            "gamesInSeries": 3,
-            "seriesGameNumber": 1,
-            "seriesDescription": "Regular Season",
-            "recordSource": "S",
-            "ifNecessary": "N",
-            "ifNecessaryDescription": "Normal Game"
+  "copyright": "Copyright 2023 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "totalItems": 15,
+  "totalEvents": 0,
+  "totalGames": 15,
+  "totalGamesInProgress": 12,
+  "dates": [
+    {
+      "date": "2023-08-29",
+      "totalItems": 15,
+      "totalEvents": 0,
+      "totalGames": 15,
+      "totalGamesInProgress": 12,
+      "games": [
+        {
+          "gamePk": 716806,
+          "gameGuid": "98d6141e-94e5-4386-b21a-6d46d872a78e",
+          "link": "/api/v1.1/game/716806/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-29T22:40:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
           },
-          {
-            "gamePk": 662766,
-            "link": "/api/v1.1/game/662766/feed/live",
-            "gameType": "R",
-            "season": "2022",
-            "gameDate": "2022-04-07T20:10:00Z",
-            "officialDate": "2022-04-07",
-            "status": {
-              "abstractGameState": "Final",
-              "codedGameState": "F",
-              "detailedState": "Final",
-              "statusCode": "F",
-              "startTimeTBD": false,
-              "abstractGameCode": "F"
-            },
-            "teams": {
-              "away": {
-                "leagueRecord": {
-                  "wins": 0,
-                  "losses": 1,
-                  "pct": ".000"
-                },
-                "score": 1,
-                "team": {
-                  "id": 114,
-                  "name": "Cleveland Guardians",
-                  "link": "/api/v1/teams/114"
-                },
-                "isWinner": false,
-                "splitSquad": false,
-                "seriesNumber": 1
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 63,
+                "losses": 69,
+                "pct": ".477"
               },
-              "home": {
-                "leagueRecord": {
-                  "wins": 1,
-                  "losses": 0,
-                  "pct": "1.000"
-                },
-                "score": 3,
-                "team": {
-                  "id": 118,
-                  "name": "Kansas City Royals",
-                  "link": "/api/v1/teams/118"
-                },
-                "isWinner": true,
-                "splitSquad": false,
-                "seriesNumber": 1
-              }
+              "score": 5,
+              "team": {
+                "id": 108,
+                "name": "Los Angeles Angels",
+                "link": "/api/v1/teams/108"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
             },
-            "venue": {
-              "id": 7,
-              "name": "Kauffman Stadium",
-              "link": "/api/v1/venues/7"
-            },
-            "content": {
-              "link": "/api/v1/game/662766/content"
-            },
-            "isTie": false,
-            "gameNumber": 1,
-            "publicFacing": true,
-            "doubleHeader": "N",
-            "gamedayType": "P",
-            "tiebreaker": "N",
-            "calendarEventID": "14-662766-2022-04-07",
-            "seasonDisplay": "2022",
-            "dayNight": "day",
-            "description": "Royals home opener",
-            "scheduledInnings": 9,
-            "reverseHomeAwayStatus": false,
-            "inningBreakLength": 120,
-            "gamesInSeries": 4,
-            "seriesGameNumber": 1,
-            "seriesDescription": "Regular Season",
-            "recordSource": "S",
-            "ifNecessary": "N",
-            "ifNecessaryDescription": "Normal Game"
+            "home": {
+              "leagueRecord": {
+                "wins": 73,
+                "losses": 58,
+                "pct": ".557"
+              },
+              "score": 8,
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
           },
-          {
-            "gamePk": 662021,
-            "link": "/api/v1.1/game/662021/feed/live",
-            "gameType": "R",
-            "season": "2022",
-            "gameDate": "2022-04-07T20:15:00Z",
-            "officialDate": "2022-04-07",
-            "status": {
-              "abstractGameState": "Final",
-              "codedGameState": "F",
-              "detailedState": "Final",
-              "statusCode": "F",
-              "startTimeTBD": false,
-              "abstractGameCode": "F"
-            },
-            "teams": {
-              "away": {
-                "leagueRecord": {
-                  "wins": 0,
-                  "losses": 1,
-                  "pct": ".000"
-                },
-                "score": 0,
-                "team": {
-                  "id": 134,
-                  "name": "Pittsburgh Pirates",
-                  "link": "/api/v1/teams/134"
-                },
-                "isWinner": false,
-                "splitSquad": false,
-                "seriesNumber": 1
-              },
-              "home": {
-                "leagueRecord": {
-                  "wins": 1,
-                  "losses": 0,
-                  "pct": "1.000"
-                },
-                "score": 9,
-                "team": {
-                  "id": 138,
-                  "name": "St. Louis Cardinals",
-                  "link": "/api/v1/teams/138"
-                },
-                "isWinner": true,
-                "splitSquad": false,
-                "seriesNumber": 1
-              }
-            },
-            "venue": {
-              "id": 2889,
-              "name": "Busch Stadium",
-              "link": "/api/v1/venues/2889"
-            },
-            "content": {
-              "link": "/api/v1/game/662021/content"
-            },
-            "isTie": false,
-            "gameNumber": 1,
-            "publicFacing": true,
-            "doubleHeader": "N",
-            "gamedayType": "P",
-            "tiebreaker": "N",
-            "calendarEventID": "14-662021-2022-04-07",
-            "seasonDisplay": "2022",
-            "dayNight": "day",
-            "description": "Cardinals home opener",
-            "scheduledInnings": 9,
-            "reverseHomeAwayStatus": false,
-            "inningBreakLength": 120,
-            "gamesInSeries": 3,
-            "seriesGameNumber": 1,
-            "seriesDescription": "Regular Season",
-            "recordSource": "S",
-            "ifNecessary": "N",
-            "ifNecessaryDescription": "Normal Game"
+          "venue": {
+            "id": 2681,
+            "name": "Citizens Bank Park",
+            "link": "/api/v1/venues/2681"
           },
-          {
-            "gamePk": 662571,
-            "link": "/api/v1.1/game/662571/feed/live",
-            "gameType": "R",
-            "season": "2022",
-            "gameDate": "2022-04-07T23:05:00Z",
-            "officialDate": "2022-04-07",
-            "status": {
-              "abstractGameState": "Final",
-              "codedGameState": "F",
-              "detailedState": "Final",
-              "statusCode": "F",
-              "startTimeTBD": false,
-              "abstractGameCode": "F"
-            },
-            "teams": {
-              "away": {
-                "leagueRecord": {
-                  "wins": 1,
-                  "losses": 0,
-                  "pct": "1.000"
-                },
-                "score": 5,
-                "team": {
-                  "id": 121,
-                  "name": "New York Mets",
-                  "link": "/api/v1/teams/121"
-                },
-                "isWinner": true,
-                "splitSquad": false,
-                "seriesNumber": 1
-              },
-              "home": {
-                "leagueRecord": {
-                  "wins": 0,
-                  "losses": 1,
-                  "pct": ".000"
-                },
-                "score": 1,
-                "team": {
-                  "id": 120,
-                  "name": "Washington Nationals",
-                  "link": "/api/v1/teams/120"
-                },
-                "isWinner": false,
-                "splitSquad": false,
-                "seriesNumber": 1
-              }
-            },
-            "venue": {
-              "id": 3309,
-              "name": "Nationals Park",
-              "link": "/api/v1/venues/3309"
-            },
-            "content": {
-              "link": "/api/v1/game/662571/content"
-            },
-            "isTie": false,
-            "gameNumber": 1,
-            "publicFacing": true,
-            "doubleHeader": "N",
-            "gamedayType": "P",
-            "tiebreaker": "N",
-            "calendarEventID": "14-662571-2022-04-07",
-            "seasonDisplay": "2022",
-            "dayNight": "night",
-            "description": "Nationals home opener",
-            "scheduledInnings": 9,
-            "reverseHomeAwayStatus": false,
-            "inningBreakLength": 120,
-            "gamesInSeries": 4,
-            "seriesGameNumber": 1,
-            "seriesDescription": "Regular Season",
-            "recordSource": "S",
-            "ifNecessary": "N",
-            "ifNecessaryDescription": "Normal Game"
+          "content": {
+            "link": "/api/v1/game/716806/content"
           },
-          {
-            "gamePk": 661577,
-            "link": "/api/v1.1/game/661577/feed/live",
-            "gameType": "R",
-            "season": "2022",
-            "gameDate": "2022-04-08T00:08:00Z",
-            "officialDate": "2022-04-07",
-            "status": {
-              "abstractGameState": "Final",
-              "codedGameState": "F",
-              "detailedState": "Final",
-              "statusCode": "F",
-              "startTimeTBD": false,
-              "abstractGameCode": "F"
-            },
-            "teams": {
-              "away": {
-                "leagueRecord": {
-                  "wins": 1,
-                  "losses": 0,
-                  "pct": "1.000"
-                },
-                "score": 6,
-                "team": {
-                  "id": 113,
-                  "name": "Cincinnati Reds",
-                  "link": "/api/v1/teams/113"
-                },
-                "isWinner": true,
-                "splitSquad": false,
-                "seriesNumber": 1
-              },
-              "home": {
-                "leagueRecord": {
-                  "wins": 0,
-                  "losses": 1,
-                  "pct": ".000"
-                },
-                "score": 3,
-                "team": {
-                  "id": 144,
-                  "name": "Atlanta Braves",
-                  "link": "/api/v1/teams/144"
-                },
-                "isWinner": false,
-                "splitSquad": false,
-                "seriesNumber": 1
-              }
-            },
-            "venue": {
-              "id": 4705,
-              "name": "Truist Park",
-              "link": "/api/v1/venues/4705"
-            },
-            "content": {
-              "link": "/api/v1/game/661577/content"
-            },
-            "isTie": false,
-            "gameNumber": 1,
-            "publicFacing": true,
-            "doubleHeader": "N",
-            "gamedayType": "P",
-            "tiebreaker": "N",
-            "calendarEventID": "14-661577-2022-04-07",
-            "seasonDisplay": "2022",
-            "dayNight": "night",
-            "description": "Braves home opener",
-            "scheduledInnings": 9,
-            "reverseHomeAwayStatus": false,
-            "inningBreakLength": 145,
-            "gamesInSeries": 4,
-            "seriesGameNumber": 1,
-            "seriesDescription": "Regular Season",
-            "recordSource": "S",
-            "ifNecessary": "N",
-            "ifNecessaryDescription": "Normal Game"
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716806-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716807,
+          "gameGuid": "1d8031bf-df70-4197-b96a-649228082ffb",
+          "link": "/api/v1.1/game/716807/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-29T22:40:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
           },
-          {
-            "gamePk": 661042,
-            "link": "/api/v1.1/game/661042/feed/live",
-            "gameType": "R",
-            "season": "2022",
-            "gameDate": "2022-04-08T01:38:00Z",
-            "officialDate": "2022-04-07",
-            "status": {
-              "abstractGameState": "Final",
-              "codedGameState": "F",
-              "detailedState": "Final",
-              "statusCode": "F",
-              "startTimeTBD": false,
-              "abstractGameCode": "F"
-            },
-            "teams": {
-              "away": {
-                "leagueRecord": {
-                  "wins": 1,
-                  "losses": 0,
-                  "pct": "1.000"
-                },
-                "score": 3,
-                "team": {
-                  "id": 117,
-                  "name": "Houston Astros",
-                  "link": "/api/v1/teams/117"
-                },
-                "isWinner": true,
-                "splitSquad": false,
-                "seriesNumber": 1
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 80,
+                "losses": 52,
+                "pct": ".606"
               },
-              "home": {
-                "leagueRecord": {
-                  "wins": 0,
-                  "losses": 1,
-                  "pct": ".000"
-                },
-                "score": 1,
-                "team": {
-                  "id": 108,
-                  "name": "Los Angeles Angels",
-                  "link": "/api/v1/teams/108"
-                },
-                "isWinner": false,
-                "splitSquad": false,
-                "seriesNumber": 1
-              }
+              "score": 4,
+              "team": {
+                "id": 139,
+                "name": "Tampa Bay Rays",
+                "link": "/api/v1/teams/139"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
             },
-            "venue": {
-              "id": 1,
-              "name": "Angel Stadium",
-              "link": "/api/v1/venues/1"
-            },
-            "content": {
-              "link": "/api/v1/game/661042/content"
-            },
-            "isTie": false,
-            "gameNumber": 1,
-            "publicFacing": true,
-            "doubleHeader": "N",
-            "gamedayType": "P",
-            "tiebreaker": "N",
-            "calendarEventID": "14-661042-2022-04-07",
-            "seasonDisplay": "2022",
-            "dayNight": "night",
-            "description": "Angels home opener",
-            "scheduledInnings": 9,
-            "reverseHomeAwayStatus": false,
-            "gamesInSeries": 4,
-            "seriesGameNumber": 1,
-            "seriesDescription": "Regular Season",
-            "recordSource": "S",
-            "ifNecessary": "N",
-            "ifNecessaryDescription": "Normal Game"
+            "home": {
+              "leagueRecord": {
+                "wins": 66,
+                "losses": 65,
+                "pct": ".504"
+              },
+              "score": 2,
+              "team": {
+                "id": 146,
+                "name": "Miami Marlins",
+                "link": "/api/v1/teams/146"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
           },
-          {
-            "gamePk": 663418,
-            "link": "/api/v1.1/game/663418/feed/live",
-            "gameType": "R",
-            "season": "2022",
-            "gameDate": "2022-04-08T01:40:00Z",
-            "officialDate": "2022-04-07",
-            "status": {
-              "abstractGameState": "Final",
-              "codedGameState": "F",
-              "detailedState": "Final",
-              "statusCode": "F",
-              "startTimeTBD": false,
-              "abstractGameCode": "F"
-            },
-            "teams": {
-              "away": {
-                "leagueRecord": {
-                  "wins": 0,
-                  "losses": 1,
-                  "pct": ".000"
-                },
-                "score": 2,
-                "team": {
-                  "id": 135,
-                  "name": "San Diego Padres",
-                  "link": "/api/v1/teams/135"
-                },
-                "isWinner": false,
-                "splitSquad": false,
-                "seriesNumber": 1
-              },
-              "home": {
-                "leagueRecord": {
-                  "wins": 1,
-                  "losses": 0,
-                  "pct": "1.000"
-                },
-                "score": 4,
-                "team": {
-                  "id": 109,
-                  "name": "Arizona Diamondbacks",
-                  "link": "/api/v1/teams/109"
-                },
-                "isWinner": true,
-                "splitSquad": false,
-                "seriesNumber": 1
-              }
-            },
-            "venue": {
-              "id": 15,
-              "name": "Chase Field",
-              "link": "/api/v1/venues/15"
-            },
-            "content": {
-              "link": "/api/v1/game/663418/content"
-            },
-            "isTie": false,
-            "gameNumber": 1,
-            "publicFacing": true,
-            "doubleHeader": "N",
-            "gamedayType": "P",
-            "tiebreaker": "N",
-            "calendarEventID": "14-663418-2022-04-07",
-            "seasonDisplay": "2022",
-            "dayNight": "night",
-            "description": "D-backs home opener",
-            "scheduledInnings": 9,
-            "reverseHomeAwayStatus": false,
-            "inningBreakLength": 120,
-            "gamesInSeries": 4,
-            "seriesGameNumber": 1,
-            "seriesDescription": "Regular Season",
-            "recordSource": "S",
-            "ifNecessary": "N",
-            "ifNecessaryDescription": "Normal Game"
+          "venue": {
+            "id": 4169,
+            "name": "loanDepot park",
+            "link": "/api/v1/venues/4169"
           },
-          {
-            "gamePk": 661333,
-            "link": "/api/v1.1/game/661333/feed/live",
-            "gameType": "R",
-            "season": "2022",
-            "gameDate": "2022-04-07T17:05:00Z",
-            "officialDate": "2022-04-08",
-            "rescheduleDate": "2022-04-08T17:05:00Z",
-            "rescheduleGameDate": "2022-04-08",
-            "status": {
-              "abstractGameState": "Final",
-              "codedGameState": "D",
-              "detailedState": "Postponed",
-              "statusCode": "DI",
-              "startTimeTBD": false,
-              "reason": "Inclement Weather",
-              "abstractGameCode": "F"
-            },
-            "teams": {
-              "away": {
-                "leagueRecord": {
-                  "wins": 0,
-                  "losses": 1,
-                  "pct": ".000"
-                },
-                "team": {
-                  "id": 111,
-                  "name": "Boston Red Sox",
-                  "link": "/api/v1/teams/111"
-                },
-                "splitSquad": false,
-                "seriesNumber": 1
-              },
-              "home": {
-                "leagueRecord": {
-                  "wins": 1,
-                  "losses": 0,
-                  "pct": "1.000"
-                },
-                "team": {
-                  "id": 147,
-                  "name": "New York Yankees",
-                  "link": "/api/v1/teams/147"
-                },
-                "splitSquad": false,
-                "seriesNumber": 1
-              }
-            },
-            "venue": {
-              "id": 3313,
-              "name": "Yankee Stadium",
-              "link": "/api/v1/venues/3313"
-            },
-            "content": {
-              "link": "/api/v1/game/661333/content"
-            },
-            "gameNumber": 1,
-            "publicFacing": true,
-            "doubleHeader": "N",
-            "gamedayType": "P",
-            "tiebreaker": "N",
-            "calendarEventID": "14-661333-2022-04-07",
-            "seasonDisplay": "2022",
-            "dayNight": "day",
-            "description": "Yankees home opener",
-            "scheduledInnings": 9,
-            "reverseHomeAwayStatus": false,
-            "inningBreakLength": 145,
-            "gamesInSeries": 3,
-            "seriesGameNumber": 1,
-            "seriesDescription": "Regular Season",
-            "recordSource": "S",
-            "ifNecessary": "N",
-            "ifNecessaryDescription": "Normal Game"
+          "content": {
+            "link": "/api/v1/game/716807/content"
           },
-          {
-            "gamePk": 661750,
-            "link": "/api/v1.1/game/661750/feed/live",
-            "gameType": "R",
-            "season": "2022",
-            "gameDate": "2022-04-07T20:10:00Z",
-            "officialDate": "2022-04-08",
-            "rescheduleDate": "2022-04-08T20:10:00Z",
-            "rescheduleGameDate": "2022-04-08",
-            "status": {
-              "abstractGameState": "Final",
-              "codedGameState": "D",
-              "detailedState": "Postponed",
-              "statusCode": "DI",
-              "startTimeTBD": false,
-              "reason": "Inclement Weather",
-              "abstractGameCode": "F"
-            },
-            "teams": {
-              "away": {
-                "leagueRecord": {
-                  "wins": 1,
-                  "losses": 0,
-                  "pct": "1.000"
-                },
-                "team": {
-                  "id": 136,
-                  "name": "Seattle Mariners",
-                  "link": "/api/v1/teams/136"
-                },
-                "splitSquad": false,
-                "seriesNumber": 1
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716807-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 2,
+          "seriesGameNumber": 1,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716795,
+          "gameGuid": "efc2f9ff-0cda-414d-81ca-14633a2a6be0",
+          "link": "/api/v1.1/game/716795/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-29T22:40:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 63,
+                "losses": 68,
+                "pct": ".481"
               },
-              "home": {
-                "leagueRecord": {
-                  "wins": 0,
-                  "losses": 1,
-                  "pct": ".000"
-                },
-                "team": {
-                  "id": 142,
-                  "name": "Minnesota Twins",
-                  "link": "/api/v1/teams/142"
-                },
-                "splitSquad": false,
-                "seriesNumber": 1
-              }
+              "score": 3,
+              "team": {
+                "id": 147,
+                "name": "New York Yankees",
+                "link": "/api/v1/teams/147"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
             },
-            "venue": {
-              "id": 3312,
-              "name": "Target Field",
-              "link": "/api/v1/venues/3312"
+            "home": {
+              "leagueRecord": {
+                "wins": 59,
+                "losses": 72,
+                "pct": ".450"
+              },
+              "score": 0,
+              "team": {
+                "id": 116,
+                "name": "Detroit Tigers",
+                "link": "/api/v1/teams/116"
+              },
+              "splitSquad": false,
+              "seriesNumber": 44
+            }
+          },
+          "venue": {
+            "id": 2394,
+            "name": "Comerica Park",
+            "link": "/api/v1/venues/2394"
+          },
+          "content": {
+            "link": "/api/v1/game/716795/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716795-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 4,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716800,
+          "gameGuid": "07b10953-78df-4e26-a395-01cabf3bad05",
+          "link": "/api/v1.1/game/716800/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-29T23:05:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 52,
+                "losses": 80,
+                "pct": ".394"
+              },
+              "score": 1,
+              "team": {
+                "id": 145,
+                "name": "Chicago White Sox",
+                "link": "/api/v1/teams/145"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
             },
-            "content": {
-              "link": "/api/v1/game/661750/content"
+            "home": {
+              "leagueRecord": {
+                "wins": 82,
+                "losses": 49,
+                "pct": ".626"
+              },
+              "score": 1,
+              "team": {
+                "id": 110,
+                "name": "Baltimore Orioles",
+                "link": "/api/v1/teams/110"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
+          },
+          "venue": {
+            "id": 2,
+            "name": "Oriole Park at Camden Yards",
+            "link": "/api/v1/venues/2"
+          },
+          "content": {
+            "link": "/api/v1/game/716800/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716800-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716801,
+          "gameGuid": "8d9b1e32-ee2f-4ab9-bbc8-fcf768b861e7",
+          "link": "/api/v1.1/game/716801/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-29T23:07:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 61,
+                "losses": 71,
+                "pct": ".462"
+              },
+              "score": 5,
+              "team": {
+                "id": 120,
+                "name": "Washington Nationals",
+                "link": "/api/v1/teams/120"
+              },
+              "splitSquad": false,
+              "seriesNumber": 44
             },
-            "gameNumber": 1,
-            "publicFacing": true,
-            "doubleHeader": "N",
-            "gamedayType": "P",
-            "tiebreaker": "N",
-            "calendarEventID": "14-661750-2022-04-07",
-            "seasonDisplay": "2022",
-            "dayNight": "day",
-            "description": "Twins home opener",
-            "scheduledInnings": 9,
-            "reverseHomeAwayStatus": false,
-            "inningBreakLength": 120,
-            "gamesInSeries": 4,
-            "seriesGameNumber": 1,
-            "seriesDescription": "Regular Season",
-            "recordSource": "S",
-            "ifNecessary": "N",
-            "ifNecessaryDescription": "Normal Game"
-          }
-        ],
-        "events": []
-      }
-    ]
-  }
+            "home": {
+              "leagueRecord": {
+                "wins": 72,
+                "losses": 60,
+                "pct": ".545"
+              },
+              "score": 1,
+              "team": {
+                "id": 141,
+                "name": "Toronto Blue Jays",
+                "link": "/api/v1/teams/141"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
+          },
+          "venue": {
+            "id": 14,
+            "name": "Rogers Centre",
+            "link": "/api/v1/venues/14"
+          },
+          "content": {
+            "link": "/api/v1/game/716801/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716801-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716802,
+          "gameGuid": "0d33a60e-66ca-4f60-b495-34c7cc6ef8de",
+          "link": "/api/v1.1/game/716802/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-29T23:10:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 75,
+                "losses": 58,
+                "pct": ".564"
+              },
+              "score": 3,
+              "team": {
+                "id": 117,
+                "name": "Houston Astros",
+                "link": "/api/v1/teams/117"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 69,
+                "losses": 63,
+                "pct": ".523"
+              },
+              "score": 1,
+              "team": {
+                "id": 111,
+                "name": "Boston Red Sox",
+                "link": "/api/v1/teams/111"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
+          },
+          "venue": {
+            "id": 3,
+            "name": "Fenway Park",
+            "link": "/api/v1/venues/3"
+          },
+          "content": {
+            "link": "/api/v1/game/716802/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716802-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716799,
+          "gameGuid": "4357b4d5-237d-455d-9d0c-71cbb7b4290d",
+          "link": "/api/v1.1/game/716799/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-29T23:10:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 74,
+                "losses": 57,
+                "pct": ".565"
+              },
+              "score": 0,
+              "team": {
+                "id": 140,
+                "name": "Texas Rangers",
+                "link": "/api/v1/teams/140"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 60,
+                "losses": 72,
+                "pct": ".455"
+              },
+              "score": 0,
+              "team": {
+                "id": 121,
+                "name": "New York Mets",
+                "link": "/api/v1/teams/121"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
+          },
+          "venue": {
+            "id": 3289,
+            "name": "Citi Field",
+            "link": "/api/v1/venues/3289"
+          },
+          "content": {
+            "link": "/api/v1/game/716799/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716799-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716796,
+          "gameGuid": "fc4adfe5-4810-40e3-8e7d-eb531eae21d8",
+          "link": "/api/v1.1/game/716796/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-29T23:40:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 62,
+                "losses": 70,
+                "pct": ".470"
+              },
+              "score": 2,
+              "team": {
+                "id": 114,
+                "name": "Cleveland Guardians",
+                "link": "/api/v1/teams/114"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 69,
+                "losses": 63,
+                "pct": ".523"
+              },
+              "score": 0,
+              "team": {
+                "id": 142,
+                "name": "Minnesota Twins",
+                "link": "/api/v1/teams/142"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
+          },
+          "venue": {
+            "id": 3312,
+            "name": "Target Field",
+            "link": "/api/v1/venues/3312"
+          },
+          "content": {
+            "link": "/api/v1/game/716796/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716796-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716797,
+          "gameGuid": "e02ca011-8ca7-4edf-8226-43fd35c068b7",
+          "link": "/api/v1.1/game/716797/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-29T23:45:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 62,
+                "losses": 70,
+                "pct": ".470"
+              },
+              "score": 1,
+              "team": {
+                "id": 135,
+                "name": "San Diego Padres",
+                "link": "/api/v1/teams/135"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 56,
+                "losses": 76,
+                "pct": ".424"
+              },
+              "score": 1,
+              "team": {
+                "id": 138,
+                "name": "St. Louis Cardinals",
+                "link": "/api/v1/teams/138"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
+          },
+          "venue": {
+            "id": 2889,
+            "name": "Busch Stadium",
+            "link": "/api/v1/venues/2889"
+          },
+          "content": {
+            "link": "/api/v1/game/716797/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716797-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716798,
+          "gameGuid": "f5674ab4-1a46-47f7-b5c9-c865cb107a8b",
+          "link": "/api/v1.1/game/716798/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-30T00:05:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 74,
+                "losses": 57,
+                "pct": ".565"
+              },
+              "score": 0,
+              "team": {
+                "id": 158,
+                "name": "Milwaukee Brewers",
+                "link": "/api/v1/teams/158"
+              },
+              "splitSquad": false,
+              "seriesNumber": 42
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 69,
+                "losses": 62,
+                "pct": ".527"
+              },
+              "score": 1,
+              "team": {
+                "id": 112,
+                "name": "Chicago Cubs",
+                "link": "/api/v1/teams/112"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
+          },
+          "venue": {
+            "id": 17,
+            "name": "Wrigley Field",
+            "link": "/api/v1/venues/17"
+          },
+          "content": {
+            "link": "/api/v1/game/716798/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716798-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 145,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716793,
+          "gameGuid": "171b31b2-68d8-42de-ba76-b6a8ec5f714d",
+          "link": "/api/v1.1/game/716793/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-30T00:10:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 59,
+                "losses": 73,
+                "pct": ".447"
+              },
+              "score": 0,
+              "team": {
+                "id": 134,
+                "name": "Pittsburgh Pirates",
+                "link": "/api/v1/teams/134"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 41,
+                "losses": 92,
+                "pct": ".308"
+              },
+              "score": 0,
+              "team": {
+                "id": 118,
+                "name": "Kansas City Royals",
+                "link": "/api/v1/teams/118"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
+          },
+          "venue": {
+            "id": 7,
+            "name": "Kauffman Stadium",
+            "link": "/api/v1/venues/7"
+          },
+          "content": {
+            "link": "/api/v1/game/716793/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716793-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716791,
+          "gameGuid": "b8672201-25e4-4df1-89a2-32bb4aaf3299",
+          "link": "/api/v1.1/game/716791/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-30T00:40:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Live",
+            "codedGameState": "I",
+            "detailedState": "In Progress",
+            "statusCode": "I",
+            "startTimeTBD": false,
+            "abstractGameCode": "L"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 85,
+                "losses": 45,
+                "pct": ".654"
+              },
+              "score": 0,
+              "team": {
+                "id": 144,
+                "name": "Atlanta Braves",
+                "link": "/api/v1/teams/144"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 49,
+                "losses": 82,
+                "pct": ".374"
+              },
+              "score": 0,
+              "team": {
+                "id": 115,
+                "name": "Colorado Rockies",
+                "link": "/api/v1/teams/115"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
+          },
+          "venue": {
+            "id": 19,
+            "name": "Coors Field",
+            "link": "/api/v1/venues/19"
+          },
+          "content": {
+            "link": "/api/v1/game/716791/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716791-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716790,
+          "gameGuid": "f89b5215-e4e5-4b48-97c6-f01da98ac607",
+          "link": "/api/v1.1/game/716790/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-30T01:40:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Preview",
+            "codedGameState": "P",
+            "detailedState": "Pre-Game",
+            "statusCode": "P",
+            "startTimeTBD": false,
+            "abstractGameCode": "P"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 38,
+                "losses": 94,
+                "pct": ".288"
+              },
+              "score": 0,
+              "team": {
+                "id": 133,
+                "name": "Oakland Athletics",
+                "link": "/api/v1/teams/133"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 75,
+                "losses": 56,
+                "pct": ".573"
+              },
+              "score": 0,
+              "team": {
+                "id": 136,
+                "name": "Seattle Mariners",
+                "link": "/api/v1/teams/136"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
+          },
+          "venue": {
+            "id": 680,
+            "name": "T-Mobile Park",
+            "link": "/api/v1/venues/680"
+          },
+          "content": {
+            "link": "/api/v1/game/716790/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716790-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716803,
+          "gameGuid": "8daf8f81-0714-4184-88d9-6294486b7589",
+          "link": "/api/v1.1/game/716803/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-30T01:45:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Preview",
+            "codedGameState": "P",
+            "detailedState": "Pre-Game",
+            "statusCode": "P",
+            "startTimeTBD": false,
+            "abstractGameCode": "P"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 68,
+                "losses": 65,
+                "pct": ".511"
+              },
+              "score": 0,
+              "team": {
+                "id": 113,
+                "name": "Cincinnati Reds",
+                "link": "/api/v1/teams/113"
+              },
+              "splitSquad": false,
+              "seriesNumber": 42
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 68,
+                "losses": 63,
+                "pct": ".519"
+              },
+              "score": 0,
+              "team": {
+                "id": 137,
+                "name": "San Francisco Giants",
+                "link": "/api/v1/teams/137"
+              },
+              "splitSquad": false,
+              "seriesNumber": 44
+            }
+          },
+          "venue": {
+            "id": 2395,
+            "name": "Oracle Park",
+            "link": "/api/v1/venues/2395"
+          },
+          "content": {
+            "link": "/api/v1/game/716803/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716803-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        },
+        {
+          "gamePk": 716792,
+          "gameGuid": "2535c19c-7602-4920-9e60-fdf7673f37de",
+          "link": "/api/v1.1/game/716792/feed/live",
+          "gameType": "R",
+          "season": "2023",
+          "gameDate": "2023-08-30T02:10:00Z",
+          "officialDate": "2023-08-29",
+          "status": {
+            "abstractGameState": "Preview",
+            "codedGameState": "P",
+            "detailedState": "Pre-Game",
+            "statusCode": "P",
+            "startTimeTBD": false,
+            "abstractGameCode": "P"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 69,
+                "losses": 63,
+                "pct": ".523"
+              },
+              "score": 0,
+              "team": {
+                "id": 109,
+                "name": "Arizona Diamondbacks",
+                "link": "/api/v1/teams/109"
+              },
+              "splitSquad": false,
+              "seriesNumber": 44
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 81,
+                "losses": 49,
+                "pct": ".623"
+              },
+              "score": 0,
+              "team": {
+                "id": 119,
+                "name": "Los Angeles Dodgers",
+                "link": "/api/v1/teams/119"
+              },
+              "splitSquad": false,
+              "seriesNumber": 43
+            }
+          },
+          "venue": {
+            "id": 22,
+            "name": "Dodger Stadium",
+            "link": "/api/v1/venues/22"
+          },
+          "content": {
+            "link": "/api/v1/game/716792/content"
+          },
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-716792-2023-08-29",
+          "seasonDisplay": "2023",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 2,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ],
+      "events": []
+    }
+  ]
+}
