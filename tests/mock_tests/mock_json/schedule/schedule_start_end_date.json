@@ -1,5 +1,5 @@
 ﻿{
-  "copyright": "Copyright 2023 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "copyright": "Copyright 2022 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
   "totalItems": 8,
   "totalEvents": 0,
   "totalGames": 8,
@@ -184,40 +184,7 @@
             "startTimeTBD": false,
             "abstractGameCode": "F"
           },
-          "teams": {
-            "away": {
-              "leagueRecord": {
-                "wins": 0,
-                "losses": 1,
-                "pct": ".000"
-              },
-              "score": 1,
-              "team": {
-                "id": 114,
-                "name": "Cleveland Guardians",
-                "link": "/api/v1/teams/114"
-              },
-              "isWinner": false,
-              "splitSquad": false,
-              "seriesNumber": 2
-            },
-            "home": {
-              "leagueRecord": {
-                "wins": 1,
-                "losses": 0,
-                "pct": "1.000"
-              },
-              "score": 4,
-              "team": {
-                "id": 147,
-                "name": "New York Yankees",
-                "link": "/api/v1/teams/147"
-              },
-              "isWinner": true,
-              "splitSquad": false,
-              "seriesNumber": 2
-            }
-          },
+          "teams": {},
           "venue": {
             "id": 3313,
             "name": "Yankee Stadium",
@@ -262,40 +229,7 @@
             "startTimeTBD": false,
             "abstractGameCode": "F"
           },
-          "teams": {
-            "away": {
-              "leagueRecord": {
-                "wins": 0,
-                "losses": 1,
-                "pct": ".000"
-              },
-              "score": 3,
-              "team": {
-                "id": 135,
-                "name": "San Diego Padres",
-                "link": "/api/v1/teams/135"
-              },
-              "isWinner": false,
-              "splitSquad": false,
-              "seriesNumber": 3
-            },
-            "home": {
-              "leagueRecord": {
-                "wins": 1,
-                "losses": 0,
-                "pct": "1.000"
-              },
-              "score": 5,
-              "team": {
-                "id": 119,
-                "name": "Los Angeles Dodgers",
-                "link": "/api/v1/teams/119"
-              },
-              "isWinner": true,
-              "splitSquad": false,
-              "seriesNumber": 3
-            }
-          },
+          "teams": {},
           "venue": {
             "id": 22,
             "name": "Dodger Stadium",
@@ -414,6 +348,7 @@
         },
         {
           "gamePk": 715747,
+          "gameGuid": "02a068a6-a08f-434f-ad41-f79d1ad20086",
           "link": "/api/v1.1/game/715747/feed/live",
           "gameType": "D",
           "season": "2022",
