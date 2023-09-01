@@ -27,6 +27,9 @@ class PitchBreak:
     breakangle: float
     breaklength: float
     breaky: float
+    breakvertical: Optional[float]
+    breakverticalinduced: Optional[float]
+    breakhorizontal: Optional[float]
     spinrate: Optional[float] = None
     spindirection: Optional[float] = None
 

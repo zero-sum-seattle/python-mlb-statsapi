@@ -14,6 +14,7 @@
       "games": [
         {
           "gamePk": 715743,
+          "gameGuid": "90cf981f-455a-4660-9804-9de34e1b75cd",
           "link": "/api/v1.1/game/715743/feed/live",
           "gameType": "D",
           "season": "2022",
@@ -91,6 +92,7 @@
         },
         {
           "gamePk": 715758,
+          "gameGuid": "5be485bd-6156-4d5d-9779-fbd474e537ab",
           "link": "/api/v1.1/game/715758/feed/live",
           "gameType": "D",
           "season": "2022",
@@ -168,6 +170,7 @@
         },
         {
           "gamePk": 715753,
+          "gameGuid": "534f1f6a-ff13-47c7-82ec-7a7f857281dd",
           "link": "/api/v1.1/game/715753/feed/live",
           "gameType": "D",
           "season": "2022",
@@ -212,6 +215,7 @@
         },
         {
           "gamePk": 715748,
+          "gameGuid": "0c5bdcc8-f9f3-4e30-95b1-c5990f06fd1d",
           "link": "/api/v1.1/game/715748/feed/live",
           "gameType": "D",
           "season": "2022",
@@ -266,6 +270,7 @@
       "games": [
         {
           "gamePk": 715742,
+          "gameGuid": "dd8141c3-1ab1-4e4c-aa6c-01b756d147b6",
           "link": "/api/v1.1/game/715742/feed/live",
           "gameType": "D",
           "season": "2022",
@@ -343,6 +348,7 @@
         },
         {
           "gamePk": 715747,
+          "gameGuid": "02a068a6-a08f-434f-ad41-f79d1ad20086",
           "link": "/api/v1.1/game/715747/feed/live",
           "gameType": "D",
           "season": "2022",
@@ -430,6 +436,7 @@
       "games": [
         {
           "gamePk": 715757,
+          "gameGuid": "d344c53c-9e37-4c4b-86ae-f20e769115fc",
           "link": "/api/v1.1/game/715757/feed/live",
           "gameType": "D",
           "season": "2022",
@@ -507,6 +514,7 @@
         },
         {
           "gamePk": 715752,
+          "gameGuid": "1aff41c9-117d-41ae-aa0c-11dbb0749955",
           "link": "/api/v1.1/game/715752/feed/live",
           "gameType": "D",
           "season": "2022",

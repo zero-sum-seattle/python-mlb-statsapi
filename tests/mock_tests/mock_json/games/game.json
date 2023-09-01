@@ -659,6 +659,9 @@
                             "breakAngle": 28.8,
                             "breakLength": 4.8,
                             "breakY": 24,
+                            "breakVertical": -19.2,
+                            "breakVerticalInduced": 11.5,
+                            "breakHorizontal": 10.2,
                             "spinRate": 2120,
                             "spinDirection": 216
                         },
@@ -725,6 +728,9 @@
                             "breakAngle": 33.6,
                             "breakLength": 4.8,
                             "breakY": 24,
+                            "breakVertical": -18.1,
+                            "breakVerticalInduced": 13,
+                            "breakHorizontal": 12.2,
                             "spinRate": 2238,
                             "spinDirection": 214
                         },
@@ -950,6 +956,9 @@
                             "breakAngle": 16.8,
                             "breakLength": 8.4,
                             "breakY": 24,
+                            "breakVertical": -37.2,
+                            "breakVerticalInduced": 6.8,
+                            "breakHorizontal": -11.6,
                             "spinRate": 2136,
                             "spinDirection": 64
                         },
@@ -1016,6 +1025,9 @@
                             "breakAngle": 37.2,
                             "breakLength": 4.8,
                             "breakY": 24,
+                            "breakVertical": -18.5,
+                            "breakVerticalInduced": 11.8,
+                            "breakHorizontal": 14,
                             "spinRate": 2257,
                             "spinDirection": 218
                         },
@@ -1573,6 +1585,9 @@
                             "breakAngle": 8.4,
                             "breakLength": 7.2,
                             "breakY": 24,
+                            "breakVertical": -30.6,
+                            "breakVerticalInduced": 4.4,
+                            "breakHorizontal": -4.4,
                             "spinRate": 2637,
                             "spinDirection": 150
                         },
@@ -1639,6 +1654,9 @@
                             "breakAngle": 14.4,
                             "breakLength": 7.2,
                             "breakY": 24,
+                            "breakVertical": -31.4,
+                            "breakVerticalInduced": 3,
+                            "breakHorizontal": -7.8,
                             "spinRate": 2686,
                             "spinDirection": 135
                         },
@@ -1705,6 +1723,9 @@
                             "breakAngle": 9.6,
                             "breakLength": 7.2,
                             "breakY": 24,
+                            "breakVertical": -30.1,
+                            "breakVerticalInduced": 3.8,
+                            "breakHorizontal": -4.9,
                             "spinRate": 2728,
                             "spinDirection": 128
                         },
@@ -1771,6 +1792,9 @@
                             "breakAngle": 15.6,
                             "breakLength": 12,
                             "breakY": 24,
+                            "breakVertical": -50.9,
+                            "breakVerticalInduced": -10.2,
+                            "breakHorizontal": -14,
                             "spinRate": 3064,
                             "spinDirection": 26
                         },
@@ -1837,6 +1861,9 @@
                             "breakAngle": 31.2,
                             "breakLength": 8.4,
                             "breakY": 24,
+                            "breakVertical": -30.5,
+                            "breakVerticalInduced": 4.3,
+                            "breakHorizontal": 17.8,
                             "spinRate": 1942,
                             "spinDirection": 223
                         },
@@ -1904,6 +1931,9 @@
                             "breakAngle": 12,
                             "breakLength": 7.2,
                             "breakY": 24,
+                            "breakVertical": -33,
+                            "breakVerticalInduced": 1.6,
+                            "breakHorizontal": -7.3,
                             "spinRate": 2683,
                             "spinDirection": 134
                         },
