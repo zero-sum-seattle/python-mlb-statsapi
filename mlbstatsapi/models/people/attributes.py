@@ -1,53 +1,39 @@
-﻿from dataclasses import dataclass
+﻿from pydantic import BaseModel
 
 
-@dataclass
-class BatSide:
+class BatSide(BaseModel):
     """
-    A class to represent a BatSide.
-
-    Attributes
-    ----------
-    code : str
-        code number of the BatSide
-    descritpion: str
-        description of the BatSide
+    Represents the side of the plate from which a player bats.
+    
+    Attributes:
+        code (str): The code representing the batting side.
+        description (str): A description of the batting side.
     """
     code: str
     description: str
 
 
-@dataclass
-class PitchHand:
+class PitchHand(BaseModel):
     """
-    A class to represent a PitchHand.
-
-    Attributes
-    ----------
-    code : str
-        code number of the PitchHand
-    descritpion: str
-        description of the PitchHand
+    Represents the hand a player uses to pitch.
+    
+    Attributes:
+        code (str): The code representing the pitching hand.
+        description (str): A description of the pitching hand.
     """
     code: str
     description: str
 
 
-@dataclass
-class Position:
+class Position(BaseModel):
     """
-    A class to represent a batside.
-
-    Attributes
-    ----------
-    code: str
-        code number of the Position
-    name: str
-        the name of the Position
-    type: str
-        the type of the Position
-    abbreviation: str
-        the abbreviation of the Position
+    Represents the position a player holds in the team.
+    
+    Attributes:
+        code (str): The code representing the player's position.
+        name (str): The name of the position.
+        type (str): The type of the position.
+        abbreviation (str): The abbreviation of the position.
     """
     code: str
     name: str
@@ -55,56 +41,42 @@ class Position:
     abbreviation: str
 
 
-@dataclass
-class Status:
+class Status(BaseModel):
     """
-    A dataclass to hold player status
-
-    Attributes
-    ----------
-    code: str
-        code of the player
-    description: str
-        description of the status
+    Represents the status of a player.
+    
+    Attributes:
+        code (str): The code representing the status of the player.
+        description (str): A description of the player's status.
     """
     code: str
     description: str
 
-@dataclass
-class Home:
-    """
-    A home is a where a draft player is from
 
-    Attributes
-    ----------
-    city : str
-        The city where the player is from.
-    state : str
-        The state where the player is from.
-    country : str
-        The country where the player is from.
+class Home(BaseModel):
+    """
+    Represents the hometown of a player.
+    
+    Attributes:
+        city (str): The city where the player is from.
+        state (str): The state where the player is from.
+        country (str): The country where the player is from.
     """
     city: str
     state: str
     country: str
 
-@dataclass
-class School:
-    """
-    Represents the school the draft player is from.
 
-    Attributes
-    ----------
-    name : str
-        The name of the school.
-    schoolclass : str
-        The class the student is in.
-    city : str
-        The city where the school is located.
-    country : str
-        The country where the school is located.
-    state : str
-        The state where the school is located.
+class School(BaseModel):
+    """
+    Represents the school that a player attended.
+    
+    Attributes:
+        name (str): The name of the school.
+        schoolclass (str): The class or grade in the school.
+        city (str): The city where the school is located.
+        country (str): The country where the school is located.
+        state (str): The state where the school is located.
     """
     name: str
     schoolclass: str

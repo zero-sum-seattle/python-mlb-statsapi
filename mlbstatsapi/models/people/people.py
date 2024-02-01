@@ -1,120 +1,67 @@
-﻿from dataclasses import dataclass, field, InitVar
-from typing import Union, Dict, Any, Optional
+﻿from pydantic import BaseModel, validator
+from typing import Optional, Union, Dict, Any, InitVar
 
 from .attributes import BatSide, Position, PitchHand, Status, Home, School
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.data import CodeDesc
-# from mlbstatsapi.models.drafts import Home, College
 
-
-@dataclass(repr=False)
-class Person:
+class Person(BaseModel):
     """
-    A class to represent a Person.
+    Represents a person with various personal and professional attributes within a sports context, including identification, physical attributes, team associations, and status.
 
-    Attributes
-    ----------
-    id : int
-        id number of the person
-    full_name : str
-        full_name of the person
-    link : str
-        Api link to person
-    primaryposition : Position
-        PrimaryPosition of the Person
-    pitchhand : str
-        PitchHand of the Person
-    batside : str
-        BatSide of the Person
-    fullname : str
-        full name of the Person
-    firstname : str
-        First name of the Person
-    lastname : str
-        Last name of the Person
-    primarynumber : str
-        Primary number of the Person
-    birthdate : str
-        Birth date of the Person
-    currentteam : str
-        The current Team of the Person
-    currentage : str
-        The current age of the Person
-    birthcity : str
-        The birthcity of the Person
-    birthstateprovince : str
-        The province of the birth state
-    height : str
-        The height of the Person
-    weight : str
-        The weight of the Person
-    active : str
-        The active status of the Person
-    usename : str
-        The use name of the Person
-    middlename : str
-        The middle name of the Person
-    boxscorename : str
-        The box score name of the Person
-    nickname : str
-        The nickname of the Person
-    draftyear : int
-        The draft year of the Person
-    mlbdebutdate : str
-        The MLB debut date of the Person
-    namefirstlast : str
-        The first and last name of the Person
-    nameslug : str
-        The name slug of the Person
-    firstlastname : str
-        The first and last name of the Person
-    lastfirstname : str
-        The last and first name of the Person
-    lastinitname : str
-        The last init name of the Person
-    initlastname : str
-        The init last name of the Person
-    fullfmlname : str
-        The full fml name of the Person
-    fulllfmname : str
-        The full lfm name of the Person
-    uselastname : str
-        The last name of the
-    birthcountry : str
-        The birth country of the Person
-    pronunciation : str
-        The pronuciation of the Person's name
-    strikezonetop : float
-        The strike zone top of the Person
-    strikezonebottom : float
-        The strike zone bottom of the Person
-    nametitle : str
-        The name title of the Person
-    gender : str
-        The gender of the Person
-    isplayer : bool
-        The player status of the Person
-    isverified : bool
-        The verification of the Person
-    namematrilineal : str
-        The name matrilineal of the Person
-    deathdate : str
-        The death date of the Person
-    deathcity : str
-        The death city of the Person
-    deathcountry : str
-        The death country of the Person
-    lastplayeddate : str
-        The last played date of the Person
-    namesuffix : str
-        The namesuffix of the Person
+    Attributes:
+        id (int): The unique identifier of the person.
+        link (str): API link to more detailed information about the person.
+        primaryposition (Union[Position, Dict[str, Any]]): The primary position of the person in the sport.
+        pitchhand (Union[PitchHand, Dict[str, Any]]): Information about the person's pitching hand.
+        batside (Union[BatSide, Dict[str, Any]]): Information about the person's batting side.
+        fullname (Optional[str]): The full name of the person.
+        firstname (Optional[str]): The first name of the person.
+        lastname (Optional[str]): The last name of the person.
+        primarynumber (Optional[str]): The primary number associated with the person.
+        birthdate (Optional[str]): The birth date of the person.
+        currentteam (Optional[str]): The current team of the person.
+        currentage (Optional[str]): The current age of the person.
+        birthcity (Optional[str]): The birth city of the person.
+        birthstateprovince (Optional[str]): The province/state of the person's birthplace.
+        height (Optional[str]): The height of the person.
+        weight (Optional[int]): The weight of the person.
+        active (Optional[bool]): Indicates if the person is currently active in the sport.
+        usename (Optional[str]): The name used to refer to the person.
+        middlename (Optional[str]): The middle name of the person.
+        boxscorename (Optional[str]): The name used in the box score for the person.
+        nickname (Optional[str]): The nickname of the person.
+        draftyear (Optional[int]): The draft year of the person.
+        mlbdebutdate (Optional[str]): The MLB debut date of the person.
+        namefirstlast (Optional[str]): The first and last name of the person.
+        nameslug (Optional[str]): A slug representation of the person's name.
+        firstlastname (Optional[str]): A combination of the first and last name of the person.
+        lastfirstname (Optional[str]): A combination of the last and first name of the person.
+        lastinitname (Optional[str]): The last name and the initial of the first name of the person.
+        initlastname (Optional[str]): The initial of the first name and the last name of the person.
+        fullfmlname (Optional[str]): The full first, middle, and last name of the person.
+        fulllfmname (Optional[str]): The full last, first, and middle name of the person.
+        uselastname (Optional[str]): The last name used for the person.
+        birthcountry (Optional[str]): The birth country of the person.
+        pronunciation (Optional[str]): The pronunciation of the person's name.
+        strikezonetop (Optional[float]): The top of the strike zone for the person.
+        strikezonebottom (Optional[float]): The bottom of the strike zone for the person.
+        nametitle (Optional[str]): The title of the person.
+        gender (Optional[str]): The gender of the person.
+        isplayer (Optional[bool]): Indicates if the person is a player.
+        isverified (Optional[bool]): Indicates if the person's identity is verified.
+        namematrilineal (Optional[str]): The matrilineal name of the person.
+        deathdate (Optional[str]): The death date of the person, if applicable.
+        deathcity (Optional[str]): The city of the person's death, if applicable.
+        deathcountry (Optional[str]): The country of the person's death, if applicable.
+        lastplayeddate (Optional[str]): The last date the person played, if applicable.
+        namesuffix (Optional[str]): The suffix of the person's name.
     """
-
     id: int
     link: str
-    primaryposition: Union[Position, Dict[str, Any]] = field(default_factory=dict)
-    pitchhand: Union[PitchHand, Dict[str, Any]] = field(default_factory=dict)
-    batside: Union[BatSide, Dict[str, Any]] = field(default_factory=dict)
+    primaryposition: Union[Position, Dict[str, Any]]
+    pitchhand: Union[PitchHand, Dict[str, Any]]
+    batside: Union[BatSide, Dict[str, Any]]
     fullname: Optional[str] = None
     firstname: Optional[str] = None
     lastname: Optional[str] = None
@@ -158,133 +105,103 @@ class Person:
     uselastname: Optional[str] = None
     namesuffix: Optional[str] = None
 
-    def __post_init__(self):
-        self.primaryposition = Position(**self.primaryposition) if self.primaryposition else self.primaryposition
-        self.pitchhand = PitchHand(**self.pitchhand) if self.pitchhand else self.pitchhand
-        self.batside = BatSide(**self.batside) if self.batside else self.batside
+    class Config:
+        orm_mode = True
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    # TODO read up on validators and understand wtf this is doing
+    @validator('primaryposition', 'pitchhand', 'batside', pre=True)
+    def parse_position(cls, v):
+        return v if isinstance(v, dict) else v.dict()
 
-@dataclass(kw_only=True, repr=False)
-class Player(Person):
+class Player(BaseModel):
     """
-    A class to represent a Player.
-
-    Attributes
-    ----------
-    jerseynumber : str
-        id number of the person
-    status : 
-        Status of the player
-    parentteamid : int
-        parent team id        
+    Represents a player, extending the person with specific attributes for players.
+    
+    Attributes:
+        jerseynumber (str): The jersey number of the player.
+        parentteamid (int): The ID of the player's parent team.
+        position (dict): The player's position, initialized from a dictionary.
+        status (Union[Status, dict]): The player's status, can be a Status object or a dictionary.
     """
     jerseynumber: str
     parentteamid: int
     position: InitVar[dict]
     status: Union[Status, dict]
 
-    def __post_init__(self, position: dict):
-        self.primaryposition = Position(**position) if position else None
+    # Include post-initialization logic if necessary
+    # TODO wtf is this?
+    def __post_init_post_parse__(self, position: dict):
+        if position:
+            self.primaryposition = Position(**position)
 
-
-@dataclass(kw_only=True, repr=False)
-class Coach(Person):
+class Coach(BaseModel):
     """
-    A class to represent a Player.
-
-    Attributes
-    ----------
-    jerseynumber : str
-        id number of the person
-    job : str
-        job of the coach
-    jobid : str
-        job id of the coach
-    title : str
-        title of the coach
-    parentteamid : int
+    Represents a coach, providing details about their role within the team.
+    
+    Attributes:
+        jerseynumber (str): The jersey number of the coach.
+        job (str): The specific job or role of the coach.
+        jobid (str): The unique identifier for the coach's job.
+        title (str): The title or official position of the coach.
+        parentteamid (int): The ID of the coach's parent team.
     """
     jerseynumber: str
     job: str
     jobid: str
     title: str
+    parentteamid: int
 
-@dataclass(kw_only=True)
-class Batter(Person):
+
+class Batter(BaseModel):
     """
-    A class to represent a Batter.
+    Represents a batter, essentially a Person specialized as a batter.
     """
-    pass
+    # Add any batter-specific attributes here if necessary
 
-
-@dataclass(kw_only=True)
-class Pitcher(Person):
+class Pitcher(BaseModel):
     """
-    A class to represent a Pitcher
+    Represents a pitcher, essentially a Person specialized as a pitcher.
     """
-    pass
+    # Add any pitcher-specific attributes here if necessary
 
 
-@dataclass(kw_only=True)
-class DraftPick(Person):
+class DraftPick(BaseModel):
     """
-    Represents a pick made in the MLB draft.
+    Represents a pick made in the MLB draft, detailing the player picked, the round, number, and value of the pick, along with additional information about the player and the drafting team.
 
-    Attributes
-    ----------
-    bisplayerid : int
-        The unique identifier of the player associated with this draft pick.
-    pickround : str
-        The round of the draft in which this pick was made.
-    picknumber : int
-        The number of the pick in the round.
-    roundpicknumber : int
-        The number of the pick overall in the draft.
-    rank : int
-        The rank of the player among all players eligible for the draft.
-    pickvalue : str
-        The value of the pick, if known.
-    signingbonus : str
-        The signing bonus associated with this pick, if known.
-    home : Home
-        Information about the player's home location.
-    scoutingreport : str
-    A   scouting report on the player's abilities.
-    school : School
-        Information about the player's school or college.
-    blurb : str
-        A   brief summary of the player's background and accomplishments.
-    headshotlink : str
-        A   link to a headshot image of the player.
-    team : Team or dict
-        The team that made this draft pick.
-    drafttype : CodeDesc
-        Information about the type of draft in which this pick was made.
-    isdrafted : bool
-        Whether or not the player associated with this pick has been drafted.
-    ispass : bool
-        Whether or not the team passed on making a pick in this round.
-    year : str
-        The year in which the draft took place.
+    Attributes:
+        bisplayerid (Optional[int]): The unique identifier of the player associated with this draft pick.
+        pickround (str): The round of the draft in which this pick was made.
+        picknumber (int): The number of the pick in the round.
+        roundpicknumber (int): The number of the pick overall in the draft.
+        rank (Optional[int]): The rank of the player among all players eligible for the draft.
+        pickvalue (Optional[str]): The value of the pick, if known.
+        signingbonus (Optional[str]): The signing bonus associated with this pick, if known.
+        home (Union[Home, Dict[str, Any]]): Information about the player's home location.
+        scoutingreport (Optional[str]): A scouting report on the player's abilities.
+        school (Union[School, Dict[str, Any]]): Information about the player's school or college.
+        blurb (Optional[str]): A brief summary of the player's background and accomplishments.
+        headshotlink (str): A link to a headshot image of the player.
+        team (Union[Team, Dict[str, Any]]): The team that made this draft pick.
+        drafttype (Union[CodeDesc, Dict[str, Any]]): Information about the type of draft in which this pick was made.
+        isdrafted (bool): Whether or not the player associated with this pick has been drafted.
+        ispass (bool): Whether or not the team passed on making a pick in this round.
+        year (str): The year in which the draft took place.
     """
-
     bisplayerid: Optional[int] = None
-    pickround:  str
-    picknumber:  int
-    roundpicknumber:  int
+    pickround: str
+    picknumber: int
+    roundpicknumber: int
     rank: Optional[int] = None
     pickvalue: Optional[str] = None
-    signingbonus:  Optional[str] = None
-    home: Union[Home , dict]
+    signingbonus: Optional[str] = None
+    home: Union[Home, Dict[str, Any]]
     scoutingreport: Optional[str] = None
-    school: Union[School , dict] 
+    school: Union[School, Dict[str, Any]]
     blurb: Optional[str] = None
     headshotlink: str
-    team: Union[Team, dict]
-    drafttype: Union[CodeDesc, dict]
+    team: Union[Team, Dict[str, Any]]
+    drafttype: Union[CodeDesc, Dict[str, Any]]
     isdrafted: bool
     ispass: bool
     year: str
