@@ -24,8 +24,9 @@ class TopPerformer:
     player: Union[PlayersDictPerson, dict]
     type: str
     gamescore: int
-    hittinggamescore: int
-
+    hittinggamescore: Optional[int] = None
+    pitchinggamescore: Optional[int] = None
+    
     def __post_init__(self):
         self.player = PlayersDictPerson(**self.player)
 
@@ -50,7 +51,7 @@ class BoxScore:
     officials: Union[List[BoxScoreOffical], List[dict]]
     info: Union[List[BoxScoreVL], List[dict]]
     pitchingnotes: List[str]
-    topperformers: Optional[List[Union[TopPerformer, dict]]] = field(default_factory=dict)
+    topperformers: Optional[List[Union[TopPerformer, dict]]] = field(default_factory=list)
 
     def __post_init__(self):
         self.teams = BoxScoreTeams(**self.teams)
