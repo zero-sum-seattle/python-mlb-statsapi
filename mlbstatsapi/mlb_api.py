@@ -126,6 +126,8 @@ class Mlb:
             for person in mlb_data.data['people']:
                 return Person(**person)
 
+        return None
+    
     def get_persons(self, person_ids: Union[str, List[int]], **params) -> List[Person]:
         """
         This endpoint returns statistical data and biographical information 
@@ -394,6 +396,8 @@ class Mlb:
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
             for team in mlb_data.data['teams']:
                 return Team(**team)
+
+        return None
 
     def get_team_id(self, team_name: str,
                     search_key: str = 'name', **params) -> List[int]:
@@ -773,6 +777,8 @@ class Mlb:
 
         if 'dates' in mlb_data.data and mlb_data.data['dates']:
             return Schedule(**mlb_data.data)
+        
+        return None
 
     def get_scheduled_games_by_date(self, date: str = None,
                                     start_date: str = None, 
@@ -906,6 +912,8 @@ class Mlb:
         if 'gamepk' in mlb_data.data and mlb_data.data['gamepk'] == game_id:
             return Game(**mlb_data.data)
 
+        return None
+    
     def get_game_play_by_play(self, game_id: int, **params) -> Union[Plays, None]:
         """
         return the playbyplay of a game for a specific game id
@@ -951,6 +959,7 @@ class Mlb:
         if 'allplays' in mlb_data.data and mlb_data.data['allplays']:
             return Plays(**mlb_data.data)
 
+        return None
     def get_game_line_score(self, game_id: int, **params) -> Union[Linescore, None]:
         """
         return the Linescore of a game for a specific game id
@@ -994,6 +1003,8 @@ class Mlb:
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
             return Linescore(**mlb_data.data)
 
+        return None
+    
     def get_game_box_score(self, game_id: int, **params) -> Union[BoxScore, None]:
         """
         return the boxscore of a game for a specific game id
@@ -1039,7 +1050,8 @@ class Mlb:
         if 'teams' in mlb_data.data and mlb_data.data['teams']:
             return BoxScore(**mlb_data.data)
 
-
+        return None
+    
     def get_game_ids(self, date: str = None,
                      start_date: str = None,
                      end_date: str = None,
@@ -1166,6 +1178,8 @@ class Mlb:
 
             return Gamepace(**mlb_data.data)
 
+        return None
+    
     def get_venue(self, venue_id: int, **params) -> Union[Venue, None]:
         """
         returns venue directorial information for all available venues in the Stats API.
@@ -1205,6 +1219,8 @@ class Mlb:
             for venue in mlb_data.data['venues']:
                 return Venue(**venue)
 
+        return None
+    
     def get_venues(self, **params) -> List[Venue]:
         """
         return all venues
@@ -1335,6 +1351,8 @@ class Mlb:
         if 'sports' in mlb_data.data and mlb_data.data['sports']:
             for sport in mlb_data.data['sports']:
                 return Sport(**sport)
+
+        return None
 
     def get_sports(self, **params) -> List[Sport]:
         """
@@ -1580,6 +1598,8 @@ class Mlb:
         if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
             for division in mlb_data.data['divisions']:
                 return Division(**division)
+            
+        return None
 
     def get_divisions(self, **params) -> List[Division]:
         """
@@ -1669,7 +1689,7 @@ class Mlb:
                     continue
         return division_ids
 
-    def get_season(self, season_id: str, sport_id: int = 1, **params) -> Season:
+    def get_season(self, season_id: str, sport_id: int = 1, **params) -> Season | None:
         """
         return a season object for seasonid and sportid
 
@@ -1714,6 +1734,7 @@ class Mlb:
             for season in mlb_data.data['seasons']:
                 return Season(**season)
 
+        return None
     def get_seasons(self, sport_id: int = 1, **params) -> List[Season]:
         """
         return a season object for sportid
@@ -1907,7 +1928,7 @@ class Mlb:
         required_args = {'teamId': team_id, 'leagueId': league_id, 'leagueListId': league_list_id}
 
         if not any(required_args):
-            return
+            return None
 
         # let's create a list of the args passed
         # this will filter out None
@@ -1922,6 +1943,8 @@ class Mlb:
         if 'records' in mlb_data.data and mlb_data.data['records']:
             return Attendance(**mlb_data.data)
 
+        return None
+    
     def get_draft(self, year_id: int, **params) -> List[Round]:
         """
         return a draft object for year_id
@@ -2051,7 +2074,7 @@ class Mlb:
         if 'status' in mlb_data.data and mlb_data.data['status']:
             return Homerunderby(**mlb_data.data)
 
-
+        return None
     def get_team_stats(self, team_id: int, stats: list, groups: list, **params) -> dict:
         """
         returns a split stat data for a team

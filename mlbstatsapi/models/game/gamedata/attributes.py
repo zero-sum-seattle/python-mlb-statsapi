@@ -79,8 +79,7 @@ class GameDatetime:
         kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
         return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass
-class GameStatus:
+class GameStatus(BaseModel):
     """
     A class to represent this game's game status.
 
@@ -101,13 +100,13 @@ class GameStatus:
     reason : str
         reason for a state. Usually used for delays or cancellations
     """
-    abstractgamestate: str
-    codedgamestate: str
-    detailedstate: str
-    statuscode: str
-    starttimetbd: bool
-    abstractgamecode: str
-    reason: Optional[str] = None
+    abstractGameState: str
+    codedGameState: str
+    detailedState: str
+    statusCode: str
+    startTimeTBD: bool
+    abstractGameCode: str
+    reason: Optional[str]
 
 
 @dataclass

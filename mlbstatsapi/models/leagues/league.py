@@ -1,12 +1,11 @@
-﻿from dataclasses import dataclass
-from typing import Optional, Union
+﻿from pydantic import BaseModel
+from typing import Optional, Union, Any
 
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.seasons import Season
 
 
-@dataclass
-class LeagueRecord:
+class LeagueRecord(BaseModel):
     """
     A class to represent a leaguerecord.
 
@@ -24,11 +23,10 @@ class LeagueRecord:
     wins: int
     losses: int
     pct: str
-    ties: Optional[int] = None
+    ties: Optional[int]
 
 
-@dataclass(repr=False)
-class League:
+class League(BaseModel):
     """
     A class to represent a league.
 
@@ -77,29 +75,21 @@ class League:
     """
     id: int
     link: str
-    name: Optional[str] = None
-    abbreviation: Optional[str] = None
-    nameshort: Optional[str] = None
-    seasonstate: Optional[str] = None
-    haswildcard: Optional[bool] = None
-    hassplitseason: Optional[bool] = None
-    numgames: Optional[int] = None
-    hasplayoffpoints: Optional[bool] = None
-    numteams: Optional[int] = None
-    numwildcardteams: Optional[int] = None
-    seasondateinfo: Optional[Union[Season, dict]] = None
-    season: Optional[str] = None
-    orgcode: Optional[str] = None
-    conferencesinuse: Optional[bool] = None
-    divisionsinuse: Optional[bool] = None
-    sport: Optional[Union[Sport, dict]] = None
-    sortorder: Optional[int] = None
-    active: Optional[bool] = None
-
-    def __post_init__(self):
-        self.seasondateinfo = Season(**self.seasondateinfo) if self.seasondateinfo else self.seasondateinfo
-        self.sport = Sport(**self.sport) if self.sport else self.sport
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    name: Optional[str]
+    abbreviation: Optional[str]
+    nameShort: Optional[str]
+    seasonState: Optional[str]
+    hasWildCard: Optional[bool]
+    hasSplitSeason: Optional[bool]
+    numGames: Optional[int]
+    hasPlayoffPoints: Optional[bool]
+    numTeams: Optional[int]
+    numWildcardTeams: Optional[int]
+    seasonDateInfo: Optional[Union[Season, dict[str, Any]]]
+    season: Optional[str]
+    orgCode: Optional[str]
+    conferencesInUse: Optional[bool]
+    divisionsInUse: Optional[bool]
+    sport: Optional[Union[Sport, dict[str, Any]]]
+    sortOrder: Optional[int]
+    active: Optional[bool]

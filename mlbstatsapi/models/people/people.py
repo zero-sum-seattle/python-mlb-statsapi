@@ -58,58 +58,57 @@ class Person(BaseModel):
         namesuffix (Optional[str]): The suffix of the person's name.
     """
     id: int
+    fullName: str
     link: str
-    primaryposition: Union[Position, Dict[str, Any]]
-    pitchhand: Union[PitchHand, Dict[str, Any]]
-    batside: Union[BatSide, Dict[str, Any]]
-    fullname: Optional[str] = None
-    firstname: Optional[str] = None
-    lastname: Optional[str] = None
-    primarynumber: Optional[str] = None
-    birthdate: Optional[str] = None
-    currentteam: Optional[str] = None
-    currentage: Optional[str] = None
-    birthcity: Optional[str] = None
-    birthstateprovince: Optional[str] = None
-    height: Optional[str] = None
-    weight: Optional[int] = None
-    active: Optional[bool] = None
-    usename: Optional[str] = None
-    middlename: Optional[str] = None
-    boxscorename: Optional[str] = None
-    nickname: Optional[str] = None
-    draftyear: Optional[int] = None
-    mlbdebutdate: Optional[str] = None
-    namefirstlast: Optional[str] = None
-    nameslug: Optional[str] = None
-    firstlastname: Optional[str] = None
-    lastfirstname: Optional[str] = None
-    lastinitname: Optional[str] = None
-    initlastname: Optional[str] = None
-    fullfmlname: Optional[str] = None
-    fulllfmname: Optional[str] = None
-    birthcountry: Optional[str] = None
-    pronunciation: Optional[str] = None
-    strikezonetop: Optional[float] = None
-    strikezonebottom: Optional[float] = None
-    nametitle: Optional[str] = None
-    gender: Optional[str] = None
-    isplayer: Optional[bool] = None
-    isverified: Optional[bool] = None
-    namematrilineal: Optional[str] = None
-    deathdate: Optional[str] = None
-    deathcity: Optional[str] = None
-    deathcountry: Optional[str] = None
-    deathstateprovince: Optional[str] = None
-    lastplayeddate: Optional[str] = None
-    uselastname: Optional[str] = None
-    namesuffix: Optional[str] = None
+    firstName: str
+    lastName: str
+    primaryNumber: Optional[str]
+    birthDate: Optional[str]
+    currentAge: Optional[int]
+    birthCity: Optional[str]
+    birthStateProvince: Optional[str]
+    birthCountry: Optional[str]
+    height: Optional[str]
+    weight: Optional[int]
+    active: Optional[bool]
+    primaryPosition: Optional[Dict[str, Any]]
+    useName: Optional[str]
+    middleName: Optional[str]
+    boxscoreName: Optional[str]
+    nickname: Optional[str]
+    draftYear: Optional[int]
+    mlbDebutDate: Optional[str]
+    batSide: Optional[Dict[str, Any]]
+    pitchHand: Optional[Dict[str, Any]]
+    nameFirstLast: Optional[str]
+    nameSlug: Optional[str]
+    firstLastName: Optional[str]
+    lastFirstName: Optional[str]
+    lastInitName: Optional[str]
+    initLastName: Optional[str]
+    fullFMLName: Optional[str]
+    fullLFMName: Optional[str]
+    useLastName: Optional[str]
+    pronunciation: Optional[str]
+    strikeZoneTop: Optional[float]
+    strikeZoneBottom: Optional[float]
+    nameTitle: Optional[str]
+    gender: Optional[str]
+    isPlayer: Optional[bool]
+    isVerified: Optional[bool]
+    nameMatrilineal: Optional[str]
+    deathDate: Optional[str]
+    deathCity: Optional[str]
+    deathCountry: Optional[str]
+    deathStateProvince: Optional[str]
+    lastPlayedDate: Optional[str]
+    nameSuffix: Optional[str]
 
     class Config:
         orm_mode = True
 
     # TODO read up on validators and understand wtf this is doing
-    @validator('primaryposition', 'pitchhand', 'batside', pre=True)
+    @validator('primaryPosition', 'pitchHand', 'batSide', pre=True)
     def parse_position(cls, v):
         return v if isinstance(v, dict) else v.dict()
 

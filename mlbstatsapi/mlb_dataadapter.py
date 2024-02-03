@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Any
 from .exceptions import TheMlbStatsApiException
 import requests
 import logging
@@ -18,7 +18,7 @@ class MlbResult:
         JSON Data received from request
     """
 
-    def __init__(self, status_code: int, message: str, data: Dict = {}):
+    def __init__(self, status_code: int, message: str, data: dict[str, Any] = {}):
         self.status_code = int(status_code)
         self.message = str(message)
 
@@ -41,45 +41,12 @@ class MlbDataAdapter:
         instance of logger class
     """
 
-    def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
+    def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger | None = None):
         self.url = f'https://{hostname}/api/{ver}/'
         self._logger = logger or logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
 
-    def _transform_keys_in_data(self, data) -> dict:
-        """
-        Recursivly transform all the keys in a dictionary to lowercase
-
-        Parameters
-        ----------
-        data : dict
-            MlbResult data dictionary
-
-        Returns
-        -------
-        dict
-        """
-
-        if isinstance(data, Dict):
-            lowered_dict = {}
-
-            for key, value in data.items():
-                lowered_dict[key.lower()] = self._transform_keys_in_data(value)
-
-            return lowered_dict
-
-        elif isinstance(data, List):
-            lowered_list = []
-
-            for item in data:
-                lowered_list.append(self._transform_keys_in_data(item))
-
-            return lowered_list
-
-        else:
-            return data
-
-    def get(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> MlbResult:
+    def get(self, endpoint: str, ep_params: dict[str, Any] | None = None) -> MlbResult:
         """
         return a MlbResult from endpoint
 
@@ -120,7 +87,6 @@ class MlbDataAdapter:
             self._logger.debug(msg=logline_post.format('success',
             response.status_code, response.reason, response.url))
 
-            data = self._transform_keys_in_data(data)
             return MlbResult(response.status_code, message=response.reason, data=data)
 
         elif response.status_code >= 400 and response.status_code <= 499:  
