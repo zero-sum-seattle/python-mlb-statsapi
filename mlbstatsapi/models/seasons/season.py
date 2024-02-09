@@ -1,80 +1,53 @@
 ﻿from typing import Optional
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass(repr=False)
-class Season:
+class Season(BaseModel):
     """
-    This class represents a season object
+    Represents a season object, detailing various dates and statuses throughout the season, including pre-season, regular season, and post-season periods.
 
-    Attributes
-    ----------
-    seasonid : str
-        season id
-    haswildcard :  bool
-        wild card status
-    preseasonstartdate : str
-        pre-season start date
-    preseasonenddate : str
-        pre-season end date
-    seasonstartdate : str
-        season start date
-    springstartdate : str
-        spring start date
-    springenddate : str
-        spring end date
-    regularseasonstartdate : str
-        regular season start date
-    lastdate1sthalf : str
-        last date 1st half
-    allstardate : str
-        all star date
-    firstdate2ndhalf : str
-        first date 2nd half
-    regularseasonenddate : str
-        regular season end date
-    postseasonstartdate : str
-        post season start date
-    postseasonenddate : str
-        post season end date
-    seasonenddate : str
-        season end date
-    offseasonstartdate : str
-        off season start date
-    offseasonenddate : str
-        off season end date
-    seasonlevelgamedaytype : str
-        season level game day type
-    gamelevelgamedaytype : str
-        game level game day type
-    qualifierplateappearances :  float
-        qualifier plate appearances
-    qualifieroutspitched : int
-        qualifier outs pitched
+    Attributes:
+        seasonId (str): The season identifier.
+        hasWildCard (Optional[bool]): Status indicating the presence of a wild card.
+        preSeasonStartDate (Optional[str]): The start date of the pre-season.
+        preSeasonEndDate (Optional[str]): The end date of the pre-season.
+        seasonStartDate (Optional[str]): The start date of the season.
+        springStartDate (Optional[str]): The start date of the spring training.
+        springEndDate (Optional[str]): The end date of the spring training.
+        regularSeasonStartDate (Optional[str]): The start date of the regular season.
+        lastDate1stHalf (Optional[str]): The last date of the first half of the season.
+        allStarDate (Optional[str]): The date of the All-Star game.
+        firstDate2ndHalf (Optional[str]): The first date of the second half of the season.
+        regularSeasonEndDate (Optional[str]): The end date of the regular season.
+        postSeasonStartDate (Optional[str]): The start date of the post-season.
+        postSeasonEndDate (Optional[str]): The end date of the post-season.
+        seasonEndDate (Optional[str]): The end date of the entire season.
+        offseasonStartDate (Optional[str]): The start date of the off-season.
+        offSeasonEndDate (Optional[str]): The end date of the off-season.
+        seasonLevelGamedayType (Optional[str]): The season-level game day type.
+        gameLevelGamedayType (Optional[str]): The game-level game day type.
+        qualifierPlateAppearances (Optional[float]): The qualifier for plate appearances.
+        qualifierOutsPitched (Optional[int]): The qualifier for outs pitched.
     """
 
-    seasonid: str
+    seasonId: str
     haswildcard: Optional[bool] = None
-    preseasonstartdate: Optional[str] = None
-    preseasonenddate: Optional[str] = None
-    seasonstartdate: Optional[str] = None
-    springstartdate: Optional[str] = None
-    springenddate: Optional[str] = None
-    regularseasonstartdate: Optional[str] = None
-    lastdate1sthalf: Optional[str] = None
-    allstardate: Optional[str] = None
-    firstdate2ndhalf: Optional[str] = None
-    regularseasonenddate: Optional[str] = None
-    postseasonstartdate: Optional[str] = None
-    postseasonenddate: Optional[str] = None
-    seasonenddate: Optional[str] = None
-    offseasonstartdate: Optional[str] = None
-    offseasonenddate: Optional[str] = None
-    seasonlevelgamedaytype: Optional[str] = None
-    gamelevelgamedaytype: Optional[str] = None
-    qualifierplateappearances: Optional[float] = None
-    qualifieroutspitched: Optional[int] = None
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    preSeasonStartDate: Optional[str] = None
+    preSeasonEndDate: Optional[str] = None
+    seasonStartDate: Optional[str] = None
+    springStartDate: Optional[str] = None
+    springEndDate: Optional[str] = None
+    regularSeasonStartDate: Optional[str] = None
+    lastDate1stHalf: Optional[str] = None
+    allStarDate: Optional[str] = None
+    firstDate2ndHalf: Optional[str] = None
+    regularSeasonEndDate: Optional[str] = None
+    postSeasonStartDate: Optional[str] = None
+    postSeasonEndDate: Optional[str] = None
+    seasonEndDate: Optional[str] = None
+    offseasonStartDate: Optional[str] = None
+    offSeasonEndDate: Optional[str] = None
+    seasonLevelGamedayType: Optional[str] = None
+    gameLevelGamedayType: Optional[str] = None
+    qualifierPlateAppearances: Optional[float] = None
+    qualifierOutsPitched: Optional[float] = None

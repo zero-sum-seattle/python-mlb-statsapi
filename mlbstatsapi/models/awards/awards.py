@@ -1,17 +1,14 @@
 from typing import List
-from dataclasses import dataclass
+from pydantic import BaseModel
 
+# Assuming the import for Award is correctly defined elsewhere in your project
 from .attributes import Award
 
-@dataclass
-class Awards:
-    """
-    This class represents an awards object
+class Awards(BaseModel):
+    """Represents an awards object.
 
-    Attributes
-    ----------
-    awards : List[Award]
-        Awards
+    Attributes:
+        awards (List[Award]): A list of awards.
     """
 
     awards: List[Award]

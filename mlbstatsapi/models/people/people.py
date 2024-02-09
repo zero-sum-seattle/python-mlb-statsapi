@@ -1,5 +1,5 @@
 ﻿from pydantic import BaseModel, validator
-from typing import Optional, Union, Dict, Any, InitVar
+from typing import Optional, Union, Dict, Any
 
 from .attributes import BatSide, Position, PitchHand, Status, Home, School
 from mlbstatsapi.models.teams import Team
@@ -58,59 +58,53 @@ class Person(BaseModel):
         namesuffix (Optional[str]): The suffix of the person's name.
     """
     id: int
-    fullName: str
+    fullName: Optional[str] = None
     link: str
-    firstName: str
-    lastName: str
-    primaryNumber: Optional[str]
-    birthDate: Optional[str]
-    currentAge: Optional[int]
-    birthCity: Optional[str]
-    birthStateProvince: Optional[str]
-    birthCountry: Optional[str]
-    height: Optional[str]
-    weight: Optional[int]
-    active: Optional[bool]
-    primaryPosition: Optional[Dict[str, Any]]
-    useName: Optional[str]
-    middleName: Optional[str]
-    boxscoreName: Optional[str]
-    nickname: Optional[str]
-    draftYear: Optional[int]
-    mlbDebutDate: Optional[str]
-    batSide: Optional[Dict[str, Any]]
-    pitchHand: Optional[Dict[str, Any]]
-    nameFirstLast: Optional[str]
-    nameSlug: Optional[str]
-    firstLastName: Optional[str]
-    lastFirstName: Optional[str]
-    lastInitName: Optional[str]
-    initLastName: Optional[str]
-    fullFMLName: Optional[str]
-    fullLFMName: Optional[str]
-    useLastName: Optional[str]
-    pronunciation: Optional[str]
-    strikeZoneTop: Optional[float]
-    strikeZoneBottom: Optional[float]
-    nameTitle: Optional[str]
-    gender: Optional[str]
-    isPlayer: Optional[bool]
-    isVerified: Optional[bool]
-    nameMatrilineal: Optional[str]
-    deathDate: Optional[str]
-    deathCity: Optional[str]
-    deathCountry: Optional[str]
-    deathStateProvince: Optional[str]
-    lastPlayedDate: Optional[str]
-    nameSuffix: Optional[str]
+    firstName: Optional[str] = None
+    lastName: Optional[str] = None
+    primaryNumber: Optional[str] = None
+    birthDate: Optional[str] = None
+    currentAge: Optional[int] = None
+    birthCity: Optional[str] = None
+    birthStateProvince: Optional[str] = None
+    birthCountry: Optional[str] = None
+    height: Optional[str] = None
+    weight: Optional[int] = None
+    active: Optional[bool] = None
+    primaryPosition: Optional[Position] = None
+    useName: Optional[str] = None
+    middleName: Optional[str] = None
+    boxscoreName: Optional[str] = None
+    nickname: Optional[str] = None
+    draftYear: Optional[int] = None
+    mlbDebutDate: Optional[str] = None
+    batSide: Optional[BatSide] = None
+    pitchHand: Optional[PitchHand] = None
+    nameFirstLast: Optional[str] = None
+    nameSlug: Optional[str] = None
+    firstLastName: Optional[str] = None
+    lastFirstName: Optional[str] = None
+    lastInitName: Optional[str] = None
+    initLastName: Optional[str] = None
+    fullFMLName: Optional[str] = None
+    fullLFMName: Optional[str] = None
+    useLastName: Optional[str] = None
+    pronunciation: Optional[str] = None
+    strikeZoneTop: Optional[float] = None
+    strikeZoneBottom: Optional[float] = None
+    nameTitle: Optional[str] = None
+    gender: Optional[str] = None
+    isPlayer: Optional[bool] = None
+    isVerified: Optional[bool] = None
+    nameMatrilineal: Optional[str] = None
+    deathDate: Optional[str] = None
+    deathCity: Optional[str] = None
+    deathCountry: Optional[str] = None
+    deathStateProvince: Optional[str] = None
+    lastPlayedDate: Optional[str] = None
+    nameSuffix: Optional[str] = None
 
-    class Config:
-        orm_mode = True
 
-    # TODO read up on validators and understand wtf this is doing
-    @validator('primaryPosition', 'pitchHand', 'batSide', pre=True)
-    def parse_position(cls, v):
-        return v if isinstance(v, dict) else v.dict()
 
 class Player(BaseModel):
     """
@@ -122,9 +116,9 @@ class Player(BaseModel):
         position (dict): The player's position, initialized from a dictionary.
         status (Union[Status, dict]): The player's status, can be a Status object or a dictionary.
     """
-    jerseynumber: str
-    parentteamid: int
-    position: InitVar[dict]
+    jerseyNumber: str
+    parentTeamId: int
+    # position: InitVar[dict] #TODO WTF IS THIS AGAIN
     status: Union[Status, dict]
 
     # Include post-initialization logic if necessary
@@ -144,11 +138,11 @@ class Coach(BaseModel):
         title (str): The title or official position of the coach.
         parentteamid (int): The ID of the coach's parent team.
     """
-    jerseynumber: str
+    jerseyNumber: str
     job: str
-    jobid: str
+    jobId: str
     title: str
-    parentteamid: int
+    parentTeamId: Optional[int] = None
 
 
 class Batter(BaseModel):
@@ -164,47 +158,4 @@ class Pitcher(BaseModel):
     # Add any pitcher-specific attributes here if necessary
 
 
-class DraftPick(BaseModel):
-    """
-    Represents a pick made in the MLB draft, detailing the player picked, the round, number, and value of the pick, along with additional information about the player and the drafting team.
 
-    Attributes:
-        bisplayerid (Optional[int]): The unique identifier of the player associated with this draft pick.
-        pickround (str): The round of the draft in which this pick was made.
-        picknumber (int): The number of the pick in the round.
-        roundpicknumber (int): The number of the pick overall in the draft.
-        rank (Optional[int]): The rank of the player among all players eligible for the draft.
-        pickvalue (Optional[str]): The value of the pick, if known.
-        signingbonus (Optional[str]): The signing bonus associated with this pick, if known.
-        home (Union[Home, Dict[str, Any]]): Information about the player's home location.
-        scoutingreport (Optional[str]): A scouting report on the player's abilities.
-        school (Union[School, Dict[str, Any]]): Information about the player's school or college.
-        blurb (Optional[str]): A brief summary of the player's background and accomplishments.
-        headshotlink (str): A link to a headshot image of the player.
-        team (Union[Team, Dict[str, Any]]): The team that made this draft pick.
-        drafttype (Union[CodeDesc, Dict[str, Any]]): Information about the type of draft in which this pick was made.
-        isdrafted (bool): Whether or not the player associated with this pick has been drafted.
-        ispass (bool): Whether or not the team passed on making a pick in this round.
-        year (str): The year in which the draft took place.
-    """
-    bisplayerid: Optional[int] = None
-    pickround: str
-    picknumber: int
-    roundpicknumber: int
-    rank: Optional[int] = None
-    pickvalue: Optional[str] = None
-    signingbonus: Optional[str] = None
-    home: Union[Home, Dict[str, Any]]
-    scoutingreport: Optional[str] = None
-    school: Union[School, Dict[str, Any]]
-    blurb: Optional[str] = None
-    headshotlink: str
-    team: Union[Team, Dict[str, Any]]
-    drafttype: Union[CodeDesc, Dict[str, Any]]
-    isdrafted: bool
-    ispass: bool
-    year: str
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))

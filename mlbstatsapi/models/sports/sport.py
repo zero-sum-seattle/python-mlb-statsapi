@@ -25,8 +25,8 @@ class Sport(BaseModel):
     """
     id: int
     link: str
-    name: Optional[str]
-    code: Optional[str]
-    abbreviation: Optional[str]
-    sortOrder: Optional[int]
-    activeStatus: Optional[bool]
+    name: Optional[str] = None
+    code: Optional[str] = None
+    abbreviation: Optional[str] = None
+    sortOrder: Optional[int] = None
+    activeStatus: Optional[bool] = None

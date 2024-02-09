@@ -2,7 +2,7 @@ from typing import Optional, Union
 from pydantic import BaseModel
 from .attributes import Location, TimeZone, FieldInfo
 
-class Venue:
+class Venue(BaseModel):
     """
     A class to represent a venue.
 
@@ -27,9 +27,9 @@ class Venue:
     """
     id: int
     link: str
-    name: Optional[str]
-    location: Optional[Union[Location, dict]]
-    timezone: Optional[Union[TimeZone, dict]]
-    fieldinfo: Optional[Union[FieldInfo, dict]]
-    active: Optional[bool]
-    season: Optional[str]
+    name: Optional[str] = None
+    location: Optional[Location] = None
+    timezone: Optional[TimeZone] = None
+    fieldinfo: Optional[FieldInfo] = None
+    active: Optional[bool] = None
+    season: Optional[str] = None

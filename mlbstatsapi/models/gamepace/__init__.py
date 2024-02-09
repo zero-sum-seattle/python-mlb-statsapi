@@ -1,2 +1,2 @@
-from .gamepace import Gamepace
-from .attributes import Gamepacedata
+from .gamepace import GamePace
+from .attributes import GamePaceData

@@ -1,6 +1,7 @@
 import unittest
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi import Mlb
+from pydantic import ValidationError
 
 
 class TestDivision(unittest.TestCase):
@@ -14,7 +15,7 @@ class TestDivision(unittest.TestCase):
         pass
 
     def test_divisions_instance_type_error(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValidationError):
             division = Division()
 
     def test_divisions_instance_position_arguments(self):
@@ -28,11 +29,11 @@ class TestDivision(unittest.TestCase):
         self.assertTrue(hasattr(self.division, "name"))
         self.assertTrue(hasattr(self.division, "link"))
         self.assertTrue(hasattr(self.division, "season"))
-        self.assertTrue(hasattr(self.division, "nameshort"))
+        self.assertTrue(hasattr(self.division, "nameShort"))
         self.assertTrue(hasattr(self.division, "abbreviation"))
         self.assertTrue(hasattr(self.division, "league"))
         self.assertTrue(hasattr(self.division, "sport"))
-        self.assertTrue(hasattr(self.division, "haswildcard"))
-        self.assertTrue(hasattr(self.division, "sortorder"))
-        self.assertTrue(hasattr(self.division, "numplayoffteams"))
+        self.assertTrue(hasattr(self.division, "hasWildcard"))
+        self.assertTrue(hasattr(self.division, "sortOrder"))
+        self.assertTrue(hasattr(self.division, "numPlayoffTeams"))
         self.assertTrue(hasattr(self.division, "active"))

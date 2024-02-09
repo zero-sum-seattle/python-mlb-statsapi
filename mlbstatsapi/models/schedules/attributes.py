@@ -4,6 +4,7 @@ from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.game.gamedata import GameStatus
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.leagues import LeagueRecord
+from pydantic import BaseModel, validator
 
 
 class ScheduleGameTeam(BaseModel):
@@ -151,20 +152,20 @@ class ScheduleGames(BaseModel):
     ifNecessaryDescription: str
     status: Union[GameStatus, dict[str, Any]]
     teams: Union[ScheduleHomeAndAway, dict[str, Any]]
-    gameGuid: Optional[str]
-    description: Optional[str]
-    inningBreakLength: Optional[int]
-    rescheduleDate: Optional[str]
-    rescheduleGameDate: Optional[str]
-    rescheduledFrom: Optional[str]
-    rescheduledFromDate: Optional[str]
-    isTie: Optional[bool]
-    resumeDate: Optional[str]
-    resumeGameDate: Optional[str]
-    resumedFrom: Optional[str]
-    resumedFromDate: Optional[str]
-    seriesGameNumber: Optional[int]
-    gamesInSeries: Optional[int]
+    gameGuid: Optional[str] = None
+    description: Optional[str] = None
+    inningBreakLength: Optional[int] = None
+    rescheduleDate: Optional[str] = None
+    rescheduleGameDate: Optional[str] = None
+    rescheduledFrom: Optional[str] = None
+    rescheduledFromDate: Optional[str] = None
+    isTie: Optional[bool] = None
+    resumeDate: Optional[str] = None
+    resumeGameDate: Optional[str] = None
+    resumedFrom: Optional[str] = None
+    resumedFromDate: Optional[str] = None
+    seriesGameNumber: Optional[int] = None
+    gamesInSeries: Optional[int] = None
 
 
 @dataclass(repr=False)

@@ -12,11 +12,10 @@ from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.schedules import Schedule, ScheduleGames
 from mlbstatsapi.models.attendances import Attendance
-from mlbstatsapi.models.stats import Stat
 from mlbstatsapi.models.seasons import Season
 from mlbstatsapi.models.drafts import Round
 from mlbstatsapi.models.awards import Award
-from mlbstatsapi.models.gamepace import Gamepace
+from mlbstatsapi.models.gamepace import GamePace
 from mlbstatsapi.models.homerunderby import Homerunderby
 from mlbstatsapi.models.standings import Standings
 
@@ -1111,7 +1110,7 @@ class Mlb:
 
         return game_ids
 
-    def get_gamepace(self, season: str, sport_id=1, **params) -> Union[Gamepace, None]:
+    def get_gamepace(self, season: str, sport_id=1, **params) -> Union[GamePace, None]:
         """
         Get pace of game metrics for specific sport, league or team.
 
@@ -1176,7 +1175,7 @@ class Mlb:
             or 'leagues' in mlb_data.data and mlb_data.data['leagues']
             or 'sports' in mlb_data.data and mlb_data.data['sports']):
 
-            return Gamepace(**mlb_data.data)
+            return GamePace(**mlb_data.data)
 
         return None
     
@@ -1476,6 +1475,7 @@ class Mlb:
             for league in mlb_data.data['leagues']:
                 return League(**league)
 
+        return None
     def get_leagues(self, **params) -> List[League]:
         """
         return all leagues

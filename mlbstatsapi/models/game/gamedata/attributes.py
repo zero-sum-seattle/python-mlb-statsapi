@@ -2,6 +2,7 @@ from typing import Optional, Union
 from dataclasses import dataclass, field
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
+from pydantic import BaseModel
 
 
 @dataclass

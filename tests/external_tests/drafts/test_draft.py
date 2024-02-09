@@ -41,7 +41,7 @@ class TestRound(unittest.TestCase):
         draftpick = draftpicks[0]
 
         # draft pick should have attrs set
-        self.assertTrue(draftpick.pickround)
+        self.assertTrue(draftpick.pickRound)
 
     def test_get_draft_by_year_id_404(self):
         """This test should return a 200 and """

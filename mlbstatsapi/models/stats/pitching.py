@@ -4,7 +4,6 @@ from typing import Optional, Union, List
 from mlbstatsapi.models.people import Person, Pitcher, Batter
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
-from mlbstatsapi.mlb_module import merge_keys
 from mlbstatsapi.models.data import (
     Count,
     PlayDetails,

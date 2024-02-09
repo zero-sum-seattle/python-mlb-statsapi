@@ -4,6 +4,10 @@ from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi import Mlb
+from pydantic import ValidationError
+
+
+
 
 
 class TestTeam(unittest.TestCase):
@@ -17,7 +21,7 @@ class TestTeam(unittest.TestCase):
         pass
 
     def test_team_instance_type_error(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValidationError):
             team = Team()
 
     def test_team_instance_id_instance_success(self):

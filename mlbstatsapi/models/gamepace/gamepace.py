@@ -1,28 +1,17 @@
-from dataclasses import dataclass
 from typing import Optional, List
+from pydantic import BaseModel
 
-from .attributes import Gamepacedata
+from .attributes import GamePaceData
 
-@dataclass
-class Gamepace:
-    """
-    A dataclass representing a gamepace.
+class GamePace(BaseModel):
+    """Represents game pace data, aggregating information across teams, leagues, and sports.
 
     Attributes:
-    ----------
-    teams : List[Gamepacedata]
-        A list of teams in the gamepace.
-    leagues : List[Gamepacedata]
-        A list of leagues in the gamepace.
-    sports : List[Gamepacedata]
-        A list of sports in the gamepace.
+        teams (List[GamePaceData], optional): A list of game pace data for various teams. Optional.
+        leagues (List[GamePaceData], optional): A list of game pace data for various leagues. Optional.
+        sports (List[GamePaceData], optional): A list of game pace data for various sports. Optional.
     """
-    teams: Optional[List[Gamepacedata]] = None
-    leagues: Optional[List[Gamepacedata]] = None
-    sports: Optional[List[Gamepacedata]] = None
-
-
-    def __post_init__(self):
-        self.teams = [Gamepacedata(**teams) for teams in self.teams]        
-        self.leagues = [Gamepacedata(**leagues) for leagues in self.leagues]    
-        self.sports = [Gamepacedata(**sports) for sports in self.sports]     
+    
+    teams: Optional[List[GamePaceData]] = None
+    leagues: Optional[List[GamePaceData]] = None
+    sports: Optional[List[GamePaceData]] = None 

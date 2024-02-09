@@ -1,4 +1,4 @@
-﻿from typing import List, Dict, Union, Optional, Any
+﻿from typing import Optional
 from pydantic import BaseModel
 
 from mlbstatsapi.models.leagues import League
@@ -11,81 +11,56 @@ from .attributes import TeamRecord
 
 
 class Team(BaseModel):
-    """
-    A class to represent a Team.
+    """Represents a Team.
 
-    Attributes
-    ----------
-    id : int
-        id number of the team
-    name : str
-        name of the team
-    link : str
-        The API link for the team
-    springleague : League
-        The spring league of the team
-    allstarstatus : str
-        The all status status of the team
-    season : str
-        The team's current season
-    venue : Venue
-        The team's home venue
-    springvenue : Venue
-        The team's spring venue
-    teamcode : str
-        team code 
-    filecode : str
-        filecode name of the team
-    abbreviation : str
-        The abbreviation of the team name
-    teamname : str
-        The team name 
-    locationname : str
-        The location of the team
-    firstyearofplay : str
-        The first year the team began play
-    league : League
-        The league of the team
-    division : Division
-        The division the team is in
-    sport : Sport
-        The sport of the team
-    shortname : str
-        The shortname of the team
-    record : TeamRecord
-        The record of the team
-    franchisename : str
-        The franchisename of the team
-    clubname : str
-        The clubname of the team
-    active : str
-        Active status of the team
-    parentorgname : str
-        The name of the parent team or org
-    parentorgid : str
-        The id of the partent team or org
+    Attributes:
+        id (int): ID number of the team.
+        name (str, optional): Name of the team. Optional.
+        link (str): The API link for the team.
+        springLeague (League, optional): The spring league of the team. Optional.
+        allStarStatus (str, optional): The all-star status of the team. Optional.
+        season (int, optional): The team's current season. Optional.
+        venue (Venue, optional): The team's home venue. Optional.
+        springVenue (Venue, optional): The team's spring venue. Optional.
+        teamCode (str, optional): Team code. Optional.
+        fileCode (str, optional): File code name of the team. Optional.
+        abbreviation (str, optional): The abbreviation of the team name. Optional.
+        teamName (str, optional): The team name. Optional.
+        locationName (str, optional): The location of the team. Optional.
+        firstYearOfPlay (str, optional): The first year the team began play. Optional.
+        league (League, optional): The league of the team. Optional.
+        division (Division, optional): The division the team is in. Optional.
+        sport (Sport, optional): The sport of the team. Optional.
+        shortName (str, optional): The short name of the team. Optional.
+        record (TeamRecord, optional): The record of the team. Optional.
+        franchiseName (str, optional): The franchise name of the team. Optional.
+        clubName (str, optional): The club name of the team. Optional.
+        active (bool, optional): Active status of the team. Optional.
+        parentorgname (str, optional): The name of the parent organization. Optional.
+        parentorgid (str, optional): The ID of the parent organization. Optional.
     """
+
     id: int
     link: str
-    name: Optional[str]
-    springLeague: Union[League, Dict[str, Any]]
-    allStarStatus: Optional[str]
-    season: Optional[str]
-    venue: Union[Venue, Dict[str, Any]]
-    springVenue: Union[Venue, Dict[str, Any]]
-    teamCode: Optional[str]
-    fileCode: Optional[str]
-    abbreviation: Optional[str]
-    teamName: Optional[str]
-    locationName: Optional[str]
-    firstYearOfPlay: Optional[str]
-    league: Union[League, Dict[str, Any]]
-    division: Union[Division, Dict[str, Any]]
-    sport: Union[Sport, Dict[str, Any]]
-    shortName: Optional[str]
-    record: Optional[Union[TeamRecord, Dict[str, Any]]]
-    franchiseName: Optional[str]
-    clubName: Optional[str]
-    active: Optional[str]
-    parentorgname: Optional[str]
-    parentorgid: Optional[str]
+    name: Optional[str] = None
+    springLeague: Optional[League] = None
+    allStarStatus: Optional[str] = None
+    season: Optional[int] = None
+    venue: Optional[Venue] = None
+    springVenue: Optional[Venue] = None
+    teamCode: Optional[str] = None
+    fileCode: Optional[str] = None
+    abbreviation: Optional[str] = None
+    teamName: Optional[str] = None
+    locationName: Optional[str] = None
+    firstYearOfPlay: Optional[str] = None
+    league: Optional[League] = None
+    division: Optional[Division] = None
+    sport: Optional[Sport] = None
+    shortName: Optional[str] = None
+    record: Optional[TeamRecord] = None
+    franchiseName: Optional[str] = None
+    clubName: Optional[str] = None
+    active: Optional[bool] = None
+    parentorgname: Optional[str] = None
+    parentorgid: Optional[str] = None

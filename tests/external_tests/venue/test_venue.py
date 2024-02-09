@@ -1,6 +1,7 @@
 import unittest
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi import Mlb
+from pydantic import ValidationError
 
 
 class TestVenue(unittest.TestCase):
@@ -14,7 +15,7 @@ class TestVenue(unittest.TestCase):
         pass
 
     def test_venue_instance_type_error(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValidationError):
             venue = Venue()
 
     def test_venue_instance_position_arguments(self):
