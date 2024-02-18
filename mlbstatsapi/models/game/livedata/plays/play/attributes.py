@@ -1,111 +1,73 @@
 from typing import Optional
-from dataclasses import dataclass
+from pydantic import BaseModel
 
-@dataclass(repr=False)
-class PlayAbout:
-    """
-    A class to represent a information about a play.
 
-    Attributes
-    ----------
-    atbatindex : int
-        Current at bat index
-    halfinning : str
-        What side of the inning
-    istopinning : bool
-        Is this inning the top of the inning
-    inning : int
-        What number of inning we are in
-    starttime : str
-        The start time for this play
-    endtime : str
-        The end time for this play
-    iscomplete : bool
-        Is this play complete
-    isscoringplay : bool
-        is this play a scoring play
-    hasreview : bool
-        Dose this play have a review
-    hasout : bool
-        Does this play have a out
-    captivatingindex : int
-        What is the captivating index for this play
+class PlayAbout(BaseModel):
+    """Represents information about a play.
+
+    Attributes:
+        atBatIndex (int): The current at-bat index.
+        halfInning (str): Specifies which half of the inning the play is in ('top' or 'bottom').
+        isTopInning (bool): Indicates if this is the top half of the inning.
+        inning (int): The current inning number.
+        startTime (Optional[str]): The start time for this play, if applicable. Defaults to None.
+        endTime (Optional[str]): The end time for this play, if applicable. Defaults to None.
+        isComplete (bool): Indicates if this play is complete.
+        isScoringPlay (bool): Specifies if this play is a scoring play.
+        hasReview (Optional[bool]): Indicates if this play has a review, if applicable. Defaults to None.
+        hasOut (bool): Specifies if this play results in an out.
+        captivatingIndex (int): The captivating index for this play.
     """
-    atbatindex: int
-    halfinning: str
-    istopinning: bool
+    atBatIndex: int
+    halfInning: str
+    isTopInning: bool
     inning: int
-    iscomplete: bool
-    isscoringplay: bool
-    hasout: bool
-    captivatingindex: int
-    endtime: Optional[str] = None
-    starttime: Optional[str] = None
-    hasreview: Optional[bool] = None
+    isComplete: bool
+    isScoringPlay: bool
+    hasOut: bool
+    captivatingIndex: int
+    endTime: Optional[str] = None
+    startTime: Optional[str] = None
+    hasReview: Optional[bool] = None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(repr=False)
-class PlayResult:
-    """
-    A class to represent a play result.
 
-    Attributes
-    ----------
-    type : str
-        Play result type
-    event : str
-        Play event
-    eventtype : str
-        Event type
-    description : str
-        Event description
-    rbi : int
-        Number of RBI's
-    awayscore : int
-        Score for away team
-    homescore : int
-        Score for home team
-    isout : bool
-        If the play was an out
+class PlayResult(BaseModel):
+    """Represents the result of a play.
+
+    Attributes:
+        type (str): The type of play result.
+        event (Optional[str]): The specific event of the play, if applicable. Defaults to None.
+        eventType (Optional[str]): The type of event, if applicable. Defaults to None.
+        description (Optional[str]): A description of the event, if applicable. Defaults to None.
+        rbi (int): Number of runs batted in (RBIs) resulting from the play.
+        awayScore (int): Score for the away team after the play.
+        homeScore (int): Score for the home team after the play.
+        isOut (Optional[bool]): Indicates if the play resulted in an out, if applicable. Defaults to None.
     """
     type: str
     rbi: int
-    awayscore: int
-    homescore: int
+    awayScore: int
+    homeScore: int
     event: Optional[str] = None
-    eventtype: Optional[str] = None
+    eventType: Optional[str] = None
     description: Optional[str] = None
-    isout: Optional[bool] = None
+    isOut: Optional[bool] = None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(repr=False)
-class PlayReviewDetails:
+class PlayReviewDetails(BaseModel):
+    """Represents the details of a play review.
+
+    Attributes:
+        isOverturned (bool): Indicates if the play was overturned.
+        inProgress (bool): Indicates if the review is in progress.
+        reviewType (str): Describes the type of review.
+        challengeTeamId (Optional[int]): The ID of the team issuing the challenge, if applicable. Defaults to None.
+        additionalReviews (Optional[str]): Any additional review details, if applicable. Defaults to None.
     """
-    A class to represent play review details.
+    isOverturned: bool
+    inProgress: bool
+    reviewType: str
+    challengeTeamId: Optional[int] = None
+    additionalReviews: Optional[str] = None
 
-    Attributes
-    ----------
-    isoverturned : bool
-        Was it overturned
-    inprogress : bool
-        Is it in progress
-    reviewtype : str
-        What type of review
-    challengeteamid : int
-        The team issuing the challenge review
-    """
-    isoverturned: bool
-    inprogress: bool
-    reviewtype: str
-    challengeteamid: Optional[int] = None
-    additionalreviews: Optional[str] = None
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))

@@ -1,8 +1,8 @@
 ﻿from dataclasses import dataclass, field
+from typing import Optional
+from pydantic import BaseModel
 
-
-@dataclass
-class Home:
+class Home(BaseModel):
     """
     A home is a where a draft player is from
 
@@ -15,12 +15,11 @@ class Home:
     country : str
         The country where the player is from.
     """
-    city: str
-    state: str
-    country: str
+    city: Optional[str] = None
+    state: Optional[str] = None
+    country: Optional[str] = None
 
-@dataclass
-class School:
+class School(BaseModel):
     """
     Represents the school the draft player is from.
 
@@ -38,7 +37,7 @@ class School:
         The state where the school is located.
     """
     name: str
-    schoolclass: str
-    city: str
+    schoolClass: Optional[str] = None
+    city: Optional[str] = None
     country: str
-    state: str
+    state: Optional[str] = None

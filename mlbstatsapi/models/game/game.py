@@ -5,44 +5,31 @@ from mlbstatsapi.models.game.gamedata import GameData
 from mlbstatsapi.models.game.livedata import LiveData
 
 from .attributes import MetaData
+from pydantic import BaseModel
 
 
-@dataclass
-class Game:
+class Game(BaseModel):
+    """Represents a game with detailed information.
+
+    Attributes:
+        gamePk (int): ID number of this game.
+        link (str): Link to the API address for this game.
+        copyright (str): MLB AM copyright information.
+        metaData (MetaData): MetaData of this game.
+        gameData (GameData): GameData of this game.
+        liveData (LiveData): LiveData of this game.
+
+    Methods:
+        id: Returns this game's ID.
     """
-    A class to represent a Game.
-
-    Attributes
-    ----------
-    gamepk : int
-        id number of this game
-    link : str
-        link to the api address for this game
-    copyright : str
-        MLB AM copyright information
-    metadata : MetaData
-        metaData of this game
-    gamedata : GameData
-        gameData of this game
-    livedata : LiveData
-        liveData of this game
-
-    Methods
-    -------
-    id():
-        returns this games id
-    """
-    gamepk: int
+    gamePk: int
     link: str
-    metadata: Union[MetaData, dict]
-    gamedata: Union[GameData, dict]
-    livedata: Union[LiveData, dict]
-
-    def __post_init__(self):
-        self.metadata = MetaData(**self.metadata)
-        self.gamedata = GameData(**self.gamedata)
-        self.livedata = LiveData(**self.livedata)
+    metaData: MetaData
+    gameData: GameData
+    liveData: LiveData
 
     @property
     def id(self):
         return self.gamepk
+
+

@@ -1,75 +1,47 @@
 from typing import Union, List
-from dataclasses import dataclass
-
+from pydantic import BaseModel
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.people import Person
 
-@dataclass
-class HitCoordinates:
-    """
-    A class to represent a Hits coordinates.
+class HitCoordinates(BaseModel):
+    """Represents the coordinates of a hit.
 
-    Attributes
-    ----------
-    x : float
-        X coordinate for hit
-    y : float
-        Y coordinate for hit
+    Attributes:
+        x (float): X coordinate for the hit.
+        y (float): Y coordinate for the hit.
     """
     x: float
     y: float
 
-@dataclass
-class HitsByTeam:
-    """
-    A class to represent a Hit during an inning.
+class HitsByTeam(BaseModel):
+    """Represents a hit during an inning.
 
-    Attributes
-    ----------
-    team : Team
-        This team
-    inning : int
-        This inning number
-    pitcher : Person
-        The pitcher
-    batter : Person
-        The batter
-    coordinates : HitCoordinates
-        Hit coordinates
-    type : str
-        Type
-    description : str
-        description
+    Attributes:
+        team (Team): The team making the hit.
+        inning (int): The inning number in which the hit occurred.
+        pitcher (Person): The pitcher during the hit.
+        batter (Person): The batter making the hit.
+        coordinates (HitCoordinates): The coordinates where the hit landed.
+        type (str): The type of hit.
+        description (str): A description of the hit.
     """
-    team: Union[Team, dict]
+    team: Team
     inning: int
-    pitcher: Union[Person, dict]
-    batter: Union[Person, dict]
-    coordinates: Union[HitCoordinates, dict]
+    pitcher: Person
+    batter: Person
+    coordinates: HitCoordinates
     type: str
     description: str
 
-    def __post_init__(self):
-        self.team = Team(**self.team)
-        self.pitcher = Person(**self.pitcher)
-        self.batter = Person(**self.batter)
-        self.coordinates = HitCoordinates(**self.coordinates)
 
-@dataclass
-class PlayByInningHits:
+class PlayByInningHits(BaseModel):
+    """Represents the hits made by inning in a game.
+
+    Attributes:
+        home (List[HitsByTeam]): A list of hits by the home team.
+        away (List[HitsByTeam]): A list of hits by the away team.
     """
-    A class to represent a play by inning in this game.
+    home: List[HitsByTeam]
+    away: List[HitsByTeam]
 
-    Attributes
-    ----------
-    home : List[HitsByTeam]
-        Home team hits
-    away : List[HitsByTeam]
-        Away team hits
-    """
-    home: Union[List[HitsByTeam], List[dict]]
-    away: Union[List[HitsByTeam], List[dict]]
 
-    def __post_init__(self):
-        self.home = [HitsByTeam(**home_hit) for home_hit in self.home]
-        self.away = [HitsByTeam(**away_hit) for away_hit in self.away]

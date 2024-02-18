@@ -1,5 +1,5 @@
 from typing import Union, Optional, List
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 from mlbstatsapi.models.game.livedata.plays.play.matchup import PlayMatchup
 from mlbstatsapi.models.game.livedata.plays.play.playrunner import PlayRunner
@@ -8,60 +8,32 @@ from mlbstatsapi.models.data import Count
 from .attributes import PlayAbout, PlayResult, PlayReviewDetails
 
 
-@dataclass(repr=False)
-class Play:
+class Play(BaseModel):
+    """Represents a single play in a game.
+
+    Attributes:
+        result (PlayResult): The result of the play.
+        about (PlayAbout): Information about the play.
+        count (Count): The play's count.
+        matchup (PlayMatchup): The play's matchup.
+        pitchIndex (List[int]): Indexes of pitches in this play, indexing `playEvents`.
+        actionIndex (List[int]): Indexes of actions in this play, indexing `playEvents`.
+        runnerIndex (List[int]): Indexes of runners in this play, indexing `runners`.
+        runners (List[PlayRunner]): Information about runners during the play.
+        playEvents (List[PlayEvent]): Events that occurred during the play.
+        playEndTime (Optional[str]): The time this play ends. Defaults to None.
+        atBatIndex (int): The play's index number.
+        reviewDetails (Optional[PlayReviewDetails]): Information on reviews if present. Defaults to None.
     """
-    A class to represent a single play in this game.
-
-    Attributes
-    ----------
-    result : PlayResult
-        Play result
-    about : PlayAbout
-        Information about this play
-    count : PlayCount
-        This plays count
-    matchup : PlayMatchup
-        This plays matchup
-    pitchindex : List[int]
-        Pitch index for this play, indexing playEvents
-    actionindex : List[int]
-        Action index for this play, indexing playEvents
-    runnerindex : List[int]
-        Runner index for this play, indexing runners
-    runners : List[PlayRunner]
-        Runners
-    playevents : List[PlayEvent]
-        Play events
-    playendtime : str
-        Time this play ends
-    atbatindex : int
-        The play index number
-    reviewdetails : PlayReviewDetails
-        Information on reviews if present
-    """
-    result: Union[PlayResult, dict]
-    about: Union[PlayAbout, dict]
-    count: Union[Count, dict]
-    matchup: Union[PlayMatchup, dict]
-    pitchindex: List[int]
-    actionindex: List[int]
-    runnerindex: List[int]
-    runners: Union[List[PlayRunner], List[dict]]
-    playevents: Union[List[PlayEvent], List[dict]]
-    atbatindex: int
-    playendtime: Optional[str] = None
-    reviewdetails: Optional[Union[PlayReviewDetails, dict]] = None
-
-    def __post_init__(self):
-        self.result = PlayResult(**self.result)
-        self.about = PlayAbout(**self.about)
-        self.count = Count(**self.count)
-        self.matchup = PlayMatchup(**self.matchup)
-        self.runners = [PlayRunner(**runner) for runner in self.runners]
-        self.playevents = [PlayEvent(**playevent) for playevent in self.playevents]
-        self.reviewdetails = PlayReviewDetails(**self.reviewdetails) if self.reviewdetails else self.reviewdetails
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    result: PlayResult
+    about: PlayAbout
+    count: Count
+    matchup: PlayMatchup
+    pitchIndex: List[int]
+    actionIndex: List[int]
+    runnerIndex: List[int]
+    runners: List[PlayRunner]
+    playEvents: List[PlayEvent]
+    atBatIndex: int
+    playEndTime: Optional[str] = None
+    reviewDetails: Optional[PlayReviewDetails] = None

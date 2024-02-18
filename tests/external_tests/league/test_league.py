@@ -1,5 +1,6 @@
 import unittest
 from mlbstatsapi.models.leagues import League
+from pydantic import ValidationError
 from mlbstatsapi import Mlb
 
 
@@ -14,7 +15,7 @@ class TestLeague(unittest.TestCase):
         pass
 
     def test_league_instance_type_error(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValidationError):
             league = League()
 
     def test_league_instance_position_arguments(self):
@@ -28,19 +29,20 @@ class TestLeague(unittest.TestCase):
         self.assertTrue(hasattr(self.league, "name"))
         self.assertTrue(hasattr(self.league, "link"))
         self.assertTrue(hasattr(self.league, "abbreviation"))
-        self.assertTrue(hasattr(self.league, "nameshort"))
-        self.assertTrue(hasattr(self.league, "seasonstate"))
-        self.assertTrue(hasattr(self.league, "haswildcard"))
-        self.assertTrue(hasattr(self.league, "hassplitseason"))
-        self.assertTrue(hasattr(self.league, "numgames"))
-        self.assertTrue(hasattr(self.league, "hasplayoffpoints"))
-        self.assertTrue(hasattr(self.league, "numteams"))
-        self.assertTrue(hasattr(self.league, "numwildcardteams"))
-        self.assertTrue(hasattr(self.league, "seasondateinfo"))
+        self.assertTrue(hasattr(self.league, "nameShort"))
+        self.assertTrue(hasattr(self.league, "seasonState"))
+        self.assertTrue(hasattr(self.league, "hasWildCard"))
+        self.assertTrue(hasattr(self.league, "hasSplitSeason"))
+        self.assertTrue(hasattr(self.league, "numGames"))
+        self.assertTrue(hasattr(self.league, "hasPlayoffPoints"))
+        self.assertTrue(hasattr(self.league, "numTeams"))
+        self.assertTrue(hasattr(self.league, "numWildcardTeams"))
+        self.assertTrue(hasattr(self.league, "seasonDateInfo"))
         self.assertTrue(hasattr(self.league, "season"))
-        self.assertTrue(hasattr(self.league, "orgcode"))
-        self.assertTrue(hasattr(self.league, "conferencesinuse"))
-        self.assertTrue(hasattr(self.league, "divisionsinuse"))
+        self.assertTrue(hasattr(self.league, "orgCode"))
+        self.assertTrue(hasattr(self.league, "conferencesInUse"))
+        self.assertTrue(hasattr(self.league, "divisionsInUse"))
         self.assertTrue(hasattr(self.league, "sport"))
-        self.assertTrue(hasattr(self.league, "sortorder"))
+        self.assertTrue(hasattr(self.league, "sortOrder"))
         self.assertTrue(hasattr(self.league, "active"))
+

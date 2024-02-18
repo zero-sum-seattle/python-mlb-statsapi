@@ -29,19 +29,10 @@ class Standings:
     teamrecords : List[Teamrecords]
         A list of Teamrecord objects containing the data for the teams standings.
     """
-    standingstype: str
+    standingsType: str
     league: Union[League, dict]
     division: Union[Sport, dict]
     lastupdated: str
-    teamrecords: List[Union[Teamrecords, dict]]
-    sport: Optional[Union[Sport, dict]] = None
+    teamrecords: List[Teamrecords]
+    sport: Optional[Sport] = None
 
-    def __post_init__(self):
-        self.league = League(**self.league)
-        self.division = Division(**self.division)
-        self.sport = Sport(**self.sport) if self.sport else None
-        self.teamrecords = [Teamrecords(**teamrecord) for teamrecord in self.teamrecords]
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))

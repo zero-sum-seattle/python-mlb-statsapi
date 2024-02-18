@@ -1,23 +1,17 @@
 from typing import List
-from dataclasses import dataclass
+from pydantic import BaseModel
 
-@dataclass
-class MetaData:
-    """
-    A class to represent a Game's metaData.
 
-    Attributes
-    ----------
-    wait : int
-        No idea what this wait signifies
-    timestamp : str
-        The timeStamp
-    gameevents : List[str]
-        Current game events for this game
-    logicalevents : List[str]
-        Current logical events for this game
+class MetaData(BaseModel):
+    """Represents a game's metaData.
+
+    Attributes:
+        wait (int): No idea what this wait signifies.
+        timeStamp (str): The timeStamp of the metaData.
+        gameEvents (List[str]): Current game events for this game.
+        logicalEvents (List[str]): Current logical events for this game.
     """
     wait: int
-    timestamp: str
-    gameevents: List[str]
-    logicalevents: List[str]
+    timeStamp: str
+    gameEvents: List[str]
+    logicalEvents: List[str]
