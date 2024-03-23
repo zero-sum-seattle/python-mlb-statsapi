@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional, Union
 from mlbstatsapi.models.teams import Team
+from pydantic import BaseModel
 
-
-@dataclass
-class AttendanceHighLowGameContent:
+class AttendanceHighLowGameContent(BaseModel):
     """
     A class to represent attendance records.
     Attributes
@@ -15,8 +14,7 @@ class AttendanceHighLowGameContent:
     link: str
 
 
-@dataclass
-class AttendanceHighLowGame:
+class AttendanceHighLowGame(BaseModel):
     """
     A class to represent attendance High and Low games.
     Attributes
@@ -35,12 +33,7 @@ class AttendanceHighLowGame:
     content: Union[AttendanceHighLowGameContent, dict]
     daynight: str
 
-    def __post_init__(self):
-        self.content = AttendanceHighLowGameContent(**self.content)
-
-
-@dataclass
-class AttendenceGameType:
+class AttendenceGameType(BaseModel):
     """
     A class to represent Attendance Game Type.
     Attributes
@@ -54,8 +47,7 @@ class AttendenceGameType:
     description: str
 
 
-@dataclass(repr=False)
-class AttendanceRecords:
+class AttendanceRecords(BaseModel):
     """
     A class to represent attendance records.
     Attributes
@@ -107,42 +99,34 @@ class AttendanceRecords:
     team : Team
         Team
     """
-    openingstotal: int
-    openingstotalaway: int
-    openingstotalhome: int
-    openingstotallost: int
-    gamestotal: int
-    gamesawaytotal: int
-    gameshometotal: int
+    openingsTotal: int
+    openingsTotalAway: int
+    openingsTotalHome: int
+    openingsTotalLost: int
+    gamesTotal: int
+    gamesAwayTotal: int
+    gamesHomeTotal: int
     year: str
-    attendanceaverageytd: int
-    attendancetotal: int
-    gametype: Union[AttendenceGameType, dict]
-    team: Union[Team, dict]
-    attendanceaverageaway: Optional[int] = None
-    attendanceaveragehome: Optional[int] = None
-    attendancehigh: Optional[int] = None
-    attendancehighdate: Optional[str] = None
-    attendancehighgame: Optional[Union[AttendanceHighLowGame, dict]] = None
-    attendancelow: Optional[int] = None
-    attendancelowdate: Optional[str] = None
-    attendancelowgame: Optional[Union[AttendanceHighLowGame, dict]] = None
-    attendancetotalaway: Optional[int] = None
-    attendancetotalhome: Optional[int] = None
-    attendanceopeningaverage: Optional[int] = None
-    
-    def __post_init__(self):
-        self.attendancehighgame = AttendanceHighLowGame(**self.attendancehighgame) if self.attendancehighgame else self.attendancehighgame
-        self.attendancelowgame = AttendanceHighLowGame(**self.attendancelowgame) if self.attendancelowgame else self.attendancelowgame
-        self.gameType = AttendenceGameType(**self.gametype)
-        self.team = Team(**self.team)
+    attendanceAverageYtd: int
+    attendanceTotal: int
+    gameType: AttendenceGameType
+    team: Team
+    attendanceAverageAway: Optional[int] = None
+    attendanceAverageHome: Optional[int] = None
+    attendanceHigh: Optional[int] = None
+    attendanceHighDate: Optional[str] = None
+    attendanceHighGame: Optional[AttendanceHighLowGame] = None
+    attendanceLow: Optional[int] = None
+    attendanceLowDate: Optional[str] = None
+    attendanceLowGame: Optional[AttendanceHighLowGame] = None
+    attendanceTotalAway: Optional[int] = None
+    attendanceTotalHome: Optional[int] = None
+    attendanceOpeningAverage: Optional[int] = None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(repr=False)
-class AttendanceTotals:
+
+
+class AttendanceTotals(BaseModel):
     """
     A class to represent attendance aggregate toatls.
     Attributes
@@ -184,7 +168,3 @@ class AttendanceTotals:
     attendancetotalhome: int
     attendanceaverageaway: Optional[int] = None
     attendanceaveragehome: Optional[int] = None
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))

@@ -1,28 +1,20 @@
 from typing import Union, List, Optional
 from dataclasses import dataclass, field
+from pydantic import BaseModel
 
 from .attributes import RunnerMovement, RunnerDetails, RunnerCredits
 
 
-@dataclass
-class PlayRunner:
+class PlayRunner(BaseModel):
     """
     A class to represent a play runner.
 
-    Attributes
-    ----------
-    movement: RunnerMovement
-        Runner movements
-    details: RunnerDetails
-        Runner details
-    credits: List[RunnerCredits]
-        Runner credits
+    Attributes:
+        movement (RunnerMovement): Runner movements.
+        details (RunnerDetails): Runner details.
+        credits (Optional[List[RunnerCredits]]): Runner credits, optional, defaults to an empty list.
     """
-    movement: Union[RunnerMovement, dict]
-    details: Union[RunnerDetails, dict]
-    credits: Optional[Union[List[RunnerCredits], List[dict]]] = field(default_factory=list)
 
-    def __post_init__(self):
-        self.movement = RunnerMovement(**self.movement)
-        self.details = RunnerDetails(**self.details)
-        self.credits = [RunnerCredits(**credit) for credit in self.credits]
+    movement: RunnerMovement
+    details: RunnerDetails
+    credits: Optional[List[RunnerCredits]] = []

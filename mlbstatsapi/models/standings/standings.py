@@ -1,38 +1,28 @@
 from typing import Union, Optional, List
-from dataclasses import dataclass
-
+from pydantic import BaseModel
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.sports import Sport
 
-from .attributes import Teamrecords
+from .attributes import TeamRecord
 
 
-@dataclass(repr=False)
-class Standings:
+class Standings(BaseModel):
     """
-    A class representing a standings in a league.
+    Represents standings within a league.
 
-
-    Attributes
-    ----------
-    standingstype : str
-        A string indicating the type of standings.
-    league : league
-        An object containing information about the league.
-    division : Division
-        An object containing information about the division
-    sport : Sport
-        An object containing information about the sport.
-    lastupdated : str
-        A string indicating the last time the standing was updated.
-    teamrecords : List[Teamrecords]
-        A list of Teamrecord objects containing the data for the teams standings.
+    Attributes:
+        standingsType (str): Indicates the type of standings.
+        league (League): Information about the league.
+        division (Division): Information about the division.
+        sport (Sport, optional): Information about the sport. Defaults to None.
+        lastUpdated (str): The last time the standings were updated.
+        teamRecords (List[TeamRecord]): Data for the team standings.
     """
-    standingsType: str
-    league: Union[League, dict]
-    division: Union[Sport, dict]
-    lastupdated: str
-    teamrecords: List[Teamrecords]
+    standingsType: Optional[str] = None
+    league: League
+    division: Sport
+    lastUpdated: str
+    teamRecords: List[TeamRecord]
     sport: Optional[Sport] = None
 

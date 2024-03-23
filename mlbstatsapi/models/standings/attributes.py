@@ -1,144 +1,165 @@
-from typing import Union, Optional
-from dataclasses import dataclass
+from typing import Optional, List
+from pydantic import BaseModel, Field
+from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.divisions import Division
 
-from mlbstatsapi.models.teams import Team, TeamRecord
-
-@dataclass
-class Streak:
-    """
+class Streak(BaseModel):
+    """Represents a winning streak
     
 
     Attributes:
-    ___________
-    streaktype : str
-        Steak type
-    streaknumber : int
-        Streak number
-    streakcode : str
-        Steak code
-    """
-    streaktype: str
-    streaknumber: int
-    streakcode: str
+        streaktype(str): Steak type     
+        streaknumber(int): Streak number
+        streakcode(str): Steak code
 
-@dataclass(repr=False)
-class Teamrecords(TeamRecord):
     """
-    Team Records
+    streakType: str
+    streakNumber: int
+    streakCode: str
+
+class DivisionRecord(BaseModel):
+    """Represents a league record.
 
     Attributes:
-    ___________
-    team: Team
-        The team for which the data belongs to. Can be an instance of the Team class or a dictionary with relevant information about the team.
-    season: int
-        The season for which the data belongs to.
-    streak: Streak
-        The streak of the team. Can be an instance of the Streak class or a dictionary with relevant information about the streak.
-    divisionrank: str
-        The rank of the team in their division.
-    leaguerank: str
-        The rank of the team in their league.
-    sportrank: str
-        The rank of the team in their sport.
-    gamesplayed: int
-        The number of games played by the team.
-    gamesback: str
-        The number of games behind the leader in the division.
-    wildcardgamesback: str
-        The number of games behind the leader in the wild card race.
-    leaguegamesback: str
-        The number of games behind the leader in the league.
-    springleaguegamesback: str
-        The number of games behind the leader in the spring league.
-    sportgamesback: str
-        The number of games behind the leader in the sport.
-    divisiongamesback: str
-        The number of games behind the leader in the division.
-    conferencegamesback: str
-        The number of games behind the leader in the conference.
-    leaguerecord: OverallleagueRecord
-        The overall league record of the team. Can be an instance of the OverallleagueRecord class or a dictionary with relevant information about the record.
-    lastupdated: str
-        The date when the data was last updated.
-    records: Records
-        The records of the team. Can be an instance of the Records class or a dictionary with relevant information about the records.
-    runsallowed: int
-        The number of runs allowed by the team.
-    runsscored: int
-        The number of runs scored by the team.
-    divisionchamp: bool
-        A flag indicating whether the team is the division champion.
-    divisionleader: bool
-        A flag indicating whether the team is the leader in their division.
-    haswildcard: bool
-        A flag indicating whether the team has a wild card spot.
-    clinched: bool
-        A flag indicating whether the team has clinched a spot in the playoffs.
-    eliminationnumber: str
-        The number of games the team needs to win or the number of games their opponents need to lose in order to be eliminated from playoff contention.
-    wildcardeliminationnumber: str
-        The number of games the team needs to win or the number of games their opponents need to lose in order to be eliminated from wild card contention.
+        wins (int): Number of wins in the league record.
+        losses (int): Number of losses in the league record.
+        pct (str): Winning percentage of the league record.
+        division (Division): 
+    """
     wins: int
-        The number of wins of the team.
     losses: int
-        The number of losses of the team.
-    rundifferential: int
-        The run differential of the team (runs scored minus runs allowed).
-    winningpercentage: str
-        The winning percentage of the team.
-    wildcardrank: str
-        The rank of the team in the wild card race.
-    wildcardleader: bool
-        A flag indicating whether the team is the leader in the wild card race.
-    magicnumber: str
-        The number of games the team needs to win or the number of games their opponents need to lose in order to clinch a spot in the playoffs.
-    clinchindicator: Optional
+    pct: str
+    division: Division
     
+
+class LeagueRecord(BaseModel):
+    """Represents a league record.
+
+    Attributes:
+        wins (int): Number of wins in the league record.
+        losses (int): Number of losses in the league record.
+        pct (str): Winning percentage of the league record.
+        league (League): Number of ties in the league record. Optional.
     """
-    team: Union[Team, dict]
+    wins: int = None
+    losses: int = None
+    pct: str = None
+    league: League = None
+    
+class Record(BaseModel):
+    """Represents a league record.
+
+    Attributes:
+        wins (int): Number of wins in the league record.
+        losses (int): Number of losses in the league record.
+        ties (int, optional): Number of ties in the league record. Optional.
+        pct (str): Winning percentage of the league record.
+    """
+    wins: int
+    losses: int
+    pct: str
+    ties: Optional[int] = None
+
+class Records(BaseModel):
+    """Represents a league record.
+
+    Attributes:
+        splitRecords (list): 
+        divisionRecords (list): List[DivisionRecord]
+        overallRecords: List[Record]
+        leagueRecords: 
+    """
+    splitRecords: List[Record] = Field(default_factory=list)
+    divisionRecords: List[DivisionRecord] = Field(default_factory=list)
+    overallRecords: List[Record] = Field(default_factory=list)
+    leagueRecords: List[LeagueRecord] = Field(default_factory=list)
+    expectedRecords: Optional[List[Record]] = Field(default=list)
+
+
+class TeamRecord(BaseModel):
+    """
+    Extends TeamRecord to include detailed statistics and standings for a team.
+
+    Attributes:
+        team (`Team`): The team for which the record is maintained. This can be either an instance
+            of the Team class or a dictionary containing team information.
+        season (int): The year of the season for which the record is relevant.
+        streak (`Streak`): Information about the team's current streak. This can be either an instance
+            of the Streak class or a dictionary containing streak information.
+        divisionRank (str): The team's rank within their division.
+        leagueRank (str): The team's rank within their league.
+        sportRank (str): The team's rank within their sport.
+        gamesPlayed (`int`, optional): The total number of games played by the team.
+        gamesBack (str): The number of games the team is behind the division leader.
+        wildCardGamesBack (`str`, optional): The number of games the team is behind the wild card leader.
+        leagueGamesBack (`str`, optional): The number of games the team is behind the league leader.
+        springLeagueGamesBack (`str`, optional): The number of games the team is behind the spring league leader.
+        sportGamesBack (`str`, optional): The number of games the team is behind the sport leader.
+        divisionGamesBack (`str`, optional): The number of games the team is behind the division leader.
+        conferenceGamesBack (`str`, optional): The number of games the team is behind the conference leader.
+        leagueRecord (OverallLeagueRecord, optional): The team's overall league record, which can be either an instance
+            of the OverallLeagueRecord class or a dictionary containing league record information.
+        lastUpdated (str): The timestamp when the record was last updated.
+        records (Records, optional): Detailed records of the team, which can be either an instance of the Records class
+            or a dictionary containing records information.
+        runsAllowed (int): The total number of runs allowed by the team.
+        runsScored (int): The total number of runs scored by the team.
+        divisionChamp (bool): Indicates whether the team is the division champion.
+        divisionLeader (`bool`, optional): Indicates whether the team is leading their division.
+        hasWildcard (bool): Indicates whether the team has a wildcard spot.
+        clinched (bool): Indicates whether the team has clinched a spot in the playoffs.
+        eliminationNumber (str): The "magic number" of games the team needs to either win or have their
+            competitors lose to be eliminated from playoff contention.
+        eliminationNumberSport (`str`, optional): Sport-specific elimination number.
+        eliminationNumberLeague (`str`, optional): League-specific elimination number.
+        eliminationNumberDivision (`str`, optional): Division-specific elimination number.
+        eliminationNumberConference (`str`, optional): Conference-specific elimination number.
+        wildCardEliminationNumber (`str`, optional): The number of games needed to be eliminated from wild card contention.
+        wins (`int`, optional): The total number of wins.
+        losses (`int`, optional): The total number of losses.
+        runDifferential (int): The difference between runs scored and runs allowed.
+        winningPercentage (`str`, optional): The percentage of games won.
+        wildCardRank (`str`, optional): The rank of the team in the wild card standings.
+        wildCardLeader (`bool`, optional): Indicates whether the team is leading the wild card standings.
+        magicNumber (`str`, optional): The number of games the team needs to either win or have their competitors lose
+            to clinch a playoff spot.
+        clinchIndicator (`str`, optional): A symbol indicating the team's clinch status for playoffs.
+    """
+    team: Team
     season: int
-    streak: Union[Streak, dict]    
-    divisionrank: str
-    leaguerank: str
-    sportrank: str
-    # gamesplayed: int
-    gamesback: str
-    # wildcardgamesback: str
-    # leaguegamesback: str
-    # springleaguegamesback: str
-    # sportgamesback: str
-    # divisiongamesback: str
-    # conferencegamesback: str
-    # leaguerecord: Union[OverallleagueRecord, dict]
-    lastupdated: str
-    # records: Union[Records, dict]
-    runsallowed: int
-    runsscored: int
-    divisionchamp: bool
-    # divisionleader: bool
-    haswildcard: bool
+    streak: Streak
+    divisionRank: str
+    leagueRank: str
+    sportRank: str
+    gamesPlayed: Optional[int] = None
+    gamesBack: str
+    wildCardGamesBack: Optional[str] = None
+    leagueGamesBack: Optional[str] = None
+    springLeagueGamesBack: Optional[str] = None
+    sportGamesBack: Optional[str] = None
+    divisionGamesBack: Optional[str] = None
+    conferenceGamesBack: Optional[str] = None
+    leagueRecord: Optional[LeagueRecord] = None
+    lastUpdated: str
+    records: Records
+    runsAllowed: int
+    runsScored: int
+    divisionChamp: bool
+    divisionLeader: Optional[bool] = None
+    hasWildcard: bool
     clinched: bool
-    eliminationnumber: str
-    eliminationnumbersport: str
-    eliminationnumberleague: str
-    eliminationnumberdivision: str
-    eliminationnumberconference: str
-    wildcardeliminationnumber: str    
-    # wins: int
-    # losses: int
-    rundifferential: int
-    # winningpercentage: str
-    wildcardrank: Optional[str] = None
-    wildcardleader: Optional[bool] = None
-    magicnumber: Optional[str] = None
-    clinchindicator: Optional[str] = None
-
-    def __post_init__(self):
-        self.team = Team(**self.team)
-        self.streak = Streak(**self.streak)
-        # self.leaguerecord = OverallleagueRecord(**self.leaguerecord)
-        # self.records = Records(**self.records)
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    eliminationNumber: str
+    eliminationNumberSport: str
+    eliminationNumberLeague: str
+    eliminationNumberDivision: str
+    eliminationNumberConference: str
+    wildCardEliminationNumber: str
+    wins: Optional[int] = None
+    losses: Optional[int] = None
+    runDifferential: int
+    winningPercentage: Optional[str] = None
+    wildCardRank: Optional[str] = None
+    wildCardLeader: Optional[bool] = None
+    magicNumber: Optional[str] = None
+    clinchIndicator: Optional[str] = None

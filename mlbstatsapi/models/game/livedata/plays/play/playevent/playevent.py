@@ -1,85 +1,58 @@
-from typing import Union, Optional
-from dataclasses import dataclass
+from typing import Optional
 from mlbstatsapi.models.people import Person, Position
 from mlbstatsapi.models.data import Count, HitData, PitchData, PlayDetails
+from pydantic import BaseModel
 
-@dataclass(repr=False)
-class PlayEvent:
+class PlayEvent(BaseModel):
     """
-    A class to represent a information about a play.
+    A class to represent information about a play.
 
-    Attributes
-    ----------
-    details : PlayDetails
-        Event details
-    index : int
-        Event index
-    starttime : str
-        Event start time
-    endtime : str
-        Event end time
-    ispitch : bool
-        Is this event a pitch
-    type : str
-        Type
-    playid : str
-        Unique play id ?
-    pitchnumber : int
-        Pitch number
-    actionplayid : str
-        Unique action play id ?
-    isbaserunningplay : bool
-        Is there base running this play
-    issubstitution : bool
-        Is this a substitution
-    battingorder : str
-        A weird batting order string that only has appeared once
-    count : PlayCount
-        Count
-    pitchdata : PitchData
-        Pitch data
-    hitdata : HitData
-        Hit data
-    player : Person
-        Player
-    position : Position
-        Position
-    replacedplayer : Person
-        Replaced player
+    Attributes:
+        details (Union[PlayDetails, dict]): Event details.
+        index (int): Event index.
+        isPitch (bool): Indicates if this event is a pitch.
+        type (str): Type of event.
+        pfxid (Optional[str]): Unique play ID, optional.
+        startTime (Optional[str]): Event start time, optional.
+        endTime (Optional[str]): Event end time, optional.
+        umpire (Optional[str]): Umpire involved, optional.
+        base (Optional[str]): Base involved in the event, optional.
+        playId (Optional[str]): Unique play ID, optional.
+        pitchNumber (Optional[int]): Pitch number, optional.
+        actionPlayId (Optional[str]): Unique action play ID, optional.
+        isBaseRunningPlay (Optional[bool]): Indicates if there is base running in this play, optional.
+        isSubstitution (Optional[bool]): Indicates if this is a substitution, optional.
+        battingOrder (Optional[str]): A weird batting order string, optional.
+        count (Optional[Count]): Count during the play, optional.
+        pitchData (Optional[PitchData]): Pitch data, optional.
+        hitData (Optional[HitData]): Hit data, optional.
+        player (Optional[Person]): Player involved, optional.
+        position (Optional[Position]): Position involved, optional.
+        replacedPlayer (Optional[Person]): Replaced player, optional.
+        reviewDetails (Optional[dict]): Details about any review, defaults to an empty dict.
+        injuryType (Optional[str]): Type of injury, if applicable, optional.
     """
-    details: Union[PlayDetails, dict]
+
+    details: PlayDetails
     index: int
-    ispitch: bool
+    isPitch: bool
     type: str
     pfxid: Optional[str] = None
-    starttime: Optional[str] = None
-    endtime: Optional[str] = None
+    startTime: Optional[str] = None
+    endTime: Optional[str] = None
     umpire: Optional[str] = None
     base: Optional[str] = None
-    playid: Optional[str] = None
-    pitchnumber: Optional[int] = None
-    actionplayid: Optional[str] = None
-    isbaserunningplay: Optional[bool] = None
-    issubstitution: Optional[bool] = None
-    battingorder: Optional[str] = None
-    count: Optional[Union[Count, dict]] = None
-    pitchdata: Optional[Union[PitchData, dict]] = None
-    hitdata: Optional[Union[HitData, dict]] = None
-    player: Optional[Union[Person, dict]] = None
-    position: Optional[Union[Position, dict]] = None
-    replacedplayer: Optional[Union[Person, dict]] = None
-    reviewdetails: Optional[dict] = None
-    injurytype: Optional[str] = None
-
-    def __post_init__(self):
-        self.details = PlayDetails(**self.details)
-        self.count = Count(**self.count) if self.count else self.count
-        self.pitchdata = PitchData(**self.pitchdata) if self.pitchdata else self.pitchdata
-        self.hitdata = HitData(**self.hitdata) if self.hitdata else self.hitdata
-        self.player = Person(**self.player) if self.player else self.player
-        self.position = Position(**self.position) if self.position else self.position
-        self.replacedplayer = Person(**self.replacedplayer) if self.replacedplayer else self.replacedplayer
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    playId: Optional[str] = None
+    pitchNumber: Optional[int] = None
+    actionPlayId: Optional[str] = None
+    isBaseRunningPlay: Optional[bool] = None
+    isSubstitution: Optional[bool] = None
+    battingOrder: Optional[str] = None
+    count: Optional[Count] = None
+    pitchData: Optional[PitchData] = None
+    hitData: Optional[HitData] = None
+    player: Optional[Person] = None
+    position: Optional[Position] = None
+    replacedPlayer: Optional[Person] = None
+    reviewDetails: Optional[dict] = {}
+    injuryType: Optional[str] = None

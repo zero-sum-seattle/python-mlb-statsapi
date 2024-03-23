@@ -193,8 +193,7 @@ class Mlb:
 
         return person_list
 
-    def get_people_id(self, fullname: str, sport_id: int = 1, 
-                      search_key: str = 'fullname', **params) -> List[int]:
+    def get_people_search(self, fullname: str, **params) -> List[Person]:
         """
         Returns specific player information based on players fullname
 
@@ -230,22 +229,18 @@ class Mlb:
         [664034]
         """
         # Used to reduce the amount of unneccessary data requested from api
-        params['fields'] = 'people,id,fullName'
+        params['names'] = fullname
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'sports/{sport_id}/players', ep_params=params)
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/search', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        player_ids = []
-
+        person_list = []
         if 'people' in mlb_data.data and mlb_data.data['people']:
             for person in mlb_data.data['people']:
-                try:
-                    if person[search_key].lower() == fullname.lower():
-                        player_ids.append(person['id'])
-                except KeyError:
-                    continue
-        return player_ids
+                person_list.append(Person(**person))
+
+        return person_list
 
     def get_teams(self, sport_id: int = 1, **params) -> List[Team]:
         """
@@ -1179,7 +1174,7 @@ class Mlb:
 
         return None
     
-    def get_venue(self, venue_id: int, **params) -> Union[Venue, None]:
+    def get_venue(self, venue_id: int, **params) -> Venue | None:
         """
         returns venue directorial information for all available venues in the Stats API.
 
@@ -1208,11 +1203,10 @@ class Mlb:
         >>> mlb.get_venue(31)
         Venue
         """
-        params['hydrate'] = ['location', 'fieldInfo', 'timezone']
 
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'venues/{venue_id}', ep_params=params)
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'venues/{venue_id}')
         if 400 <= mlb_data.status_code <= 499:
-            return []
+            return None
 
         if 'venues' in mlb_data.data and mlb_data.data['venues']:
             for venue in mlb_data.data['venues']:

@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
-@dataclass
-class PlayMatchupSplits:
+class PlayMatchupSplits(BaseModel):
     """
     A class to represent a playMatchup Split.
 
@@ -16,4 +15,4 @@ class PlayMatchupSplits:
     """
     batter: str
     pitcher: str
-    menonbase: str
+    menOnBase: str

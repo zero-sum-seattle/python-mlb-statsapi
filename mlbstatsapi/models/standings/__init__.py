@@ -1,2 +1,2 @@
 from .standings import Standings
-from .attributes import Teamrecords
+from .attributes import Records, LeagueRecord, DivisionRecord, Record

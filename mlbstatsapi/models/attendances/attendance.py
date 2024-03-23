@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Union, List
 from .attributes import AttendanceTotals, AttendanceRecords
+from pydantic import BaseModel
 
-@dataclass
-class Attendance:
+
+class Attendance(BaseModel):
     """
     A class to represent attendance.
     Attributes
@@ -15,9 +16,5 @@ class Attendance:
     aggregatetotals : AttendanceAggregateTotals
         Attendence aggregate total numbers for query
     """
-    aggregatetotals: Union[AttendanceTotals, dict]
-    records: Union[List[AttendanceRecords], List[dict]] = field(default_factory=list)
-
-    def __post_init__(self):
-        self.records = [AttendanceRecords(**record) for record in self.records if self.records]
-        self.aggregatetotals = AttendanceTotals(**self.aggregatetotals)
+    aggregateTotals: AttendanceTotals
+    records: Union[List[AttendanceRecords]] = field(default_factory=list)

@@ -26,10 +26,7 @@ class TestVenue(unittest.TestCase):
 
     def test_venue_attributes(self):
         self.assertIsInstance(self.venue, Venue)
-        self.assertTrue(hasattr(self.venue, "id"))
-        self.assertTrue(hasattr(self.venue, "link"))
-        self.assertTrue(hasattr(self.venue, "name"))
-        self.assertTrue(hasattr(self.venue, "location"))
-        self.assertTrue(hasattr(self.venue, "timezone"))
-        self.assertTrue(hasattr(self.venue, "fieldinfo"))
-        self.assertTrue(hasattr(self.venue, "active"))
+        self.assertTrue(self.venue.id)
+        self.assertTrue(self.venue.link)
+        self.assertTrue(self.venue.name)
+        self.assertTrue(self.venue.active)

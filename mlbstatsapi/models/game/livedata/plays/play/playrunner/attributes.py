@@ -1,106 +1,70 @@
 from typing import Union, Optional
 from dataclasses import dataclass
+from pydantic import BaseModel
 
 from mlbstatsapi.models.people import Person, Position
 
 
-@dataclass
-class RunnerCredits:
+class RunnerCredits(BaseModel):
     """
-    A class to represent a runners credit.
+    A class to represent a runner's credit.
 
-    Attributes
-    ----------
+    Attributes:
+        player (Person): The player involved in the runner's credit.
+        position (Position): The position related to the runner's credit.
+        credit (str): A description or type of credit awarded to the runner.
+    """
+
     player: Person
-        The player
-    position: RunnerCreditsPosition
-        The position
-    credit: str
-        The credit
-    """
-    player: Union[Person, dict]
-    position: Union[Position, dict]
+    position: Position
     credit: str
 
-    def __post_init__(self):
-        self.player = Person(**self.player)
-        self.position = Position(**self.position)
 
 
-@dataclass(repr=False)
-class RunnerMovement:
+class RunnerMovement(BaseModel):
     """
-    A class to represent a play runner.
+    A class to represent a runner's movement during a play.
 
-    Attributes
-    ----------
-    isout: bool
-        Was the running movement an out
-    outnumber: int
-        What is the outnumber
-    originbase: str
-        Original base
-    start: str
-        What base the runner started from
-    end: str
-        What base the runner ended at
-    outbase: str
-        Base runner was made out
+    Attributes:
+        isOut (bool): Indicates if the running movement resulted in an out.
+        outNumber (int): The sequence number of the out during the play.
+        originBase (Optional[str]): The original base of the runner before the play started, defaults to None.
+        start (Optional[str]): The base from which the runner started, defaults to None.
+        end (Optional[str]): The base at which the runner ended after the play, defaults to None.
+        outBase (Optional[str]): The base at which the runner was made out, defaults to None.
     """
-    isout: bool
-    outnumber: int
-    originbase: Optional[str] = None
+
+    isOut: bool
+    outNumber: int
+    originBase: Optional[str] = None
     start: Optional[str] = None
     end: Optional[str] = None
-    outbase: Optional[str] = None
+    outBase: Optional[str] = None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
-
-@dataclass(repr=False)
-class RunnerDetails:
+class RunnerDetails(BaseModel):
     """
-    A class to represent a play runner.
+    A class to represent the details of a play runner's action.
 
-    Attributes
-    ----------
+    Attributes:
+        event (str): Description of the runner event.
+        eventType (str): Type of the runner event.
+        runner (Person): The player who is the runner.
+        isScoringEvent (bool): Indicates whether the event was a scoring event.
+        rbi (bool): Indicates whether the event resulted in a run batted in (RBI).
+        earned (bool): Specifies if the run was earned.
+        teamUnearned (bool): Specifies if the run was unearned by the team.
+        playIndex (int): Index of the play in the game.
+        movementReason (Optional[str]): Reason for the runner's movement, defaults to None.
+        responsiblePitcher (Optional[Person]): The pitcher responsible for the runner, defaults to None.
+    """
+
     event: str
-        Runner event
-    eventtype: str
-        Runner event type
+    eventType: str
     runner: Person
-        Who the runner is
-    isscoringevent:  bool
-        Was this a scoring events
-    rbi: bool
-        Was this a rbi
-    earned: bool
-        Was it earned
-    teamunearned: bool
-        Was it unearned
-    playindex: int
-        Play index
-    movementreason: str
-        Reason for the movement
-    responsiblepitcher: Person
-        WHo was the responsible pitcher
-    """
-    event: str
-    eventtype: str
-    runner: Union[Person, dict]
-    isscoringevent: bool
+    isScoringEvent: bool
     rbi: bool
     earned: bool
-    teamunearned: bool
-    playindex: int
-    movementreason: Optional[str] = None
-    responsiblepitcher: Optional[Union[Person, dict]] = None
-
-    def __post_init__(self):
-        self.runner = Person(**self.runner)
-        self.responsiblepitcher = Person(**self.responsiblepitcher) if self.responsiblepitcher else self.responsiblepitcher
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    teamUnearned: bool
+    playIndex: int
+    movementReason: Optional[str] = None
+    responsiblePitcher: Optional[Person] = None

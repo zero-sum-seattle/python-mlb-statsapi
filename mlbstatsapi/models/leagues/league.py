@@ -5,20 +5,6 @@ from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.seasons import Season
 
 
-class LeagueRecord(BaseModel):
-    """Represents a league record.
-
-    Attributes:
-        wins (int): Number of wins in the league record.
-        losses (int): Number of losses in the league record.
-        ties (int, optional): Number of ties in the league record. Optional.
-        pct (str): Winning percentage of the league record.
-    """
-    wins: int
-    losses: int
-    pct: str
-    ties: Optional[int]
-
 
 class League(BaseModel):
     """

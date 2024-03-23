@@ -3,33 +3,18 @@ from pydantic import BaseModel
 from .attributes import Location, TimeZone, FieldInfo
 
 class Venue(BaseModel):
-    """
-    A class to represent a venue.
+    """Represents a venue.
 
-    Attributes
-    ----------
-    id : int
-        id for this venue
-    name : str
-        Name for this venue
-    link : str
-        Link to venues endpoint
-    location : Location
-        Location for this venue
-    timezone : TimeZone
-        Timezone for this venue
-    fieldinfo :  FieldInfo
-        Info on this venue's field
-    active : bool
-        Is this field currently active
-    season : str
-        This field holds the season
+    Attributes:
+        id (int): ID for this venue.
+        name (Optional[str]): Name of this venue.
+        link (str): Link to venue's endpoint.
+        location (Location): Location of this venue.
+        active (Optional[bool]): Indicates if this venue is currently active.
+        season (Optional[str]): The season this venue is associated with.
     """
     id: int
     link: str
     name: Optional[str] = None
-    location: Optional[Location] = None
-    timezone: Optional[TimeZone] = None
-    fieldinfo: Optional[FieldInfo] = None
     active: Optional[bool] = None
     season: Optional[str] = None
