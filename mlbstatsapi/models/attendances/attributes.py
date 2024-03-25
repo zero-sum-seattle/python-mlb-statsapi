@@ -28,10 +28,10 @@ class AttendanceHighLowGame(BaseModel):
     daynight : str
         Type of time of day for game
     """
-    gamepk: int
+    gamePk: int
     link: str
     content: Union[AttendanceHighLowGameContent, dict]
-    daynight: str
+    dayNight: str
 
 class AttendenceGameType(BaseModel):
     """
@@ -123,9 +123,6 @@ class AttendanceRecords(BaseModel):
     attendanceTotalHome: Optional[int] = None
     attendanceOpeningAverage: Optional[int] = None
 
-
-
-
 class AttendanceTotals(BaseModel):
     """
     A class to represent attendance aggregate toatls.
@@ -156,15 +153,16 @@ class AttendanceTotals(BaseModel):
     attendancetotalhome : int
         Attendance total home
     """
-    openingstotalaway: int
-    openingstotalhome: int
-    openingstotallost: int
-    openingstotalytd: int
-    attendanceaverageytd: int
-    attendancehigh: int
-    attendancehighdate: str
-    attendancetotal: int
-    attendancetotalaway: int
-    attendancetotalhome: int
-    attendanceaverageaway: Optional[int] = None
-    attendanceaveragehome: Optional[int] = None
+    openingsTotalAway: int
+    openingsTotalHome: int
+    openingsTotalLost: int
+    openingsTotalYtd: int
+    attendanceAverageYtd: int
+    attendanceHigh: int
+    attendanceHighDate: str
+    attendanceTotal: int
+    attendanceTotalAway: int
+    attendanceTotalHome: int
+    attendanceAverageAway: Optional[int] = None
+    attendanceAverageHome: Optional[int] = None
+

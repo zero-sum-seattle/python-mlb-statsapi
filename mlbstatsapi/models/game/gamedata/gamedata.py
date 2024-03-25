@@ -1,4 +1,4 @@
-from typing import Optional, Union, List
+from typing import Optional, Union, List, Dict
 from pydantic import BaseModel
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.people import Person
@@ -41,18 +41,18 @@ class GameData(BaseModel):
     datetime: GameDatetime
     status: GameStatus
     teams: GameTeams
-    players: List[Person]
-    venue: Union[Venue]
-    officialVenue: Union[Venue]
-    review: Union[GameReview]
-    flags: Union[GameFlags]
+    players: Dict[str, Person]
+    venue: Venue
+    officialVenue: Venue
+    review: GameReview
+    flags: GameFlags
     alerts: List
     probablePitchers: GameProbablePitchers
-    moundVisits: Optional[MoundVisits]
+    moundVisits: Optional[MoundVisits] = None
     gameInfo: GameInfo
     weather: GameWeather
-    officialScorer: Optional[Person]
-    primaryDatacaster: Optional[Person]
-    secondaryDatacaster: Optional[Person]
+    officialScorer: Optional[Person] = None
+    primaryDatacaster: Optional[Person] = None
+    secondaryDatacaster: Optional[Person] = None
 
 

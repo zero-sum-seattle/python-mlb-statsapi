@@ -30,6 +30,6 @@ class Game(BaseModel):
 
     @property
     def id(self):
-        return self.gamepk
+        return self.gamePk
 
 

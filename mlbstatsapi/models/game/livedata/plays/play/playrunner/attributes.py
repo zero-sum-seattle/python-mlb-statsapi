@@ -35,7 +35,7 @@ class RunnerMovement(BaseModel):
     """
 
     isOut: bool
-    outNumber: int
+    outNumber: Optional[int] = None
     originBase: Optional[str] = None
     start: Optional[str] = None
     end: Optional[str] = None

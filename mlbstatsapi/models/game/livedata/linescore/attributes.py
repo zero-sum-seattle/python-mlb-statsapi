@@ -67,8 +67,8 @@ class LinescoreOffense(BaseModel):
     """
     team: Team
     batter: Person
-    ondeck: Person
-    inhole: Person
+    onDeck: Person
+    inHole: Person
     pitcher: Person
     battingOrder: Optional[int] = None
     first: Optional[str] = None

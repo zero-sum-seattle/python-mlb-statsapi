@@ -26,6 +26,6 @@ class GameLeaders(BaseModel):
         pitchspeed (dict): Pitch speed data, though typically empty.
     """
     # Dont know what this populated looks like. Every game ive seen its three empty dicts?
-    hitdistance: dict
-    hitspeed: dict
-    pitchspeed: dict
+    hitDistance: dict
+    hitSpeed: dict
+    pitchSpeed: dict

@@ -1,11 +1,10 @@
-﻿from dataclasses import dataclass, field, InitVar
+﻿from pydantic import BaseModel
 from typing import List, Union, Dict, Any, Optional
 
 
 
 
-@dataclass(repr=False)
-class PitchBreak:
+class PitchBreak(BaseModel):
     """
     A class to hold pitch pitch break data
     
@@ -24,21 +23,17 @@ class PitchBreak:
     spindirection : int
         Pitch spinDirection
     """
-    breakangle: float
-    breaklength: float
-    breaky: float
-    breakvertical: Optional[float]
-    breakverticalinduced: Optional[float]
-    breakhorizontal: Optional[float]
-    spinrate: Optional[float] = None
-    spindirection: Optional[float] = None
+    breakAngle: float
+    breakLength: float
+    breakY: float
+    breakVertical: Optional[float]
+    breakVerticalInduced: Optional[float]
+    breakHorizontal: Optional[float]
+    spinRate: Optional[float] = None
+    spinDirection: Optional[float] = None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(repr=False)
-class PitchCoordinates:
+class PitchCoordinates(BaseModel):
     """
     A class to hold pitch coordinates for playLog
 
@@ -82,28 +77,24 @@ class PitchCoordinates:
     y : float, default=None
         Y coordinate where pitch crossed front of home plate
     """
-    ay: Optional[float] = None
-    az: Optional[float] = None
-    pfxx: Optional[float] = None
-    pfxz: Optional[float] = None
-    px: Optional[float] = None
-    pz: Optional[float] = None
-    vx0: Optional[float] = None
-    vy0: Optional[float] = None
-    vz0: Optional[float] = None
+    aY: Optional[float] = None
+    aZ: Optional[float] = None
+    pfxX: Optional[float] = None
+    pfxZ: Optional[float] = None
+    pX: Optional[float] = None
+    pZ: Optional[float] = None
+    vX0: Optional[float] = None
+    vY0: Optional[float] = None
+    vZ0: Optional[float] = None
     x0: Optional[float] = None
     y0: Optional[float] = None
     z0: Optional[float] = None
-    ax: Optional[float] = None
+    aX: Optional[float] = None
     x: Optional[float] = None
     y: Optional[float] = None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(repr=False)
-class PitchData:
+class PitchData(BaseModel):
     """
     A class to hold data on a pitch
     
@@ -134,30 +125,21 @@ class PitchData:
     strikezonedepth : float
         The depth of the strikezone
     """
-    strikezonetop: float
-    strikezonebottom: float
-    breaks: Union[PitchBreak, dict] 
-    coordinates: Optional[Union[PitchCoordinates, dict]] = field(default_factory=dict) 
+    strikeZoneTop: float
+    strikeZoneBottom: float
+    breaks: PitchBreak 
+    coordinates: Optional[PitchCoordinates] = None
     extension: Optional[float] = None
-    startspeed: Optional[float] = None
-    endspeed: Optional[float] = None
+    startSpeed: Optional[float] = None
+    endSpeed: Optional[float] = None
     zone: Optional[float] = None
-    typeconfidence: Optional[float] = None
-    platetime: Optional[float] = None
-    strikezonewidth: Optional[float] = None
-    strikezonedepth: Optional[float] = None
+    typeConfidence: Optional[float] = None
+    plateTime: Optional[float] = None
+    strikeZoneWidth: Optional[float] = None
+    strikeZoneDepth: Optional[float] = None
 
 
-    def __post_init__(self):
-        self.coordinates = PitchCoordinates(**self.coordinates) if self.coordinates else self.coordinates
-        self.breaks = PitchBreak(**self.breaks) if self.breaks else self.breaks
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
-
-@dataclass
-class HitCoordinates:
+class HitCoordinates(BaseModel):
     """
     A class to represent a play events hit location coordinates.
 
@@ -179,8 +161,7 @@ class HitCoordinates:
     def y(self):
         return self.coordy
 
-@dataclass(repr=False)
-class HitData:
+class HitData(BaseModel):
     """
     A class to represent a play events hit data.
 
@@ -205,21 +186,14 @@ class HitData:
 
     trajectory: str
     hardness: str
-    coordinates: Union[HitCoordinates, dict]
+    coordinates: HitCoordinates
     location: Optional[int] = None
-    launchspeed: Optional[float] = None
-    launchangle: Optional[str] = None # this is a negative number and I'm brain farting on those
-    totaldistance: Optional[float] = None
+    launchSpeed: Optional[float] = None
+    launchAngle: Optional[float] = None
+    totalDistance: Optional[float] = None
 
-    def __post_init__(self):
-        self.coordinates = HitCoordinates(**self.coordinates) if self.coordinates else self.coordinates
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
-
-@dataclass
-class CodeDesc:
+class CodeDesc(BaseModel):
     """
     a class to hold a code and a description
 
@@ -234,8 +208,7 @@ class CodeDesc:
     description: Optional[str] = None
 
 
-@dataclass(repr=False)
-class Count:
+class Count(BaseModel):
     """
     a class to hold a pitch count and base runners
 
@@ -264,17 +237,14 @@ class Count:
     outs: int
     strikes: int
     inning: Optional[int] = None
-    runneron1b: Optional[bool] = None
-    runneron2b: Optional[bool] = None
-    runneron3b: Optional[bool] = None
-    istopinning: Optional[bool] = None
+    runnerOn1b: Optional[bool] = None
+    runnerOn2b: Optional[bool] = None
+    runnerOn3b: Optional[bool] = None
+    isTopInning: Optional[bool] = None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(repr=False)
-class PlayDetails:
+
+class PlayDetails(BaseModel):
     """
     A class to represent a gamelog stat for a hitter
 
@@ -309,36 +279,27 @@ class PlayDetails:
     fromcatcher : bool
     """
     call: Optional[Union[CodeDesc, dict]] = None
-    isinplay: Optional[bool] = None
-    isstrike: Optional[bool] = None
-    isscoringplay: Optional[bool] = None
-    isout: Optional[bool] = None
-    runnergoing: Optional[bool] = None
-    isball: Optional[bool] = None
-    isbasehit: Optional[bool] = None
-    isatbat: Optional[bool] = None
-    isplateappearance: Optional[bool] = None
-    batside: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
-    pitchhand: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
-    eventtype: Optional[str] = None
+    isInPlay: Optional[bool] = None
+    isStrike: Optional[bool] = None
+    isScoringPlay: Optional[bool] = None
+    isOut: Optional[bool] = None
+    runnerGoing: Optional[bool] = None
+    isBall: Optional[bool] = None
+    isBasehit: Optional[bool] = None
+    isAtBat: Optional[bool] = None
+    isPlateAppearance: Optional[bool] = None
+    batSide: Optional[CodeDesc] = None
+    pitchHand: Optional[CodeDesc] = None
+    eventType: Optional[str] = None
     event: Optional[str] = None
     description: Optional[str] = None
-    type: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
-    awayscore: Optional[int] = None
-    homescore: Optional[int] = None
-    hasreview: Optional[bool] = None
+    type: Optional[CodeDesc] = None
+    awayScore: Optional[int] = None
+    homeScore: Optional[int] = None
+    hasReview: Optional[bool] = None
     code: Optional[str] = None
-    ballcolor: Optional[str] = None
-    trailcolor: Optional[str] = None
-    fromcatcher: Optional[bool] = None
+    ballColor: Optional[str] = None
+    trailColor: Optional[str] = None
+    fromCatcher: Optional[bool] = None
     disengagementnum: Optional[int] = None
     
-    def __post_init__(self):
-        self.call = CodeDesc(**self.call) if self.call else self.call
-        self.batside = CodeDesc(**self.batside) if self.batside else self.batside
-        self.pitchhand = CodeDesc(**self.pitchhand) if self.pitchhand else self.pitchhand
-        self.type = CodeDesc(**self.type) if self.type else self.type
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))

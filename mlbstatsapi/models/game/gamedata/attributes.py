@@ -27,7 +27,7 @@ class GameDataGame(BaseModel):
     gamedayType: str
     tiebreaker: str
     gameNumber: int
-    calendarEventId: str
+    calendarEventId: Optional[str] = None
     season: str
     seasonDisplay: str
 
@@ -52,7 +52,7 @@ class GameDatetime(BaseModel):
     officialDate: str
     dayNight: str
     time: str
-    amPm: str
+    ampm: str
     resumeDate: Optional[str] = None
     resumeDateTime: Optional[str] = None
     resumedFromDate: Optional[str] = None
@@ -78,7 +78,7 @@ class GameStatus(BaseModel):
     statusCode: str
     startTimeTBD: bool
     abstractGameCode: str
-    reason: Optional[str]
+    reason: Optional[str] = None
 
 
 class GameTeams(BaseModel):
@@ -117,7 +117,7 @@ class GameInfo(BaseModel):
     """
     attendance: int
     firstPitch: str
-    gamedurationMinutes: int
+    gameDurationMinutes: int
     delayDurationMinutes: Optional[int] = None
 
 
@@ -159,7 +159,7 @@ class GameFlags(BaseModel):
     """
     noHitter: bool
     perfectGame: bool
-    awayTeamnoHitter: bool
+    awayTeamnoHitter: Optional[bool] = None
     awayTeamPerfectGame: bool
     homeTeamNoHitter: bool
     homeTeamPerfectGame: bool
