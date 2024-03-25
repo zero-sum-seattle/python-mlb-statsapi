@@ -903,7 +903,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'gamepk' in mlb_data.data and mlb_data.data['gamepk'] == game_id:
+        if 'gamePk' in mlb_data.data and mlb_data.data['gamePk'] == game_id:
             return Game(**mlb_data.data)
 
         return None
@@ -950,7 +950,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'allplays' in mlb_data.data and mlb_data.data['allplays']:
+        if 'allPlays' in mlb_data.data and mlb_data.data['allPlays']:
             return Plays(**mlb_data.data)
 
         return None

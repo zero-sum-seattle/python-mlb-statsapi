@@ -285,7 +285,6 @@ class TestMlbGetGame(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        pass
 
     @classmethod
     def tearDownClass(cls) -> None:

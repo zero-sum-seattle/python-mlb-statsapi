@@ -1,185 +1,110 @@
 from typing import Union, Optional, List
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.leagues import League
 
-@dataclass
-class Record:
-    """
-    Record
+class Record(BaseModel):
+    """Represents a basic record, providing a general structure for wins, losses, and winning percentage.
 
     Attributes:
-    ___________
-    wins : int
-        Number of wins
-    losses : int
-        Number of losses
-    pct : str
-        Percentage
+        wins (int): The number of wins.
+        losses (int): The number of losses.
+        pct (str): The winning percentage.
     """
     wins: int
     losses: int
     pct: str
 
-@dataclass
-class OverallleagueRecord(Record):
-    """
-    Overall League Record
-    
+class OverallLeagueRecord(Record):
+    """Represents the overall league record for a team, including wins, losses, and overall win percentage.
 
     Attributes:
-    ___________
-    wins : int
-        Overall number of wins in league
-    losses : int
-        Overall number of losses in league
-    pct : str
-        Overall percentage in league
+        wins (int): The overall number of wins in the league.
+        losses (int): The overall number of losses in the league.
+        pct (str): The overall win percentage in the league.
     """
     ties: int
 
-@dataclass
-class Typerecords(Record):
-    """
-    Type records
+
+class TypeRecords(Record):
+    """Represents specific types of records for a team, such as home vs. away or pre/post All-Star break.
 
     Attributes:
-    ___________
-    wins : int
-        Number of wins in type
-    losses : int
-        Number of losses in type
-    pct : str
-        Percentage in type
-    type : str
-        Type of record
+        wins (int): The number of wins for the specified type.
+        losses (int): The number of losses for the specified type.
+        pct (str): The win percentage for the specified type.
+        type (str): The type of record (e.g., "Home", "Away", "Post-All-Star").
     """
     type: str
 
-@dataclass
-class Divisionrecords(Record):
-    """
-    Division records
+class DivisionRecords(Record):
+    """Represents the team's record within their division, including wins, losses, and win percentage.
 
     Attributes:
-    ___________
-    wins : int
-        Number of wins in division
-    losses : int
-        Number of losses in division
-    pct : str
-        Percentage in division
-    division : Divison
-        Division
+        wins (int): The number of wins within the division.
+        losses (int): The number of losses within the division.
+        pct (str): The win percentage within the division.
+        division (Union[Division, dict]): The division for which the record is applicable.
     """
-    division: Union[Division, dict]
+    division: Division
 
-@dataclass
-class Leaguerecords(Record):
-    """
-    League records
+class LeagueRecords(Record):
+    """Represents the team's record within their league, detailing wins, losses, and win percentage.
 
     Attributes:
-    ___________
-    wins : int
-        Number of wins in league
-    losses : int
-        Number of losses in league
-    pct : str
-        Percentage in league
-    league : League
-        League
+        wins (int): The number of wins within the league.
+        losses (int): The number of losses within the league.
+        pct (str): The win percentage within the league.
+        league (Union[League, dict]): The league for which the record is applicable.
     """
-    league: Union[League, dict]
+    league: League
 
-@dataclass
-class Records:
-    """"
-    A class representing the records of a team.
+class Records(BaseModel):
+    """Represents the various types of records held by a team, categorized into splits, divisions, overall, league, and expected records.
 
     Attributes:
-    ___________
-    splitrecords : Typerecords
-        A list of split records
-    divisionrecords : Divisionrecords
-        A list of division records
-    overallrecords : Typerecords
-        A list of overall records
-    leaguerecords : Leaguerecords
-        A list of league records
-    expectedrecords : Typerecords
-        A list of expected records
+        splitRecords (List[Typerecords]): A list of the team's records split by various criteria. If not applicable, the list may be empty.
+        divisionRecords (List[Divisionrecords]): A list detailing the team's records within their division. If not applicable, the list may be empty.
+        overallRecords (List[Typerecords]): A list of the team's overall records across all games played. If not applicable, the list may be empty.
+        leagueRecords (List[Leaguerecords]): A list of the team's records within their league. If not applicable, the list may be empty.
+        expectedRecords (List[Typerecords]): A list of the team's expected records based on performance metrics. If not applicable, the list may be empty.
     """
-    splitrecords: Optional[List[Union[Typerecords, dict]]] = None
-    divisionrecords: Optional[List[Union[Divisionrecords, dict]]] = None
-    overallrecords: Optional[List[Union[Typerecords, dict]]] = None
-    leaguerecords: Optional[List[Union[Leaguerecords, dict]]] = None
-    expectedrecords: Optional[List[Union[Typerecords, dict]]] = None
+    splitRecords: Optional[List[TypeRecords]] = None
+    divisionRecords: Optional[List[DivisionRecords]] = None
+    overallRecords: Optional[List[TypeRecords]] = None
+    leagueRecords: Optional[List[LeagueRecords]] = None
+    expectedRecords: Optional[List[TypeRecords]] = None
 
-    def __post_init__(self):
-        self.splitrecords = [Typerecords(**splitrecord) for splitrecord in self.splitrecords] if self.splitrecords else None
-        self.divisionrecords = [Divisionrecords(**divisionrecord) for divisionrecord in self.divisionrecords] if self.divisionrecords else None
-        self.overallrecords = [Typerecords(**overallrecord) for overallrecord in self.overallrecords] if self.overallrecords else None
-        self.leaguerecords = [Leaguerecords(**leaguerecord) for leaguerecord in self.leaguerecords] if self.leaguerecords else None
-        self.expectedrecords = [Typerecords(**expectedrecord) for expectedrecord in self.expectedrecords] if self.expectedrecords else None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+class TeamRecord(BaseModel):
+    """Represents a team's current record, including their standing in various leagues and their overall performance.
 
-@dataclass(repr=False)
-class TeamRecord:
+    Attributes:
+        gamesPlayed (int): The number of games played by the team.
+        wildCardGamesBack (str): The number of games behind the leader in the wild card race.
+        leagueGamesBack (str): The number of games behind the leader in the league.
+        springLeagueGamesBack (str): The number of games behind the leader in the spring league.
+        sportGamesBack (str): The number of games behind the leader in the sport.
+        divisionGamesBack (str): The number of games behind the leader in the division.
+        conferenceGamesBack (str): The number of games behind the leader in the conference.
+        leagueRecord (OverallleagueRecord): The overall league record of the team.
+        records (Records): The records of the team.
+        divisionLeader (bool): Indicates whether the team is the leader in their division.
+        wins (int): The number of wins by the team.
+        losses (int): The number of losses by the team.
+        winningPercentage (str): The winning percentage of the team.
     """
-    A class to represent a teams current record.
-
-    Attributes 
-    ----------
-    gamesplayed: int
-        The number of games played by the team.
-    wildcardgamesback: str
-        The number of games behind the leader in the wild card race.
-    leaguegamesback: str
-        The number of games behind the leader in the league.
-    springleaguegamesback: str
-        The number of games behind the leader in the spring league.
-    sportgamesback: str
-        The number of games behind the leader in the sport.
-    divisiongamesback: str
-        The number of games behind the leader in the division.
-    conferencegamesback: str
-        The number of games behind the leader in the conference.
-    leaguerecord: OverallleagueRecord
-        The overall league record of the team. Can be an instance of the OverallleagueRecord class or a dictionary with relevant information about the record.
+    gamesPlayed: int
+    wildCardGamesBack: str
+    leagueGamesBack: str
+    springLeagueGamesBack: str
+    sportGamesBack: str
+    divisionGamesBack: str
+    conferenceGamesBack: str
+    leagueRecord: OverallLeagueRecord
     records: Records
-        The records of the team. Can be an instance of the Records class or a dictionary with relevant information about the records.
-    divisionleader: bool
-        A flag indicating whether the team is the leader in their division.
-    wins: int
-        The number of wins of the team.
-    losses: int
-        The number of losses of the team.
-    winningpercentage: str
-        The winning percentage of the team.
-    """
-    gamesplayed: int
-    wildcardgamesback: str
-    leaguegamesback: str
-    springleaguegamesback: str
-    sportgamesback: str
-    divisiongamesback: str
-    conferencegamesback: str
-    leaguerecord: Union[OverallleagueRecord, dict]
-    records: Union[Records, dict]
-    divisionleader: bool
+    divisionLeader: bool
     wins: int
     losses: int
-    winningpercentage: str
-
-    def __post_init__(self):
-        self.leaguerecord = OverallleagueRecord(**self.leaguerecord)
-        self.records = Records(**self.records)
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    winningPercentage: str
