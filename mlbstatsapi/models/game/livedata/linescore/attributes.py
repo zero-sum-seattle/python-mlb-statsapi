@@ -1,184 +1,111 @@
 from typing import Union, Optional
-from dataclasses import dataclass, field
+from pydantic import BaseModel
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.teams import Team
 
-@dataclass
-class LinescoreTeamScoreing:
-    """
-    A class to represent a games Linescore
+class LinescoreTeamScoreing(BaseModel):
+    """Represents a team's scoring details in a game's Linescore.
 
-    Attributes
-    ----------
-    hits : int
-        Team hits for this inning
-    errors : int
-        Team errors for this inning
-    leftonbase : int
-        Player left on base for this inning
-    runs : int
-        Team runs for this inning
-    iswinner : bool
-        If team is winner
+    This class includes details on the hits, errors, players left on base, and runs for a particular inning. It also indicates if the team is the winner.
+
+    Attributes:
+        hits (int): The number of hits by the team in this inning.
+        errors (int): The number of errors committed by the team in this inning.
+        leftOnBase (int): The number of players left on base by the team in this inning.
+        runs (int): The number of runs scored by the team in this inning. Default is None.
+        isWinner (bool): Indicates whether the team is the winner. Default is None.
     """
     hits: int
     errors: int
-    leftonbase: int
+    leftOnBase: int
     runs: Optional[int] = None
-    iswinner: Optional[bool] = None
+    isWinner: Optional[bool] = None
 
-@dataclass
-class LinescoreInning:
-    """
-    A class to represent a inning for a games Linescore
+class LinescoreInning(BaseModel):
+    """Represents an inning within a game's Linescore.
 
-    Attributes
-    ----------
-    num : int
-        Inning number
-    ordinalnum : str
-        Inning ordinal
-    home : LinescoreTeamScoreing
-        Home team inning info
-    away : LinescoreTeamScoreing
-        Away team inning info
+    Attributes:
+        num (int): The inning number.
+        ordinalNum (str): The ordinal representation of the inning number (e.g., "1st", "2nd").
+        home (LinescoreTeamScoreing): Scoring details for the home team during this inning.
+        away (LinescoreTeamScoreing): Scoring details for the away team during this inning.
     """
     num: int
-    ordinalnum: str
-    home: Union[LinescoreTeamScoreing, dict]
-    away: Union[LinescoreTeamScoreing, dict] 
+    ordinalNum: str
+    home: LinescoreTeamScoreing
+    away: LinescoreTeamScoreing
 
-    def __post_init__(self):
-        self.home = LinescoreTeamScoreing(**self.home) if self.home else self.home
-        self.away = LinescoreTeamScoreing(**self.away) if self.away else self.away
 
-@dataclass
-class LinescoreTeams:
+
+class LinescoreTeams(BaseModel):
+    """Represents the scoring details for both home and away teams in a game's Linescore.
+
+    Attributes:
+        home (LinescoreTeamScoreing): Scoring and performance details for the home team.
+        away (LinescoreTeamScoreing): Scoring and performance details for the away team.
     """
-    A class to represent home and away teams in the linescore
+    home: LinescoreTeamScoreing
+    away: LinescoreTeamScoreing
 
-    Attributes
-    ----------
-    home : LinescoreTeamScoreing
-        Home team current inning info
-    away : LinescoreTeamScoreing
-        Away team current inning info
+
+
+class LinescoreOffense(BaseModel):
+    """Represents the current offense in a game.
+
+    Details the composition of the offensive team at a given moment, including the current batter, players on deck and in the hole, the pitcher from the offensive team's perspective, and their position in the batting order.
+
+    Attributes:
+        team (Team): The team currently on offense.
+        batter (Person): The current batter.
+        ondeck (Person): The player on deck, ready to bat next.
+        inhole (Person): The player in the hole, batting after the on deck player.
+        pitcher (Person): The pitcher for the offensive team.
+        battingOrder (int, optional): The position in the batting order for the current offense. Default is None.
+        first (str, optional): Identifier for the first base runner. Default is None.
+        second (str, optional): Identifier for the second base runner. Default is None.
+        third (str, optional): Identifier for the third base runner. Default is None.
     """
-    home: Union[LinescoreTeamScoreing, dict] = field(default_factory=dict)
-    away: Union[LinescoreTeamScoreing, dict] = field(default_factory=dict)
-
-    def __post_init__(self):
-        self.home = LinescoreTeamScoreing(**self.home) if self.home else self.home
-        self.away = LinescoreTeamScoreing(**self.away) if self.away else self.away
-
-@dataclass(repr=False)
-class LinescoreOffense:
-    """
-    A class to represent a games current offense
-
-    Attributes
-    ----------
-    batter : Person
-        Current batter
-    ondeck : Person
-        Current on deck batter
-    inhole : Person
-        Current in the hole batter
-    pitcher : Person
-        Who is this teams pitcher
-    battingorder : int
-        Number in the batting order
-    team : Team
-        The team currently on offense
-    """
-    team: Union[Team, dict]
-    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
-    ondeck: Optional[Union[Person, dict]] = field(default_factory=dict)
-    inhole: Optional[Union[Person, dict]] = field(default_factory=dict)
-    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
-    battingorder: Optional[int] = None
+    team: Team
+    batter: Person
+    ondeck: Person
+    inhole: Person
+    pitcher: Person
+    battingOrder: Optional[int] = None
     first: Optional[str] = None
     second: Optional[str] = None
     third: Optional[str] = None
 
-    def __post_init__(self):
-        self.batter = Person(**self.batter) if self.batter else self.batter
-        self.ondeck = Person(**self.ondeck) if self.ondeck else self.ondeck
-        self.inhole = Person(**self.inhole) if self.inhole else self.inhole
-        self.pitcher = Person(**self.pitcher) if self.pitcher else self.pitcher
-        self.team = Team(**self.team)
+class LinescoreDefense(BaseModel):
+    """Represents the current defense in a game.
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
-
-@dataclass(repr=False)
-class LinescoreDefense:
+    Attributes:
+        team (Team, optional): The team that is currently playing defense. Default is None.
+        pitcher (Person, optional): The current pitcher. Default is None.
+        catcher (Person, optional): The current catcher. Default is None.
+        first (Person, optional): The player at first base. Default is None.
+        second (Person, optional): The player at second base. Default is None.
+        third (Person, optional): The player at third base. Default is None.
+        shortStop (Person, optional): The current shortstop. Default is None.
+        left (Person, optional): The player in left field. Default is None.
+        center (Person, optional): The player in center field. Default is None.
+        right (Person, optional): The player in right field. Default is None.
+        batter (Person, optional): The next batter when this team switches to offense. Default is None.
+        onDeck (Person, optional): The next on deck batter when this team switches to offense. Default is None.
+        inHole (Person, optional): The next in hole batter when this team switches to offense. Default is None.
+        battingOrder (int, optional): The position of this team in the batting order. Default is None.
     """
-    A class to represent a games current defense
+    team: Optional[Team] = None
+    pitcher: Optional[Person] = None
+    catcher: Optional[Person] = None
+    first: Optional[Person] = None
+    second: Optional[Person] = None
+    third: Optional[Person] = None
+    shortStop: Optional[Person] = None
+    left: Optional[Person] = None
+    center: Optional[Person] = None
+    right: Optional[Person] = None
+    batter: Optional[Person] = None
+    onDeck: Optional[Person] = None
+    inHole: Optional[Person] = None
+    battingOrder: Optional[int] = None
 
-    Attributes
-    ----------
-    pitcher : Person
-        Current pitcher
-    catcher : Person
-        Current catcher
-    first : Person
-        Current first
-    second : Person
-        Current second
-    third : Person
-        Current third
-    shortstop : Person
-        Current shortstop
-    left : Person
-        Current left
-    center : Person
-        Current center
-    right : Person
-        Current right
-    batter : Person
-        The next batter when this team switches to offense
-    ondeck : Person
-        The next ondeck batter when this team switches to offense
-    inhole : Person
-        The next inHole batter when this team switches to offense
-    battingorder : int
-        Number this team is in the batting order
-    team : Team
-        The team that is playing defense currently
-    """
-    team: Union[Team, dict]
-    pitcher: Optional[Union[Person, dict]] = field(default_factory=dict)
-    catcher: Optional[Union[Person, dict]] = field(default_factory=dict)
-    first: Optional[Union[Person, dict]] = field(default_factory=dict)
-    second: Optional[Union[Person, dict]] = field(default_factory=dict)
-    third: Optional[Union[Person, dict]] = field(default_factory=dict)
-    shortstop: Optional[Union[Person, dict]] = field(default_factory=dict)
-    left: Optional[Union[Person, dict]] = field(default_factory=dict)
-    center: Optional[Union[Person, dict]] = field(default_factory=dict)
-    right: Optional[Union[Person, dict]] = field(default_factory=dict)
-    batter: Optional[Union[Person, dict]] = field(default_factory=dict)
-    ondeck: Optional[Union[Person, dict]] = field(default_factory=dict)
-    inhole: Optional[Union[Person, dict]] = field(default_factory=dict)
-    battingorder: int = None
-
-
-    def __post_init__(self):
-        self.pitcher = Person(**self.pitcher) if self.pitcher else self.pitcher
-        self.catcher = Person(**self.catcher) if self.catcher else self.catcher
-        self.first = Person(**self.first) if self.first else self.first
-        self.second = Person(**self.second) if self.second else self.second
-        self.third = Person(**self.third) if self.third else self.third
-        self.shortstop = Person(**self.shortstop) if self.shortstop else self.shortstop
-        self.left = Person(**self.left) if self.left else self.left
-        self.center = Person(**self.center) if self.center else self.center
-        self.right = Person(**self.right) if self.right else self.right
-        self.batter = Person(**self.batter) if self.batter else self.batter
-        self.ondeck = Person(**self.ondeck) if self.ondeck else self.ondeck
-        self.inhole = Person(**self.inhole) if self.inhole else self.inhole
-        self.team = Team(**self.team)
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))

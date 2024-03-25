@@ -1,67 +1,42 @@
 from typing import Union, List, Optional
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 from .attributes import LinescoreInning
 from .attributes import LinescoreTeams
 from .attributes import LinescoreDefense
 from .attributes import LinescoreOffense
 
-@dataclass(repr=False)
-class Linescore:
-    """
-    A class to represent a games Linescore
 
-    Attributes
-    ----------
-    currentinning : int
-        The games current inning
-    currentinningordinal : str
-        This innings ordinal
-    inningstate : str
-        What state this inning is in
-    inninghalf : str
-        WHich half of the inning are we in
-    istopinning : bool
-        Is this the top of the inning
-    scheduledinnings : int
-        How many innings are scheduled for this game
-    innings : List[LinescoreInning]
-        Data on each inning
-    teams : LinescoreTeams
-        Line score data on our teams
-    defense : LinescoreDefense
-        Current defense
-    offense : LinescoreOffense
-        Current offense
-    balls : int
-        current count balls
-    strikes : int
-        current count strikes
-    outs : int
-        current count outs
+class Linescore(BaseModel):
+    """Represents a game's Line score.
+
+    Attributes:
+        currentinning (int): The game's current inning.
+        currentinningordinal (str): The ordinal of the current inning.
+        inningstate (str): The state of the current inning.
+        inninghalf (str): Indicates which half of the inning is in play.
+        istopinning (bool): Specifies if it's the top of the inning.
+        scheduledinnings (int): The number of innings scheduled for the game.
+        innings (List[LinescoreInning]): Data on each inning.
+        teams (LinescoreTeams): Line score data for the teams.
+        defense (LinescoreDefense): Information on the current defense.
+        offense (LinescoreOffense): Information on the current offense.
+        balls (int): The current count of balls.
+        strikes (int): The current count of strikes.
+        outs (int): The current count of outs.
     """
 
-    scheduledinnings: int
-    innings: Union[List[LinescoreInning], List[dict]]
-    teams: Union[LinescoreTeams, dict]
-    defense: Union[LinescoreDefense, dict]
-    offense: Union[LinescoreOffense, dict]
+    scheduledInnings: int
+    innings: List[LinescoreInning]
+    teams: LinescoreTeams
+    defense: LinescoreDefense
+    offense: LinescoreOffense
     balls: Optional[int] = None
     strikes: Optional[int] = None
     outs: Optional[int] = None
     note: Optional[str] = None
-    currentinning: Optional[int] = None
-    currentinningordinal: Optional[str] = None
-    inningstate: Optional[str] = None
-    inninghalf: Optional[str] = None
-    istopinning: Optional[bool] = None
-
-    def __post_init__(self):
-        self.innings = [LinescoreInning(**inning) for inning in self.innings]
-        self.teams = LinescoreTeams(**self.teams)
-        self.defense = LinescoreDefense(**self.defense)
-        self.offense = LinescoreOffense(**self.offense)
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    currentInning: Optional[int] = None
+    currentInningOrdinal: Optional[str] = None
+    inningState: Optional[str] = None
+    inningHalf: Optional[str] = None
+    isTopInning: Optional[bool] = None

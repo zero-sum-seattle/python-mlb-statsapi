@@ -5,101 +5,72 @@ from mlbstatsapi.models.teams import Team
 from pydantic import BaseModel
 
 
-@dataclass
-class GameDataGame:
-    """
-    A class to represent the this game's game info.
+class GameDataGame(BaseModel):
+    """Represents this game's game info.
 
-    Attributes
-    ----------
-    pk : int
-        This game's game id
-    type : str
-        This game's game type code
-    doubleheader : str
-        Represents if this game is a double header or not
-    id : str
-        An unknown Id
-    gamedaytype : str
-        This game's gameday type code
-    tiebreaker : str
-        Is this game a tie breaker
-    gamenumber : int
-        The game number for this game. If double header will be 2.
-    calendareventid : str
-        The id for this calendar event
-    season : str
-        This game's season year
-    seasondisplay : str
-        This game's displayed season
+    Attributes:
+        pk (int): This game's game id.
+        type (str): This game's game type code.
+        doubleHeader (str): Represents if this game is a doubleheader or not.
+        id (str): An unknown Id.
+        gamedayType (str): This game's gameday type code.
+        tiebreaker (str): Indicates if this game is a tiebreaker.
+        gameNumber (int): The game number for this game. If doubleheader, will be 2.
+        calendarEventId (str): The id for this calendar event.
+        season (str): This game's season year.
+        seasonDisplay (str): This game's displayed season.
     """
     pk: int
     type: str
-    doubleheader: str
+    doubleHeader: str
     id: str
-    gamedaytype: str
+    gamedayType: str
     tiebreaker: str
-    gamenumber: int
-    calendareventid: str
+    gameNumber: int
+    calendarEventId: str
     season: str
-    seasondisplay: str
+    seasonDisplay: str
 
 
-@dataclass(repr=False)
-class GameDatetime:
+class GameDatetime(BaseModel):
+    """Represents the date and time information for this game.
+
+    Attributes:
+        datetime (str): The date and time for this game.
+        originalDate (str): The original scheduled date for this game.
+        officialDate (str): The current scheduled date for this game.
+        dayNight (str): The current lighting condition game type (e.g., "day" or "night").
+        time (str): The time of the game.
+        ampm (str): The game's AM or PM code.
+        resumeDate (str, optional): The rescheduled date if the game was postponed. Default is None.
+        resumeDatetime (str, optional): The rescheduled date and time if the game was postponed. Default is None.
+        resumedFromDate (str, optional): The original date from which the game was resumed. Default is None.
+        resumedFromDatetime (str, optional): The original date and time from which the game was resumed. Default is None.
     """
-    A class to represent the date time for this game.
-
-    Attributes
-    ----------
-    datetime : str
-        Date time for this game
-    originaldate : str
-        The original scheduled date for this game
-    officialdate : str
-        The current scheduled date for this game
-    daynight : str
-        The current lighting condition game type
-    time : str
-        The time
-    ampm : str
-        The games am or pm code
-    """
-    datetime: str
-    originaldate: str
-    officialdate: str
-    daynight: str
+    dateTime: str
+    originalDate: str
+    officialDate: str
+    dayNight: str
     time: str
-    ampm: str
-    resumedate: Optional[str] = None
-    resumedatetime: Optional[str] = None
-    resumedfromdate: Optional[str] = None
-    resumedfromdatetime: Optional[str] = None
+    amPm: str
+    resumeDate: Optional[str] = None
+    resumeDateTime: Optional[str] = None
+    resumedFromDate: Optional[str] = None
+    resumedFromDateTime: Optional[str] = None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+
 
 class GameStatus(BaseModel):
-    """
-    A class to represent this game's game status.
+    """Represents this game's game status.
 
-    Attributes
-    ----------
-    abstractgamestate : str
-        The abstract game state
-    codedgamestate : str
-        The coded game state
-    detailedstate : str
-        The detailed game state
-    statuscode : str
-        Status code for this game
-    starttimetbd : bool
-        If the start time is TBD
-    abstractgamecode : str
-        The abstract game code
-    reason : str
-        reason for a state. Usually used for delays or cancellations
+    Attributes:
+        abstractGameState (str): The abstract game state, providing a general description of the game's current phase.
+        codedGameState (str): The coded game state, offering a concise, coded representation of the game's status.
+        detailedState (str): The detailed game state, giving an in-depth description of the current status of the game.
+        statusCode (str): Status code for this game, providing a numeric or short coded representation of the game's state.
+        startTimeTBD (bool): Indicates if the start time is to be determined (TBD).
+        abstractGameCode (str): The abstract game code, a shorthand code summarizing the game state.
+        reason (str): Reason for the current state. This is usually used for delays, cancellations, or other irregularities affecting the game.
     """
     abstractGameState: str
     codedGameState: str
@@ -110,164 +81,108 @@ class GameStatus(BaseModel):
     reason: Optional[str]
 
 
-@dataclass
-class GameTeams:
+class GameTeams(BaseModel):
+    """Represents the home and away teams in a game.
+
+    Attributes:
+        away (Team): The away team.
+        home (Team): The home team.
     """
-    A class to represent the home and away teams.
-
-    Attributes
-    ----------
-    away : Team
-        Away team
-    home : Team
-        Home team
-    """
-    away: Union[Team, dict]
-    home: Union[Team, dict]
-
-    def __post_init__(self):
-        self.away = Team(**self.away)
-        self.home = Team(**self.home)
+    away: Team
+    home: Team
 
 
-@dataclass
-class GameWeather:
-    """
-    A class to represent the weather for this game.
 
-    Attributes
-    ----------
-    condition : str
-        The weather condition
-    temp : str
-        The temperature in F
-    wind : str
-        The wind in MPH and the direction
+class GameWeather(BaseModel):
+    """Represents the weather conditions for this game.
+
+    Attributes:
+        condition (str): The weather condition (e.g., "Sunny", "Cloudy").
+        temp (str): The temperature in Fahrenheit.
+        wind (str, optional): The wind speed in MPH and direction. Default is None.
     """
     condition: str
     temp: str
     wind: Optional[str] = None
 
 
-@dataclass
-class GameInfo:
-    """
-    A class to represent the game info for this game.
+class GameInfo(BaseModel):
+    """Represents the general information about this game.
 
-    Attributes
-    ----------
-    attendance : int
-        The attendance for this game
-    firstpitch : str
-        The time of the first pitch
-    gamedurationminutes : int
-        The duration of the game in minutes
-    delaydurationminutes : int
-        The length of delay for the game in minutes
+    Attributes:
+        attendance (int): The attendance number for this game.
+        firstPitch (str): The time when the first pitch was thrown.
+        gameDurationMinutes (int): The total duration of the game in minutes.
+        delayDurationMinutes (int, optional): The total delay duration of the game in minutes. Default is None.
     """
     attendance: int
-    firstpitch: str
-    gamedurationminutes: int
-    delaydurationminutes: Optional[int] = None
+    firstPitch: str
+    gamedurationMinutes: int
+    delayDurationMinutes: Optional[int] = None
 
 
-@dataclass
-class ReviewInfo:
-    """
-    A class to represent reviewInfo for each team in this game.
+class ReviewInfo(BaseModel):
+    """Represents the review information for a team in this game.
 
-    Attributes
-    ----------
-    used : int
-        How many challenges used
-    remaining : int
-        How many challenges are remaining
+    Attributes:
+        used (int): The number of challenges that have been used.
+        remaining (int): The number of challenges remaining.
     """
     used: int
     remaining: int
 
 
-@dataclass
-class GameReview:
+class GameReview(BaseModel):
+    """Represents the game review information for this game.
+
+    Attributes:
+        hasChallenges (bool): Indicates whether there are challenges in this game.
+        away (ReviewInfo): Review information for the away team.
+        home (ReviewInfo): Review information for the home team.
     """
-    A class to represent the Game Reviews for this game.
+    hasChallenges: bool
+    away: ReviewInfo
+    home: ReviewInfo
 
-    Attributes
-    ----------
-    haschallenges : bool
-        If their are challenges
-    away : ReviewInfo
-        Away team review info
-    home : ReviewInfo
-        Home team review info
+
+
+class GameFlags(BaseModel):
+    """Represents various significant flags for this game.
+
+    Attributes:
+        noHitter (bool): Indicates if there is a no-hitter in this game.
+        perfectGame (bool): Indicates if this game is a perfect game.
+        awayTeamNoHitter (bool): Indicates if the away team has achieved a no-hitter.
+        awayTeamPerfectGame (bool): Indicates if the away team has achieved a perfect game.
+        homeTeamNoHitter (bool): Indicates if the home team has achieved a no-hitter.
+        homeTeamPerfectGame (bool): Indicates if the home team has achieved a perfect game.
     """
-    haschallenges: bool
-    away: Union[ReviewInfo, dict]
-    home: Union[ReviewInfo, dict]
+    noHitter: bool
+    perfectGame: bool
+    awayTeamnoHitter: bool
+    awayTeamPerfectGame: bool
+    homeTeamNoHitter: bool
+    homeTeamPerfectGame: bool
 
-    def __post_init__(self):
-        self.away = ReviewInfo(**self.away)
-        self.home = ReviewInfo(**self.home)
 
+class GameProbablePitchers(BaseModel):
+    """Represents the probable pitchers for the home and away teams in this game.
 
-@dataclass
-class GameFlags:
+    Attributes:
+        away (Person): The probable pitcher for the away team.
+        home (Person): The probable pitcher for the home team.
     """
-    A class to represent the flags for this game.
+    away: Person
+    home: Person
 
-    Attributes
-    ----------
-    nohitter : bool
-        If there is a no hitter in this game
-    perfectgame :  bool
-        If there this game is a perfect game
-    awayteamnohitter : bool
-        If the away team has a no hitter
-    awayteamperfectgame : bool
-        If the away team has a perfect game
-    hometeamnohitter : bool
-        If the home team has a no hitter
-    hometeamperfectgame : bool
-        If the home team has a perfect game
+
+class MoundVisits(BaseModel):
+    """Represents the mound visits information for this game.
+
+    Attributes:
+        away (dict): Mound visits by the away team.
+        home (dict): Mound visits by the home team.
     """
-    nohitter: bool
-    perfectgame: bool
-    awayteamnohitter: bool
-    awayteamperfectgame: bool
-    hometeamnohitter: bool
-    hometeamperfectgame: bool
-
-
-@dataclass
-class GameProbablePitchers:
-    """
-    A class to represent the home and away probable pitchers for this game.
-
-    Attributes
-    ----------
-    home : Person
-        Home team probable pitcher
-    away : Person
-        Away team probable pitcher
-    """
-    away: Union[Person, dict] = field(default_factory=dict)
-    home: Union[Person, dict] = field(default_factory=dict)
-
-    def __post_init__(self):
-        self.away = Person(**self.away) if self.away else self.away
-        self.home = Person(**self.home) if self.home else self.home
-
-@dataclass
-class MoundVisits:
-    """
-    A class to represent the mound visits for a game
-    Attributes
-    ----------
-    home : Person
-        Home team probable pitcher
-    away : Person
-        Away team probable pitcher
-    """
-    away: dict = field(default_factory=dict)
-    home: dict = field(default_factory=dict)
+    away: dict = {}
+    home: dict = {}
 

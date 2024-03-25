@@ -1,30 +1,18 @@
 from typing import Union, List
-from dataclasses import dataclass, field
-
+from pydantic import BaseModel
 from .attributes import BoxScoreTeams, BoxScoreOffical, BoxScoreVL
 
-@dataclass
-class BoxScore:
-    """
-    A class to represent this games boxscore
+class BoxScore(BaseModel):
+    """Represents the box score of this game.
 
-    Attributes
-    ----------
-    teams : BoxScoreTeams
-        Box score data for each team
-    officials : List[BoxScoreOffical]
-        The officials for this game
-    info : List[BoxScoreVL]
-        Box score information
-    pitchingnotes : List[str]
-        Pitching notes for this game
+    Attributes:
+        teams (BoxScoreTeams): Box score data for each team, detailing their performance in the game.
+        officials (List[BoxScoreOfficial]): A list of officials overseeing this game.
+        info (List[BoxScoreVL]): General box score information, potentially including various statistics and notable events.
+        pitchingNotes (List[str]): Notes regarding pitching during the game, such as remarkable achievements or critical plays.
     """
-    teams: Union[BoxScoreTeams, dict]
-    officials: Union[List[BoxScoreOffical], List[dict]]
-    info: Union[List[BoxScoreVL], List[dict]]
-    pitchingnotes: List[str]
+    teams: BoxScoreTeams
+    officials: List[BoxScoreOffical]
+    info: List[BoxScoreVL]
+    pitchingNotes: List[str]
 
-    def __post_init__(self):
-        self.teams = BoxScoreTeams(**self.teams)
-        self.officials = [BoxScoreOffical(**official) for official in self.officials]
-        self.info = [BoxScoreVL(**infos) for infos in self.info]
