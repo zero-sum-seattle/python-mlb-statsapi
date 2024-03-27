@@ -233,6 +233,22 @@ class CodeDesc:
     code: str
     description: Optional[str] = None
 
+@dataclass
+class Violation:
+    """
+    
+    Attributes
+    ----------
+    type : str
+        the type of violation during the play
+    description : str
+        the description of the violation that occured
+    player : player
+        the player that caused the violation
+    """
+    type: Optional[str] = None
+    description: Optional[str] = None
+    player: Optional[dict] = None
 
 @dataclass(repr=False)
 class Count:
@@ -332,12 +348,14 @@ class PlayDetails:
     trailcolor: Optional[str] = None
     fromcatcher: Optional[bool] = None
     disengagementnum: Optional[int] = None
+    violation: Optional[Union[Violation, dict]] = field(default_factory=dict)
     
     def __post_init__(self):
         self.call = CodeDesc(**self.call) if self.call else self.call
         self.batside = CodeDesc(**self.batside) if self.batside else self.batside
         self.pitchhand = CodeDesc(**self.pitchhand) if self.pitchhand else self.pitchhand
         self.type = CodeDesc(**self.type) if self.type else self.type
+        self.violation = Violation(**self.violation) if self.violation else self.violation
 
     def __repr__(self) -> str:
         kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
