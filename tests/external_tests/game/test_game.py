@@ -15,14 +15,14 @@ class TestGame(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
-        cls.game = cls.mlb.get_game(662242)
+        cls.game = cls.mlb.get_game(717911)
 
     @classmethod
     def tearDownClass(cls) -> None:
         pass
 
     def test_game_creation(self):
-        self.assertEqual(self.game.id, 662242)
+        self.assertEqual(self.game.id, 717911)
         self.assertIsInstance(self.game, Game)
 
     def test_game_attrs(self):
