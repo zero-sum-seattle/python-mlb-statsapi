@@ -116,9 +116,9 @@ class AttendanceRecords:
     gameshometotal: int
     year: str
     attendanceaverageytd: int
-    attendancetotal: int
     gametype: Union[AttendenceGameType, dict]
     team: Union[Team, dict]
+    attendancetotal: Optional[int] = None
     attendanceaverageaway: Optional[int] = None
     attendanceaveragehome: Optional[int] = None
     attendancehigh: Optional[int] = None
