@@ -2255,7 +2255,7 @@ class Mlb:
             return {}
 
         if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            splits = mlb_module.create_split_data(mlb_data)
+            splits = mlb_module.create_split_data(mlb_data.data['stats'])
         else:
             return {}
             
