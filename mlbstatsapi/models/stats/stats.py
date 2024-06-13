@@ -95,6 +95,7 @@ class Split:
     ----------
     season : str
     numteams : int
+    numleagues : int
     gametype : str
     rank : int
     position : Position
@@ -105,6 +106,7 @@ class Split:
     """
     season: Optional[str] = None
     numteams: Optional[int] = None
+    numleagues: Optional[int] = None
     gametype: Optional[str] = None
     rank: Optional[int] = None
     position: Optional[Union[Position, dict]] = field(default_factory=dict)

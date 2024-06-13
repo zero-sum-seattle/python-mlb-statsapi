@@ -322,8 +322,8 @@ class Round:
         A list of objects containing the data for the matchups in the round.
     """
     round: int
-    numbatters: int
     matchups: List[Union[Matchup, dict]]
+    numbatters: Optional[int] = None
 
     def __post_init__(self):
         self.matchups = [Matchup(**matchup) for matchup in self.matchups]

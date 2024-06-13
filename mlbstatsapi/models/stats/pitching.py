@@ -28,6 +28,8 @@ class SimplePitchingSplit:
         The games played by the pitcher.
     gamesstarted : int
         The games started by the pitcher.
+    flyouts : int
+        The number of flyouts for the pitcher
     groundouts : int
         The number of groundouts for the pitcher.
     airouts : int
@@ -149,6 +151,7 @@ class SimplePitchingSplit:
     """
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
+    flyouts: Optional[int] = None
     groundouts: Optional[int] = None
     airouts: Optional[int] = None
     runs: Optional[int] = None
