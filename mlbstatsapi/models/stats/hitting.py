@@ -139,6 +139,8 @@ class SimpleHittingSplit:
     
     gamesplayed : int
         The number of games played by the batter.
+    flyouts : int
+        The number flyouts hit by the batter
     groundouts : int
         The amount of groundouts hit by the batter.
     airouts : int
@@ -212,6 +214,7 @@ class SimpleHittingSplit:
         The number of bats per home run of the batter.
     """
     gamesplayed: Optional[int] = None
+    flyouts: Optional[int] = None
     groundouts: Optional[int] = None
     airouts: Optional[int] = None
     runs: Optional[int] = None
