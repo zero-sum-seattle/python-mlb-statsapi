@@ -24,6 +24,8 @@ class SimplePitchingSplit:
 
     Attributes
     ----------
+    summary : str
+        Summary of stats for the pitcher
     gamesplayed : int
         The games played by the pitcher.
     gamesstarted : int
@@ -149,6 +151,7 @@ class SimplePitchingSplit:
     inheritedrunners : int
         The number of inherited runners for the pitcher.
     """
+    summary: Optional[str] = None
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
     flyouts: Optional[int] = None
