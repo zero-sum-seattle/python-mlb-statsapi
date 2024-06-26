@@ -181,8 +181,8 @@ class Player(Person):
     parentteamid : int
         parent team id        
     """
+    parentteamid: Optional[int] = None
     jerseynumber: str
-    parentteamid: int
     position: InitVar[dict]
     status: Union[Status, dict]
 
