@@ -248,6 +248,15 @@ class SimpleHittingSplit:
     catchersinterference: Optional[int] = None
     atbatsperhomerun: Optional[int] = None
 
+    def __init__(self, **kwargs):
+        # Assign only known attributes to the class
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+            else:
+                # Log or handle unexpected attributes
+                print(f"Warning: Unexpected attribute '{key}' with value '{value}' ignored.")
+
     def __repr__(self) -> str:
         kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
         return "{}({})".format(type(self).__name__, ", ".join(kws))
