@@ -98,6 +98,7 @@ class MlbDataAdapter:
         """
 
         full_url = self.url + endpoint
+        print (full_url)
         logline_pre = f'url={full_url}'
         logline_post = " ,".join((logline_pre, 'success={}, status_code={}, message={}, url={}'))
 

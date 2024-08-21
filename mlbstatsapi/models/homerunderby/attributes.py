@@ -213,6 +213,8 @@ class Hits:
     isbonustime : bool
         A boolean indicating whether the hit occurred during bonus time. This 
         attribute is a duplicate of the `bonustime` attribute.
+    timeremainingseconds : int
+        A integer indicated the amount of time remaining in seconds
     istiebreaker : bool
         A boolean indicating whether the hit occurred during a tiebreaker. 
         This attribute is a duplicate of the `tiebreaker` attribute.
@@ -225,6 +227,7 @@ class Hits:
     timeremaining: str
     isbonustime: bool
     istiebreaker: bool
+    timeremainingseconds: Optional[int] = None
     playid: Optional[str] = None
 
     def __post_init__(self):
