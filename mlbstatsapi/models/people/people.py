@@ -179,12 +179,16 @@ class Player(Person):
     status : 
         Status of the player
     parentteamid : int
-        parent team id        
+        parent team id      
+    note : str
+        Optional str that allows a note to be added to a player. Such cases seen
+        include injury notes. 
     """
     parentteamid: Optional[int] = None
     jerseynumber: str
     position: InitVar[dict]
     status: Union[Status, dict]
+    note: Optional[str] = None
 
     def __post_init__(self, position: dict):
         self.primaryposition = Position(**position) if position else None
