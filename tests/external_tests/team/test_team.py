@@ -30,7 +30,7 @@ class TestTeam(unittest.TestCase):
         # Team object should have attrs set
         self.assertEqual(self.team.id, 133)
         self.assertIsInstance(self.team, Team)
-        self.assertEqual(self.team.name, "Oakland Athletics")
+        self.assertEqual(self.team.name, "Athletics")
         self.assertEqual(self.team.link, "/api/v1/teams/133")
         self.assertIsInstance(self.team.sport, Sport)
         self.assertIsInstance(self.team.venue, Venue)
