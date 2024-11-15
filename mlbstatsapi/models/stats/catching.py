@@ -98,6 +98,7 @@ class SimpleCatchingSplit:
     sacbunts: Optional[int] = None
     sacflies: Optional[int] = None
     passedball: Optional[int] = None
+    pickoffattempts: Optional[int] = None
 
     def __repr__(self) -> str:
         kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
