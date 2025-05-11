@@ -74,7 +74,7 @@ class PlayResult:
     type: str
     awayscore: int
     homescore: int
-    rbi: Optional[int] = 0
+    rbi: Optional[int] = None
     event: Optional[str] = None
     eventtype: Optional[str] = None
     description: Optional[str] = None
