@@ -24,14 +24,14 @@ class PitchBreak:
     spindirection : int
         Pitch spinDirection
     """
-    breakangle: float
-    breaklength: float
-    breaky: float
+    breakangle: Optional[float]
     breakvertical: Optional[float]
     breakverticalinduced: Optional[float]
     breakhorizontal: Optional[float]
     spinrate: Optional[float] = None
     spindirection: Optional[float] = None
+    breaklength: Optional[float] = None
+    breaky: Optional[float] = None
 
     def __repr__(self) -> str:
         kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
@@ -203,9 +203,9 @@ class HitData:
     """
 
 
-    trajectory: str
-    hardness: str
     coordinates: Union[HitCoordinates, dict]
+    trajectory: Optional[str] = None
+    hardness: Optional[str] = None
     location: Optional[int] = None
     launchspeed: Optional[float] = None
     launchangle: Optional[str] = None # this is a negative number and I'm brain farting on those
