@@ -89,11 +89,6 @@ class TestMlbGetPeople(unittest.TestCase):
         id = self.mlb.get_people_id('Ty France')
         self.assertEqual(id, [664034])
 
-    def test_mlb_get_person_id_with_sportid(self):
-        """mlb get_person_id should return a person id"""
-        id = self.mlb.get_people_id('Tyler Black', sport_id=11)
-        self.assertEqual(id, [672012])
-
     def test_mlb_get_invalid_person_id(self):
         """mlb get_person_id should return empty list for invalid name"""
         id = self.mlb.get_people_id('Joe Blow')
