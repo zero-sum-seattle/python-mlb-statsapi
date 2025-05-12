@@ -70,6 +70,7 @@ class GameData:
     officialscorer: Optional[Union[Person, dict]] = field(default_factory=dict)
     primarydatacaster: Optional[Union[Person, dict]] = field(default_factory=dict)
     secondarydatacaster: Optional[Union[Person, dict]] = field(default_factory=dict)
+    abschallenges: Optional[Union[List[dict], dict]] = field(default_factory=dict)
 
     def __post_init__(self):
         self.game = GameDataGame(**self.game)
