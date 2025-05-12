@@ -72,9 +72,9 @@ class PlayResult:
         If the play was an out
     """
     type: str
-    rbi: int
     awayscore: int
     homescore: int
+    rbi: Optional[int] = None
     event: Optional[str] = None
     eventtype: Optional[str] = None
     description: Optional[str] = None
