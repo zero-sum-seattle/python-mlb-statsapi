@@ -152,6 +152,8 @@ class SimplePitchingSplit:
         The number of inherited runners for the pitcher.
     age : int
         The age of the pitcher.
+    caughtstealingpercentage : str
+        The caught stealing percentage for the pitcher.
     """
     summary: Optional[str] = None
     gamesplayed: Optional[int] = None
