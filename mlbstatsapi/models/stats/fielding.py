@@ -12,13 +12,16 @@ from .stats import Stat, Split
 class SimpleFieldingSplit:
     """
     A class to represent a simple fielding split
-
+    age: int
+        player age at the start of the season
     gamesplayed: int
         The number of games played 
     gamesstarted: int
         The number of games started
     caughtstealing: int
         The number of runners caught stealing
+    caughtstealingpercentage: str
+        The percentage of runners caught stealing
     stolenbases: int
         The number of stolen bases 
     stolenbasepercentage: str
