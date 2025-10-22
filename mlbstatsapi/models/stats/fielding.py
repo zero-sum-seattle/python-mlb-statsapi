@@ -60,10 +60,12 @@ class SimpleFieldingSplit:
     pickoffs: int
         The number of pick offs.
     """
+    age:Optional[int]=None
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
     caughtstealing: Optional[int] = None
+    caughtstealingpercentage: Optional[str] = None
     stolenbases: Optional[int] = None
     stolenbasepercentage: Optional[str] = None
     assists: Optional[int] = None
