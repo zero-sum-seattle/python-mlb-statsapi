@@ -150,6 +150,10 @@ class SimplePitchingSplit:
         The number of inherited runners scored by the pitcher.
     inheritedrunners : int
         The number of inherited runners for the pitcher.
+    age : int
+        The age of the pitcher.
+    caughtstealingpercentage : str
+        The caught stealing percentage for the pitcher.
     """
     summary: Optional[str] = None
     age: Optional[int] = None
@@ -218,6 +222,8 @@ class SimplePitchingSplit:
     balls: Optional[int] = None
     outspitched: Optional[int] = None
     rbi: Optional[int] = None
+    age: Optional[int] = None
+    caughtstealingpercentage: Optional[str] = None
 
     def __repr__(self) -> str:
         kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
