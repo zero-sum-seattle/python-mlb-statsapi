@@ -12,13 +12,16 @@ from .stats import Stat, Split
 class SimpleFieldingSplit:
     """
     A class to represent a simple fielding split
-
+    age: int
+        player age at the start of the season
     gamesplayed: int
         The number of games played 
     gamesstarted: int
         The number of games started
     caughtstealing: int
         The number of runners caught stealing
+    caughtstealingpercentage: str
+        The percentage of runners caught stealing
     stolenbases: int
         The number of stolen bases 
     stolenbasepercentage: str
@@ -60,10 +63,12 @@ class SimpleFieldingSplit:
     pickoffs: int
         The number of pick offs.
     """
+    age:Optional[int]=None
     position: Optional[Union[Position, dict]] = field(default_factory=dict)
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
     caughtstealing: Optional[int] = None
+    caughtstealingpercentage: Optional[str] = None
     stolenbases: Optional[int] = None
     stolenbasepercentage: Optional[str] = None
     assists: Optional[int] = None

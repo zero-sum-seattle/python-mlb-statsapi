@@ -11,7 +11,8 @@ from .stats import Split
 class SimpleCatchingSplit:
     """
     A class to represent a simple catching split
-
+    Age: int
+        age at beginning of season
     gamesplayed : int
         The number of games played by the catcher
     runs : int
@@ -41,6 +42,8 @@ class SimpleCatchingSplit:
         see also: https://www.mlb.com/glossary/standard-stats/on-base-plus-slugging
     caughtstealing : int
         The number of runners caught stealing by the catcher.
+    caughtstealingpercentage: str
+        percentage of runners caught stealing by the catcher.
     stolenbases : int
         The number of stolen bases while catching.
     stolenbasepercentage : str
@@ -70,6 +73,7 @@ class SimpleCatchingSplit:
     passedball : int
         The number of passed balls while catching.
     """
+    age: Optional[int] = None
     gamesplayed: Optional[int] = None
     runs: Optional[int] = None
     homeruns: Optional[int] = None
@@ -84,6 +88,7 @@ class SimpleCatchingSplit:
     slg: Optional[str] = None
     ops: Optional[str] = None
     caughtstealing: Optional[int] = None
+    caughtstealingpercentage: Optional[str]=None
     stolenbases: Optional[int] = None
     stolenbasepercentage: Optional[str] = None
     earnedruns: Optional[int] = None

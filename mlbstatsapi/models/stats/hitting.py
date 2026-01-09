@@ -23,6 +23,8 @@ class AdvancedHittingSplit:
 
     Attributes
     ----------
+    age: int
+        player age at the beginning of the season
     plateappearances : int
         The number of plate appearances.
     totalbases : int
@@ -95,8 +97,9 @@ class AdvancedHittingSplit:
     groundhits : int
         The amount of ground hits the batter has hit.
     linehits : int
-        The amount of line hits the the batter has hit.
+        The amount of line hits the batter has hit.
     """
+    age: Optional[int] = None
     plateappearances: Optional[int] = None
     totalbases: Optional[int] = None
     leftonbase: Optional[int] = None
@@ -136,7 +139,8 @@ class AdvancedHittingSplit:
 class SimpleHittingSplit:
     """
     A class to represent a simple hitting statistics
-    
+    age: int
+        players age at the beginning of the season
     gamesplayed : int
         The number of games played by the batter.
     flyouts : int
@@ -213,6 +217,7 @@ class SimpleHittingSplit:
     atbatsperhomerun : int
         The number of bats per home run of the batter.
     """
+    age: Optional[int] = None
     gamesplayed: Optional[int] = None
     flyouts: Optional[int] = None
     groundouts: Optional[int] = None
@@ -232,6 +237,7 @@ class SimpleHittingSplit:
     slg: Optional[str] = None
     ops: Optional[str] = None
     caughtstealing: Optional[int] = None
+    caughtstealingpercentage: Optional[str] = None
     stolenbases: Optional[int] = None
     stolenbasepercentage: Optional[int] = None
     groundintodoubleplay: Optional[int] = None

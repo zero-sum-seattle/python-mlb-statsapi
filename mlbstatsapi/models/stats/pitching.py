@@ -152,6 +152,7 @@ class SimplePitchingSplit:
         The number of inherited runners for the pitcher.
     """
     summary: Optional[str] = None
+    age: Optional[int] = None
     gamesplayed: Optional[int] = None
     gamesstarted: Optional[int] = None
     flyouts: Optional[int] = None
@@ -172,6 +173,7 @@ class SimplePitchingSplit:
     slg: Optional[str] = None
     ops: Optional[str] = None
     caughtstealing: Optional[int] = None
+    caughtstealingpercentage: Optional[str]=None
     stolenbases: Optional[int] = None
     stolenbasepercentage: Optional[str] = None
     groundintodoubleplay: Optional[int] = None
@@ -327,6 +329,7 @@ class AdvancedPitchingSplit:
         The number of bequeathed runners scored.
         see also: https://www.mlb.com/glossary/advanced-stats/bequeathed-runners
     """
+    age: Optional[int] = None
     winningpercentage: Optional[str] = None
     runsscoredper9: Optional[str] = None
     battersfaced: Optional[int] = None
@@ -352,6 +355,12 @@ class AdvancedPitchingSplit:
     pickoffs: Optional[int] = None
     totalswings: Optional[int] = None
     swingandmisses: Optional[int] = None
+    strikeoutsminuswalkspercentage: Optional[str] = None
+    gidppercentage: Optional[str] = None
+    battersfacedpergame: Optional[str] = None
+    buntsfailed: Optional[int] = None
+    buntsmissedtipped: Optional[int] = None
+    whiffpercentage: Optional[int] = None
     ballsinplay: Optional[int] = None
     runsupport: Optional[int] = None
     strikepercentage: Optional[str] = None
