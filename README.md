@@ -117,6 +117,58 @@ python3
 * `Mlb.get_game_box_score(self, game_id: int, **params)` - Return a Boxscore for a game
 
 
+## Contributing
+
+Contributions are welcome! Whether it's bug fixes, new features, or documentation improvements, we appreciate your help.
+
+### Getting Started
+
+1. Fork the repository
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/python-mlb-statsapi.git`
+3. Install dependencies: `poetry install`
+4. Create a branch: `git checkout -b feat/your-feature`
+
+### Development
+
+```bash
+# Run tests
+poetry run pytest
+
+# Run mock tests only (no external API calls)
+poetry run pytest tests/mock_tests/
+
+# Run external tests (requires internet)
+poetry run pytest tests/external_tests/
+```
+
+### Pull Request Guidelines
+
+- **All tests must pass** before submitting a PR
+- Use the [PR template](.github/pull_request_template.md) when creating your pull request
+- Follow the branch naming convention:
+  - `feat/` - New features
+  - `fix/` - Bug fixes
+  - `docs/` - Documentation updates
+  - `refactor/` - Code improvements
+
+### Reporting Issues
+
+Found a bug or have a feature request? Please [open an issue](https://github.com/zero-sum-seattle/python-mlb-statsapi/issues/new) with:
+
+- A clear description of the problem or feature
+- Steps to reproduce (for bugs)
+- Expected vs actual behavior
+- Python version and package version
+
+### Note on External Tests
+
+Some tests make real API calls to the MLB Stats API. These may occasionally fail due to:
+- API changes (new fields, removed endpoints)
+- Season/data availability
+
+If you notice external test failures, please check if the MLB API has changed and update the models accordingly.
+
+
 ## Examples
 
 Let's show some examples of getting stat objects from the API. What is baseball with out stats right?
