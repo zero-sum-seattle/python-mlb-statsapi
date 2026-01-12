@@ -35,6 +35,7 @@ class Standings:
     lastupdated: str
     teamrecords: List[Union[Teamrecords, dict]]
     sport: Optional[Union[Sport, dict]] = None
+    roundrobin: Optional[dict] = None
 
     def __post_init__(self):
         self.league = League(**self.league)
