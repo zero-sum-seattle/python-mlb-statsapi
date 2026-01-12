@@ -1,105 +1,89 @@
-﻿from typing import List, Dict, Union, Optional
-from dataclasses import dataclass, field
-
+from typing import Optional
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.sports import Sport
-
 from .attributes import TeamRecord
-# from mlbstatsapi.models.standings import Teamrecords
 
 
-@dataclass(repr=False)
-class Team:
+class Team(MLBBaseModel):
     """
     A class to represent a Team.
 
     Attributes
     ----------
     id : int
-        id number of the team
-    name : str
-        name of the team
+        ID number of the team.
     link : str
-        The API link for the team
-    springleague : League
-        The spring league of the team
-    allstarstatus : str
-        The all status status of the team
-    season : str
-        The team's current season
+        The API link for the team.
+    name : str
+        Name of the team.
+    spring_league : League
+        The spring league of the team.
+    all_star_status : str
+        The all-star status of the team.
+    season : int
+        The team's current season.
     venue : Venue
-        The team's home venue
-    springvenue : Venue
-        The team's spring venue
-    teamcode : str
-        team code 
-    filecode : str
-        filecode name of the team
+        The team's home venue.
+    spring_venue : Venue
+        The team's spring venue.
+    team_code : str
+        Team code.
+    file_code : str
+        File code name of the team.
     abbreviation : str
-        The abbreviation of the team name
-    teamname : str
-        The team name 
-    locationname : str
-        The location of the team
-    firstyearofplay : str
-        The first year the team began play
+        The abbreviation of the team name.
+    team_name : str
+        The team name.
+    location_name : str
+        The location of the team.
+    first_year_of_play : str
+        The first year the team began play.
     league : League
-        The league of the team
+        The league of the team.
     division : Division
-        The division the team is in
+        The division the team is in.
     sport : Sport
-        The sport of the team
-    shortname : str
-        The shortname of the team
+        The sport of the team.
+    short_name : str
+        The short name of the team.
     record : TeamRecord
-        The record of the team
-    franchisename : str
-        The franchisename of the team
-    clubname : str
-        The clubname of the team
-    active : str
-        Active status of the team
-    parentorgname : str
-        The name of the parent team or org
-    parentorgid : str
-        The id of the partent team or org
+        The record of the team.
+    franchise_name : str
+        The franchise name of the team.
+    club_name : str
+        The club name of the team.
+    active : bool
+        Active status of the team.
+    parent_org_name : str
+        The name of the parent team or org.
+    parent_org_id : int
+        The ID of the parent team or org.
     """
     id: int
     link: str
-    name: Optional[str] = field(default_factory=dict)
-    springleague: Union[League, dict] = field(default_factory=dict)
-    allstarstatus: Optional[str] = None
-    season: Optional[str] = None
-    venue: Union[Venue, dict] = field(default_factory=dict)
-    springvenue:  Union[Venue, dict] = field(default_factory=dict)
-    teamcode: Optional[str] = None
-    filecode: Optional[str] = None
+    name: Optional[str] = None
+    spring_league: Optional[League] = Field(default=None, alias="springleague")
+    all_star_status: Optional[str] = Field(default=None, alias="allstarstatus")
+    season: Optional[int] = None
+    venue: Optional[Venue] = None
+    spring_venue: Optional[Venue] = Field(default=None, alias="springvenue")
+    team_code: Optional[str] = Field(default=None, alias="teamcode")
+    file_code: Optional[str] = Field(default=None, alias="filecode")
     abbreviation: Optional[str] = None
-    teamname: Optional[str] = None
-    locationname: Optional[str] = None
-    firstyearofplay: Optional[str] = None
-    league: Union[League, dict] = field(default_factory=dict)
-    division: Union[Division, dict] = field(default_factory=dict)
-    sport: Union[Sport, dict] = field(default_factory=dict)
-    shortname: Optional[str] = None
-    record: Union[TeamRecord, dict] = None
-    franchisename: Optional[str] = None
-    clubname: Optional[str] = None
-    active: Optional[str] = None
-    parentorgname: Optional[str] = None
-    parentorgid: Optional[str] = None
-
-    def __post_init__(self):
-        self.springleague = League(**self.springleague) if self.springleague else self.springleague
-        self.venue = Venue(**self.venue) if self.venue else self.venue        
-        self.springvenue = Venue(**self.springvenue) if self.springvenue else self.springvenue        
-        self.league = League(**self.league) if self.league else self.league
-        self.division = Division(**self.division) if self.division else self.division
-        self.record = TeamRecord(**self.record) if self.record else self.record
-        self.sport = Sport(**self.sport) if self.sport else self.sport
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    team_name: Optional[str] = Field(default=None, alias="teamname")
+    location_name: Optional[str] = Field(default=None, alias="locationname")
+    first_year_of_play: Optional[str] = Field(default=None, alias="firstyearofplay")
+    league: Optional[League] = None
+    division: Optional[Division] = None
+    sport: Optional[Sport] = None
+    short_name: Optional[str] = Field(default=None, alias="shortname")
+    record: Optional[TeamRecord] = None
+    franchise_name: Optional[str] = Field(default=None, alias="franchisename")
+    club_name: Optional[str] = Field(default=None, alias="clubname")
+    active: Optional[bool] = None
+    parent_org_name: Optional[str] = Field(default=None, alias="parentorgname")
+    parent_org_id: Optional[int] = Field(default=None, alias="parentorgid")

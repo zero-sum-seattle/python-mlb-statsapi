@@ -34,12 +34,12 @@ class TestStandings(unittest.TestCase):
 
         standing = standings[0]
 
-        # sportgamepace should not be none
+        # standing should not be none
         self.assertIsNotNone(standing)
 
-        # sportgamepace should have attrs set
-        self.assertTrue(standing.standingstype)
-        self.assertTrue(standing.lastupdated)
+        # standing should have attrs set
+        self.assertTrue(standing.standings_type)
+        self.assertTrue(standing.last_updated)
 
     def test_get_standings_404(self):
         """This test should return a 200 and """

@@ -1,4 +1,5 @@
 import unittest
+from pydantic import ValidationError
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi import Mlb
 
@@ -14,7 +15,8 @@ class TestVenue(unittest.TestCase):
         pass
 
     def test_venue_instance_type_error(self):
-        with self.assertRaises(TypeError):
+        """Pydantic raises ValidationError when required fields are missing."""
+        with self.assertRaises(ValidationError):
             venue = Venue()
 
     def test_venue_instance_position_arguments(self):
@@ -30,5 +32,5 @@ class TestVenue(unittest.TestCase):
         self.assertTrue(hasattr(self.venue, "name"))
         self.assertTrue(hasattr(self.venue, "location"))
         self.assertTrue(hasattr(self.venue, "timezone"))
-        self.assertTrue(hasattr(self.venue, "fieldinfo"))
+        self.assertTrue(hasattr(self.venue, "field_info"))
         self.assertTrue(hasattr(self.venue, "active"))

@@ -1,23 +1,19 @@
-from dataclasses import dataclass, field
-from typing import Union, List
+from typing import List
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 from .attributes import AttendanceTotals, AttendanceRecords
 
-@dataclass
-class Attendance:
+
+class Attendance(MLBBaseModel):
     """
     A class to represent attendance.
+
     Attributes
     ----------
-    copyright : str
-        Copyright message
     records : List[AttendanceRecords]
-        List of attendance records
-    aggregatetotals : AttendanceAggregateTotals
-        Attendence aggregate total numbers for query
+        List of attendance records.
+    aggregate_totals : AttendanceTotals
+        Attendance aggregate total numbers for query.
     """
-    aggregatetotals: Union[AttendanceTotals, dict]
-    records: Union[List[AttendanceRecords], List[dict]] = field(default_factory=list)
-
-    def __post_init__(self):
-        self.records = [AttendanceRecords(**record) for record in self.records if self.records]
-        self.aggregatetotals = AttendanceTotals(**self.aggregatetotals)
+    aggregate_totals: AttendanceTotals = Field(alias="aggregatetotals")
+    records: List[AttendanceRecords] = []
