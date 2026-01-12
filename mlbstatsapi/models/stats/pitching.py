@@ -1,4 +1,4 @@
-﻿from dataclasses import InitVar, dataclass, field
+from dataclasses import InitVar, dataclass, field
 from typing import Optional, Union, List
 
 from mlbstatsapi.models.people import Person, Pitcher, Batter
@@ -389,6 +389,9 @@ class AdvancedPitchingSplit:
     inheritedrunnersscored: Optional[int] = None
     bequeathedrunners: Optional[int] = None
     bequeathedrunnersscored: Optional[int] = None
+    inningspitchedpergame: Optional[str] = None
+    flyballpercentage: Optional[str] = None
+
 
     def __repr__(self) -> str:
         kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]

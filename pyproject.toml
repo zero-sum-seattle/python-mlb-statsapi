@@ -1,28 +1,34 @@
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
-
-[project]
+[tool.poetry]
 name = "python-mlb-statsapi"
-version = "0.5.26"
-
-authors = [
-  { name="Matthew Spah", email="spahmatthew@gmail.com" },
-  { name="Kristian Nilssen", email="krinilssen@gmail.com" },
-]
+version = "0.6.1"
 description = "mlbstatsapi python wrapper"
-readme = "README.md"
-license = { file="LICENSE" }
-requires-python = ">=3.10"
-dependencies = [
-  "requests>=2", 
-  "requests_mock>=1.10.0"
+authors = [
+    "Matthew Spah <spahmatthew@gmail.com>",
+    "Kristian Nilssen <krinilssen@gmail.com>",
 ]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/zero-sum-seattle/python-mlb-statsapi"
+repository = "https://github.com/zero-sum-seattle/python-mlb-statsapi"
+packages = [{ include = "mlbstatsapi" }]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-[project.urls]
-"Homepage" = "https://github.com/zero-sum-seattle/python-mlb-statsapi"
+
+[tool.poetry.urls]
 "Bug Tracker" = "https://github.com/zero-sum-seattle/python-mlb-statsapi/issues"
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+requests = ">=2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+requests-mock = "^1.10.0"
+build = "^1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
