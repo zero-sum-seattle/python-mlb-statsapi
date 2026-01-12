@@ -1,4 +1,4 @@
-﻿name: Python Build MLBstats API 
+name: Python Build MLBstats API 
 
 on:
   push:
@@ -11,28 +11,24 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10"]
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
       - name: Install dependencies
-        run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install --upgrade pytest
-          python3 -m pip install --upgrade build
-          python3 -m pip install --upgrade requests
-          python3 -m pip install --upgrade requests_mock
+        run: poetry install --no-interaction
       - name: Test with mocks with pytest
-        run: |
-          python3 -m pytest tests/mock_tests/*
+        run: poetry run pytest tests/mock_tests/
       - name: Test external tests with pytest
-        run: |
-          python3 -m pytest tests/external_tests/*
-      - name: build and install
-        run: |
-          python3 -m build
-          python3 -m pip install .
+        run: poetry run pytest tests/external_tests/
+      - name: Build package
+        run: poetry build
