@@ -390,6 +390,8 @@ class AdvancedPitchingSplit:
     bequeathedrunners: Optional[int] = None
     bequeathedrunnersscored: Optional[int] = None
     inningspitchedpergame: Optional[str] = None
+    flyballpercentage: Optional[str] = None
+
 
     def __repr__(self) -> str:
         kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
