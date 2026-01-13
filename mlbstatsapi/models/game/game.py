@@ -1,48 +1,34 @@
-from typing import Union, Optional
-from dataclasses import dataclass
-
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.game.gamedata import GameData
 from mlbstatsapi.models.game.livedata import LiveData
-
 from .attributes import MetaData
 
 
-@dataclass
-class Game:
+class Game(MLBBaseModel):
     """
     A class to represent a Game.
 
     Attributes
     ----------
-    gamepk : int
-        id number of this game
+    game_pk : int
+        ID number of this game.
     link : str
-        link to the api address for this game
-    copyright : str
-        MLB AM copyright information
+        Link to the API address for this game.
     metadata : MetaData
-        metaData of this game
-    gamedata : GameData
-        gameData of this game
-    livedata : LiveData
-        liveData of this game
-
-    Methods
-    -------
-    id():
-        returns this games id
+        Metadata of this game.
+    game_data : GameData
+        Game data of this game.
+    live_data : LiveData
+        Live data of this game.
     """
-    gamepk: int
+    game_pk: int = Field(alias="gamepk")
     link: str
-    metadata: Union[MetaData, dict]
-    gamedata: Union[GameData, dict]
-    livedata: Union[LiveData, dict]
-
-    def __post_init__(self):
-        self.metadata = MetaData(**self.metadata)
-        self.gamedata = GameData(**self.gamedata)
-        self.livedata = LiveData(**self.livedata)
+    metadata: MetaData
+    game_data: GameData = Field(alias="gamedata")
+    live_data: LiveData = Field(alias="livedata")
 
     @property
-    def id(self):
-        return self.gamepk
+    def id(self) -> int:
+        """Returns this game's ID."""
+        return self.game_pk

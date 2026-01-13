@@ -1,19 +1,20 @@
-from dataclasses import dataclass
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 
-@dataclass
-class PlayMatchupSplits:
+
+class PlayMatchupSplits(MLBBaseModel):
     """
-    A class to represent a playMatchup Split.
+    A class to represent a play matchup split.
 
     Attributes
     ----------
     batter : str
-        Batter matchup split
+        Batter matchup split.
     pitcher : str
-        Pitcher matchup split
-    menonbase : str
-        Menonbase matchup split
+        Pitcher matchup split.
+    men_on_base : str
+        Men on base matchup split.
     """
     batter: str
     pitcher: str
-    menonbase: str
+    men_on_base: str = Field(alias="menonbase")

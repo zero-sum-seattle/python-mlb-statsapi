@@ -1,68 +1,63 @@
-from typing import Union, List, Optional
-from dataclasses import dataclass, field
+from typing import List, Optional, Dict, Any
+from pydantic import Field, field_validator
+from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.people import Person, Position
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.data import CodeDesc
 
 
-@dataclass
-class BoxScoreVL:
+class BoxScoreVL(MLBBaseModel):
     """
-    A class to represent a boxscore team's infos label and value
+    A class to represent a boxscore team's info label and value.
 
     Attributes
     ----------
     label : str
-        The label for this peice of info
+        The label for this piece of info.
     value : str
-        The info associated with this label
+        The info associated with this label.
     """
     label: str
-    value: str = None
+    value: Optional[str] = None
 
 
-@dataclass
-class BoxScoreTeamInfo:
+class BoxScoreTeamInfo(MLBBaseModel):
     """
-    A class to represent a boxscore team's info
+    A class to represent a boxscore team's info.
 
     Attributes
     ----------
     title : str
-        Type of information
-    fieldlist : List[BoxScoreVL]
-        List holding the info for this info type
+        Type of information.
+    field_list : List[BoxScoreVL]
+        List holding the info for this info type.
     """
     title: str
-    fieldlist: Union[List[BoxScoreVL], List[dict]]
-
-    def __post_init__(self):
-        self.fieldlist = [BoxScoreVL(**fieldlists) for fieldlists in self.fieldlist]
+    field_list: List[BoxScoreVL] = Field(alias="fieldlist")
 
 
-@dataclass
-class GameStatus:
+class BoxScoreGameStatus(MLBBaseModel):
     """
     A class representing the game status of a player.
 
     Attributes
     ----------
-    iscurrentbatter : bool
+    is_current_batter : bool
         Whether the player is the current batter.
-    iscurrentpitcher : bool
+    is_current_pitcher : bool
         Whether the player is the current pitcher.
-    isonbench : bool
+    is_on_bench : bool
         Whether the player is on the bench.
-    issubstitute : bool
+    is_substitute : bool
         Whether the player is a substitute.
     """
-    iscurrentbatter: bool
-    iscurrentpitcher: bool
-    isonbench: bool
-    issubstitute: bool
+    is_current_batter: bool = Field(alias="iscurrentbatter")
+    is_current_pitcher: bool = Field(alias="iscurrentpitcher")
+    is_on_bench: bool = Field(alias="isonbench")
+    is_substitute: bool = Field(alias="issubstitute")
 
-@dataclass
-class PlayersDictPerson:
+
+class PlayersDictPerson(MLBBaseModel):
     """
     A class representing a person in a dictionary of players.
 
@@ -70,122 +65,101 @@ class PlayersDictPerson:
     ----------
     person : Person
         The person object.
-    jerseynumber : str
+    jersey_number : str
         The person's jersey number.
     position : Position
         The person's position.
     status : CodeDesc
         The person's status.
-    parentteamid : int
+    parent_team_id : int
         The ID of the person's parent team.
     stats : dict
         A dictionary of the person's stats.
-    seasonstats : dict
+    season_stats : dict
         A dictionary of the person's season stats.
-    gameStatus : GameStatus
+    game_status : BoxScoreGameStatus
         The person's game status.
-    battingorder : int
-        The persons place in the batting order if avaliable.
-    allpositions : Position
-        All of the person's positions if avaliable.
+    batting_order : int
+        The person's place in the batting order if available.
+    all_positions : List[Position]
+        All of the person's positions if available.
     """
-    person: Union[Person, dict]
-    status: Union[CodeDesc, dict]
+    person: Person
+    status: CodeDesc
     stats: dict
-    seasonstats: dict
-    gamestatus: Union[GameStatus, dict]
-    position: Optional[Union[Position, dict]] = None
-    battingorder: Optional[int] = None
-    jerseynumber: Optional[str] = None
-    parentteamid: Optional[int] = None
-    allpositions: Optional[Union[List[Position], List[dict]]] = None
+    season_stats: dict = Field(alias="seasonstats")
+    game_status: BoxScoreGameStatus = Field(alias="gamestatus")
+    position: Optional[Position] = None
+    batting_order: Optional[int] = Field(default=None, alias="battingorder")
+    jersey_number: Optional[str] = Field(default=None, alias="jerseynumber")
+    parent_team_id: Optional[int] = Field(default=None, alias="parentteamid")
+    all_positions: Optional[List[Position]] = Field(default=None, alias="allpositions")
 
-    def __post_init__(self):
-        self.person = Person(**self.person)
-        self.position = Position(**self.position) if self.position else self.position
-        self.status = CodeDesc(**self.status)
-        self.gamestatus = GameStatus(**self.gamestatus)
-        self.allpositions = [Position(**allposition) for allposition in self.allpositions] if self.allpositions else self.allpositions
 
-@dataclass
-class BoxScoreTeam:
+class BoxScoreTeam(MLBBaseModel):
     """
-    A class to represent the boxscore team
+    A class to represent the boxscore team.
 
     Attributes
     ----------
     team : Team
-        This team
-    teamstats : Dict
-        Team stats
-    players : Dict
-        Players on team
+        This team.
+    team_stats : dict
+        Team stats.
+    players : dict
+        Players on team.
     batters : List[int]
-        List of batters playerid for this team
+        List of batter player IDs for this team.
     pitchers : List[int]
-        List of pitcher playerid for this team
+        List of pitcher player IDs for this team.
     bench : List[int]
-        List of bench playerid for this team
+        List of bench player IDs for this team.
     bullpen : List[int]
-        Bullpen list of playerid
-    battingorder : List[int]
-        Batting order for this team as a list of playerid
+        Bullpen list of player IDs.
+    batting_order : List[int]
+        Batting order for this team as a list of player IDs.
     info : List[BoxScoreTeamInfo]
-        Batting and fielding info for team
-    note : List[str]
-        Team notes
+        Batting and fielding info for team.
+    note : List[BoxScoreVL]
+        Team notes.
     """
-    team: Union[Team, dict]
-    teamstats: dict
-    players: dict
+    team: Team
+    team_stats: dict = Field(alias="teamstats")
+    players: Dict[str, PlayersDictPerson]
     batters: List[int]
     pitchers: List[int]
     bench: List[int]
     bullpen: List[int]
-    battingorder: List[int]
-    info: Union[List[BoxScoreTeamInfo], List[dict]]
-    note: List[str]
+    batting_order: List[int] = Field(alias="battingorder")
+    info: List[BoxScoreTeamInfo]
+    note: List[BoxScoreVL] = []
 
-    def __post_init__(self):
-        self.team = Team(**self.team)
-        self.info = [BoxScoreTeamInfo(**infos) for infos in self.info]
 
-        for player in self.players:
-            self.players[player] = PlayersDictPerson(**self.players[player])
-
-@dataclass
-class BoxScoreTeams:
+class BoxScoreTeams(MLBBaseModel):
     """
-    A class to represent the boxscore home and away teams
+    A class to represent the boxscore home and away teams.
 
     Attributes
     ----------
     home : BoxScoreTeam
-        Home team boxscore information
+        Home team boxscore information.
     away : BoxScoreTeam
-        Away team boxscore information
+        Away team boxscore information.
     """
-    home: Union[BoxScoreTeam, dict]
-    away: Union[BoxScoreTeam, dict]
+    home: BoxScoreTeam
+    away: BoxScoreTeam
 
-    def __post_init__(self):
-        self.home = BoxScoreTeam(**self.home)
-        self.away = BoxScoreTeam(**self.away)
 
-@dataclass
-class BoxScoreOffical:
+class BoxScoreOfficial(MLBBaseModel):
     """
-    A class to represent an official for this game
+    A class to represent an official for this game.
 
     Attributes
     ----------
     official : Person
-        The official person
-    officialtype : str
-        What type of official this person is
+        The official person.
+    official_type : str
+        What type of official this person is.
     """
-    official: Union[Person, dict]
-    officialtype: str
-
-    def __post_init__(self):
-        self.official = Person(**self.official)
+    official: Person
+    official_type: str = Field(alias="officialtype")

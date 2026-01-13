@@ -1,64 +1,55 @@
-from typing import Union, Optional, List
-from dataclasses import dataclass
-
+from typing import Optional, List, Any
+from pydantic import Field, field_validator
+from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.data import CodeDesc
-
 from .attributes import PlayMatchupSplits
 
-@dataclass(repr=False)
-class PlayMatchup:
+
+class PlayMatchup(MLBBaseModel):
     """
-    A class to represent a play Matchup.
+    A class to represent a play matchup.
 
     Attributes
     ----------
     batter : Person
-        Matchup batter
-    batside : PlayMatchupSide
-        batters batside
+        Matchup batter.
+    bat_side : CodeDesc
+        Batter's bat side.
     pitcher : Person
-        Matchup pitcher
-    pitchhand : PlayMatchupSide
-        Pitchers side
-    pitcherhotcoldzones : List
-        Pitcher hot cold zone stats
+        Matchup pitcher.
+    pitch_hand : CodeDesc
+        Pitcher's side.
+    pitcher_hot_cold_zones : List
+        Pitcher hot cold zone stats.
     splits : PlayMatchupSplits
-        PlayMatchupSplits
-    batterhotcoldzonestats : List
-        Batter hot cold zone stats
-    postonfirst : Person
-        Runner on first
-    postonsecond : Person
-        Runner on second
-    postonthird : Person
-        Runner on third 
+        Play matchup splits.
+    batter_hot_cold_zone_stats : List
+        Batter hot cold zone stats.
+    post_on_first : Person
+        Runner on first.
+    post_on_second : Person
+        Runner on second.
+    post_on_third : Person
+        Runner on third.
     """
-    batter: Union[Person, dict]
-    batside: Union[CodeDesc, dict]
-    pitcher: Union[Person, dict]
-    pitchhand: Union[CodeDesc, dict]
-    batterhotcoldzones: List
-    pitcherhotcoldzones: List
-    splits: Union[PlayMatchupSplits, dict]
-    batterhotcoldzonestats: Optional[List] = None
-    pitcherhotcoldzonestats: Optional[List] = None
-    postonfirst: Optional[Union[Person, dict]] = None
-    postonsecond: Optional[Union[Person, dict]] = None
-    postonthird: Optional[Union[Person, dict]] = None
+    batter: Person
+    bat_side: CodeDesc = Field(alias="batside")
+    pitcher: Person
+    pitch_hand: CodeDesc = Field(alias="pitchhand")
+    batter_hot_cold_zones: List = Field(alias="batterhotcoldzones")
+    pitcher_hot_cold_zones: List = Field(alias="pitcherhotcoldzones")
+    splits: PlayMatchupSplits
+    batter_hot_cold_zone_stats: Optional[List] = Field(default=None, alias="batterhotcoldzonestats")
+    pitcher_hot_cold_zone_stats: Optional[List] = Field(default=None, alias="pitcherhotcoldzonestats")
+    post_on_first: Optional[Person] = Field(default=None, alias="postonfirst")
+    post_on_second: Optional[Person] = Field(default=None, alias="postonsecond")
+    post_on_third: Optional[Person] = Field(default=None, alias="postonthird")
 
-    def __post_init__(self):
-        self.batter = Person(**self.batter)
-        self.batside = CodeDesc(**self.batside)
-        self.pitcher = Person(**self.pitcher)
-        self.pitchhand = CodeDesc(**self.pitchhand)
-        self.splits = PlayMatchupSplits(**self.splits)
-        self.batterhotcoldzonestats = self.batterhotcoldzonestats['stats'] if self.batterhotcoldzonestats else self.batterhotcoldzonestats
-        self.pitcherhotcoldzonestats = self.pitcherhotcoldzonestats['stats'] if self.pitcherhotcoldzonestats else self.pitcherhotcoldzonestats
-        self.postonfirst = Person(**self.postonfirst) if self.postonfirst else self.postonfirst
-        self.postonsecond = Person(**self.postonsecond) if self.postonsecond else self.postonsecond
-        self.postonthird = Person(**self.postonthird) if self.postonthird else self.postonthird
-    
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    @field_validator('batter_hot_cold_zone_stats', 'pitcher_hot_cold_zone_stats', mode='before')
+    @classmethod
+    def extract_stats(cls, v: Any) -> Any:
+        """Extract stats from nested dict if present."""
+        if isinstance(v, dict) and 'stats' in v:
+            return v['stats']
+        return v

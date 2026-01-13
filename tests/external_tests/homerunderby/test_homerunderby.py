@@ -1,5 +1,5 @@
 import unittest
-from mlbstatsapi.models.homerunderby import Homerunderby, Round
+from mlbstatsapi.models.homerunderby import HomeRunDerby, Round
 from mlbstatsapi import Mlb
 
 
@@ -12,34 +12,34 @@ class TestHomerunderby(unittest.TestCase):
     def tearDownClass(cls) -> None:
         pass
 
-    def test_get_gamepace(self):
+    def test_get_homerunderby(self):
         """This test should return a 200 and Round"""
 
-        # set draft id
+        # set game id
         game_id = 511101
 
-        # call get_gamepace return Gamepace object
+        # call get_homerun_derby return HomeRunDerby object
         derby = self.mlb.get_homerun_derby(game_id)
 
-        # Gamepace should not be None
+        # HomeRunDerby should not be None
         self.assertIsNotNone(derby)
 
-        self.assertIsInstance(derby, Homerunderby)
+        self.assertIsInstance(derby, HomeRunDerby)
 
         # list should not be empty
         self.assertNotEqual(derby.rounds, [])
 
-        # items in list should be gamepace data
+        # items in list should be Round
         self.assertIsInstance(derby.rounds[0], Round)
 
     def test_get_homerunderby_404(self):
-        """This test should return a 200 and """
+        """This test should return None for invalid game id"""
 
         # set gameid to invalid id
         game_id = '100394810242'
 
-        # call get_gamepace return Gamepace object
+        # call get_homerun_derby return HomeRunDerby object
         derby = self.mlb.get_homerun_derby(game_id)
 
-        # gamepace should be None
+        # derby should be None
         self.assertIsNone(derby)

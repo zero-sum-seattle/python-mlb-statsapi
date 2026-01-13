@@ -7,7 +7,7 @@ import os
 
 
 from mlbstatsapi import Mlb
-from mlbstatsapi.models.homerunderby import Homerunderby, Round
+from mlbstatsapi.models.homerunderby import HomeRunDerby, Round
 
 
 path_to_current_file = os.path.realpath(__file__)
@@ -31,19 +31,19 @@ class TestHomerunderbyMock(unittest.TestCase):
         m.get('https://statsapi.mlb.com/api/v1/homeRunDerby/511101', json=self.homerunderby_mock,
         status_code=200)
 
-         # set draft id
+         # set game id
         game_id = 511101
 
-        # call get_gamepace return Gamepace object
+        # call get_homerun_derby return HomeRunDerby object
         derby = self.mlb.get_homerun_derby(game_id)
 
-        # Gamepace should not be None
+        # HomeRunDerby should not be None
         self.assertIsNotNone(derby)
 
-        self.assertIsInstance(derby, Homerunderby)
+        self.assertIsInstance(derby, HomeRunDerby)
 
         # list should not be empty
         self.assertNotEqual(derby.rounds, [])
 
-        # items in list should be gamepace data
+        # items in list should be Round
         self.assertIsInstance(derby.rounds[0], Round)

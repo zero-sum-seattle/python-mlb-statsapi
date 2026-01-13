@@ -1,51 +1,41 @@
-from typing import Union, Optional
-from dataclasses import dataclass
+from typing import Optional
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.people import Person
 
 
-@dataclass(repr=False)
-class GameDecisions:
+class GameDecisions(MLBBaseModel):
     """
-    A class to represent the winning and loosing pitcher for this game.
+    A class to represent the winning and losing pitcher for this game.
     Only used when a game is over.
 
     Attributes
     ----------
     winner : Person
-        The winning person
+        The winning pitcher.
     loser : Person
-        The loosing person
+        The losing pitcher.
+    save : Person
+        The save pitcher (if applicable).
     """
-    winner: Union[Person, dict]
-    loser: Union[Person, dict]
-    save: Optional[Union[Person, dict]] = None
+    winner: Person
+    loser: Person
+    save: Optional[Person] = None
 
-    def __post_init__(self):
-        self.winner = Person(**self.winner)
-        self.loser = Person(**self.loser)
-        self.save = Person(**self.save) if self.save else self.save
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
-
-@dataclass
-class GameLeaders:
+class GameLeaders(MLBBaseModel):
     """
-    A class to represent this games live data leaders.
-    Not sure what this data looks like since every game ive seen
-    has an empty dict for each of these.
+    A class to represent this game's live data leaders.
 
     Attributes
     ----------
-    hitdistance : dict
-        hit distance
-    hitspeed : dict
-        hit speed
-    pitchspeed : dict
-        pitch speed
+    hit_distance : dict
+        Hit distance leaders.
+    hit_speed : dict
+        Hit speed leaders.
+    pitch_speed : dict
+        Pitch speed leaders.
     """
-    # Dont know what this populated looks like. Every game ive seen its three empty dicts?
-    hitdistance: dict
-    hitspeed: dict
-    pitchspeed: dict
+    hit_distance: dict = Field(alias="hitdistance")
+    hit_speed: dict = Field(alias="hitspeed")
+    pitch_speed: dict = Field(alias="pitchspeed")
