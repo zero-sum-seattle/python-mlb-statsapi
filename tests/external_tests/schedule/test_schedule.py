@@ -1,4 +1,5 @@
 import unittest
+from pydantic import ValidationError
 from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi import Mlb
 
@@ -13,20 +14,32 @@ class TestSchedule(unittest.TestCase):
     def tearDownClass(cls) -> None:
         pass
 
-    def test_schedule_instance_type_error(self):
-        with self.assertRaises(TypeError):
+    def test_schedule_instance_validation_error(self):
+        with self.assertRaises(ValidationError):
             schedule = Schedule()
 
     def test_schedule_instance_position_arguments(self):
-        self.assertEqual(self.schedule.totalitems, 4)
-        self.assertEqual(self.schedule.totalevents, 0)
-        self.assertEqual(self.schedule.totalgames, 4)
+        self.assertEqual(self.schedule.total_items, 4)
+        self.assertEqual(self.schedule.total_events, 0)
+        self.assertEqual(self.schedule.total_games, 4)
 
     def test_schedule_has_attributes(self):
         self.assertIsInstance(self.schedule, Schedule)
-        self.assertTrue(hasattr(self.schedule, "totalitems"))
-        self.assertTrue(hasattr(self.schedule, "totalevents"))
-        self.assertTrue(hasattr(self.schedule, "totalgames"))
-        self.assertTrue(hasattr(self.schedule, "totalgamesinprogress"))
+        self.assertTrue(hasattr(self.schedule, "total_items"))
+        self.assertTrue(hasattr(self.schedule, "total_events"))
+        self.assertTrue(hasattr(self.schedule, "total_games"))
+        self.assertTrue(hasattr(self.schedule, "total_games_in_progress"))
         self.assertTrue(hasattr(self.schedule, "dates"))
 
+    def test_schedule_pythonic_field_names(self):
+        """Test that Pythonic field names are accessible."""
+        self.assertIsNotNone(self.schedule.total_items)
+        self.assertIsNotNone(self.schedule.dates)
+        if self.schedule.dates:
+            date = self.schedule.dates[0]
+            self.assertIsNotNone(date.total_games)
+            if date.games:
+                game = date.games[0]
+                self.assertIsNotNone(game.game_pk)
+                self.assertIsNotNone(game.game_type)
+                self.assertIsNotNone(game.game_date)

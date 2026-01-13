@@ -1,4 +1,4 @@
-﻿from typing import Dict, List
+from typing import Dict, List
 from unittest.mock import patch
 import unittest
 import requests_mock
@@ -57,5 +57,5 @@ class TestDraftMock(unittest.TestCase):
 
         draftpick = draftpicks[0]
 
-        # draft pick should have attrs set
-        self.assertTrue(draftpick.pickround)
+        # draft pick should have attrs set (using Pythonic field name)
+        self.assertTrue(draftpick.pick_round)

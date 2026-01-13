@@ -1,10 +1,11 @@
-﻿from dataclasses import dataclass, field
+from typing import Optional
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 
 
-@dataclass
-class Home:
+class DraftHome(MLBBaseModel):
     """
-    A home is a where a draft player is from
+    A class representing where a draft player is from.
 
     Attributes
     ----------
@@ -16,19 +17,19 @@ class Home:
         The country where the player is from.
     """
     city: str
-    state: str
     country: str
+    state: Optional[str] = None
 
-@dataclass
-class School:
+
+class DraftSchool(MLBBaseModel):
     """
-    Represents the school the draft player is from.
+    A class representing the school the draft player is from.
 
     Attributes
     ----------
     name : str
         The name of the school.
-    schoolclass : str
+    school_class : str
         The class the student is in.
     city : str
         The city where the school is located.
@@ -38,7 +39,7 @@ class School:
         The state where the school is located.
     """
     name: str
-    schoolclass: str
-    city: str
     country: str
-    state: str
+    state: Optional[str] = None
+    school_class: Optional[str] = Field(default=None, alias="schoolclass")
+    city: Optional[str] = None
