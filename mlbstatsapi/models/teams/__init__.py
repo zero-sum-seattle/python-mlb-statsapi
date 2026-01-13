@@ -1,2 +1,10 @@
 from .team import Team
-from .attributes import TeamRecord
+from .attributes import (
+    Record,
+    OverallLeagueRecord,
+    TypeRecords,
+    DivisionRecords,
+    LeagueRecords,
+    Records,
+    TeamRecord,
+)

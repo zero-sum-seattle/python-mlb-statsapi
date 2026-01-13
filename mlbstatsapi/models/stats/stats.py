@@ -1,310 +1,338 @@
-﻿from dataclasses import dataclass, field
-from typing import Optional, Union, List
-
+from typing import Optional, List, Any, ClassVar
+from pydantic import Field, field_validator
+from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.people import Person, Batter, Position
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.data import CodeDesc
 
-@dataclass
-class PitchArsenalSplit:
+
+class PitchArsenalSplit(MLBBaseModel):
     """
-    A class to represent a pitching pitch arsenal split 
+    A class to represent a pitching pitch arsenal split.
 
     Attributes
     ----------
     percentage : float
+        Percentage of this pitch type.
     count : int
-    totalPitches : int
-    averageSpeed : float
-    type : Union[CodeDesc, dict]
+        Count of this pitch type.
+    total_pitches : int
+        Total pitches thrown.
+    average_speed : float
+        Average speed of this pitch type.
+    type : CodeDesc
+        The pitch type code and description.
     """
     percentage: float
     count: int
-    totalpitches: int
-    averagespeed: float
-    type: Union[CodeDesc, dict]
+    total_pitches: int = Field(alias="totalpitches")
+    average_speed: float = Field(alias="averagespeed")
+    type: CodeDesc
 
-@dataclass
-class ExpectedStatistics:
+
+class ExpectedStatistics(MLBBaseModel):
     """
-    a class to hold a code and a description
+    A class to hold expected statistics.
 
     Attributes
     ----------
+    avg : str
+        Expected batting average.
+    slg : str
+        Expected slugging.
+    woba : str
+        Expected wOBA.
+    wobacon : str
+        Expected wOBA on contact.
     """
     avg: str
     slg: str
     woba: str
     wobacon: str
 
-@dataclass(repr=False)
-class Sabermetrics:
+
+class Sabermetrics(MLBBaseModel):
     """
-    a class to hold a code and a description
+    A class to hold sabermetric statistics.
 
     Attributes
     ----------
     woba : float
-    wRaa : float
-    wRc : float
-    wRcPlus : float
+        Weighted on-base average.
+    wraa : float
+        Weighted runs above average.
+    wrc : float
+        Weighted runs created.
+    wrc_plus : float
+        Weighted runs created plus.
     rar : float
+        Runs above replacement.
     war : float
+        Wins above replacement.
     batting : float
+        Batting runs.
     fielding : float
-    baseRunning : float
+        Fielding runs.
+    base_running : float
+        Base running runs.
     positional : float
-    wLeague : float
+        Positional adjustment.
+    w_league : float
+        League adjustment.
     replacement : float
+        Replacement level runs.
     spd : float
+        Speed score.
     ubr : float
-    wGdp : float
-    wSb : float
+        Ultimate base running.
+    w_gdp : float
+        Weighted grounded into double play runs.
+    w_sb : float
+        Weighted stolen base runs.
     """
-
     woba: Optional[float] = None
     wraa: Optional[float] = None
     wrc: Optional[float] = None
-    wrcplus: Optional[float] = None
+    wrc_plus: Optional[float] = Field(default=None, alias="wrcplus")
     rar: Optional[float] = None
     war: Optional[float] = None
     batting: Optional[float] = None
     fielding: Optional[float] = None
-    baserunning: Optional[float] = None
+    base_running: Optional[float] = Field(default=None, alias="baserunning")
     positional: Optional[float] = None
-    wleague: Optional[float] = None
+    w_league: Optional[float] = Field(default=None, alias="wleague")
     replacement: Optional[float] = None
     spd: Optional[float] = None
     ubr: Optional[float] = None
-    wgdp: Optional[float] = None
-    wsb: Optional[float] = None
+    w_gdp: Optional[float] = Field(default=None, alias="wgdp")
+    w_sb: Optional[float] = Field(default=None, alias="wsb")
 
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
-
-@dataclass(kw_only=True, repr=False)
-class Split:
+class Split(MLBBaseModel):
     """
-    Base class for splits
+    Base class for splits.
 
     Attributes
     ----------
     season : str
-    numteams : int
-    numleagues : int
-    gametype : str
+        The season.
+    num_teams : int
+        Number of teams.
+    num_leagues : int
+        Number of leagues.
+    game_type : str
+        The game type.
     rank : int
+        The rank.
     position : Position
+        The position.
     team : Team
+        The team.
     player : Person
+        The player.
     sport : Sport
+        The sport.
     league : League
+        The league.
     """
     season: Optional[str] = None
-    numteams: Optional[int] = None
-    numleagues: Optional[int] = None
-    gametype: Optional[str] = None
+    num_teams: Optional[int] = Field(default=None, alias="numteams")
+    num_leagues: Optional[int] = Field(default=None, alias="numleagues")
+    game_type: Optional[str] = Field(default=None, alias="gametype")
     rank: Optional[int] = None
-    position: Optional[Union[Position, dict]] = field(default_factory=dict)
-    team: Optional[Union[Team, dict]] = field(default_factory=dict)
-    player: Optional[Union[Person, dict]] = field(default_factory=dict)
-    sport: Optional[Union[Sport, dict]] = field(default_factory=dict)
-    league: Optional[Union[League, dict]] = field(default_factory=dict)
+    position: Optional[Position] = None
+    team: Optional[Team] = None
+    player: Optional[Person] = None
+    sport: Optional[Sport] = None
+    league: Optional[League] = None
 
-    def __post_init__(self):
-        self.position = Position(**self.position) if self.position else self.position
-        self.team = Team(**self.team) if self.team else self.team
-        self.sport = Sport(**self.sport) if self.sport else self.sport
-        self.league = League(**self.league) if self.league else self.league
-        self.player = Person(**self.player) if self.player else self.player
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    @field_validator('position', 'team', 'player', 'sport', 'league', mode='before')
+    @classmethod
+    def empty_dict_to_none(cls, v: Any) -> Any:
+        """Convert empty dicts to None."""
+        if isinstance(v, dict) and not v:
+            return None
+        return v
 
 
-@dataclass(kw_only=True, repr=False)
-class Stat:
+class Stat(MLBBaseModel):
     """
-    Base class for stats
+    Base class for stats.
 
     Attributes
     ----------
     group : str
-        type of the stat group
+        Type of the stat group.
     type : str
-        type of the stat 
-    totalsplits : int
-        The number of split objects
+        Type of the stat.
+    total_splits : int
+        The number of split objects.
     exemptions : list
-        not sure what this is
+        Exemptions list.
     splits : list
-        a list of split objects
+        A list of split objects.
     """
     group: str
     type: str
-    totalsplits: int
-    exemptions: Optional[List] = field(default_factory=list)
-    splits: Optional[List] = field(default_factory=list)
+    total_splits: int = Field(alias="totalsplits")
+    exemptions: Optional[List] = []
+    splits: Optional[List] = []
 
-    def __repr__(self):
-        return f'Stat(group={self.group}, type={self.type})'
 
-@dataclass(kw_only=True)
 class PitchArsenal(Split):
     """
-    A class to represent a pitcharsenal stat for a hitter and pitcher
+    A class to represent a pitcharsenal stat for a hitter and pitcher.
 
     Attributes
     ----------
+    stat : PitchArsenalSplit
+        The pitch arsenal statistics.
     """
-    _stat = ['pitchArsenal']
-    stat: Union[PitchArsenalSplit, dict]
-
-    def __post_init__(self):
-        self.stat = PitchArsenalSplit(**self.stat)
+    _stat: ClassVar[List[str]] = ['pitchArsenal']
+    stat: PitchArsenalSplit
 
 
-@dataclass(kw_only=True)
-class ZoneCodes:
+class ZoneCodes(MLBBaseModel):
     """
-    A class to represent a zone code statistic used in hot cold zones
+    A class to represent a zone code statistic used in hot cold zones.
 
     Attributes
     ----------
     zone : str
-        zone code location
+        Zone code location.
     color : str
-        rgba code for the color of zone
+        RGBA code for the color of zone.
     temp : str
-        temp description of the zone
+        Temperature description of the zone.
     value : str
-        batting percentage of the zone
+        Batting percentage of the zone.
     """
     zone: str
     value: str
     color: Optional[str] = None
     temp: Optional[str] = None
 
-@dataclass(kw_only=True)
-class Zones:
+
+class Zones(MLBBaseModel):
     """
-    A class to represent a hot cold zone statistic
+    A class to represent a hot cold zone statistic.
 
     Attributes
     ----------
     name : str
-        name of the hot cold zone 
+        Name of the hot cold zone.
     zones : List[ZoneCodes]
-        a list of zone codes to describe the zone
+        A list of zone codes to describe the zone.
     """
     name: str
-    zones: List[ZoneCodes]
+    zones: List[ZoneCodes] = []
 
-    def __post_init__(self):
-        self.zones = [ZoneCodes(**zone) for zone in self.zones]
 
-@dataclass(kw_only=True)
 class HotColdZones(Split):
     """
-    A class to represent a hotcoldzone statistic
+    A class to represent a hotcoldzone statistic.
 
     Attributes
     ----------
     stat : Zones
-        the holdcoldzones for the stat
+        The hot cold zones for the stat.
     """
+    _stat: ClassVar[List[str]] = ['hotColdZones']
     stat: Zones
-    _stat = ['hotColdZones']
 
-    def __post_init__(self):
-        self.stat = Zones(**self.stat)
 
-@dataclass
-class Chart:
+class Chart(MLBBaseModel):
     """
-    A class to represent a chart for SprayCharts
+    A class to represent a chart for SprayCharts.
 
     Attributes
     ----------
-    leftfield : int
-        percentage
-    leftcenterfield : int
-        percentage
-    centerfield : int
-        percentage
-    rightcenterfield : int
-        percentage
-    rightfield : int
-        percentage
+    left_field : int
+        Left field percentage.
+    left_center_field : int
+        Left center field percentage.
+    center_field : int
+        Center field percentage.
+    right_center_field : int
+        Right center field percentage.
+    right_field : int
+        Right field percentage.
     """
-    leftfield: int
-    leftcenterfield: int
-    centerfield: int
-    rightcenterfield: int
-    rightfield: int
+    left_field: int = Field(alias="leftfield")
+    left_center_field: int = Field(alias="leftcenterfield")
+    center_field: int = Field(alias="centerfield")
+    right_center_field: int = Field(alias="rightcenterfield")
+    right_field: int = Field(alias="rightfield")
 
-@dataclass(kw_only=True)
+
 class SprayCharts(Split):
+    """
+    A class to represent spray chart statistics.
+
+    Attributes
+    ----------
+    stat : Chart
+        The spray chart data.
+    batter : Batter
+        The batter.
+    """
+    _stat: ClassVar[List[str]] = ['sprayChart']
+    stat: Chart
+    batter: Optional[Batter] = None
+
+    @field_validator('batter', mode='before')
+    @classmethod
+    def empty_dict_to_none(cls, v: Any) -> Any:
+        """Convert empty dicts to None."""
+        if isinstance(v, dict) and not v:
+            return None
+        return v
 
 
-    _stat = ['sprayChart']
-    stat: Union[Chart, dict]
-    batter: Optional[Union[Batter, dict]] = field(default_factory=dict)
-
-    def __post_init__(self):
-        self.batter = Batter(**self.batter) if self.batter else self.batter
-        self.stat = Chart(**self.stat)
-
-@dataclass(kw_only=True)
 class OutsAboveAverage(Split):
     """
-    A class to represent a outs above average statistic
+    A class to represent an outs above average statistic.
 
-    NOTE: This stat type returns a empty list, or keys with with the value 0
+    NOTE: This stat type returns an empty list, or keys with the value 0.
     """
-    _stat = ['outsAboveAverage']
+    _stat: ClassVar[List[str]] = ['outsAboveAverage']
     attempts: int
-    totaloutsaboveaverageback: int
-    totaloutsaboveaveragebackunrounded: int
-    outsaboveaveragebackstraight: int
-    outsaboveaveragebackstraightunrounded: int
-    outsaboveaveragebackleft: int
-    outsaboveaveragebackleftunrounded: int
-    outsaboveaveragebackright: int
-    outsaboveaveragebackrightunrounded: int
-    totaloutsaboveaveragein: int
-    totaloutsaboveaverageinunrounded: int
-    outsaboveaverageinstraight: int
-    outsaboveaverageinstraightunrounded: int
-    outsaboveaverageinleft: int
-    outsaboveaverageinleftunrounded: int
-    outsaboveaverageinright: int
-    outsaboveaverageinrightunrounded: int
-    player: Union[Person, dict]
-    gametype: str
+    total_outs_above_average_back: int = Field(alias="totaloutsaboveaverageback")
+    total_outs_above_average_back_unrounded: int = Field(alias="totaloutsaboveaveragebackunrounded")
+    outs_above_average_back_straight: int = Field(alias="outsaboveaveragebackstraight")
+    outs_above_average_back_straight_unrounded: int = Field(alias="outsaboveaveragebackstraightunrounded")
+    outs_above_average_back_left: int = Field(alias="outsaboveaveragebackleft")
+    outs_above_average_back_left_unrounded: int = Field(alias="outsaboveaveragebackleftunrounded")
+    outs_above_average_back_right: int = Field(alias="outsaboveaveragebackright")
+    outs_above_average_back_right_unrounded: int = Field(alias="outsaboveaveragebackrightunrounded")
+    total_outs_above_average_in: int = Field(alias="totaloutsaboveaveragein")
+    total_outs_above_average_in_unrounded: int = Field(alias="totaloutsaboveaverageinunrounded")
+    outs_above_average_in_straight: int = Field(alias="outsaboveaverageinstraight")
+    outs_above_average_in_straight_unrounded: int = Field(alias="outsaboveaverageinstraightunrounded")
+    outs_above_average_in_left: int = Field(alias="outsaboveaverageinleft")
+    outs_above_average_in_left_unrounded: int = Field(alias="outsaboveaverageinleftunrounded")
+    outs_above_average_in_right: int = Field(alias="outsaboveaverageinright")
+    outs_above_average_in_right_unrounded: int = Field(alias="outsaboveaverageinrightunrounded")
+    player: Person
+    game_type: str = Field(alias="gametype")
 
 
-#
-# These dataclasses are for the game stats end point only
-# url: https://statsapi.mlb.com/api/v1/people/663728/stats/game/715757
-# The gamelog stats in this JSON have different keys set for their stat
-# and group. This breaks my logic of handling stat classes
-#
-
-@dataclass
 class PlayerGameLogStat(Split):
     """
-    A class to represent a chart for SprayCharts
+    A class to represent a player game log stat.
 
     Attributes
     ----------
+    type : str
+        The stat type.
+    group : str
+        The stat group.
+    stat : dict
+        The stat data.
     """
+    _stat: ClassVar[List[str]] = ['gameLog']
     type: str
     group: str
     stat: dict
-    _stat = ['gameLog']

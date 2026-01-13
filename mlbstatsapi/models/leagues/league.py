@@ -1,25 +1,24 @@
-﻿from dataclasses import dataclass
-from typing import Optional, Union
-
+from typing import Optional
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.seasons import Season
 
 
-@dataclass
-class LeagueRecord:
+class LeagueRecord(MLBBaseModel):
     """
-    A class to represent a leaguerecord.
+    A class to represent a league record.
 
     Attributes
     ----------
     wins : int
-        number of wins in leaguerecord
+        Number of wins in league record.
     losses : int
-        number of losses in leaguerecord
-    ties : int
-        number of ties in leaguerecord
+        Number of losses in league record.
     pct : str
-        winning pct of leaguerecord
+        Winning percentage of league record.
+    ties : int
+        Number of ties in league record.
     """
     wins: int
     losses: int
@@ -27,79 +26,70 @@ class LeagueRecord:
     ties: Optional[int] = None
 
 
-@dataclass(repr=False)
-class League:
+class League(MLBBaseModel):
     """
     A class to represent a league.
 
     Attributes
     ----------
     id : int
-        id number of the league
-    name : str
-        name of the league
+        ID number of the league.
     link : str
-        link of the league
+        API link for the league.
+    name : str
+        Name of the league.
     abbreviation : str
-        abbreviation the league
-    nameshort : str
-        Short name for the league
-    seasonstate : str
-        State of the leagues season
-    haswildcard : bool
-        Status of the leagues wildcard
-    hassplitseason : bool
-        Status of the leagues split season
-    numgames : int
-        Total number of league games
-    hasplayoffpoints : bool
-        Status of the leagues playoff points
-    numteams : int
-        Total number of team in league
-    numwildcardteams : int
-        Total number of wildcard teams in league
-    seasondateinfo : Season
-        Season obj
+        Abbreviation of the league.
+    name_short : str
+        Short name for the league.
+    season_state : str
+        State of the league's season.
+    has_wildcard : bool
+        Status of the league's wildcard.
+    has_split_season : bool
+        Status of the league's split season.
+    num_games : int
+        Total number of league games.
+    has_playoff_points : bool
+        Status of the league's playoff points.
+    num_teams : int
+        Total number of teams in league.
+    num_wildcard_teams : int
+        Total number of wildcard teams in league.
+    season_date_info : Season
+        Season object.
     season : str
-        League season
-    orgcode : str
-        Leagues orginization code
-    conferencesinuse : bool
-        Status of the in use conferences of the league
-    divisionsinuse : bool
-        Status of leagues divisions in use
+        League season.
+    org_code : str
+        League's organization code.
+    conferences_in_use : bool
+        Status of in-use conferences of the league.
+    divisions_in_use : bool
+        Status of league's divisions in use.
     sport : Sport
-        What 'sport' this league is a part of
-    sortorder : int
-        League sort order
+        What sport this league is a part of.
+    sort_order : int
+        League sort order.
     active : bool
-        Status on the activity of the league
+        Status on the activity of the league.
     """
     id: int
     link: str
     name: Optional[str] = None
     abbreviation: Optional[str] = None
-    nameshort: Optional[str] = None
-    seasonstate: Optional[str] = None
-    haswildcard: Optional[bool] = None
-    hassplitseason: Optional[bool] = None
-    numgames: Optional[int] = None
-    hasplayoffpoints: Optional[bool] = None
-    numteams: Optional[int] = None
-    numwildcardteams: Optional[int] = None
-    seasondateinfo: Optional[Union[Season, dict]] = None
+    name_short: Optional[str] = Field(default=None, alias="nameshort")
+    season_state: Optional[str] = Field(default=None, alias="seasonstate")
+    has_wildcard: Optional[bool] = Field(default=None, alias="haswildcard")
+    has_split_season: Optional[bool] = Field(default=None, alias="hassplitseason")
+    num_games: Optional[int] = Field(default=None, alias="numgames")
+    has_playoff_points: Optional[bool] = Field(default=None, alias="hasplayoffpoints")
+    num_teams: Optional[int] = Field(default=None, alias="numteams")
+    num_wildcard_teams: Optional[int] = Field(default=None, alias="numwildcardteams")
+    season_date_info: Optional[Season] = Field(default=None, alias="seasondateinfo")
     season: Optional[str] = None
-    orgcode: Optional[str] = None
-    conferencesinuse: Optional[bool] = None
-    divisionsinuse: Optional[bool] = None
-    sport: Optional[Union[Sport, dict]] = None
-    sortorder: Optional[int] = None
+    org_code: Optional[str] = Field(default=None, alias="orgcode")
+    conferences_in_use: Optional[bool] = Field(default=None, alias="conferencesinuse")
+    divisions_in_use: Optional[bool] = Field(default=None, alias="divisionsinuse")
+    sport: Optional[Sport] = None
+    sort_order: Optional[int] = Field(default=None, alias="sortorder")
     active: Optional[bool] = None
-
-    def __post_init__(self):
-        self.seasondateinfo = Season(**self.seasondateinfo) if self.seasondateinfo else self.seasondateinfo
-        self.sport = Sport(**self.sport) if self.sport else self.sport
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))

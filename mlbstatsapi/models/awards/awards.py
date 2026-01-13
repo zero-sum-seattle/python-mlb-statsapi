@@ -1,17 +1,15 @@
 from typing import List
-from dataclasses import dataclass
-
+from mlbstatsapi.models.base import MLBBaseModel
 from .attributes import Award
 
-@dataclass
-class Awards:
+
+class Awards(MLBBaseModel):
     """
-    This class represents an awards object
+    A class representing an awards collection.
 
     Attributes
     ----------
     awards : List[Award]
-        Awards
+        List of awards.
     """
-
-    awards: List[Award]
+    awards: List[Award] = []

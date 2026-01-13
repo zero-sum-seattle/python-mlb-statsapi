@@ -1,59 +1,55 @@
-﻿from dataclasses import dataclass
-from typing import Optional, Union
-
-from mlbstatsapi.models.leagues import League
+from __future__ import annotations
+from typing import Optional, TYPE_CHECKING
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.sports import Sport
 
+if TYPE_CHECKING:
+    from mlbstatsapi.models.leagues import League
 
-@dataclass(repr=False)
-class Division:
+
+class Division(MLBBaseModel):
     """
     A class to represent a division.
 
     Attributes
     ----------
     id : int
-        id number of the divison
-    name : str
-        name of the division
+        ID number of the division.
     link : str
-        link of the division
+        API link for the division.
+    name : str
+        Name of the division.
     season : str
-        Current season for the division
-    nameshort : str
-        Short name for the division
+        Current season for the division.
+    name_short : str
+        Short name for the division.
     abbreviation : str
-        Abbreviation of the divison name
+        Abbreviation of the division name.
     league : League
-        League this division is in
+        League this division is in.
     sport : Sport
-        Sport this divison is in
-    haswildcard : bool
-        If this league has a wildcard
-    sortorder : int
-        Sort order
-    numplayoffteams : int
-        Number of playoff teams in division
+        Sport this division is in.
+    has_wildcard : bool
+        Whether this league has a wildcard.
+    sort_order : int
+        Sort order.
+    num_playoff_teams : int
+        Number of playoff teams in division.
     active : bool
-        Current status of this division
+        Current status of this division.
     """
     id: int
     link: str
     name: Optional[str] = None
     season: Optional[str] = None
-    nameshort: Optional[str] = None
+    name_short: Optional[str] = Field(default=None, alias="nameshort")
     abbreviation: Optional[str] = None
-    league: Optional[Union[League, dict]] = None
-    sport: Optional[Union[Sport, dict]] = None
-    haswildcard: Optional[bool] = None
-    sortorder: Optional[int] = None
-    numplayoffteams: Optional[int] = None
+    league: Optional[League] = None
+    sport: Optional[Sport] = None
+    has_wildcard: Optional[bool] = Field(default=None, alias="haswildcard")
+    sort_order: Optional[int] = Field(default=None, alias="sortorder")
+    num_playoff_teams: Optional[int] = Field(default=None, alias="numplayoffteams")
     active: Optional[bool] = None
 
-    def __post_init__(self):
-        self.league = League(**self.league) if self.league else self.league
-        self.sport = Sport(**self.sport) if self.sport else self.sport
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    model_config = {"arbitrary_types_allowed": True}

@@ -1,38 +1,28 @@
 from typing import List
-from dataclasses import dataclass, field
-
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 from .attributes import ScheduleDates
 
 
-@dataclass(repr=False)
-class Schedule:
+class Schedule(MLBBaseModel):
     """
     A class to represent a Schedule.
 
     Attributes
     ----------
-    copyright : str
-        Copyright
-    totalitems : int 
-        Total items in schedule
-    totalevents : int
-        Total events in schedule
-    totalgames : int
-        Total games in schedule
-    totalgamesinprogress : int
-        Total games in progress in schedule
-    dates : ScheduleDates
-        List of dates with games in schedule
+    total_items : int
+        Total items in schedule.
+    total_events : int
+        Total events in schedule.
+    total_games : int
+        Total games in schedule.
+    total_games_in_progress : int
+        Total games in progress in schedule.
+    dates : List[ScheduleDates]
+        List of dates with games in schedule.
     """
-    totalitems: int
-    totalevents: int
-    totalgames: int
-    totalgamesinprogress: int
-    dates: List[ScheduleDates] = field(default_factory=list)
-
-    def __post_init__(self):
-        self.dates = [ScheduleDates(**date) for date in self.dates if self.dates]
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    total_items: int = Field(alias="totalitems")
+    total_events: int = Field(alias="totalevents")
+    total_games: int = Field(alias="totalgames")
+    total_games_in_progress: int = Field(alias="totalgamesinprogress")
+    dates: List[ScheduleDates] = []

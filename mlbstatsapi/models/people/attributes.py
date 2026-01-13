@@ -1,53 +1,52 @@
-﻿from dataclasses import dataclass
+from typing import Optional
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 
 
-@dataclass
-class BatSide:
+class BatSide(MLBBaseModel):
     """
-    A class to represent a BatSide.
+    A class to represent a bat side.
 
     Attributes
     ----------
     code : str
-        code number of the BatSide
-    descritpion: str
-        description of the BatSide
+        Code of the bat side.
+    description : str
+        Description of the bat side.
     """
     code: str
     description: str
 
 
-@dataclass
-class PitchHand:
+class PitchHand(MLBBaseModel):
     """
-    A class to represent a PitchHand.
+    A class to represent a pitch hand.
 
     Attributes
     ----------
     code : str
-        code number of the PitchHand
-    descritpion: str
-        description of the PitchHand
+        Code of the pitch hand.
+    description : str
+        Description of the pitch hand.
     """
     code: str
     description: str
 
 
-@dataclass
-class Position:
+class Position(MLBBaseModel):
     """
-    A class to represent a batside.
+    A class to represent a position.
 
     Attributes
     ----------
-    code: str
-        code number of the Position
-    name: str
-        the name of the Position
-    type: str
-        the type of the Position
-    abbreviation: str
-        the abbreviation of the Position
+    code : str
+        Code of the position.
+    name : str
+        Name of the position.
+    type : str
+        Type of the position.
+    abbreviation : str
+        Abbreviation of the position.
     """
     code: str
     name: str
@@ -55,25 +54,24 @@ class Position:
     abbreviation: str
 
 
-@dataclass
-class Status:
+class Status(MLBBaseModel):
     """
-    A dataclass to hold player status
+    A class to represent player status.
 
     Attributes
     ----------
-    code: str
-        code of the player
-    description: str
-        description of the status
+    code : str
+        Code of the player status.
+    description : str
+        Description of the status.
     """
     code: str
     description: str
 
-@dataclass
-class Home:
+
+class Home(MLBBaseModel):
     """
-    A home is a where a draft player is from
+    A class to represent where a draft player is from.
 
     Attributes
     ----------
@@ -88,16 +86,16 @@ class Home:
     state: str
     country: str
 
-@dataclass
-class School:
+
+class School(MLBBaseModel):
     """
-    Represents the school the draft player is from.
+    A class to represent the school a draft player is from.
 
     Attributes
     ----------
     name : str
         The name of the school.
-    schoolclass : str
+    school_class : str
         The class the student is in.
     city : str
         The city where the school is located.
@@ -107,7 +105,7 @@ class School:
         The state where the school is located.
     """
     name: str
-    schoolclass: str
+    school_class: str = Field(alias="schoolclass")
     city: str
     country: str
     state: str

@@ -1,67 +1,60 @@
-from typing import Union, List, Optional
-from dataclasses import dataclass
+from typing import List, Optional
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
+from .attributes import (
+    LinescoreInning,
+    LinescoreTeams,
+    LinescoreDefense,
+    LinescoreOffense,
+)
 
-from .attributes import LinescoreInning
-from .attributes import LinescoreTeams
-from .attributes import LinescoreDefense
-from .attributes import LinescoreOffense
 
-@dataclass(repr=False)
-class Linescore:
+class Linescore(MLBBaseModel):
     """
-    A class to represent a games Linescore
+    A class to represent a game's linescore.
 
     Attributes
     ----------
-    currentinning : int
-        The games current inning
-    currentinningordinal : str
-        This innings ordinal
-    inningstate : str
-        What state this inning is in
-    inninghalf : str
-        WHich half of the inning are we in
-    istopinning : bool
-        Is this the top of the inning
-    scheduledinnings : int
-        How many innings are scheduled for this game
+    current_inning : int
+        The game's current inning.
+    current_inning_ordinal : str
+        This inning's ordinal.
+    inning_state : str
+        What state this inning is in.
+    inning_half : str
+        Which half of the inning we are in.
+    is_top_inning : bool
+        Is this the top of the inning.
+    scheduled_innings : int
+        How many innings are scheduled for this game.
     innings : List[LinescoreInning]
-        Data on each inning
+        Data on each inning.
     teams : LinescoreTeams
-        Line score data on our teams
+        Line score data on our teams.
     defense : LinescoreDefense
-        Current defense
+        Current defense.
     offense : LinescoreOffense
-        Current offense
+        Current offense.
     balls : int
-        current count balls
+        Current count balls.
     strikes : int
-        current count strikes
+        Current count strikes.
     outs : int
-        current count outs
+        Current count outs.
+    note : str
+        Any note for the linescore.
     """
-
-    scheduledinnings: int
-    innings: Union[List[LinescoreInning], List[dict]]
-    teams: Union[LinescoreTeams, dict]
-    defense: Union[LinescoreDefense, dict]
-    offense: Union[LinescoreOffense, dict]
+    scheduled_innings: int = Field(alias="scheduledinnings")
+    innings: List[LinescoreInning] = []
+    teams: LinescoreTeams
+    defense: LinescoreDefense
+    offense: LinescoreOffense
     balls: Optional[int] = None
     strikes: Optional[int] = None
     outs: Optional[int] = None
     note: Optional[str] = None
-    currentinning: Optional[int] = None
-    currentinningordinal: Optional[str] = None
-    inningstate: Optional[str] = None
-    inninghalf: Optional[str] = None
-    istopinning: Optional[bool] = None
-
-    def __post_init__(self):
-        self.innings = [LinescoreInning(**inning) for inning in self.innings]
-        self.teams = LinescoreTeams(**self.teams)
-        self.defense = LinescoreDefense(**self.defense)
-        self.offense = LinescoreOffense(**self.offense)
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    current_inning: Optional[int] = Field(default=None, alias="currentinning")
+    current_inning_ordinal: Optional[str] = Field(default=None, alias="currentinningordinal")
+    inning_state: Optional[str] = Field(default=None, alias="inningstate")
+    inning_half: Optional[str] = Field(default=None, alias="inninghalf")
+    is_top_inning: Optional[bool] = Field(default=None, alias="istopinning")

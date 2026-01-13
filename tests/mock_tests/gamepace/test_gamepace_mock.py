@@ -7,7 +7,7 @@ import os
 
 
 from mlbstatsapi import Mlb
-from mlbstatsapi.models.gamepace import Gamepace, Gamepacedata
+from mlbstatsapi.models.gamepace import GamePace, GamePaceData
 
 
 path_to_current_file = os.path.realpath(__file__)
@@ -34,25 +34,25 @@ class TestGamepaceMock(unittest.TestCase):
         # set draft id
         season_id = 2021
 
-        # call get_gamepace return Gamepace object
+        # call get_gamepace return GamePace object
         gamepace = self.mlb.get_gamepace(season_id)
 
-        # Gamepace should not be None
+        # GamePace should not be None
         self.assertIsNotNone(gamepace)
 
-        self.assertIsInstance(gamepace, Gamepace)
+        self.assertIsInstance(gamepace, GamePace)
 
         # list should not be empty
         self.assertNotEqual(gamepace.sports, [])
 
         # items in list should be gamepace data
-        self.assertIsInstance(gamepace.sports[0], Gamepacedata)
+        self.assertIsInstance(gamepace.sports[0], GamePaceData)
 
         sportgamepace = gamepace.sports[0]
 
         # sportgamepace should not be none
         self.assertIsNotNone(sportgamepace)
 
-        # sportgamepace should have attrs set
-        self.assertTrue(sportgamepace.hitspergame)
-        self.assertTrue(sportgamepace.totalgames)
+        # sportgamepace should have attrs set (using Pythonic names)
+        self.assertTrue(sportgamepace.hits_per_game)
+        self.assertTrue(sportgamepace.total_games)

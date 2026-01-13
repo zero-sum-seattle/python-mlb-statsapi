@@ -1,125 +1,123 @@
-from typing import Optional, Union
-from dataclasses import dataclass, field
+from typing import Optional
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 
-@dataclass
-class VenueDefaultCoordinates:
+
+class VenueDefaultCoordinates(MLBBaseModel):
     """
-    A class to represent a venue.
+    A class to represent venue coordinates.
 
     Attributes
     ----------
     latitude : float
-        The latatude coordinate for this venue
+        The latitude coordinate for this venue.
     longitude : float
-        The longitude coordinate for this venue
+        The longitude coordinate for this venue.
     """
     latitude: float
     longitude: float
 
-@dataclass(repr=False)
-class Location:
+
+class Location(MLBBaseModel):
     """
-    A class to represent a Location used by venue.
+    A class to represent a location used by venue.
 
     Attributes
     ----------
-    address1 : str
-        Venues first address line
-    address2 : str
-        Venues second address line
     city : str
-        City the venue is in
-    state : str
-        The State the venue is in
-    stateAbbrev : str
-        The staes abbreviation
-    postalCode : str
-        Postal code for this venue
-    defaultCoordinates : VenueDefaultCoordinates
-        Long and lat for this venues location
+        City the venue is in.
     country : str
-        What country this venue is in
+        Country this venue is in.
+    state_abbrev : str
+        The state's abbreviation.
+    address1 : str
+        Venue's first address line.
+    address2 : str
+        Venue's second address line.
+    address3 : str
+        Venue's third address line.
+    state : str
+        The state the venue is in.
+    postal_code : str
+        Postal code for this venue.
     phone : str
-        Phone number for this venue
+        Phone number for this venue.
+    azimuth_angle : float
+        Azimuth angle for this venue.
+    elevation : int
+        Elevation for this venue.
+    default_coordinates : VenueDefaultCoordinates
+        Latitude and longitude for this venue's location.
     """
     city: str
     country: str
-    stateabbrev: Optional[str] = None
+    state_abbrev: Optional[str] = Field(default=None, alias="stateabbrev")
     address1: Optional[str] = None
     state: Optional[str] = None
-    postalcode: Optional[str] = None
+    postal_code: Optional[str] = Field(default=None, alias="postalcode")
     phone: Optional[str] = None
     address2: Optional[str] = None
     address3: Optional[str] = None
-    azimuthangle: Optional[str] = None
-    elevation: Optional[str] = None
-    defaultcoordinates: Optional[Union[VenueDefaultCoordinates, dict]] = field(default_factory=dict)
+    azimuth_angle: Optional[float] = Field(default=None, alias="azimuthangle")
+    elevation: Optional[int] = None
+    default_coordinates: Optional[VenueDefaultCoordinates] = Field(default=None, alias="defaultcoordinates")
 
-    def __post_init__(self):
-        self.defaultcoordinates = VenueDefaultCoordinates(**self.defaultcoordinates) if self.defaultcoordinates else self.defaultcoordinates
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
-
-@dataclass
-class TimeZone:
+class TimeZone(MLBBaseModel):
     """
-    A class to represent a TimeZone Used by venue.
+    A class to represent a timezone used by venue.
 
     Attributes
     ----------
     id : str
-        id string for a venues timezone
+        ID string for a venue's timezone.
     offset : int
-        The offset for this timezone from
+        The offset for this timezone.
     tz : str
-        Timezone string
+        Timezone string.
+    offset_at_game_time : int
+        Offset at game time.
     """
     id: str
     offset: int
     tz: str
-    offsetatgametime: Optional[int] = None
+    offset_at_game_time: Optional[int] = Field(default=None, alias="offsetatgametime")
 
-@dataclass(repr=False)
-class FieldInfo:
+
+class FieldInfo(MLBBaseModel):
     """
-    A class to represent a venue Field info.
+    A class to represent venue field info.
 
     Attributes
     ----------
     capacity : int
-        Capacity for this venue
-    turfType : str
-        The type of turf in this venue
-    roofType : str
-        What kind of roof for this venue
-    leftLine : int
-        Distance down the left line
+        Capacity for this venue.
+    turf_type : str
+        The type of turf in this venue.
+    roof_type : str
+        What kind of roof for this venue.
+    left_line : int
+        Distance down the left line.
     left : int
-        Distance to left
-    leftCenter : int
-        Distance to left center
+        Distance to left.
+    left_center : int
+        Distance to left center.
     center : int
-        Distance to center
-    rightCenter : int
-        Distance to right center
+        Distance to center.
+    right_center : int
+        Distance to right center.
     right : int
-        Distance to right
-    rightLine : int
-        Distance to right line
+        Distance to right.
+    right_line : int
+        Distance to right line.
     """
     capacity: Optional[int] = None
-    turftype: Optional[str] = None
-    rooftype: Optional[str] = None
-    leftline: Optional[int] = None
+    turf_type: Optional[str] = Field(default=None, alias="turftype")
+    roof_type: Optional[str] = Field(default=None, alias="rooftype")
+    left_line: Optional[int] = Field(default=None, alias="leftline")
     left: Optional[int] = None
-    leftcenter: Optional[int] = None
+    left_center: Optional[int] = Field(default=None, alias="leftcenter")
     center: Optional[int] = None
-    rightcenter: Optional[int] = None
+    right_center: Optional[int] = Field(default=None, alias="rightcenter")
     right: Optional[int] = None
-    rightline: Optional[int] = None
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    right_line: Optional[int] = Field(default=None, alias="rightline")

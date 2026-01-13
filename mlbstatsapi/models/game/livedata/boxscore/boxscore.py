@@ -1,62 +1,52 @@
-from typing import Union, List, Any, Optional
-from dataclasses import dataclass, field
+from typing import List, Optional
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
+from .attributes import BoxScoreTeams, BoxScoreOfficial, BoxScoreVL, PlayersDictPerson
 
-from .attributes import BoxScoreTeams, BoxScoreOffical, BoxScoreVL, PlayersDictPerson
 
-
-
-@dataclass
-class TopPerformer:
+class TopPerformer(MLBBaseModel):
     """
-    A class to represent this games topperformer
+    A class to represent this game's top performer.
 
     Attributes
     ----------
-    player : Player
-        Player 
+    player : PlayersDictPerson
+        Player.
     type : str
-        The officials for this game
-    gamescore : int
-        gamescore
-    hittinggamescore : int
-        hitting game score
+        The type of top performer.
+    game_score : int
+        Game score.
+    hitting_game_score : int
+        Hitting game score.
+    pitching_game_score : int
+        Pitching game score.
     """
-    player: Union[PlayersDictPerson, dict]
+    player: PlayersDictPerson
     type: str
-    gamescore: int
-    hittinggamescore: Optional[int] = None
-    pitchinggamescore: Optional[int] = None
-    
-    def __post_init__(self):
-        self.player = PlayersDictPerson(**self.player)
+    game_score: int = Field(alias="gamescore")
+    hitting_game_score: Optional[int] = Field(default=None, alias="hittinggamescore")
+    pitching_game_score: Optional[int] = Field(default=None, alias="pitchinggamescore")
 
-@dataclass
-class BoxScore:
+
+class BoxScore(MLBBaseModel):
     """
-    A class to represent this games boxscore
+    A class to represent this game's boxscore.
 
     Attributes
     ----------
     teams : BoxScoreTeams
-        Box score data for each team
-    officials : List[BoxScoreOffical]
-        The officials for this game
+        Box score data for each team.
+    officials : List[BoxScoreOfficial]
+        The officials for this game.
     info : List[BoxScoreVL]
-        Box score information
-    pitchingnotes : List[str]
-        Pitching notes for this game
+        Box score information.
+    pitching_notes : List[str]
+        Pitching notes for this game.
+    top_performers : List[TopPerformer]
+        Top performers for this game.
     """
-
-    teams: Union[BoxScoreTeams, dict]
-    officials: Union[List[BoxScoreOffical], List[dict]]
-    info: Union[List[BoxScoreVL], List[dict]]
-    pitchingnotes: List[str]
-    topperformers: Optional[List[Union[TopPerformer, dict]]] = field(default_factory=list)
-
-    def __post_init__(self):
-        self.teams = BoxScoreTeams(**self.teams)
-        self.officials = [BoxScoreOffical(**official) for official in self.officials]
-        self.info = [BoxScoreVL(**infos) for infos in self.info]
-        self.topperformers = [TopPerformer(**topperformer) for topperformer in self.topperformers]
-
-
+    teams: BoxScoreTeams
+    officials: List[BoxScoreOfficial] = []
+    info: List[BoxScoreVL] = []
+    pitching_notes: List[str] = Field(default=[], alias="pitchingnotes")
+    top_performers: List[TopPerformer] = Field(default=[], alias="topperformers")

@@ -1,4 +1,4 @@
-﻿import unittest
+import unittest
 from mlbstatsapi import Mlb
 from mlbstatsapi.models.drafts import Round
 
@@ -40,8 +40,8 @@ class TestRound(unittest.TestCase):
 
         draftpick = draftpicks[0]
 
-        # draft pick should have attrs set
-        self.assertTrue(draftpick.pickround)
+        # draft pick should have attrs set (using Pythonic field name)
+        self.assertTrue(draftpick.pick_round)
 
     def test_get_draft_by_year_id_404(self):
         """This test should return a 200 and """

@@ -1,4 +1,5 @@
-﻿import unittest
+import unittest
+from pydantic import ValidationError
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.venues import Venue
 from mlbstatsapi.models.divisions import Division
@@ -17,7 +18,8 @@ class TestTeam(unittest.TestCase):
         pass
 
     def test_team_instance_type_error(self):
-        with self.assertRaises(TypeError):
+        """Pydantic raises ValidationError when required fields are missing."""
+        with self.assertRaises(ValidationError):
             team = Team()
 
     def test_team_instance_id_instance_success(self):

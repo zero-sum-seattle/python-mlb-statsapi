@@ -27,5 +27,27 @@ class TestGame(unittest.TestCase):
 
     def test_game_attrs(self):
         self.assertTrue(hasattr(self.game, "metadata"))
-        self.assertTrue(hasattr(self.game, "gamedata"))
-        self.assertTrue(hasattr(self.game, "livedata"))
+        self.assertTrue(hasattr(self.game, "game_data"))
+        self.assertTrue(hasattr(self.game, "live_data"))
+
+    def test_game_pythonic_field_names(self):
+        """Test that Pythonic field names are accessible."""
+        # Test top-level game attributes
+        self.assertIsNotNone(self.game.game_pk)
+        self.assertIsNotNone(self.game.metadata)
+        self.assertIsNotNone(self.game.game_data)
+        self.assertIsNotNone(self.game.live_data)
+
+        # Test game_data nested attributes
+        self.assertIsNotNone(self.game.game_data.game)
+        self.assertIsNotNone(self.game.game_data.datetime)
+        self.assertIsNotNone(self.game.game_data.status)
+        self.assertIsNotNone(self.game.game_data.teams)
+        self.assertIsNotNone(self.game.game_data.venue)
+        self.assertIsNotNone(self.game.game_data.official_venue)
+        self.assertIsNotNone(self.game.game_data.probable_pitchers)
+
+        # Test live_data nested attributes
+        self.assertIsNotNone(self.game.live_data.plays)
+        self.assertIsNotNone(self.game.live_data.boxscore)
+        self.assertIsNotNone(self.game.live_data.leaders)

@@ -1,97 +1,88 @@
-﻿from dataclasses import dataclass, field
-from typing import List, Optional, Union
-
-from .attributes import School, Home
+from typing import List, Optional
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.people import Person
 from mlbstatsapi.models.data import CodeDesc
+from .attributes import DraftSchool, DraftHome
 
-@dataclass(repr=False)
-class DraftPick:
+
+class DraftPick(MLBBaseModel):
     """
-    Represents a pick made in the MLB draft.
+    A class representing a pick made in the MLB draft.
 
     Attributes
     ----------
-    bisplayerid : int
-        The unique identifier of the player associated with this draft pick.
-    pickround : str
-        The round of the draft in which this pick was made.
-    picknumber : int
-        The number of the pick in the round.
-    displaypicknumber : int
-        The overall pick number displayed.
-    roundpicknumber : int
-        The number of the pick overall in the draft.
-    rank : int
-        The rank of the player among all players eligible for the draft.
-    pickvalue : str
-        The value of the pick, if known.
-    signingbonus : str
-        The signing bonus associated with this pick, if known.
-    home : Home
-        Information about the player's home location.
-    scoutingreport : str
-    A   scouting report on the player's abilities.
-    school : School
-        Information about the player's school or college.
-    blurb : str
-        A   brief summary of the player's background and accomplishments.
-    headshotlink : str
-        A   link to a headshot image of the player.
-    team : Team or dict
+    team : Team
         The team that made this draft pick.
-    drafttype : CodeDesc
+    draft_type : CodeDesc
         Information about the type of draft in which this pick was made.
-    isdrafted : bool
+    is_drafted : bool
         Whether or not the player associated with this pick has been drafted.
-    ispass : bool
+    is_pass : bool
         Whether or not the team passed on making a pick in this round.
     year : str
         The year in which the draft took place.
+    school : DraftSchool
+        Information about the player's school or college.
+    home : DraftHome
+        Information about the player's home location.
+    pick_round : str
+        The round of the draft in which this pick was made.
+    pick_number : int
+        The number of the pick in the round.
+    display_pick_number : int
+        The overall pick number displayed.
+    round_pick_number : int
+        The number of the pick overall in the draft.
+    headshot_link : str
+        A link to a headshot image of the player.
+    person : Person
+        The person drafted.
+    bis_player_id : int
+        The unique identifier of the player associated with this draft pick.
+    rank : int
+        The rank of the player among all players eligible for the draft.
+    pick_value : str
+        The value of the pick, if known.
+    signing_bonus : str
+        The signing bonus associated with this pick, if known.
+    scouting_report : str
+        A scouting report on the player's abilities.
+    blurb : str
+        A brief summary of the player's background and accomplishments.
     """
-    team: Union[Team, dict]
-    drafttype: Union[CodeDesc, dict]
-    isdrafted: bool
-    ispass: bool
+    team: Team
+    draft_type: CodeDesc = Field(alias="drafttype")
+    is_drafted: bool = Field(alias="isdrafted")
+    is_pass: bool = Field(alias="ispass")
     year: str
-    school: Union[School , dict] 
-    home: Union[Home, dict]
-    pickround:  str
-    picknumber:  int
-    displaypicknumber: int
-    roundpicknumber:  int
-    headshotlink: Optional[str] = None
-    person: Optional[Union[Person, dict]] = None
-    bisplayerid: Optional[int] = None
+    school: DraftSchool
+    home: DraftHome
+    pick_round: str = Field(alias="pickround")
+    pick_number: int = Field(alias="picknumber")
+    display_pick_number: int = Field(alias="displaypicknumber")
+    round_pick_number: int = Field(alias="roundpicknumber")
+    headshot_link: Optional[str] = Field(default=None, alias="headshotlink")
+    person: Optional[Person] = None
+    bis_player_id: Optional[int] = Field(default=None, alias="bisplayerid")
     rank: Optional[int] = None
-    pickvalue: Optional[str] = None
-    signingbonus:  Optional[str] = None
-    scoutingreport: Optional[str] = None
+    pick_value: Optional[str] = Field(default=None, alias="pickvalue")
+    signing_bonus: Optional[str] = Field(default=None, alias="signingbonus")
+    scouting_report: Optional[str] = Field(default=None, alias="scoutingreport")
     blurb: Optional[str] = None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(repr=False)
-class Round:
+class Round(MLBBaseModel):
     """
-    Represents a round of the MLB draft.
+    A class representing a round of the MLB draft.
 
     Attributes
     ----------
     round : str
         The round number of the draft, represented as a string.
     picks : List[DraftPick]
-        A list of DraftPick objects representing the picks made in this round of the draft.
+        A list of DraftPick objects representing the picks made in this round.
     """
     round: str
-    picks: List[DraftPick]
-
-    def __post_init__(self):
-        self.picks = [DraftPick(**pick) for pick in self.picks]
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    picks: List[DraftPick] = []

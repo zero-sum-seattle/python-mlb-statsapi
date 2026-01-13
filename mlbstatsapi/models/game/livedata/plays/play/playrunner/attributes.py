@@ -1,106 +1,88 @@
-from typing import Union, Optional
-from dataclasses import dataclass
-
+from typing import Optional
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.people import Person, Position
 
 
-@dataclass
-class RunnerCredits:
+class RunnerCredits(MLBBaseModel):
     """
-    A class to represent a runners credit.
+    A class to represent a runner's credit.
 
     Attributes
     ----------
+    player : Person
+        The player.
+    position : Position
+        The position.
+    credit : str
+        The credit.
+    """
     player: Person
-        The player
-    position: RunnerCreditsPosition
-        The position
-    credit: str
-        The credit
-    """
-    player: Union[Person, dict]
-    position: Union[Position, dict]
+    position: Position
     credit: str
 
-    def __post_init__(self):
-        self.player = Person(**self.player)
-        self.position = Position(**self.position)
 
-
-@dataclass(repr=False)
-class RunnerMovement:
+class RunnerMovement(MLBBaseModel):
     """
-    A class to represent a play runner.
+    A class to represent a play runner movement.
 
     Attributes
     ----------
-    isout: bool
-        Was the running movement an out
-    outnumber: int
-        What is the outnumber
-    originbase: str
-        Original base
-    start: str
-        What base the runner started from
-    end: str
-        What base the runner ended at
-    outbase: str
-        Base runner was made out
+    is_out : bool
+        Was the running movement an out.
+    out_number : int
+        What is the out number (None if not an out).
+    origin_base : str
+        Original base.
+    start : str
+        What base the runner started from.
+    end : str
+        What base the runner ended at.
+    out_base : str
+        Base runner was made out.
     """
-    isout: bool
-    outnumber: int
-    originbase: Optional[str] = None
+    is_out: bool = Field(alias="isout")
+    out_number: Optional[int] = Field(default=None, alias="outnumber")
+    origin_base: Optional[str] = Field(default=None, alias="originbase")
     start: Optional[str] = None
     end: Optional[str] = None
-    outbase: Optional[str] = None
+    out_base: Optional[str] = Field(default=None, alias="outbase")
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(repr=False)
-class RunnerDetails:
+class RunnerDetails(MLBBaseModel):
     """
-    A class to represent a play runner.
+    A class to represent a play runner details.
 
     Attributes
     ----------
-    event: str
-        Runner event
-    eventtype: str
-        Runner event type
-    runner: Person
-        Who the runner is
-    isscoringevent:  bool
-        Was this a scoring events
-    rbi: bool
-        Was this a rbi
-    earned: bool
-        Was it earned
-    teamunearned: bool
-        Was it unearned
-    playindex: int
-        Play index
-    movementreason: str
-        Reason for the movement
-    responsiblepitcher: Person
-        WHo was the responsible pitcher
+    event : str
+        Runner event.
+    event_type : str
+        Runner event type.
+    runner : Person
+        Who the runner is.
+    is_scoring_event : bool
+        Was this a scoring event.
+    rbi : bool
+        Was this an RBI.
+    earned : bool
+        Was it earned.
+    team_unearned : bool
+        Was it unearned.
+    play_index : int
+        Play index.
+    movement_reason : str
+        Reason for the movement.
+    responsible_pitcher : Person
+        Who was the responsible pitcher.
     """
     event: str
-    eventtype: str
-    runner: Union[Person, dict]
-    isscoringevent: bool
+    event_type: str = Field(alias="eventtype")
+    runner: Person
+    is_scoring_event: bool = Field(alias="isscoringevent")
     rbi: bool
     earned: bool
-    teamunearned: bool
-    playindex: int
-    movementreason: Optional[str] = None
-    responsiblepitcher: Optional[Union[Person, dict]] = None
-
-    def __post_init__(self):
-        self.runner = Person(**self.runner)
-        self.responsiblepitcher = Person(**self.responsiblepitcher) if self.responsiblepitcher else self.responsiblepitcher
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    team_unearned: bool = Field(alias="teamunearned")
+    play_index: int = Field(alias="playindex")
+    movement_reason: Optional[str] = Field(default=None, alias="movementreason")
+    responsible_pitcher: Optional[Person] = Field(default=None, alias="responsiblepitcher")

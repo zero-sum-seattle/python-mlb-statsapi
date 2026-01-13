@@ -1,96 +1,91 @@
-﻿from dataclasses import dataclass, field, InitVar
-from typing import List, Union, Dict, Any, Optional
+from typing import Optional, Any
+from pydantic import Field, field_validator
+from mlbstatsapi.models.base import MLBBaseModel
 
 
-
-
-@dataclass(repr=False)
-class PitchBreak:
+class PitchBreak(MLBBaseModel):
     """
-    A class to hold pitch pitch break data
-    
+    A class to hold pitch break data.
+
     Attributes
     ----------
-    breakangle : float
-        Degrees clockwise (batter's view) that the plane of 
-        the pitch deviates from the vertical
-    breaklength : float
+    break_angle : float
+        Degrees clockwise (batter's view) that the plane of
+        the pitch deviates from the vertical.
+    break_vertical : float
+        Vertical break of the pitch.
+    break_vertical_induced : float
+        Induced vertical break.
+    break_horizontal : float
+        Horizontal break of the pitch.
+    break_length : float
         Max distance that the pitch separates from the straight
-        line between pitch start and pitch end
-    breaky : int
-        Distance from home plate where the break is greatest
-    spinrate : int
-        Pitch spinRate
-    spindirection : int
-        Pitch spinDirection
+        line between pitch start and pitch end.
+    break_y : int
+        Distance from home plate where the break is greatest.
+    spin_rate : float
+        Pitch spin rate.
+    spin_direction : float
+        Pitch spin direction.
     """
-    breakangle: Optional[float]
-    breakvertical: Optional[float]
-    breakverticalinduced: Optional[float]
-    breakhorizontal: Optional[float]
-    spinrate: Optional[float] = None
-    spindirection: Optional[float] = None
-    breaklength: Optional[float] = None
-    breaky: Optional[float] = None
+    break_angle: Optional[float] = Field(default=None, alias="breakangle")
+    break_vertical: Optional[float] = Field(default=None, alias="breakvertical")
+    break_vertical_induced: Optional[float] = Field(default=None, alias="breakverticalinduced")
+    break_horizontal: Optional[float] = Field(default=None, alias="breakhorizontal")
+    spin_rate: Optional[float] = Field(default=None, alias="spinrate")
+    spin_direction: Optional[float] = Field(default=None, alias="spindirection")
+    break_length: Optional[float] = Field(default=None, alias="breaklength")
+    break_y: Optional[float] = Field(default=None, alias="breaky")
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(repr=False)
-class PitchCoordinates:
+class PitchCoordinates(MLBBaseModel):
     """
-    A class to hold pitch coordinates for playLog
+    A class to hold pitch coordinates for playLog.
 
     Attributes
     ----------
-    ay : float, default=None
-        Ball acceleration on the y axis
-    az : float, default=None
-        Ball acceleration on the z axis
-    pfxx : float, default=None
-        horizontal movement of the ball in inches
-    pfxz : float, default=None
-        Vertical movement of the ball in inches
-    px : float, default=None
-        Horizontal position in feet of the ball as it 
-        crosses the front axis of home plate
-    pz : float, default=None
-        Vertical position in feet of the ball as it 
-        crosses the front axis of home plate
-    vx0 : float, default=None
-        Velocity of the ball from the x-axis
-    vy0 : float, default=None
-        Velocity of the ball from the y axis, this
-        is negative becuase 0,0,0 is behind the batter
-        and the ball travels from pitcher mound towards 0,0,0
-    vz0 : float, default=None
-        Velocity of the ball from the z axis
-    x0 : float, default=None
-        Coordinate location of the ball at the point it was
-        reeased from pitchers hand on the x axis (time=0)
-    y0 : float, default=None
-        Coordinate location of the ball at the point it was
-        reeased from pitchers hand on the y axis (time=0)
-    z0 : float, default=None
-        Coordinate location of the ball at the point it was
-        reeased from pitchers hand on the z axis (time=0)
-    ax : float, default=None
-        Ball acceleration on the x axis
-    x : float, default=None
-        X coordinate where pitch crossed front of home plate
-    y : float, default=None
-        Y coordinate where pitch crossed front of home plate
+    ay : float
+        Ball acceleration on the y axis.
+    az : float
+        Ball acceleration on the z axis.
+    pfx_x : float
+        Horizontal movement of the ball in inches.
+    pfx_z : float
+        Vertical movement of the ball in inches.
+    p_x : float
+        Horizontal position in feet of the ball as it
+        crosses the front axis of home plate.
+    p_z : float
+        Vertical position in feet of the ball as it
+        crosses the front axis of home plate.
+    v_x0 : float
+        Velocity of the ball from the x-axis.
+    v_y0 : float
+        Velocity of the ball from the y axis.
+    v_z0 : float
+        Velocity of the ball from the z axis.
+    x0 : float
+        Coordinate location of the ball at release on x axis.
+    y0 : float
+        Coordinate location of the ball at release on y axis.
+    z0 : float
+        Coordinate location of the ball at release on z axis.
+    ax : float
+        Ball acceleration on the x axis.
+    x : float
+        X coordinate where pitch crossed front of home plate.
+    y : float
+        Y coordinate where pitch crossed front of home plate.
     """
     ay: Optional[float] = None
     az: Optional[float] = None
-    pfxx: Optional[float] = None
-    pfxz: Optional[float] = None
-    px: Optional[float] = None
-    pz: Optional[float] = None
-    vx0: Optional[float] = None
-    vy0: Optional[float] = None
-    vz0: Optional[float] = None
+    pfx_x: Optional[float] = Field(default=None, alias="pfxx")
+    pfx_z: Optional[float] = Field(default=None, alias="pfxz")
+    p_x: Optional[float] = Field(default=None, alias="px")
+    p_z: Optional[float] = Field(default=None, alias="pz")
+    v_x0: Optional[float] = Field(default=None, alias="vx0")
+    v_y0: Optional[float] = Field(default=None, alias="vy0")
+    v_z0: Optional[float] = Field(default=None, alias="vz0")
     x0: Optional[float] = None
     y0: Optional[float] = None
     z0: Optional[float] = None
@@ -98,24 +93,20 @@ class PitchCoordinates:
     x: Optional[float] = None
     y: Optional[float] = None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(repr=False)
-class PitchData:
+class PitchData(MLBBaseModel):
     """
-    A class to hold data on a pitch
-    
+    A class to hold data on a pitch.
+
     Attributes
     ----------
-    startspeed : float
+    start_speed : float
         The starting speed of the pitch.
-    endspeed : float
+    end_speed : float
         The ending speed of the pitch.
-    strikezonetop : float
+    strike_zone_top : float
         The top of the strike zone.
-    strikezonebottom : float
+    strike_zone_bottom : float
         The bottom of the strike zone.
     coordinates : PitchCoordinates
         The coordinates of the pitch.
@@ -123,240 +114,215 @@ class PitchData:
         The break data of the pitch.
     zone : float
         The zone in which the pitch was thrown.
-    typeconfidence : float
+    type_confidence : float
         The confidence in the type of pitch thrown.
-    platetime : float
+    plate_time : float
         The amount of time the pitch was in the air.
     extension : float
         The extension of the pitch.
-    strikezonewidth : float
-        The width of the strikezone
-    strikezonedepth : float
-        The depth of the strikezone
+    strike_zone_width : float
+        The width of the strike zone.
+    strike_zone_depth : float
+        The depth of the strike zone.
     """
-    strikezonetop: float
-    strikezonebottom: float
-    breaks: Union[PitchBreak, dict] 
-    coordinates: Optional[Union[PitchCoordinates, dict]] = field(default_factory=dict) 
+    strike_zone_top: float = Field(alias="strikezonetop")
+    strike_zone_bottom: float = Field(alias="strikezonebottom")
+    breaks: PitchBreak
+    coordinates: Optional[PitchCoordinates] = None
     extension: Optional[float] = None
-    startspeed: Optional[float] = None
-    endspeed: Optional[float] = None
+    start_speed: Optional[float] = Field(default=None, alias="startspeed")
+    end_speed: Optional[float] = Field(default=None, alias="endspeed")
     zone: Optional[float] = None
-    typeconfidence: Optional[float] = None
-    platetime: Optional[float] = None
-    strikezonewidth: Optional[float] = None
-    strikezonedepth: Optional[float] = None
+    type_confidence: Optional[float] = Field(default=None, alias="typeconfidence")
+    plate_time: Optional[float] = Field(default=None, alias="platetime")
+    strike_zone_width: Optional[float] = Field(default=None, alias="strikezonewidth")
+    strike_zone_depth: Optional[float] = Field(default=None, alias="strikezonedepth")
 
 
-    def __post_init__(self):
-        self.coordinates = PitchCoordinates(**self.coordinates) if self.coordinates else self.coordinates
-        self.breaks = PitchBreak(**self.breaks) if self.breaks else self.breaks
-
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
-
-@dataclass
-class HitCoordinates:
+class HitCoordinates(MLBBaseModel):
     """
-    A class to represent a play events hit location coordinates.
+    A class to represent a play event's hit location coordinates.
 
     Attributes
     ----------
-    coordx : int
-        X coordinate for hit
-    coordy : int
-        Y coordinate for hit
+    coord_x : float
+        X coordinate for hit.
+    coord_y : float
+        Y coordinate for hit.
     """
-    coordx: Optional[float] = None
-    coordy: Optional[float] = None
+    coord_x: Optional[float] = Field(default=None, alias="coordx")
+    coord_y: Optional[float] = Field(default=None, alias="coordy")
 
     @property
     def x(self):
-        return self.coordx
+        return self.coord_x
 
     @property
     def y(self):
-        return self.coordy
+        return self.coord_y
 
-@dataclass(repr=False)
-class HitData:
+
+class HitData(MLBBaseModel):
     """
-    A class to represent a play events hit data.
+    A class to represent a play event's hit data.
 
     Attributes
     ----------
-    launchspeed : float
-        Hit launch speed
-    launchangle : int
-        Hit launch angle
-    totaldistance : int
-        Hits total distance
+    launch_speed : float
+        Hit launch speed.
+    launch_angle : float
+        Hit launch angle.
+    total_distance : float
+        Hit's total distance.
     trajectory : str
-        Hit trajectory
+        Hit trajectory.
     hardness : str
-        Hit hardness
-    location : str
-        Hit location
-    coordinates : HitCoordinate
-        Hit coordinates
+        Hit hardness.
+    location : int
+        Hit location.
+    coordinates : HitCoordinates
+        Hit coordinates.
     """
-
-
-    coordinates: Union[HitCoordinates, dict]
+    coordinates: HitCoordinates
     trajectory: Optional[str] = None
     hardness: Optional[str] = None
     location: Optional[int] = None
-    launchspeed: Optional[float] = None
-    launchangle: Optional[str] = None # this is a negative number and I'm brain farting on those
-    totaldistance: Optional[float] = None
+    launch_speed: Optional[float] = Field(default=None, alias="launchspeed")
+    launch_angle: Optional[float] = Field(default=None, alias="launchangle")
+    total_distance: Optional[float] = Field(default=None, alias="totaldistance")
 
-    def __post_init__(self):
-        self.coordinates = HitCoordinates(**self.coordinates) if self.coordinates else self.coordinates
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
-
-@dataclass
-class CodeDesc:
+class CodeDesc(MLBBaseModel):
     """
-    a class to hold a code and a description
+    A class to hold a code and a description.
 
     Attributes
     ----------
     code : str
-        the code to reference the attribute using this
+        The code to reference the attribute.
     description : str
-        the description of the attribute using this
+        The description of the attribute.
     """
     code: str
     description: Optional[str] = None
 
-@dataclass
-class Violation:
+
+class Violation(MLBBaseModel):
     """
-    
+    A class to represent a violation during play.
+
     Attributes
     ----------
     type : str
-        the type of violation during the play
+        The type of violation during the play.
     description : str
-        the description of the violation that occured
-    player : player
-        the player that caused the violation
+        The description of the violation that occurred.
+    player : dict
+        The player that caused the violation.
     """
     type: Optional[str] = None
     description: Optional[str] = None
     player: Optional[dict] = None
 
-@dataclass(repr=False)
-class Count:
+
+class Count(MLBBaseModel):
     """
-    a class to hold a pitch count and base runners
+    A class to hold a pitch count and base runners.
 
     Attributes
     ----------
-    code : str
-        code
     balls : int
-        number of balls
-    inning : int
-        inning number
-    istopinning : bool
-        bool to hold status of top inning
+        Number of balls.
     outs : int
-        number of outs
-    runneron1b : bool
-        bool to hold 1b runner status
-    runneron2b : bool
-        bool to hold 2b runner status
-    runneron3b : bool
-        bool to hold 3b runner status
+        Number of outs.
     strikes : int
-        strike count
+        Strike count.
+    inning : int
+        Inning number.
+    is_top_inning : bool
+        Status of top inning.
+    runner_on_1b : bool
+        1B runner status.
+    runner_on_2b : bool
+        2B runner status.
+    runner_on_3b : bool
+        3B runner status.
     """
     balls: int
     outs: int
     strikes: int
     inning: Optional[int] = None
-    runneron1b: Optional[bool] = None
-    runneron2b: Optional[bool] = None
-    runneron3b: Optional[bool] = None
-    istopinning: Optional[bool] = None
+    runner_on_1b: Optional[bool] = Field(default=None, alias="runneron1b")
+    runner_on_2b: Optional[bool] = Field(default=None, alias="runneron2b")
+    runner_on_3b: Optional[bool] = Field(default=None, alias="runneron3b")
+    is_top_inning: Optional[bool] = Field(default=None, alias="istopinning")
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
 
-@dataclass(repr=False)
-class PlayDetails:
+class PlayDetails(MLBBaseModel):
     """
-    A class to represent a gamelog stat for a hitter
+    A class to represent play details.
 
     Attributes
     ----------
     call : CodeDesc
-        play call code and description
+        Play call code and description.
     description : str
-        description of the play
+        Description of the play.
     event : str
-        type of event
-    eventtype : str
-        type of event
-    isinplay : bool
-        is the ball in play true or false
-    isstrike : bool
-        is the ball a strike true or false
-    isball : bool
-        is it a ball true or false
-    isbasehit : bool
-        is the event a base hit true or false
-    isatbat : bool
-        is the event at bat true or false
-    isplateappearance : bool
-        is the event a at play appears true or false
+        Type of event.
+    event_type : str
+        Type of event.
+    is_in_play : bool
+        Is the ball in play.
+    is_strike : bool
+        Is the ball a strike.
+    is_ball : bool
+        Is it a ball.
+    is_base_hit : bool
+        Is the event a base hit.
+    is_at_bat : bool
+        Is the event at bat.
+    is_plate_appearance : bool
+        Is the event a plate appearance.
     type : CodeDesc
-        type of pitch code and description
-    batside : CodeDesc
-        bat side code and description
-    pitchhand : CodeDesc
-        pitch hand code and description
-    fromcatcher : bool
+        Type of pitch code and description.
+    bat_side : CodeDesc
+        Bat side code and description.
+    pitch_hand : CodeDesc
+        Pitch hand code and description.
+    from_catcher : bool
+        From catcher flag.
     """
-    call: Optional[Union[CodeDesc, dict]] = None
-    isinplay: Optional[bool] = None
-    isstrike: Optional[bool] = None
-    isscoringplay: Optional[bool] = None
-    isout: Optional[bool] = None
-    runnergoing: Optional[bool] = None
-    isball: Optional[bool] = None
-    isbasehit: Optional[bool] = None
-    isatbat: Optional[bool] = None
-    isplateappearance: Optional[bool] = None
-    batside: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
-    pitchhand: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
-    eventtype: Optional[str] = None
+    call: Optional[CodeDesc] = None
+    is_in_play: Optional[bool] = Field(default=None, alias="isinplay")
+    is_strike: Optional[bool] = Field(default=None, alias="isstrike")
+    is_scoring_play: Optional[bool] = Field(default=None, alias="isscoringplay")
+    is_out: Optional[bool] = Field(default=None, alias="isout")
+    runner_going: Optional[bool] = Field(default=None, alias="runnergoing")
+    is_ball: Optional[bool] = Field(default=None, alias="isball")
+    is_base_hit: Optional[bool] = Field(default=None, alias="isbasehit")
+    is_at_bat: Optional[bool] = Field(default=None, alias="isatbat")
+    is_plate_appearance: Optional[bool] = Field(default=None, alias="isplateappearance")
+    bat_side: Optional[CodeDesc] = Field(default=None, alias="batside")
+    pitch_hand: Optional[CodeDesc] = Field(default=None, alias="pitchhand")
+    event_type: Optional[str] = Field(default=None, alias="eventtype")
     event: Optional[str] = None
     description: Optional[str] = None
-    type: Optional[Union[CodeDesc, dict]] = field(default_factory=dict)
-    awayscore: Optional[int] = None
-    homescore: Optional[int] = None
-    hasreview: Optional[bool] = None
+    type: Optional[CodeDesc] = None
+    away_score: Optional[int] = Field(default=None, alias="awayscore")
+    home_score: Optional[int] = Field(default=None, alias="homescore")
+    has_review: Optional[bool] = Field(default=None, alias="hasreview")
     code: Optional[str] = None
-    ballcolor: Optional[str] = None
-    trailcolor: Optional[str] = None
-    fromcatcher: Optional[bool] = None
-    disengagementnum: Optional[int] = None
-    violation: Optional[Union[Violation, dict]] = field(default_factory=dict)
-    
-    def __post_init__(self):
-        self.call = CodeDesc(**self.call) if self.call else self.call
-        self.batside = CodeDesc(**self.batside) if self.batside else self.batside
-        self.pitchhand = CodeDesc(**self.pitchhand) if self.pitchhand else self.pitchhand
-        self.type = CodeDesc(**self.type) if self.type else self.type
-        self.violation = Violation(**self.violation) if self.violation else self.violation
+    ball_color: Optional[str] = Field(default=None, alias="ballcolor")
+    trail_color: Optional[str] = Field(default=None, alias="trailcolor")
+    from_catcher: Optional[bool] = Field(default=None, alias="fromcatcher")
+    disengagement_num: Optional[int] = Field(default=None, alias="disengagementnum")
+    violation: Optional[Violation] = None
 
-    def __repr__(self) -> str:
-        kws = [f'{key}={value}' for key, value in self.__dict__.items() if value is not None and value]
-        return "{}({})".format(type(self).__name__, ", ".join(kws))
+    @field_validator('bat_side', 'pitch_hand', 'type', 'call', 'violation', mode='before')
+    @classmethod
+    def empty_dict_to_none(cls, v: Any) -> Any:
+        """Convert empty dicts to None."""
+        if isinstance(v, dict) and not v:
+            return None
+        return v

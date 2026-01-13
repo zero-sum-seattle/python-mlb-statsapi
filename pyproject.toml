@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-mlb-statsapi"
-version = "0.6.2"
+version = "0.7.0"
 description = "mlbstatsapi python wrapper"
 authors = [
     "Matthew Spah <spahmatthew@gmail.com>",
@@ -23,6 +23,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = ">=3.10"
 requests = ">=2"
+pydantic = "^2.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0"

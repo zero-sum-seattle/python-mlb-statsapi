@@ -1,4 +1,5 @@
 import unittest
+from pydantic import ValidationError
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi import Mlb
 
@@ -14,7 +15,8 @@ class TestSport(unittest.TestCase):
         pass
 
     def test_sport_instance_type_error(self):
-        with self.assertRaises(TypeError):
+        """Pydantic raises ValidationError when required fields are missing."""
+        with self.assertRaises(ValidationError):
             sport = Sport()
 
     def test_sport_instance_position_arguments(self):
@@ -29,5 +31,5 @@ class TestSport(unittest.TestCase):
         self.assertTrue(hasattr(self.sport, "name"))
         self.assertTrue(hasattr(self.sport, "code"))
         self.assertTrue(hasattr(self.sport, "abbreviation"))
-        self.assertTrue(hasattr(self.sport, "sortorder"))
-        self.assertTrue(hasattr(self.sport, "activestatus"))
+        self.assertTrue(hasattr(self.sport, "sort_order"))
+        self.assertTrue(hasattr(self.sport, "active_status"))

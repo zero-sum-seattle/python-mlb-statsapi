@@ -1,28 +1,21 @@
-from dataclasses import dataclass
-from typing import Optional, List
+from typing import List
+from mlbstatsapi.models.base import MLBBaseModel
+from .attributes import GamePaceData
 
-from .attributes import Gamepacedata
 
-@dataclass
-class Gamepace:
+class GamePace(MLBBaseModel):
     """
-    A dataclass representing a gamepace.
+    A class representing game pace data.
 
-    Attributes:
+    Attributes
     ----------
-    teams : List[Gamepacedata]
-        A list of teams in the gamepace.
-    leagues : List[Gamepacedata]
-        A list of leagues in the gamepace.
-    sports : List[Gamepacedata]
-        A list of sports in the gamepace.
+    teams : List[GamePaceData]
+        A list of game pace data by team.
+    leagues : List[GamePaceData]
+        A list of game pace data by league.
+    sports : List[GamePaceData]
+        A list of game pace data by sport.
     """
-    teams: Optional[List[Gamepacedata]] = None
-    leagues: Optional[List[Gamepacedata]] = None
-    sports: Optional[List[Gamepacedata]] = None
-
-
-    def __post_init__(self):
-        self.teams = [Gamepacedata(**teams) for teams in self.teams]        
-        self.leagues = [Gamepacedata(**leagues) for leagues in self.leagues]    
-        self.sports = [Gamepacedata(**sports) for sports in self.sports]     
+    teams: List[GamePaceData] = []
+    leagues: List[GamePaceData] = []
+    sports: List[GamePaceData] = []

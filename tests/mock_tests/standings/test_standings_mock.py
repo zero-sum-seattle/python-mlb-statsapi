@@ -51,6 +51,6 @@ class TestStandingsMock(unittest.TestCase):
         # sportgamepace should not be none
         self.assertIsNotNone(standing)
 
-        # sportgamepace should have attrs set
-        self.assertTrue(standing.standingstype)
-        self.assertTrue(standing.lastupdated)
+        # standings should have attrs set
+        self.assertTrue(standing.standings_type)
+        self.assertTrue(standing.last_updated)

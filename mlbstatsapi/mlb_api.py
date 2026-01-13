@@ -16,8 +16,8 @@ from mlbstatsapi.models.stats import Stat
 from mlbstatsapi.models.seasons import Season
 from mlbstatsapi.models.drafts import Round
 from mlbstatsapi.models.awards import Award
-from mlbstatsapi.models.gamepace import Gamepace
-from mlbstatsapi.models.homerunderby import Homerunderby
+from mlbstatsapi.models.gamepace import GamePace
+from mlbstatsapi.models.homerunderby import HomeRunDerby
 from mlbstatsapi.models.standings import Standings
 
 from .mlb_dataadapter import MlbDataAdapter
@@ -1099,7 +1099,7 @@ class Mlb:
 
         return game_ids
 
-    def get_gamepace(self, season: str, sport_id=1, **params) -> Union[Gamepace, None]:
+    def get_gamepace(self, season: str, sport_id=1, **params) -> Union[GamePace, None]:
         """
         Get pace of game metrics for specific sport, league or team.
 
@@ -1164,7 +1164,7 @@ class Mlb:
             or 'leagues' in mlb_data.data and mlb_data.data['leagues']
             or 'sports' in mlb_data.data and mlb_data.data['sports']):
 
-            return Gamepace(**mlb_data.data)
+            return GamePace(**mlb_data.data)
 
     def get_venue(self, venue_id: int, **params) -> Union[Venue, None]:
         """
@@ -2016,7 +2016,7 @@ class Mlb:
         
         return awards_list
 
-    def get_homerun_derby(self, game_id, **params) -> Union[Homerunderby, None]:
+    def get_homerun_derby(self, game_id, **params) -> Union[HomeRunDerby, None]:
         """
         The homerun derby endpoint on the Stats API allows for users to 
         request information from the MLB database pertaining to the 
@@ -2036,7 +2036,7 @@ class Mlb:
 
         Returns
         -------
-        Homerunderby object
+        HomeRunDerby object
 
         See Also
         --------
@@ -2049,7 +2049,7 @@ class Mlb:
             None
         
         if 'status' in mlb_data.data and mlb_data.data['status']:
-            return Homerunderby(**mlb_data.data)
+            return HomeRunDerby(**mlb_data.data)
 
 
     def get_team_stats(self, team_id: int, stats: list, groups: list, **params) -> dict:
