@@ -1,4 +1,4 @@
-﻿import unittest
+import unittest
 import time
 
 from mlbstatsapi.mlb_api import Mlb
@@ -45,19 +45,19 @@ class TestPitchingStats(unittest.TestCase):
         season_advanced = stats['pitching']['seasonadvanced']
         career_advanced = stats['pitching']['careeradvanced']
 
-        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.total_splits, len(season.splits))
         self.assertEqual(season.group, 'pitching')
         self.assertEqual(season.type, 'season')
 
-        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.total_splits, len(career.splits))
         self.assertEqual(career.group, 'pitching')
         self.assertEqual(career.type, 'career')
 
-        self.assertEqual(season_advanced.totalsplits, len(season_advanced.splits))
+        self.assertEqual(season_advanced.total_splits, len(season_advanced.splits))
         self.assertEqual(season_advanced.group, 'pitching')
         self.assertEqual(season_advanced.type, 'seasonAdvanced')
 
-        self.assertEqual(career_advanced.totalsplits, len(career_advanced.splits))
+        self.assertEqual(career_advanced.total_splits, len(career_advanced.splits))
         self.assertEqual(career_advanced.group, 'pitching')
         self.assertEqual(career_advanced.type, 'careerAdvanced')
 
@@ -89,19 +89,19 @@ class TestPitchingStats(unittest.TestCase):
         season_advanced = stats['pitching']['seasonadvanced']
         career_advanced = stats['pitching']['careeradvanced']
 
-        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.total_splits, len(season.splits))
         self.assertEqual(season.group, 'pitching')
         self.assertEqual(season.type, 'season')
 
-        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.total_splits, len(career.splits))
         self.assertEqual(career.group, 'pitching')
         self.assertEqual(career.type, 'career')
 
-        self.assertEqual(season_advanced.totalsplits, len(season_advanced.splits))
+        self.assertEqual(season_advanced.total_splits, len(season_advanced.splits))
         self.assertEqual(season_advanced.group, 'pitching')
         self.assertEqual(season_advanced.type, 'seasonAdvanced')
 
-        self.assertEqual(career_advanced.totalsplits, len(career_advanced.splits))
+        self.assertEqual(career_advanced.total_splits, len(career_advanced.splits))
         self.assertEqual(career_advanced.group, 'pitching')
         self.assertEqual(career_advanced.type, 'careerAdvanced')
 

@@ -1,4 +1,3 @@
-﻿from dataclasses import dataclass, field
-from typing import Optional, Union
-
-from .stats import Splits
+# Streak module - placeholder for future implementation
+# Original file imported from .stats import Splits which doesn't exist
+# This file is kept for backwards compatibility

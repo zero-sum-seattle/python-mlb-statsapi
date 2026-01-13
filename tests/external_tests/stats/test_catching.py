@@ -1,4 +1,4 @@
-﻿import unittest
+import unittest
 import time
 
 from mlbstatsapi.mlb_api import Mlb
@@ -39,11 +39,11 @@ class TestCatchingStats(unittest.TestCase):
         season = stats['catching']['season']
         career = stats['catching']['career']
 
-        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.total_splits, len(season.splits))
         self.assertEqual(season.group, 'catching')
         self.assertEqual(season.type, 'season')
 
-        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.total_splits, len(career.splits))
         self.assertEqual(career.group, 'catching')
         self.assertEqual(career.type, 'career')
 
@@ -70,10 +70,10 @@ class TestCatchingStats(unittest.TestCase):
         season = stats['catching']['season']
         career = stats['catching']['career']
 
-        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.total_splits, len(season.splits))
         self.assertEqual(season.group, 'catching')
         self.assertEqual(season.type, 'season')
 
-        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.total_splits, len(career.splits))
         self.assertEqual(career.group, 'catching')
         self.assertEqual(career.type, 'career')

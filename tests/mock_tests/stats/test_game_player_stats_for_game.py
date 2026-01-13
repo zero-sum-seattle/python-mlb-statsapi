@@ -1,4 +1,4 @@
-﻿import unittest
+import unittest
 import time
 
 from mlbstatsapi.mlb_api import Mlb
@@ -156,7 +156,7 @@ class TestHittingStats(unittest.TestCase):
 
         gamelogs = game_stats['stats']['gamelog']
         self.assertEqual(len(gamelogs.splits), 3)
-        self.assertEqual(gamelogs.totalsplits, len(gamelogs.splits))
+        self.assertEqual(gamelogs.total_splits, len(gamelogs.splits))
 
         vsplayer5y = game_stats['pitching']['vsplayer5y']
 

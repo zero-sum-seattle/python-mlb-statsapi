@@ -1,4 +1,4 @@
-﻿import unittest
+import unittest
 import time
 
 from mlbstatsapi.mlb_api import Mlb
@@ -49,19 +49,19 @@ class TestHittingStats(unittest.TestCase):
         career_advanced = stats['hitting']['careeradvanced']
         # check that attrs exist and contain data
 
-        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.total_splits, len(season.splits))
         self.assertEqual(season.group, 'hitting')
         self.assertEqual(season.type, 'season')
 
-        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.total_splits, len(career.splits))
         self.assertEqual(career.group, 'hitting')
         self.assertEqual(career.type, 'career')
 
-        self.assertEqual(season_advanced.totalsplits, len(season_advanced.splits))
+        self.assertEqual(season_advanced.total_splits, len(season_advanced.splits))
         self.assertEqual(season_advanced.group, 'hitting')
         self.assertEqual(season_advanced.type, 'seasonAdvanced')
 
-        self.assertEqual(career_advanced.totalsplits, len(career_advanced.splits))
+        self.assertEqual(career_advanced.total_splits, len(career_advanced.splits))
         self.assertEqual(career_advanced.group, 'hitting')
         self.assertEqual(career_advanced.type, 'careerAdvanced')
 
@@ -94,19 +94,19 @@ class TestHittingStats(unittest.TestCase):
         season_advanced = stats['hitting']['seasonadvanced']
         career_advanced = stats['hitting']['careeradvanced']
 
-        self.assertEqual(season.totalsplits, len(season.splits))
+        self.assertEqual(season.total_splits, len(season.splits))
         self.assertEqual(season.group, 'hitting')
         self.assertEqual(season.type, 'season')
 
-        self.assertEqual(career.totalsplits, len(career.splits))
+        self.assertEqual(career.total_splits, len(career.splits))
         self.assertEqual(career.group, 'hitting')
         self.assertEqual(career.type, 'career')
 
-        self.assertEqual(season_advanced.totalsplits, len(season_advanced.splits))
+        self.assertEqual(season_advanced.total_splits, len(season_advanced.splits))
         self.assertEqual(season_advanced.group, 'hitting')
         self.assertEqual(season_advanced.type, 'seasonAdvanced')
 
-        self.assertEqual(career_advanced.totalsplits, len(career_advanced.splits))
+        self.assertEqual(career_advanced.total_splits, len(career_advanced.splits))
         self.assertEqual(career_advanced.group, 'hitting')
         self.assertEqual(career_advanced.type, 'careerAdvanced')
 
@@ -274,7 +274,7 @@ class TestHittingStats(unittest.TestCase):
 
         pitchlog = stats['hitting']['pitchlog']
         self.assertTrue(len(pitchlog.splits) > 1)
-        self.assertEqual(pitchlog.totalsplits, len(pitchlog.splits))
+        self.assertEqual(pitchlog.total_splits, len(pitchlog.splits))
 
 
     def test_hitting_pitchlog_stats_player(self):
@@ -298,7 +298,7 @@ class TestHittingStats(unittest.TestCase):
         # playlogs should return multiple splits
         playlogs = stats['hitting']['playlog']
         self.assertTrue(len(playlogs.splits) > 1)
-        self.assertEqual(playlogs.totalsplits, len(playlogs.splits))
+        self.assertEqual(playlogs.total_splits, len(playlogs.splits))
 
 
     def test_hitting_pitchArsenal_stats_player(self):
@@ -321,7 +321,7 @@ class TestHittingStats(unittest.TestCase):
 
         pitcharsenal = stats['stats']['pitcharsenal']
         self.assertTrue(len(pitcharsenal.splits) > 1)
-        self.assertEqual(pitcharsenal.totalsplits, len(pitcharsenal.splits))
+        self.assertEqual(pitcharsenal.total_splits, len(pitcharsenal.splits))
 
     def test_hitting_hotcoldzones_stats_player(self):
         """mlb get stats should return hitting stats"""
@@ -344,4 +344,4 @@ class TestHittingStats(unittest.TestCase):
         # hotcoldzone should return 5 splits
         hotcoldzone = stats['stats']['hotcoldzones']
         self.assertEqual(len(hotcoldzone.splits), 5)
-        self.assertEqual(hotcoldzone.totalsplits, len(hotcoldzone.splits))
+        self.assertEqual(hotcoldzone.total_splits, len(hotcoldzone.splits))

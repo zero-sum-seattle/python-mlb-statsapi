@@ -1,72 +1,86 @@
-﻿from dataclasses import dataclass, field
-from typing import Optional, Union, List
-
+from typing import Optional, List, ClassVar
+from pydantic import Field
+from mlbstatsapi.models.base import MLBBaseModel
 from .stats import Split
 
-@dataclass
-class SimpleGameStats:
+
+class SimpleGameStats(MLBBaseModel):
     """
-    A class to represent a simple game statistics
+    A class to represent simple game statistics.
 
     Attributes
     ----------
-    firstdateplayed : str
-        first date of game played
-    gamesplayed : int
-        number of the games player
-    gamesstarted : int
-        number of the games started
-    lastdateplayed : str
-        last date of the game played
+    first_date_played : str
+        First date of game played.
+    games_played : int
+        Number of the games played.
+    games_started : int
+        Number of the games started.
+    last_date_played : str
+        Last date of the game played.
     """
-    firstdateplayed: str
-    gamesplayed: int
-    gamesstarted: int
-    lastdateplayed: str
+    first_date_played: str = Field(alias="firstdateplayed")
+    games_played: int = Field(alias="gamesplayed")
+    games_started: int = Field(alias="gamesstarted")
+    last_date_played: str = Field(alias="lastdateplayed")
 
-    def __post_init__(self):
-        super().__post_init__()
 
-@dataclass(kw_only=True)
 class SeasonGame(Split):
     """
-    A class to represent a game statistic
+    A class to represent a game statistic.
 
     Used for the following stat types:
-    season, career, careerRegularSeason, careerPlayoffs, statsSingleSeason
+    season, statsSingleSeason
     """
-    type_ = ['season', 'statsSingleSeason']
+    _type: ClassVar[List[str]] = ['season', 'statsSingleSeason']
 
-    def __post_init__(self):
-        super().__post_init__()
 
-@dataclass(kw_only=True)
 class CareerGame(Split):
     """
-    A class to represent a game statistic
+    A class to represent a career game statistic.
     """
-    type_ = ['career']
+    _type: ClassVar[List[str]] = ['career']
 
-    def __post_init__(self):
-        super().__post_init__()
 
-@dataclass(kw_only=True)
-class CareerRegularSeasonGame(Split, SimpleGameStats):
+class CareerRegularSeasonGame(Split):
     """
-    A class to represent a game statistic
+    A class to represent a career regular season game statistic.
+
+    Attributes
+    ----------
+    first_date_played : str
+        First date of game played.
+    games_played : int
+        Number of the games played.
+    games_started : int
+        Number of the games started.
+    last_date_played : str
+        Last date of the game played.
     """
-    type_ = ['careerRegularSeason']
+    _type: ClassVar[List[str]] = ['careerRegularSeason']
+    first_date_played: Optional[str] = Field(default=None, alias="firstdateplayed")
+    games_played: Optional[int] = Field(default=None, alias="gamesplayed")
+    games_started: Optional[int] = Field(default=None, alias="gamesstarted")
+    last_date_played: Optional[str] = Field(default=None, alias="lastdateplayed")
 
-    def __post_init__(self):
-        super().__post_init__()
 
-@dataclass(kw_only=True)
-class CareerPlayoffsGame(Split, SimpleGameStats):
+class CareerPlayoffsGame(Split):
     """
-    A class to represent a game statistic
+    A class to represent a career playoffs game statistic.
 
+    Attributes
+    ----------
+    first_date_played : str
+        First date of game played.
+    games_played : int
+        Number of the games played.
+    games_started : int
+        Number of the games started.
+    last_date_played : str
+        Last date of the game played.
     """
-    type_ = ['careerPlayoffs']
-
-    def __post_init__(self):
-        super().__post_init__()
+    _type: ClassVar[List[str]] = ['careerPlayoffs']
+    first_date_played: Optional[str] = Field(default=None, alias="firstdateplayed")
+    games_played: Optional[int] = Field(default=None, alias="gamesplayed")
+    games_started: Optional[int] = Field(default=None, alias="gamesstarted")
+    last_date_played: Optional[str] = Field(default=None, alias="lastdateplayed")

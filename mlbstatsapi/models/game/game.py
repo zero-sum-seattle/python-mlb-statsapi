@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import Field
 from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.game.gamedata import GameData
@@ -24,9 +25,9 @@ class Game(MLBBaseModel):
     """
     game_pk: int = Field(alias="gamepk")
     link: str
-    metadata: MetaData
-    game_data: GameData = Field(alias="gamedata")
-    live_data: LiveData = Field(alias="livedata")
+    metadata: Optional[MetaData] = None
+    game_data: Optional[GameData] = Field(default=None, alias="gamedata")
+    live_data: Optional[LiveData] = Field(default=None, alias="livedata")
 
     @property
     def id(self) -> int:
