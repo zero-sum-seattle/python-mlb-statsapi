@@ -20,10 +20,10 @@ class Plays(MLBBaseModel):
     plays_by_inning : List[PlayByInning]
         Plays by inning.
     """
-    all_plays: List[Play] = Field(default=[], alias="allplays")
-    scoring_plays: List[int] = Field(alias="scoringplays")
-    plays_by_inning: List[PlayByInning] = Field(default=[], alias="playsbyinning")
-    current_play: Optional[Play] = Field(default=None, alias="currentplay")
+    all_plays: List[Play] = Field(default=[], alias="allPlays")
+    scoring_plays: List[int] = Field(alias="scoringPlays")
+    plays_by_inning: List[PlayByInning] = Field(default=[], alias="playsByInning")
+    current_play: Optional[Play] = Field(default=None, alias="currentPlay")
 
     @field_validator('current_play', mode='before')
     @classmethod

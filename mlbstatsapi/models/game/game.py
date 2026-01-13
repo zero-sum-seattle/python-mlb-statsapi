@@ -23,11 +23,11 @@ class Game(MLBBaseModel):
     live_data : LiveData
         Live data of this game.
     """
-    game_pk: int = Field(alias="gamepk")
+    game_pk: int = Field(alias="gamePk")
     link: str
     metadata: Optional[MetaData] = None
-    game_data: Optional[GameData] = Field(default=None, alias="gamedata")
-    live_data: Optional[LiveData] = Field(default=None, alias="livedata")
+    game_data: Optional[GameData] = Field(default=None, alias="gameData")
+    live_data: Optional[LiveData] = Field(default=None, alias="liveData")
 
     @property
     def id(self) -> int:

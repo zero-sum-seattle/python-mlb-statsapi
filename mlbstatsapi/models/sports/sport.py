@@ -29,5 +29,5 @@ class Sport(MLBBaseModel):
     name: Optional[str] = None
     code: Optional[str] = None
     abbreviation: Optional[str] = None
-    sort_order: Optional[int] = Field(default=None, alias="sortorder")
-    active_status: Optional[bool] = Field(default=None, alias="activestatus")
+    sort_order: Optional[int] = Field(default=None, alias="sortOrder")
+    active_status: Optional[bool] = Field(default=None, alias="activeStatus")

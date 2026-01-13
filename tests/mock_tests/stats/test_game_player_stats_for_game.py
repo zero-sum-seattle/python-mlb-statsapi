@@ -18,7 +18,7 @@ current_directory = os.path.dirname(path_to_current_file)
 path_to_not_found = os.path.join(current_directory, "../mock_json/response/not_found_404.json")
 path_to_error = os.path.join(current_directory, "../mock_json/response/error_500.json")
 path_to_hotcoldzone_file = os.path.join(current_directory, "../mock_json/stats/person/hotcoldzone.json")
-path_to_hitting_playlog_file = os.path.join(current_directory, "../mock_json/stats/person/hitting_player_playlog.json")
+path_to_hitting_playLog_file = os.path.join(current_directory, "../mock_json/stats/person/hitting_player_playlog.json")
 path_to_shoei_ohtani = os.path.join(current_directory, "../mock_json/stats/person/game_stats_player_shoei_ohtani.json")
 path_to_ty_france = os.path.join(current_directory, "../mock_json/stats/person/game_stats_player_ty_france.json")
 path_to_cal = os.path.join(current_directory, "../mock_json/stats/person/game_stats_player_cal.json")
@@ -71,10 +71,10 @@ class TestHittingStats(unittest.TestCase):
         # game_stats should have hitting stats
         self.assertTrue(game_stats['pitching'])
 
-        # game_stats should have vsplayer5y and playlog stats
-        self.assertTrue(game_stats['pitching']['vsplayer5y'])
+        # game_stats should have vsPlayer5Y and playLog stats
+        self.assertTrue(game_stats['pitching']['vsPlayer5Y'])
 
-        splits = game_stats['pitching']['vsplayer5y']
+        splits = game_stats['pitching']['vsPlayer5Y']
 
         for split in splits.splits:
             self.assertTrue(split.team)
@@ -96,12 +96,12 @@ class TestHittingStats(unittest.TestCase):
         # game_stats should have hitting stats
         self.assertTrue(game_stats['hitting'])
 
-        # game_stats should have vsplayer5y and playlog stats
-        self.assertTrue(game_stats['hitting']['vsplayer5y'])
-        self.assertTrue(game_stats['hitting']['playlog'])
-        self.assertTrue(game_stats['stats']['gamelog'])
+        # game_stats should have vsPlayer5Y and playLog stats
+        self.assertTrue(game_stats['hitting']['vsPlayer5Y'])
+        self.assertTrue(game_stats['hitting']['playLog'])
+        self.assertTrue(game_stats['stats']['gameLog'])
 
-        splits = game_stats['hitting']['vsplayer5y']
+        splits = game_stats['hitting']['vsPlayer5Y']
 
         for split in splits.splits:
             self.assertTrue(split.team)
@@ -123,12 +123,12 @@ class TestHittingStats(unittest.TestCase):
         # game_stats should have hitting stats
         self.assertTrue(game_stats['hitting'])
 
-        # game_stats should have vsplayer5y and playlog stats
-        self.assertTrue(game_stats['hitting']['vsplayer5y'])
-        self.assertTrue(game_stats['hitting']['playlog'])
-        self.assertTrue(game_stats['stats']['gamelog'])
+        # game_stats should have vsPlayer5Y and playLog stats
+        self.assertTrue(game_stats['hitting']['vsPlayer5Y'])
+        self.assertTrue(game_stats['hitting']['playLog'])
+        self.assertTrue(game_stats['stats']['gameLog'])
         
-        splits = game_stats['hitting']['vsplayer5y']
+        splits = game_stats['hitting']['vsPlayer5Y']
 
         for split in splits.splits:
             self.assertTrue(split.team)
@@ -150,16 +150,16 @@ class TestHittingStats(unittest.TestCase):
         # game_stats should have hitting stats
         self.assertTrue(game_stats['pitching'])
 
-        # game_stats should have vsplayer5y and playlog stats
-        self.assertTrue(game_stats['pitching']['vsplayer5y'])
-        self.assertTrue(game_stats['stats']['gamelog'])
+        # game_stats should have vsPlayer5Y and playLog stats
+        self.assertTrue(game_stats['pitching']['vsPlayer5Y'])
+        self.assertTrue(game_stats['stats']['gameLog'])
 
-        gamelogs = game_stats['stats']['gamelog']
-        self.assertEqual(len(gamelogs.splits), 3)
-        self.assertEqual(gamelogs.total_splits, len(gamelogs.splits))
+        gameLogs = game_stats['stats']['gameLog']
+        self.assertEqual(len(gameLogs.splits), 3)
+        self.assertEqual(gameLogs.total_splits, len(gameLogs.splits))
 
-        vsplayer5y = game_stats['pitching']['vsplayer5y']
+        vsPlayer5Y = game_stats['pitching']['vsPlayer5Y']
 
-        for split in vsplayer5y.splits:
+        for split in vsPlayer5Y.splits:
             self.assertTrue(split.team)
             self.assertTrue(split.stat)

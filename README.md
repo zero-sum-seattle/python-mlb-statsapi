@@ -56,7 +56,7 @@ Ty France
 >>> groups = ['hitting']
 >>> params = {'season': 2022}
 >>> mlb.get_player_stats(664034, stats, groups, **params)
-{'hitting': {'season': Stat, 'seasonadvanced': Stat }}
+{'hitting': {'season': Stat, 'seasonAdvanced': Stat }}
 
 >>> mlb.get_team_id("Seattle Mariners")
 [136]
@@ -277,7 +277,7 @@ Use team id and the stat types and groups to return season hitting stats
 ```python
 >>> stats = mlb.get_team_stats(team_id, stats=stats, groups=groups, **params)
 >>> season_hitting = stats['hitting']['season']
->>> advanced_hitting = stats['hitting']['seasonadvanced']
+>>> advanced_hitting = stats['hitting']['seasonAdvanced']
 ```
 
 Print stats as JSON
@@ -301,7 +301,7 @@ Print stats as JSON
 >>> params = {'season': 2022}
 
 >>> stats = mlb.get_player_stats(player_id, stats=stats, groups=group, **params)
->>> expected = stats['hitting']['expectedstatistics']
+>>> expected = stats['hitting']['expectedStatistics']
 >>> for split in expected.splits:
 ...     print(f"Expected AVG: {split.stat.avg}")
 ...     print(f"Expected SLG: {split.stat.slg}")
@@ -326,7 +326,7 @@ Set stat type, stat groups, and params
 Get stats
 ```python
 >>> stats = mlb.get_player_stats(ty_france_id, stats=stats, groups=group, **params)
->>> vs_player = stats['hitting']['vsplayer']
+>>> vs_player = stats['hitting']['vsPlayer']
 >>> for split in vs_player.splits:
 ...     print(f"Games: {split.stat.games_played}, Hits: {split.stat.hits}")
 Games: 2, Hits: 2
@@ -340,7 +340,7 @@ Games: 2, Hits: 2
 >>> params = {'season': 2022}
 
 >>> hotcoldzones = mlb.get_player_stats(ty_france_id, stats=stats, groups=hitting_group, **params)
->>> zones = hotcoldzones['stats']['hotcoldzones']
+>>> zones = hotcoldzones['stats']['hotColdZones']
 
 >>> for split in zones.splits:
 ...     print(f"Stat: {split.stat.name}")

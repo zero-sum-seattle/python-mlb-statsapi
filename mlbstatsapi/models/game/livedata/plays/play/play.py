@@ -43,11 +43,11 @@ class Play(MLBBaseModel):
     about: PlayAbout
     count: Count
     matchup: PlayMatchup
-    pitch_index: List[int] = Field(alias="pitchindex")
-    action_index: List[int] = Field(alias="actionindex")
-    runner_index: List[int] = Field(alias="runnerindex")
+    pitch_index: List[int] = Field(alias="pitchIndex")
+    action_index: List[int] = Field(alias="actionIndex")
+    runner_index: List[int] = Field(alias="runnerIndex")
     runners: List[PlayRunner] = []
-    play_events: List[PlayEvent] = Field(default=[], alias="playevents")
-    at_bat_index: int = Field(alias="atbatindex")
-    play_end_time: Optional[str] = Field(default=None, alias="playendtime")
-    review_details: Optional[PlayReviewDetails] = Field(default=None, alias="reviewdetails")
+    play_events: List[PlayEvent] = Field(default=[], alias="playEvents")
+    at_bat_index: int = Field(alias="atBatIndex")
+    play_end_time: Optional[str] = Field(default=None, alias="playEndTime")
+    review_details: Optional[PlayReviewDetails] = Field(default=None, alias="reviewDetails")

@@ -1,7 +1,6 @@
 import unittest
 import requests
 from unittest.mock import patch
-from typing import List, Dict
 from mlbstatsapi import MlbDataAdapter, TheMlbStatsApiException
 
 
@@ -14,16 +13,6 @@ class TestMlbAdapter(unittest.TestCase):
     def tearDownClass(cls) -> None:
         pass
 
-    # I don't know if this is best practice
-    def lower_keys_in_response(self, data):
-        if isinstance(data, Dict):
-            for key, value in data.items():
-                self.assertTrue(key.islower())
-                self.lower_keys_in_response(value)
-
-        elif isinstance(data, List):        
-            for item in data:
-                self.lower_keys_in_response(item)
 
     def test_mlbadapter_get_200(self):
         """mlbadapter should return 200 and data for sports endpoint"""
@@ -71,22 +60,6 @@ class TestMlbAdapter(unittest.TestCase):
 
         # result should have data
         self.assertTrue(result.data)
-
-    def test_mlbadapter_transform_keys_in_data(self):
-        """mlbadapter transform keys should make all keys lowercase"""
-
-        # pretty stable external
-        result = self.mlb_adapter.get(endpoint="sports")
-
-        # status code should be 200
-        self.assertEqual(result.status_code, 200)
-
-        # data should not be None
-        self.assertTrue(result.data)
-
-        # data should all be lowercase
-        self.lower_keys_in_response(result.data)
-
 
 class MlbAdapterMockTesting(unittest.TestCase):
     @classmethod

@@ -36,6 +36,6 @@ class GameLeaders(MLBBaseModel):
     pitch_speed : dict
         Pitch speed leaders.
     """
-    hit_distance: dict = Field(alias="hitdistance")
-    hit_speed: dict = Field(alias="hitspeed")
-    pitch_speed: dict = Field(alias="pitchspeed")
+    hit_distance: dict = Field(alias="hitDistance")
+    hit_speed: dict = Field(alias="hitSpeed")
+    pitch_speed: dict = Field(alias="pitchSpeed")

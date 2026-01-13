@@ -112,11 +112,11 @@ class Records(MLBBaseModel):
     expected_records : List[TypeRecords]
         A list of expected records.
     """
-    split_records: Optional[List[TypeRecords]] = Field(default=None, alias="splitrecords")
-    division_records: Optional[List[DivisionRecords]] = Field(default=None, alias="divisionrecords")
-    overall_records: Optional[List[TypeRecords]] = Field(default=None, alias="overallrecords")
-    league_records: Optional[List[LeagueRecords]] = Field(default=None, alias="leaguerecords")
-    expected_records: Optional[List[TypeRecords]] = Field(default=None, alias="expectedrecords")
+    split_records: Optional[List[TypeRecords]] = Field(default=None, alias="splitRecords")
+    division_records: Optional[List[DivisionRecords]] = Field(default=None, alias="divisionRecords")
+    overall_records: Optional[List[TypeRecords]] = Field(default=None, alias="overallRecords")
+    league_records: Optional[List[LeagueRecords]] = Field(default=None, alias="leagueRecords")
+    expected_records: Optional[List[TypeRecords]] = Field(default=None, alias="expectedRecords")
 
 
 class TeamRecord(MLBBaseModel):
@@ -152,16 +152,16 @@ class TeamRecord(MLBBaseModel):
     winning_percentage : str
         The winning percentage of the team.
     """
-    games_played: int = Field(alias="gamesplayed")
-    wildcard_games_back: str = Field(alias="wildcardgamesback")
-    league_games_back: str = Field(alias="leaguegamesback")
-    spring_league_games_back: str = Field(alias="springleaguegamesback")
-    sport_games_back: str = Field(alias="sportgamesback")
-    division_games_back: str = Field(alias="divisiongamesback")
-    conference_games_back: str = Field(alias="conferencegamesback")
-    league_record: OverallLeagueRecord = Field(alias="leaguerecord")
+    games_played: int = Field(alias="gamesPlayed")
+    wildcard_games_back: str = Field(alias="wildcardGamesBack")
+    league_games_back: str = Field(alias="leagueGamesBack")
+    spring_league_games_back: str = Field(alias="springLeagueGamesBack")
+    sport_games_back: str = Field(alias="sportGamesBack")
+    division_games_back: str = Field(alias="divisionGamesBack")
+    conference_games_back: str = Field(alias="conferenceGamesBack")
+    league_record: OverallLeagueRecord = Field(alias="leagueRecord")
     records: Records
-    division_leader: bool = Field(alias="divisionleader")
+    division_leader: bool = Field(alias="divisionLeader")
     wins: int
     losses: int
-    winning_percentage: str = Field(alias="winningpercentage")
+    winning_percentage: str = Field(alias="winningPercentage")

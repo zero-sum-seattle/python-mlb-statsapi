@@ -37,13 +37,13 @@ class TestPitchingStats(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['pitching']['season'])
         self.assertTrue(stats['pitching']['career'])
-        self.assertTrue(stats['pitching']['seasonadvanced'])
-        self.assertTrue(stats['pitching']['careeradvanced'])
+        self.assertTrue(stats['pitching']['seasonAdvanced'])
+        self.assertTrue(stats['pitching']['careerAdvanced'])
 
         season = stats['pitching']['season']
         career = stats['pitching']['career']
-        season_advanced = stats['pitching']['seasonadvanced']
-        career_advanced = stats['pitching']['careeradvanced']
+        season_advanced = stats['pitching']['seasonAdvanced']
+        career_advanced = stats['pitching']['careerAdvanced']
 
         self.assertEqual(season.total_splits, len(season.splits))
         self.assertEqual(season.group, 'pitching')
@@ -81,13 +81,13 @@ class TestPitchingStats(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['pitching']['season'])
         self.assertTrue(stats['pitching']['career'])
-        self.assertTrue(stats['pitching']['seasonadvanced'])
-        self.assertTrue(stats['pitching']['careeradvanced'])
+        self.assertTrue(stats['pitching']['seasonAdvanced'])
+        self.assertTrue(stats['pitching']['careerAdvanced'])
 
         season = stats['pitching']['season']
         career = stats['pitching']['career']
-        season_advanced = stats['pitching']['seasonadvanced']
-        career_advanced = stats['pitching']['careeradvanced']
+        season_advanced = stats['pitching']['seasonAdvanced']
+        career_advanced = stats['pitching']['careerAdvanced']
 
         self.assertEqual(season.total_splits, len(season.splits))
         self.assertEqual(season.group, 'pitching')
@@ -121,7 +121,7 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue('pitching' in stats)
 
         # check for split objects
-        self.assertTrue(stats['pitching']['expectedstatistics'])
+        self.assertTrue(stats['pitching']['expectedStatistics'])
 
 
     def test_pitching_bydate_stats_player(self):
@@ -140,10 +140,10 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue('pitching' in stats)
 
         # check for split objects
-        self.assertTrue(stats['pitching']['bydaterange'])
-        self.assertTrue(stats['pitching']['bydaterangeadvanced'])
+        self.assertTrue(stats['pitching']['byDateRange'])
+        self.assertTrue(stats['pitching']['byDateRangeAdvanced'])
 
-    def test_pitching_bymonth_stats_player(self):
+    def test_pitching_byMonth_stats_player(self):
         """mlb get stats should return pitching stats"""
         self.stats = ['byMonth']
         self.group = ['pitching']
@@ -158,9 +158,9 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue('pitching' in stats)
 
         # check for split objects
-        self.assertTrue(stats['pitching']['bymonth'])
+        self.assertTrue(stats['pitching']['byMonth'])
 
-    def test_pitching_bydayofweek_stats_player(self):
+    def test_pitching_byDayOfWeek_stats_player(self):
         """mlb get stats should return pitching stats"""
         self.stats = ['byDayOfWeek']
         self.group = ['pitching']
@@ -175,9 +175,9 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue('pitching' in stats)
 
         # check for split objects
-        self.assertTrue(stats['pitching']['bydayofweek'])
+        self.assertTrue(stats['pitching']['byDayOfWeek'])
 
-    def test_pitching_vsplayer_stats_player(self):
+    def test_pitching_vsPlayer_stats_player(self):
         """mlb get stats should return hitting stats"""
         self.stats = ['vsPlayer']
         self.group = ['pitching']
@@ -192,9 +192,9 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue('pitching' in stats)
 
         # check for split objects
-        self.assertTrue(stats['pitching']['vsplayer'])
+        self.assertTrue(stats['pitching']['vsPlayer'])
 
-    def test_pitching_pitchlog_stats_player(self):
+    def test_pitching_pitchLog_stats_player(self):
         """mlb get stats should return hitting stats"""
         self.stats = ['pitchLog']
         self.group = ['pitching']
@@ -209,9 +209,9 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue('pitching' in stats)
 
         # check for split objects
-        self.assertTrue(stats['pitching']['pitchlog'])
+        self.assertTrue(stats['pitching']['pitchLog'])
 
-    def test_pitching_playlog_stats_player(self):
+    def test_pitching_playLog_stats_player(self):
         """mlb get stats should return hitting stats"""
         self.stats = ['playLog']
         self.group = ['pitching']
@@ -226,7 +226,7 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue('pitching' in stats)
 
         # check for split objects
-        self.assertTrue(stats['pitching']['playlog'])
+        self.assertTrue(stats['pitching']['playLog'])
 
     def test_pitching_pitchArsenal_stats_player(self):
         """mlb get stats should return hitting stats"""
@@ -245,7 +245,7 @@ class TestPitchingStats(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['stats']['pitcharsenal'])
 
-    def test_pitching_hotcoldzones_stats_player(self):
+    def test_pitching_hotColdZones_stats_player(self):
         """mlb get stats should return hitting stats"""
         self.stats = ['hotColdZones']
         self.group = ['pitching']
@@ -260,4 +260,4 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue('stats' in stats)
 
         # check for split objects
-        self.assertTrue(stats['stats']['hotcoldzones'])
+        self.assertTrue(stats['stats']['hotColdZones'])

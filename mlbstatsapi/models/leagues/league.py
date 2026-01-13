@@ -77,19 +77,19 @@ class League(MLBBaseModel):
     link: str
     name: Optional[str] = None
     abbreviation: Optional[str] = None
-    name_short: Optional[str] = Field(default=None, alias="nameshort")
-    season_state: Optional[str] = Field(default=None, alias="seasonstate")
-    has_wildcard: Optional[bool] = Field(default=None, alias="haswildcard")
-    has_split_season: Optional[bool] = Field(default=None, alias="hassplitseason")
-    num_games: Optional[int] = Field(default=None, alias="numgames")
-    has_playoff_points: Optional[bool] = Field(default=None, alias="hasplayoffpoints")
-    num_teams: Optional[int] = Field(default=None, alias="numteams")
-    num_wildcard_teams: Optional[int] = Field(default=None, alias="numwildcardteams")
-    season_date_info: Optional[Season] = Field(default=None, alias="seasondateinfo")
+    name_short: Optional[str] = Field(default=None, alias="nameShort")
+    season_state: Optional[str] = Field(default=None, alias="seasonState")
+    has_wildcard: Optional[bool] = Field(default=None, alias="hasWildcard")
+    has_split_season: Optional[bool] = Field(default=None, alias="hasSplitSeason")
+    num_games: Optional[int] = Field(default=None, alias="numGames")
+    has_playoff_points: Optional[bool] = Field(default=None, alias="hasPlayoffPoints")
+    num_teams: Optional[int] = Field(default=None, alias="numTeams")
+    num_wildcard_teams: Optional[int] = Field(default=None, alias="numWildcardTeams")
+    season_date_info: Optional[Season] = Field(default=None, alias="seasonDateInfo")
     season: Optional[str] = None
-    org_code: Optional[str] = Field(default=None, alias="orgcode")
-    conferences_in_use: Optional[bool] = Field(default=None, alias="conferencesinuse")
-    divisions_in_use: Optional[bool] = Field(default=None, alias="divisionsinuse")
+    org_code: Optional[str] = Field(default=None, alias="orgCode")
+    conferences_in_use: Optional[bool] = Field(default=None, alias="conferencesInUse")
+    divisions_in_use: Optional[bool] = Field(default=None, alias="divisionsInUse")
     sport: Optional[Sport] = None
-    sort_order: Optional[int] = Field(default=None, alias="sortorder")
+    sort_order: Optional[int] = Field(default=None, alias="sortOrder")
     active: Optional[bool] = None

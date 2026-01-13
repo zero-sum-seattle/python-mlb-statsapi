@@ -26,12 +26,12 @@ class ScheduleGameTeam(MLBBaseModel):
     is_winner : bool
         If this team is the winner of this game.
     """
-    league_record: LeagueRecord = Field(alias="leaguerecord")
+    league_record: LeagueRecord = Field(alias="leagueRecord")
     team: Team
-    split_squad: bool = Field(alias="splitsquad")
-    series_number: Optional[int] = Field(default=None, alias="seriesnumber")
+    split_squad: bool = Field(alias="splitSquad")
+    series_number: Optional[int] = Field(default=None, alias="seriesNumber")
     score: Optional[int] = None
-    is_winner: Optional[bool] = Field(default=False, alias="iswinner")
+    is_winner: Optional[bool] = Field(default=False, alias="isWinner")
 
 
 class ScheduleHomeAndAway(MLBBaseModel):
@@ -132,44 +132,44 @@ class ScheduleGames(MLBBaseModel):
     resumed_from_date : str
         Resumed from date.
     """
-    game_pk: int = Field(alias="gamepk")
+    game_pk: int = Field(alias="gamePk")
     link: str
-    game_type: str = Field(alias="gametype")
+    game_type: str = Field(alias="gameType")
     season: str
-    game_date: str = Field(alias="gamedate")
-    official_date: str = Field(alias="officialdate")
+    game_date: str = Field(alias="gameDate")
+    official_date: str = Field(alias="officialDate")
     venue: Venue
     content: dict
-    game_number: int = Field(alias="gamenumber")
-    public_facing: bool = Field(alias="publicfacing")
-    double_header: str = Field(alias="doubleheader")
-    gameday_type: str = Field(alias="gamedaytype")
+    game_number: int = Field(alias="gameNumber")
+    public_facing: bool = Field(alias="publicFacing")
+    double_header: str = Field(alias="doubleHeader")
+    gameday_type: str = Field(alias="gamedayType")
     tiebreaker: str
-    calendar_event_id: str = Field(alias="calendareventid")
-    season_display: str = Field(alias="seasondisplay")
-    day_night: str = Field(alias="daynight")
-    scheduled_innings: int = Field(alias="scheduledinnings")
-    reverse_home_away_status: bool = Field(alias="reversehomeawaystatus")
-    series_description: str = Field(alias="seriesdescription")
-    record_source: str = Field(alias="recordsource")
-    if_necessary: str = Field(alias="ifnecessary")
-    if_necessary_description: str = Field(alias="ifnecessarydescription")
+    calendar_event_id: str = Field(alias="calendarEventId")
+    season_display: str = Field(alias="seasonDisplay")
+    day_night: str = Field(alias="dayNight")
+    scheduled_innings: int = Field(alias="scheduledInnings")
+    reverse_home_away_status: bool = Field(alias="reverseHomeAwayStatus")
+    series_description: str = Field(alias="seriesDescription")
+    record_source: str = Field(alias="recordSource")
+    if_necessary: str = Field(alias="ifNecessary")
+    if_necessary_description: str = Field(alias="ifNecessaryDescription")
     status: Optional[GameStatus] = None
     teams: Optional[ScheduleHomeAndAway] = None
-    game_guid: Optional[str] = Field(default=None, alias="gameguid")
+    game_guid: Optional[str] = Field(default=None, alias="gameGuid")
     description: Optional[str] = None
-    inning_break_length: Optional[int] = Field(default=None, alias="inningbreaklength")
-    reschedule_date: Optional[str] = Field(default=None, alias="rescheduledate")
-    reschedule_game_date: Optional[str] = Field(default=None, alias="reschedulegamedate")
-    rescheduled_from: Optional[str] = Field(default=None, alias="rescheduledfrom")
-    rescheduled_from_date: Optional[str] = Field(default=None, alias="rescheduledfromdate")
-    is_tie: Optional[bool] = Field(default=None, alias="istie")
-    resume_date: Optional[str] = Field(default=None, alias="resumedate")
-    resume_game_date: Optional[str] = Field(default=None, alias="resumegamedate")
-    resumed_from: Optional[str] = Field(default=None, alias="resumedfrom")
-    resumed_from_date: Optional[str] = Field(default=None, alias="resumedfromdate")
-    series_game_number: Optional[int] = Field(default=None, alias="seriesgamenumber")
-    games_in_series: Optional[int] = Field(default=None, alias="gamesinseries")
+    inning_break_length: Optional[int] = Field(default=None, alias="inningBreakLength")
+    reschedule_date: Optional[str] = Field(default=None, alias="rescheduleDate")
+    reschedule_game_date: Optional[str] = Field(default=None, alias="rescheduleGameDate")
+    rescheduled_from: Optional[str] = Field(default=None, alias="rescheduledFrom")
+    rescheduled_from_date: Optional[str] = Field(default=None, alias="rescheduledFromDate")
+    is_tie: Optional[bool] = Field(default=None, alias="isTie")
+    resume_date: Optional[str] = Field(default=None, alias="resumeDate")
+    resume_game_date: Optional[str] = Field(default=None, alias="resumeGameDate")
+    resumed_from: Optional[str] = Field(default=None, alias="resumedFrom")
+    resumed_from_date: Optional[str] = Field(default=None, alias="resumedFromDate")
+    series_game_number: Optional[int] = Field(default=None, alias="seriesGameNumber")
+    games_in_series: Optional[int] = Field(default=None, alias="gamesInSeries")
 
     @field_validator('status', 'teams', mode='before')
     @classmethod
@@ -202,9 +202,9 @@ class ScheduleDates(MLBBaseModel):
         A list of events for this date.
     """
     date: str
-    total_items: int = Field(alias="totalitems")
-    total_events: int = Field(alias="totalevents")
-    total_games: int = Field(alias="totalgames")
-    total_games_in_progress: int = Field(alias="totalgamesinprogress")
+    total_items: int = Field(alias="totalItems")
+    total_events: int = Field(alias="totalEvents")
+    total_games: int = Field(alias="totalGames")
+    total_games_in_progress: int = Field(alias="totalGamesInProgress")
     events: List = []
     games: List[ScheduleGames] = []

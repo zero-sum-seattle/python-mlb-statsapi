@@ -105,7 +105,7 @@ class School(MLBBaseModel):
         The state where the school is located.
     """
     name: str
-    school_class: str = Field(alias="schoolclass")
+    school_class: str = Field(alias="schoolClass")
     city: str
     country: str
     state: str

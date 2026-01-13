@@ -43,13 +43,13 @@ class Division(MLBBaseModel):
     link: str
     name: Optional[str] = None
     season: Optional[str] = None
-    name_short: Optional[str] = Field(default=None, alias="nameshort")
+    name_short: Optional[str] = Field(default=None, alias="nameShort")
     abbreviation: Optional[str] = None
     league: Optional[League] = None
     sport: Optional[Sport] = None
-    has_wildcard: Optional[bool] = Field(default=None, alias="haswildcard")
-    sort_order: Optional[int] = Field(default=None, alias="sortorder")
-    num_playoff_teams: Optional[int] = Field(default=None, alias="numplayoffteams")
+    has_wildcard: Optional[bool] = Field(default=None, alias="hasWildcard")
+    sort_order: Optional[int] = Field(default=None, alias="sortOrder")
+    num_playoff_teams: Optional[int] = Field(default=None, alias="numPlayoffTeams")
     active: Optional[bool] = None
 
     model_config = {"arbitrary_types_allowed": True}

@@ -15,18 +15,18 @@ path_to_not_found = os.path.join(current_directory, "../mock_json/response/not_f
 path_to_error = os.path.join(current_directory, "../mock_json/response/error_500.json")
 path_to_player_stats = os.path.join(current_directory, "../mock_json/stats/person/pitching_player_stats.json")
 path_to_team_stats = os.path.join(current_directory, "../mock_json/stats/team/pitching_team_stats.json")
-path_to_pitching_playlog_file = os.path.join(current_directory, "../mock_json/stats/person/pitching_player_playlog.json")
-path_to_pitching_pitchlog_file = os.path.join(current_directory, "../mock_json/stats/person/pitching_player_pitchlog.json")
-path_to_spraychart_file = os.path.join(current_directory, "../mock_json/stats/person/spraychart.json")
+path_to_pitching_playLog_file = os.path.join(current_directory, "../mock_json/stats/person/pitching_player_playlog.json")
+path_to_pitching_pitchLog_file = os.path.join(current_directory, "../mock_json/stats/person/pitching_player_pitchlog.json")
+path_to_sprayChart_file = os.path.join(current_directory, "../mock_json/stats/person/spraychart.json")
 
 HOTCOLDZONE = open(path_to_hotcoldzone_file, "r", encoding="utf-8-sig").read()
 NOT_FOUND_404 = open(path_to_not_found, "r", encoding="utf-8-sig").read()
 ERROR_500 = open(path_to_error, "r", encoding="utf-8-sig").read()
 PLAYERSTATS = open(path_to_player_stats, "r", encoding="utf-8-sig").read()
 TEAMSTATS = open(path_to_team_stats, "r", encoding="utf-8-sig").read()
-PITCHING_PLAY_LOG = open(path_to_pitching_playlog_file, "r", encoding="utf-8-sig").read()
-PITCHING_PITCH_LOG = open(path_to_pitching_pitchlog_file, "r", encoding="utf-8-sig").read()
-SPRAYCHART = open(path_to_spraychart_file, "r", encoding="utf-8-sig").read()
+PITCHING_PLAY_LOG = open(path_to_pitching_playLog_file, "r", encoding="utf-8-sig").read()
+PITCHING_PITCH_LOG = open(path_to_pitching_pitchLog_file, "r", encoding="utf-8-sig").read()
+SPRAYCHART = open(path_to_sprayChart_file, "r", encoding="utf-8-sig").read()
 
 
 @requests_mock.Mocker()
@@ -41,9 +41,9 @@ class TestPitchingStatsMock(unittest.TestCase):
         cls.mock_not_found = json.loads(NOT_FOUND_404)
         cls.mock_player_stats = json.loads(PLAYERSTATS)
         cls.mock_team_stats = json.loads(TEAMSTATS)
-        cls.mock_pitching_playlog = json.loads(PITCHING_PLAY_LOG)
-        cls.mock_pitching_pitchlog = json.loads(PITCHING_PITCH_LOG)
-        cls.mock_spraycharts = json.loads(SPRAYCHART)
+        cls.mock_pitching_playLog = json.loads(PITCHING_PLAY_LOG)
+        cls.mock_pitching_pitchLog = json.loads(PITCHING_PITCH_LOG)
+        cls.mock_sprayCharts = json.loads(SPRAYCHART)
 
 
     @classmethod
@@ -70,13 +70,13 @@ class TestPitchingStatsMock(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['pitching']['season'])
         self.assertTrue(stats['pitching']['career'])
-        self.assertTrue(stats['pitching']['seasonadvanced'])
-        self.assertTrue(stats['pitching']['careeradvanced'])
+        self.assertTrue(stats['pitching']['seasonAdvanced'])
+        self.assertTrue(stats['pitching']['careerAdvanced'])
 
         season = stats['pitching']['season']
         career = stats['pitching']['career']
-        season_advanced = stats['pitching']['seasonadvanced']
-        career_advanced = stats['pitching']['careeradvanced']
+        season_advanced = stats['pitching']['seasonAdvanced']
+        career_advanced = stats['pitching']['careerAdvanced']
 
         self.assertEqual(season.total_splits, len(season.splits))
         self.assertEqual(season.group, 'pitching')
@@ -114,13 +114,13 @@ class TestPitchingStatsMock(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['pitching']['season'])
         self.assertTrue(stats['pitching']['career'])
-        self.assertTrue(stats['pitching']['seasonadvanced'])
-        self.assertTrue(stats['pitching']['careeradvanced'])
+        self.assertTrue(stats['pitching']['seasonAdvanced'])
+        self.assertTrue(stats['pitching']['careerAdvanced'])
 
         season = stats['pitching']['season']
         career = stats['pitching']['career']
-        season_advanced = stats['pitching']['seasonadvanced']
-        career_advanced = stats['pitching']['careeradvanced']
+        season_advanced = stats['pitching']['seasonAdvanced']
+        career_advanced = stats['pitching']['careerAdvanced']
 
         self.assertEqual(season.total_splits, len(season.splits))
         self.assertEqual(season.group, 'pitching')
@@ -153,15 +153,15 @@ class TestPitchingStatsMock(unittest.TestCase):
         self.assertNotEqual(stats, {})
 
         # should not be empty
-        self.assertTrue(stats['stats']['hotcoldzones'])
+        self.assertTrue(stats['stats']['hotColdZones'])
 
-        hotcoldzone = stats['stats']['hotcoldzones']
+        hotcoldzone = stats['stats']['hotColdZones']
 
         # check for split objects
-        self.assertTrue(stats['stats']['hotcoldzones'])
+        self.assertTrue(stats['stats']['hotColdZones'])
 
         # hotcoldzone should return 5 splits
-        hotcoldzone = stats['stats']['hotcoldzones']
+        hotcoldzone = stats['stats']['hotColdZones']
         self.assertEqual(len(hotcoldzone.splits), 5)
         self.assertEqual(hotcoldzone.total_splits, len(hotcoldzone.splits))
 
@@ -170,9 +170,9 @@ class TestPitchingStatsMock(unittest.TestCase):
             self.assertTrue(split.stat.name)
             self.assertEqual(len(split.stat.zones), 13)
 
-    def test_pitching_pitchlog_for_pitcher(self, m):
+    def test_pitching_pitchLog_for_pitcher(self, m):
         """get_player_game_stats should return a dict with stats"""
-        m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=pitchLog&group=pitching', json=self.mock_pitching_pitchlog,
+        m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=pitchLog&group=pitching', json=self.mock_pitching_pitchLog,
         status_code=200)
         self.stats = ['pitchLog']
         self.groups = ['pitching']
@@ -184,23 +184,23 @@ class TestPitchingStatsMock(unittest.TestCase):
         # game_stats should not be empty dic
         self.assertNotEqual(stats, {})
 
-        # playlog key should be populated
+        # playLog key should be populated
         self.assertTrue('pitching' in stats)
-        self.assertTrue(stats['pitching']['pitchlog'])
+        self.assertTrue(stats['pitching']['pitchLog'])
 
-        # pitchlog should have 2 splits from mock
-        pitchlogs = stats['pitching']['pitchlog']
-        self.assertEqual(len(pitchlogs.splits), 2)
-        self.assertEqual(pitchlogs.total_splits, len(pitchlogs.splits))
+        # pitchLog should have 2 splits from mock
+        pitchLogs = stats['pitching']['pitchLog']
+        self.assertEqual(len(pitchLogs.splits), 2)
+        self.assertEqual(pitchLogs.total_splits, len(pitchLogs.splits))
 
-        for pitchlog in pitchlogs.splits:
-            self.assertTrue(pitchlog.stat.details)
-            self.assertTrue(pitchlog.stat.count)
+        for pitchLog in pitchLogs.splits:
+            self.assertTrue(pitchLog.stat.details)
+            self.assertTrue(pitchLog.stat.count)
 
     
-    def test_pitching_playlog_for_pitcher(self, m):
+    def test_pitching_playLog_for_pitcher(self, m):
         """get_player_game_stats should return a dict with stats"""
-        m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=playLog&group=pitching', json=self.mock_pitching_playlog,
+        m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=playLog&group=pitching', json=self.mock_pitching_playLog,
         status_code=200)
         self.stats = ['playLog']
         self.groups = ['pitching']
@@ -212,38 +212,38 @@ class TestPitchingStatsMock(unittest.TestCase):
         # game_stats should not be empty dic
         self.assertNotEqual(stats, {})
 
-        # playlog key should be populated
+        # playLog key should be populated
         self.assertTrue('pitching' in stats)
-        self.assertTrue(stats['pitching']['playlog'])
+        self.assertTrue(stats['pitching']['playLog'])
 
-        # pitchlog items should have 2 splits
-        pitchlogs = stats['pitching']['playlog']
-        self.assertEqual(len(pitchlogs.splits), 2)
-        self.assertEqual(pitchlogs.total_splits, len(pitchlogs.splits))
+        # pitchLog items should have 2 splits
+        pitchLogs = stats['pitching']['playLog']
+        self.assertEqual(len(pitchLogs.splits), 2)
+        self.assertEqual(pitchLogs.total_splits, len(pitchLogs.splits))
 
-        for pitchlog in pitchlogs.splits:
-            self.assertTrue(pitchlog.stat)
+        for pitchLog in pitchLogs.splits:
+            self.assertTrue(pitchLog.stat)
     
     def test_pitching_play_log_for_player(self, m):
         """get_player_game_stats should return a dict with stats"""
-        m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=sprayChart&group=pitching', json=self.mock_spraycharts,
+        m.get('https://statsapi.mlb.com/api/v1/people/660271/stats?stats=sprayChart&group=pitching', json=self.mock_sprayCharts,
         status_code=200)
         self.stats = ['sprayChart']
         self.groups = ['pitching']
-        spraychart = self.mlb.get_player_stats(self.pitcher.id, stats=self.stats, groups=self.groups)
+        sprayChart = self.mlb.get_player_stats(self.pitcher.id, stats=self.stats, groups=self.groups)
 
         # game_stats should not be None
-        self.assertIsNotNone(spraychart)
+        self.assertIsNotNone(sprayChart)
 
         # game_stats should not be empty dic
-        self.assertNotEqual(spraychart, {})
+        self.assertNotEqual(sprayChart, {})
 
-        self.assertTrue(spraychart['stats']['spraychart'])
+        self.assertTrue(sprayChart['stats']['sprayChart'])
 
 
-        spraychart = spraychart['stats']['spraychart']
-        self.assertEqual(len(spraychart.splits), 1)
-        self.assertEqual(spraychart.total_splits, len(spraychart.splits))
+        sprayChart = sprayChart['stats']['sprayChart']
+        self.assertEqual(len(sprayChart.splits), 1)
+        self.assertEqual(sprayChart.total_splits, len(sprayChart.splits))
 
-        for pitchlog in spraychart.splits:
-            self.assertTrue(pitchlog.stat)
+        for pitchLog in sprayChart.splits:
+            self.assertTrue(pitchLog.stat)

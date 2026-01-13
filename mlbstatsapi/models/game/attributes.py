@@ -20,5 +20,5 @@ class MetaData(MLBBaseModel):
     """
     wait: int
     timestamp: str
-    game_events: List[str] = Field(alias="gameevents")
-    logical_events: List[str] = Field(alias="logicalevents")
+    game_events: List[str] = Field(alias="gameEvents")
+    logical_events: List[str] = Field(alias="logicalEvents")

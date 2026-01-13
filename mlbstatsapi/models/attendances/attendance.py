@@ -15,5 +15,5 @@ class Attendance(MLBBaseModel):
     aggregate_totals : AttendanceTotals
         Attendance aggregate total numbers for query.
     """
-    aggregate_totals: AttendanceTotals = Field(alias="aggregatetotals")
+    aggregate_totals: AttendanceTotals = Field(alias="aggregateTotals")
     records: List[AttendanceRecords] = []

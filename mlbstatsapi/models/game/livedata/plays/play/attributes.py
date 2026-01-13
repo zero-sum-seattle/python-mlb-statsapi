@@ -32,17 +32,17 @@ class PlayAbout(MLBBaseModel):
     captivating_index : int
         What is the captivating index for this play.
     """
-    at_bat_index: int = Field(alias="atbatindex")
-    half_inning: str = Field(alias="halfinning")
-    is_top_inning: bool = Field(alias="istopinning")
+    at_bat_index: int = Field(alias="atBatIndex")
+    half_inning: str = Field(alias="halfInning")
+    is_top_inning: bool = Field(alias="isTopInning")
     inning: int
-    is_complete: bool = Field(alias="iscomplete")
-    is_scoring_play: bool = Field(alias="isscoringplay")
-    has_out: bool = Field(alias="hasout")
-    captivating_index: int = Field(alias="captivatingindex")
-    end_time: Optional[str] = Field(default=None, alias="endtime")
-    start_time: Optional[str] = Field(default=None, alias="starttime")
-    has_review: Optional[bool] = Field(default=None, alias="hasreview")
+    is_complete: bool = Field(alias="isComplete")
+    is_scoring_play: bool = Field(alias="isScoringPlay")
+    has_out: bool = Field(alias="hasOut")
+    captivating_index: int = Field(alias="captivatingIndex")
+    end_time: Optional[str] = Field(default=None, alias="endTime")
+    start_time: Optional[str] = Field(default=None, alias="startTime")
+    has_review: Optional[bool] = Field(default=None, alias="hasReview")
 
 
 class PlayResult(MLBBaseModel):
@@ -69,13 +69,13 @@ class PlayResult(MLBBaseModel):
         If the play was an out.
     """
     type: str
-    away_score: int = Field(alias="awayscore")
-    home_score: int = Field(alias="homescore")
+    away_score: int = Field(alias="awayScore")
+    home_score: int = Field(alias="homeScore")
     rbi: Optional[int] = None
     event: Optional[str] = None
-    event_type: Optional[str] = Field(default=None, alias="eventtype")
+    event_type: Optional[str] = Field(default=None, alias="eventType")
     description: Optional[str] = None
-    is_out: Optional[bool] = Field(default=None, alias="isout")
+    is_out: Optional[bool] = Field(default=None, alias="isOut")
 
 
 class PlayReviewDetails(MLBBaseModel):
@@ -95,8 +95,8 @@ class PlayReviewDetails(MLBBaseModel):
     additional_reviews : str
         Additional reviews.
     """
-    is_overturned: bool = Field(alias="isoverturned")
-    in_progress: bool = Field(alias="inprogress")
-    review_type: str = Field(alias="reviewtype")
-    challenge_team_id: Optional[int] = Field(default=None, alias="challengeteamid")
-    additional_reviews: Optional[str] = Field(default=None, alias="additionalreviews")
+    is_overturned: bool = Field(alias="isOverturned")
+    in_progress: bool = Field(alias="inProgress")
+    review_type: str = Field(alias="reviewType")
+    challenge_team_id: Optional[int] = Field(default=None, alias="challengeTeamId")
+    additional_reviews: Optional[str] = Field(default=None, alias="additionalReviews")

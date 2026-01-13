@@ -28,10 +28,10 @@ class Standings(MLBBaseModel):
     roundrobin : dict
         Roundrobin data (if applicable).
     """
-    standings_type: str = Field(alias="standingstype")
+    standings_type: str = Field(alias="standingsType")
     league: League
     division: Division
-    last_updated: str = Field(alias="lastupdated")
-    team_records: List[TeamRecords] = Field(alias="teamrecords")
+    last_updated: str = Field(alias="lastUpdated")
+    team_records: List[TeamRecords] = Field(alias="teamRecords")
     sport: Optional[Sport] = None
     roundrobin: Optional[dict] = None

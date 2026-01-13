@@ -51,16 +51,16 @@ class Location(MLBBaseModel):
     """
     city: str
     country: str
-    state_abbrev: Optional[str] = Field(default=None, alias="stateabbrev")
+    state_abbrev: Optional[str] = Field(default=None, alias="stateAbbrev")
     address1: Optional[str] = None
     state: Optional[str] = None
-    postal_code: Optional[str] = Field(default=None, alias="postalcode")
+    postal_code: Optional[str] = Field(default=None, alias="postalCode")
     phone: Optional[str] = None
     address2: Optional[str] = None
     address3: Optional[str] = None
-    azimuth_angle: Optional[float] = Field(default=None, alias="azimuthangle")
+    azimuth_angle: Optional[float] = Field(default=None, alias="azimuthAngle")
     elevation: Optional[int] = None
-    default_coordinates: Optional[VenueDefaultCoordinates] = Field(default=None, alias="defaultcoordinates")
+    default_coordinates: Optional[VenueDefaultCoordinates] = Field(default=None, alias="defaultCoordinates")
 
 
 class TimeZone(MLBBaseModel):
@@ -81,7 +81,7 @@ class TimeZone(MLBBaseModel):
     id: str
     offset: int
     tz: str
-    offset_at_game_time: Optional[int] = Field(default=None, alias="offsetatgametime")
+    offset_at_game_time: Optional[int] = Field(default=None, alias="offsetAtGameTime")
 
 
 class FieldInfo(MLBBaseModel):
@@ -112,12 +112,12 @@ class FieldInfo(MLBBaseModel):
         Distance to right line.
     """
     capacity: Optional[int] = None
-    turf_type: Optional[str] = Field(default=None, alias="turftype")
-    roof_type: Optional[str] = Field(default=None, alias="rooftype")
-    left_line: Optional[int] = Field(default=None, alias="leftline")
+    turf_type: Optional[str] = Field(default=None, alias="turfType")
+    roof_type: Optional[str] = Field(default=None, alias="roofType")
+    left_line: Optional[int] = Field(default=None, alias="leftLine")
     left: Optional[int] = None
-    left_center: Optional[int] = Field(default=None, alias="leftcenter")
+    left_center: Optional[int] = Field(default=None, alias="leftCenter")
     center: Optional[int] = None
-    right_center: Optional[int] = Field(default=None, alias="rightcenter")
+    right_center: Optional[int] = Field(default=None, alias="rightCenter")
     right: Optional[int] = None
-    right_line: Optional[int] = Field(default=None, alias="rightline")
+    right_line: Optional[int] = Field(default=None, alias="rightLine")

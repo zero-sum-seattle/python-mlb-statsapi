@@ -27,8 +27,8 @@ class PitchArsenalSplit(MLBBaseModel):
     """
     percentage: float
     count: int
-    total_pitches: int = Field(alias="totalpitches")
-    average_speed: float = Field(alias="averagespeed")
+    total_pitches: int = Field(alias="totalPitches")
+    average_speed: float = Field(alias="averageSpeed")
     type: CodeDesc
 
 
@@ -95,19 +95,19 @@ class Sabermetrics(MLBBaseModel):
     woba: Optional[float] = None
     wraa: Optional[float] = None
     wrc: Optional[float] = None
-    wrc_plus: Optional[float] = Field(default=None, alias="wrcplus")
+    wrc_plus: Optional[float] = Field(default=None, alias="wrcPlus")
     rar: Optional[float] = None
     war: Optional[float] = None
     batting: Optional[float] = None
     fielding: Optional[float] = None
-    base_running: Optional[float] = Field(default=None, alias="baserunning")
+    base_running: Optional[float] = Field(default=None, alias="baseRunning")
     positional: Optional[float] = None
-    w_league: Optional[float] = Field(default=None, alias="wleague")
+    w_league: Optional[float] = Field(default=None, alias="wLeague")
     replacement: Optional[float] = None
     spd: Optional[float] = None
     ubr: Optional[float] = None
-    w_gdp: Optional[float] = Field(default=None, alias="wgdp")
-    w_sb: Optional[float] = Field(default=None, alias="wsb")
+    w_gdp: Optional[float] = Field(default=None, alias="wGdp")
+    w_sb: Optional[float] = Field(default=None, alias="wSb")
 
 
 class Split(MLBBaseModel):
@@ -138,9 +138,9 @@ class Split(MLBBaseModel):
         The league.
     """
     season: Optional[str] = None
-    num_teams: Optional[int] = Field(default=None, alias="numteams")
-    num_leagues: Optional[int] = Field(default=None, alias="numleagues")
-    game_type: Optional[str] = Field(default=None, alias="gametype")
+    num_teams: Optional[int] = Field(default=None, alias="numTeams")
+    num_leagues: Optional[int] = Field(default=None, alias="numLeagues")
+    game_type: Optional[str] = Field(default=None, alias="gameType")
     rank: Optional[int] = None
     position: Optional[Position] = None
     team: Optional[Team] = None
@@ -176,7 +176,7 @@ class Stat(MLBBaseModel):
     """
     group: str
     type: str
-    total_splits: int = Field(alias="totalsplits")
+    total_splits: int = Field(alias="totalSplits")
     exemptions: Optional[List] = []
     splits: Optional[List] = []
 
@@ -260,11 +260,11 @@ class Chart(MLBBaseModel):
     right_field : int
         Right field percentage.
     """
-    left_field: int = Field(alias="leftfield")
-    left_center_field: int = Field(alias="leftcenterfield")
-    center_field: int = Field(alias="centerfield")
-    right_center_field: int = Field(alias="rightcenterfield")
-    right_field: int = Field(alias="rightfield")
+    left_field: int = Field(alias="leftField")
+    left_center_field: int = Field(alias="leftCenterField")
+    center_field: int = Field(alias="centerField")
+    right_center_field: int = Field(alias="rightCenterField")
+    right_field: int = Field(alias="rightField")
 
 
 class SprayCharts(Split):
@@ -299,24 +299,24 @@ class OutsAboveAverage(Split):
     """
     _stat: ClassVar[List[str]] = ['outsAboveAverage']
     attempts: int
-    total_outs_above_average_back: int = Field(alias="totaloutsaboveaverageback")
-    total_outs_above_average_back_unrounded: int = Field(alias="totaloutsaboveaveragebackunrounded")
-    outs_above_average_back_straight: int = Field(alias="outsaboveaveragebackstraight")
-    outs_above_average_back_straight_unrounded: int = Field(alias="outsaboveaveragebackstraightunrounded")
-    outs_above_average_back_left: int = Field(alias="outsaboveaveragebackleft")
-    outs_above_average_back_left_unrounded: int = Field(alias="outsaboveaveragebackleftunrounded")
-    outs_above_average_back_right: int = Field(alias="outsaboveaveragebackright")
-    outs_above_average_back_right_unrounded: int = Field(alias="outsaboveaveragebackrightunrounded")
-    total_outs_above_average_in: int = Field(alias="totaloutsaboveaveragein")
-    total_outs_above_average_in_unrounded: int = Field(alias="totaloutsaboveaverageinunrounded")
-    outs_above_average_in_straight: int = Field(alias="outsaboveaverageinstraight")
-    outs_above_average_in_straight_unrounded: int = Field(alias="outsaboveaverageinstraightunrounded")
-    outs_above_average_in_left: int = Field(alias="outsaboveaverageinleft")
-    outs_above_average_in_left_unrounded: int = Field(alias="outsaboveaverageinleftunrounded")
-    outs_above_average_in_right: int = Field(alias="outsaboveaverageinright")
-    outs_above_average_in_right_unrounded: int = Field(alias="outsaboveaverageinrightunrounded")
+    total_outs_above_average_back: int = Field(alias="totalOutsAboveAverageBack")
+    total_outs_above_average_back_unrounded: int = Field(alias="totalOutsAboveAverageBackUnrounded")
+    outs_above_average_back_straight: int = Field(alias="outsAboveAverageBackStraight")
+    outs_above_average_back_straight_unrounded: int = Field(alias="outsAboveAverageBackStraightUnrounded")
+    outs_above_average_back_left: int = Field(alias="outsAboveAverageBackLeft")
+    outs_above_average_back_left_unrounded: int = Field(alias="outsAboveAverageBackLeftUnrounded")
+    outs_above_average_back_right: int = Field(alias="outsAboveAverageBackRight")
+    outs_above_average_back_right_unrounded: int = Field(alias="outsAboveAverageBackRightUnrounded")
+    total_outs_above_average_in: int = Field(alias="totalOutsAboveAverageIn")
+    total_outs_above_average_in_unrounded: int = Field(alias="totalOutsAboveAverageInUnrounded")
+    outs_above_average_in_straight: int = Field(alias="outsAboveAverageInStraight")
+    outs_above_average_in_straight_unrounded: int = Field(alias="outsAboveAverageInStraightUnrounded")
+    outs_above_average_in_left: int = Field(alias="outsAboveAverageInLeft")
+    outs_above_average_in_left_unrounded: int = Field(alias="outsAboveAverageInLeftUnrounded")
+    outs_above_average_in_right: int = Field(alias="outsAboveAverageInRight")
+    outs_above_average_in_right_unrounded: int = Field(alias="outsAboveAverageInRightUnrounded")
     player: Person
-    game_type: str = Field(alias="gametype")
+    game_type: str = Field(alias="gameType")
 
 
 class PlayerGameLogStat(Split):

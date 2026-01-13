@@ -66,18 +66,18 @@ class GameData(MLBBaseModel):
     teams: GameTeams
     players: List[Person] = []
     venue: Venue
-    official_venue: Venue = Field(alias="officialvenue")
+    official_venue: Venue = Field(alias="officialVenue")
     review: GameReview
     flags: GameFlags
     alerts: List = []
-    probable_pitchers: GameProbablePitchers = Field(alias="probablepitchers")
-    mound_visits: Optional[MoundVisits] = Field(default=None, alias="moundvisits")
-    game_info: Optional[GameInfo] = Field(default=None, alias="gameinfo")
+    probable_pitchers: GameProbablePitchers = Field(alias="probablePitchers")
+    mound_visits: Optional[MoundVisits] = Field(default=None, alias="moundVisits")
+    game_info: Optional[GameInfo] = Field(default=None, alias="gameInfo")
     weather: Optional[GameWeather] = None
-    official_scorer: Optional[Person] = Field(default=None, alias="officialscorer")
-    primary_data_caster: Optional[Person] = Field(default=None, alias="primarydatacaster")
-    secondary_data_caster: Optional[Person] = Field(default=None, alias="secondarydatacaster")
-    abs_challenges: Optional[List[dict]] = Field(default=None, alias="abschallenges")
+    official_scorer: Optional[Person] = Field(default=None, alias="officialScorer")
+    primary_data_caster: Optional[Person] = Field(default=None, alias="primaryDataCaster")
+    secondary_data_caster: Optional[Person] = Field(default=None, alias="secondaryDataCaster")
+    abs_challenges: Optional[List[dict]] = Field(default=None, alias="absChallenges")
 
     @model_validator(mode='before')
     @classmethod

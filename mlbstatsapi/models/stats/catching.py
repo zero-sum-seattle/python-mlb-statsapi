@@ -76,36 +76,36 @@ class SimpleCatchingSplit(MLBBaseModel):
         The number of pickoff attempts.
     """
     age: Optional[int] = None
-    games_played: Optional[int] = Field(default=None, alias="gamesplayed")
+    games_played: Optional[int] = Field(default=None, alias="gamesPlayed")
     runs: Optional[int] = None
-    home_runs: Optional[int] = Field(default=None, alias="homeruns")
+    home_runs: Optional[int] = Field(default=None, alias="homeRuns")
     strikeouts: Optional[int] = None
-    base_on_balls: Optional[int] = Field(default=None, alias="baseonballs")
-    intentional_walks: Optional[int] = Field(default=None, alias="intentionalwalks")
+    base_on_balls: Optional[int] = Field(default=None, alias="baseOnBalls")
+    intentional_walks: Optional[int] = Field(default=None, alias="intentionalWalks")
     hits: Optional[int] = None
-    hit_by_pitch: Optional[int] = Field(default=None, alias="hitbypitch")
+    hit_by_pitch: Optional[int] = Field(default=None, alias="hitByPitch")
     avg: Optional[str] = None
-    at_bats: Optional[int] = Field(default=None, alias="atbats")
+    at_bats: Optional[int] = Field(default=None, alias="atBats")
     obp: Optional[str] = None
     slg: Optional[str] = None
     ops: Optional[str] = None
-    caught_stealing: Optional[int] = Field(default=None, alias="caughtstealing")
-    caught_stealing_percentage: Optional[str] = Field(default=None, alias="caughtstealingpercentage")
-    stolen_bases: Optional[int] = Field(default=None, alias="stolenbases")
-    stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenbasepercentage")
-    earned_runs: Optional[int] = Field(default=None, alias="earnedruns")
-    batters_faced: Optional[int] = Field(default=None, alias="battersfaced")
-    games_pitched: Optional[int] = Field(default=None, alias="gamespitched")
-    hit_batsmen: Optional[int] = Field(default=None, alias="hitbatsmen")
-    wild_pitches: Optional[int] = Field(default=None, alias="wildpitches")
+    caught_stealing: Optional[int] = Field(default=None, alias="caughtStealing")
+    caught_stealing_percentage: Optional[str] = Field(default=None, alias="caughtStealingPercentage")
+    stolen_bases: Optional[int] = Field(default=None, alias="stolenBases")
+    stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenBasePercentage")
+    earned_runs: Optional[int] = Field(default=None, alias="earnedRuns")
+    batters_faced: Optional[int] = Field(default=None, alias="battersFaced")
+    games_pitched: Optional[int] = Field(default=None, alias="gamesPitched")
+    hit_batsmen: Optional[int] = Field(default=None, alias="hitBatsmen")
+    wild_pitches: Optional[int] = Field(default=None, alias="wildPitches")
     pickoffs: Optional[int] = None
-    total_bases: Optional[int] = Field(default=None, alias="totalbases")
-    strikeout_walk_ratio: Optional[str] = Field(default=None, alias="strikeoutwalkratio")
-    catchers_interference: Optional[int] = Field(default=None, alias="catchersinterference")
-    sac_bunts: Optional[int] = Field(default=None, alias="sacbunts")
-    sac_flies: Optional[int] = Field(default=None, alias="sacflies")
-    passed_ball: Optional[int] = Field(default=None, alias="passedball")
-    pickoff_attempts: Optional[int] = Field(default=None, alias="pickoffattempts")
+    total_bases: Optional[int] = Field(default=None, alias="totalBases")
+    strikeout_walk_ratio: Optional[str] = Field(default=None, alias="strikeoutWalkRatio")
+    catchers_interference: Optional[int] = Field(default=None, alias="catchersInterference")
+    sac_bunts: Optional[int] = Field(default=None, alias="sacBunts")
+    sac_flies: Optional[int] = Field(default=None, alias="sacFlies")
+    passed_ball: Optional[int] = Field(default=None, alias="passedBall")
+    pickoff_attempts: Optional[int] = Field(default=None, alias="pickoffAttempts")
 
 
 class CatchingSeason(Split):
@@ -217,8 +217,8 @@ class CatchingGameLog(Split):
         The opponent.
     """
     _stat: ClassVar[List[str]] = ['gameLog']
-    is_home: bool = Field(alias="ishome")
-    is_win: bool = Field(alias="iswin")
+    is_home: bool = Field(alias="isHome")
+    is_win: bool = Field(alias="isWin")
     date: str
     game: Game
     opponent: Team
@@ -262,7 +262,7 @@ class CatchingByDayOfWeek(Split):
         The catching split stat.
     """
     _stat: ClassVar[List[str]] = ['byDayOfWeek']
-    day_of_week: int = Field(alias="dayofweek")
+    day_of_week: int = Field(alias="dayOfWeek")
     stat: SimpleCatchingSplit
 
 
@@ -278,7 +278,7 @@ class CatchingHomeAndAway(Split):
         The catching split stat.
     """
     _stat: ClassVar[List[str]] = ['homeAndAway']
-    is_home: bool = Field(alias="ishome")
+    is_home: bool = Field(alias="isHome")
     stat: SimpleCatchingSplit
 
 
@@ -294,5 +294,5 @@ class CatchingWinLoss(Split):
         The catching split stat.
     """
     _stat: ClassVar[List[str]] = ['winLoss']
-    is_win: bool = Field(alias="iswin")
+    is_win: bool = Field(alias="isWin")
     stat: SimpleCatchingSplit

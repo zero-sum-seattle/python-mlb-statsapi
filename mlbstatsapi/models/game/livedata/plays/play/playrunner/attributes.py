@@ -41,12 +41,12 @@ class RunnerMovement(MLBBaseModel):
     out_base : str
         Base runner was made out.
     """
-    is_out: bool = Field(alias="isout")
-    out_number: Optional[int] = Field(default=None, alias="outnumber")
-    origin_base: Optional[str] = Field(default=None, alias="originbase")
+    is_out: bool = Field(alias="isOut")
+    out_number: Optional[int] = Field(default=None, alias="outNumber")
+    origin_base: Optional[str] = Field(default=None, alias="originBase")
     start: Optional[str] = None
     end: Optional[str] = None
-    out_base: Optional[str] = Field(default=None, alias="outbase")
+    out_base: Optional[str] = Field(default=None, alias="outBase")
 
 
 class RunnerDetails(MLBBaseModel):
@@ -77,12 +77,12 @@ class RunnerDetails(MLBBaseModel):
         Who was the responsible pitcher.
     """
     event: str
-    event_type: str = Field(alias="eventtype")
+    event_type: str = Field(alias="eventType")
     runner: Person
-    is_scoring_event: bool = Field(alias="isscoringevent")
+    is_scoring_event: bool = Field(alias="isScoringEvent")
     rbi: bool
     earned: bool
-    team_unearned: bool = Field(alias="teamunearned")
-    play_index: int = Field(alias="playindex")
-    movement_reason: Optional[str] = Field(default=None, alias="movementreason")
-    responsible_pitcher: Optional[Person] = Field(default=None, alias="responsiblepitcher")
+    team_unearned: bool = Field(alias="teamUnearned")
+    play_index: int = Field(alias="playIndex")
+    movement_reason: Optional[str] = Field(default=None, alias="movementReason")
+    responsible_pitcher: Optional[Person] = Field(default=None, alias="responsiblePitcher")

@@ -903,7 +903,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'gamepk' in mlb_data.data and mlb_data.data['gamepk'] == game_id:
+        if 'gamePk' in mlb_data.data and mlb_data.data['gamePk'] == game_id:
             return Game(**mlb_data.data)
 
     def get_game_play_by_play(self, game_id: int, **params) -> Union[Plays, None]:
@@ -948,7 +948,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'allplays' in mlb_data.data and mlb_data.data['allplays']:
+        if 'allPlays' in mlb_data.data and mlb_data.data['allPlays']:
             return Plays(**mlb_data.data)
 
     def get_game_line_score(self, game_id: int, **params) -> Union[Linescore, None]:
@@ -1095,7 +1095,7 @@ class Mlb:
         if 'dates' in mlb_data.data and mlb_data.data['dates']:
             for date in mlb_data.data['dates']:
                for game in date['games']:
-                   game_ids.append(game.gamepk)
+                   game_ids.append(game['gamePk'])
 
         return game_ids
 
@@ -2027,7 +2027,7 @@ class Mlb:
         Parameters
         ----------
         game_id : int
-            Insert gamePk to return HomerunDerby data for a specific gamepk.
+            Insert gamePk to return HomerunDerby data for a specific gamePk.
 
         Other Parameters
         ----------------
@@ -2088,7 +2088,7 @@ class Mlb:
         >>> stats = ['season', 'seasonAdvanced']
         >>> groups = ['pitching']
         >>> mlb.get_team_stats(133, stats, groups)
-        {'pitching': {'season': [PitchingSeason], 'seasonadvanced': [PitchingSeasonAdvanced] }}
+        {'pitching': {'season': [PitchingSeason], 'seasonAdvanced': [PitchingSeasonAdvanced] }}
         """
         params['stats'] = stats
         params['group'] = groups
@@ -2134,8 +2134,8 @@ class Mlb:
         >>> player_id = 663728
         >>> game_id = 715757
         >>> stats = mlb.get_player_stats_for_game(person_id=person_id, game_id=game_id)
-        >>> print(stats['stats']['gamelog'])
-        >>> print(stats['hitting']['playlog'])
+        >>> print(stats['stats']['gameLog'])
+        >>> print(stats['hitting']['playLog'])
         """
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats/game/{game_id}')
         if 400 <= mlb_data.status_code <= 499:
@@ -2166,7 +2166,7 @@ class Mlb:
         season : str
             Insert year to return team stats for a particular season, season=2018
         eventType : str
-            Notes for individual events for playLog, playlog can be filered by individual events.
+            Notes for individual events for playLog, playLog can be filered by individual events.
             List of eventTypes can be found at https://statsapi.mlb.com/api/v1/eventTypes
 
         Returns
@@ -2186,7 +2186,7 @@ class Mlb:
         >>> stats = ['season', 'seasonAdvanced']
         >>> groups = ['hitting']
         >>> mlb.get_player_stats(647351, stats, groups)
-        {'hitting': {'season': [HittingSeason], 'seasonadvanced': [HittingSeasonAdvanced] }}
+        {'hitting': {'season': [HittingSeason], 'seasonAdvanced': [HittingSeasonAdvanced] }}
         """
         params['stats'] = stats
         params['group'] = groups
@@ -2262,4 +2262,3 @@ class Mlb:
         return splits
 
 # This is to test pypi, please delete later
-

@@ -24,9 +24,9 @@ class LinescoreTeamScoring(MLBBaseModel):
     """
     hits: int
     errors: int
-    left_on_base: int = Field(alias="leftonbase")
+    left_on_base: int = Field(alias="leftOnBase")
     runs: Optional[int] = None
-    is_winner: Optional[bool] = Field(default=None, alias="iswinner")
+    is_winner: Optional[bool] = Field(default=None, alias="isWinner")
 
 
 class LinescoreInning(MLBBaseModel):
@@ -45,7 +45,7 @@ class LinescoreInning(MLBBaseModel):
         Away team inning info.
     """
     num: int
-    ordinal_num: str = Field(alias="ordinalnum")
+    ordinal_num: str = Field(alias="ordinalNum")
     home: Optional[LinescoreTeamScoring] = None
     away: Optional[LinescoreTeamScoring] = None
 
@@ -108,10 +108,10 @@ class LinescoreOffense(MLBBaseModel):
     """
     team: Team
     batter: Optional[Person] = None
-    on_deck: Optional[Person] = Field(default=None, alias="ondeck")
-    in_hole: Optional[Person] = Field(default=None, alias="inhole")
+    on_deck: Optional[Person] = Field(default=None, alias="onDeck")
+    in_hole: Optional[Person] = Field(default=None, alias="inHole")
     pitcher: Optional[Person] = None
-    batting_order: Optional[int] = Field(default=None, alias="battingorder")
+    batting_order: Optional[int] = Field(default=None, alias="battingOrder")
     first: Optional[str] = None
     second: Optional[str] = None
     third: Optional[str] = None
@@ -171,9 +171,9 @@ class LinescoreDefense(MLBBaseModel):
     center: Optional[Person] = None
     right: Optional[Person] = None
     batter: Optional[Person] = None
-    on_deck: Optional[Person] = Field(default=None, alias="ondeck")
-    in_hole: Optional[Person] = Field(default=None, alias="inhole")
-    batting_order: Optional[int] = Field(default=None, alias="battingorder")
+    on_deck: Optional[Person] = Field(default=None, alias="onDeck")
+    in_hole: Optional[Person] = Field(default=None, alias="inHole")
+    batting_order: Optional[int] = Field(default=None, alias="battingOrder")
 
     @field_validator(
         'pitcher', 'catcher', 'first', 'second', 'third', 'shortstop',

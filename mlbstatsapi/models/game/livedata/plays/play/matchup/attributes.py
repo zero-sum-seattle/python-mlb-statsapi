@@ -17,4 +17,4 @@ class PlayMatchupSplits(MLBBaseModel):
     """
     batter: str
     pitcher: str
-    men_on_base: str = Field(alias="menonbase")
+    men_on_base: str = Field(alias="menOnBase")

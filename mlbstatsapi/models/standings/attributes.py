@@ -18,9 +18,9 @@ class Streak(MLBBaseModel):
     streak_code : str
         Streak code.
     """
-    streak_type: str = Field(alias="streaktype")
-    streak_number: int = Field(alias="streaknumber")
-    streak_code: str = Field(alias="streakcode")
+    streak_type: str = Field(alias="streakType")
+    streak_number: int = Field(alias="streakNumber")
+    streak_code: str = Field(alias="streakCode")
 
 
 class TeamRecords(TeamRecord):
@@ -81,24 +81,24 @@ class TeamRecords(TeamRecord):
     team: Team
     season: int
     streak: Streak
-    division_rank: str = Field(alias="divisionrank")
-    league_rank: str = Field(alias="leaguerank")
-    sport_rank: str = Field(alias="sportrank")
-    games_back: str = Field(alias="gamesback")
-    last_updated: str = Field(alias="lastupdated")
-    runs_allowed: int = Field(alias="runsallowed")
-    runs_scored: int = Field(alias="runsscored")
-    division_champ: bool = Field(alias="divisionchamp")
-    has_wildcard: bool = Field(alias="haswildcard")
+    division_rank: str = Field(alias="divisionRank")
+    league_rank: str = Field(alias="leagueRank")
+    sport_rank: str = Field(alias="sportRank")
+    games_back: str = Field(alias="gamesBack")
+    last_updated: str = Field(alias="lastUpdated")
+    runs_allowed: int = Field(alias="runsAllowed")
+    runs_scored: int = Field(alias="runsScored")
+    division_champ: bool = Field(alias="divisionChamp")
+    has_wildcard: bool = Field(alias="hasWildcard")
     clinched: bool
-    elimination_number: str = Field(alias="eliminationnumber")
-    elimination_number_sport: str = Field(alias="eliminationnumbersport")
-    elimination_number_league: str = Field(alias="eliminationnumberleague")
-    elimination_number_division: str = Field(alias="eliminationnumberdivision")
-    elimination_number_conference: str = Field(alias="eliminationnumberconference")
-    wildcard_elimination_number: str = Field(alias="wildcardeliminationnumber")
-    run_differential: int = Field(alias="rundifferential")
-    wildcard_rank: Optional[str] = Field(default=None, alias="wildcardrank")
-    wildcard_leader: Optional[bool] = Field(default=None, alias="wildcardleader")
-    magic_number: Optional[str] = Field(default=None, alias="magicnumber")
-    clinch_indicator: Optional[str] = Field(default=None, alias="clinchindicator")
+    elimination_number: str = Field(alias="eliminationNumber")
+    elimination_number_sport: str = Field(alias="eliminationNumberSport")
+    elimination_number_league: str = Field(alias="eliminationNumberLeague")
+    elimination_number_division: str = Field(alias="eliminationNumberDivision")
+    elimination_number_conference: str = Field(alias="eliminationNumberConference")
+    wildcard_elimination_number: str = Field(alias="wildcardEliminationNumber")
+    run_differential: int = Field(alias="runDifferential")
+    wildcard_rank: Optional[str] = Field(default=None, alias="wildcardRank")
+    wildcard_leader: Optional[bool] = Field(default=None, alias="wildcardLeader")
+    magic_number: Optional[str] = Field(default=None, alias="magicNumber")
+    clinch_indicator: Optional[str] = Field(default=None, alias="clinchIndicator")

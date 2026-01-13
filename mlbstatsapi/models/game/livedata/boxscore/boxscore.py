@@ -23,9 +23,9 @@ class TopPerformer(MLBBaseModel):
     """
     player: PlayersDictPerson
     type: str
-    game_score: int = Field(alias="gamescore")
-    hitting_game_score: Optional[int] = Field(default=None, alias="hittinggamescore")
-    pitching_game_score: Optional[int] = Field(default=None, alias="pitchinggamescore")
+    game_score: int = Field(alias="gameScore")
+    hitting_game_score: Optional[int] = Field(default=None, alias="hittingGameScore")
+    pitching_game_score: Optional[int] = Field(default=None, alias="pitchingGameScore")
 
 
 class BoxScore(MLBBaseModel):
@@ -48,5 +48,5 @@ class BoxScore(MLBBaseModel):
     teams: BoxScoreTeams
     officials: List[BoxScoreOfficial] = []
     info: List[BoxScoreVL] = []
-    pitching_notes: List[str] = Field(default=[], alias="pitchingnotes")
-    top_performers: List[TopPerformer] = Field(default=[], alias="topperformers")
+    pitching_notes: List[str] = Field(default=[], alias="pitchingNotes")
+    top_performers: List[TopPerformer] = Field(default=[], alias="topPerformers")
