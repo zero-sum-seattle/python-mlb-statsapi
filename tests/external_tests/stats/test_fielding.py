@@ -71,13 +71,13 @@ class TestPitchingStats(unittest.TestCase):
         # check for split objects
         self.assertTrue(stats['fielding']['season'])
         self.assertTrue(stats['fielding']['career'])
-        self.assertTrue(stats['fielding']['seasonadvanced'])
-        self.assertTrue(stats['fielding']['careeradvanced'])
+        self.assertTrue(stats['fielding']['seasonAdvanced'])
+        self.assertTrue(stats['fielding']['careerAdvanced'])
 
         season = stats['fielding']['season']
         career = stats['fielding']['career']
-        season_advanced = stats['fielding']['seasonadvanced']
-        career_advanced = stats['fielding']['careeradvanced']
+        season_advanced = stats['fielding']['seasonAdvanced']
+        career_advanced = stats['fielding']['careerAdvanced']
 
         self.assertEqual(season.total_splits, len(season.splits))
         self.assertEqual(season.group, 'fielding')

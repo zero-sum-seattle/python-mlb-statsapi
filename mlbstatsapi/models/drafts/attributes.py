@@ -41,5 +41,5 @@ class DraftSchool(MLBBaseModel):
     name: str
     country: str
     state: Optional[str] = None
-    school_class: Optional[str] = Field(default=None, alias="schoolclass")
+    school_class: Optional[str] = Field(default=None, alias="schoolClass")
     city: Optional[str] = None

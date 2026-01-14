@@ -33,7 +33,7 @@ class BoxScoreTeamInfo(MLBBaseModel):
         List holding the info for this info type.
     """
     title: str
-    field_list: List[BoxScoreVL] = Field(alias="fieldlist")
+    field_list: List[BoxScoreVL] = Field(alias="fieldList")
 
 
 class BoxScoreGameStatus(MLBBaseModel):
@@ -51,10 +51,10 @@ class BoxScoreGameStatus(MLBBaseModel):
     is_substitute : bool
         Whether the player is a substitute.
     """
-    is_current_batter: bool = Field(alias="iscurrentbatter")
-    is_current_pitcher: bool = Field(alias="iscurrentpitcher")
-    is_on_bench: bool = Field(alias="isonbench")
-    is_substitute: bool = Field(alias="issubstitute")
+    is_current_batter: bool = Field(alias="isCurrentBatter")
+    is_current_pitcher: bool = Field(alias="isCurrentPitcher")
+    is_on_bench: bool = Field(alias="isOnBench")
+    is_substitute: bool = Field(alias="isSubstitute")
 
 
 class PlayersDictPerson(MLBBaseModel):
@@ -87,13 +87,13 @@ class PlayersDictPerson(MLBBaseModel):
     person: Person
     status: CodeDesc
     stats: dict
-    season_stats: dict = Field(alias="seasonstats")
-    game_status: BoxScoreGameStatus = Field(alias="gamestatus")
+    season_stats: dict = Field(alias="seasonStats")
+    game_status: BoxScoreGameStatus = Field(alias="gameStatus")
     position: Optional[Position] = None
-    batting_order: Optional[int] = Field(default=None, alias="battingorder")
-    jersey_number: Optional[str] = Field(default=None, alias="jerseynumber")
-    parent_team_id: Optional[int] = Field(default=None, alias="parentteamid")
-    all_positions: Optional[List[Position]] = Field(default=None, alias="allpositions")
+    batting_order: Optional[int] = Field(default=None, alias="battingOrder")
+    jersey_number: Optional[str] = Field(default=None, alias="jerseyNumber")
+    parent_team_id: Optional[int] = Field(default=None, alias="parentTeamId")
+    all_positions: Optional[List[Position]] = Field(default=None, alias="allPositions")
 
 
 class BoxScoreTeam(MLBBaseModel):
@@ -124,13 +124,13 @@ class BoxScoreTeam(MLBBaseModel):
         Team notes.
     """
     team: Team
-    team_stats: dict = Field(alias="teamstats")
+    team_stats: dict = Field(alias="teamStats")
     players: Dict[str, PlayersDictPerson]
     batters: List[int]
     pitchers: List[int]
     bench: List[int]
     bullpen: List[int]
-    batting_order: List[int] = Field(alias="battingorder")
+    batting_order: List[int] = Field(alias="battingOrder")
     info: List[BoxScoreTeamInfo]
     note: List[BoxScoreVL] = []
 
@@ -162,4 +162,4 @@ class BoxScoreOfficial(MLBBaseModel):
         What type of official this person is.
     """
     official: Person
-    official_type: str = Field(alias="officialtype")
+    official_type: str = Field(alias="officialType")

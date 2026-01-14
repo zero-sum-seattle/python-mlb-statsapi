@@ -44,7 +44,7 @@ class Linescore(MLBBaseModel):
     note : str
         Any note for the linescore.
     """
-    scheduled_innings: int = Field(alias="scheduledinnings")
+    scheduled_innings: int = Field(alias="scheduledInnings")
     innings: List[LinescoreInning] = []
     teams: LinescoreTeams
     defense: LinescoreDefense
@@ -53,8 +53,8 @@ class Linescore(MLBBaseModel):
     strikes: Optional[int] = None
     outs: Optional[int] = None
     note: Optional[str] = None
-    current_inning: Optional[int] = Field(default=None, alias="currentinning")
-    current_inning_ordinal: Optional[str] = Field(default=None, alias="currentinningordinal")
-    inning_state: Optional[str] = Field(default=None, alias="inningstate")
-    inning_half: Optional[str] = Field(default=None, alias="inninghalf")
-    is_top_inning: Optional[bool] = Field(default=None, alias="istopinning")
+    current_inning: Optional[int] = Field(default=None, alias="currentInning")
+    current_inning_ordinal: Optional[str] = Field(default=None, alias="currentInningOrdinal")
+    inning_state: Optional[str] = Field(default=None, alias="inningState")
+    inning_half: Optional[str] = Field(default=None, alias="inningHalf")
+    is_top_inning: Optional[bool] = Field(default=None, alias="isTopInning")

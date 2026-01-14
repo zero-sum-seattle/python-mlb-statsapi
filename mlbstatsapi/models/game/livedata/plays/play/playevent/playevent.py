@@ -50,24 +50,24 @@ class PlayEvent(MLBBaseModel):
     """
     details: PlayDetails
     index: int
-    is_pitch: bool = Field(alias="ispitch")
+    is_pitch: bool = Field(alias="isPitch")
     type: str
-    pfx_id: Optional[str] = Field(default=None, alias="pfxid")
-    start_time: Optional[str] = Field(default=None, alias="starttime")
-    end_time: Optional[str] = Field(default=None, alias="endtime")
+    pfx_id: Optional[str] = Field(default=None, alias="pfxId")
+    start_time: Optional[str] = Field(default=None, alias="startTime")
+    end_time: Optional[str] = Field(default=None, alias="endTime")
     umpire: Optional[str] = None
     base: Optional[str] = None
-    play_id: Optional[str] = Field(default=None, alias="playid")
-    pitch_number: Optional[int] = Field(default=None, alias="pitchnumber")
-    action_play_id: Optional[str] = Field(default=None, alias="actionplayid")
-    is_base_running_play: Optional[bool] = Field(default=None, alias="isbaserunningplay")
-    is_substitution: Optional[bool] = Field(default=None, alias="issubstitution")
-    batting_order: Optional[str] = Field(default=None, alias="battingorder")
+    play_id: Optional[str] = Field(default=None, alias="playId")
+    pitch_number: Optional[int] = Field(default=None, alias="pitchNumber")
+    action_play_id: Optional[str] = Field(default=None, alias="actionPlayId")
+    is_base_running_play: Optional[bool] = Field(default=None, alias="isBaseRunningPlay")
+    is_substitution: Optional[bool] = Field(default=None, alias="isSubstitution")
+    batting_order: Optional[str] = Field(default=None, alias="battingOrder")
     count: Optional[Count] = None
-    pitch_data: Optional[PitchData] = Field(default=None, alias="pitchdata")
-    hit_data: Optional[HitData] = Field(default=None, alias="hitdata")
+    pitch_data: Optional[PitchData] = Field(default=None, alias="pitchData")
+    hit_data: Optional[HitData] = Field(default=None, alias="hitData")
     player: Optional[Person] = None
     position: Optional[Position] = None
-    replaced_player: Optional[Person] = Field(default=None, alias="replacedplayer")
-    review_details: Optional[dict] = Field(default=None, alias="reviewdetails")
-    injury_type: Optional[str] = Field(default=None, alias="injurytype")
+    replaced_player: Optional[Person] = Field(default=None, alias="replacedPlayer")
+    review_details: Optional[dict] = Field(default=None, alias="reviewDetails")
+    injury_type: Optional[str] = Field(default=None, alias="injuryType")

@@ -34,14 +34,14 @@ class GameDataGame(MLBBaseModel):
     """
     pk: int
     type: str
-    double_header: str = Field(alias="doubleheader")
+    double_header: str = Field(alias="doubleHeader")
     id: str
-    gameday_type: str = Field(alias="gamedaytype")
+    gameday_type: str = Field(alias="gamedayType")
     tiebreaker: str
-    game_number: int = Field(alias="gamenumber")
-    calendar_event_id: str = Field(alias="calendareventid")
+    game_number: int = Field(alias="gameNumber")
+    calendar_event_id: Optional[str] = Field(default=None, alias="calendarEventId")
     season: str
-    season_display: str = Field(alias="seasondisplay")
+    season_display: str = Field(alias="seasonDisplay")
 
 
 class GameDatetime(MLBBaseModel):
@@ -71,16 +71,16 @@ class GameDatetime(MLBBaseModel):
     resumed_from_datetime : str
         Resumed from datetime if applicable.
     """
-    datetime: str
-    original_date: str = Field(alias="originaldate")
-    official_date: str = Field(alias="officialdate")
-    day_night: str = Field(alias="daynight")
+    datetime: str = Field(alias="dateTime")
+    original_date: str = Field(alias="originalDate")
+    official_date: str = Field(alias="officialDate")
+    day_night: str = Field(alias="dayNight")
     time: str
     ampm: str
-    resume_date: Optional[str] = Field(default=None, alias="resumedate")
-    resume_datetime: Optional[str] = Field(default=None, alias="resumedatetime")
-    resumed_from_date: Optional[str] = Field(default=None, alias="resumedfromdate")
-    resumed_from_datetime: Optional[str] = Field(default=None, alias="resumedfromdatetime")
+    resume_date: Optional[str] = Field(default=None, alias="resumeDate")
+    resume_datetime: Optional[str] = Field(default=None, alias="resumeDatetime")
+    resumed_from_date: Optional[str] = Field(default=None, alias="resumedFromDate")
+    resumed_from_datetime: Optional[str] = Field(default=None, alias="resumedFromDatetime")
 
 
 class GameStatus(MLBBaseModel):
@@ -104,12 +104,12 @@ class GameStatus(MLBBaseModel):
     reason : str
         Reason for a state. Usually used for delays or cancellations.
     """
-    abstract_game_state: str = Field(alias="abstractgamestate")
-    coded_game_state: str = Field(alias="codedgamestate")
-    detailed_state: str = Field(alias="detailedstate")
-    status_code: str = Field(alias="statuscode")
-    start_time_tbd: bool = Field(alias="starttimetbd")
-    abstract_game_code: str = Field(alias="abstractgamecode")
+    abstract_game_state: str = Field(alias="abstractGameState")
+    coded_game_state: str = Field(alias="codedGameState")
+    detailed_state: str = Field(alias="detailedState")
+    status_code: str = Field(alias="statusCode")
+    start_time_tbd: Optional[bool] = Field(default=None, alias="startTimeTbd")
+    abstract_game_code: str = Field(alias="abstractGameCode")
     reason: Optional[str] = None
 
 
@@ -161,10 +161,10 @@ class GameInfo(MLBBaseModel):
     delay_duration_minutes : int
         The length of delay for the game in minutes.
     """
-    first_pitch: str = Field(alias="firstpitch")
+    first_pitch: str = Field(alias="firstPitch")
     attendance: Optional[int] = None
-    game_duration_minutes: Optional[int] = Field(default=None, alias="gamedurationminutes")
-    delay_duration_minutes: Optional[int] = Field(default=None, alias="delaydurationminutes")
+    game_duration_minutes: Optional[int] = Field(default=None, alias="gameDurationMinutes")
+    delay_duration_minutes: Optional[int] = Field(default=None, alias="delayDurationMinutes")
 
 
 class ReviewInfo(MLBBaseModel):
@@ -195,7 +195,7 @@ class GameReview(MLBBaseModel):
     home : ReviewInfo
         Home team review info.
     """
-    has_challenges: bool = Field(alias="haschallenges")
+    has_challenges: bool = Field(alias="hasChallenges")
     away: ReviewInfo
     home: ReviewInfo
 
@@ -219,12 +219,12 @@ class GameFlags(MLBBaseModel):
     home_team_perfect_game : bool
         If the home team has a perfect game.
     """
-    no_hitter: bool = Field(alias="nohitter")
-    perfect_game: bool = Field(alias="perfectgame")
-    away_team_no_hitter: bool = Field(alias="awayteamnohitter")
-    away_team_perfect_game: bool = Field(alias="awayteamperfectgame")
-    home_team_no_hitter: bool = Field(alias="hometeamnohitter")
-    home_team_perfect_game: bool = Field(alias="hometeamperfectgame")
+    no_hitter: bool = Field(alias="noHitter")
+    perfect_game: bool = Field(alias="perfectGame")
+    away_team_no_hitter: bool = Field(alias="awayTeamNoHitter")
+    away_team_perfect_game: bool = Field(alias="awayTeamPerfectGame")
+    home_team_no_hitter: bool = Field(alias="homeTeamNoHitter")
+    home_team_perfect_game: bool = Field(alias="homeTeamPerfectGame")
 
 
 class GameProbablePitchers(MLBBaseModel):

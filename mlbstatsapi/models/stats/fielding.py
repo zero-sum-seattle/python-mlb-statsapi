@@ -64,28 +64,28 @@ class SimpleFieldingSplit(MLBBaseModel):
     """
     age: Optional[int] = None
     position: Optional[Position] = None
-    games_played: Optional[int] = Field(default=None, alias="gamesplayed")
-    games_started: Optional[int] = Field(default=None, alias="gamesstarted")
-    caught_stealing: Optional[int] = Field(default=None, alias="caughtstealing")
-    caught_stealing_percentage: Optional[str] = Field(default=None, alias="caughtstealingpercentage")
-    stolen_bases: Optional[int] = Field(default=None, alias="stolenbases")
-    stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenbasepercentage")
+    games_played: Optional[int] = Field(default=None, alias="gamesPlayed")
+    games_started: Optional[int] = Field(default=None, alias="gamesStarted")
+    caught_stealing: Optional[int] = Field(default=None, alias="caughtStealing")
+    caught_stealing_percentage: Optional[str] = Field(default=None, alias="caughtStealingPercentage")
+    stolen_bases: Optional[int] = Field(default=None, alias="stolenBases")
+    stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenBasePercentage")
     assists: Optional[int] = None
     putouts: Optional[int] = None
     errors: Optional[int] = None
     chances: Optional[int] = None
     fielding: Optional[str] = None
-    range_factor_per_game: Optional[str] = Field(default=None, alias="rangefactorpergame")
-    range_factor_per_9_inn: Optional[str] = Field(default=None, alias="rangefactorper9inn")
+    range_factor_per_game: Optional[str] = Field(default=None, alias="rangeFactorPerGame")
+    range_factor_per_9_inn: Optional[str] = Field(default=None, alias="rangeFactorPer9Inn")
     innings: Optional[str] = None
     games: Optional[int] = None
-    passed_ball: Optional[int] = Field(default=None, alias="passedball")
-    double_plays: Optional[int] = Field(default=None, alias="doubleplays")
-    triple_plays: Optional[int] = Field(default=None, alias="tripleplays")
-    catcher_era: Optional[str] = Field(default=None, alias="catcherera")
-    catchers_interference: Optional[int] = Field(default=None, alias="catchersinterference")
-    wild_pitches: Optional[int] = Field(default=None, alias="wildpitches")
-    throwing_errors: Optional[int] = Field(default=None, alias="throwingerrors")
+    passed_ball: Optional[int] = Field(default=None, alias="passedBall")
+    double_plays: Optional[int] = Field(default=None, alias="doublePlays")
+    triple_plays: Optional[int] = Field(default=None, alias="triplePlays")
+    catcher_era: Optional[str] = Field(default=None, alias="catcherEra")
+    catchers_interference: Optional[int] = Field(default=None, alias="catchersInterference")
+    wild_pitches: Optional[int] = Field(default=None, alias="wildPitches")
+    throwing_errors: Optional[int] = Field(default=None, alias="throwingErrors")
     pickoffs: Optional[int] = None
 
     @field_validator('position', mode='before')
@@ -277,7 +277,7 @@ class FieldingHomeAndAway(Split):
         The fielding split stat.
     """
     _stat: ClassVar[List[str]] = ['homeAndAway']
-    is_home: bool = Field(alias="ishome")
+    is_home: bool = Field(alias="isHome")
     stat: SimpleFieldingSplit
 
 
@@ -293,7 +293,7 @@ class FieldingHomeAndAwayPlayoffs(Split):
         The fielding split stat.
     """
     _stat: ClassVar[List[str]] = ['homeAndAwayPlayoffs']
-    is_home: bool = Field(alias="ishome")
+    is_home: bool = Field(alias="isHome")
     stat: SimpleFieldingSplit
 
 
@@ -348,7 +348,7 @@ class FieldingWinLoss(Split):
         The fielding split stat.
     """
     _stat: ClassVar[List[str]] = ['winLoss']
-    is_win: bool = Field(alias="iswin")
+    is_win: bool = Field(alias="isWin")
     stat: SimpleFieldingSplit
 
 
@@ -364,7 +364,7 @@ class FieldingWinLossPlayoffs(Split):
         The fielding split stat.
     """
     _stat: ClassVar[List[str]] = ['winLossPlayoffs']
-    is_win: bool = Field(alias="iswin")
+    is_win: bool = Field(alias="isWin")
     stat: SimpleFieldingSplit
 
 
@@ -380,7 +380,7 @@ class FieldingByDayOfWeek(Split):
         The fielding split stat.
     """
     _stat: ClassVar[List[str]] = ['byDayOfWeek']
-    day_of_week: str = Field(alias="dayofweek")
+    day_of_week: str = Field(alias="dayOfWeek")
     stat: SimpleFieldingSplit
 
 
@@ -476,8 +476,8 @@ class FieldingGameLog(Split):
     """
     _stat: ClassVar[List[str]] = ['gameLog']
     date: str
-    is_home: bool = Field(alias="ishome")
-    is_win: bool = Field(alias="iswin")
+    is_home: bool = Field(alias="isHome")
+    is_win: bool = Field(alias="isWin")
     stat: SimpleFieldingSplit
     opponent: Optional[Team] = None
     position: Optional[Position] = None

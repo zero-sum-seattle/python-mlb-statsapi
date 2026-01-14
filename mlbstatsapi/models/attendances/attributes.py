@@ -31,10 +31,10 @@ class AttendanceHighLowGame(MLBBaseModel):
     day_night : str
         Time of day for game (day or night).
     """
-    game_pk: int = Field(alias="gamepk")
+    game_pk: int = Field(alias="gamePk")
     link: str
     content: AttendanceHighLowGameContent
-    day_night: str = Field(alias="daynight")
+    day_night: str = Field(alias="dayNight")
 
 
 class AttendanceGameType(MLBBaseModel):
@@ -105,29 +105,29 @@ class AttendanceRecords(MLBBaseModel):
     team : Team
         Team.
     """
-    openings_total: int = Field(alias="openingstotal")
-    openings_total_away: int = Field(alias="openingstotalaway")
-    openings_total_home: int = Field(alias="openingstotalhome")
-    openings_total_lost: int = Field(alias="openingstotallost")
-    games_total: int = Field(alias="gamestotal")
-    games_away_total: int = Field(alias="gamesawaytotal")
-    games_home_total: int = Field(alias="gameshometotal")
+    openings_total: int = Field(alias="openingsTotal")
+    openings_total_away: int = Field(alias="openingsTotalAway")
+    openings_total_home: int = Field(alias="openingsTotalHome")
+    openings_total_lost: int = Field(alias="openingsTotalLost")
+    games_total: int = Field(alias="gamesTotal")
+    games_away_total: int = Field(alias="gamesAwayTotal")
+    games_home_total: int = Field(alias="gamesHomeTotal")
     year: str
-    attendance_average_ytd: int = Field(alias="attendanceaverageytd")
-    game_type: AttendanceGameType = Field(alias="gametype")
+    attendance_average_ytd: int = Field(alias="attendanceAverageYtd")
+    game_type: AttendanceGameType = Field(alias="gameType")
     team: Team
-    attendance_total: Optional[int] = Field(default=None, alias="attendancetotal")
-    attendance_average_away: Optional[int] = Field(default=None, alias="attendanceaverageaway")
-    attendance_average_home: Optional[int] = Field(default=None, alias="attendanceaveragehome")
-    attendance_high: Optional[int] = Field(default=None, alias="attendancehigh")
-    attendance_high_date: Optional[str] = Field(default=None, alias="attendancehighdate")
-    attendance_high_game: Optional[AttendanceHighLowGame] = Field(default=None, alias="attendancehighgame")
-    attendance_low: Optional[int] = Field(default=None, alias="attendancelow")
-    attendance_low_date: Optional[str] = Field(default=None, alias="attendancelowdate")
-    attendance_low_game: Optional[AttendanceHighLowGame] = Field(default=None, alias="attendancelowgame")
-    attendance_total_away: Optional[int] = Field(default=None, alias="attendancetotalaway")
-    attendance_total_home: Optional[int] = Field(default=None, alias="attendancetotalhome")
-    attendance_opening_average: Optional[int] = Field(default=None, alias="attendanceopeningaverage")
+    attendance_total: Optional[int] = Field(default=None, alias="attendanceTotal")
+    attendance_average_away: Optional[int] = Field(default=None, alias="attendanceAverageAway")
+    attendance_average_home: Optional[int] = Field(default=None, alias="attendanceAverageHome")
+    attendance_high: Optional[int] = Field(default=None, alias="attendanceHigh")
+    attendance_high_date: Optional[str] = Field(default=None, alias="attendanceHighDate")
+    attendance_high_game: Optional[AttendanceHighLowGame] = Field(default=None, alias="attendanceHighGame")
+    attendance_low: Optional[int] = Field(default=None, alias="attendanceLow")
+    attendance_low_date: Optional[str] = Field(default=None, alias="attendanceLowDate")
+    attendance_low_game: Optional[AttendanceHighLowGame] = Field(default=None, alias="attendanceLowGame")
+    attendance_total_away: Optional[int] = Field(default=None, alias="attendanceTotalAway")
+    attendance_total_home: Optional[int] = Field(default=None, alias="attendanceTotalHome")
+    attendance_opening_average: Optional[int] = Field(default=None, alias="attendanceOpeningAverage")
 
 
 class AttendanceTotals(MLBBaseModel):
@@ -161,15 +161,15 @@ class AttendanceTotals(MLBBaseModel):
     attendance_total_home : int
         Attendance total home.
     """
-    openings_total_away: int = Field(alias="openingstotalaway")
-    openings_total_home: int = Field(alias="openingstotalhome")
-    openings_total_lost: int = Field(alias="openingstotallost")
-    openings_total_ytd: int = Field(alias="openingstotalytd")
-    attendance_average_ytd: int = Field(alias="attendanceaverageytd")
-    attendance_high: int = Field(alias="attendancehigh")
-    attendance_high_date: str = Field(alias="attendancehighdate")
-    attendance_total: int = Field(alias="attendancetotal")
-    attendance_total_away: int = Field(alias="attendancetotalaway")
-    attendance_total_home: int = Field(alias="attendancetotalhome")
-    attendance_average_away: Optional[int] = Field(default=None, alias="attendanceaverageaway")
-    attendance_average_home: Optional[int] = Field(default=None, alias="attendanceaveragehome")
+    openings_total_away: int = Field(alias="openingsTotalAway")
+    openings_total_home: int = Field(alias="openingsTotalHome")
+    openings_total_lost: int = Field(alias="openingsTotalLost")
+    openings_total_ytd: int = Field(alias="openingsTotalYtd")
+    attendance_average_ytd: int = Field(alias="attendanceAverageYtd")
+    attendance_high: int = Field(alias="attendanceHigh")
+    attendance_high_date: str = Field(alias="attendanceHighDate")
+    attendance_total: int = Field(alias="attendanceTotal")
+    attendance_total_away: int = Field(alias="attendanceTotalAway")
+    attendance_total_home: int = Field(alias="attendanceTotalHome")
+    attendance_average_away: Optional[int] = Field(default=None, alias="attendanceAverageAway")
+    attendance_average_home: Optional[int] = Field(default=None, alias="attendanceAverageHome")

@@ -32,6 +32,6 @@ class Venue(MLBBaseModel):
     name: Optional[str] = None
     location: Optional[Location] = None
     timezone: Optional[TimeZone] = None
-    field_info: Optional[FieldInfo] = Field(default=None, alias="fieldinfo")
+    field_info: Optional[FieldInfo] = Field(default=None, alias="fieldInfo")
     active: Optional[bool] = None
     season: Optional[str] = None

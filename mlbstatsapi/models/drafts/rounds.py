@@ -53,23 +53,23 @@ class DraftPick(MLBBaseModel):
         A brief summary of the player's background and accomplishments.
     """
     team: Team
-    draft_type: CodeDesc = Field(alias="drafttype")
-    is_drafted: bool = Field(alias="isdrafted")
-    is_pass: bool = Field(alias="ispass")
+    draft_type: CodeDesc = Field(alias="draftType")
+    is_drafted: bool = Field(alias="isDrafted")
+    is_pass: bool = Field(alias="isPass")
     year: str
     school: DraftSchool
     home: DraftHome
-    pick_round: str = Field(alias="pickround")
-    pick_number: int = Field(alias="picknumber")
-    display_pick_number: int = Field(alias="displaypicknumber")
-    round_pick_number: int = Field(alias="roundpicknumber")
-    headshot_link: Optional[str] = Field(default=None, alias="headshotlink")
+    pick_round: str = Field(alias="pickRound")
+    pick_number: int = Field(alias="pickNumber")
+    display_pick_number: int = Field(alias="displayPickNumber")
+    round_pick_number: int = Field(alias="roundPickNumber")
+    headshot_link: Optional[str] = Field(default=None, alias="headshotLink")
     person: Optional[Person] = None
-    bis_player_id: Optional[int] = Field(default=None, alias="bisplayerid")
+    bis_player_id: Optional[int] = Field(default=None, alias="bisPlayerId")
     rank: Optional[int] = None
-    pick_value: Optional[str] = Field(default=None, alias="pickvalue")
-    signing_bonus: Optional[str] = Field(default=None, alias="signingbonus")
-    scouting_report: Optional[str] = Field(default=None, alias="scoutingreport")
+    pick_value: Optional[str] = Field(default=None, alias="pickValue")
+    signing_bonus: Optional[str] = Field(default=None, alias="signingBonus")
+    scouting_report: Optional[str] = Field(default=None, alias="scoutingReport")
     blurb: Optional[str] = None
 
 

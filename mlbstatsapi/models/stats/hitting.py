@@ -78,36 +78,36 @@ class AdvancedHittingSplit(MLBBaseModel):
         The amount of line hits.
     """
     age: Optional[int] = None
-    plate_appearances: Optional[int] = Field(default=None, alias="plateappearances")
-    total_bases: Optional[int] = Field(default=None, alias="totalbases")
-    left_on_base: Optional[int] = Field(default=None, alias="leftonbase")
-    sac_bunts: Optional[int] = Field(default=None, alias="sacbunts")
-    sac_flies: Optional[int] = Field(default=None, alias="sacflies")
+    plate_appearances: Optional[int] = Field(default=None, alias="plateAppearances")
+    total_bases: Optional[int] = Field(default=None, alias="totalBases")
+    left_on_base: Optional[int] = Field(default=None, alias="leftOnBase")
+    sac_bunts: Optional[int] = Field(default=None, alias="sacBunts")
+    sac_flies: Optional[int] = Field(default=None, alias="sacFlies")
     babip: Optional[str] = None
-    extra_base_hits: Optional[int] = Field(default=None, alias="extrabasehits")
-    hit_by_pitch: Optional[int] = Field(default=None, alias="hitbypitch")
+    extra_base_hits: Optional[int] = Field(default=None, alias="extraBaseHits")
+    hit_by_pitch: Optional[int] = Field(default=None, alias="hitByPitch")
     gidp: Optional[int] = None
-    gidp_opp: Optional[int] = Field(default=None, alias="gidpopp")
-    number_of_pitches: Optional[int] = Field(default=None, alias="numberofpitches")
-    pitches_per_plate_appearance: Optional[str] = Field(default=None, alias="pitchesperplateappearance")
-    walks_per_plate_appearance: Optional[str] = Field(default=None, alias="walksperplateappearance")
-    strikeouts_per_plate_appearance: Optional[str] = Field(default=None, alias="strikeoutsperplateappearance")
-    home_runs_per_plate_appearance: Optional[str] = Field(default=None, alias="homerunsperplateappearance")
-    walks_per_strikeout: Optional[str] = Field(default=None, alias="walksperstrikeout")
+    gidp_opp: Optional[int] = Field(default=None, alias="gidpOpp")
+    number_of_pitches: Optional[int] = Field(default=None, alias="numberOfPitches")
+    pitches_per_plate_appearance: Optional[str] = Field(default=None, alias="pitchesPerPlateAppearance")
+    walks_per_plate_appearance: Optional[str] = Field(default=None, alias="walksPerPlateAppearance")
+    strikeouts_per_plate_appearance: Optional[str] = Field(default=None, alias="strikeoutsPerPlateAppearance")
+    home_runs_per_plate_appearance: Optional[str] = Field(default=None, alias="homeRunsPerPlateAppearance")
+    walks_per_strikeout: Optional[str] = Field(default=None, alias="walksPerStrikeout")
     iso: Optional[str] = None
-    reached_on_error: Optional[int] = Field(default=None, alias="reachedonerror")
+    reached_on_error: Optional[int] = Field(default=None, alias="reachedOnError")
     walkoffs: Optional[int] = None
     flyouts: Optional[int] = None
-    total_swings: Optional[int] = Field(default=None, alias="totalswings")
-    swing_and_misses: Optional[int] = Field(default=None, alias="swingandmisses")
-    balls_in_play: Optional[int] = Field(default=None, alias="ballsinplay")
+    total_swings: Optional[int] = Field(default=None, alias="totalSwings")
+    swing_and_misses: Optional[int] = Field(default=None, alias="swingAndMisses")
+    balls_in_play: Optional[int] = Field(default=None, alias="ballsInPlay")
     popouts: Optional[int] = None
     lineouts: Optional[int] = None
     groundouts: Optional[int] = None
-    fly_hits: Optional[int] = Field(default=None, alias="flyhits")
-    pop_hits: Optional[int] = Field(default=None, alias="pophits")
-    ground_hits: Optional[int] = Field(default=None, alias="groundhits")
-    line_hits: Optional[int] = Field(default=None, alias="linehits")
+    fly_hits: Optional[int] = Field(default=None, alias="flyHits")
+    pop_hits: Optional[int] = Field(default=None, alias="popHits")
+    ground_hits: Optional[int] = Field(default=None, alias="groundHits")
+    line_hits: Optional[int] = Field(default=None, alias="lineHits")
 
 
 class SimpleHittingSplit(MLBBaseModel):
@@ -190,41 +190,41 @@ class SimpleHittingSplit(MLBBaseModel):
         The number of at bats per home run of the batter.
     """
     age: Optional[int] = None
-    games_played: Optional[int] = Field(default=None, alias="gamesplayed")
+    games_played: Optional[int] = Field(default=None, alias="gamesPlayed")
     flyouts: Optional[int] = None
     groundouts: Optional[int] = None
     airouts: Optional[int] = None
     runs: Optional[int] = None
     doubles: Optional[int] = None
     triples: Optional[int] = None
-    home_runs: Optional[int] = Field(default=None, alias="homeruns")
+    home_runs: Optional[int] = Field(default=None, alias="homeRuns")
     strikeouts: Optional[int] = None
-    base_on_balls: Optional[int] = Field(default=None, alias="baseonballs")
-    intentional_walks: Optional[int] = Field(default=None, alias="intentionalwalks")
+    base_on_balls: Optional[int] = Field(default=None, alias="baseOnBalls")
+    intentional_walks: Optional[int] = Field(default=None, alias="intentionalWalks")
     hits: Optional[int] = None
-    hit_by_pitch: Optional[int] = Field(default=None, alias="hitbypitch")
+    hit_by_pitch: Optional[int] = Field(default=None, alias="hitByPitch")
     avg: Optional[str] = None
-    at_bats: Optional[int] = Field(default=None, alias="atbats")
+    at_bats: Optional[int] = Field(default=None, alias="atBats")
     obp: Optional[str] = None
     slg: Optional[str] = None
     ops: Optional[str] = None
-    caught_stealing: Optional[int] = Field(default=None, alias="caughtstealing")
-    caught_stealing_percentage: Optional[str] = Field(default=None, alias="caughtstealingpercentage")
-    stolen_bases: Optional[int] = Field(default=None, alias="stolenbases")
-    stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenbasepercentage")
-    ground_into_double_play: Optional[int] = Field(default=None, alias="groundintodoubleplay")
-    ground_into_triple_play: Optional[int] = Field(default=None, alias="groundintotripleplay")
-    number_of_pitches: Optional[int] = Field(default=None, alias="numberofpitches")
-    plate_appearances: Optional[int] = Field(default=None, alias="plateappearances")
-    total_bases: Optional[int] = Field(default=None, alias="totalbases")
+    caught_stealing: Optional[int] = Field(default=None, alias="caughtStealing")
+    caught_stealing_percentage: Optional[str] = Field(default=None, alias="caughtStealingPercentage")
+    stolen_bases: Optional[int] = Field(default=None, alias="stolenBases")
+    stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenBasePercentage")
+    ground_into_double_play: Optional[int] = Field(default=None, alias="groundIntoDoublePlay")
+    ground_into_triple_play: Optional[int] = Field(default=None, alias="groundIntoTriplePlay")
+    number_of_pitches: Optional[int] = Field(default=None, alias="numberOfPitches")
+    plate_appearances: Optional[int] = Field(default=None, alias="plateAppearances")
+    total_bases: Optional[int] = Field(default=None, alias="totalBases")
     rbi: Optional[int] = None
-    left_on_base: Optional[int] = Field(default=None, alias="leftonbase")
-    sac_bunts: Optional[int] = Field(default=None, alias="sacbunts")
-    sac_flies: Optional[int] = Field(default=None, alias="sacflies")
+    left_on_base: Optional[int] = Field(default=None, alias="leftOnBase")
+    sac_bunts: Optional[int] = Field(default=None, alias="sacBunts")
+    sac_flies: Optional[int] = Field(default=None, alias="sacFlies")
     babip: Optional[str] = None
-    groundouts_to_airouts: Optional[str] = Field(default=None, alias="groundoutstoairouts")
-    catchers_interference: Optional[int] = Field(default=None, alias="catchersinterference")
-    at_bats_per_home_run: Optional[str] = Field(default=None, alias="atbatsperhomerun")
+    groundouts_to_airouts: Optional[str] = Field(default=None, alias="groundoutsToAirouts")
+    catchers_interference: Optional[int] = Field(default=None, alias="catchersInterference")
+    at_bats_per_home_run: Optional[str] = Field(default=None, alias="atBatsPerHomeRun")
 
 
 class HittingWinLoss(Split):
@@ -239,7 +239,7 @@ class HittingWinLoss(Split):
         The hitting split stat.
     """
     _stat: ClassVar[List[str]] = ['winLoss']
-    is_win: bool = Field(alias="iswin")
+    is_win: bool = Field(alias="isWin")
     stat: SimpleHittingSplit
 
 
@@ -255,7 +255,7 @@ class HittingWinLossPlayoffs(Split):
         The hitting split stat.
     """
     _stat: ClassVar[List[str]] = ['winLossPlayoffs']
-    is_win: bool = Field(alias="iswin")
+    is_win: bool = Field(alias="isWin")
     stat: SimpleHittingSplit
 
 
@@ -271,7 +271,7 @@ class HittingHomeAndAway(Split):
         The hitting split stat.
     """
     _stat: ClassVar[List[str]] = ['homeAndAway']
-    is_home: bool = Field(alias="ishome")
+    is_home: bool = Field(alias="isHome")
     stat: SimpleHittingSplit
 
 
@@ -287,7 +287,7 @@ class HittingHomeAndAwayPlayoffs(Split):
         The hitting split stat.
     """
     _stat: ClassVar[List[str]] = ['homeAndAwayPlayoffs']
-    is_home: bool = Field(alias="ishome")
+    is_home: bool = Field(alias="isHome")
     stat: SimpleHittingSplit
 
 
@@ -400,7 +400,7 @@ class OpponentsFacedHitting(Split):
     _stat: ClassVar[List[str]] = ['opponentsFaced']
     group: str
     batter: Batter
-    fielding_team: Team = Field(alias="fieldingteam")
+    fielding_team: Team = Field(alias="fieldingTeam")
     pitcher: Pitcher
 
 
@@ -439,12 +439,12 @@ class HittingGameLog(Split):
         Team of the opponent.
     """
     _stat: ClassVar[List[str]] = ['gameLog']
-    is_home: bool = Field(alias="ishome")
-    is_win: bool = Field(alias="iswin")
+    is_home: bool = Field(alias="isHome")
+    is_win: bool = Field(alias="isWin")
     game: Game
     date: str
     opponent: Team
-    positions_played: Optional[List[Position]] = Field(default=[], alias="positionsplayed")
+    positions_played: Optional[List[Position]] = Field(default=[], alias="positionsPlayed")
     stat: Optional[SimpleHittingSplit] = None
 
     @field_validator('stat', mode='before')
@@ -489,15 +489,15 @@ class HittingPlay(MLBBaseModel):
     """
     details: PlayDetails
     count: Count
-    is_pitch: bool = Field(alias="ispitch")
-    pitch_number: Optional[int] = Field(default=None, alias="pitchnumber")
-    at_bat_number: Optional[int] = Field(default=None, alias="atbatnumber")
+    is_pitch: bool = Field(alias="isPitch")
+    pitch_number: Optional[int] = Field(default=None, alias="pitchNumber")
+    at_bat_number: Optional[int] = Field(default=None, alias="atBatNumber")
     index: Optional[int] = None
-    play_id: Optional[str] = Field(default=None, alias="playid")
-    pitch_data: Optional[PitchData] = Field(default=None, alias="pitchdata")
-    hit_data: Optional[HitData] = Field(default=None, alias="hitdata")
-    start_time: Optional[str] = Field(default=None, alias="starttime")
-    end_time: Optional[str] = Field(default=None, alias="endtime")
+    play_id: Optional[str] = Field(default=None, alias="playId")
+    pitch_data: Optional[PitchData] = Field(default=None, alias="pitchData")
+    hit_data: Optional[HitData] = Field(default=None, alias="hitData")
+    start_time: Optional[str] = Field(default=None, alias="startTime")
+    end_time: Optional[str] = Field(default=None, alias="endTime")
     type: Optional[str] = None
 
     @field_validator('pitch_data', 'hit_data', mode='before')
@@ -534,7 +534,7 @@ class HittingPlayLog(Split):
     stat: HittingPlay
     opponent: Optional[Team] = None
     date: Optional[str] = None
-    is_home: Optional[bool] = Field(default=None, alias="ishome")
+    is_home: Optional[bool] = Field(default=None, alias="isHome")
     pitcher: Optional[Pitcher] = None
     batter: Optional[Batter] = None
     game: Optional[Game] = None
@@ -583,11 +583,11 @@ class HittingPitchLog(Split):
     stat: HittingPlay
     opponent: Team
     date: str
-    is_home: bool = Field(alias="ishome")
+    is_home: bool = Field(alias="isHome")
     pitcher: Pitcher
     batter: Batter
     game: Game
-    play_id: Optional[str] = Field(default=None, alias="playid")
+    play_id: Optional[str] = Field(default=None, alias="playId")
 
     @field_validator('stat', mode='before')
     @classmethod
@@ -694,7 +694,7 @@ class HittingDayOfWeek(Split):
         The hitting split stat.
     """
     _stat: ClassVar[List[str]] = ['byDayOfWeek']
-    day_of_week: int = Field(alias="dayofweek")
+    day_of_week: int = Field(alias="dayOfWeek")
     stat: SimpleHittingSplit
 
 
@@ -710,7 +710,7 @@ class HittingDayOfWeekPlayoffs(Split):
         The hitting split stat.
     """
     _stat: ClassVar[List[str]] = ['byDayOfWeekPlayoffs']
-    day_of_week: int = Field(alias="dayofweek")
+    day_of_week: int = Field(alias="dayOfWeek")
     stat: SimpleHittingSplit
 
 

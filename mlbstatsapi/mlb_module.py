@@ -114,14 +114,14 @@ def create_split_data(stat_data: dict) -> dict:
         if 'splits' in stat and stat['splits']:
             split_data = return_splits(stat['splits'], stat_type, stat_group)
             stat_object = Stat(group=stat_group, type=stat_type,
-                        totalsplits=total_splits, splits=split_data)
+                        totalSplits=total_splits, splits=split_data)
         else:
             continue
     
         if stat_group not in stats:
             stats[stat_group] = {}
     
-        stats[stat_group][stat_type.lower()] = stat_object
+        stats[stat_group][stat_type] = stat_object
 
     return stats
 
@@ -137,14 +137,14 @@ def get_stat_attributes(stats) -> str:
     -------
     (stat_type, stat_group)
     """
-    if 'type' in stats and 'displayname' in stats['type']:
-        stat_type = stats['type']['displayname']
+    if 'type' in stats and 'displayName' in stats['type']:
+        stat_type = stats['type']['displayName']
     else:
         stat_type = 'gameLog'
 
     # default to stats if no group returned
-    if 'group' in stats and 'displayname' in stats['group']:
-        stat_group = stats['group']['displayname']
+    if 'group' in stats and 'displayName' in stats['group']:
+        stat_group = stats['group']['displayName']
     else:
         # if stat_type is None return None
         if stat_type:
@@ -152,11 +152,10 @@ def get_stat_attributes(stats) -> str:
         else: 
             stat_group = None
     
-    if 'totalsplits' in stats:
-        total_splits = stats['totalsplits']
+    if 'totalSplits' in stats:
+        total_splits = stats['totalSplits']
     else:
         total_splits = len(stats['splits'])
 
     return (stat_type, stat_group, total_splits)
-
 

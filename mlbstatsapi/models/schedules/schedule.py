@@ -21,8 +21,8 @@ class Schedule(MLBBaseModel):
     dates : List[ScheduleDates]
         List of dates with games in schedule.
     """
-    total_items: int = Field(alias="totalitems")
-    total_events: int = Field(alias="totalevents")
-    total_games: int = Field(alias="totalgames")
-    total_games_in_progress: int = Field(alias="totalgamesinprogress")
+    total_items: int = Field(alias="totalItems")
+    total_events: int = Field(alias="totalEvents")
+    total_games: int = Field(alias="totalGames")
+    total_games_in_progress: int = Field(alias="totalGamesInProgress")
     dates: List[ScheduleDates] = []

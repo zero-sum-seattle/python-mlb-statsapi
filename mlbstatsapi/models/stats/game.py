@@ -19,10 +19,10 @@ class SimpleGameStats(MLBBaseModel):
     last_date_played : str
         Last date of the game played.
     """
-    first_date_played: str = Field(alias="firstdateplayed")
-    games_played: int = Field(alias="gamesplayed")
-    games_started: int = Field(alias="gamesstarted")
-    last_date_played: str = Field(alias="lastdateplayed")
+    first_date_played: str = Field(alias="firstDatePlayed")
+    games_played: int = Field(alias="gamesPlayed")
+    games_started: int = Field(alias="gamesStarted")
+    last_date_played: str = Field(alias="lastDatePlayed")
 
 
 class SeasonGame(Split):
@@ -58,10 +58,10 @@ class CareerRegularSeasonGame(Split):
         Last date of the game played.
     """
     _type: ClassVar[List[str]] = ['careerRegularSeason']
-    first_date_played: Optional[str] = Field(default=None, alias="firstdateplayed")
-    games_played: Optional[int] = Field(default=None, alias="gamesplayed")
-    games_started: Optional[int] = Field(default=None, alias="gamesstarted")
-    last_date_played: Optional[str] = Field(default=None, alias="lastdateplayed")
+    first_date_played: Optional[str] = Field(default=None, alias="firstDatePlayed")
+    games_played: Optional[int] = Field(default=None, alias="gamesPlayed")
+    games_started: Optional[int] = Field(default=None, alias="gamesStarted")
+    last_date_played: Optional[str] = Field(default=None, alias="lastDatePlayed")
 
 
 class CareerPlayoffsGame(Split):
@@ -80,7 +80,7 @@ class CareerPlayoffsGame(Split):
         Last date of the game played.
     """
     _type: ClassVar[List[str]] = ['careerPlayoffs']
-    first_date_played: Optional[str] = Field(default=None, alias="firstdateplayed")
-    games_played: Optional[int] = Field(default=None, alias="gamesplayed")
-    games_started: Optional[int] = Field(default=None, alias="gamesstarted")
-    last_date_played: Optional[str] = Field(default=None, alias="lastdateplayed")
+    first_date_played: Optional[str] = Field(default=None, alias="firstDatePlayed")
+    games_played: Optional[int] = Field(default=None, alias="gamesPlayed")
+    games_started: Optional[int] = Field(default=None, alias="gamesStarted")
+    last_date_played: Optional[str] = Field(default=None, alias="lastDatePlayed")

@@ -21,8 +21,8 @@ class PlayByInning(MLBBaseModel):
     hits : PlayByInningHits
         Hits for the inning by home and away.
     """
-    start_index: int = Field(alias="startindex")
-    end_index: int = Field(alias="endindex")
+    start_index: int = Field(alias="startIndex")
+    end_index: int = Field(alias="endIndex")
     top: List[int]
     bottom: List[int]
     hits: PlayByInningHits

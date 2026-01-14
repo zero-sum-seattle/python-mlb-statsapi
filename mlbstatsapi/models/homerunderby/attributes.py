@@ -53,16 +53,16 @@ class Info(MLBBaseModel):
         The teams participating in the event.
     """
     id: int
-    non_game_guid: str = Field(alias="nongameguid")
+    non_game_guid: str = Field(alias="nonGameGuid")
     name: str
-    event_type: EventType = Field(alias="eventtype")
-    event_date: str = Field(alias="eventdate")
+    event_type: EventType = Field(alias="eventType")
+    event_date: str = Field(alias="eventDate")
     venue: Venue
-    is_multi_day: bool = Field(alias="ismultiday")
-    is_primary_calendar: bool = Field(alias="isprimarycalendar")
-    file_code: str = Field(alias="filecode")
-    event_number: int = Field(alias="eventnumber")
-    public_facing: bool = Field(alias="publicfacing")
+    is_multi_day: bool = Field(alias="isMultiDay")
+    is_primary_calendar: bool = Field(alias="isPrimaryCalendar")
+    file_code: str = Field(alias="fileCode")
+    event_number: int = Field(alias="eventNumber")
+    public_facing: bool = Field(alias="publicFacing")
     teams: List[Team] = []
 
 
@@ -88,12 +88,12 @@ class Status(MLBBaseModel):
         Whether the round is currently in bonus time.
     """
     state: str
-    current_round: int = Field(alias="currentround")
-    current_round_time_left: str = Field(alias="currentroundtimeleft")
-    in_tiebreaker: bool = Field(alias="intiebreaker")
-    tiebreaker_num: int = Field(alias="tiebreakernum")
-    clock_stopped: bool = Field(alias="clockstopped")
-    bonus_time: bool = Field(alias="bonustime")
+    current_round: int = Field(alias="currentRound")
+    current_round_time_left: str = Field(alias="currentRoundTimeLeft")
+    in_tiebreaker: bool = Field(alias="inTieBreaker")
+    tiebreaker_num: int = Field(alias="tieBreakerNum")
+    clock_stopped: bool = Field(alias="clockStopped")
+    bonus_time: bool = Field(alias="bonusTime")
 
 
 class Coordinates(MLBBaseModel):
@@ -111,10 +111,10 @@ class Coordinates(MLBBaseModel):
     landing_pos_y : float
         The y-coordinate of the hit's landing position.
     """
-    coord_x: Optional[float] = Field(default=None, alias="coordx")
-    coord_y: Optional[float] = Field(default=None, alias="coordy")
-    landing_pos_x: Optional[float] = Field(default=None, alias="landingposx")
-    landing_pos_y: Optional[float] = Field(default=None, alias="landingposy")
+    coord_x: Optional[float] = Field(default=None, alias="coordX")
+    coord_y: Optional[float] = Field(default=None, alias="coordY")
+    landing_pos_x: Optional[float] = Field(default=None, alias="landingPosX")
+    landing_pos_y: Optional[float] = Field(default=None, alias="landingPosY")
 
 
 class TrajectoryData(MLBBaseModel):
@@ -134,11 +134,11 @@ class TrajectoryData(MLBBaseModel):
     measured_time_interval : List[float]
         Start and end times of the interval during which trajectory was measured.
     """
-    trajectory_polynomial_x: List[float] = Field(alias="trajectorypolynomialx")
-    trajectory_polynomial_y: List[float] = Field(alias="trajectorypolynomialy")
-    trajectory_polynomial_z: List[float] = Field(alias="trajectorypolynomialz")
-    valid_time_interval: List[float] = Field(alias="validtimeinterval")
-    measured_time_interval: List[float] = Field(alias="measuredtimeinterval")
+    trajectory_polynomial_x: List[float] = Field(alias="trajectoryPolynomialX")
+    trajectory_polynomial_y: List[float] = Field(alias="trajectoryPolynomialY")
+    trajectory_polynomial_z: List[float] = Field(alias="trajectoryPolynomialZ")
+    valid_time_interval: List[float] = Field(alias="validTimeInterval")
+    measured_time_interval: List[float] = Field(alias="measuredTimeInterval")
 
 
 class HitData(MLBBaseModel):
@@ -158,11 +158,11 @@ class HitData(MLBBaseModel):
     trajectory_data : TrajectoryData
         Trajectory data for the hit.
     """
-    total_distance: int = Field(alias="totaldistance")
-    launch_speed: Optional[float] = Field(default=None, alias="launchspeed")
-    launch_angle: Optional[float] = Field(default=None, alias="launchangle")
+    total_distance: int = Field(alias="totalDistance")
+    launch_speed: Optional[float] = Field(default=None, alias="launchSpeed")
+    launch_angle: Optional[float] = Field(default=None, alias="launchAngle")
     coordinates: Optional[Coordinates] = None
-    trajectory_data: Optional[TrajectoryData] = Field(default=None, alias="trajectorydata")
+    trajectory_data: Optional[TrajectoryData] = Field(default=None, alias="trajectoryData")
 
 
 class Hits(MLBBaseModel):
@@ -192,16 +192,16 @@ class Hits(MLBBaseModel):
     play_id : str
         The ID of the play in which the hit occurred.
     """
-    bonus_time: bool = Field(alias="bonustime")
-    homerun: bool
-    tiebreaker: bool
-    hit_data: HitData = Field(alias="hitdata")
-    is_homerun: bool = Field(alias="ishomerun")
-    time_remaining: str = Field(alias="timeremaining")
-    is_bonus_time: bool = Field(alias="isbonustime")
-    is_tiebreaker: bool = Field(alias="istiebreaker")
-    time_remaining_seconds: Optional[int] = Field(default=None, alias="timeremainingseconds")
-    play_id: Optional[str] = Field(default=None, alias="playid")
+    bonus_time: bool = Field(alias="bonusTime")
+    homerun: bool = Field(alias="homeRun")
+    tiebreaker: bool = Field(alias="tieBreaker")
+    hit_data: HitData = Field(alias="hitData")
+    is_homerun: bool = Field(alias="isHomeRun")
+    time_remaining: str = Field(alias="timeRemaining")
+    is_bonus_time: bool = Field(alias="isBonusTime")
+    is_tiebreaker: bool = Field(alias="isTieBreaker")
+    time_remaining_seconds: Optional[int] = Field(default=None, alias="timeRemainingSeconds")
+    play_id: Optional[str] = Field(default=None, alias="playId")
 
 
 class Seed(MLBBaseModel):
@@ -239,14 +239,14 @@ class Seed(MLBBaseModel):
     started: bool
     winner: bool
     player: Person
-    top_derby_hit_data: HitData = Field(alias="topderbyhitdata")
+    top_derby_hit_data: HitData = Field(alias="topDerbyHitData")
     hits: List[Hits] = []
     seed: int
     order: int
-    is_winner: bool = Field(alias="iswinner")
-    is_complete: bool = Field(alias="iscomplete")
-    is_started: bool = Field(alias="isstarted")
-    num_homeruns: int = Field(alias="numhomeruns")
+    is_winner: bool = Field(alias="isWinner")
+    is_complete: bool = Field(alias="isComplete")
+    is_started: bool = Field(alias="isStarted")
+    num_homeruns: int = Field(alias="numHomeRuns")
 
 
 class Matchup(MLBBaseModel):
@@ -260,8 +260,8 @@ class Matchup(MLBBaseModel):
     bottom_seed : Seed
         The bottom seed in the matchup.
     """
-    top_seed: Seed = Field(alias="topseed")
-    bottom_seed: Seed = Field(alias="bottomseed")
+    top_seed: Seed = Field(alias="topSeed")
+    bottom_seed: Seed = Field(alias="bottomSeed")
 
 
 class Round(MLBBaseModel):
@@ -279,4 +279,4 @@ class Round(MLBBaseModel):
     """
     round: int
     matchups: List[Matchup] = []
-    num_batters: Optional[int] = Field(default=None, alias="numbatters")
+    num_batters: Optional[int] = Field(default=None, alias="numBatters")

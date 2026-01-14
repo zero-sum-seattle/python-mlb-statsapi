@@ -110,51 +110,51 @@ class Person(MLBBaseModel):
     """
     id: int
     link: str
-    primary_position: Optional[Position] = Field(default=None, alias="primaryposition")
-    pitch_hand: Optional[PitchHand] = Field(default=None, alias="pitchhand")
-    bat_side: Optional[BatSide] = Field(default=None, alias="batside")
-    full_name: Optional[str] = Field(default=None, alias="fullname")
-    first_name: Optional[str] = Field(default=None, alias="firstname")
-    last_name: Optional[str] = Field(default=None, alias="lastname")
-    primary_number: Optional[str] = Field(default=None, alias="primarynumber")
-    birth_date: Optional[str] = Field(default=None, alias="birthdate")
-    current_team: Optional[Team] = Field(default=None, alias="currentteam")
-    current_age: Optional[int] = Field(default=None, alias="currentage")
-    birth_city: Optional[str] = Field(default=None, alias="birthcity")
-    birth_state_province: Optional[str] = Field(default=None, alias="birthstateprovince")
+    primary_position: Optional[Position] = Field(default=None, alias="primaryPosition")
+    pitch_hand: Optional[PitchHand] = Field(default=None, alias="pitchHand")
+    bat_side: Optional[BatSide] = Field(default=None, alias="batSide")
+    full_name: Optional[str] = Field(default=None, alias="fullName")
+    first_name: Optional[str] = Field(default=None, alias="firstName")
+    last_name: Optional[str] = Field(default=None, alias="lastName")
+    primary_number: Optional[str] = Field(default=None, alias="primaryNumber")
+    birth_date: Optional[str] = Field(default=None, alias="birthDate")
+    current_team: Optional[Team] = Field(default=None, alias="currentTeam")
+    current_age: Optional[int] = Field(default=None, alias="currentAge")
+    birth_city: Optional[str] = Field(default=None, alias="birthCity")
+    birth_state_province: Optional[str] = Field(default=None, alias="birthStateProvince")
     height: Optional[str] = None
     weight: Optional[int] = None
     active: Optional[bool] = None
-    use_name: Optional[str] = Field(default=None, alias="usename")
-    middle_name: Optional[str] = Field(default=None, alias="middlename")
-    boxscore_name: Optional[str] = Field(default=None, alias="boxscorename")
+    use_name: Optional[str] = Field(default=None, alias="useName")
+    middle_name: Optional[str] = Field(default=None, alias="middleName")
+    boxscore_name: Optional[str] = Field(default=None, alias="boxscoreName")
     nickname: Optional[str] = None
-    draft_year: Optional[int] = Field(default=None, alias="draftyear")
-    mlb_debut_date: Optional[str] = Field(default=None, alias="mlbdebutdate")
-    name_first_last: Optional[str] = Field(default=None, alias="namefirstlast")
-    name_slug: Optional[str] = Field(default=None, alias="nameslug")
-    first_last_name: Optional[str] = Field(default=None, alias="firstlastname")
-    last_first_name: Optional[str] = Field(default=None, alias="lastfirstname")
-    last_init_name: Optional[str] = Field(default=None, alias="lastinitname")
-    init_last_name: Optional[str] = Field(default=None, alias="initlastname")
-    full_fml_name: Optional[str] = Field(default=None, alias="fullfmlname")
-    full_lfm_name: Optional[str] = Field(default=None, alias="fulllfmname")
-    birth_country: Optional[str] = Field(default=None, alias="birthcountry")
+    draft_year: Optional[int] = Field(default=None, alias="draftYear")
+    mlb_debut_date: Optional[str] = Field(default=None, alias="mlbDebutDate")
+    name_first_last: Optional[str] = Field(default=None, alias="nameFirstLast")
+    name_slug: Optional[str] = Field(default=None, alias="nameSlug")
+    first_last_name: Optional[str] = Field(default=None, alias="firstLastName")
+    last_first_name: Optional[str] = Field(default=None, alias="lastFirstName")
+    last_init_name: Optional[str] = Field(default=None, alias="lastInitName")
+    init_last_name: Optional[str] = Field(default=None, alias="initLastName")
+    full_fml_name: Optional[str] = Field(default=None, alias="fullFmlName")
+    full_lfm_name: Optional[str] = Field(default=None, alias="fullLfmName")
+    birth_country: Optional[str] = Field(default=None, alias="birthCountry")
     pronunciation: Optional[str] = None
-    strike_zone_top: Optional[float] = Field(default=None, alias="strikezonetop")
-    strike_zone_bottom: Optional[float] = Field(default=None, alias="strikezonebottom")
-    name_title: Optional[str] = Field(default=None, alias="nametitle")
+    strike_zone_top: Optional[float] = Field(default=None, alias="strikeZoneTop")
+    strike_zone_bottom: Optional[float] = Field(default=None, alias="strikeZoneBottom")
+    name_title: Optional[str] = Field(default=None, alias="nameTitle")
     gender: Optional[str] = None
-    is_player: Optional[bool] = Field(default=None, alias="isplayer")
-    is_verified: Optional[bool] = Field(default=None, alias="isverified")
-    name_matrilineal: Optional[str] = Field(default=None, alias="namematrilineal")
-    death_date: Optional[str] = Field(default=None, alias="deathdate")
-    death_city: Optional[str] = Field(default=None, alias="deathcity")
-    death_country: Optional[str] = Field(default=None, alias="deathcountry")
-    death_state_province: Optional[str] = Field(default=None, alias="deathstateprovince")
-    last_played_date: Optional[str] = Field(default=None, alias="lastplayeddate")
-    use_last_name: Optional[str] = Field(default=None, alias="uselastname")
-    name_suffix: Optional[str] = Field(default=None, alias="namesuffix")
+    is_player: Optional[bool] = Field(default=None, alias="isPlayer")
+    is_verified: Optional[bool] = Field(default=None, alias="isVerified")
+    name_matrilineal: Optional[str] = Field(default=None, alias="nameMatrilineal")
+    death_date: Optional[str] = Field(default=None, alias="deathDate")
+    death_city: Optional[str] = Field(default=None, alias="deathCity")
+    death_country: Optional[str] = Field(default=None, alias="deathCountry")
+    death_state_province: Optional[str] = Field(default=None, alias="deathStateProvince")
+    last_played_date: Optional[str] = Field(default=None, alias="lastPlayedDate")
+    use_last_name: Optional[str] = Field(default=None, alias="useLastName")
+    name_suffix: Optional[str] = Field(default=None, alias="nameSuffix")
 
 
 class Player(Person):
@@ -174,9 +174,9 @@ class Player(Person):
     position : Position
         Position of the player (alias for primary_position).
     """
-    jersey_number: str = Field(alias="jerseynumber")
+    jersey_number: str = Field(alias="jerseyNumber")
     status: Status
-    parent_team_id: Optional[int] = Field(default=None, alias="parentteamid")
+    parent_team_id: Optional[int] = Field(default=None, alias="parentTeamId")
     note: Optional[str] = None
 
     @model_validator(mode='before')
@@ -203,9 +203,9 @@ class Coach(Person):
     title : str
         Title of the coach.
     """
-    jersey_number: str = Field(alias="jerseynumber")
+    jersey_number: str = Field(alias="jerseyNumber")
     job: str
-    job_id: str = Field(alias="jobid")
+    job_id: str = Field(alias="jobId")
     title: str
 
 
@@ -264,20 +264,20 @@ class DraftPick(Person):
     year : str
         The year in which the draft took place.
     """
-    pick_round: str = Field(alias="pickround")
-    pick_number: int = Field(alias="picknumber")
-    round_pick_number: int = Field(alias="roundpicknumber")
+    pick_round: str = Field(alias="pickRound")
+    pick_number: int = Field(alias="pickNumber")
+    round_pick_number: int = Field(alias="roundPickNumber")
     home: Home
     school: School
-    headshot_link: str = Field(alias="headshotlink")
+    headshot_link: str = Field(alias="headshotLink")
     team: Team
-    draft_type: CodeDesc = Field(alias="drafttype")
-    is_drafted: bool = Field(alias="isdrafted")
-    is_pass: bool = Field(alias="ispass")
+    draft_type: CodeDesc = Field(alias="draftType")
+    is_drafted: bool = Field(alias="isDrafted")
+    is_pass: bool = Field(alias="isPass")
     year: str
-    bis_player_id: Optional[int] = Field(default=None, alias="bisplayerid")
+    bis_player_id: Optional[int] = Field(default=None, alias="bisPlayerId")
     rank: Optional[int] = None
-    pick_value: Optional[str] = Field(default=None, alias="pickvalue")
-    signing_bonus: Optional[str] = Field(default=None, alias="signingbonus")
-    scouting_report: Optional[str] = Field(default=None, alias="scoutingreport")
+    pick_value: Optional[str] = Field(default=None, alias="pickValue")
+    signing_bonus: Optional[str] = Field(default=None, alias="signingBonus")
+    scouting_report: Optional[str] = Field(default=None, alias="scoutingReport")
     blurb: Optional[str] = None

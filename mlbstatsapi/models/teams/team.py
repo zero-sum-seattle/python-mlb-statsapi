@@ -66,24 +66,24 @@ class Team(MLBBaseModel):
     id: int
     link: str
     name: Optional[str] = None
-    spring_league: Optional[League] = Field(default=None, alias="springleague")
-    all_star_status: Optional[str] = Field(default=None, alias="allstarstatus")
+    spring_league: Optional[League] = Field(default=None, alias="springLeague")
+    all_star_status: Optional[str] = Field(default=None, alias="allStarStatus")
     season: Optional[int] = None
     venue: Optional[Venue] = None
-    spring_venue: Optional[Venue] = Field(default=None, alias="springvenue")
-    team_code: Optional[str] = Field(default=None, alias="teamcode")
-    file_code: Optional[str] = Field(default=None, alias="filecode")
+    spring_venue: Optional[Venue] = Field(default=None, alias="springVenue")
+    team_code: Optional[str] = Field(default=None, alias="teamCode")
+    file_code: Optional[str] = Field(default=None, alias="fileCode")
     abbreviation: Optional[str] = None
-    team_name: Optional[str] = Field(default=None, alias="teamname")
-    location_name: Optional[str] = Field(default=None, alias="locationname")
-    first_year_of_play: Optional[str] = Field(default=None, alias="firstyearofplay")
+    team_name: Optional[str] = Field(default=None, alias="teamName")
+    location_name: Optional[str] = Field(default=None, alias="locationName")
+    first_year_of_play: Optional[str] = Field(default=None, alias="firstYearOfPlay")
     league: Optional[League] = None
     division: Optional[Division] = None
     sport: Optional[Sport] = None
-    short_name: Optional[str] = Field(default=None, alias="shortname")
+    short_name: Optional[str] = Field(default=None, alias="shortName")
     record: Optional[TeamRecord] = None
-    franchise_name: Optional[str] = Field(default=None, alias="franchisename")
-    club_name: Optional[str] = Field(default=None, alias="clubname")
+    franchise_name: Optional[str] = Field(default=None, alias="franchiseName")
+    club_name: Optional[str] = Field(default=None, alias="clubName")
     active: Optional[bool] = None
-    parent_org_name: Optional[str] = Field(default=None, alias="parentorgname")
-    parent_org_id: Optional[int] = Field(default=None, alias="parentorgid")
+    parent_org_name: Optional[str] = Field(default=None, alias="parentOrgName")
+    parent_org_id: Optional[int] = Field(default=None, alias="parentOrgId")

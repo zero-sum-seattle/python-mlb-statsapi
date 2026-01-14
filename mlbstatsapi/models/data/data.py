@@ -28,14 +28,14 @@ class PitchBreak(MLBBaseModel):
     spin_direction : float
         Pitch spin direction.
     """
-    break_angle: Optional[float] = Field(default=None, alias="breakangle")
-    break_vertical: Optional[float] = Field(default=None, alias="breakvertical")
-    break_vertical_induced: Optional[float] = Field(default=None, alias="breakverticalinduced")
-    break_horizontal: Optional[float] = Field(default=None, alias="breakhorizontal")
-    spin_rate: Optional[float] = Field(default=None, alias="spinrate")
-    spin_direction: Optional[float] = Field(default=None, alias="spindirection")
-    break_length: Optional[float] = Field(default=None, alias="breaklength")
-    break_y: Optional[float] = Field(default=None, alias="breaky")
+    break_angle: Optional[float] = Field(default=None, alias="breakAngle")
+    break_vertical: Optional[float] = Field(default=None, alias="breakVertical")
+    break_vertical_induced: Optional[float] = Field(default=None, alias="breakVerticalInduced")
+    break_horizontal: Optional[float] = Field(default=None, alias="breakHorizontal")
+    spin_rate: Optional[float] = Field(default=None, alias="spinRate")
+    spin_direction: Optional[float] = Field(default=None, alias="spinDirection")
+    break_length: Optional[float] = Field(default=None, alias="breakLength")
+    break_y: Optional[float] = Field(default=None, alias="breakY")
 
 
 class PitchCoordinates(MLBBaseModel):
@@ -79,13 +79,13 @@ class PitchCoordinates(MLBBaseModel):
     """
     ay: Optional[float] = None
     az: Optional[float] = None
-    pfx_x: Optional[float] = Field(default=None, alias="pfxx")
-    pfx_z: Optional[float] = Field(default=None, alias="pfxz")
-    p_x: Optional[float] = Field(default=None, alias="px")
-    p_z: Optional[float] = Field(default=None, alias="pz")
-    v_x0: Optional[float] = Field(default=None, alias="vx0")
-    v_y0: Optional[float] = Field(default=None, alias="vy0")
-    v_z0: Optional[float] = Field(default=None, alias="vz0")
+    pfx_x: Optional[float] = Field(default=None, alias="pfxX")
+    pfx_z: Optional[float] = Field(default=None, alias="pfxZ")
+    p_x: Optional[float] = Field(default=None, alias="pX")
+    p_z: Optional[float] = Field(default=None, alias="pZ")
+    v_x0: Optional[float] = Field(default=None, alias="vX0")
+    v_y0: Optional[float] = Field(default=None, alias="vY0")
+    v_z0: Optional[float] = Field(default=None, alias="vZ0")
     x0: Optional[float] = None
     y0: Optional[float] = None
     z0: Optional[float] = None
@@ -125,18 +125,18 @@ class PitchData(MLBBaseModel):
     strike_zone_depth : float
         The depth of the strike zone.
     """
-    strike_zone_top: float = Field(alias="strikezonetop")
-    strike_zone_bottom: float = Field(alias="strikezonebottom")
+    strike_zone_top: float = Field(alias="strikeZoneTop")
+    strike_zone_bottom: float = Field(alias="strikeZoneBottom")
     breaks: PitchBreak
     coordinates: Optional[PitchCoordinates] = None
     extension: Optional[float] = None
-    start_speed: Optional[float] = Field(default=None, alias="startspeed")
-    end_speed: Optional[float] = Field(default=None, alias="endspeed")
+    start_speed: Optional[float] = Field(default=None, alias="startSpeed")
+    end_speed: Optional[float] = Field(default=None, alias="endSpeed")
     zone: Optional[float] = None
-    type_confidence: Optional[float] = Field(default=None, alias="typeconfidence")
-    plate_time: Optional[float] = Field(default=None, alias="platetime")
-    strike_zone_width: Optional[float] = Field(default=None, alias="strikezonewidth")
-    strike_zone_depth: Optional[float] = Field(default=None, alias="strikezonedepth")
+    type_confidence: Optional[float] = Field(default=None, alias="typeConfidence")
+    plate_time: Optional[float] = Field(default=None, alias="plateTime")
+    strike_zone_width: Optional[float] = Field(default=None, alias="strikeZoneWidth")
+    strike_zone_depth: Optional[float] = Field(default=None, alias="strikeZoneDepth")
 
 
 class HitCoordinates(MLBBaseModel):
@@ -150,8 +150,8 @@ class HitCoordinates(MLBBaseModel):
     coord_y : float
         Y coordinate for hit.
     """
-    coord_x: Optional[float] = Field(default=None, alias="coordx")
-    coord_y: Optional[float] = Field(default=None, alias="coordy")
+    coord_x: Optional[float] = Field(default=None, alias="coordX")
+    coord_y: Optional[float] = Field(default=None, alias="coordY")
 
     @property
     def x(self):
@@ -187,9 +187,9 @@ class HitData(MLBBaseModel):
     trajectory: Optional[str] = None
     hardness: Optional[str] = None
     location: Optional[int] = None
-    launch_speed: Optional[float] = Field(default=None, alias="launchspeed")
-    launch_angle: Optional[float] = Field(default=None, alias="launchangle")
-    total_distance: Optional[float] = Field(default=None, alias="totaldistance")
+    launch_speed: Optional[float] = Field(default=None, alias="launchSpeed")
+    launch_angle: Optional[float] = Field(default=None, alias="launchAngle")
+    total_distance: Optional[float] = Field(default=None, alias="totalDistance")
 
 
 class CodeDesc(MLBBaseModel):
@@ -252,10 +252,10 @@ class Count(MLBBaseModel):
     outs: int
     strikes: int
     inning: Optional[int] = None
-    runner_on_1b: Optional[bool] = Field(default=None, alias="runneron1b")
-    runner_on_2b: Optional[bool] = Field(default=None, alias="runneron2b")
-    runner_on_3b: Optional[bool] = Field(default=None, alias="runneron3b")
-    is_top_inning: Optional[bool] = Field(default=None, alias="istopinning")
+    runner_on_1b: Optional[bool] = Field(default=None, alias="runnerOn1b")
+    runner_on_2b: Optional[bool] = Field(default=None, alias="runnerOn2b")
+    runner_on_3b: Optional[bool] = Field(default=None, alias="runnerOn3b")
+    is_top_inning: Optional[bool] = Field(default=None, alias="isTopInning")
 
 
 class PlayDetails(MLBBaseModel):
@@ -294,29 +294,29 @@ class PlayDetails(MLBBaseModel):
         From catcher flag.
     """
     call: Optional[CodeDesc] = None
-    is_in_play: Optional[bool] = Field(default=None, alias="isinplay")
-    is_strike: Optional[bool] = Field(default=None, alias="isstrike")
-    is_scoring_play: Optional[bool] = Field(default=None, alias="isscoringplay")
-    is_out: Optional[bool] = Field(default=None, alias="isout")
-    runner_going: Optional[bool] = Field(default=None, alias="runnergoing")
-    is_ball: Optional[bool] = Field(default=None, alias="isball")
-    is_base_hit: Optional[bool] = Field(default=None, alias="isbasehit")
-    is_at_bat: Optional[bool] = Field(default=None, alias="isatbat")
-    is_plate_appearance: Optional[bool] = Field(default=None, alias="isplateappearance")
-    bat_side: Optional[CodeDesc] = Field(default=None, alias="batside")
-    pitch_hand: Optional[CodeDesc] = Field(default=None, alias="pitchhand")
-    event_type: Optional[str] = Field(default=None, alias="eventtype")
+    is_in_play: Optional[bool] = Field(default=None, alias="isInPlay")
+    is_strike: Optional[bool] = Field(default=None, alias="isStrike")
+    is_scoring_play: Optional[bool] = Field(default=None, alias="isScoringPlay")
+    is_out: Optional[bool] = Field(default=None, alias="isOut")
+    runner_going: Optional[bool] = Field(default=None, alias="runnerGoing")
+    is_ball: Optional[bool] = Field(default=None, alias="isBall")
+    is_base_hit: Optional[bool] = Field(default=None, alias="isBaseHit")
+    is_at_bat: Optional[bool] = Field(default=None, alias="isAtBat")
+    is_plate_appearance: Optional[bool] = Field(default=None, alias="isPlateAppearance")
+    bat_side: Optional[CodeDesc] = Field(default=None, alias="batSide")
+    pitch_hand: Optional[CodeDesc] = Field(default=None, alias="pitchHand")
+    event_type: Optional[str] = Field(default=None, alias="eventType")
     event: Optional[str] = None
     description: Optional[str] = None
     type: Optional[CodeDesc] = None
-    away_score: Optional[int] = Field(default=None, alias="awayscore")
-    home_score: Optional[int] = Field(default=None, alias="homescore")
-    has_review: Optional[bool] = Field(default=None, alias="hasreview")
+    away_score: Optional[int] = Field(default=None, alias="awayScore")
+    home_score: Optional[int] = Field(default=None, alias="homeScore")
+    has_review: Optional[bool] = Field(default=None, alias="hasReview")
     code: Optional[str] = None
-    ball_color: Optional[str] = Field(default=None, alias="ballcolor")
-    trail_color: Optional[str] = Field(default=None, alias="trailcolor")
-    from_catcher: Optional[bool] = Field(default=None, alias="fromcatcher")
-    disengagement_num: Optional[int] = Field(default=None, alias="disengagementnum")
+    ball_color: Optional[str] = Field(default=None, alias="ballColor")
+    trail_color: Optional[str] = Field(default=None, alias="trailColor")
+    from_catcher: Optional[bool] = Field(default=None, alias="fromCatcher")
+    disengagement_num: Optional[int] = Field(default=None, alias="disengagementNum")
     violation: Optional[Violation] = None
 
     @field_validator('bat_side', 'pitch_hand', 'type', 'call', 'violation', mode='before')
