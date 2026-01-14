@@ -96,7 +96,7 @@ class TeamRecords(TeamRecord):
     elimination_number_league: str = Field(alias="eliminationNumberLeague")
     elimination_number_division: str = Field(alias="eliminationNumberDivision")
     elimination_number_conference: str = Field(alias="eliminationNumberConference")
-    wildcard_elimination_number: str = Field(alias="wildcardEliminationNumber")
+    wildcard_elimination_number: Optional[str] = Field(default=None, alias="wildcardEliminationNumber")
     run_differential: int = Field(alias="runDifferential")
     wildcard_rank: Optional[str] = Field(default=None, alias="wildcardRank")
     wildcard_leader: Optional[bool] = Field(default=None, alias="wildcardLeader")

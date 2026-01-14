@@ -234,7 +234,7 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue('hitting' in stats)
 
         # check for split objects
-        self.assertTrue(stats['hitting']['vsteam'])
+        self.assertTrue(stats['hitting']['vsTeam'])
 
     def test_hitting_vsteam_stats_team(self):
         """mlb get stats should return hitting stats"""
@@ -252,7 +252,7 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue('hitting' in stats)
 
         # check for split objects
-        self.assertTrue(stats['hitting']['vsteam'])
+        self.assertTrue(stats['hitting']['vsTeam'])
 
     def test_hitting_pitchLog_stats_player(self):
         """mlb get stats should return hitting stats"""
@@ -317,9 +317,9 @@ class TestHittingStats(unittest.TestCase):
         self.assertTrue('stats' in stats)
 
         # check for split objects
-        self.assertTrue(stats['stats']['pitcharsenal'])
+        self.assertTrue(stats['stats']['pitchArsenal'])
 
-        pitcharsenal = stats['stats']['pitcharsenal']
+        pitcharsenal = stats['stats']['pitchArsenal']
         self.assertTrue(len(pitcharsenal.splits) > 1)
         self.assertEqual(pitcharsenal.total_splits, len(pitcharsenal.splits))
 

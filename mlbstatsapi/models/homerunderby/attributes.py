@@ -90,8 +90,8 @@ class Status(MLBBaseModel):
     state: str
     current_round: int = Field(alias="currentRound")
     current_round_time_left: str = Field(alias="currentRoundTimeLeft")
-    in_tiebreaker: bool = Field(alias="inTiebreaker")
-    tiebreaker_num: int = Field(alias="tiebreakerNum")
+    in_tiebreaker: bool = Field(alias="inTieBreaker")
+    tiebreaker_num: int = Field(alias="tieBreakerNum")
     clock_stopped: bool = Field(alias="clockStopped")
     bonus_time: bool = Field(alias="bonusTime")
 
@@ -193,13 +193,13 @@ class Hits(MLBBaseModel):
         The ID of the play in which the hit occurred.
     """
     bonus_time: bool = Field(alias="bonusTime")
-    homerun: bool
-    tiebreaker: bool
+    homerun: bool = Field(alias="homeRun")
+    tiebreaker: bool = Field(alias="tieBreaker")
     hit_data: HitData = Field(alias="hitData")
-    is_homerun: bool = Field(alias="isHomerun")
+    is_homerun: bool = Field(alias="isHomeRun")
     time_remaining: str = Field(alias="timeRemaining")
     is_bonus_time: bool = Field(alias="isBonusTime")
-    is_tiebreaker: bool = Field(alias="isTiebreaker")
+    is_tiebreaker: bool = Field(alias="isTieBreaker")
     time_remaining_seconds: Optional[int] = Field(default=None, alias="timeRemainingSeconds")
     play_id: Optional[str] = Field(default=None, alias="playId")
 
@@ -246,7 +246,7 @@ class Seed(MLBBaseModel):
     is_winner: bool = Field(alias="isWinner")
     is_complete: bool = Field(alias="isComplete")
     is_started: bool = Field(alias="isStarted")
-    num_homeruns: int = Field(alias="numHomeruns")
+    num_homeruns: int = Field(alias="numHomeRuns")
 
 
 class Matchup(MLBBaseModel):

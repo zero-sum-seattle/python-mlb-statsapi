@@ -153,14 +153,14 @@ class TeamRecord(MLBBaseModel):
         The winning percentage of the team.
     """
     games_played: int = Field(alias="gamesPlayed")
-    wildcard_games_back: str = Field(alias="wildcardGamesBack")
+    wildcard_games_back: Optional[str] = Field(default=None, alias="wildcardGamesBack")
     league_games_back: str = Field(alias="leagueGamesBack")
-    spring_league_games_back: str = Field(alias="springLeagueGamesBack")
+    spring_league_games_back: Optional[str] = Field(default=None, alias="springLeagueGamesBack")
     sport_games_back: str = Field(alias="sportGamesBack")
     division_games_back: str = Field(alias="divisionGamesBack")
-    conference_games_back: str = Field(alias="conferenceGamesBack")
+    conference_games_back: Optional[str] = Field(default=None, alias="conferenceGamesBack")
     league_record: OverallLeagueRecord = Field(alias="leagueRecord")
-    records: Records
+    records: Optional[Records] = None
     division_leader: bool = Field(alias="divisionLeader")
     wins: int
     losses: int

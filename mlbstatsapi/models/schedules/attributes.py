@@ -145,7 +145,7 @@ class ScheduleGames(MLBBaseModel):
     double_header: str = Field(alias="doubleHeader")
     gameday_type: str = Field(alias="gamedayType")
     tiebreaker: str
-    calendar_event_id: str = Field(alias="calendarEventId")
+    calendar_event_id: Optional[str] = Field(default=None, alias="calendarEventId")
     season_display: str = Field(alias="seasonDisplay")
     day_night: str = Field(alias="dayNight")
     scheduled_innings: int = Field(alias="scheduledInnings")

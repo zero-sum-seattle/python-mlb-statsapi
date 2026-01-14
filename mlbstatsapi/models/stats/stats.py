@@ -50,7 +50,7 @@ class ExpectedStatistics(MLBBaseModel):
     avg: str
     slg: str
     woba: str
-    wobacon: str
+    wobacon: str = Field(alias="wobaCon")
 
 
 class Sabermetrics(MLBBaseModel):

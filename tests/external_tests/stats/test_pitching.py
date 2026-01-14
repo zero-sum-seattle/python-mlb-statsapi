@@ -243,7 +243,7 @@ class TestPitchingStats(unittest.TestCase):
         self.assertTrue('stats' in stats)
 
         # check for split objects
-        self.assertTrue(stats['stats']['pitcharsenal'])
+        self.assertTrue(stats['stats']['pitchArsenal'])
 
     def test_pitching_hotColdZones_stats_player(self):
         """mlb get stats should return hitting stats"""

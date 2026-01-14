@@ -19,6 +19,6 @@ class MetaData(MLBBaseModel):
         Current logical events for this game.
     """
     wait: int
-    timestamp: str
+    timestamp: str = Field(alias="timeStamp")
     game_events: List[str] = Field(alias="gameEvents")
     logical_events: List[str] = Field(alias="logicalEvents")

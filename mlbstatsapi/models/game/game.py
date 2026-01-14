@@ -25,7 +25,7 @@ class Game(MLBBaseModel):
     """
     game_pk: int = Field(alias="gamePk")
     link: str
-    metadata: Optional[MetaData] = None
+    metadata: Optional[MetaData] = Field(default=None, alias="metaData")
     game_data: Optional[GameData] = Field(default=None, alias="gameData")
     live_data: Optional[LiveData] = Field(default=None, alias="liveData")
 
