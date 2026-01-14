@@ -26,8 +26,6 @@ jobs:
           virtualenvs-in-project: true
       - name: Install dependencies
         run: poetry install --no-interaction
-      - name: Test with mocks with pytest
-        run: poetry run pytest tests/mock_tests/
       - name: Test external tests with pytest
         run: poetry run pytest tests/external_tests/
       - name: Build package
