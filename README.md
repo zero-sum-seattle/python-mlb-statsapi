@@ -185,9 +185,6 @@ Contributions are welcome! Whether it's bug fixes, new features, or documentatio
 # Run tests
 poetry run pytest
 
-# Run mock tests only (no external API calls)
-poetry run pytest tests/mock_tests/
-
 # Run external tests (requires internet)
 poetry run pytest tests/external_tests/
 ```
