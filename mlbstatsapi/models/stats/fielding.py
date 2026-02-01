@@ -1,6 +1,6 @@
 from typing import Optional, Any, List, ClassVar
 from pydantic import Field, field_validator
-from mlbstatsapi.models.base import MLBBaseModel
+from mlbstatsapi.models.base import MLBBaseModel, OptionalFloat
 from mlbstatsapi.models.people import Position
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
@@ -21,11 +21,11 @@ class SimpleFieldingSplit(MLBBaseModel):
         The number of games started.
     caught_stealing : int
         The number of runners caught stealing.
-    caught_stealing_percentage : str
+    caught_stealing_percentage : float
         The percentage of runners caught stealing.
     stolen_bases : int
         The number of stolen bases.
-    stolen_base_percentage : str
+    stolen_base_percentage : float
         The stolen base percentage.
     assists : int
         The number of assists.
@@ -35,13 +35,13 @@ class SimpleFieldingSplit(MLBBaseModel):
         The number of errors committed.
     chances : int
         The number of chances.
-    fielding : str
+    fielding : float
         The fielding percentage.
-    range_factor_per_game : str
+    range_factor_per_game : float
         Range rating per game.
-    range_factor_per_9_inn : str
+    range_factor_per_9_inn : float
         Range factor per 9 innings.
-    innings : str
+    innings : float
         The number of innings played.
     games : int
         The number of games played.
@@ -51,7 +51,7 @@ class SimpleFieldingSplit(MLBBaseModel):
         The number of double plays.
     triple_plays : int
         The number of triple plays.
-    catcher_era : str
+    catcher_era : float
         The catcher ERA of the fielding stat.
     catchers_interference : int
         The number of times catchers interference was committed.
@@ -67,22 +67,22 @@ class SimpleFieldingSplit(MLBBaseModel):
     games_played: Optional[int] = Field(default=None, alias="gamesPlayed")
     games_started: Optional[int] = Field(default=None, alias="gamesStarted")
     caught_stealing: Optional[int] = Field(default=None, alias="caughtStealing")
-    caught_stealing_percentage: Optional[str] = Field(default=None, alias="caughtStealingPercentage")
+    caught_stealing_percentage: OptionalFloat = Field(default=None, alias="caughtStealingPercentage")
     stolen_bases: Optional[int] = Field(default=None, alias="stolenBases")
-    stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenBasePercentage")
+    stolen_base_percentage: OptionalFloat = Field(default=None, alias="stolenBasePercentage")
     assists: Optional[int] = None
     putouts: Optional[int] = None
     errors: Optional[int] = None
     chances: Optional[int] = None
-    fielding: Optional[str] = None
-    range_factor_per_game: Optional[str] = Field(default=None, alias="rangeFactorPerGame")
-    range_factor_per_9_inn: Optional[str] = Field(default=None, alias="rangeFactorPer9Inn")
-    innings: Optional[str] = None
+    fielding: OptionalFloat = None
+    range_factor_per_game: OptionalFloat = Field(default=None, alias="rangeFactorPerGame")
+    range_factor_per_9_inn: OptionalFloat = Field(default=None, alias="rangeFactorPer9Inn")
+    innings: OptionalFloat = None
     games: Optional[int] = None
     passed_ball: Optional[int] = Field(default=None, alias="passedBall")
     double_plays: Optional[int] = Field(default=None, alias="doublePlays")
     triple_plays: Optional[int] = Field(default=None, alias="triplePlays")
-    catcher_era: Optional[str] = Field(default=None, alias="catcherEra")
+    catcher_era: OptionalFloat = Field(default=None, alias="catcherEra")
     catchers_interference: Optional[int] = Field(default=None, alias="catchersInterference")
     wild_pitches: Optional[int] = Field(default=None, alias="wildPitches")
     throwing_errors: Optional[int] = Field(default=None, alias="throwingErrors")
