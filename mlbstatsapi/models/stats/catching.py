@@ -1,6 +1,6 @@
 from typing import Optional, List, ClassVar
 from pydantic import Field
-from mlbstatsapi.models.base import MLBBaseModel
+from mlbstatsapi.models.base import MLBBaseModel, OptionalFloat
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 from .stats import Split
@@ -30,23 +30,23 @@ class SimpleCatchingSplit(MLBBaseModel):
         The number of hits while catching.
     hit_by_pitch : int
         The number of batters hit by a pitch while catching.
-    avg : str
+    avg : float
         The batting average while catching.
     at_bats : int
         The number of at bats while catching.
-    obp : str
+    obp : float
         The on base percentage while catching.
-    slg : str
+    slg : float
         The slugging percentage while catching.
-    ops : str
+    ops : float
         The on-base slugging while catching.
     caught_stealing : int
         The number of runners caught stealing by the catcher.
-    caught_stealing_percentage : str
+    caught_stealing_percentage : float
         Percentage of runners caught stealing by the catcher.
     stolen_bases : int
         The number of stolen bases while catching.
-    stolen_base_percentage : str
+    stolen_base_percentage : float
         The stolen base percentage against the catcher.
     earned_runs : int
         The earned run amount against the catcher.
@@ -62,7 +62,7 @@ class SimpleCatchingSplit(MLBBaseModel):
         The number of pick offs while catching.
     total_bases : int
         The total number of bases.
-    strikeout_walk_ratio : str
+    strikeout_walk_ratio : float
         The strike out to walk ratio while catching.
     catchers_interference : int
         The number of times catcher interference committed.
@@ -84,15 +84,15 @@ class SimpleCatchingSplit(MLBBaseModel):
     intentional_walks: Optional[int] = Field(default=None, alias="intentionalWalks")
     hits: Optional[int] = None
     hit_by_pitch: Optional[int] = Field(default=None, alias="hitByPitch")
-    avg: Optional[str] = None
+    avg: OptionalFloat = None
     at_bats: Optional[int] = Field(default=None, alias="atBats")
-    obp: Optional[str] = None
-    slg: Optional[str] = None
-    ops: Optional[str] = None
+    obp: OptionalFloat = None
+    slg: OptionalFloat = None
+    ops: OptionalFloat = None
     caught_stealing: Optional[int] = Field(default=None, alias="caughtStealing")
-    caught_stealing_percentage: Optional[str] = Field(default=None, alias="caughtStealingPercentage")
+    caught_stealing_percentage: OptionalFloat = Field(default=None, alias="caughtStealingPercentage")
     stolen_bases: Optional[int] = Field(default=None, alias="stolenBases")
-    stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenBasePercentage")
+    stolen_base_percentage: OptionalFloat = Field(default=None, alias="stolenBasePercentage")
     earned_runs: Optional[int] = Field(default=None, alias="earnedRuns")
     batters_faced: Optional[int] = Field(default=None, alias="battersFaced")
     games_pitched: Optional[int] = Field(default=None, alias="gamesPitched")
@@ -100,7 +100,7 @@ class SimpleCatchingSplit(MLBBaseModel):
     wild_pitches: Optional[int] = Field(default=None, alias="wildPitches")
     pickoffs: Optional[int] = None
     total_bases: Optional[int] = Field(default=None, alias="totalBases")
-    strikeout_walk_ratio: Optional[str] = Field(default=None, alias="strikeoutWalkRatio")
+    strikeout_walk_ratio: OptionalFloat = Field(default=None, alias="strikeoutWalkRatio")
     catchers_interference: Optional[int] = Field(default=None, alias="catchersInterference")
     sac_bunts: Optional[int] = Field(default=None, alias="sacBunts")
     sac_flies: Optional[int] = Field(default=None, alias="sacFlies")
