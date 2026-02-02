@@ -79,7 +79,7 @@ class SimpleCatchingSplit(MLBBaseModel):
     games_played: Optional[int] = Field(default=None, alias="gamesPlayed")
     runs: Optional[int] = None
     home_runs: Optional[int] = Field(default=None, alias="homeRuns")
-    strikeouts: Optional[int] = None
+    strikeouts: Optional[int] = Field(default=None, alias="strikeOuts")
     base_on_balls: Optional[int] = Field(default=None, alias="baseOnBalls")
     intentional_walks: Optional[int] = Field(default=None, alias="intentionalWalks")
     hits: Optional[int] = None
