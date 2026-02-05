@@ -6,7 +6,6 @@
 
 [![PyPI version](https://badge.fury.io/py/python-mlb-statsapi.svg)](https://badge.fury.io/py/python-mlb-statsapi)
 ![Development Branch Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test-mlbstatsapi-test.yml/badge.svg?event=push)
-![Periodic External Test Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/catch-and-report.yml/badge.svg?event=schedule)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-mlb-statsapi)
 ![GitHub](https://img.shields.io/github/license/zero-sum-seattle/python-mlb-statsapi)
 
