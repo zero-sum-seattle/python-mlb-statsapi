@@ -112,11 +112,12 @@ class LinescoreOffense(MLBBaseModel):
     in_hole: Optional[Person] = Field(default=None, alias="inHole")
     pitcher: Optional[Person] = None
     batting_order: Optional[int] = Field(default=None, alias="battingOrder")
-    first: Optional[str] = None
-    second: Optional[str] = None
-    third: Optional[str] = None
+    # MLB API sometimes returns these as person objects (id/link/fullName).
+    first: Optional[Person] = None
+    second: Optional[Person] = None
+    third: Optional[Person] = None
 
-    @field_validator('batter', 'on_deck', 'in_hole', 'pitcher', mode='before')
+    @field_validator('batter', 'on_deck', 'in_hole', 'pitcher', 'first', 'second', 'third', mode='before')
     @classmethod
     def empty_dict_to_none(cls, v: Any) -> Any:
         """Convert empty dicts to None."""

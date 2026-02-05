@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import Field
+from pydantic import Field, field_validator
 from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.people import Person, Position
 
@@ -41,12 +41,20 @@ class RunnerMovement(MLBBaseModel):
     out_base : str
         Base runner was made out.
     """
-    is_out: bool = Field(alias="isOut")
+    is_out: bool = Field(default=False, alias="isOut")
     out_number: Optional[int] = Field(default=None, alias="outNumber")
     origin_base: Optional[str] = Field(default=None, alias="originBase")
     start: Optional[str] = None
     end: Optional[str] = None
     out_base: Optional[str] = Field(default=None, alias="outBase")
+
+    @field_validator("is_out", mode="before")
+    @classmethod
+    def _coerce_is_out(cls, v):
+        # MLB API occasionally returns null for isOut.
+        if v is None:
+            return False
+        return v
 
 
 class RunnerDetails(MLBBaseModel):

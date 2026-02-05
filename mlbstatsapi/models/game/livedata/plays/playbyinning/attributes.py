@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import Field
 from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.teams import Team
@@ -16,8 +16,9 @@ class HitCoordinates(MLBBaseModel):
     y : float
         Y coordinate for hit.
     """
-    x: float
-    y: float
+    # MLB API occasionally returns null for these coordinates.
+    x: Optional[float] = None
+    y: Optional[float] = None
 
 
 class HitsByTeam(MLBBaseModel):

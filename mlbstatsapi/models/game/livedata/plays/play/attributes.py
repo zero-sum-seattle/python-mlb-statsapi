@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any, Dict, List, Union
 from pydantic import Field
 from mlbstatsapi.models.base import MLBBaseModel
 
@@ -99,4 +99,5 @@ class PlayReviewDetails(MLBBaseModel):
     in_progress: bool = Field(alias="inProgress")
     review_type: str = Field(alias="reviewType")
     challenge_team_id: Optional[int] = Field(default=None, alias="challengeTeamId")
-    additional_reviews: Optional[str] = Field(default=None, alias="additionalReviews")
+    # MLB API returns this as either null, a string, or a list of review objects.
+    additional_reviews: Optional[Union[str, List[Dict[str, Any]]]] = Field(default=None, alias="additionalReviews")

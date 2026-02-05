@@ -1,5 +1,5 @@
-from typing import Optional
-from pydantic import Field
+from typing import Optional, Union, Any
+from pydantic import Field, field_validator
 from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.people import Person, Position
 from mlbstatsapi.models.data import Count, HitData, PitchData, PlayDetails
@@ -55,7 +55,8 @@ class PlayEvent(MLBBaseModel):
     pfx_id: Optional[str] = Field(default=None, alias="pfxId")
     start_time: Optional[str] = Field(default=None, alias="startTime")
     end_time: Optional[str] = Field(default=None, alias="endTime")
-    umpire: Optional[str] = None
+    # MLB API sometimes returns a person object (id/link) instead of a string.
+    umpire: Optional[Union[str, Person]] = None
     base: Optional[str] = None
     play_id: Optional[str] = Field(default=None, alias="playId")
     pitch_number: Optional[int] = Field(default=None, alias="pitchNumber")
@@ -71,3 +72,10 @@ class PlayEvent(MLBBaseModel):
     replaced_player: Optional[Person] = Field(default=None, alias="replacedPlayer")
     review_details: Optional[dict] = Field(default=None, alias="reviewDetails")
     injury_type: Optional[str] = Field(default=None, alias="injuryType")
+
+    @field_validator("umpire", mode="before")
+    @classmethod
+    def _empty_dict_to_none(cls, v: Any) -> Any:
+        if isinstance(v, dict) and not v:
+            return None
+        return v

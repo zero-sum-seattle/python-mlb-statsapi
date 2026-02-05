@@ -20,4 +20,8 @@ class MLBBaseModel(BaseModel):
         extra="ignore",
         alias_generator=to_camel_case,
         populate_by_name=True,
+        # MLB's API occasionally returns numbers for fields that are logically strings
+        # (e.g. liveData.plays.*.playEvents.*.base can be 1/2/3).
+        # Enable coercion to be resilient to these inconsistencies.
+        coerce_numbers_to_str=True,
     )
