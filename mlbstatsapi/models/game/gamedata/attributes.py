@@ -200,6 +200,42 @@ class GameReview(MLBBaseModel):
     home: ReviewInfo
 
 
+class AbsChallengeInfo(MLBBaseModel):
+    """
+    A class to represent ABS challenge info for each team in this game.
+
+    Attributes
+    ----------
+    used_successful : int
+        How many successful ABS challenges were used.
+    used_failed : int
+        How many failed ABS challenges were used.
+    remaining : int
+        How many ABS challenges are remaining.
+    """
+    used_successful: int = Field(alias="usedSuccessful")
+    used_failed: int = Field(alias="usedFailed")
+    remaining: int
+
+
+class AbsChallenges(MLBBaseModel):
+    """
+    A class to represent ABS challenge information for this game.
+
+    Attributes
+    ----------
+    has_challenges : bool
+        If ABS challenges are available.
+    away : AbsChallengeInfo
+        Away team ABS challenge info.
+    home : AbsChallengeInfo
+        Home team ABS challenge info.
+    """
+    has_challenges: bool = Field(alias="hasChallenges")
+    away: AbsChallengeInfo
+    home: AbsChallengeInfo
+
+
 class GameFlags(MLBBaseModel):
     """
     A class to represent the flags for this game.
