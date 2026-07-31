@@ -54,8 +54,8 @@ class Season(MLBBaseModel):
     """
     season_id: str = Field(alias="seasonId")
     has_wildcard: Optional[bool] = Field(default=None, alias="hasWildcard")
-    preseason_start_date: Optional[str] = Field(default=None, alias="preseasonStartDate")
-    preseason_end_date: Optional[str] = Field(default=None, alias="preseasonEndDate")
+    preseason_start_date: Optional[str] = Field(default=None, alias="preSeasonStartDate")
+    preseason_end_date: Optional[str] = Field(default=None, alias="preSeasonEndDate")
     season_start_date: Optional[str] = Field(default=None, alias="seasonStartDate")
     spring_start_date: Optional[str] = Field(default=None, alias="springStartDate")
     spring_end_date: Optional[str] = Field(default=None, alias="springEndDate")
@@ -64,11 +64,13 @@ class Season(MLBBaseModel):
     all_star_date: Optional[str] = Field(default=None, alias="allStarDate")
     first_date_2nd_half: Optional[str] = Field(default=None, alias="firstDate2ndHalf")
     regular_season_end_date: Optional[str] = Field(default=None, alias="regularSeasonEndDate")
-    postseason_start_date: Optional[str] = Field(default=None, alias="postseasonStartDate")
-    postseason_end_date: Optional[str] = Field(default=None, alias="postseasonEndDate")
+    postseason_start_date: Optional[str] = Field(default=None, alias="postSeasonStartDate")
+    postseason_end_date: Optional[str] = Field(default=None, alias="postSeasonEndDate")
     season_end_date: Optional[str] = Field(default=None, alias="seasonEndDate")
+    # MLB is inconsistent here: the start key is "offseasonStartDate" but the end key
+    # is "offSeasonEndDate".
     offseason_start_date: Optional[str] = Field(default=None, alias="offseasonStartDate")
-    offseason_end_date: Optional[str] = Field(default=None, alias="offseasonEndDate")
+    offseason_end_date: Optional[str] = Field(default=None, alias="offSeasonEndDate")
     season_level_gameday_type: Optional[str] = Field(default=None, alias="seasonLevelGamedayType")
     game_level_gameday_type: Optional[str] = Field(default=None, alias="gameLevelGamedayType")
     qualifier_plate_appearances: Optional[float] = Field(default=None, alias="qualifierPlateAppearances")

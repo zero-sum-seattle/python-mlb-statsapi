@@ -93,9 +93,9 @@ class Sabermetrics(MLBBaseModel):
         Weighted stolen base runs.
     """
     woba: Optional[float] = None
-    wraa: Optional[float] = None
-    wrc: Optional[float] = None
-    wrc_plus: Optional[float] = Field(default=None, alias="wrcPlus")
+    wraa: Optional[float] = Field(default=None, alias="wRaa")
+    wrc: Optional[float] = Field(default=None, alias="wRc")
+    wrc_plus: Optional[float] = Field(default=None, alias="wRcPlus")
     rar: Optional[float] = None
     war: Optional[float] = None
     batting: Optional[float] = None

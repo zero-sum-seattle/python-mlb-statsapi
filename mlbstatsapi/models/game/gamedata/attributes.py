@@ -39,7 +39,7 @@ class GameDataGame(MLBBaseModel):
     gameday_type: str = Field(alias="gamedayType")
     tiebreaker: str
     game_number: int = Field(alias="gameNumber")
-    calendar_event_id: Optional[str] = Field(default=None, alias="calendarEventId")
+    calendar_event_id: Optional[str] = Field(default=None, alias="calendarEventID")
     season: str
     season_display: str = Field(alias="seasonDisplay")
 
@@ -108,7 +108,7 @@ class GameStatus(MLBBaseModel):
     coded_game_state: str = Field(alias="codedGameState")
     detailed_state: str = Field(alias="detailedState")
     status_code: str = Field(alias="statusCode")
-    start_time_tbd: Optional[bool] = Field(default=None, alias="startTimeTbd")
+    start_time_tbd: Optional[bool] = Field(default=None, alias="startTimeTBD")
     abstract_game_code: str = Field(alias="abstractGameCode")
     reason: Optional[str] = None
 

@@ -34,4 +34,4 @@ class Standings(MLBBaseModel):
     last_updated: str = Field(alias="lastUpdated")
     team_records: List[TeamRecords] = Field(alias="teamRecords")
     sport: Optional[Sport] = None
-    roundrobin: Optional[dict] = None
+    roundrobin: Optional[dict] = Field(default=None, alias="roundRobin")

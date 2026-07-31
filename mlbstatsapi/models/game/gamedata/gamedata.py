@@ -76,7 +76,7 @@ class GameData(MLBBaseModel):
     game_info: Optional[GameInfo] = Field(default=None, alias="gameInfo")
     weather: Optional[GameWeather] = None
     official_scorer: Optional[Person] = Field(default=None, alias="officialScorer")
-    primary_data_caster: Optional[Person] = Field(default=None, alias="primaryDataCaster")
+    primary_data_caster: Optional[Person] = Field(default=None, alias="primaryDatacaster")
     secondary_data_caster: Optional[Person] = Field(default=None, alias="secondaryDataCaster")
     abs_challenges: Optional[AbsChallenges] = Field(default=None, alias="absChallenges")
 

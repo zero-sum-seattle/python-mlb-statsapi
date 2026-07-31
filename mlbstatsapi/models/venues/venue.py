@@ -31,7 +31,7 @@ class Venue(MLBBaseModel):
     link: str
     name: Optional[str] = None
     location: Optional[Location] = None
-    timezone: Optional[TimeZone] = None
+    timezone: Optional[TimeZone] = Field(default=None, alias="timeZone")
     field_info: Optional[FieldInfo] = Field(default=None, alias="fieldInfo")
     active: Optional[bool] = None
     season: Optional[str] = None

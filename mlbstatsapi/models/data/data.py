@@ -77,8 +77,8 @@ class PitchCoordinates(MLBBaseModel):
     y : float
         Y coordinate where pitch crossed front of home plate.
     """
-    ay: Optional[float] = None
-    az: Optional[float] = None
+    ay: Optional[float] = Field(default=None, alias="aY")
+    az: Optional[float] = Field(default=None, alias="aZ")
     pfx_x: Optional[float] = Field(default=None, alias="pfxX")
     pfx_z: Optional[float] = Field(default=None, alias="pfxZ")
     p_x: Optional[float] = Field(default=None, alias="pX")
@@ -89,7 +89,7 @@ class PitchCoordinates(MLBBaseModel):
     x0: Optional[float] = None
     y0: Optional[float] = None
     z0: Optional[float] = None
-    ax: Optional[float] = None
+    ax: Optional[float] = Field(default=None, alias="aX")
     x: Optional[float] = None
     y: Optional[float] = None
 

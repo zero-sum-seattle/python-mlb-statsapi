@@ -27,6 +27,8 @@ from pathlib import Path
 from typing import Any, Iterator
 
 import mlbstatsapi
+from pydantic import AliasChoices
+
 from mlbstatsapi.models.base import MLBBaseModel
 
 FIXTURE_DIR = Path(__file__).parent / "fixtures"
@@ -195,15 +197,27 @@ def normalize(key: str) -> str:
     return key.replace("_", "").lower()
 
 
+def validation_aliases(model: type[MLBBaseModel], field_name: str) -> list[str]:
+    """Every key this field validates against, explicit, generated or a set of choices."""
+    field = model.model_fields[field_name]
+    alias = field.validation_alias
+    if isinstance(alias, AliasChoices):
+        return [choice for choice in alias.choices if isinstance(choice, str)]
+    if isinstance(alias, str):
+        return [alias]
+    return [field.alias or field_name]
+
+
 def effective_alias(model: type[MLBBaseModel], field_name: str) -> str:
-    """The key this field actually validates against, explicit or generated."""
-    return model.model_fields[field_name].alias or field_name
+    """The key this field is primarily expected to arrive under."""
+    return validation_aliases(model, field_name)[0]
 
 
 def accepted_keys(model: type[MLBBaseModel]) -> set[str]:
     """Keys that populate a field, given ``populate_by_name`` accepts names too."""
     keys = set(model.model_fields)
-    keys.update(effective_alias(model, name) for name in model.model_fields)
+    for name in model.model_fields:
+        keys.update(validation_aliases(model, name))
     return keys
 
 
@@ -260,10 +274,10 @@ def alias_mismatches(vocabulary: set[str]) -> list[tuple[type[MLBBaseModel], str
     mismatches = []
     for model in iter_models():
         for name in model.model_fields:
-            alias = effective_alias(model, name)
-            real = observed.get(normalize(alias))
-            if real and alias not in real:
-                mismatches.append((model, name, alias, sorted(real)))
+            aliases = validation_aliases(model, name)
+            real = set().union(*(observed.get(normalize(a), set()) for a in aliases))
+            if real and not real.intersection(aliases):
+                mismatches.append((model, name, aliases[0], sorted(real)))
     return mismatches
 
 

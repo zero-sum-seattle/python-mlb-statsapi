@@ -128,7 +128,7 @@ class Person(MLBBaseModel):
     use_name: Optional[str] = Field(default=None, alias="useName")
     middle_name: Optional[str] = Field(default=None, alias="middleName")
     boxscore_name: Optional[str] = Field(default=None, alias="boxscoreName")
-    nickname: Optional[str] = None
+    nickname: Optional[str] = Field(default=None, alias="nickName")
     draft_year: Optional[int] = Field(default=None, alias="draftYear")
     mlb_debut_date: Optional[str] = Field(default=None, alias="mlbDebutDate")
     name_first_last: Optional[str] = Field(default=None, alias="nameFirstLast")
@@ -137,8 +137,8 @@ class Person(MLBBaseModel):
     last_first_name: Optional[str] = Field(default=None, alias="lastFirstName")
     last_init_name: Optional[str] = Field(default=None, alias="lastInitName")
     init_last_name: Optional[str] = Field(default=None, alias="initLastName")
-    full_fml_name: Optional[str] = Field(default=None, alias="fullFmlName")
-    full_lfm_name: Optional[str] = Field(default=None, alias="fullLfmName")
+    full_fml_name: Optional[str] = Field(default=None, alias="fullFMLName")
+    full_lfm_name: Optional[str] = Field(default=None, alias="fullLFMName")
     birth_country: Optional[str] = Field(default=None, alias="birthCountry")
     pronunciation: Optional[str] = None
     strike_zone_top: Optional[float] = Field(default=None, alias="strikeZoneTop")

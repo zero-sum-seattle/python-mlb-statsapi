@@ -1,5 +1,5 @@
 from typing import Optional, List, Any, ClassVar
-from pydantic import Field, field_validator
+from pydantic import AliasChoices, Field, field_validator
 from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.people import Person, Pitcher, Batter
 from mlbstatsapi.models.teams import Team
@@ -148,9 +148,9 @@ class SimplePitchingSplit(MLBBaseModel):
     age: Optional[int] = None
     games_played: Optional[int] = Field(default=None, alias="gamesPlayed")
     games_started: Optional[int] = Field(default=None, alias="gamesStarted")
-    flyouts: Optional[int] = None
-    groundouts: Optional[int] = None
-    airouts: Optional[int] = None
+    flyouts: Optional[int] = Field(default=None, alias="flyOuts")
+    groundouts: Optional[int] = Field(default=None, alias="groundOuts")
+    airouts: Optional[int] = Field(default=None, alias="airOuts")
     runs: Optional[int] = None
     doubles: Optional[int] = None
     triples: Optional[int] = None
@@ -192,7 +192,7 @@ class SimplePitchingSplit(MLBBaseModel):
     wild_pitches: Optional[int] = Field(default=None, alias="wildPitches")
     pickoffs: Optional[int] = None
     total_bases: Optional[int] = Field(default=None, alias="totalBases")
-    groundouts_to_airouts: Optional[str] = Field(default=None, alias="groundoutsToAirouts")
+    groundouts_to_airouts: Optional[str] = Field(default=None, alias="groundOutsToAirouts")
     win_percentage: Optional[str] = Field(default=None, alias="winPercentage")
     pitches_per_inning: Optional[str] = Field(default=None, alias="pitchesPerInning")
     games_finished: Optional[int] = Field(default=None, alias="gamesFinished")
@@ -328,7 +328,13 @@ class AdvancedPitchingSplit(MLBBaseModel):
     base_on_balls_per_9: Optional[str] = Field(default=None, alias="baseOnBallsPer9")
     home_runs_per_9: Optional[str] = Field(default=None, alias="homeRunsPer9")
     hits_per_9: Optional[str] = Field(default=None, alias="hitsPer9")
-    strikeouts_to_walks: Optional[str] = Field(default=None, alias="strikeoutsToWalks")
+    # MLB spells this key "strikesoutsToWalks". Both spellings are accepted so the
+    # field keeps working if they ever correct it.
+    strikeouts_to_walks: Optional[str] = Field(
+        default=None,
+        alias="strikesoutsToWalks",
+        validation_alias=AliasChoices("strikesoutsToWalks", "strikeoutsToWalks"),
+    )
     stolen_bases: Optional[int] = Field(default=None, alias="stolenBases")
     caught_stealing: Optional[int] = Field(default=None, alias="caughtStealing")
     quality_starts: Optional[int] = Field(default=None, alias="qualityStarts")
@@ -358,10 +364,10 @@ class AdvancedPitchingSplit(MLBBaseModel):
     home_runs_per_plate_appearance: Optional[str] = Field(default=None, alias="homeRunsPerPlateAppearance")
     walks_per_strikeout: Optional[str] = Field(default=None, alias="walksPerStrikeout")
     iso: Optional[str] = None
-    flyouts: Optional[int] = None
-    popouts: Optional[int] = None
-    lineouts: Optional[int] = None
-    groundouts: Optional[int] = None
+    flyouts: Optional[int] = Field(default=None, alias="flyOuts")
+    popouts: Optional[int] = Field(default=None, alias="popOuts")
+    lineouts: Optional[int] = Field(default=None, alias="lineOuts")
+    groundouts: Optional[int] = Field(default=None, alias="groundOuts")
     fly_hits: Optional[int] = Field(default=None, alias="flyHits")
     pop_hits: Optional[int] = Field(default=None, alias="popHits")
     line_hits: Optional[int] = Field(default=None, alias="lineHits")
@@ -371,7 +377,7 @@ class AdvancedPitchingSplit(MLBBaseModel):
     bequeathed_runners: Optional[int] = Field(default=None, alias="bequeathedRunners")
     bequeathed_runners_scored: Optional[int] = Field(default=None, alias="bequeathedRunnersScored")
     innings_pitched_per_game: Optional[str] = Field(default=None, alias="inningsPitchedPerGame")
-    flyball_percentage: Optional[str] = Field(default=None, alias="flyballPercentage")
+    flyball_percentage: Optional[str] = Field(default=None, alias="flyBallPercentage")
 
 
 class PitchingSabermetrics(Split):

@@ -71,7 +71,7 @@ class SimpleFieldingSplit(MLBBaseModel):
     stolen_bases: Optional[int] = Field(default=None, alias="stolenBases")
     stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenBasePercentage")
     assists: Optional[int] = None
-    putouts: Optional[int] = None
+    putouts: Optional[int] = Field(default=None, alias="putOuts")
     errors: Optional[int] = None
     chances: Optional[int] = None
     fielding: Optional[str] = None
