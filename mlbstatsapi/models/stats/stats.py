@@ -291,32 +291,44 @@ class SprayCharts(Split):
         return v
 
 
+class OutsAboveAverageSplit(MLBBaseModel):
+    """
+    A class to represent outs above average statistics.
+
+    NOTE: This stat type returns an empty list, or keys with the value 0.
+    """
+    attempts: Optional[int] = None
+    fielding_runs_prevented: Optional[float] = Field(default=None, alias="fieldingRunsPrevented")
+    fielding_runs_prevented_unrounded: Optional[float] = Field(default=None, alias="fieldingRunsPreventedUnrounded")
+    total_outs_above_average_back: Optional[float] = Field(default=None, alias="totalOutsAboveAverageBack")
+    total_outs_above_average_back_unrounded: Optional[float] = Field(default=None, alias="totalOutsAboveAverageBackUnrounded")
+    outs_above_average_back_straight: Optional[float] = Field(default=None, alias="outsAboveAverageBackStraight")
+    outs_above_average_back_straight_unrounded: Optional[float] = Field(default=None, alias="outsAboveAverageBackStraightUnrounded")
+    outs_above_average_back_left: Optional[float] = Field(default=None, alias="outsAboveAverageBackLeft")
+    outs_above_average_back_left_unrounded: Optional[float] = Field(default=None, alias="outsAboveAverageBackLeftUnrounded")
+    outs_above_average_back_right: Optional[float] = Field(default=None, alias="outsAboveAverageBackRight")
+    outs_above_average_back_right_unrounded: Optional[float] = Field(default=None, alias="outsAboveAverageBackRightUnrounded")
+    total_outs_above_average_in: Optional[float] = Field(default=None, alias="totalOutsAboveAverageIn")
+    total_outs_above_average_in_unrounded: Optional[float] = Field(default=None, alias="totalOutsAboveAverageInUnrounded")
+    outs_above_average_in_straight: Optional[float] = Field(default=None, alias="outsAboveAverageInStraight")
+    outs_above_average_in_straight_unrounded: Optional[float] = Field(default=None, alias="outsAboveAverageInStraightUnrounded")
+    outs_above_average_in_left: Optional[float] = Field(default=None, alias="outsAboveAverageInLeft")
+    outs_above_average_in_left_unrounded: Optional[float] = Field(default=None, alias="outsAboveAverageInLeftUnrounded")
+    outs_above_average_in_right: Optional[float] = Field(default=None, alias="outsAboveAverageInRight")
+    outs_above_average_in_right_unrounded: Optional[float] = Field(default=None, alias="outsAboveAverageInRightUnrounded")
+
+
 class OutsAboveAverage(Split):
     """
     A class to represent an outs above average statistic.
 
-    NOTE: This stat type returns an empty list, or keys with the value 0.
+    Attributes
+    ----------
+    stat : OutsAboveAverageSplit
+        The outs above average statistics.
     """
     _stat: ClassVar[List[str]] = ['outsAboveAverage']
-    attempts: int
-    total_outs_above_average_back: int = Field(alias="totalOutsAboveAverageBack")
-    total_outs_above_average_back_unrounded: int = Field(alias="totalOutsAboveAverageBackUnrounded")
-    outs_above_average_back_straight: int = Field(alias="outsAboveAverageBackStraight")
-    outs_above_average_back_straight_unrounded: int = Field(alias="outsAboveAverageBackStraightUnrounded")
-    outs_above_average_back_left: int = Field(alias="outsAboveAverageBackLeft")
-    outs_above_average_back_left_unrounded: int = Field(alias="outsAboveAverageBackLeftUnrounded")
-    outs_above_average_back_right: int = Field(alias="outsAboveAverageBackRight")
-    outs_above_average_back_right_unrounded: int = Field(alias="outsAboveAverageBackRightUnrounded")
-    total_outs_above_average_in: int = Field(alias="totalOutsAboveAverageIn")
-    total_outs_above_average_in_unrounded: int = Field(alias="totalOutsAboveAverageInUnrounded")
-    outs_above_average_in_straight: int = Field(alias="outsAboveAverageInStraight")
-    outs_above_average_in_straight_unrounded: int = Field(alias="outsAboveAverageInStraightUnrounded")
-    outs_above_average_in_left: int = Field(alias="outsAboveAverageInLeft")
-    outs_above_average_in_left_unrounded: int = Field(alias="outsAboveAverageInLeftUnrounded")
-    outs_above_average_in_right: int = Field(alias="outsAboveAverageInRight")
-    outs_above_average_in_right_unrounded: int = Field(alias="outsAboveAverageInRightUnrounded")
-    player: Person
-    game_type: str = Field(alias="gameType")
+    stat: OutsAboveAverageSplit
 
 
 class PlayerGameLogStat(Split):
