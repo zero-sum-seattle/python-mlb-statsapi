@@ -1195,7 +1195,9 @@ class Mlb:
         >>> mlb.get_venue(31)
         Venue
         """
-        params['hydrate'] = ['location', 'fieldInfo', 'timezone']
+        # MLB expects one comma delimited hydrate value; a list is encoded as
+        # repeated query params and the hydrations are dropped.
+        params['hydrate'] = 'location,fieldInfo,timezone'
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'venues/{venue_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
@@ -1241,7 +1243,9 @@ class Mlb:
         >>> mlb.get_venues()
         [Venue, Venue, Venue]
         """
-        params['hydrate'] = ['location', 'fieldInfo', 'timezone']
+        # MLB expects one comma delimited hydrate value; a list is encoded as
+        # repeated query params and the hydrations are dropped.
+        params['hydrate'] = 'location,fieldInfo,timezone'
 
         mlb_data = self._mlb_adapter_v1.get(endpoint='venues', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
