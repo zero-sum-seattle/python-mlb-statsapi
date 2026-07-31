@@ -96,14 +96,14 @@ class AdvancedHittingSplit(MLBBaseModel):
     walks_per_strikeout: Optional[str] = Field(default=None, alias="walksPerStrikeout")
     iso: Optional[str] = None
     reached_on_error: Optional[int] = Field(default=None, alias="reachedOnError")
-    walkoffs: Optional[int] = None
-    flyouts: Optional[int] = None
+    walkoffs: Optional[int] = Field(default=None, alias="walkOffs")
+    flyouts: Optional[int] = Field(default=None, alias="flyOuts")
     total_swings: Optional[int] = Field(default=None, alias="totalSwings")
     swing_and_misses: Optional[int] = Field(default=None, alias="swingAndMisses")
     balls_in_play: Optional[int] = Field(default=None, alias="ballsInPlay")
-    popouts: Optional[int] = None
-    lineouts: Optional[int] = None
-    groundouts: Optional[int] = None
+    popouts: Optional[int] = Field(default=None, alias="popOuts")
+    lineouts: Optional[int] = Field(default=None, alias="lineOuts")
+    groundouts: Optional[int] = Field(default=None, alias="groundOuts")
     fly_hits: Optional[int] = Field(default=None, alias="flyHits")
     pop_hits: Optional[int] = Field(default=None, alias="popHits")
     ground_hits: Optional[int] = Field(default=None, alias="groundHits")
@@ -191,14 +191,14 @@ class SimpleHittingSplit(MLBBaseModel):
     """
     age: Optional[int] = None
     games_played: Optional[int] = Field(default=None, alias="gamesPlayed")
-    flyouts: Optional[int] = None
-    groundouts: Optional[int] = None
-    airouts: Optional[int] = None
+    flyouts: Optional[int] = Field(default=None, alias="flyOuts")
+    groundouts: Optional[int] = Field(default=None, alias="groundOuts")
+    airouts: Optional[int] = Field(default=None, alias="airOuts")
     runs: Optional[int] = None
     doubles: Optional[int] = None
     triples: Optional[int] = None
     home_runs: Optional[int] = Field(default=None, alias="homeRuns")
-    strikeouts: Optional[int] = None
+    strikeouts: Optional[int] = Field(default=None, alias="strikeOuts")
     base_on_balls: Optional[int] = Field(default=None, alias="baseOnBalls")
     intentional_walks: Optional[int] = Field(default=None, alias="intentionalWalks")
     hits: Optional[int] = None
@@ -222,7 +222,7 @@ class SimpleHittingSplit(MLBBaseModel):
     sac_bunts: Optional[int] = Field(default=None, alias="sacBunts")
     sac_flies: Optional[int] = Field(default=None, alias="sacFlies")
     babip: Optional[str] = None
-    groundouts_to_airouts: Optional[str] = Field(default=None, alias="groundoutsToAirouts")
+    groundouts_to_airouts: Optional[str] = Field(default=None, alias="groundOutsToAirouts")
     catchers_interference: Optional[int] = Field(default=None, alias="catchersInterference")
     at_bats_per_home_run: Optional[str] = Field(default=None, alias="atBatsPerHomeRun")
 
