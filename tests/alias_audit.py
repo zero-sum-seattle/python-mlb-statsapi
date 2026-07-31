@@ -38,12 +38,16 @@ PAYLOADS_FIXTURE = FIXTURE_DIR / "model_payloads.json"
 BASE_V1 = "https://statsapi.mlb.com/api/v1"
 BASE_V1_1 = "https://statsapi.mlb.com/api/v1.1"
 
-# Fixed identifiers so a re-record produces a comparable snapshot.
+# Fixed identifiers so a re-record produces a comparable snapshot. Several exist only
+# to reach keys MLB omits from an ordinary response: catcher-only fielding stats, the
+# death fields on a deceased player, and a game recent enough to carry ABS challenges.
 SOTO = 665742
 SKUBAL = 669373
 REALMUTO = 592663
+AARON = 110001
 PHILLIES = 147
 GAME_PK = 775296
+ABS_GAME_PK = 823837
 SEASON = 2025
 
 # Endpoints crawled to build the vocabulary of real API keys. Hydrations are requested
@@ -57,6 +61,12 @@ SNAPSHOT_ENDPOINTS = (
     f"{BASE_V1}/people/{SOTO}/stats?stats=season,career,seasonAdvanced,yearByYear,gameLog"
     f"&group=fielding&season={SEASON}",
     f"{BASE_V1}/people/{REALMUTO}/stats?stats=season,career,yearByYear&group=catching&season={SEASON}",
+    # A catcher's fielding split carries catcherERA and passedBall, which an outfielder's
+    # does not.
+    f"{BASE_V1}/people/{REALMUTO}/stats?stats=season,career&group=fielding&season={SEASON}",
+    f"{BASE_V1}/people/{SOTO}/stats?stats=outsAboveAverage&group=fielding&season={SEASON}",
+    # Death and nickname fields are only present for players they apply to.
+    f"{BASE_V1}/people/{AARON}",
     f"{BASE_V1}/teams/{PHILLIES}/stats?stats=season,seasonAdvanced,career"
     f"&group=hitting,pitching,fielding&season={SEASON}",
     f"{BASE_V1}/people/{SOTO}?hydrate=stats(group=[hitting],type=[season])",
@@ -75,6 +85,8 @@ SNAPSHOT_ENDPOINTS = (
     f"{BASE_V1}/league?sportId=1",
     f"{BASE_V1}/sports",
     f"{BASE_V1_1}/game/{GAME_PK}/feed/live",
+    # ABS challenges only appear on games played once the system was in use.
+    f"{BASE_V1_1}/game/{ABS_GAME_PK}/feed/live",
     f"{BASE_V1}/game/{GAME_PK}/boxscore",
     f"{BASE_V1}/game/{GAME_PK}/linescore",
     f"{BASE_V1}/game/{GAME_PK}/playByPlay",
@@ -130,6 +142,18 @@ PAYLOAD_SPECS = (
         path=("stats", 0, "splits", 0, "stat"),
     ),
     PayloadSpec(
+        "fielding_season_catcher",
+        "mlbstatsapi.models.stats.fielding:SimpleFieldingSplit",
+        f"{BASE_V1}/people/{REALMUTO}/stats?stats=season&group=fielding&season={SEASON}",
+        path=("stats", 0, "splits", 0, "stat"),
+    ),
+    PayloadSpec(
+        "outs_above_average",
+        "mlbstatsapi.models.stats.stats:OutsAboveAverage",
+        f"{BASE_V1}/people/{SOTO}/stats?stats=outsAboveAverage&group=fielding&season={SEASON}",
+        path=("stats", 0, "splits", 0),
+    ),
+    PayloadSpec(
         "catching_season",
         "mlbstatsapi.models.stats.catching:SimpleCatchingSplit",
         f"{BASE_V1}/people/{REALMUTO}/stats?stats=season&group=catching&season={SEASON}",
@@ -146,6 +170,18 @@ PAYLOAD_SPECS = (
         "mlbstatsapi.models.people.people:Person",
         f"{BASE_V1}/people/{SOTO}",
         path=("people", 0),
+    ),
+    PayloadSpec(
+        "person_deceased",
+        "mlbstatsapi.models.people.people:Person",
+        f"{BASE_V1}/people/{AARON}",
+        path=("people", 0),
+    ),
+    PayloadSpec(
+        "abs_challenge_info",
+        "mlbstatsapi.models.game.gamedata.attributes:AbsChallengeInfo",
+        f"{BASE_V1_1}/game/{ABS_GAME_PK}/feed/live",
+        probe="usedSuccessful",
     ),
     PayloadSpec(
         "season",

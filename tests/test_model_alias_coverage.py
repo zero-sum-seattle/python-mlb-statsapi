@@ -43,11 +43,17 @@ REPORTED_REGRESSIONS = [
     ("pitching_season_advanced", "flyball_percentage"),
     ("pitching_season_advanced", "strikeouts_to_walks"),
     ("fielding_season", "putouts"),
+    ("fielding_season_catcher", "putouts"),
+    ("fielding_season_catcher", "catcher_era"),
+    ("outs_above_average", "stat"),
     ("catching_season", "strikeouts"),
     ("hitting_sabermetrics", "wraa"),
     ("hitting_sabermetrics", "wrc"),
     ("hitting_sabermetrics", "wrc_plus"),
     ("person", "nickname"),
+    ("person_deceased", "death_date"),
+    ("person_deceased", "death_city"),
+    ("abs_challenge_info", "used_successful"),
     ("season", "preseason_start_date"),
     ("season", "postseason_end_date"),
     ("venue", "timezone"),
@@ -57,6 +63,27 @@ REPORTED_REGRESSIONS = [
     ("game_data_game", "calendar_event_id"),
     ("pitch_coordinates", "ax"),
 ]
+
+
+def test_recorded_keys_cover_most_of_the_model_surface():
+    """A failed or truncated re-record would disable the checks below without failing.
+
+    The remaining few percent are keys MLB only sends in situations the crawl cannot
+    reach on demand -- resumed and rescheduled games, ejections, injury play events --
+    plus Stat.total_splits, which mlb_module computes rather than reads.
+    """
+    fields = [
+        (model, name) for model in alias_audit.iter_models() for name in model.model_fields
+    ]
+    observed = {alias_audit.normalize(key) for key in OBSERVED_API_KEYS}
+    covered = sum(
+        alias_audit.normalize(alias_audit.effective_alias(model, name)) in observed
+        for model, name in fields
+    )
+    assert covered / len(fields) > 0.9, (
+        f"only {covered} of {len(fields)} model fields appear in "
+        "tests/fixtures/api_keys.json; re-run python tests/tools/record_api_fixtures.py"
+    )
 
 
 def test_every_payload_spec_was_recorded():

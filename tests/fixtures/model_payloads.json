@@ -21,6 +21,14 @@
       "model": "mlbstatsapi.models.stats.fielding:SimpleFieldingSplit",
       "url": "https://statsapi.mlb.com/api/v1/people/665742/stats?stats=season&group=fielding&season=2025"
     },
+    "fielding_season_catcher": {
+      "model": "mlbstatsapi.models.stats.fielding:SimpleFieldingSplit",
+      "url": "https://statsapi.mlb.com/api/v1/people/592663/stats?stats=season&group=fielding&season=2025"
+    },
+    "outs_above_average": {
+      "model": "mlbstatsapi.models.stats.stats:OutsAboveAverage",
+      "url": "https://statsapi.mlb.com/api/v1/people/665742/stats?stats=outsAboveAverage&group=fielding&season=2025"
+    },
     "catching_season": {
       "model": "mlbstatsapi.models.stats.catching:SimpleCatchingSplit",
       "url": "https://statsapi.mlb.com/api/v1/people/592663/stats?stats=season&group=catching&season=2025"
@@ -32,6 +40,14 @@
     "person": {
       "model": "mlbstatsapi.models.people.people:Person",
       "url": "https://statsapi.mlb.com/api/v1/people/665742"
+    },
+    "person_deceased": {
+      "model": "mlbstatsapi.models.people.people:Person",
+      "url": "https://statsapi.mlb.com/api/v1/people/110001"
+    },
+    "abs_challenge_info": {
+      "model": "mlbstatsapi.models.game.gamedata.attributes:AbsChallengeInfo",
+      "url": "https://statsapi.mlb.com/api/v1.1/game/823837/feed/live"
     },
     "season": {
       "model": "mlbstatsapi.models.seasons.season:Season",
@@ -277,6 +293,69 @@
       "triplePlays": 0,
       "throwingErrors": 0
     },
+    "fielding_season_catcher": {
+      "age": 34,
+      "gamesPlayed": 132,
+      "gamesStarted": 132,
+      "caughtStealing": 30,
+      "stolenBases": 71,
+      "stolenBasePercentage": ".703",
+      "caughtStealingPercentage": ".297",
+      "assists": 37,
+      "putOuts": 1216,
+      "errors": 6,
+      "chances": 1259,
+      "fielding": ".995",
+      "position": {
+        "code": "2",
+        "name": "Catcher",
+        "type": "Catcher",
+        "abbreviation": "C"
+      },
+      "rangeFactorPerGame": "9.49",
+      "rangeFactorPer9Inn": "9.80",
+      "innings": "1151.1",
+      "games": 132,
+      "passedBall": 2,
+      "doublePlays": 10,
+      "triplePlays": 0,
+      "catcherERA": "3.76",
+      "catchersInterference": 0,
+      "wildPitches": 31,
+      "throwingErrors": 5,
+      "pickoffs": 0
+    },
+    "outs_above_average": {
+      "stat": {
+        "attempts": 221,
+        "totalOutsAboveAverage": 18,
+        "totalOutsAboveAverageUnrounded": 18.2073,
+        "totalOutsAboveAverageBack": 8,
+        "totalOutsAboveAverageBackUnrounded": 8.2395,
+        "outsAboveAverageBackStraight": 2,
+        "outsAboveAverageBackStraightUnrounded": 2.2066,
+        "outsAboveAverageBackLeft": 6,
+        "outsAboveAverageBackLeftUnrounded": 5.8617,
+        "outsAboveAverageBackRight": 2,
+        "outsAboveAverageBackRightUnrounded": 2.3779,
+        "totalOutsAboveAverageIn": 9,
+        "totalOutsAboveAverageInUnrounded": 9.2358,
+        "outsAboveAverageInStraight": 3,
+        "outsAboveAverageInStraightUnrounded": 2.5209,
+        "outsAboveAverageInLeft": 3,
+        "outsAboveAverageInLeftUnrounded": 3.1752,
+        "outsAboveAverageInRight": 4,
+        "outsAboveAverageInRightUnrounded": 3.5397,
+        "fieldingRunsPrevented": 16,
+        "fieldingRunsPreventedUnrounded": 16.3866
+      },
+      "player": {
+        "id": 665742,
+        "fullName": "Juan Soto",
+        "link": "/api/v1/people/665742"
+      },
+      "gameType": "R"
+    },
     "catching_season": {
       "age": 34,
       "gamesPlayed": 132,
@@ -376,6 +455,65 @@
       "fullLFMName": "Soto, Juan Jose",
       "strikeZoneTop": 3.259,
       "strikeZoneBottom": 1.645
+    },
+    "person_deceased": {
+      "id": 110001,
+      "fullName": "Hank Aaron",
+      "link": "/api/v1/people/110001",
+      "firstName": "Henry",
+      "lastName": "Aaron",
+      "primaryNumber": "44",
+      "birthDate": "1934-02-05",
+      "currentAge": 86,
+      "birthCity": "Mobile",
+      "birthStateProvince": "AL",
+      "birthCountry": "USA",
+      "height": "6' 0\"",
+      "weight": 180,
+      "active": false,
+      "primaryPosition": {
+        "code": "9",
+        "name": "Outfielder",
+        "type": "Outfielder",
+        "abbreviation": "RF"
+      },
+      "useName": "Hank",
+      "useLastName": "Aaron",
+      "middleName": "Louis",
+      "boxscoreName": "Aaron",
+      "nickName": "Hammerin' Hank",
+      "gender": "M",
+      "isPlayer": true,
+      "isVerified": true,
+      "deathDate": "2021-01-22",
+      "deathCity": "Atlanta",
+      "deathStateProvince": "GA",
+      "deathCountry": "USA",
+      "lastPlayedDate": "1976-10-03",
+      "mlbDebutDate": "1954-04-13",
+      "batSide": {
+        "code": "R",
+        "description": "Right"
+      },
+      "pitchHand": {
+        "code": "R",
+        "description": "Right"
+      },
+      "nameFirstLast": "Hank Aaron",
+      "nameSlug": "hank-aaron-110001",
+      "firstLastName": "Hank Aaron",
+      "lastFirstName": "Aaron, Hank",
+      "lastInitName": "Aaron, H",
+      "initLastName": "H Aaron",
+      "fullFMLName": "Henry Louis Aaron",
+      "fullLFMName": "Aaron, Henry Louis",
+      "strikeZoneTop": 3.21,
+      "strikeZoneBottom": 1.62
+    },
+    "abs_challenge_info": {
+      "usedSuccessful": 0,
+      "usedFailed": 0,
+      "remaining": 2
     },
     "season": {
       "seasonId": "2025",
