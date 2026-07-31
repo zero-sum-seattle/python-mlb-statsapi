@@ -82,7 +82,7 @@ class SimpleFieldingSplit(MLBBaseModel):
     passed_ball: Optional[int] = Field(default=None, alias="passedBall")
     double_plays: Optional[int] = Field(default=None, alias="doublePlays")
     triple_plays: Optional[int] = Field(default=None, alias="triplePlays")
-    catcher_era: Optional[str] = Field(default=None, alias="catcherEra")
+    catcher_era: Optional[str] = Field(default=None, alias="catcherERA")
     catchers_interference: Optional[int] = Field(default=None, alias="catchersInterference")
     wild_pitches: Optional[int] = Field(default=None, alias="wildPitches")
     throwing_errors: Optional[int] = Field(default=None, alias="throwingErrors")
