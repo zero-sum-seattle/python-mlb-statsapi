@@ -5,7 +5,7 @@
 **The Unofficial Python Wrapper for the MLB Stats API**
 
 [![PyPI version](https://badge.fury.io/py/python-mlb-statsapi.svg)](https://badge.fury.io/py/python-mlb-statsapi)
-![Development Branch Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test-mlbstatsapi-test.yml/badge.svg?event=push)
+[![Offline CI](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test.yml)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-mlb-statsapi)
 ![GitHub](https://img.shields.io/github/license/zero-sum-seattle/python-mlb-statsapi)
 
@@ -64,6 +64,29 @@ Ty France
 >>> print(team.name, team.franchise_name)
 Seattle Mariners Seattle
 ```
+
+## HTTP Reliability and Configuration
+
+The client remains synchronous. Sessions and retries are handled automatically for ordinary users, and existing `Mlb()` construction remains valid.
+
+Prefer a context manager when you want automatic cleanup:
+
+```python
+import mlbstatsapi
+
+with mlbstatsapi.Mlb() as mlb:
+    player = mlb.get_person(664034)
+```
+
+Customize connect and read timeouts when needed:
+
+```python
+mlb = mlbstatsapi.Mlb(
+    timeout=(5.0, 60.0),
+)
+```
+
+For shared Sessions, Session injection, retries, and structured exceptions, see [HTTP Transport](docs/http-transport.md).
 
 ## Working with Pydantic Models
 
@@ -180,17 +203,35 @@ Contributions are welcome! Whether it's bug fixes, new features, or documentatio
 
 ### Development
 
-```bash
-# Run tests
-poetry run pytest
+Offline tests are deterministic and should run before every pull request:
 
-# Run external tests (requires internet)
-poetry run pytest tests/external_tests/
+```bash
+poetry run pytest \
+  tests/ \
+  --ignore=tests/external_tests
 ```
+
+External tests contact the live MLB API. They require internet access and are separate from normal offline CI:
+
+```bash
+poetry run pytest \
+  tests/external_tests/
+```
+
+These live tests may fail because the MLB service is unavailable or because MLB changes undocumented payloads.
+
+Full local validation:
+
+```bash
+poetry run pytest tests/
+poetry build
+```
+
+Offline CI is the normal pull-request gate. External tests are available manually, on a weekly schedule, and before releases.
 
 ### Pull Request Guidelines
 
-- **All tests must pass** before submitting a PR
+- Run offline tests before submitting a PR
 - Use the [PR template](.github/pull_request_template.md) when creating your pull request
 - Follow the branch naming convention:
   - `feat/` - New features
@@ -206,14 +247,6 @@ Found a bug or have a feature request? Please [open an issue](https://github.com
 - Steps to reproduce (for bugs)
 - Expected vs actual behavior
 - Python version and package version
-
-### Note on External Tests
-
-Some tests make real API calls to the MLB Stats API. These may occasionally fail due to:
-- API changes (new fields, removed endpoints)
-- Season/data availability
-
-If you notice external test failures, please check if the MLB API has changed and update the models accordingly.
 
 
 ## Examples
