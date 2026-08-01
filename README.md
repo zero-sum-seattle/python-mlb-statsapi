@@ -65,28 +65,180 @@ Ty France
 Seattle Mariners Seattle
 ```
 
-## HTTP Reliability and Configuration
+## HTTP Sessions, Timeouts, and Retries
 
-The client remains synchronous. Sessions and retries are handled automatically for ordinary users, and existing `Mlb()` construction remains valid.
+Version 0.8.0 adds shared HTTP Sessions, explicit timeouts, optional Session injection, bounded retries, and structured transport exceptions. The `Mlb` client remains synchronous. Shared Sessions pool reusable connections; they do not cache MLB response bodies, and the client does not enable response caching by default.
 
-Prefer a context manager when you want automatic cleanup:
+### Recommended context-manager usage
+
+Prefer a context manager so library-owned HTTP resources are closed when the block exits, including when the block exits because of an exception:
 
 ```python
 import mlbstatsapi
 
 with mlbstatsapi.Mlb() as mlb:
     player = mlb.get_person(664034)
+    team = mlb.get_team(136)
 ```
 
-Customize connect and read timeouts when needed:
+One `Mlb` client uses one shared `requests.Session`. The v1 and v1.1 adapters share that Session, so repeated requests can reuse pooled connections. A Session manages a pool of reusable connections; it is not one permanent network connection.
+
+### Existing construction remains valid
+
+Existing construction continues to work:
 
 ```python
-mlb = mlbstatsapi.Mlb(
-    timeout=(5.0, 60.0),
-)
+import mlbstatsapi
+
+mlb = mlbstatsapi.Mlb()
+player = mlb.get_person(664034)
 ```
 
-For shared Sessions, Session injection, retries, and structured exceptions, see [HTTP Transport](docs/http-transport.md).
+Callers who do not use a context manager may call `mlb.close()`. Repeated `close()` calls are safe.
+
+### Custom timeouts
+
+Every request uses an explicit timeout. The defaults are:
+
+```text
+Connection timeout: 3.05 seconds
+Read timeout: 30 seconds
+```
+
+The read timeout is the maximum wait while reading response data. It is not one absolute total duration for the complete request.
+
+Use a scalar to apply the same value to both connect and read phases:
+
+```python
+import mlbstatsapi
+
+with mlbstatsapi.Mlb(timeout=10) as mlb:
+    player = mlb.get_person(664034)
+```
+
+Or provide separate connection and read timeouts:
+
+```python
+import mlbstatsapi
+
+with mlbstatsapi.Mlb(
+    timeout=(5.0, 60.0),
+) as mlb:
+    player = mlb.get_person(664034)
+```
+
+```text
+5.0 seconds: connection timeout
+60.0 seconds: read timeout
+```
+
+### Injecting a custom Session
+
+Advanced callers may inject a caller-owned Session:
+
+```python
+import requests
+import mlbstatsapi
+
+session = requests.Session()
+session.headers.update({
+    "User-Agent": "my-baseball-project/1.0",
+})
+
+try:
+    with mlbstatsapi.Mlb(session=session) as mlb:
+        player = mlb.get_person(664034)
+finally:
+    session.close()
+```
+
+Ownership rules:
+
+```text
+Library-created Session
+    The library owns and closes it
+Caller-injected Session
+    The caller owns and closes it
+```
+
+`Mlb.close()` does not close a caller-injected Session, and exiting `with Mlb(session=session)` does not close the injected Session either. The library does not replace or reconfigure adapters on an injected Session. Callers control custom retry, TLS, proxy, and adapter configuration.
+
+### Structured exception handling
+
+```python
+import mlbstatsapi
+
+try:
+    with mlbstatsapi.Mlb() as mlb:
+        player = mlb.get_person(664034)
+except mlbstatsapi.MlbTimeoutError:
+    print("The MLB API timed out")
+except mlbstatsapi.MlbTransportError:
+    print("The request could not reach the MLB API")
+except mlbstatsapi.MlbHttpError as exc:
+    print(
+        exc.status_code,
+        exc.reason,
+        exc.url,
+    )
+except mlbstatsapi.MlbDecodeError:
+    print("The MLB API returned invalid JSON")
+```
+
+* `MlbTimeoutError` represents connection and read timeouts
+* `MlbTransportError` represents other request transport failures
+* `MlbHttpError` represents an unexpected final HTTP response
+* `MlbDecodeError` represents invalid JSON in a successful response
+
+### Backward-compatible exception handling
+
+All new transport exceptions inherit from `TheMlbStatsApiException`, so existing broad exception handling remains compatible:
+
+```python
+import mlbstatsapi
+
+try:
+    with mlbstatsapi.Mlb() as mlb:
+        player = mlb.get_person(664034)
+except mlbstatsapi.TheMlbStatsApiException:
+    print("The MLB request failed")
+```
+
+### Default retry behavior
+
+Library-created Sessions automatically retry temporary GET failures for:
+
+```text
+429
+500
+502
+503
+504
+```
+
+```text
+Initial request: 1
+Maximum retries: 3
+Maximum total attempts: 4
+Backoff factor: 0.5
+Retry-After respected: yes
+```
+
+Only GET requests are retried, and retries are bounded. Ordinary client errors such as 400, 401, 403, and 404 are not retried. Invalid JSON and Pydantic validation failures are not retried. Retries improve resilience for transient failures, but they do not guarantee success.
+
+### Existing 404 compatibility
+
+Version 0.8.0 preserves existing endpoint-specific not-found behavior. Depending on the endpoint, a 404 may still produce:
+
+```text
+None
+[]
+{}
+```
+
+Not every 404 raises `MlbHttpError`.
+
+See the [HTTP transport documentation](docs/http-transport.md) for the complete retry policy, Session ownership rules, cleanup behavior, and exception hierarchy.
 
 ## Working with Pydantic Models
 
