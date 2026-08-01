@@ -243,9 +243,7 @@ def test_final_429_returns_empty_mlb_result(
     assert _ScriptedHandler.request_count == 4
 
 
-def test_invalid_json_is_not_retried(scripted_http_server, no_retry_sleep):
-    configure, port = scripted_http_server
-
+def test_invalid_json_is_not_retried(no_retry_sleep):
     class BadJsonHandler(_ScriptedHandler):
         def do_GET(self) -> None:  # noqa: N802
             with self.lock:
@@ -257,7 +255,6 @@ def test_invalid_json_is_not_retried(scripted_http_server, no_retry_sleep):
             self.end_headers()
             self.wfile.write(body)
 
-    # Replace handler class on a dedicated server for this case.
     server = ThreadingHTTPServer(("127.0.0.1", 0), BadJsonHandler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
