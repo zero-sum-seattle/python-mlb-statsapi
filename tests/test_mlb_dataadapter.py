@@ -1,9 +1,11 @@
-"""Offline characterization tests for MlbDataAdapter.
+"""Offline regression tests for MlbDataAdapter.
 
-These tests document current HTTP adapter behavior with requests-mock before
-the transport is refactored in version 0.8.0. Known defects use strict xfail
-markers so a future fix causes XPASS until the marker is removed.
+These tests protect HTTP adapter response-handling behavior for version 0.8.0,
+including successful 2xx handling, status classification before JSON decoding,
+and empty successful bodies.
 """
+
+import logging
 
 import requests
 import pytest
@@ -36,6 +38,49 @@ def test_successful_json_response_returns_exact_values(adapter, requests_mock):
     assert result.status_code == 200
     assert result.message == "OK"
     assert result.data == {"sports": [{"id": 1, "name": "Major League Baseball"}]}
+
+
+@pytest.mark.parametrize(
+    ("status_code", "reason", "payload"),
+    [
+        (201, "Created", {"id": 42, "name": "created"}),
+        (299, "Custom Success", {"ok": True}),
+    ],
+)
+def test_other_successful_json_statuses_return_exact_values(
+    adapter,
+    requests_mock,
+    status_code,
+    reason,
+    payload,
+):
+    requests_mock.get(
+        f"{BASE_URL}sports",
+        json=payload,
+        status_code=status_code,
+        reason=reason,
+    )
+
+    result = adapter.get(endpoint="sports")
+
+    assert result.status_code == status_code
+    assert result.message == reason
+    assert result.data == payload
+
+
+def test_empty_successful_response_returns_empty_data(adapter, requests_mock):
+    requests_mock.get(
+        f"{BASE_URL}sports",
+        text="",
+        status_code=204,
+        reason="No Content",
+    )
+
+    result = adapter.get(endpoint="sports")
+
+    assert result.status_code == 204
+    assert result.message == "No Content"
+    assert result.data == {}
 
 
 def test_ep_params_are_sent_as_query_parameters(adapter, requests_mock):
@@ -107,6 +152,23 @@ def test_json_404_returns_empty_data(adapter, requests_mock):
     result = adapter.get(endpoint="teams/19990")
 
     assert result.status_code == 404
+    assert result.message == "Not Found"
+    assert result.data == {}
+
+
+def test_non_json_404_returns_empty_data(adapter, requests_mock):
+    requests_mock.get(
+        f"{BASE_URL}teams/19990",
+        text="<html><body>Not Found</body></html>",
+        status_code=404,
+        reason="Not Found",
+        headers={"Content-Type": "text/html"},
+    )
+
+    result = adapter.get(endpoint="teams/19990")
+
+    assert result.status_code == 404
+    assert result.message == "Not Found"
     assert result.data == {}
 
 
@@ -130,6 +192,21 @@ def test_json_500_raises_the_mlb_stats_api_exception(adapter, requests_mock):
         )
 
     assert str(exc_info.value) == "500: Internal Server Error"
+
+
+def test_html_502_raises_the_mlb_stats_api_exception(adapter, requests_mock):
+    requests_mock.get(
+        f"{BASE_URL}sports",
+        text="<html><body>Bad Gateway</body></html>",
+        status_code=502,
+        reason="Bad Gateway",
+        headers={"Content-Type": "text/html"},
+    )
+
+    with pytest.raises(TheMlbStatsApiException, match=r"^502: Bad Gateway$") as exc_info:
+        adapter.get(endpoint="sports")
+
+    assert str(exc_info.value) == "502: Bad Gateway"
 
 
 def test_connection_failure_raises_request_failed(adapter, requests_mock):
@@ -163,6 +240,17 @@ def test_invalid_json_on_successful_response_raises_bad_json(adapter, requests_m
     assert str(exc_info.value) == "Bad JSON in response"
 
 
+def test_constructor_does_not_change_logger_level():
+    logger = logging.Logger(
+        "mlbstatsapi-test",
+        level=logging.WARNING,
+    )
+
+    MlbDataAdapter(logger=logger)
+
+    assert logger.level == logging.WARNING
+
+
 def test_mlb_result_optional_data_argument_omitted():
     result = MlbResult(200, "OK")
 
@@ -184,46 +272,3 @@ def test_mlb_result_type_coercion():
 
     assert result.status_code == 200
     assert result.message == "123"
-
-
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Adapter always JSON-decodes before status handling; "
-        "fix/http-adapter-correctness should return empty data for empty successful bodies"
-    ),
-)
-def test_empty_successful_response_returns_empty_data(adapter, requests_mock):
-    requests_mock.get(
-        f"{BASE_URL}sports",
-        text="",
-        status_code=204,
-        reason="No Content",
-    )
-
-    result = adapter.get(endpoint="sports")
-
-    assert result.status_code == 204
-    assert result.data == {}
-
-
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Adapter JSON-decodes before HTTP status handling; "
-        "fix/http-adapter-correctness should return empty data for non-JSON 404 bodies"
-    ),
-)
-def test_non_json_404_returns_empty_data(adapter, requests_mock):
-    requests_mock.get(
-        f"{BASE_URL}teams/19990",
-        text="<html><body>Not Found</body></html>",
-        status_code=404,
-        reason="Not Found",
-        headers={"Content-Type": "text/html"},
-    )
-
-    result = adapter.get(endpoint="teams/19990")
-
-    assert result.status_code == 404
-    assert result.data == {}

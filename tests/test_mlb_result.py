@@ -1,10 +1,8 @@
-"""Offline characterization tests for MlbResult.
+"""Offline regression tests for MlbResult.
 
-These tests document current constructor behavior before the HTTP adapter
-correctness work in version 0.8.0. Known defects use strict xfail markers.
+These tests protect MlbResult constructor behavior for version 0.8.0,
+including independent data dictionaries and caller-owned dictionary safety.
 """
-
-import pytest
 
 from mlbstatsapi import MlbResult
 
@@ -68,33 +66,28 @@ def test_accepts_explicitly_supplied_dictionary():
     assert result.data == {"teams": [{"id": 133}]}
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "MlbResult uses a shared mutable default for data; "
-        "fix/http-adapter-correctness should give each instance its own dict"
-    ),
-)
 def test_each_instance_gets_independent_data_dict():
     first = MlbResult(200, "OK")
     second = MlbResult(200, "OK")
 
+    first.data["changed"] = True
+
+    assert second.data == {}
     assert first.data is not second.data
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "MlbResult deletes copyright from the caller-owned dictionary; "
-        "fix/http-adapter-correctness should leave the input unchanged"
-    ),
-)
 def test_does_not_mutate_caller_owned_dictionary():
     payload = {
         "copyright": "MLB",
         "sports": [],
     }
 
-    MlbResult(200, "OK", payload)
+    result = MlbResult(200, "OK", payload)
 
-    assert "copyright" in payload
+    assert payload == {
+        "copyright": "MLB",
+        "sports": [],
+    }
+    assert result.data == {
+        "sports": [],
+    }

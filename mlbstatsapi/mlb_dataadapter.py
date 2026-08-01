@@ -18,13 +18,18 @@ class MlbResult:
         JSON Data received from request
     """
 
-    def __init__(self, status_code: int, message: str, data: Dict = {}):
+    def __init__(
+        self,
+        status_code: int,
+        message: str,
+        data: Dict | None = None,
+    ):
         self.status_code = int(status_code)
         self.message = str(message)
 
-        self.data = data
-        if 'copyright' in data:
-            del data['copyright']
+        # Copy so caller-owned dictionaries are not mutated when copyright is removed.
+        self.data = dict(data) if data is not None else {}
+        self.data.pop("copyright", None)
 
 
 class MlbDataAdapter:
@@ -44,7 +49,6 @@ class MlbDataAdapter:
     def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
         self.url = f'https://{hostname}/api/{ver}/'
         self._logger = logger or logging.getLogger(__name__)
-        self._logger.setLevel(logging.DEBUG)
 
     def get(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> MlbResult:
         """
@@ -76,32 +80,57 @@ class MlbDataAdapter:
             self._logger.error(msg=(str(e)))
             raise TheMlbStatsApiException('Request failed') from e
 
-        try:
-            data = response.json()
+        status_code = response.status_code
 
-        except (ValueError, requests.JSONDecodeError) as e: 
-            self._logger.error(msg=(str(e)))
-            raise TheMlbStatsApiException('Bad JSON in response') from e
+        if 400 <= status_code <= 499:
+            self._logger.error(msg=logline_post.format(
+                'Invalid Request',
+                status_code,
+                response.reason,
+                response.url,
+            ))
+            return MlbResult(
+                status_code=status_code,
+                message=response.reason,
+                data={},
+            )
 
-        if response.status_code <= 200 and response.status_code <= 299:
-            self._logger.debug(msg=logline_post.format('success',
-            response.status_code, response.reason, response.url))
+        if 500 <= status_code <= 599:
+            self._logger.error(msg=logline_post.format(
+                'Internal error occurred',
+                status_code,
+                response.reason,
+                response.url,
+            ))
+            raise TheMlbStatsApiException(
+                f"{status_code}: {response.reason}"
+            )
 
-            return MlbResult(response.status_code, message=response.reason, data=data)
+        if not 200 <= status_code <= 299:
+            raise TheMlbStatsApiException(
+                f"{status_code}: {response.reason}"
+            )
 
-        elif response.status_code >= 400 and response.status_code <= 499:  
-            self._logger.error(msg=logline_post.format('Invalid Request',
-            response.status_code, response.reason, response.url))
+        self._logger.debug(msg=logline_post.format(
+            'success',
+            status_code,
+            response.reason,
+            response.url,
+        ))
 
-            # return MlbResult with 404 and empty data
-            return MlbResult(response.status_code, message=response.reason, data={})
-
-        elif response.status_code >= 500 and response.status_code <= 599:
-
-            self._logger.error(msg=logline_post.format('Internal error occurred', 
-            response.status_code, response.reason, response.url))
-
-            raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}")
-
+        if not response.content:
+            response_data = {}
         else:
-            raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}")
+            try:
+                response_data = response.json()
+            except (ValueError, requests.JSONDecodeError) as exc:
+                self._logger.error(msg=(str(exc)))
+                raise TheMlbStatsApiException(
+                    "Bad JSON in response"
+                ) from exc
+
+        return MlbResult(
+            status_code,
+            message=response.reason,
+            data=response_data,
+        )
