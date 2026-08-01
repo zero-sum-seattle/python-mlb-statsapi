@@ -22,7 +22,12 @@ from mlbstatsapi.models.gamepace import GamePace
 from mlbstatsapi.models.homerunderby import HomeRunDerby
 from mlbstatsapi.models.standings import Standings
 
-from .mlb_dataadapter import DEFAULT_TIMEOUT, MlbDataAdapter, TimeoutType
+from .mlb_dataadapter import (
+    DEFAULT_TIMEOUT,
+    MlbDataAdapter,
+    TimeoutType,
+    _configure_retry_adapters,
+)
 # from .exceptions import TheMlbStatsApiException
 from . import mlb_module
 
@@ -49,8 +54,13 @@ class Mlb:
     ):
         # One session is shared by the v1 and v1.1 adapters. The library closes
         # only sessions it creates; caller-injected sessions remain caller-owned.
+        # Retry adapters are installed only on library-created Sessions.
         self._owns_session = session is None
-        self._session = session if session is not None else requests.Session()
+        if session is None:
+            self._session = requests.Session()
+            _configure_retry_adapters(self._session)
+        else:
+            self._session = session
         self._closed = False
         self._timeout = timeout
         self._mlb_adapter_v1 = MlbDataAdapter(

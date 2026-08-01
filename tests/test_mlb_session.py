@@ -9,7 +9,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 import requests
 
-from mlbstatsapi import Mlb, MlbDataAdapter, TheMlbStatsApiException
+from mlbstatsapi import Mlb, MlbDataAdapter, MlbHttpError, TheMlbStatsApiException
 from mlbstatsapi.mlb_dataadapter import DEFAULT_TIMEOUT
 
 
@@ -144,8 +144,13 @@ def test_adapter_500_behavior_with_session():
     )
     adapter = MlbDataAdapter(session=session)
 
-    with pytest.raises(TheMlbStatsApiException, match=r"^500: Internal Server Error$"):
+    with pytest.raises(MlbHttpError, match=r"^500: Internal Server Error$") as exc_info:
         adapter.get(endpoint="sports")
+
+    assert isinstance(exc_info.value, TheMlbStatsApiException)
+    assert exc_info.value.status_code == 500
+    assert exc_info.value.reason == "Internal Server Error"
+    assert exc_info.value.url == "https://statsapi.mlb.com/api/v1/sports"
 
 
 # --- Timeouts ---
