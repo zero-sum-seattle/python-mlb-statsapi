@@ -1,7 +1,13 @@
-from typing import Dict
+from typing import Dict, Union
+
 from .exceptions import TheMlbStatsApiException
 import requests
 import logging
+
+
+# Connect timeout, then read timeout. Callers may override with a scalar or tuple.
+DEFAULT_TIMEOUT: tuple[float, float] = (3.05, 30.0)
+TimeoutType = Union[int, float, tuple[float, float]]
 
 
 class MlbResult:
@@ -46,9 +52,20 @@ class MlbDataAdapter:
         instance of logger class
     """
 
-    def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
+    def __init__(
+        self,
+        hostname: str = 'statsapi.mlb.com',
+        ver: str = 'v1',
+        logger: logging.Logger = None,
+        timeout: TimeoutType = DEFAULT_TIMEOUT,
+        session: requests.Session | None = None,
+    ):
         self.url = f'https://{hostname}/api/{ver}/'
         self._logger = logger or logging.getLogger(__name__)
+        self._timeout = timeout
+        self._owns_session = session is None
+        self._session = session if session is not None else requests.Session()
+        self._closed = False
 
     def get(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> MlbResult:
         """
@@ -74,7 +91,11 @@ class MlbDataAdapter:
 
         try:
             self._logger.debug(logline_post)
-            response = requests.get(url=full_url, params=ep_params)
+            response = self._session.get(
+                url=full_url,
+                params=ep_params,
+                timeout=self._timeout,
+            )
 
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=(str(e)))
@@ -134,3 +155,12 @@ class MlbDataAdapter:
             message=response.reason,
             data=response_data,
         )
+
+    def close(self) -> None:
+        """Close the HTTP session when this adapter owns it.
+
+        Safe to call more than once. Caller-injected sessions are left alone.
+        """
+        if self._owns_session and not self._closed:
+            self._session.close()
+            self._closed = True
