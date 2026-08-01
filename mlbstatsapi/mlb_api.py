@@ -3,6 +3,8 @@ import datetime
 
 from typing import List, Union
 
+import requests
+
 from mlbstatsapi.models.people import Person, Player, Coach
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.sports import Sport
@@ -20,7 +22,12 @@ from mlbstatsapi.models.gamepace import GamePace
 from mlbstatsapi.models.homerunderby import HomeRunDerby
 from mlbstatsapi.models.standings import Standings
 
-from .mlb_dataadapter import MlbDataAdapter
+from .mlb_dataadapter import (
+    DEFAULT_TIMEOUT,
+    MlbDataAdapter,
+    TimeoutType,
+    _configure_retry_adapters,
+)
 # from .exceptions import TheMlbStatsApiException
 from . import mlb_module
 
@@ -38,11 +45,55 @@ class Mlb:
     logger: logging.Loger
         logger
     """
-    def __init__(self, hostname: str = 'statsapi.mlb.com', logger: logging.Logger = None):
-        self._mlb_adapter_v1 = MlbDataAdapter(hostname, 'v1', logger)
-        self._mlb_adapter_v1_1 = MlbDataAdapter(hostname, 'v1.1', logger)
+    def __init__(
+        self,
+        hostname: str = 'statsapi.mlb.com',
+        logger: logging.Logger | None = None,
+        timeout: TimeoutType = DEFAULT_TIMEOUT,
+        session: requests.Session | None = None,
+    ):
+        # One session is shared by the v1 and v1.1 adapters. The library closes
+        # only sessions it creates; caller-injected sessions remain caller-owned.
+        # Retry adapters are installed only on library-created Sessions.
+        self._owns_session = session is None
+        if session is None:
+            self._session = requests.Session()
+            _configure_retry_adapters(self._session)
+        else:
+            self._session = session
+        self._closed = False
+        self._timeout = timeout
+        self._mlb_adapter_v1 = MlbDataAdapter(
+            hostname,
+            'v1',
+            logger,
+            timeout=timeout,
+            session=self._session,
+        )
+        self._mlb_adapter_v1_1 = MlbDataAdapter(
+            hostname,
+            'v1.1',
+            logger,
+            timeout=timeout,
+            session=self._session,
+        )
         self._logger = logger or logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
+
+    def close(self) -> None:
+        """Close the HTTP session when this client owns it.
+
+        Safe to call more than once. Caller-injected sessions are left alone.
+        """
+        if self._owns_session and not self._closed:
+            self._session.close()
+            self._closed = True
+
+    def __enter__(self) -> "Mlb":
+        return self
+
+    def __exit__(self, exc_type, exc, traceback) -> None:
+        self.close()
 
     def get_people(self, sport_id: int = 1, **params) -> List[Person]:
         """

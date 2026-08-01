@@ -5,7 +5,7 @@
 **The Unofficial Python Wrapper for the MLB Stats API**
 
 [![PyPI version](https://badge.fury.io/py/python-mlb-statsapi.svg)](https://badge.fury.io/py/python-mlb-statsapi)
-![Development Branch Status](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test-mlbstatsapi-test.yml/badge.svg?event=push)
+[![Offline CI](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/zero-sum-seattle/python-mlb-statsapi/actions/workflows/build-and-test.yml)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-mlb-statsapi)
 ![GitHub](https://img.shields.io/github/license/zero-sum-seattle/python-mlb-statsapi)
 
@@ -64,6 +64,181 @@ Ty France
 >>> print(team.name, team.franchise_name)
 Seattle Mariners Seattle
 ```
+
+## HTTP Sessions, Timeouts, and Retries
+
+Version 0.8.0 adds shared HTTP Sessions, explicit timeouts, optional Session injection, bounded retries, and structured transport exceptions. The `Mlb` client remains synchronous. Shared Sessions pool reusable connections; they do not cache MLB response bodies, and the client does not enable response caching by default.
+
+### Recommended context-manager usage
+
+Prefer a context manager so library-owned HTTP resources are closed when the block exits, including when the block exits because of an exception:
+
+```python
+import mlbstatsapi
+
+with mlbstatsapi.Mlb() as mlb:
+    player = mlb.get_person(664034)
+    team = mlb.get_team(136)
+```
+
+One `Mlb` client uses one shared `requests.Session`. The v1 and v1.1 adapters share that Session, so repeated requests can reuse pooled connections. A Session manages a pool of reusable connections; it is not one permanent network connection.
+
+### Existing construction remains valid
+
+Existing construction continues to work:
+
+```python
+import mlbstatsapi
+
+mlb = mlbstatsapi.Mlb()
+player = mlb.get_person(664034)
+```
+
+Callers who do not use a context manager may call `mlb.close()`. Repeated `close()` calls are safe.
+
+### Custom timeouts
+
+Every request uses an explicit timeout. The defaults are:
+
+```text
+Connection timeout: 3.05 seconds
+Read timeout: 30 seconds
+```
+
+The read timeout is the maximum wait while reading response data. It is not one absolute total duration for the complete request.
+
+Use a scalar to apply the same value to both connect and read phases:
+
+```python
+import mlbstatsapi
+
+with mlbstatsapi.Mlb(timeout=10) as mlb:
+    player = mlb.get_person(664034)
+```
+
+Or provide separate connection and read timeouts:
+
+```python
+import mlbstatsapi
+
+with mlbstatsapi.Mlb(
+    timeout=(5.0, 60.0),
+) as mlb:
+    player = mlb.get_person(664034)
+```
+
+```text
+5.0 seconds: connection timeout
+60.0 seconds: read timeout
+```
+
+### Injecting a custom Session
+
+Advanced callers may inject a caller-owned Session:
+
+```python
+import requests
+import mlbstatsapi
+
+session = requests.Session()
+session.headers.update({
+    "User-Agent": "my-baseball-project/1.0",
+})
+
+try:
+    with mlbstatsapi.Mlb(session=session) as mlb:
+        player = mlb.get_person(664034)
+finally:
+    session.close()
+```
+
+Ownership rules:
+
+```text
+Library-created Session
+    The library owns and closes it
+Caller-injected Session
+    The caller owns and closes it
+```
+
+`Mlb.close()` does not close a caller-injected Session, and exiting `with Mlb(session=session)` does not close the injected Session either. The library does not replace or reconfigure adapters on an injected Session. Callers control custom retry, TLS, proxy, and adapter configuration.
+
+### Structured exception handling
+
+```python
+import mlbstatsapi
+
+try:
+    with mlbstatsapi.Mlb() as mlb:
+        player = mlb.get_person(664034)
+except mlbstatsapi.MlbTimeoutError:
+    print("The MLB API timed out")
+except mlbstatsapi.MlbTransportError:
+    print("The request could not reach the MLB API")
+except mlbstatsapi.MlbHttpError as exc:
+    print(
+        exc.status_code,
+        exc.reason,
+        exc.url,
+    )
+except mlbstatsapi.MlbDecodeError:
+    print("The MLB API returned invalid JSON")
+```
+
+* `MlbTimeoutError` represents connection and read timeouts
+* `MlbTransportError` represents other request transport failures
+* `MlbHttpError` represents an unexpected final HTTP response
+* `MlbDecodeError` represents invalid JSON in a successful response
+
+### Backward-compatible exception handling
+
+All new transport exceptions inherit from `TheMlbStatsApiException`, so existing broad exception handling remains compatible:
+
+```python
+import mlbstatsapi
+
+try:
+    with mlbstatsapi.Mlb() as mlb:
+        player = mlb.get_person(664034)
+except mlbstatsapi.TheMlbStatsApiException:
+    print("The MLB request failed")
+```
+
+### Default retry behavior
+
+Library-created Sessions automatically retry temporary GET failures for:
+
+```text
+429
+500
+502
+503
+504
+```
+
+```text
+Initial request: 1
+Maximum retries: 3
+Maximum total attempts: 4
+Backoff factor: 0.5
+Retry-After respected: yes
+```
+
+Only GET requests are retried, and retries are bounded. Ordinary client errors such as 400, 401, 403, and 404 are not retried. Invalid JSON and Pydantic validation failures are not retried. Retries improve resilience for transient failures, but they do not guarantee success.
+
+### Existing 404 compatibility
+
+Version 0.8.0 preserves existing endpoint-specific not-found behavior. Depending on the endpoint, a 404 may still produce:
+
+```text
+None
+[]
+{}
+```
+
+Not every 404 raises `MlbHttpError`.
+
+See the [HTTP transport documentation](docs/http-transport.md) for the complete retry policy, Session ownership rules, cleanup behavior, and exception hierarchy.
 
 ## Working with Pydantic Models
 
@@ -180,17 +355,35 @@ Contributions are welcome! Whether it's bug fixes, new features, or documentatio
 
 ### Development
 
-```bash
-# Run tests
-poetry run pytest
+Offline tests are deterministic and should run before every pull request:
 
-# Run external tests (requires internet)
-poetry run pytest tests/external_tests/
+```bash
+poetry run pytest \
+  tests/ \
+  --ignore=tests/external_tests
 ```
+
+External tests contact the live MLB API. They require internet access and are separate from normal offline CI:
+
+```bash
+poetry run pytest \
+  tests/external_tests/
+```
+
+These live tests may fail because the MLB service is unavailable or because MLB changes undocumented payloads.
+
+Full local validation:
+
+```bash
+poetry run pytest tests/
+poetry build
+```
+
+Offline CI is the normal pull-request gate. External tests are available manually, on a weekly schedule, and before releases.
 
 ### Pull Request Guidelines
 
-- **All tests must pass** before submitting a PR
+- Run offline tests before submitting a PR
 - Use the [PR template](.github/pull_request_template.md) when creating your pull request
 - Follow the branch naming convention:
   - `feat/` - New features
@@ -206,14 +399,6 @@ Found a bug or have a feature request? Please [open an issue](https://github.com
 - Steps to reproduce (for bugs)
 - Expected vs actual behavior
 - Python version and package version
-
-### Note on External Tests
-
-Some tests make real API calls to the MLB Stats API. These may occasionally fail due to:
-- API changes (new fields, removed endpoints)
-- Season/data availability
-
-If you notice external test failures, please check if the MLB API has changed and update the models accordingly.
 
 
 ## Examples

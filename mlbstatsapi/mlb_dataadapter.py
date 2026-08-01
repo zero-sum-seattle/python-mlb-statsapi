@@ -1,7 +1,63 @@
 from typing import Dict
-from .exceptions import TheMlbStatsApiException
-import requests
+
+from .exceptions import (
+    MlbDecodeError,
+    MlbHttpError,
+    MlbTimeoutError,
+    MlbTransportError,
+)
 import logging
+
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+
+# Connect timeout, then read timeout. Callers may override with a scalar or tuple.
+DEFAULT_TIMEOUT = (3.05, 30.0)
+TimeoutType = int | float | tuple[float, float]
+
+
+def _build_retry_policy() -> Retry:
+    return Retry(
+        total=3,
+        connect=3,
+        read=2,
+        status=3,
+        backoff_factor=0.5,
+        status_forcelist=(
+            429,
+            500,
+            502,
+            503,
+            504,
+        ),
+        allowed_methods=frozenset({"GET"}),
+        respect_retry_after_header=True,
+        raise_on_status=False,
+    )
+
+
+def _configure_retry_adapters(
+    session: requests.Session,
+) -> None:
+    """Mount default retry adapters on a library-created Session.
+
+    Caller-injected Sessions must not be passed here; their adapters stay
+    under the caller's control.
+    """
+    session.mount(
+        "https://",
+        HTTPAdapter(
+            max_retries=_build_retry_policy()
+        ),
+    )
+    session.mount(
+        "http://",
+        HTTPAdapter(
+            max_retries=_build_retry_policy()
+        ),
+    )
 
 
 class MlbResult:
@@ -18,13 +74,18 @@ class MlbResult:
         JSON Data received from request
     """
 
-    def __init__(self, status_code: int, message: str, data: Dict = {}):
+    def __init__(
+        self,
+        status_code: int,
+        message: str,
+        data: Dict | None = None,
+    ):
         self.status_code = int(status_code)
         self.message = str(message)
 
-        self.data = data
-        if 'copyright' in data:
-            del data['copyright']
+        # Copy so caller-owned dictionaries are not mutated when copyright is removed.
+        self.data = dict(data) if data is not None else {}
+        self.data.pop("copyright", None)
 
 
 class MlbDataAdapter:
@@ -41,10 +102,24 @@ class MlbDataAdapter:
         instance of logger class
     """
 
-    def __init__(self, hostname: str = 'statsapi.mlb.com', ver: str = 'v1', logger: logging.Logger = None):
+    def __init__(
+        self,
+        hostname: str = 'statsapi.mlb.com',
+        ver: str = 'v1',
+        logger: logging.Logger | None = None,
+        timeout: TimeoutType = DEFAULT_TIMEOUT,
+        session: requests.Session | None = None,
+    ):
         self.url = f'https://{hostname}/api/{ver}/'
         self._logger = logger or logging.getLogger(__name__)
-        self._logger.setLevel(logging.DEBUG)
+        self._timeout = timeout
+        self._owns_session = session is None
+        if session is None:
+            self._session = requests.Session()
+            _configure_retry_adapters(self._session)
+        else:
+            self._session = session
+        self._closed = False
 
     def get(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> MlbResult:
         """
@@ -70,38 +145,83 @@ class MlbDataAdapter:
 
         try:
             self._logger.debug(logline_post)
-            response = requests.get(url=full_url, params=ep_params)
+            response = self._session.get(
+                url=full_url,
+                params=ep_params,
+                timeout=self._timeout,
+            )
 
-        except requests.exceptions.RequestException as e:
-            self._logger.error(msg=(str(e)))
-            raise TheMlbStatsApiException('Request failed') from e
+        except requests.exceptions.Timeout as exc:
+            self._logger.error(msg=(str(exc)))
+            raise MlbTimeoutError("Request failed") from exc
+        except requests.exceptions.RequestException as exc:
+            self._logger.error(msg=(str(exc)))
+            raise MlbTransportError("Request failed") from exc
 
-        try:
-            data = response.json()
+        status_code = response.status_code
 
-        except (ValueError, requests.JSONDecodeError) as e: 
-            self._logger.error(msg=(str(e)))
-            raise TheMlbStatsApiException('Bad JSON in response') from e
+        if 400 <= status_code <= 499:
+            self._logger.error(msg=logline_post.format(
+                'Invalid Request',
+                status_code,
+                response.reason,
+                response.url,
+            ))
+            return MlbResult(
+                status_code=status_code,
+                message=response.reason,
+                data={},
+            )
 
-        if response.status_code <= 200 and response.status_code <= 299:
-            self._logger.debug(msg=logline_post.format('success',
-            response.status_code, response.reason, response.url))
+        if 500 <= status_code <= 599:
+            self._logger.error(msg=logline_post.format(
+                'Internal error occurred',
+                status_code,
+                response.reason,
+                response.url,
+            ))
+            raise MlbHttpError(
+                status_code=status_code,
+                reason=response.reason,
+                url=response.url,
+            )
 
-            return MlbResult(response.status_code, message=response.reason, data=data)
+        if not 200 <= status_code <= 299:
+            raise MlbHttpError(
+                status_code=status_code,
+                reason=response.reason,
+                url=response.url,
+            )
 
-        elif response.status_code >= 400 and response.status_code <= 499:  
-            self._logger.error(msg=logline_post.format('Invalid Request',
-            response.status_code, response.reason, response.url))
+        self._logger.debug(msg=logline_post.format(
+            'success',
+            status_code,
+            response.reason,
+            response.url,
+        ))
 
-            # return MlbResult with 404 and empty data
-            return MlbResult(response.status_code, message=response.reason, data={})
-
-        elif response.status_code >= 500 and response.status_code <= 599:
-
-            self._logger.error(msg=logline_post.format('Internal error occurred', 
-            response.status_code, response.reason, response.url))
-
-            raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}")
-
+        if not response.content:
+            response_data = {}
         else:
-            raise TheMlbStatsApiException(f"{response.status_code}: {response.reason}")
+            try:
+                response_data = response.json()
+            except (ValueError, requests.JSONDecodeError) as exc:
+                self._logger.error(msg=(str(exc)))
+                raise MlbDecodeError(
+                    "Bad JSON in response"
+                ) from exc
+
+        return MlbResult(
+            status_code,
+            message=response.reason,
+            data=response_data,
+        )
+
+    def close(self) -> None:
+        """Close the HTTP session when this adapter owns it.
+
+        Safe to call more than once. Caller-injected sessions are left alone.
+        """
+        if self._owns_session and not self._closed:
+            self._session.close()
+            self._closed = True
