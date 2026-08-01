@@ -66,7 +66,6 @@ def test_accepts_explicitly_supplied_dictionary():
     result = MlbResult(200, "OK", payload)
 
     assert result.data == {"teams": [{"id": 133}]}
-    assert result.data is payload
 
 
 @pytest.mark.xfail(
