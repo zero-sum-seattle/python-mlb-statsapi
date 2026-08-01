@@ -10,7 +10,14 @@ import logging
 import requests
 import pytest
 
-from mlbstatsapi import MlbDataAdapter, MlbResult, TheMlbStatsApiException
+from mlbstatsapi import (
+    MlbDataAdapter,
+    MlbDecodeError,
+    MlbHttpError,
+    MlbResult,
+    MlbTransportError,
+    TheMlbStatsApiException,
+)
 
 
 BASE_URL = "https://statsapi.mlb.com/api/v1/"
@@ -172,7 +179,7 @@ def test_non_json_404_returns_empty_data(adapter, requests_mock):
     assert result.data == {}
 
 
-def test_json_500_raises_the_mlb_stats_api_exception(adapter, requests_mock):
+def test_json_500_raises_mlb_http_error(adapter, requests_mock):
     requests_mock.get(
         f"{BASE_URL}teams/133/stats",
         json={
@@ -185,16 +192,19 @@ def test_json_500_raises_the_mlb_stats_api_exception(adapter, requests_mock):
         reason="Internal Server Error",
     )
 
-    with pytest.raises(TheMlbStatsApiException, match=r"^500: Internal Server Error$") as exc_info:
+    with pytest.raises(MlbHttpError, match=r"^500: Internal Server Error$") as exc_info:
         adapter.get(
             endpoint="teams/133/stats",
             ep_params={"stats": "standard", "group": "hitting"},
         )
 
+    assert isinstance(exc_info.value, TheMlbStatsApiException)
     assert str(exc_info.value) == "500: Internal Server Error"
+    assert exc_info.value.status_code == 500
+    assert exc_info.value.reason == "Internal Server Error"
 
 
-def test_html_502_raises_the_mlb_stats_api_exception(adapter, requests_mock):
+def test_html_502_raises_mlb_http_error(adapter, requests_mock):
     requests_mock.get(
         f"{BASE_URL}sports",
         text="<html><body>Bad Gateway</body></html>",
@@ -203,26 +213,30 @@ def test_html_502_raises_the_mlb_stats_api_exception(adapter, requests_mock):
         headers={"Content-Type": "text/html"},
     )
 
-    with pytest.raises(TheMlbStatsApiException, match=r"^502: Bad Gateway$") as exc_info:
+    with pytest.raises(MlbHttpError, match=r"^502: Bad Gateway$") as exc_info:
         adapter.get(endpoint="sports")
 
+    assert isinstance(exc_info.value, TheMlbStatsApiException)
     assert str(exc_info.value) == "502: Bad Gateway"
+    assert exc_info.value.status_code == 502
+    assert exc_info.value.reason == "Bad Gateway"
 
 
-def test_connection_failure_raises_request_failed(adapter, requests_mock):
+def test_connection_failure_raises_mlb_transport_error(adapter, requests_mock):
     requests_mock.get(
         f"{BASE_URL}sports",
         exc=requests.exceptions.ConnectionError("connection refused"),
     )
 
-    with pytest.raises(TheMlbStatsApiException, match=r"^Request failed$") as exc_info:
+    with pytest.raises(MlbTransportError, match=r"^Request failed$") as exc_info:
         adapter.get(endpoint="sports")
 
+    assert isinstance(exc_info.value, TheMlbStatsApiException)
     assert str(exc_info.value) == "Request failed"
     assert isinstance(exc_info.value.__cause__, requests.exceptions.ConnectionError)
 
 
-def test_invalid_json_on_successful_response_raises_bad_json(adapter, requests_mock):
+def test_invalid_json_on_successful_response_raises_mlb_decode_error(adapter, requests_mock):
     requests_mock.get(
         f"{BASE_URL}teams/133/stats",
         text='{"some bad json": sdfsd',
@@ -231,13 +245,15 @@ def test_invalid_json_on_successful_response_raises_bad_json(adapter, requests_m
         headers={"Content-Type": "application/json"},
     )
 
-    with pytest.raises(TheMlbStatsApiException, match=r"^Bad JSON in response$") as exc_info:
+    with pytest.raises(MlbDecodeError, match=r"^Bad JSON in response$") as exc_info:
         adapter.get(
             endpoint="teams/133/stats",
             ep_params={"stats": "season", "group": "hitting"},
         )
 
+    assert isinstance(exc_info.value, TheMlbStatsApiException)
     assert str(exc_info.value) == "Bad JSON in response"
+    assert isinstance(exc_info.value.__cause__, ValueError)
 
 
 def test_constructor_does_not_change_logger_level():

@@ -1,13 +1,63 @@
 from typing import Dict
 
-from .exceptions import TheMlbStatsApiException
-import requests
+from .exceptions import (
+    MlbDecodeError,
+    MlbHttpError,
+    MlbTimeoutError,
+    MlbTransportError,
+)
 import logging
+
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 
 # Connect timeout, then read timeout. Callers may override with a scalar or tuple.
 DEFAULT_TIMEOUT = (3.05, 30.0)
 TimeoutType = int | float | tuple[float, float]
+
+
+def _build_retry_policy() -> Retry:
+    return Retry(
+        total=3,
+        connect=3,
+        read=2,
+        status=3,
+        backoff_factor=0.5,
+        status_forcelist=(
+            429,
+            500,
+            502,
+            503,
+            504,
+        ),
+        allowed_methods=frozenset({"GET"}),
+        respect_retry_after_header=True,
+        raise_on_status=False,
+    )
+
+
+def _configure_retry_adapters(
+    session: requests.Session,
+) -> None:
+    """Mount default retry adapters on a library-created Session.
+
+    Caller-injected Sessions must not be passed here; their adapters stay
+    under the caller's control.
+    """
+    session.mount(
+        "https://",
+        HTTPAdapter(
+            max_retries=_build_retry_policy()
+        ),
+    )
+    session.mount(
+        "http://",
+        HTTPAdapter(
+            max_retries=_build_retry_policy()
+        ),
+    )
 
 
 class MlbResult:
@@ -64,7 +114,11 @@ class MlbDataAdapter:
         self._logger = logger or logging.getLogger(__name__)
         self._timeout = timeout
         self._owns_session = session is None
-        self._session = session if session is not None else requests.Session()
+        if session is None:
+            self._session = requests.Session()
+            _configure_retry_adapters(self._session)
+        else:
+            self._session = session
         self._closed = False
 
     def get(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> MlbResult:
@@ -97,9 +151,12 @@ class MlbDataAdapter:
                 timeout=self._timeout,
             )
 
-        except requests.exceptions.RequestException as e:
-            self._logger.error(msg=(str(e)))
-            raise TheMlbStatsApiException('Request failed') from e
+        except requests.exceptions.Timeout as exc:
+            self._logger.error(msg=(str(exc)))
+            raise MlbTimeoutError("Request failed") from exc
+        except requests.exceptions.RequestException as exc:
+            self._logger.error(msg=(str(exc)))
+            raise MlbTransportError("Request failed") from exc
 
         status_code = response.status_code
 
@@ -123,13 +180,17 @@ class MlbDataAdapter:
                 response.reason,
                 response.url,
             ))
-            raise TheMlbStatsApiException(
-                f"{status_code}: {response.reason}"
+            raise MlbHttpError(
+                status_code=status_code,
+                reason=response.reason,
+                url=response.url,
             )
 
         if not 200 <= status_code <= 299:
-            raise TheMlbStatsApiException(
-                f"{status_code}: {response.reason}"
+            raise MlbHttpError(
+                status_code=status_code,
+                reason=response.reason,
+                url=response.url,
             )
 
         self._logger.debug(msg=logline_post.format(
@@ -146,7 +207,7 @@ class MlbDataAdapter:
                 response_data = response.json()
             except (ValueError, requests.JSONDecodeError) as exc:
                 self._logger.error(msg=(str(exc)))
-                raise TheMlbStatsApiException(
+                raise MlbDecodeError(
                     "Bad JSON in response"
                 ) from exc
 
