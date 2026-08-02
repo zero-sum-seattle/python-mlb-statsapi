@@ -201,6 +201,7 @@ def test_mlb_configured_timeout_reaches_both_adapters():
 
 
 def test_mlb_scalar_timeout_reaches_both_adapters():
+    """Scalar Mlb(timeout=...) values are forwarded unchanged to both adapters."""
     session = RecordingSession()
     mlb = Mlb(session=session, timeout=10)
 
@@ -234,6 +235,7 @@ def test_injected_session_is_shared_by_both_adapters():
 
 
 def test_injected_session_is_not_replaced_with_library_session():
+    """Caller-injected Sessions are used as-is; the library creates no replacement."""
     session = requests.Session()
     with patch("mlbstatsapi.mlb_api.requests.Session") as session_cls:
         mlb = Mlb(session=session)
@@ -249,6 +251,7 @@ def test_injected_session_is_not_replaced_with_library_session():
 
 
 def test_injected_session_headers_and_user_agent_are_not_modified():
+    """Injected Session headers, including User-Agent, stay under caller control."""
     session = requests.Session()
     session.headers["User-Agent"] = "caller-agent/1.0"
     session.headers["X-Caller-Header"] = "keep-me"

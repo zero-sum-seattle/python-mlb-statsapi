@@ -39,6 +39,7 @@ def _response(
     content: bytes = b"",
     payload=None,
 ):
+    """Build a fake requests Response for offline adapter tests."""
     response = MagicMock()
     response.status_code = status_code
     response.reason = reason
@@ -84,6 +85,7 @@ class RecordingSession:
 
 
 def test_status_matrices_document_compatibility_baseline():
+    """Keep the shared status groups stable for later strict-mode tests."""
     assert COMPATIBILITY_CLIENT_ERRORS == (400, 401, 403, 405, 422, 429)
     assert NOT_FOUND_STATUS == 404
     assert SERVER_ERRORS == (500, 502, 503, 504)
@@ -97,6 +99,7 @@ def test_status_matrices_document_compatibility_baseline():
 
 @pytest.mark.parametrize("status_code", COMPATIBILITY_CLIENT_ERRORS)
 def test_compatibility_client_errors_return_empty_mlb_result(status_code):
+    """Non-404 4xx responses return an empty MlbResult via the Mlb adapters."""
     reason = HTTP_REASON_BY_STATUS[status_code]
     url = "https://statsapi.mlb.com/api/v1/sports"
     session = MagicMock()
@@ -116,6 +119,7 @@ def test_compatibility_client_errors_return_empty_mlb_result(status_code):
 
 @pytest.mark.parametrize("status_code", COMPATIBILITY_CLIENT_ERRORS)
 def test_compatibility_client_errors_do_not_raise_mlb_http_error(status_code):
+    """Compatibility-mode client errors must not raise MlbHttpError."""
     reason = HTTP_REASON_BY_STATUS[status_code]
     session = MagicMock()
     session.get.return_value = _response(
@@ -135,6 +139,7 @@ def test_compatibility_client_errors_do_not_raise_mlb_http_error(status_code):
 
 
 def test_mlb_get_person_404_returns_none():
+    """Single-object endpoints keep returning None on 404."""
     session = MagicMock()
     session.get.return_value = _response(
         status_code=NOT_FOUND_STATUS,
@@ -147,6 +152,7 @@ def test_mlb_get_person_404_returns_none():
 
 
 def test_mlb_get_teams_404_returns_empty_list():
+    """Collection endpoints keep returning an empty list on 404."""
     session = MagicMock()
     session.get.return_value = _response(
         status_code=NOT_FOUND_STATUS,
@@ -159,6 +165,7 @@ def test_mlb_get_teams_404_returns_empty_list():
 
 
 def test_mlb_get_player_stats_404_returns_empty_mapping():
+    """Mapping endpoints keep returning an empty dict on 404."""
     session = MagicMock()
     session.get.return_value = _response(
         status_code=NOT_FOUND_STATUS,
@@ -171,6 +178,7 @@ def test_mlb_get_player_stats_404_returns_empty_mapping():
 
 
 def test_mlb_endpoint_404_does_not_raise_mlb_http_error():
+    """Public 404 handling stays domain-level empty results, not MlbHttpError."""
     session = MagicMock()
     session.get.return_value = _response(
         status_code=NOT_FOUND_STATUS,
@@ -189,6 +197,7 @@ def test_mlb_endpoint_404_does_not_raise_mlb_http_error():
 
 @pytest.mark.parametrize("status_code", SERVER_ERRORS)
 def test_mlb_server_errors_raise_mlb_http_error_with_existing_attributes(status_code):
+    """Persistent 5xx failures raise MlbHttpError with status_code, reason, and url."""
     reason = HTTP_REASON_BY_STATUS[status_code]
     url = "https://statsapi.mlb.com/api/v1/people/664034"
     session = MagicMock()
@@ -216,6 +225,7 @@ def test_mlb_server_errors_raise_mlb_http_error_with_existing_attributes(status_
 
 
 def test_library_created_mlb_session_retains_retry_policy_contract():
+    """Library-created Mlb Sessions keep the existing retry policy values."""
     mlb = Mlb()
     try:
         for scheme in ("https://", "http://"):
@@ -228,6 +238,7 @@ def test_library_created_mlb_session_retains_retry_policy_contract():
 
 
 def test_mlb_constructors_remain_compatible():
+    """Existing Mlb() positional constructor usage continues to work."""
     mlb_default = Mlb()
     try:
         assert isinstance(mlb_default._session, requests.Session)
@@ -266,6 +277,7 @@ def test_mlb_positional_timeout_remains_third_argument():
 
 
 def test_adapter_positional_construction_remains_compatible():
+    """Existing MlbDataAdapter positional construction order stays intact."""
     logger = MagicMock()
     session = RecordingSession()
     adapter = MlbDataAdapter("statsapi.mlb.com", "v1.1", logger, (5.0, 60.0), session)
@@ -283,6 +295,7 @@ def test_adapter_positional_construction_remains_compatible():
 
 
 def test_mlb_timeout_constructors_forward_to_both_adapters():
+    """Default, scalar, and tuple timeouts reach both v1 and v1.1 adapters."""
     default_session = RecordingSession()
     mlb_default = Mlb(session=default_session)
     mlb_default._mlb_adapter_v1.get(endpoint="sports")

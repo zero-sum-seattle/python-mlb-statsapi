@@ -23,6 +23,7 @@ from http_contract_support import (
 
 
 def test_library_created_mlb_session_has_retry_policy():
+    """Library-created Mlb Sessions mount the default retry policy on http/https."""
     mlb = Mlb()
     try:
         for scheme in ("https://", "http://"):
@@ -33,6 +34,7 @@ def test_library_created_mlb_session_has_retry_policy():
 
 
 def test_library_created_adapter_session_has_retry_policy():
+    """Library-created MlbDataAdapter Sessions mount the default retry policy."""
     adapter = MlbDataAdapter()
     try:
         for scheme in ("https://", "http://"):
@@ -43,6 +45,7 @@ def test_library_created_adapter_session_has_retry_policy():
 
 
 def test_injected_session_adapters_are_not_replaced():
+    """Mlb must not replace adapters or retry config on an injected Session."""
     session = requests.Session()
     custom_adapter = HTTPAdapter(max_retries=0)
     session.mount("https://", custom_adapter)
@@ -57,6 +60,7 @@ def test_injected_session_adapters_are_not_replaced():
 
 
 def test_injected_adapter_session_adapters_are_not_replaced():
+    """Standalone adapters must not replace adapters on an injected Session."""
     session = requests.Session()
     custom_adapter = HTTPAdapter(max_retries=0)
     session.mount("http://", custom_adapter)
@@ -138,6 +142,7 @@ def test_retries_recover_from_two_500_responses(
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Transient 500s are retried and a later 200 succeeds."""
     configure, port = scripted_http_server
     configure([500, 500, 200])
     adapter = _adapter_against_local_server(port)
@@ -159,6 +164,7 @@ def test_retries_retryable_statuses_then_succeed(
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Each retryable status is retried once and can recover on success."""
     configure, port = scripted_http_server
     configure([retryable_status, 200])
     adapter = _adapter_against_local_server(port)
@@ -179,6 +185,7 @@ def test_non_retryable_client_errors_are_not_retried(
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Ordinary client errors are returned immediately without retries."""
     configure, port = scripted_http_server
     configure([status_code, 200])
     adapter = _adapter_against_local_server(port)
@@ -199,6 +206,7 @@ def test_bounded_persistent_server_errors_raise_after_four_attempts(
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Persistent server errors raise MlbHttpError after initial try plus 3 retries."""
     configure, port = scripted_http_server
     configure([status_code] * 6)
     adapter = _adapter_against_local_server(port)
@@ -217,6 +225,7 @@ def test_final_429_returns_empty_mlb_result(
     scripted_http_server,
     no_retry_sleep,
 ):
+    """After retry exhaustion, a final 429 still returns an empty MlbResult."""
     configure, port = scripted_http_server
     configure([429, 429, 429, 429, 429, 429])
     adapter = _adapter_against_local_server(port)
@@ -233,6 +242,7 @@ def test_final_429_returns_empty_mlb_result(
 
 
 def test_invalid_json_is_not_retried(no_retry_sleep):
+    """JSON decode failures are not treated as retryable transport errors."""
     class BadJsonHandler(_ScriptedHandler):
         def do_GET(self) -> None:  # noqa: N802
             with self.lock:
