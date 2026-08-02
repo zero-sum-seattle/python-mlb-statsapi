@@ -98,7 +98,7 @@ def test_status_matrices_document_compatibility_baseline():
 @pytest.mark.parametrize("status_code", COMPATIBILITY_CLIENT_ERRORS)
 def test_compatibility_client_errors_return_empty_mlb_result(status_code):
     reason = HTTP_REASON_BY_STATUS[status_code]
-    url = f"https://statsapi.mlb.com/api/v1/sports"
+    url = "https://statsapi.mlb.com/api/v1/sports"
     session = MagicMock()
     session.get.return_value = _response(
         status_code=status_code,
