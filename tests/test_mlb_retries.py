@@ -12,8 +12,8 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from mlbstatsapi import Mlb, MlbDataAdapter, MlbHttpError, MlbResult, create_retry_policy
 import mlbstatsapi
+from mlbstatsapi import Mlb, MlbDataAdapter, MlbHttpError, MlbResult, create_retry_policy
 
 from http_contract_support import (
     NON_RETRYABLE_CLIENT_ERRORS,
@@ -112,6 +112,7 @@ def test_caller_can_opt_in_to_public_retry_policy():
     mlb = Mlb(session=session)
     try:
         assert mlb._session is session
+        assert mlb._owns_session is False
         assert session.get_adapter("https://") is https_adapter
         assert session.get_adapter("http://") is http_adapter
         assert_library_retry_policy(https_adapter.max_retries)
@@ -119,7 +120,9 @@ def test_caller_can_opt_in_to_public_retry_policy():
         assert https_adapter.max_retries is not http_adapter.max_retries
     finally:
         mlb.close()
-        assert not getattr(session, "closed", False)
+        # Injected Sessions remain caller-owned after Mlb.close().
+        assert session.get_adapter("https://") is https_adapter
+        assert session.get_adapter("http://") is http_adapter
         session.close()
 
 
