@@ -200,6 +200,18 @@ def test_mlb_configured_timeout_reaches_both_adapters():
     assert session.calls[1]["url"].endswith("/api/v1.1/game")
 
 
+def test_mlb_scalar_timeout_reaches_both_adapters():
+    """Scalar Mlb(timeout=...) values are forwarded unchanged to both adapters."""
+    session = RecordingSession()
+    mlb = Mlb(session=session, timeout=10)
+
+    mlb._mlb_adapter_v1.get(endpoint="sports")
+    mlb._mlb_adapter_v1_1.get(endpoint="game")
+
+    assert session.calls[0]["timeout"] == 10
+    assert session.calls[1]["timeout"] == 10
+
+
 def test_mlb_default_timeout_passed_to_session():
     session = RecordingSession()
     mlb = Mlb(session=session)
@@ -216,9 +228,43 @@ def test_injected_session_is_shared_by_both_adapters():
     session = RecordingSession()
     mlb = Mlb(session=session)
 
+    assert mlb._session is session
     assert mlb._mlb_adapter_v1._session is session
     assert mlb._mlb_adapter_v1_1._session is session
     assert mlb._mlb_adapter_v1._session is mlb._mlb_adapter_v1_1._session
+
+
+def test_injected_session_is_not_replaced_with_library_session():
+    """Caller-injected Sessions are used as-is; the library creates no replacement."""
+    session = requests.Session()
+    with patch("mlbstatsapi.mlb_api.requests.Session") as session_cls:
+        mlb = Mlb(session=session)
+
+        session_cls.assert_not_called()
+        assert mlb._session is session
+        assert mlb._mlb_adapter_v1._session is session
+        assert mlb._mlb_adapter_v1_1._session is session
+        assert mlb._owns_session is False
+
+    mlb.close()
+    session.close()
+
+
+def test_injected_session_headers_and_user_agent_are_not_modified():
+    """Injected Session headers, including User-Agent, stay under caller control."""
+    session = requests.Session()
+    session.headers["User-Agent"] = "caller-agent/1.0"
+    session.headers["X-Caller-Header"] = "keep-me"
+    headers_before = dict(session.headers)
+
+    mlb = Mlb(session=session)
+    try:
+        assert dict(session.headers) == headers_before
+        assert session.headers["User-Agent"] == "caller-agent/1.0"
+        assert session.headers["X-Caller-Header"] == "keep-me"
+    finally:
+        mlb.close()
+        session.close()
 
 
 def test_library_created_session_is_shared_by_both_adapters():

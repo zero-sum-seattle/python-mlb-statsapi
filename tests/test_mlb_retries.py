@@ -14,43 +14,38 @@ from urllib3.util.retry import Retry
 
 from mlbstatsapi import Mlb, MlbDataAdapter, MlbHttpError, MlbResult
 
-
-def _assert_retry_policy(retry: Retry) -> None:
-    assert retry.total == 3
-    assert retry.connect == 3
-    assert retry.read == 2
-    assert retry.status == 3
-    assert retry.backoff_factor == 0.5
-    assert set(retry.status_forcelist) == {429, 500, 502, 503, 504}
-    assert retry.allowed_methods == frozenset({"GET"})
-    assert retry.respect_retry_after_header is True
-    assert retry.raise_on_status is False
-    assert "POST" not in retry.allowed_methods
-    assert "PATCH" not in retry.allowed_methods
-    assert "DELETE" not in retry.allowed_methods
+from http_contract_support import (
+    NON_RETRYABLE_CLIENT_ERRORS,
+    RETRYABLE_STATUS_CODES,
+    SERVER_ERRORS,
+    assert_library_retry_policy,
+)
 
 
 def test_library_created_mlb_session_has_retry_policy():
+    """Library-created Mlb Sessions mount the default retry policy on http/https."""
     mlb = Mlb()
     try:
         for scheme in ("https://", "http://"):
             adapter = mlb._session.get_adapter(scheme)
-            _assert_retry_policy(adapter.max_retries)
+            assert_library_retry_policy(adapter.max_retries)
     finally:
         mlb.close()
 
 
 def test_library_created_adapter_session_has_retry_policy():
+    """Library-created MlbDataAdapter Sessions mount the default retry policy."""
     adapter = MlbDataAdapter()
     try:
         for scheme in ("https://", "http://"):
             http_adapter = adapter._session.get_adapter(scheme)
-            _assert_retry_policy(http_adapter.max_retries)
+            assert_library_retry_policy(http_adapter.max_retries)
     finally:
         adapter.close()
 
 
 def test_injected_session_adapters_are_not_replaced():
+    """Mlb must not replace adapters or retry config on an injected Session."""
     session = requests.Session()
     custom_adapter = HTTPAdapter(max_retries=0)
     session.mount("https://", custom_adapter)
@@ -58,12 +53,14 @@ def test_injected_session_adapters_are_not_replaced():
     mlb = Mlb(session=session)
     try:
         assert session.get_adapter("https://") is custom_adapter
+        assert session.get_adapter("https://").max_retries.total == 0
     finally:
         mlb.close()
         session.close()
 
 
 def test_injected_adapter_session_adapters_are_not_replaced():
+    """Standalone adapters must not replace adapters on an injected Session."""
     session = requests.Session()
     custom_adapter = HTTPAdapter(max_retries=0)
     session.mount("http://", custom_adapter)
@@ -71,6 +68,7 @@ def test_injected_adapter_session_adapters_are_not_replaced():
     adapter = MlbDataAdapter(session=session)
     try:
         assert session.get_adapter("http://") is custom_adapter
+        assert session.get_adapter("http://").max_retries.total == 0
     finally:
         adapter.close()
         session.close()
@@ -144,6 +142,7 @@ def test_retries_recover_from_two_500_responses(
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Transient 500s are retried and a later 200 succeeds."""
     configure, port = scripted_http_server
     configure([500, 500, 200])
     adapter = _adapter_against_local_server(port)
@@ -159,15 +158,13 @@ def test_retries_recover_from_two_500_responses(
     assert _ScriptedHandler.request_count == 3
 
 
-@pytest.mark.parametrize(
-    "retryable_status",
-    [429, 500, 502, 503, 504],
-)
+@pytest.mark.parametrize("retryable_status", RETRYABLE_STATUS_CODES)
 def test_retries_retryable_statuses_then_succeed(
     retryable_status,
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Each retryable status is retried once and can recover on success."""
     configure, port = scripted_http_server
     configure([retryable_status, 200])
     adapter = _adapter_against_local_server(port)
@@ -182,15 +179,13 @@ def test_retries_retryable_statuses_then_succeed(
     assert _ScriptedHandler.request_count == 2
 
 
-@pytest.mark.parametrize(
-    "status_code",
-    [400, 401, 403, 404],
-)
+@pytest.mark.parametrize("status_code", NON_RETRYABLE_CLIENT_ERRORS)
 def test_non_retryable_client_errors_are_not_retried(
     status_code,
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Ordinary client errors are returned immediately without retries."""
     configure, port = scripted_http_server
     configure([status_code, 200])
     adapter = _adapter_against_local_server(port)
@@ -205,12 +200,15 @@ def test_non_retryable_client_errors_are_not_retried(
     assert _ScriptedHandler.request_count == 1
 
 
-def test_bounded_persistent_500_raises_after_four_attempts(
+@pytest.mark.parametrize("status_code", SERVER_ERRORS)
+def test_bounded_persistent_server_errors_raise_after_four_attempts(
+    status_code,
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Persistent server errors raise MlbHttpError after initial try plus 3 retries."""
     configure, port = scripted_http_server
-    configure([500, 500, 500, 500, 500, 500])
+    configure([status_code] * 6)
     adapter = _adapter_against_local_server(port)
 
     try:
@@ -219,8 +217,7 @@ def test_bounded_persistent_500_raises_after_four_attempts(
     finally:
         adapter.close()
 
-    assert exc_info.value.status_code == 500
-    assert exc_info.value.reason == "Internal Server Error"
+    assert exc_info.value.status_code == status_code
     assert _ScriptedHandler.request_count == 4
 
 
@@ -228,6 +225,7 @@ def test_final_429_returns_empty_mlb_result(
     scripted_http_server,
     no_retry_sleep,
 ):
+    """After retry exhaustion, a final 429 still returns an empty MlbResult."""
     configure, port = scripted_http_server
     configure([429, 429, 429, 429, 429, 429])
     adapter = _adapter_against_local_server(port)
@@ -244,6 +242,7 @@ def test_final_429_returns_empty_mlb_result(
 
 
 def test_invalid_json_is_not_retried(no_retry_sleep):
+    """JSON decode failures are not treated as retryable transport errors."""
     class BadJsonHandler(_ScriptedHandler):
         def do_GET(self) -> None:  # noqa: N802
             with self.lock:
