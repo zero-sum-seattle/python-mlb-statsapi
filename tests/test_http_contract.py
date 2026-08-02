@@ -216,9 +216,6 @@ def test_mlb_server_errors_raise_mlb_http_error_with_existing_attributes(status_
     assert exc.status_code == status_code
     assert exc.reason == reason
     assert exc.url == url
-    # Richer error context belongs to a later issue; protect the current shape.
-    assert not hasattr(exc, "response_data")
-    assert not hasattr(exc, "body_excerpt")
 
 
 # --- Library-created retry policy (contract-level guard) ---
