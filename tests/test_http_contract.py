@@ -208,7 +208,7 @@ def test_mlb_server_errors_raise_mlb_http_error_with_existing_attributes(status_
     )
     mlb = Mlb(session=session)
 
-    with pytest.raises(MlbHttpError, match=rf"^{status_code}: {reason}$") as exc_info:
+    with pytest.raises(MlbHttpError) as exc_info:
         mlb.get_person(664034)
 
     exc = exc_info.value
@@ -216,6 +216,10 @@ def test_mlb_server_errors_raise_mlb_http_error_with_existing_attributes(status_
     assert exc.status_code == status_code
     assert exc.reason == reason
     assert exc.url == url
+    # Protect useful message content without freezing the full exception string;
+    # issue #268 may enrich MlbHttpError while keeping these attributes.
+    assert str(status_code) in str(exc)
+    assert reason in str(exc)
 
 
 # --- Library-created retry policy (contract-level guard) ---
