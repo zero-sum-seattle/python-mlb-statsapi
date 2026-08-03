@@ -12,7 +12,8 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from mlbstatsapi import Mlb, MlbDataAdapter, MlbHttpError, MlbResult
+import mlbstatsapi
+from mlbstatsapi import Mlb, MlbDataAdapter, MlbHttpError, MlbResult, create_retry_policy
 
 from http_contract_support import (
     NON_RETRYABLE_CLIENT_ERRORS,
@@ -22,13 +23,37 @@ from http_contract_support import (
 )
 
 
+def test_create_retry_policy_is_publicly_importable():
+    """create_retry_policy is available through the package public API."""
+    assert callable(mlbstatsapi.create_retry_policy)
+    assert create_retry_policy is mlbstatsapi.create_retry_policy
+
+
+def test_create_retry_policy_returns_retry_instance():
+    """create_retry_policy returns an urllib3 Retry with the library policy."""
+    policy = create_retry_policy()
+    assert isinstance(policy, Retry)
+    assert_library_retry_policy(policy)
+
+
+def test_create_retry_policy_returns_independent_instances():
+    """Each call returns a distinct Retry instance with the same configuration."""
+    first = create_retry_policy()
+    second = create_retry_policy()
+    assert first is not second
+    assert_library_retry_policy(first)
+    assert_library_retry_policy(second)
+
+
 def test_library_created_mlb_session_has_retry_policy():
     """Library-created Mlb Sessions mount the default retry policy on http/https."""
     mlb = Mlb()
     try:
-        for scheme in ("https://", "http://"):
-            adapter = mlb._session.get_adapter(scheme)
-            assert_library_retry_policy(adapter.max_retries)
+        https_adapter = mlb._session.get_adapter("https://")
+        http_adapter = mlb._session.get_adapter("http://")
+        assert_library_retry_policy(https_adapter.max_retries)
+        assert_library_retry_policy(http_adapter.max_retries)
+        assert https_adapter.max_retries is not http_adapter.max_retries
     finally:
         mlb.close()
 
@@ -37,9 +62,11 @@ def test_library_created_adapter_session_has_retry_policy():
     """Library-created MlbDataAdapter Sessions mount the default retry policy."""
     adapter = MlbDataAdapter()
     try:
-        for scheme in ("https://", "http://"):
-            http_adapter = adapter._session.get_adapter(scheme)
-            assert_library_retry_policy(http_adapter.max_retries)
+        https_adapter = adapter._session.get_adapter("https://")
+        http_adapter = adapter._session.get_adapter("http://")
+        assert_library_retry_policy(https_adapter.max_retries)
+        assert_library_retry_policy(http_adapter.max_retries)
+        assert https_adapter.max_retries is not http_adapter.max_retries
     finally:
         adapter.close()
 
@@ -71,6 +98,31 @@ def test_injected_adapter_session_adapters_are_not_replaced():
         assert session.get_adapter("http://").max_retries.total == 0
     finally:
         adapter.close()
+        session.close()
+
+
+def test_caller_can_opt_in_to_public_retry_policy():
+    """Callers may mount create_retry_policy() on their own Session."""
+    session = requests.Session()
+    https_adapter = HTTPAdapter(max_retries=create_retry_policy())
+    http_adapter = HTTPAdapter(max_retries=create_retry_policy())
+    session.mount("https://", https_adapter)
+    session.mount("http://", http_adapter)
+
+    mlb = Mlb(session=session)
+    try:
+        assert mlb._session is session
+        assert mlb._owns_session is False
+        assert session.get_adapter("https://") is https_adapter
+        assert session.get_adapter("http://") is http_adapter
+        assert_library_retry_policy(https_adapter.max_retries)
+        assert_library_retry_policy(http_adapter.max_retries)
+        assert https_adapter.max_retries is not http_adapter.max_retries
+    finally:
+        mlb.close()
+        # Injected Sessions remain caller-owned after Mlb.close().
+        assert session.get_adapter("https://") is https_adapter
+        assert session.get_adapter("http://") is http_adapter
         session.close()
 
 

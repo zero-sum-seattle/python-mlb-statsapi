@@ -138,7 +138,10 @@ Callers who inject a Session control its retry, TLS, proxy, and adapter configur
 
 ## Default retry policy
 
-Library-created Sessions mount a bounded retry policy for GET requests.
+Library-created Sessions mount a bounded retry policy for GET requests automatically.
+
+Caller-injected Sessions are never automatically reconfigured. Retry settings on an
+injected Session remain under the caller's control unless the caller opts in.
 
 ```text
 Initial request: 1
@@ -180,6 +183,40 @@ Additional rules:
 * A final 5xx raises `MlbHttpError`
 
 Retries improve resilience for transient failures. They do not guarantee success.
+
+## Reusing the retry policy on a caller-managed Session
+
+`create_retry_policy()` returns a new instance of the same tested retry policy used
+internally for library-created Sessions.
+
+Callers who inject a Session must mount the policy themselves. The library does not
+install or replace adapters on caller-injected Sessions.
+
+Callers retain control over connection-pool sizes and other `HTTPAdapter` options.
+The caller remains responsible for closing an injected Session.
+
+```python
+import requests
+import mlbstatsapi
+
+session = requests.Session()
+adapter = requests.adapters.HTTPAdapter(
+    max_retries=mlbstatsapi.create_retry_policy(),
+    pool_connections=10,
+    pool_maxsize=20,
+)
+session.mount("https://", adapter)
+session.mount("http://", adapter)
+
+try:
+    with mlbstatsapi.Mlb(session=session) as mlb:
+        player = mlb.get_person(664034)
+finally:
+    session.close()
+```
+
+Mounting the same adapter instance for both schemes is valid. Callers may also mount
+separate adapters when they need different settings for HTTP and HTTPS.
 
 ## Structured exceptions
 

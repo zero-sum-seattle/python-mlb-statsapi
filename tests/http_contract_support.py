@@ -68,10 +68,10 @@ HTTP_REASON_BY_STATUS = {
 
 
 def assert_library_retry_policy(retry: Retry) -> None:
-    """Assert the library-created Session retry policy values.
+    """Assert the default library retry policy values.
 
-    Kept in tests so retry and contract modules share one source of truth
-    without exposing a public production helper.
+    Kept in tests so retry and contract modules share one assertion helper
+    for the public `create_retry_policy()` configuration.
     """
     assert retry.total == 3
     assert retry.connect == 3

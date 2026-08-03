@@ -18,7 +18,8 @@ DEFAULT_TIMEOUT = (3.05, 30.0)
 TimeoutType = int | float | tuple[float, float]
 
 
-def _build_retry_policy() -> Retry:
+def create_retry_policy() -> Retry:
+    """Create a new instance of the default MLB HTTP retry policy."""
     return Retry(
         total=3,
         connect=3,
@@ -49,13 +50,13 @@ def _configure_retry_adapters(
     session.mount(
         "https://",
         HTTPAdapter(
-            max_retries=_build_retry_policy()
+            max_retries=create_retry_policy(),
         ),
     )
     session.mount(
         "http://",
         HTTPAdapter(
-            max_retries=_build_retry_policy()
+            max_retries=create_retry_policy(),
         ),
     )
 
