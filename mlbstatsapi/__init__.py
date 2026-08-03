@@ -7,6 +7,7 @@ from .exceptions import (
     MlbTransportError,
     TheMlbStatsApiException,
 )
+from .warnings import MlbHttpCompatibilityWarning
 
 from .mlb_module import (
     return_splits,
