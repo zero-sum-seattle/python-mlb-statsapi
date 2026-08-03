@@ -136,6 +136,54 @@ The library does not install or replace retry adapters on caller-injected Sessio
 
 Callers who inject a Session control its retry, TLS, proxy, and adapter configuration.
 
+## User-Agent
+
+Library-created Sessions send a package-specific User-Agent:
+
+```text
+python-mlb-statsapi/<installed-version>
+```
+
+The version comes from the installed package metadata, so it always matches the
+installed release without a separately maintained version string.
+
+Notes:
+
+* The header helps identify package traffic while debugging
+* Other Requests default headers such as `Accept-Encoding`, `Accept`, and `Connection` remain intact
+* Only `User-Agent` is set; the full header mapping is never replaced
+* Caller-injected Sessions are never modified
+* Applications using an injected Session may set their own User-Agent
+* The header contains no machine identifiers, installation identifiers, hostnames, or user tracking data
+* This is not telemetry and sends no analytics
+
+If the distribution metadata is unavailable, for example in an unusual
+source-only environment, the header falls back to:
+
+```text
+python-mlb-statsapi/unknown
+```
+
+Callers who inject a Session control the User-Agent themselves:
+
+```python
+import requests
+import mlbstatsapi
+
+session = requests.Session()
+session.headers.update(
+    {
+        "User-Agent": "my-baseball-project/1.0",
+    }
+)
+
+try:
+    with mlbstatsapi.Mlb(session=session) as mlb:
+        player = mlb.get_person(664034)
+finally:
+    session.close()
+```
+
 ## Default retry policy
 
 Library-created Sessions mount a bounded retry policy for GET requests automatically.
