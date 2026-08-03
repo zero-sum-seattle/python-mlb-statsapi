@@ -145,7 +145,7 @@ def test_connection_error_raises_mlb_transport_error():
 def test_invalid_json_raises_mlb_decode_error(requests_mock):
     requests_mock.get(
         f"{BASE_URL}sports",
-        text=\'{"some bad json": sdfsd\',
+        text='{"some bad json": sdfsd',
         status_code=200,
         reason="OK",
         headers={"Content-Type": "application/json"},
@@ -237,7 +237,7 @@ def test_json_list_error_populates_response_data(requests_mock):
 
 
 def test_invalid_json_error_keeps_mlb_http_error(requests_mock):
-    malformed = \'{"message": broken\'
+    malformed = '{"message": broken'
     requests_mock.get(
         f"{BASE_URL}sports",
         text=malformed,
@@ -341,7 +341,7 @@ def test_large_error_body_excerpt_is_bounded(requests_mock):
 def test_json_scalar_error_response_data_is_none(requests_mock):
     requests_mock.get(
         f"{BASE_URL}sports",
-        text=\'"server unavailable"\',
+        text='"server unavailable"',
         status_code=500,
         reason="Internal Server Error",
         headers={"Content-Type": "application/json"},
@@ -400,9 +400,9 @@ def test_url_fallback_when_response_url_missing():
     response.status_code = 500
     response.reason = "Internal Server Error"
     response.url = ""
-    response.content = b\'{"message": "boom"}\'
+    response.content = b'{"message": "boom"}'
     response.json.return_value = {"message": "boom"}
-    response.text = \'{"message": "boom"}\'
+    response.text = '{"message": "boom"}'
 
     exc = _build_http_error(
         response,
