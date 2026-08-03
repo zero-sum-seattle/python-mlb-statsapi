@@ -1,3 +1,4 @@
+from importlib.metadata import PackageNotFoundError, version as package_version
 from typing import Dict
 
 from .exceptions import (
@@ -18,6 +19,11 @@ from urllib3.util.retry import Retry
 # Connect timeout, then read timeout. Callers may override with a scalar or tuple.
 DEFAULT_TIMEOUT = (3.05, 30.0)
 TimeoutType = int | float | tuple[float, float]
+
+# Distribution name published on PyPI; the User-Agent version is read from its
+# installed metadata so no release version is duplicated in source.
+PACKAGE_DISTRIBUTION_NAME = "python-mlb-statsapi"
+UNKNOWN_PACKAGE_VERSION = "unknown"
 
 # Bounded excerpt for error response bodies attached to MlbHttpError.
 HTTP_ERROR_BODY_EXCERPT_LIMIT = 500
@@ -163,6 +169,34 @@ def _configure_retry_adapters(
     )
 
 
+def _build_user_agent() -> str:
+    """Build the package User-Agent from installed distribution metadata.
+
+    Falls back to an "unknown" version for source-only environments where the
+    distribution metadata is not installed. This must never raise, because it
+    runs while a library-created Session is being constructed.
+    """
+    try:
+        installed_version = package_version(PACKAGE_DISTRIBUTION_NAME)
+    except PackageNotFoundError:
+        installed_version = UNKNOWN_PACKAGE_VERSION
+    return f"{PACKAGE_DISTRIBUTION_NAME}/{installed_version}"
+
+
+def _configure_library_session(
+    session: requests.Session,
+) -> None:
+    """Apply library defaults to a Session the library created and owns.
+
+    Caller-injected Sessions must not be passed here; their headers and
+    adapters stay under the caller's control.
+    """
+    # Only the User-Agent is replaced so the remaining Requests default
+    # headers (Accept-Encoding, Accept, Connection) are preserved.
+    session.headers["User-Agent"] = _build_user_agent()
+    _configure_retry_adapters(session)
+
+
 class MlbResult:
     """
     A class that holds data, status_code, and message returned from statsapi.mlb.com
@@ -222,7 +256,7 @@ class MlbDataAdapter:
         self._owns_session = session is None
         if session is None:
             self._session = requests.Session()
-            _configure_retry_adapters(self._session)
+            _configure_library_session(self._session)
         else:
             self._session = session
         self._closed = False
