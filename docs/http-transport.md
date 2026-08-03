@@ -227,6 +227,7 @@ Notes:
 * Strict mode does not change transport or decode exceptions
 * Strict-mode exceptions include the richer context from `MlbHttpError`
 * Existing constructor usage remains valid
+* Compatibility mode emits `MlbHttpCompatibilityWarning` for a suppressed non-404 4xx
 
 Example:
 
@@ -244,6 +245,94 @@ except mlbstatsapi.MlbHttpError as exc:
     print(exc.response_data)
     print(exc.body_excerpt)
 ```
+
+## Compatibility warnings
+
+Version 0.9.0 emits `MlbHttpCompatibilityWarning` when compatibility mode returns the
+historical empty result for a final non-404 4xx response.
+
+The warning means strict mode would have raised `MlbHttpError` for the same response.
+
+```python
+import mlbstatsapi
+
+mlb = mlbstatsapi.Mlb()
+sports = mlb.get_sports()
+```
+
+A representative warning looks like:
+
+```text
+HTTP 403 for https://statsapi.mlb.com/api/v1/sports was handled through
+compatibility mode and returned the historical empty result. Pass
+strict_http=True to raise MlbHttpError. This compatibility behavior may
+change in version 1.0.
+```
+
+The category inherits from `FutureWarning` so the migration notice stays visible under
+default Python warning filters.
+
+When the warning is emitted:
+
+| Response                  | Warning |
+| ------------------------- | ------- |
+| Non-404 4xx, compatibility mode | Yes |
+| Final 429, compatibility mode, after retries | Yes |
+| Non-404 4xx, strict mode  | No, `MlbHttpError` is raised instead |
+| 404, either mode          | No      |
+| Successful 2xx            | No      |
+| Final 5xx                 | No, `MlbHttpError` is raised in both modes |
+| Timeout, transport, decode, or validation failure | No |
+
+Additional rules:
+
+* The warning never changes the return value; compatibility mode still returns the
+  historical empty result in version 0.9.0
+* A final 404 remains warning-free and keeps existing `None` / `[]` / `{}` behavior
+* Warnings are emitted only after retries are exhausted, so a retried 429 warns once
+* Strict mode does not warn because it raises `MlbHttpError` directly
+* Warning messages contain only the status code and request URL, never response
+  bodies, headers, or credentials
+* Stricter defaults may be introduced in version 1.0
+
+Enabling strict mode is the recommended migration:
+
+```python
+import mlbstatsapi
+
+mlb = mlbstatsapi.Mlb(
+    strict_http=True,
+)
+```
+
+Applications may also turn only this package warning into an exception:
+
+```python
+import warnings
+import mlbstatsapi
+
+warnings.filterwarnings(
+    "error",
+    category=mlbstatsapi.MlbHttpCompatibilityWarning,
+)
+```
+
+Or silence only this category:
+
+```python
+import warnings
+import mlbstatsapi
+
+warnings.filterwarnings(
+    "ignore",
+    category=mlbstatsapi.MlbHttpCompatibilityWarning,
+)
+```
+
+Prefer enabling strict mode over permanently ignoring the warning when the application
+wants explicit HTTP failures. Filter by `mlbstatsapi.MlbHttpCompatibilityWarning` rather
+than disabling all `FutureWarning` or all warnings, which would also hide unrelated
+notices from other libraries.
 
 ## Reusing the retry policy on a caller-managed Session
 

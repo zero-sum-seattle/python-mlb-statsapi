@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import threading
+import warnings
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Iterable
 
@@ -13,7 +14,14 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 import mlbstatsapi
-from mlbstatsapi import Mlb, MlbDataAdapter, MlbHttpError, MlbResult, create_retry_policy
+from mlbstatsapi import (
+    Mlb,
+    MlbDataAdapter,
+    MlbHttpCompatibilityWarning,
+    MlbHttpError,
+    MlbResult,
+    create_retry_policy,
+)
 
 from http_contract_support import (
     NON_RETRYABLE_CLIENT_ERRORS,
@@ -295,6 +303,37 @@ def test_final_429_returns_empty_mlb_result(
     assert result.status_code == 429
     assert result.data == {}
     assert _ScriptedHandler.request_count == 4
+
+
+def test_final_429_warns_once_after_retry_exhaustion(
+    scripted_http_server,
+    no_retry_sleep,
+):
+    """Compatibility mode warns only after the final 429, not per retry attempt."""
+    configure, port = scripted_http_server
+    configure([429, 429, 429, 429, 429, 429])
+    # Library-created Session keeps the mounted retry adapter; do not inject a mock.
+    adapter = _adapter_against_local_server(port)
+
+    try:
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", MlbHttpCompatibilityWarning)
+            result = adapter.get(endpoint="sports")
+    finally:
+        adapter.close()
+
+    compatibility_warnings = [
+        item
+        for item in caught
+        if issubclass(item.category, MlbHttpCompatibilityWarning)
+    ]
+
+    assert _ScriptedHandler.request_count == 4
+    assert len(compatibility_warnings) == 1
+    assert "429" in str(compatibility_warnings[0].message)
+    assert isinstance(result, MlbResult)
+    assert result.status_code == 429
+    assert result.data == {}
 
 
 def test_final_429_raises_mlb_http_error_in_strict_mode(

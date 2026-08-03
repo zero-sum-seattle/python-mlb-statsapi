@@ -6,7 +6,9 @@ from .exceptions import (
     MlbTimeoutError,
     MlbTransportError,
 )
+from .warnings import MlbHttpCompatibilityWarning
 import logging
+import warnings
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -19,6 +21,32 @@ TimeoutType = int | float | tuple[float, float]
 
 # Bounded excerpt for error response bodies attached to MlbHttpError.
 HTTP_ERROR_BODY_EXCERPT_LIMIT = 500
+
+# Frames from warnings.warn() out to whoever called MlbDataAdapter.get(), so the
+# warning points at application code rather than the helper below.
+COMPATIBILITY_WARNING_STACKLEVEL = 3
+
+
+def _warn_http_compatibility(
+    *,
+    status_code: int,
+    url: str,
+) -> None:
+    """Warn that compatibility mode suppressed an error strict mode would raise.
+
+    Only the status code and URL are reported; response bodies, headers, and
+    credentials must never reach a warning message.
+    """
+    warnings.warn(
+        (
+            f"HTTP {status_code} for {url} was handled through compatibility mode "
+            "and returned the historical empty result. Pass strict_http=True to "
+            "raise MlbHttpError. This compatibility behavior may change in "
+            "version 1.0."
+        ),
+        MlbHttpCompatibilityWarning,
+        stacklevel=COMPATIBILITY_WARNING_STACKLEVEL,
+    )
 
 
 def _extract_error_response_data(
@@ -252,6 +280,11 @@ class MlbDataAdapter:
                     response,
                     method="GET",
                     fallback_url=full_url,
+                )
+            if status_code != 404:
+                _warn_http_compatibility(
+                    status_code=status_code,
+                    url=response.url or full_url,
                 )
             return MlbResult(
                 status_code=status_code,
