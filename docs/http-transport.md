@@ -179,10 +179,71 @@ Additional rules:
 * Pydantic validation failures are not retried
 * Application parsing failures are not retried
 * A final 404 preserves existing not-found behavior
-* A final 429 preserves existing 4xx compatibility
+* A final 429 preserves existing 4xx compatibility by default
 * A final 5xx raises `MlbHttpError`
+* In strict mode, a final non-404 4xx (including a final 429) raises `MlbHttpError`
 
 Retries improve resilience for transient failures. They do not guarantee success.
+
+## HTTP compatibility modes
+
+Compatibility mode remains the default:
+
+```python
+mlb = mlbstatsapi.Mlb()
+```
+
+or:
+
+```python
+mlb = mlbstatsapi.Mlb(
+    strict_http=False,
+)
+```
+
+Callers may explicitly enable strict mode:
+
+```python
+mlb = mlbstatsapi.Mlb(
+    strict_http=True,
+)
+```
+
+Behavior:
+
+| Response    | Compatibility                    | Strict                     |
+| ----------- | -------------------------------- | -------------------------- |
+| Non-404 4xx | Empty endpoint-compatible result | `MlbHttpError`             |
+| 404         | Existing endpoint behavior       | Existing endpoint behavior |
+| Final 429   | Empty result                     | `MlbHttpError`             |
+| Final 5xx   | `MlbHttpError`                   | `MlbHttpError`             |
+
+Notes:
+
+* Compatibility mode remains the default
+* Strict mode is explicitly opt-in
+* Strict mode applies only after retries are exhausted
+* Strict mode does not make 404 raise
+* Strict mode does not change transport or decode exceptions
+* Strict-mode exceptions include the richer context from `MlbHttpError`
+* Existing constructor usage remains valid
+
+Example:
+
+```python
+import mlbstatsapi
+
+try:
+    with mlbstatsapi.Mlb(strict_http=True) as mlb:
+        player = mlb.get_person(664034)
+except mlbstatsapi.MlbHttpError as exc:
+    print(exc.method)
+    print(exc.status_code)
+    print(exc.reason)
+    print(exc.url)
+    print(exc.response_data)
+    print(exc.body_excerpt)
+```
 
 ## Reusing the retry policy on a caller-managed Session
 

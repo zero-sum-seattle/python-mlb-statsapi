@@ -184,10 +184,13 @@ class MlbDataAdapter:
         logger: logging.Logger | None = None,
         timeout: TimeoutType = DEFAULT_TIMEOUT,
         session: requests.Session | None = None,
+        *,
+        strict_http: bool = False,
     ):
         self.url = f'https://{hostname}/api/{ver}/'
         self._logger = logger or logging.getLogger(__name__)
         self._timeout = timeout
+        self._strict_http = strict_http
         self._owns_session = session is None
         if session is None:
             self._session = requests.Session()
@@ -242,6 +245,14 @@ class MlbDataAdapter:
                 response.reason,
                 response.url,
             ))
+            # Strict mode raises for final non-404 4xx after retries are exhausted.
+            # 404 stays an empty MlbResult so endpoints keep None / [] / {} behavior.
+            if self._strict_http and status_code != 404:
+                raise _build_http_error(
+                    response,
+                    method="GET",
+                    fallback_url=full_url,
+                )
             return MlbResult(
                 status_code=status_code,
                 message=response.reason,
