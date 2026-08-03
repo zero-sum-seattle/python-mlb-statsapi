@@ -286,22 +286,6 @@ except mlbstatsapi.MlbHttpError as exc:
     print(exc.body_excerpt)
 ```
 
-Precise handling with the expanded attributes:
-
-```python
-try:
-    player = mlb.get_person(664034)
-except MlbHttpError as exc:
-    print(
-        exc.method,
-        exc.status_code,
-        exc.reason,
-        exc.url,
-        exc.response_data,
-        exc.body_excerpt,
-    )
-```
-
 ## Existing 404 behavior
 
 Version 0.8.0 preserves endpoint-specific not-found behavior.
