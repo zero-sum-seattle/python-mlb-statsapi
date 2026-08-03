@@ -1,13 +1,12 @@
-"""High-level offline HTTP compatibility contract for version 0.9.0.
+"""High-level offline HTTP compatibility and strict-mode contract for version 0.9.0.
 
-Protects existing version 0.8.0 public behavior before configurable transport
-features are implemented. These tests intentionally validate current
-compatibility behavior only; they do not enable strict mode or add production
-features.
+Protects existing version 0.8.0 public compatibility behavior and the opt-in
+strict HTTP mode introduced for version 0.9.0.
 """
 
 from __future__ import annotations
 
+import json
 from unittest.mock import MagicMock
 
 import pytest
@@ -16,8 +15,11 @@ import requests
 from mlbstatsapi import (
     Mlb,
     MlbDataAdapter,
+    MlbDecodeError,
     MlbHttpError,
     MlbResult,
+    MlbTimeoutError,
+    MlbTransportError,
     TheMlbStatsApiException,
 )
 from mlbstatsapi.mlb_dataadapter import DEFAULT_TIMEOUT
@@ -30,6 +32,11 @@ from http_contract_support import (
     assert_library_retry_policy,
 )
 
+# Non-404 client errors asserted under strict mode (final 429 covered in retries).
+STRICT_NON_404_CLIENT_ERRORS = tuple(
+    code for code in COMPATIBILITY_CLIENT_ERRORS if code != 429
+)
+
 
 def _response(
     *,
@@ -38,6 +45,7 @@ def _response(
     url: str,
     content: bytes = b"",
     payload=None,
+    text: str | None = None,
 ):
     """Build a fake requests Response for offline adapter tests."""
     response = MagicMock()
@@ -45,6 +53,12 @@ def _response(
     response.reason = reason
     response.url = url
     response.content = content
+    if text is not None:
+        response.text = text
+    elif content:
+        response.text = content.decode("utf-8", errors="replace")
+    else:
+        response.text = ""
     if payload is None:
         response.json.side_effect = ValueError("no json")
     else:
@@ -87,11 +101,48 @@ class RecordingSession:
 def test_status_matrices_document_compatibility_baseline():
     """Keep the shared status groups stable for later strict-mode tests."""
     assert COMPATIBILITY_CLIENT_ERRORS == (400, 401, 403, 405, 422, 429)
+    assert STRICT_NON_404_CLIENT_ERRORS == (400, 401, 403, 405, 422)
     assert NOT_FOUND_STATUS == 404
     assert SERVER_ERRORS == (500, 502, 503, 504)
     assert 404 not in COMPATIBILITY_CLIENT_ERRORS
     assert 429 in COMPATIBILITY_CLIENT_ERRORS
     assert set(SERVER_ERRORS).isdisjoint(COMPATIBILITY_CLIENT_ERRORS)
+
+
+# --- Default / explicit mode wiring ---
+
+
+def test_mlb_default_uses_compatibility_mode():
+    """Mlb() defaults to compatibility mode on the client and both adapters."""
+    mlb = Mlb()
+    try:
+        assert mlb._strict_http is False
+        assert mlb._mlb_adapter_v1._strict_http is False
+        assert mlb._mlb_adapter_v1_1._strict_http is False
+    finally:
+        mlb.close()
+
+
+def test_mlb_explicit_compatibility_mode_matches_default():
+    """Mlb(strict_http=False) matches the default compatibility wiring."""
+    mlb = Mlb(strict_http=False)
+    try:
+        assert mlb._strict_http is False
+        assert mlb._mlb_adapter_v1._strict_http is False
+        assert mlb._mlb_adapter_v1_1._strict_http is False
+    finally:
+        mlb.close()
+
+
+def test_mlb_explicit_strict_mode_wires_both_adapters():
+    """Mlb(strict_http=True) enables strict mode on both internal adapters."""
+    mlb = Mlb(strict_http=True)
+    try:
+        assert mlb._strict_http is True
+        assert mlb._mlb_adapter_v1._strict_http is True
+        assert mlb._mlb_adapter_v1_1._strict_http is True
+    finally:
+        mlb.close()
 
 
 # --- Default 4xx compatibility (empty MlbResult, no MlbHttpError) ---
@@ -133,6 +184,91 @@ def test_compatibility_client_errors_do_not_raise_mlb_http_error(status_code):
 
     assert result.status_code == status_code
     assert result.data == {}
+
+
+@pytest.mark.parametrize("status_code", COMPATIBILITY_CLIENT_ERRORS)
+def test_explicit_compatibility_mode_client_errors_return_empty_mlb_result(
+    status_code,
+):
+    """Mlb(strict_http=False) preserves empty MlbResult for non-404 4xx."""
+    reason = HTTP_REASON_BY_STATUS[status_code]
+    url = "https://statsapi.mlb.com/api/v1/sports"
+    session = MagicMock()
+    session.get.return_value = _response(
+        status_code=status_code,
+        reason=reason,
+        url=url,
+    )
+    mlb = Mlb(session=session, strict_http=False)
+
+    result = mlb._mlb_adapter_v1.get(endpoint="sports")
+
+    assert isinstance(result, MlbResult)
+    assert result.status_code == status_code
+    assert result.data == {}
+
+
+# --- Strict non-404 4xx raises enriched MlbHttpError ---
+
+
+@pytest.mark.parametrize("status_code", STRICT_NON_404_CLIENT_ERRORS)
+def test_strict_non_404_client_errors_raise_enriched_mlb_http_error(status_code):
+    """Strict mode raises MlbHttpError with richer context for non-404 4xx."""
+    reason = HTTP_REASON_BY_STATUS[status_code]
+    url = "https://statsapi.mlb.com/api/v1/sports"
+    payload = {"message": "client error", "code": status_code}
+    body = json.dumps(payload).encode("utf-8")
+    session = MagicMock()
+    session.get.return_value = _response(
+        status_code=status_code,
+        reason=reason,
+        url=url,
+        content=body,
+        payload=payload,
+    )
+    mlb = Mlb(session=session, strict_http=True)
+
+    with pytest.raises(MlbHttpError) as exc_info:
+        mlb._mlb_adapter_v1.get(endpoint="sports")
+
+    exc = exc_info.value
+    assert isinstance(exc, TheMlbStatsApiException)
+    assert exc.status_code == status_code
+    assert exc.reason == reason
+    assert exc.url == url
+    assert exc.method == "GET"
+    assert exc.response_data == payload
+    assert exc.body_excerpt is not None
+    assert "client error" in exc.body_excerpt
+
+
+@pytest.mark.parametrize("status_code", STRICT_NON_404_CLIENT_ERRORS)
+def test_strict_adapter_non_404_client_errors_raise_mlb_http_error(status_code):
+    """Standalone adapters honor strict_http for non-404 4xx responses."""
+    reason = HTTP_REASON_BY_STATUS[status_code]
+    url = "https://statsapi.mlb.com/api/v1/sports"
+    payload = {"error": reason}
+    body = json.dumps(payload).encode("utf-8")
+    session = MagicMock()
+    session.get.return_value = _response(
+        status_code=status_code,
+        reason=reason,
+        url=url,
+        content=body,
+        payload=payload,
+    )
+    adapter = MlbDataAdapter(session=session, strict_http=True)
+
+    with pytest.raises(MlbHttpError) as exc_info:
+        adapter.get(endpoint="sports")
+
+    exc = exc_info.value
+    assert exc.status_code == status_code
+    assert exc.reason == reason
+    assert exc.url == url
+    assert exc.method == "GET"
+    assert exc.response_data == payload
+    assert exc.body_excerpt is not None
 
 
 # --- Endpoint-specific 404 return shapes via public Mlb methods ---
@@ -192,6 +328,41 @@ def test_mlb_endpoint_404_does_not_raise_mlb_http_error():
     assert mlb.get_player_stats(999999, ["season"], ["hitting"]) == {}
 
 
+@pytest.mark.parametrize("strict_http", [False, True])
+def test_404_preserves_endpoint_shapes_in_both_modes(strict_http):
+    """404 keeps None / [] / {} endpoint shapes in compatibility and strict modes."""
+    session = MagicMock()
+    session.get.return_value = _response(
+        status_code=NOT_FOUND_STATUS,
+        reason=HTTP_REASON_BY_STATUS[NOT_FOUND_STATUS],
+        url="https://statsapi.mlb.com/api/v1/people/999999",
+    )
+    mlb = Mlb(session=session, strict_http=strict_http)
+
+    assert mlb.get_person(999999) is None
+    assert mlb.get_teams() == []
+    assert mlb.get_player_stats(999999, ["season"], ["hitting"]) == {}
+
+
+@pytest.mark.parametrize("strict_http", [False, True])
+def test_adapter_404_returns_mlb_result_in_both_modes(strict_http):
+    """Adapters return a 404 MlbResult rather than raising in either mode."""
+    url = "https://statsapi.mlb.com/api/v1/people/999999"
+    session = MagicMock()
+    session.get.return_value = _response(
+        status_code=NOT_FOUND_STATUS,
+        reason=HTTP_REASON_BY_STATUS[NOT_FOUND_STATUS],
+        url=url,
+    )
+    adapter = MlbDataAdapter(session=session, strict_http=strict_http)
+
+    result = adapter.get(endpoint="people/999999")
+
+    assert isinstance(result, MlbResult)
+    assert result.status_code == NOT_FOUND_STATUS
+    assert result.data == {}
+
+
 # --- Final 5xx raises MlbHttpError with existing attributes ---
 
 
@@ -222,6 +393,94 @@ def test_mlb_server_errors_raise_mlb_http_error_with_existing_attributes(status_
     assert reason in str(exc)
 
 
+@pytest.mark.parametrize("status_code", [500, 502])
+@pytest.mark.parametrize("strict_http", [False, True])
+def test_server_errors_raise_enriched_mlb_http_error_in_both_modes(
+    status_code,
+    strict_http,
+):
+    """Final 5xx responses raise enriched MlbHttpError in both HTTP modes."""
+    reason = HTTP_REASON_BY_STATUS[status_code]
+    url = "https://statsapi.mlb.com/api/v1/sports"
+    payload = {"message": "server error", "status": status_code}
+    body = json.dumps(payload).encode("utf-8")
+    session = MagicMock()
+    session.get.return_value = _response(
+        status_code=status_code,
+        reason=reason,
+        url=url,
+        content=body,
+        payload=payload,
+    )
+    mlb = Mlb(session=session, strict_http=strict_http)
+
+    with pytest.raises(MlbHttpError) as exc_info:
+        mlb._mlb_adapter_v1.get(endpoint="sports")
+
+    exc = exc_info.value
+    assert exc.status_code == status_code
+    assert exc.reason == reason
+    assert exc.url == url
+    assert exc.method == "GET"
+    assert exc.response_data == payload
+    assert exc.body_excerpt is not None
+    assert "server error" in exc.body_excerpt
+
+
+# --- Transport and decode errors remain unchanged in strict mode ---
+
+
+def test_strict_mode_timeout_still_raises_mlb_timeout_error():
+    """Strict mode does not convert timeouts into MlbHttpError."""
+    original = requests.exceptions.Timeout("timed out")
+    session = MagicMock()
+    session.get.side_effect = original
+    adapter = MlbDataAdapter(session=session, strict_http=True)
+
+    with pytest.raises(MlbTimeoutError, match=r"^Request failed$") as exc_info:
+        adapter.get(endpoint="sports")
+
+    assert isinstance(exc_info.value, MlbTransportError)
+    assert not isinstance(exc_info.value, MlbHttpError)
+    assert exc_info.value.__cause__ is original
+
+
+def test_strict_mode_connection_failure_still_raises_mlb_transport_error():
+    """Strict mode does not convert connection failures into MlbHttpError."""
+    original = requests.exceptions.ConnectionError("connection refused")
+    session = MagicMock()
+    session.get.side_effect = original
+    adapter = MlbDataAdapter(session=session, strict_http=True)
+
+    with pytest.raises(MlbTransportError, match=r"^Request failed$") as exc_info:
+        adapter.get(endpoint="sports")
+
+    assert not isinstance(exc_info.value, MlbTimeoutError)
+    assert not isinstance(exc_info.value, MlbHttpError)
+    assert exc_info.value.__cause__ is original
+
+
+def test_strict_mode_invalid_json_still_raises_mlb_decode_error():
+    """Strict mode does not convert 2xx JSON decode failures into MlbHttpError."""
+    url = "https://statsapi.mlb.com/api/v1/sports"
+    session = MagicMock()
+    session.get.return_value = _response(
+        status_code=200,
+        reason="OK",
+        url=url,
+        content=b'{"bad": json',
+        text='{"bad": json',
+    )
+    # Force json() to raise like a real Response with malformed body.
+    session.get.return_value.json.side_effect = ValueError("Expecting value")
+    adapter = MlbDataAdapter(session=session, strict_http=True)
+
+    with pytest.raises(MlbDecodeError, match=r"^Bad JSON in response$") as exc_info:
+        adapter.get(endpoint="sports")
+
+    assert not isinstance(exc_info.value, MlbHttpError)
+
+
 # --- Library-created retry policy (contract-level guard) ---
 
 
@@ -244,6 +503,7 @@ def test_mlb_constructors_remain_compatible():
     try:
         assert isinstance(mlb_default._session, requests.Session)
         assert mlb_default._timeout == DEFAULT_TIMEOUT
+        assert mlb_default._strict_http is False
     finally:
         mlb_default.close()
 
@@ -275,6 +535,35 @@ def test_mlb_positional_timeout_remains_third_argument():
     assert session.calls[0]["timeout"] == 10
     assert session.calls[1]["timeout"] == 10
     assert mlb._session is session
+    assert mlb._strict_http is False
+
+
+def test_mlb_strict_http_is_keyword_only():
+    """strict_http must not shift existing positional constructor arguments."""
+    logger = MagicMock()
+    logger.level = 0
+    session = RecordingSession()
+
+    mlb = Mlb("statsapi.mlb.com", logger, 10, session)
+    assert mlb._session is session
+    assert mlb._timeout == 10
+    assert mlb._strict_http is False
+
+    mlb_strict = Mlb(
+        "statsapi.mlb.com",
+        logger,
+        10,
+        session,
+        strict_http=True,
+    )
+    assert mlb_strict._session is session
+    assert mlb_strict._timeout == 10
+    assert mlb_strict._strict_http is True
+    assert mlb_strict._mlb_adapter_v1._strict_http is True
+    assert mlb_strict._mlb_adapter_v1_1._strict_http is True
+
+    with pytest.raises(TypeError):
+        Mlb("statsapi.mlb.com", logger, 10, session, True)
 
 
 def test_adapter_positional_construction_remains_compatible():
@@ -287,9 +576,35 @@ def test_adapter_positional_construction_remains_compatible():
     assert adapter._logger is logger
     assert adapter._timeout == (5.0, 60.0)
     assert adapter._session is session
+    assert adapter._strict_http is False
 
     adapter.get(endpoint="game")
     assert session.calls[0]["timeout"] == (5.0, 60.0)
+
+
+def test_adapter_strict_http_is_keyword_only():
+    """Adapter strict_http is keyword-only and does not shift positional args."""
+    logger = MagicMock()
+    session = RecordingSession()
+    adapter = MlbDataAdapter(
+        "statsapi.mlb.com",
+        "v1.1",
+        logger,
+        (5.0, 60.0),
+        session,
+        strict_http=True,
+    )
+    assert adapter._strict_http is True
+
+    with pytest.raises(TypeError):
+        MlbDataAdapter(
+            "statsapi.mlb.com",
+            "v1.1",
+            logger,
+            (5.0, 60.0),
+            session,
+            True,
+        )
 
 
 # --- Timeout forwarding at the Mlb client level ---

@@ -51,6 +51,8 @@ class Mlb:
         logger: logging.Logger | None = None,
         timeout: TimeoutType = DEFAULT_TIMEOUT,
         session: requests.Session | None = None,
+        *,
+        strict_http: bool = False,
     ):
         # One session is shared by the v1 and v1.1 adapters. The library closes
         # only sessions it creates; caller-injected sessions remain caller-owned.
@@ -63,12 +65,14 @@ class Mlb:
             self._session = session
         self._closed = False
         self._timeout = timeout
+        self._strict_http = strict_http
         self._mlb_adapter_v1 = MlbDataAdapter(
             hostname,
             'v1',
             logger,
             timeout=timeout,
             session=self._session,
+            strict_http=strict_http,
         )
         self._mlb_adapter_v1_1 = MlbDataAdapter(
             hostname,
@@ -76,6 +80,7 @@ class Mlb:
             logger,
             timeout=timeout,
             session=self._session,
+            strict_http=strict_http,
         )
         self._logger = logger or logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)

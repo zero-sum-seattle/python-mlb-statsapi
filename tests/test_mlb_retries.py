@@ -184,8 +184,12 @@ def no_retry_sleep(monkeypatch):
     monkeypatch.setattr(Retry, "sleep", lambda self, response=None: None)
 
 
-def _adapter_against_local_server(port: int) -> MlbDataAdapter:
-    adapter = MlbDataAdapter()
+def _adapter_against_local_server(
+    port: int,
+    *,
+    strict_http: bool = False,
+) -> MlbDataAdapter:
+    adapter = MlbDataAdapter(strict_http=strict_http)
     adapter.url = f"http://127.0.0.1:{port}/api/v1/"
     return adapter
 
@@ -291,6 +295,48 @@ def test_final_429_returns_empty_mlb_result(
     assert result.status_code == 429
     assert result.data == {}
     assert _ScriptedHandler.request_count == 4
+
+
+def test_final_429_raises_mlb_http_error_in_strict_mode(
+    scripted_http_server,
+    no_retry_sleep,
+):
+    """Strict mode raises MlbHttpError only after retry exhaustion on final 429."""
+    configure, port = scripted_http_server
+    configure([429, 429, 429, 429, 429, 429])
+    # Library-created Session keeps the mounted retry adapter; do not inject a mock.
+    adapter = _adapter_against_local_server(port, strict_http=True)
+
+    try:
+        with pytest.raises(MlbHttpError) as exc_info:
+            adapter.get(endpoint="sports")
+    finally:
+        adapter.close()
+
+    assert _ScriptedHandler.request_count == 4
+    assert exc_info.value.status_code == 429
+    assert exc_info.value.method == "GET"
+
+
+def test_final_429_raises_via_strict_mlb_client(
+    scripted_http_server,
+    no_retry_sleep,
+):
+    """Mlb(strict_http=True) raises after retries when the final response is 429."""
+    configure, port = scripted_http_server
+    configure([429, 429, 429, 429, 429, 429])
+    mlb = Mlb(strict_http=True)
+    mlb._mlb_adapter_v1.url = f"http://127.0.0.1:{port}/api/v1/"
+
+    try:
+        with pytest.raises(MlbHttpError) as exc_info:
+            mlb._mlb_adapter_v1.get(endpoint="sports")
+    finally:
+        mlb.close()
+
+    assert _ScriptedHandler.request_count == 4
+    assert exc_info.value.status_code == 429
+    assert exc_info.value.method == "GET"
 
 
 def test_invalid_json_is_not_retried(no_retry_sleep):
