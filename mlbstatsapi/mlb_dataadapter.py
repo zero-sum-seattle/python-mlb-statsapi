@@ -17,6 +17,80 @@ from urllib3.util.retry import Retry
 DEFAULT_TIMEOUT = (3.05, 30.0)
 TimeoutType = int | float | tuple[float, float]
 
+# Bounded excerpt for error response bodies attached to MlbHttpError.
+HTTP_ERROR_BODY_EXCERPT_LIMIT = 500
+
+
+def _extract_error_response_data(
+    response: requests.Response,
+) -> dict | list | None:
+    """Best-effort JSON object/list extraction from an error response.
+
+    Returns None for empty bodies, invalid JSON, scalars, or unexpected failures.
+    Must not raise; context extraction cannot replace the original HTTP error.
+    """
+    try:
+        if not response.content:
+            return None
+        data = response.json()
+    except Exception:
+        return None
+
+    if isinstance(data, (dict, list)):
+        return data
+    return None
+
+
+def _extract_error_body_excerpt(
+    response: requests.Response,
+) -> str | None:
+    """Best-effort bounded text excerpt from an error response body.
+
+    Returns None for empty bodies or unexpected text-decoding failures.
+    Must not raise; context extraction cannot replace the original HTTP error.
+    """
+    try:
+        if not response.content:
+            return None
+        text = response.text
+    except Exception:
+        return None
+
+    if not text:
+        return None
+    return text[:HTTP_ERROR_BODY_EXCERPT_LIMIT]
+
+
+def _build_http_error(
+    response: requests.Response,
+    *,
+    method: str,
+    fallback_url: str,
+) -> MlbHttpError:
+    """Build an MlbHttpError with best-effort response context.
+
+    Extraction failures must not prevent raising MlbHttpError with status,
+    reason, URL, and method.
+    """
+    try:
+        response_data = _extract_error_response_data(response)
+    except Exception:
+        response_data = None
+
+    try:
+        body_excerpt = _extract_error_body_excerpt(response)
+    except Exception:
+        body_excerpt = None
+
+    return MlbHttpError(
+        status_code=response.status_code,
+        reason=response.reason,
+        url=response.url or fallback_url,
+        method=method,
+        response_data=response_data,
+        body_excerpt=body_excerpt,
+    )
+
 
 def create_retry_policy() -> Retry:
     """Create a new instance of the default MLB HTTP retry policy."""
@@ -181,17 +255,17 @@ class MlbDataAdapter:
                 response.reason,
                 response.url,
             ))
-            raise MlbHttpError(
-                status_code=status_code,
-                reason=response.reason,
-                url=response.url,
+            raise _build_http_error(
+                response,
+                method="GET",
+                fallback_url=full_url,
             )
 
         if not 200 <= status_code <= 299:
-            raise MlbHttpError(
-                status_code=status_code,
-                reason=response.reason,
-                url=response.url,
+            raise _build_http_error(
+                response,
+                method="GET",
+                fallback_url=full_url,
             )
 
         self._logger.debug(msg=logline_post.format(
