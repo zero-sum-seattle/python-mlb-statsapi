@@ -243,12 +243,64 @@ Notes:
 `MlbHttpError` exposes:
 
 ```text
+method
+status_code
+reason
+url
+response_data
+body_excerpt
+```
+
+Existing attributes remain compatible:
+
+```text
 status_code
 reason
 url
 ```
 
-It does not expose a response body or Response object.
+Additional context:
+
+* `method` is the HTTP method when the adapter raises the error (`GET` today). Manually constructed exceptions without a method leave `method` as `None`.
+* `response_data` contains a decoded JSON dictionary or list when the error body is valid JSON of that shape.
+* `response_data` is `None` for invalid JSON, HTML, plain text, empty bodies, or JSON scalars such as strings, numbers, booleans, or null.
+* `body_excerpt` contains at most 500 characters of the response text for non-empty bodies.
+* `body_excerpt` is `None` for an empty body.
+* Error-context extraction is best-effort. A parsing or decoding failure while collecting context must not replace the original HTTP error.
+* Complete `requests.Response` objects are not exposed.
+* Complete large response bodies are not preserved beyond the excerpt limit.
+* Response bodies are not automatically logged.
+* `str(exc)` remains concise, for example `500: Internal Server Error`, and does not include the response body, excerpt, or `response_data`.
+
+Usage:
+
+```python
+try:
+    player = mlb.get_person(664034)
+except mlbstatsapi.MlbHttpError as exc:
+    print(exc.method)
+    print(exc.status_code)
+    print(exc.reason)
+    print(exc.url)
+    print(exc.response_data)
+    print(exc.body_excerpt)
+```
+
+Precise handling with the expanded attributes:
+
+```python
+try:
+    player = mlb.get_person(664034)
+except MlbHttpError as exc:
+    print(
+        exc.method,
+        exc.status_code,
+        exc.reason,
+        exc.url,
+        exc.response_data,
+        exc.body_excerpt,
+    )
+```
 
 ## Existing 404 behavior
 

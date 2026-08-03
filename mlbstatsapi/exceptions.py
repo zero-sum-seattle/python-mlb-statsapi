@@ -18,10 +18,17 @@ class MlbHttpError(TheMlbStatsApiException):
         status_code: int,
         reason: str,
         url: str | None = None,
+        *,
+        method: str | None = None,
+        response_data: dict | list | None = None,
+        body_excerpt: str | None = None,
     ):
         self.status_code = int(status_code)
         self.reason = str(reason)
         self.url = url
+        self.method = method.upper() if method is not None else None
+        self.response_data = response_data
+        self.body_excerpt = body_excerpt
 
         super().__init__(
             f"{self.status_code}: {self.reason}"
