@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-mlb-statsapi"
-version = "0.8.0"
+version = "0.9.0"
 description = "mlbstatsapi python wrapper"
 authors = [
     "Matthew Spah <spahmatthew@gmail.com>",
