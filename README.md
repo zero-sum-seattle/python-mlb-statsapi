@@ -35,7 +35,7 @@ For detailed documentation, check out the [Wiki](https://github.com/zero-sum-sea
 <div align="left">
 
 ## Installation
-```python
+```bash
 python3 -m pip install python-mlb-statsapi
 ```
 
@@ -65,9 +65,13 @@ Ty France
 Seattle Mariners Seattle
 ```
 
-## HTTP Sessions, Timeouts, and Retries
+## HTTP Sessions, Timeouts, Retries, and Error Behavior
 
-Version 0.8.0 adds shared HTTP Sessions, explicit timeouts, optional Session injection, bounded retries, and structured transport exceptions. The `Mlb` client remains synchronous. Shared Sessions pool reusable connections; they do not cache MLB response bodies, and the client does not enable response caching by default.
+Version 0.8.0 added shared HTTP Sessions, explicit timeouts, optional Session injection, bounded retries, and structured transport exceptions. Version 0.9.0 builds on that transport with configurable HTTP behavior: a public retry policy, richer `MlbHttpError` context, an optional strict mode, compatibility warnings, and a versioned User-Agent.
+
+The `Mlb` client remains synchronous. Shared Sessions pool reusable connections; they do not cache MLB response bodies, and the client does not enable response caching by default.
+
+For the complete reference see the [HTTP transport documentation](docs/http-transport.md). For what changed in this release see the [0.9.0 release notes](docs/releases/0.9.0.md).
 
 ### Recommended context-manager usage
 
@@ -83,18 +87,67 @@ with mlbstatsapi.Mlb() as mlb:
 
 One `Mlb` client uses one shared `requests.Session`. The v1 and v1.1 adapters share that Session, so repeated requests can reuse pooled connections. A Session manages a pool of reusable connections; it is not one permanent network connection.
 
-### Existing construction remains valid
+Callers who do not use a context manager may call `mlb.close()` instead. Repeated `close()` calls are safe. Closing a client only closes a Session the library created; a caller-injected Session is left open for its owner.
 
-Existing construction continues to work:
+### Compatibility mode is the default
+
+Existing construction continues to work unchanged:
 
 ```python
 import mlbstatsapi
 
-mlb = mlbstatsapi.Mlb()
-player = mlb.get_person(664034)
+with mlbstatsapi.Mlb() as mlb:
+    player = mlb.get_person(664034)
 ```
 
-Callers who do not use a context manager may call `mlb.close()`. Repeated `close()` calls are safe.
+That is equivalent to:
+
+```python
+mlb = mlbstatsapi.Mlb(
+    strict_http=False,
+)
+```
+
+Compatibility mode remains the default in version 0.9.0. A final non-404 4xx response still returns the historical empty result instead of raising, so existing applications keep working after upgrading.
+
+### Optional strict HTTP mode
+
+Applications that would rather fail loudly can opt in to strict mode:
+
+```python
+import mlbstatsapi
+
+with mlbstatsapi.Mlb(
+    strict_http=True,
+) as mlb:
+    player = mlb.get_person(664034)
+```
+
+In strict mode:
+
+* A final non-404 4xx response raises `MlbHttpError`
+* A final 5xx response raises `MlbHttpError`, as it already did in compatibility mode
+* A 404 keeps the existing endpoint-specific behavior and does not raise
+
+"Final" means after the bounded retry policy has been exhausted. Strict mode is opt-in; it is not the default.
+
+### Compatibility warnings
+
+When compatibility mode converts a final non-404 4xx response into the historical empty result, the library emits `MlbHttpCompatibilityWarning`. The warning marks a response that strict mode would have raised on, so it doubles as migration guidance.
+
+The category inherits from `FutureWarning`, so it stays visible under default Python warning filters. Applications can promote only this package category to an error:
+
+```python
+import warnings
+import mlbstatsapi
+
+warnings.filterwarnings(
+    "error",
+    category=mlbstatsapi.MlbHttpCompatibilityWarning,
+)
+```
+
+Filter on `mlbstatsapi.MlbHttpCompatibilityWarning` specifically rather than disabling all warnings or all `FutureWarning` instances, which would also hide unrelated notices from other libraries. No warning is emitted for successful responses, 404 responses, intermediate retries, final 5xx responses, or in strict mode.
 
 ### Custom timeouts
 
@@ -156,12 +209,50 @@ Ownership rules:
 
 ```text
 Library-created Session
-    The library owns and closes it
+    The library configures and closes it
 Caller-injected Session
-    The caller owns and closes it
+    The caller configures and closes it
 ```
 
-`Mlb.close()` does not close a caller-injected Session, and exiting `with Mlb(session=session)` does not close the injected Session either. The library does not replace or reconfigure adapters on an injected Session. Callers control custom retry, TLS, proxy, and adapter configuration.
+`Mlb.close()` does not close a caller-injected Session, and exiting `with Mlb(session=session)` does not close the injected Session either. The library does not replace or reconfigure adapters or headers on an injected Session. Callers control custom retry, TLS, proxy, header, and adapter configuration.
+
+### Reusing the retry policy on a caller-managed Session
+
+`create_retry_policy()` is public in version 0.9.0. It returns a new instance of the same tested policy the library mounts on Sessions it creates, so a caller-managed Session can opt in to identical retry behavior:
+
+```python
+import requests
+import mlbstatsapi
+
+session = requests.Session()
+adapter = requests.adapters.HTTPAdapter(
+    max_retries=mlbstatsapi.create_retry_policy(),
+)
+session.mount("https://", adapter)
+session.mount("http://", adapter)
+
+try:
+    with mlbstatsapi.Mlb(session=session) as mlb:
+        player = mlb.get_person(664034)
+finally:
+    session.close()
+```
+
+* The caller mounts the adapters
+* The caller closes the injected Session
+* The library never reconfigures an injected Session
+
+### Versioned User-Agent
+
+A Session created by the library sends a package-specific User-Agent:
+
+```text
+python-mlb-statsapi/<installed-version>
+```
+
+For this release that resolves to `python-mlb-statsapi/0.9.0`. The version is read from the installed distribution metadata, so it always matches the installed release. Only the `User-Agent` header is set; other Requests defaults such as `Accept-Encoding` remain intact, and the header carries no identifiers beyond the package name and version.
+
+Headers on a caller-injected Session are left untouched, so applications that set their own User-Agent keep it.
 
 ### Structured exception handling
 
@@ -176,11 +267,12 @@ except mlbstatsapi.MlbTimeoutError:
 except mlbstatsapi.MlbTransportError:
     print("The request could not reach the MLB API")
 except mlbstatsapi.MlbHttpError as exc:
-    print(
-        exc.status_code,
-        exc.reason,
-        exc.url,
-    )
+    print(exc.method)
+    print(exc.status_code)
+    print(exc.reason)
+    print(exc.url)
+    print(exc.response_data)
+    print(exc.body_excerpt)
 except mlbstatsapi.MlbDecodeError:
     print("The MLB API returned invalid JSON")
 ```
@@ -189,6 +281,8 @@ except mlbstatsapi.MlbDecodeError:
 * `MlbTransportError` represents other request transport failures
 * `MlbHttpError` represents an unexpected final HTTP response
 * `MlbDecodeError` represents invalid JSON in a successful response
+
+Version 0.9.0 adds `method`, `response_data`, and `body_excerpt` to `MlbHttpError` alongside the existing `status_code`, `reason`, and `url`. `response_data` holds the decoded JSON dictionary or list when the error body contains one, and is `None` otherwise. `body_excerpt` is a bounded excerpt of the response text, capped at 500 characters. Complete response bodies are never automatically logged, and `str(exc)` stays concise.
 
 ### Backward-compatible exception handling
 
@@ -224,11 +318,11 @@ Backoff factor: 0.5
 Retry-After respected: yes
 ```
 
-Only GET requests are retried, and retries are bounded. Ordinary client errors such as 400, 401, 403, and 404 are not retried. Invalid JSON and Pydantic validation failures are not retried. Retries improve resilience for transient failures, but they do not guarantee success.
+Only GET requests are retried, and retries are bounded. Ordinary client errors such as 400, 401, 403, and 404 are not retried. Invalid JSON and Pydantic validation failures are not retried. Retries improve resilience for transient failures, but they do not guarantee success. The retry values are unchanged from version 0.8.0.
 
 ### Existing 404 compatibility
 
-Version 0.8.0 preserves existing endpoint-specific not-found behavior. Depending on the endpoint, a 404 may still produce:
+Version 0.9.0 preserves existing endpoint-specific not-found behavior in both compatibility mode and strict mode. Depending on the endpoint, a 404 may still produce:
 
 ```text
 None
@@ -236,9 +330,19 @@ None
 {}
 ```
 
-Not every 404 raises `MlbHttpError`.
+Not every 404 raises `MlbHttpError`, and strict mode does not change that.
 
-See the [HTTP transport documentation](docs/http-transport.md) for the complete retry policy, Session ownership rules, cleanup behavior, and exception hierarchy.
+### HTTP behavior at a glance
+
+| Final response | Compatibility mode (default) | Strict mode |
+| -------------- | ---------------------------- | ----------- |
+| Successful 2xx | Normal result | Normal result |
+| Non-404 4xx | Warning and historical empty result | `MlbHttpError` |
+| 404 | Existing endpoint behavior | Existing endpoint behavior |
+| Final 429 | Warning and historical empty result | `MlbHttpError` |
+| Final 5xx | `MlbHttpError` | `MlbHttpError` |
+
+See the [HTTP transport documentation](docs/http-transport.md) for the complete retry policy, Session ownership rules, warning behavior, cleanup behavior, and exception hierarchy, and the [0.9.0 release notes](docs/releases/0.9.0.md) for the release summary and migration guidance.
 
 ## Working with Pydantic Models
 
@@ -376,8 +480,12 @@ Full local validation:
 
 ```bash
 poetry run pytest tests/
+rm -rf dist
 poetry build
+python3 scripts/validate_release.py
 ```
+
+`scripts/validate_release.py` is the same release check offline CI runs. It inspects the built wheel and source distribution, installs the wheel into a temporary virtual environment, and runs a public-import smoke test against the installed package. It never contacts the MLB API.
 
 Offline CI is the normal pull-request gate. External tests are available manually, on a weekly schedule, and before releases.
 
