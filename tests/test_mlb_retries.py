@@ -27,6 +27,7 @@ from http_contract_support import (
     NON_RETRYABLE_CLIENT_ERRORS,
     RETRYABLE_STATUS_CODES,
     SERVER_ERRORS,
+    XFAIL_PENDING_STRICT_DEFAULT,
     assert_library_retry_policy,
 )
 
@@ -285,14 +286,14 @@ def test_bounded_persistent_server_errors_raise_after_four_attempts(
     assert _ScriptedHandler.request_count == 4
 
 
-def test_final_429_returns_empty_mlb_result(
+def test_final_429_returns_empty_mlb_result_in_compatibility_mode(
     scripted_http_server,
     no_retry_sleep,
 ):
-    """After retry exhaustion, a final 429 still returns an empty MlbResult."""
+    """After retry exhaustion, compatibility mode returns an empty MlbResult."""
     configure, port = scripted_http_server
     configure([429, 429, 429, 429, 429, 429])
-    adapter = _adapter_against_local_server(port)
+    adapter = _adapter_against_local_server(port, strict_http=False)
 
     try:
         result = adapter.get(endpoint="sports")
@@ -305,15 +306,57 @@ def test_final_429_returns_empty_mlb_result(
     assert _ScriptedHandler.request_count == 4
 
 
-def test_final_429_warns_once_after_retry_exhaustion(
+@XFAIL_PENDING_STRICT_DEFAULT
+def test_final_429_raises_mlb_http_error_after_retry_exhaustion_default_adapter(
+    scripted_http_server,
+    no_retry_sleep,
+):
+    """Default MlbDataAdapter() raises MlbHttpError after retry exhaustion."""
+    configure, port = scripted_http_server
+    configure([429, 429, 429, 429, 429, 429])
+    adapter = _adapter_against_local_server(port)
+
+    try:
+        with pytest.raises(MlbHttpError) as exc_info:
+            adapter.get(endpoint="sports")
+    finally:
+        adapter.close()
+
+    assert _ScriptedHandler.request_count == 4
+    assert exc_info.value.status_code == 429
+    assert exc_info.value.method == "GET"
+
+
+@XFAIL_PENDING_STRICT_DEFAULT
+def test_final_429_raises_via_default_mlb_client_after_retry_exhaustion(
+    scripted_http_server,
+    no_retry_sleep,
+):
+    """Default Mlb() raises MlbHttpError after retries when the final response is 429."""
+    configure, port = scripted_http_server
+    configure([429, 429, 429, 429, 429, 429])
+    mlb = Mlb()
+    mlb._mlb_adapter_v1.url = f"http://127.0.0.1:{port}/api/v1/"
+
+    try:
+        with pytest.raises(MlbHttpError) as exc_info:
+            mlb._mlb_adapter_v1.get(endpoint="sports")
+    finally:
+        mlb.close()
+
+    assert _ScriptedHandler.request_count == 4
+    assert exc_info.value.status_code == 429
+    assert exc_info.value.method == "GET"
+
+
+def test_final_429_warns_once_after_retry_exhaustion_in_compatibility_mode(
     scripted_http_server,
     no_retry_sleep,
 ):
     """Compatibility mode warns only after the final 429, not per retry attempt."""
     configure, port = scripted_http_server
     configure([429, 429, 429, 429, 429, 429])
-    # Library-created Session keeps the mounted retry adapter; do not inject a mock.
-    adapter = _adapter_against_local_server(port)
+    adapter = _adapter_against_local_server(port, strict_http=False)
 
     try:
         with warnings.catch_warnings(record=True) as caught:
