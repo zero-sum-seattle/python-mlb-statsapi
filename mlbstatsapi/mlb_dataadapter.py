@@ -1,3 +1,4 @@
+from importlib.metadata import PackageNotFoundError, version as package_version
 from typing import Dict
 
 from .exceptions import (
@@ -6,7 +7,9 @@ from .exceptions import (
     MlbTimeoutError,
     MlbTransportError,
 )
+from .warnings import MlbHttpCompatibilityWarning
 import logging
+import warnings
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -17,8 +20,114 @@ from urllib3.util.retry import Retry
 DEFAULT_TIMEOUT = (3.05, 30.0)
 TimeoutType = int | float | tuple[float, float]
 
+# Distribution name published on PyPI; the User-Agent version is read from its
+# installed metadata so no release version is duplicated in source.
+PACKAGE_DISTRIBUTION_NAME = "python-mlb-statsapi"
+UNKNOWN_PACKAGE_VERSION = "unknown"
 
-def _build_retry_policy() -> Retry:
+# Bounded excerpt for error response bodies attached to MlbHttpError.
+HTTP_ERROR_BODY_EXCERPT_LIMIT = 500
+
+# Frames from warnings.warn() out to whoever called MlbDataAdapter.get(), so the
+# warning points at application code rather than the helper below.
+COMPATIBILITY_WARNING_STACKLEVEL = 3
+
+
+def _warn_http_compatibility(
+    *,
+    status_code: int,
+    url: str,
+) -> None:
+    """Warn that compatibility mode suppressed an error strict mode would raise.
+
+    Only the status code and URL are reported; response bodies, headers, and
+    credentials must never reach a warning message.
+    """
+    warnings.warn(
+        (
+            f"HTTP {status_code} for {url} was handled through compatibility mode "
+            "and returned the historical empty result. Pass strict_http=True to "
+            "raise MlbHttpError. This compatibility behavior may change in "
+            "version 1.0."
+        ),
+        MlbHttpCompatibilityWarning,
+        stacklevel=COMPATIBILITY_WARNING_STACKLEVEL,
+    )
+
+
+def _extract_error_response_data(
+    response: requests.Response,
+) -> dict | list | None:
+    """Best-effort JSON object/list extraction from an error response.
+
+    Returns None for empty bodies, invalid JSON, scalars, or unexpected failures.
+    Must not raise; context extraction cannot replace the original HTTP error.
+    """
+    try:
+        if not response.content:
+            return None
+        data = response.json()
+    except Exception:
+        return None
+
+    if isinstance(data, (dict, list)):
+        return data
+    return None
+
+
+def _extract_error_body_excerpt(
+    response: requests.Response,
+) -> str | None:
+    """Best-effort bounded text excerpt from an error response body.
+
+    Returns None for empty bodies or unexpected text-decoding failures.
+    Must not raise; context extraction cannot replace the original HTTP error.
+    """
+    try:
+        if not response.content:
+            return None
+        text = response.text
+    except Exception:
+        return None
+
+    if not text:
+        return None
+    return text[:HTTP_ERROR_BODY_EXCERPT_LIMIT]
+
+
+def _build_http_error(
+    response: requests.Response,
+    *,
+    method: str,
+    fallback_url: str,
+) -> MlbHttpError:
+    """Build an MlbHttpError with best-effort response context.
+
+    Extraction failures must not prevent raising MlbHttpError with status,
+    reason, URL, and method.
+    """
+    try:
+        response_data = _extract_error_response_data(response)
+    except Exception:
+        response_data = None
+
+    try:
+        body_excerpt = _extract_error_body_excerpt(response)
+    except Exception:
+        body_excerpt = None
+
+    return MlbHttpError(
+        status_code=response.status_code,
+        reason=response.reason,
+        url=response.url or fallback_url,
+        method=method,
+        response_data=response_data,
+        body_excerpt=body_excerpt,
+    )
+
+
+def create_retry_policy() -> Retry:
+    """Create a new instance of the default MLB HTTP retry policy."""
     return Retry(
         total=3,
         connect=3,
@@ -49,15 +158,43 @@ def _configure_retry_adapters(
     session.mount(
         "https://",
         HTTPAdapter(
-            max_retries=_build_retry_policy()
+            max_retries=create_retry_policy(),
         ),
     )
     session.mount(
         "http://",
         HTTPAdapter(
-            max_retries=_build_retry_policy()
+            max_retries=create_retry_policy(),
         ),
     )
+
+
+def _build_user_agent() -> str:
+    """Build the package User-Agent from installed distribution metadata.
+
+    Falls back to an "unknown" version for source-only environments where the
+    distribution metadata is not installed. This must never raise, because it
+    runs while a library-created Session is being constructed.
+    """
+    try:
+        installed_version = package_version(PACKAGE_DISTRIBUTION_NAME)
+    except PackageNotFoundError:
+        installed_version = UNKNOWN_PACKAGE_VERSION
+    return f"{PACKAGE_DISTRIBUTION_NAME}/{installed_version}"
+
+
+def _configure_library_session(
+    session: requests.Session,
+) -> None:
+    """Apply library defaults to a Session the library created and owns.
+
+    Caller-injected Sessions must not be passed here; their headers and
+    adapters stay under the caller's control.
+    """
+    # Only the User-Agent is replaced so the remaining Requests default
+    # headers (Accept-Encoding, Accept, Connection) are preserved.
+    session.headers["User-Agent"] = _build_user_agent()
+    _configure_retry_adapters(session)
 
 
 class MlbResult:
@@ -109,14 +246,17 @@ class MlbDataAdapter:
         logger: logging.Logger | None = None,
         timeout: TimeoutType = DEFAULT_TIMEOUT,
         session: requests.Session | None = None,
+        *,
+        strict_http: bool = False,
     ):
         self.url = f'https://{hostname}/api/{ver}/'
         self._logger = logger or logging.getLogger(__name__)
         self._timeout = timeout
+        self._strict_http = strict_http
         self._owns_session = session is None
         if session is None:
             self._session = requests.Session()
-            _configure_retry_adapters(self._session)
+            _configure_library_session(self._session)
         else:
             self._session = session
         self._closed = False
@@ -167,6 +307,19 @@ class MlbDataAdapter:
                 response.reason,
                 response.url,
             ))
+            # Strict mode raises for final non-404 4xx after retries are exhausted.
+            # 404 stays an empty MlbResult so endpoints keep None / [] / {} behavior.
+            if self._strict_http and status_code != 404:
+                raise _build_http_error(
+                    response,
+                    method="GET",
+                    fallback_url=full_url,
+                )
+            if status_code != 404:
+                _warn_http_compatibility(
+                    status_code=status_code,
+                    url=response.url or full_url,
+                )
             return MlbResult(
                 status_code=status_code,
                 message=response.reason,
@@ -180,17 +333,17 @@ class MlbDataAdapter:
                 response.reason,
                 response.url,
             ))
-            raise MlbHttpError(
-                status_code=status_code,
-                reason=response.reason,
-                url=response.url,
+            raise _build_http_error(
+                response,
+                method="GET",
+                fallback_url=full_url,
             )
 
         if not 200 <= status_code <= 299:
-            raise MlbHttpError(
-                status_code=status_code,
-                reason=response.reason,
-                url=response.url,
+            raise _build_http_error(
+                response,
+                method="GET",
+                fallback_url=full_url,
             )
 
         self._logger.debug(msg=logline_post.format(

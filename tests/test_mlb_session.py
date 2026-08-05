@@ -1,16 +1,27 @@
-"""Offline tests for shared HTTP sessions and configurable timeouts.
+"""Offline tests for shared HTTP sessions, timeouts, and the package User-Agent.
 
-These tests cover session injection, ownership, cleanup, sharing, and timeout
-forwarding without calling the live MLB API.
+These tests cover session injection, ownership, cleanup, sharing, header
+handling, and timeout forwarding without calling the live MLB API.
 """
 
+from importlib.metadata import PackageNotFoundError
 from unittest.mock import MagicMock, patch
 
 import pytest
 import requests
 
 from mlbstatsapi import Mlb, MlbDataAdapter, MlbHttpError, TheMlbStatsApiException
-from mlbstatsapi.mlb_dataadapter import DEFAULT_TIMEOUT
+from mlbstatsapi.mlb_dataadapter import (
+    DEFAULT_TIMEOUT,
+    PACKAGE_DISTRIBUTION_NAME,
+    _configure_library_session,
+)
+
+from http_contract_support import assert_library_retry_policy
+
+
+MOCKED_PACKAGE_VERSION = "9.8.7"
+MOCKED_USER_AGENT = f"python-mlb-statsapi/{MOCKED_PACKAGE_VERSION}"
 
 
 class RecordingSession:
@@ -200,6 +211,18 @@ def test_mlb_configured_timeout_reaches_both_adapters():
     assert session.calls[1]["url"].endswith("/api/v1.1/game")
 
 
+def test_mlb_scalar_timeout_reaches_both_adapters():
+    """Scalar Mlb(timeout=...) values are forwarded unchanged to both adapters."""
+    session = RecordingSession()
+    mlb = Mlb(session=session, timeout=10)
+
+    mlb._mlb_adapter_v1.get(endpoint="sports")
+    mlb._mlb_adapter_v1_1.get(endpoint="game")
+
+    assert session.calls[0]["timeout"] == 10
+    assert session.calls[1]["timeout"] == 10
+
+
 def test_mlb_default_timeout_passed_to_session():
     session = RecordingSession()
     mlb = Mlb(session=session)
@@ -216,9 +239,43 @@ def test_injected_session_is_shared_by_both_adapters():
     session = RecordingSession()
     mlb = Mlb(session=session)
 
+    assert mlb._session is session
     assert mlb._mlb_adapter_v1._session is session
     assert mlb._mlb_adapter_v1_1._session is session
     assert mlb._mlb_adapter_v1._session is mlb._mlb_adapter_v1_1._session
+
+
+def test_injected_session_is_not_replaced_with_library_session():
+    """Caller-injected Sessions are used as-is; the library creates no replacement."""
+    session = requests.Session()
+    with patch("mlbstatsapi.mlb_api.requests.Session") as session_cls:
+        mlb = Mlb(session=session)
+
+        session_cls.assert_not_called()
+        assert mlb._session is session
+        assert mlb._mlb_adapter_v1._session is session
+        assert mlb._mlb_adapter_v1_1._session is session
+        assert mlb._owns_session is False
+
+    mlb.close()
+    session.close()
+
+
+def test_injected_session_headers_and_user_agent_are_not_modified():
+    """Injected Session headers, including User-Agent, stay under caller control."""
+    session = requests.Session()
+    session.headers["User-Agent"] = "caller-agent/1.0"
+    session.headers["X-Caller-Header"] = "keep-me"
+    headers_before = dict(session.headers)
+
+    mlb = Mlb(session=session)
+    try:
+        assert dict(session.headers) == headers_before
+        assert session.headers["User-Agent"] == "caller-agent/1.0"
+        assert session.headers["X-Caller-Header"] == "keep-me"
+    finally:
+        mlb.close()
+        session.close()
 
 
 def test_library_created_session_is_shared_by_both_adapters():
@@ -390,3 +447,178 @@ def test_adapter_positional_hostname_version_and_logger():
     adapter = MlbDataAdapter("statsapi.mlb.com", "v1.1", logger)
     assert adapter._logger is logger
     adapter.close()
+
+
+# --- Versioned User-Agent ---
+
+
+@pytest.fixture
+def mocked_package_version():
+    """Patch the metadata lookup the production User-Agent helper uses."""
+    with patch(
+        "mlbstatsapi.mlb_dataadapter.package_version",
+        return_value=MOCKED_PACKAGE_VERSION,
+    ) as lookup:
+        yield lookup
+
+
+def test_user_agent_version_comes_from_package_metadata(mocked_package_version):
+    """The User-Agent version is read from installed distribution metadata."""
+    session = requests.Session()
+    try:
+        _configure_library_session(session)
+
+        assert session.headers["User-Agent"] == MOCKED_USER_AGENT
+    finally:
+        session.close()
+
+    mocked_package_version.assert_called_with(PACKAGE_DISTRIBUTION_NAME)
+
+
+def test_mlb_library_created_session_has_versioned_user_agent(mocked_package_version):
+    """Library-created Mlb Sessions send the package and version User-Agent."""
+    mlb = Mlb()
+    try:
+        user_agent = mlb._session.headers["User-Agent"]
+
+        assert "python-mlb-statsapi" in user_agent
+        assert user_agent == MOCKED_USER_AGENT
+    finally:
+        mlb.close()
+
+
+def test_standalone_adapter_session_has_versioned_user_agent(mocked_package_version):
+    """Library-created standalone adapter Sessions use the same User-Agent."""
+    adapter = MlbDataAdapter()
+    try:
+        assert adapter._session.headers["User-Agent"] == MOCKED_USER_AGENT
+    finally:
+        adapter.close()
+
+
+def test_prepared_request_carries_versioned_user_agent(mocked_package_version):
+    """The versioned User-Agent reaches the outgoing prepared request."""
+    mlb = Mlb()
+    try:
+        prepared = mlb._session.prepare_request(
+            requests.Request("GET", "https://example.test"),
+        )
+
+        assert prepared.headers["User-Agent"] == MOCKED_USER_AGENT
+    finally:
+        mlb.close()
+
+
+def test_library_created_session_preserves_requests_default_headers():
+    """Only User-Agent changes; other Requests default headers are untouched."""
+    baseline = requests.Session()
+    mlb = Mlb()
+    try:
+        for header, value in baseline.headers.items():
+            if header.lower() == "user-agent":
+                continue
+            assert mlb._session.headers[header] == value
+
+        for header in ("Accept-Encoding", "Accept", "Connection"):
+            assert mlb._session.headers[header] == baseline.headers[header]
+
+        assert mlb._session.headers["User-Agent"] != baseline.headers["User-Agent"]
+    finally:
+        mlb.close()
+        baseline.close()
+
+
+def test_injected_session_user_agent_is_preserved():
+    """A caller-provided User-Agent is never overwritten by the library."""
+    session = requests.Session()
+    session.headers["User-Agent"] = "my-baseball-project/1.0"
+
+    mlb = Mlb(session=session)
+    try:
+        assert session.headers["User-Agent"] == "my-baseball-project/1.0"
+        assert mlb._session.headers["User-Agent"] == "my-baseball-project/1.0"
+    finally:
+        mlb.close()
+
+    assert session.headers["User-Agent"] == "my-baseball-project/1.0"
+    session.close()
+
+
+def test_injected_session_custom_headers_are_preserved():
+    """Custom headers on an injected Session survive construction and close()."""
+    session = requests.Session()
+    session.headers.update(
+        {
+            "User-Agent": "my-baseball-project/1.0",
+            "X-Application": "scoreboard",
+        }
+    )
+    headers_before = dict(session.headers)
+
+    mlb = Mlb(session=session)
+    mlb.close()
+
+    assert dict(session.headers) == headers_before
+    assert session.headers["User-Agent"] == "my-baseball-project/1.0"
+    assert session.headers["X-Application"] == "scoreboard"
+    session.close()
+
+
+def test_standalone_adapter_injected_session_headers_are_preserved():
+    """A Session injected into MlbDataAdapter keeps all caller headers."""
+    session = requests.Session()
+    session.headers.update(
+        {
+            "User-Agent": "my-baseball-project/1.0",
+            "X-Application": "scoreboard",
+        }
+    )
+    headers_before = dict(session.headers)
+
+    adapter = MlbDataAdapter(session=session)
+    try:
+        assert dict(session.headers) == headers_before
+        assert session.headers["User-Agent"] == "my-baseball-project/1.0"
+        assert session.headers["X-Application"] == "scoreboard"
+    finally:
+        adapter.close()
+        session.close()
+
+
+def test_user_agent_falls_back_when_package_metadata_is_missing():
+    """Missing distribution metadata yields a safe value instead of raising."""
+    with patch(
+        "mlbstatsapi.mlb_dataadapter.package_version",
+        side_effect=PackageNotFoundError(PACKAGE_DISTRIBUTION_NAME),
+    ):
+        session = requests.Session()
+        try:
+            _configure_library_session(session)
+
+            assert session.headers["User-Agent"] == "python-mlb-statsapi/unknown"
+        finally:
+            session.close()
+
+
+def test_mlb_construction_succeeds_without_package_metadata():
+    """Client construction still works in source-only environments."""
+    with patch(
+        "mlbstatsapi.mlb_dataadapter.package_version",
+        side_effect=PackageNotFoundError(PACKAGE_DISTRIBUTION_NAME),
+    ):
+        mlb = Mlb()
+        try:
+            assert mlb._session.headers["User-Agent"] == "python-mlb-statsapi/unknown"
+        finally:
+            mlb.close()
+
+
+def test_user_agent_does_not_change_library_retry_adapters(mocked_package_version):
+    """Setting the User-Agent leaves the mounted retry adapters intact."""
+    mlb = Mlb()
+    try:
+        assert mlb._session.headers["User-Agent"] == MOCKED_USER_AGENT
+        assert_library_retry_policy(mlb._session.get_adapter("https://").max_retries)
+        assert_library_retry_policy(mlb._session.get_adapter("http://").max_retries)
+    finally:
+        mlb.close()

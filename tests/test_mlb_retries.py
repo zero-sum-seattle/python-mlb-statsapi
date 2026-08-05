@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import threading
+import warnings
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Iterable
 
@@ -12,45 +13,74 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from mlbstatsapi import Mlb, MlbDataAdapter, MlbHttpError, MlbResult
+import mlbstatsapi
+from mlbstatsapi import (
+    Mlb,
+    MlbDataAdapter,
+    MlbHttpCompatibilityWarning,
+    MlbHttpError,
+    MlbResult,
+    create_retry_policy,
+)
+
+from http_contract_support import (
+    NON_RETRYABLE_CLIENT_ERRORS,
+    RETRYABLE_STATUS_CODES,
+    SERVER_ERRORS,
+    assert_library_retry_policy,
+)
 
 
-def _assert_retry_policy(retry: Retry) -> None:
-    assert retry.total == 3
-    assert retry.connect == 3
-    assert retry.read == 2
-    assert retry.status == 3
-    assert retry.backoff_factor == 0.5
-    assert set(retry.status_forcelist) == {429, 500, 502, 503, 504}
-    assert retry.allowed_methods == frozenset({"GET"})
-    assert retry.respect_retry_after_header is True
-    assert retry.raise_on_status is False
-    assert "POST" not in retry.allowed_methods
-    assert "PATCH" not in retry.allowed_methods
-    assert "DELETE" not in retry.allowed_methods
+def test_create_retry_policy_is_publicly_importable():
+    """create_retry_policy is available through the package public API."""
+    assert callable(mlbstatsapi.create_retry_policy)
+    assert create_retry_policy is mlbstatsapi.create_retry_policy
+
+
+def test_create_retry_policy_returns_retry_instance():
+    """create_retry_policy returns an urllib3 Retry with the library policy."""
+    policy = create_retry_policy()
+    assert isinstance(policy, Retry)
+    assert_library_retry_policy(policy)
+
+
+def test_create_retry_policy_returns_independent_instances():
+    """Each call returns a distinct Retry instance with the same configuration."""
+    first = create_retry_policy()
+    second = create_retry_policy()
+    assert first is not second
+    assert_library_retry_policy(first)
+    assert_library_retry_policy(second)
 
 
 def test_library_created_mlb_session_has_retry_policy():
+    """Library-created Mlb Sessions mount the default retry policy on http/https."""
     mlb = Mlb()
     try:
-        for scheme in ("https://", "http://"):
-            adapter = mlb._session.get_adapter(scheme)
-            _assert_retry_policy(adapter.max_retries)
+        https_adapter = mlb._session.get_adapter("https://")
+        http_adapter = mlb._session.get_adapter("http://")
+        assert_library_retry_policy(https_adapter.max_retries)
+        assert_library_retry_policy(http_adapter.max_retries)
+        assert https_adapter.max_retries is not http_adapter.max_retries
     finally:
         mlb.close()
 
 
 def test_library_created_adapter_session_has_retry_policy():
+    """Library-created MlbDataAdapter Sessions mount the default retry policy."""
     adapter = MlbDataAdapter()
     try:
-        for scheme in ("https://", "http://"):
-            http_adapter = adapter._session.get_adapter(scheme)
-            _assert_retry_policy(http_adapter.max_retries)
+        https_adapter = adapter._session.get_adapter("https://")
+        http_adapter = adapter._session.get_adapter("http://")
+        assert_library_retry_policy(https_adapter.max_retries)
+        assert_library_retry_policy(http_adapter.max_retries)
+        assert https_adapter.max_retries is not http_adapter.max_retries
     finally:
         adapter.close()
 
 
 def test_injected_session_adapters_are_not_replaced():
+    """Mlb must not replace adapters or retry config on an injected Session."""
     session = requests.Session()
     custom_adapter = HTTPAdapter(max_retries=0)
     session.mount("https://", custom_adapter)
@@ -58,12 +88,14 @@ def test_injected_session_adapters_are_not_replaced():
     mlb = Mlb(session=session)
     try:
         assert session.get_adapter("https://") is custom_adapter
+        assert session.get_adapter("https://").max_retries.total == 0
     finally:
         mlb.close()
         session.close()
 
 
 def test_injected_adapter_session_adapters_are_not_replaced():
+    """Standalone adapters must not replace adapters on an injected Session."""
     session = requests.Session()
     custom_adapter = HTTPAdapter(max_retries=0)
     session.mount("http://", custom_adapter)
@@ -71,8 +103,34 @@ def test_injected_adapter_session_adapters_are_not_replaced():
     adapter = MlbDataAdapter(session=session)
     try:
         assert session.get_adapter("http://") is custom_adapter
+        assert session.get_adapter("http://").max_retries.total == 0
     finally:
         adapter.close()
+        session.close()
+
+
+def test_caller_can_opt_in_to_public_retry_policy():
+    """Callers may mount create_retry_policy() on their own Session."""
+    session = requests.Session()
+    https_adapter = HTTPAdapter(max_retries=create_retry_policy())
+    http_adapter = HTTPAdapter(max_retries=create_retry_policy())
+    session.mount("https://", https_adapter)
+    session.mount("http://", http_adapter)
+
+    mlb = Mlb(session=session)
+    try:
+        assert mlb._session is session
+        assert mlb._owns_session is False
+        assert session.get_adapter("https://") is https_adapter
+        assert session.get_adapter("http://") is http_adapter
+        assert_library_retry_policy(https_adapter.max_retries)
+        assert_library_retry_policy(http_adapter.max_retries)
+        assert https_adapter.max_retries is not http_adapter.max_retries
+    finally:
+        mlb.close()
+        # Injected Sessions remain caller-owned after Mlb.close().
+        assert session.get_adapter("https://") is https_adapter
+        assert session.get_adapter("http://") is http_adapter
         session.close()
 
 
@@ -134,8 +192,12 @@ def no_retry_sleep(monkeypatch):
     monkeypatch.setattr(Retry, "sleep", lambda self, response=None: None)
 
 
-def _adapter_against_local_server(port: int) -> MlbDataAdapter:
-    adapter = MlbDataAdapter()
+def _adapter_against_local_server(
+    port: int,
+    *,
+    strict_http: bool = False,
+) -> MlbDataAdapter:
+    adapter = MlbDataAdapter(strict_http=strict_http)
     adapter.url = f"http://127.0.0.1:{port}/api/v1/"
     return adapter
 
@@ -144,6 +206,7 @@ def test_retries_recover_from_two_500_responses(
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Transient 500s are retried and a later 200 succeeds."""
     configure, port = scripted_http_server
     configure([500, 500, 200])
     adapter = _adapter_against_local_server(port)
@@ -159,15 +222,13 @@ def test_retries_recover_from_two_500_responses(
     assert _ScriptedHandler.request_count == 3
 
 
-@pytest.mark.parametrize(
-    "retryable_status",
-    [429, 500, 502, 503, 504],
-)
+@pytest.mark.parametrize("retryable_status", RETRYABLE_STATUS_CODES)
 def test_retries_retryable_statuses_then_succeed(
     retryable_status,
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Each retryable status is retried once and can recover on success."""
     configure, port = scripted_http_server
     configure([retryable_status, 200])
     adapter = _adapter_against_local_server(port)
@@ -182,15 +243,13 @@ def test_retries_retryable_statuses_then_succeed(
     assert _ScriptedHandler.request_count == 2
 
 
-@pytest.mark.parametrize(
-    "status_code",
-    [400, 401, 403, 404],
-)
+@pytest.mark.parametrize("status_code", NON_RETRYABLE_CLIENT_ERRORS)
 def test_non_retryable_client_errors_are_not_retried(
     status_code,
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Ordinary client errors are returned immediately without retries."""
     configure, port = scripted_http_server
     configure([status_code, 200])
     adapter = _adapter_against_local_server(port)
@@ -205,12 +264,15 @@ def test_non_retryable_client_errors_are_not_retried(
     assert _ScriptedHandler.request_count == 1
 
 
-def test_bounded_persistent_500_raises_after_four_attempts(
+@pytest.mark.parametrize("status_code", SERVER_ERRORS)
+def test_bounded_persistent_server_errors_raise_after_four_attempts(
+    status_code,
     scripted_http_server,
     no_retry_sleep,
 ):
+    """Persistent server errors raise MlbHttpError after initial try plus 3 retries."""
     configure, port = scripted_http_server
-    configure([500, 500, 500, 500, 500, 500])
+    configure([status_code] * 6)
     adapter = _adapter_against_local_server(port)
 
     try:
@@ -219,8 +281,7 @@ def test_bounded_persistent_500_raises_after_four_attempts(
     finally:
         adapter.close()
 
-    assert exc_info.value.status_code == 500
-    assert exc_info.value.reason == "Internal Server Error"
+    assert exc_info.value.status_code == status_code
     assert _ScriptedHandler.request_count == 4
 
 
@@ -228,6 +289,7 @@ def test_final_429_returns_empty_mlb_result(
     scripted_http_server,
     no_retry_sleep,
 ):
+    """After retry exhaustion, a final 429 still returns an empty MlbResult."""
     configure, port = scripted_http_server
     configure([429, 429, 429, 429, 429, 429])
     adapter = _adapter_against_local_server(port)
@@ -243,7 +305,81 @@ def test_final_429_returns_empty_mlb_result(
     assert _ScriptedHandler.request_count == 4
 
 
+def test_final_429_warns_once_after_retry_exhaustion(
+    scripted_http_server,
+    no_retry_sleep,
+):
+    """Compatibility mode warns only after the final 429, not per retry attempt."""
+    configure, port = scripted_http_server
+    configure([429, 429, 429, 429, 429, 429])
+    # Library-created Session keeps the mounted retry adapter; do not inject a mock.
+    adapter = _adapter_against_local_server(port)
+
+    try:
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", MlbHttpCompatibilityWarning)
+            result = adapter.get(endpoint="sports")
+    finally:
+        adapter.close()
+
+    compatibility_warnings = [
+        item
+        for item in caught
+        if issubclass(item.category, MlbHttpCompatibilityWarning)
+    ]
+
+    assert _ScriptedHandler.request_count == 4
+    assert len(compatibility_warnings) == 1
+    assert "429" in str(compatibility_warnings[0].message)
+    assert isinstance(result, MlbResult)
+    assert result.status_code == 429
+    assert result.data == {}
+
+
+def test_final_429_raises_mlb_http_error_in_strict_mode(
+    scripted_http_server,
+    no_retry_sleep,
+):
+    """Strict mode raises MlbHttpError only after retry exhaustion on final 429."""
+    configure, port = scripted_http_server
+    configure([429, 429, 429, 429, 429, 429])
+    # Library-created Session keeps the mounted retry adapter; do not inject a mock.
+    adapter = _adapter_against_local_server(port, strict_http=True)
+
+    try:
+        with pytest.raises(MlbHttpError) as exc_info:
+            adapter.get(endpoint="sports")
+    finally:
+        adapter.close()
+
+    assert _ScriptedHandler.request_count == 4
+    assert exc_info.value.status_code == 429
+    assert exc_info.value.method == "GET"
+
+
+def test_final_429_raises_via_strict_mlb_client(
+    scripted_http_server,
+    no_retry_sleep,
+):
+    """Mlb(strict_http=True) raises after retries when the final response is 429."""
+    configure, port = scripted_http_server
+    configure([429, 429, 429, 429, 429, 429])
+    mlb = Mlb(strict_http=True)
+    mlb._mlb_adapter_v1.url = f"http://127.0.0.1:{port}/api/v1/"
+
+    try:
+        with pytest.raises(MlbHttpError) as exc_info:
+            mlb._mlb_adapter_v1.get(endpoint="sports")
+    finally:
+        mlb.close()
+
+    assert _ScriptedHandler.request_count == 4
+    assert exc_info.value.status_code == 429
+    assert exc_info.value.method == "GET"
+
+
 def test_invalid_json_is_not_retried(no_retry_sleep):
+    """JSON decode failures are not treated as retryable transport errors."""
     class BadJsonHandler(_ScriptedHandler):
         def do_GET(self) -> None:  # noqa: N802
             with self.lock:
