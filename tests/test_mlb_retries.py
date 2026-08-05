@@ -27,9 +27,10 @@ from http_contract_support import (
     NON_RETRYABLE_CLIENT_ERRORS,
     RETRYABLE_STATUS_CODES,
     SERVER_ERRORS,
-    XFAIL_PENDING_STRICT_DEFAULT,
     assert_library_retry_policy,
 )
+
+_UNSET = object()
 
 
 def test_create_retry_policy_is_publicly_importable():
@@ -196,9 +197,12 @@ def no_retry_sleep(monkeypatch):
 def _adapter_against_local_server(
     port: int,
     *,
-    strict_http: bool = False,
+    strict_http=_UNSET,
 ) -> MlbDataAdapter:
-    adapter = MlbDataAdapter(strict_http=strict_http)
+    kwargs = {}
+    if strict_http is not _UNSET:
+        kwargs["strict_http"] = strict_http
+    adapter = MlbDataAdapter(**kwargs)
     adapter.url = f"http://127.0.0.1:{port}/api/v1/"
     return adapter
 
@@ -250,18 +254,23 @@ def test_non_retryable_client_errors_are_not_retried(
     scripted_http_server,
     no_retry_sleep,
 ):
-    """Ordinary client errors are returned immediately without retries."""
+    """Ordinary client errors complete after one attempt without retries."""
     configure, port = scripted_http_server
     configure([status_code, 200])
     adapter = _adapter_against_local_server(port)
 
     try:
-        result = adapter.get(endpoint="sports")
+        if status_code == 404:
+            result = adapter.get(endpoint="sports")
+            assert result.status_code == status_code
+            assert result.data == {}
+        else:
+            with pytest.raises(MlbHttpError) as exc_info:
+                adapter.get(endpoint="sports")
+            assert exc_info.value.status_code == status_code
     finally:
         adapter.close()
 
-    assert result.status_code == status_code
-    assert result.data == {}
     assert _ScriptedHandler.request_count == 1
 
 
@@ -306,7 +315,6 @@ def test_final_429_returns_empty_mlb_result_in_compatibility_mode(
     assert _ScriptedHandler.request_count == 4
 
 
-@XFAIL_PENDING_STRICT_DEFAULT
 def test_final_429_raises_mlb_http_error_after_retry_exhaustion_default_adapter(
     scripted_http_server,
     no_retry_sleep,
@@ -327,7 +335,6 @@ def test_final_429_raises_mlb_http_error_after_retry_exhaustion_default_adapter(
     assert exc_info.value.method == "GET"
 
 
-@XFAIL_PENDING_STRICT_DEFAULT
 def test_final_429_raises_via_default_mlb_client_after_retry_exhaustion(
     scripted_http_server,
     no_retry_sleep,

@@ -52,12 +52,14 @@ class Mlb:
         timeout: TimeoutType = DEFAULT_TIMEOUT,
         session: requests.Session | None = None,
         *,
-        strict_http: bool = False,
+        strict_http: bool = True,
     ):
         # One session is shared by the v1 and v1.1 adapters. The library closes
         # only sessions it creates; caller-injected sessions remain caller-owned.
         # The versioned User-Agent and retry adapters are applied only to
         # library-created Sessions.
+        # strict_http defaults to True in version 1.0; pass False for the
+        # historical empty-result compatibility path on final non-404 4xx.
         self._owns_session = session is None
         if session is None:
             self._session = requests.Session()
