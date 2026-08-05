@@ -26,10 +26,14 @@ from mlbstatsapi import (
 )
 
 from http_contract_support import (
+    API_VERSIONS,
     COMPATIBILITY_CLIENT_ERRORS,
     HTTP_REASON_BY_STATUS,
     NOT_FOUND_STATUS,
     SERVER_ERRORS,
+    XFAIL_PENDING_WARNING_CALL_SITE,
+    adapter_for_api_version,
+    standalone_adapter_for_version,
 )
 
 # Final 429 is retried first, so it is covered in tests/test_mlb_retries.py.
@@ -129,11 +133,22 @@ def test_compatibility_warning_inherits_future_warning():
 # --- Compatibility-mode non-404 4xx warns exactly once ---
 
 
+@pytest.mark.parametrize("api_version", API_VERSIONS)
 @pytest.mark.parametrize("status_code", WARNING_CLIENT_ERRORS)
-def test_compatibility_client_errors_warn_once_and_return_empty_result(status_code):
+def test_compatibility_client_errors_warn_once_and_return_empty_result(
+    api_version,
+    status_code,
+):
     """Non-404 4xx warns once while preserving the historical empty result."""
-    session = _session_for_status(status_code)
-    adapter = MlbDataAdapter(session=session)
+    session = _session_for_status(
+        status_code,
+        url=f"https://statsapi.mlb.com/api/{api_version}/sports",
+    )
+    adapter = standalone_adapter_for_version(
+        session,
+        api_version,
+        strict_http=False,
+    )
 
     with pytest.warns(MlbHttpCompatibilityWarning) as warning_info:
         result = adapter.get(endpoint="sports")
@@ -148,7 +163,7 @@ def test_compatibility_client_errors_warn_once_and_return_empty_result(status_co
 def test_compatibility_warning_message_contains_migration_guidance(status_code):
     """The message carries status, URL, mode, migration, and version guidance."""
     session = _session_for_status(status_code)
-    adapter = MlbDataAdapter(session=session)
+    adapter = MlbDataAdapter(session=session, strict_http=False)
 
     with pytest.warns(MlbHttpCompatibilityWarning) as warning_info:
         adapter.get(endpoint="sports")
@@ -166,7 +181,7 @@ def test_compatibility_warning_excludes_response_body():
     """Response bodies must never leak into the warning message."""
     payload = {"message": "secret client error detail"}
     session = _session_for_status(403, payload=payload)
-    adapter = MlbDataAdapter(session=session)
+    adapter = MlbDataAdapter(session=session, strict_http=False)
 
     with pytest.warns(MlbHttpCompatibilityWarning) as warning_info:
         adapter.get(endpoint="sports")
@@ -183,7 +198,7 @@ def test_compatibility_warning_falls_back_to_request_url():
         reason=HTTP_REASON_BY_STATUS[403],
         url=None,
     )
-    adapter = MlbDataAdapter(session=_session_returning(response))
+    adapter = MlbDataAdapter(session=_session_returning(response), strict_http=False)
 
     with pytest.warns(MlbHttpCompatibilityWarning) as warning_info:
         adapter.get(endpoint="sports")
@@ -191,30 +206,37 @@ def test_compatibility_warning_falls_back_to_request_url():
     assert SPORTS_URL in str(warning_info[0].message)
 
 
-# --- Client wiring: default and explicit compatibility mode ---
+# --- Explicit compatibility mode on Mlb and adapters ---
 
 
+@pytest.mark.parametrize("api_version", API_VERSIONS)
 @pytest.mark.parametrize("status_code", WARNING_CLIENT_ERRORS)
-def test_default_mlb_client_warns_for_non_404_client_errors(status_code):
-    """Mlb() stays in compatibility mode and receives the migration notice."""
-    session = _session_for_status(status_code)
-    mlb = Mlb(session=session)
+def test_explicit_compatibility_mlb_client_warns_for_non_404_client_errors(
+    api_version,
+    status_code,
+):
+    """Mlb(strict_http=False) warns once for non-404 4xx."""
+    session = _session_for_status(
+        status_code,
+        url=f"https://statsapi.mlb.com/api/{api_version}/sports",
+    )
+    mlb = Mlb(session=session, strict_http=False)
 
     with pytest.warns(MlbHttpCompatibilityWarning) as warning_info:
-        result = mlb._mlb_adapter_v1.get(endpoint="sports")
+        result = adapter_for_api_version(mlb, api_version).get(endpoint="sports")
 
     assert result.status_code == status_code
     assert result.data == {}
     assert len(warning_info) == 1
 
 
-def test_default_mlb_client_public_endpoint_warns_and_keeps_return_shape():
+def test_explicit_compatibility_mlb_public_endpoint_warns_and_keeps_return_shape():
     """A public endpoint keeps returning None for 4xx while warning once."""
     session = _session_for_status(
         403,
         url="https://statsapi.mlb.com/api/v1/people/664034",
     )
-    mlb = Mlb(session=session)
+    mlb = Mlb(session=session, strict_http=False)
 
     with pytest.warns(MlbHttpCompatibilityWarning) as warning_info:
         person = mlb.get_person(664034)
@@ -241,21 +263,29 @@ def test_explicit_compatibility_mode_warns_and_preserves_result(status_code):
 # --- Strict mode raises instead of warning ---
 
 
+@pytest.mark.parametrize("api_version", API_VERSIONS)
 @pytest.mark.parametrize("status_code", WARNING_CLIENT_ERRORS)
-def test_strict_mode_raises_without_compatibility_warning(status_code):
+def test_strict_mode_raises_without_compatibility_warning(
+    api_version,
+    status_code,
+):
     """Strict mode raises MlbHttpError and emits no compatibility warning."""
     payload = {"error": HTTP_REASON_BY_STATUS[status_code]}
-    session = _session_for_status(status_code, payload=payload)
+    session = _session_for_status(
+        status_code,
+        url=f"https://statsapi.mlb.com/api/{api_version}/sports",
+        payload=payload,
+    )
     mlb = Mlb(session=session, strict_http=True)
 
     with _recorded_compatibility_warnings() as caught:
         with pytest.raises(MlbHttpError) as exc_info:
-            mlb._mlb_adapter_v1.get(endpoint="sports")
+            adapter_for_api_version(mlb, api_version).get(endpoint="sports")
 
     exc = exc_info.value
     assert exc.status_code == status_code
     assert exc.reason == HTTP_REASON_BY_STATUS[status_code]
-    assert exc.url == SPORTS_URL
+    assert exc.url.endswith(f"/api/{api_version}/sports")
     assert exc.method == "GET"
     assert exc.response_data == payload
     assert _compatibility_warnings(caught) == []
@@ -402,7 +432,7 @@ def test_decode_failure_does_not_warn(strict_http):
 def test_caller_can_turn_the_warning_into_an_exception():
     """A caller may promote only this category to an error."""
     session = _session_for_status(403)
-    adapter = MlbDataAdapter(session=session)
+    adapter = MlbDataAdapter(session=session, strict_http=False)
 
     with warnings.catch_warnings():
         warnings.simplefilter("error", MlbHttpCompatibilityWarning)
@@ -413,7 +443,7 @@ def test_caller_can_turn_the_warning_into_an_exception():
 def test_caller_can_ignore_only_this_warning_category():
     """Ignoring the category keeps the historical compatibility result."""
     session = _session_for_status(403)
-    adapter = MlbDataAdapter(session=session)
+    adapter = MlbDataAdapter(session=session, strict_http=False)
 
     with warnings.catch_warnings(record=True) as caught:
         warnings.simplefilter("always")
@@ -428,10 +458,58 @@ def test_caller_can_ignore_only_this_warning_category():
 def test_each_request_emits_its_own_warning():
     """Every final non-404 4xx warns; deduplication is left to warning filters."""
     session = _session_for_status(429)
-    adapter = MlbDataAdapter(session=session)
+    adapter = MlbDataAdapter(session=session, strict_http=False)
 
     with _recorded_compatibility_warnings() as caught:
         adapter.get(endpoint="sports")
         adapter.get(endpoint="sports")
 
     assert len(_compatibility_warnings(caught)) == 2
+
+
+# --- Warning call-site location ---
+
+
+def test_compatibility_warning_points_to_direct_adapter_caller_line():
+    """Direct adapter.get() warnings must reference the test caller line."""
+    import inspect
+
+    session = _session_for_status(403)
+    adapter = MlbDataAdapter(session=session, strict_http=False)
+    this_file = __file__
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always", MlbHttpCompatibilityWarning)
+        expected_lineno = inspect.currentframe().f_lineno + 1
+        adapter.get(endpoint="sports")
+
+    compatibility = _compatibility_warnings(caught)
+    assert len(compatibility) == 1
+    warning = compatibility[0]
+    assert warning.filename == this_file
+    assert warning.lineno == expected_lineno
+
+
+@XFAIL_PENDING_WARNING_CALL_SITE
+def test_compatibility_warning_points_to_public_mlb_endpoint_caller_line():
+    """Public Mlb endpoint warnings must reference the application caller line."""
+    import inspect
+
+    session = _session_for_status(
+        403,
+        url="https://statsapi.mlb.com/api/v1/people/664034",
+    )
+    mlb = Mlb(session=session, strict_http=False)
+    this_file = __file__
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always", MlbHttpCompatibilityWarning)
+        expected_lineno = inspect.currentframe().f_lineno + 1
+        person = mlb.get_person(664034)
+
+    assert person is None
+    compatibility = _compatibility_warnings(caught)
+    assert len(compatibility) == 1
+    warning = compatibility[0]
+    assert warning.filename == this_file
+    assert warning.lineno == expected_lineno

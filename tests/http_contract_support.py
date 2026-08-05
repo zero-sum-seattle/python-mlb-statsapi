@@ -8,6 +8,7 @@ They must not contact the live MLB API.
 
 from __future__ import annotations
 
+import pytest
 from urllib3.util.retry import Retry
 
 
@@ -19,6 +20,7 @@ COMPATIBILITY_CLIENT_ERRORS = (
     401,
     403,
     405,
+    409,
     422,
     429,
 )
@@ -49,6 +51,7 @@ NON_RETRYABLE_CLIENT_ERRORS = (
     403,
     404,
     405,
+    409,
     422,
 )
 
@@ -58,6 +61,7 @@ HTTP_REASON_BY_STATUS = {
     403: "Forbidden",
     404: "Not Found",
     405: "Method Not Allowed",
+    409: "Conflict",
     422: "Unprocessable Entity",
     429: "Too Many Requests",
     500: "Internal Server Error",
@@ -85,3 +89,43 @@ def assert_library_retry_policy(retry: Retry) -> None:
     assert "POST" not in retry.allowed_methods
     assert "PATCH" not in retry.allowed_methods
     assert "DELETE" not in retry.allowed_methods
+
+
+API_VERSIONS = ("v1", "v1.1")
+
+# Pending version 1.0 default strict HTTP behavior (#284).
+XFAIL_PENDING_STRICT_DEFAULT = pytest.mark.xfail(
+    strict=True,
+    reason="Pending #284: strict HTTP behavior becomes the 1.0 default",
+)
+
+# Pending compatibility warning caller location via public Mlb endpoints (#285).
+XFAIL_PENDING_WARNING_CALL_SITE = pytest.mark.xfail(
+    strict=True,
+    reason="Pending #285: compatibility warning must point to the public caller",
+)
+
+
+def adapter_for_api_version(mlb, api_version: str):
+    """Return the internal MlbDataAdapter for v1 or v1.1."""
+    if api_version == "v1":
+        return mlb._mlb_adapter_v1
+    if api_version == "v1.1":
+        return mlb._mlb_adapter_v1_1
+    raise ValueError(f"unsupported api_version: {api_version!r}")
+
+
+def standalone_adapter_for_version(
+    session,
+    api_version: str,
+    *,
+    strict_http: bool = False,
+) -> "MlbDataAdapter":
+    """Build a versioned MlbDataAdapter sharing a mocked session."""
+    from mlbstatsapi import MlbDataAdapter
+
+    return MlbDataAdapter(
+        session=session,
+        ver=api_version,
+        strict_http=strict_http,
+    )
