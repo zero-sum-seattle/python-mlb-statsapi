@@ -247,8 +247,10 @@ class MlbDataAdapter:
         timeout: TimeoutType = DEFAULT_TIMEOUT,
         session: requests.Session | None = None,
         *,
-        strict_http: bool = False,
+        strict_http: bool = True,
     ):
+        # strict_http defaults to True in version 1.0; pass False for the
+        # historical empty-result compatibility path on final non-404 4xx.
         self.url = f'https://{hostname}/api/{ver}/'
         self._logger = logger or logging.getLogger(__name__)
         self._timeout = timeout
