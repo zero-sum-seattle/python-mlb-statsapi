@@ -96,12 +96,6 @@ API_VERSIONS = ("v1", "v1.1")
 # Sentinel so helpers can omit strict_http and exercise the real constructor default.
 _UNSET = object()
 
-# Pending compatibility warning caller location via public Mlb endpoints (#285).
-XFAIL_PENDING_WARNING_CALL_SITE = pytest.mark.xfail(
-    strict=True,
-    reason="Pending #285: compatibility warning must point to the public caller",
-)
-
 
 def adapter_for_api_version(mlb, api_version: str):
     """Return the internal MlbDataAdapter for v1 or v1.1."""

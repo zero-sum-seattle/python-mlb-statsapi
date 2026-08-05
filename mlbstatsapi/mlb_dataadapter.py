@@ -8,6 +8,7 @@ from .exceptions import (
     MlbTransportError,
 )
 from .warnings import MlbHttpCompatibilityWarning
+import inspect
 import logging
 import warnings
 
@@ -28,9 +29,33 @@ UNKNOWN_PACKAGE_VERSION = "unknown"
 # Bounded excerpt for error response bodies attached to MlbHttpError.
 HTTP_ERROR_BODY_EXCERPT_LIMIT = 500
 
-# Frames from warnings.warn() out to whoever called MlbDataAdapter.get(), so the
-# warning points at application code rather than the helper below.
-COMPATIBILITY_WARNING_STACKLEVEL = 3
+
+def _is_mlbstatsapi_module(module_name: str) -> bool:
+    """Return True when *module_name* belongs to this package."""
+    return module_name == "mlbstatsapi" or module_name.startswith("mlbstatsapi.")
+
+
+def _compatibility_warning_stacklevel() -> int:
+    """Return a warnings.warn stacklevel for the first non-package caller.
+
+    A fixed stack level cannot serve both direct MlbDataAdapter.get() calls and
+    public Mlb endpoint methods that wrap the adapter. Walk frames from the
+    caller of this helper outward and stop at the first module outside the
+    mlbstatsapi package namespace.
+    """
+    frame = inspect.currentframe()
+    stacklevel = 1
+    try:
+        frame = frame.f_back
+        while frame is not None:
+            module_name = frame.f_globals.get("__name__", "")
+            if not _is_mlbstatsapi_module(module_name):
+                return stacklevel
+            stacklevel += 1
+            frame = frame.f_back
+    finally:
+        del frame
+    return 1
 
 
 def _warn_http_compatibility(
@@ -45,13 +70,14 @@ def _warn_http_compatibility(
     """
     warnings.warn(
         (
-            f"HTTP {status_code} for {url} was handled through compatibility mode "
-            "and returned the historical empty result. Pass strict_http=True to "
-            "raise MlbHttpError. This compatibility behavior may change in "
-            "version 1.0."
+            f"HTTP {status_code} for {url} was suppressed because "
+            "strict_http=False explicitly selected compatibility mode, so the "
+            "historical empty result was returned. Strict HTTP behavior is the "
+            "default in version 1.0. Remove strict_http=False or pass "
+            "strict_http=True to raise MlbHttpError."
         ),
         MlbHttpCompatibilityWarning,
-        stacklevel=COMPATIBILITY_WARNING_STACKLEVEL,
+        stacklevel=_compatibility_warning_stacklevel(),
     )
 
 
