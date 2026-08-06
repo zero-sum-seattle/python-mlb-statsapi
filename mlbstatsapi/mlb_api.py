@@ -1044,7 +1044,7 @@ class Mlb:
         Examples
         --------
         >>> mlb = Mlb()
-        >>> mlb.get_game_line_scrore(662242)
+        >>> mlb.get_game_line_score(662242)
         Linescore
         """
 
@@ -1684,10 +1684,10 @@ class Mlb:
 
         return divisions
 
-    def get_division_id(self, division_name: str, 
-                        search_key: str = 'name', **params) -> List[Division]:
+    def get_division_id(self, division_name: str,
+                        search_key: str = 'name', **params) -> List[int]:
         """
-        return divsion id
+        return division id
 
         Parameters
         ----------
