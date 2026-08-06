@@ -58,10 +58,13 @@ from mlbstatsapi import (
     MlbDecodeError,
     MlbHttpCompatibilityWarning,
     MlbHttpError,
+    MlbResult,
     MlbTimeoutError,
     MlbTransportError,
     TheMlbStatsApiException,
     create_retry_policy,
+    get_stat_attributes,
+    return_splits,
 )
 
 expected_version = sys.argv[1]
@@ -76,7 +79,29 @@ assert installed_version == expected_version, (
     f"installed metadata reports {installed_version}, expected {expected_version}"
 )
 
+supported_symbols = (
+    "Mlb",
+    "MlbDataAdapter",
+    "MlbDecodeError",
+    "MlbHttpCompatibilityWarning",
+    "MlbHttpError",
+    "MlbResult",
+    "MlbTimeoutError",
+    "MlbTransportError",
+    "TheMlbStatsApiException",
+    "create_retry_policy",
+    "get_stat_attributes",
+    "return_splits",
+)
+for name in supported_symbols:
+    assert hasattr(mlbstatsapi, name), name
+    assert getattr(mlbstatsapi, name) is not None
+
+# Version 1.0 intentionally omits __all__; adding it would narrow star imports.
+assert getattr(mlbstatsapi, "__all__", None) is None
+
 assert callable(create_retry_policy)
+assert inspect.signature(create_retry_policy).parameters == {}
 retry_policy = create_retry_policy()
 assert isinstance(retry_policy, Retry), type(retry_policy)
 assert create_retry_policy() is not retry_policy, (
@@ -84,19 +109,60 @@ assert create_retry_policy() is not retry_policy, (
 )
 
 assert issubclass(MlbHttpCompatibilityWarning, FutureWarning)
+assert issubclass(TheMlbStatsApiException, Exception)
 assert issubclass(MlbHttpError, TheMlbStatsApiException)
 assert issubclass(MlbTimeoutError, MlbTransportError)
 assert issubclass(MlbTransportError, TheMlbStatsApiException)
 assert issubclass(MlbDecodeError, TheMlbStatsApiException)
 
-# Compatibility mode is the default in this release.
-assert (
-    inspect.signature(Mlb.__init__).parameters["strict_http"].default is False
-)
-assert (
-    inspect.signature(MlbDataAdapter.__init__).parameters["strict_http"].default
-    is False
-)
+mlb_init = inspect.signature(Mlb.__init__).parameters
+adapter_init = inspect.signature(MlbDataAdapter.__init__).parameters
+result_init = inspect.signature(MlbResult.__init__).parameters
+
+assert list(mlb_init) == [
+    "self",
+    "hostname",
+    "logger",
+    "timeout",
+    "session",
+    "strict_http",
+]
+assert mlb_init["hostname"].default == "statsapi.mlb.com"
+assert mlb_init["logger"].default is None
+assert mlb_init["timeout"].default == (3.05, 30.0)
+assert mlb_init["session"].default is None
+assert mlb_init["strict_http"].default is True
+assert mlb_init["strict_http"].kind is inspect.Parameter.KEYWORD_ONLY
+
+assert list(adapter_init) == [
+    "self",
+    "hostname",
+    "ver",
+    "logger",
+    "timeout",
+    "session",
+    "strict_http",
+]
+assert adapter_init["hostname"].default == "statsapi.mlb.com"
+assert adapter_init["ver"].default == "v1"
+assert adapter_init["logger"].default is None
+assert adapter_init["timeout"].default == (3.05, 30.0)
+assert adapter_init["session"].default is None
+assert adapter_init["strict_http"].default is True
+assert adapter_init["strict_http"].kind is inspect.Parameter.KEYWORD_ONLY
+
+assert list(result_init) == ["self", "status_code", "message", "data"]
+assert result_init["data"].default is None
+
+result = MlbResult(200, "OK", {"copyright": "x", "ok": True})
+assert result.status_code == 200
+assert result.message == "OK"
+assert result.data == {"ok": True}
+
+assert callable(return_splits)
+assert callable(get_stat_attributes)
+assert return_splits is mlbstatsapi.return_splits
+assert get_stat_attributes is mlbstatsapi.get_stat_attributes
 
 # A library-created Session is library-owned, so reading its User-Agent through
 # the private attribute is acceptable for internal release validation only.
@@ -104,8 +170,9 @@ expected_user_agent = f"python-mlb-statsapi/{expected_version}"
 with Mlb() as mlb:
     user_agent = mlb._session.headers["User-Agent"]
     assert user_agent == expected_user_agent, user_agent
+    assert mlb._strict_http is True
 
-# Strict mode is constructible and injected Session headers stay untouched.
+# Injected Session headers stay untouched; library close does not close them.
 session = requests.Session()
 session.headers.update(
     {
@@ -114,8 +181,8 @@ session.headers.update(
     }
 )
 try:
-    with Mlb(session=session, strict_http=True):
-        pass
+    with Mlb(session=session, strict_http=False) as mlb:
+        assert mlb._strict_http is False
     assert session.headers["User-Agent"] == "release-smoke-test/1.0"
     assert session.headers["X-Release-Test"] == "preserved"
 finally:

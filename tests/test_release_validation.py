@@ -13,7 +13,9 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 README = PROJECT_ROOT / "README.md"
 TRANSPORT_DOC = PROJECT_ROOT / "docs" / "http-transport.md"
+PUBLIC_API_DOC = PROJECT_ROOT / "docs" / "public-api.md"
 RELEASE_NOTES = PROJECT_ROOT / "docs" / "releases" / "0.9.0.md"
+VALIDATE_RELEASE = PROJECT_ROOT / "scripts" / "validate_release.py"
 
 PYTHON_BLOCK_PATTERN = re.compile(
     r"^```python\n(.*?)^```",
@@ -45,7 +47,7 @@ def _python_blocks(path: Path) -> list[tuple[int, str]]:
 
 
 def _documented_paths() -> list[Path]:
-    return [README, TRANSPORT_DOC, RELEASE_NOTES]
+    return [README, TRANSPORT_DOC, PUBLIC_API_DOC, RELEASE_NOTES]
 
 
 @pytest.mark.parametrize(
@@ -102,6 +104,23 @@ def test_documented_user_agent_matches_the_declared_version() -> None:
             f"{path.name} documents User-Agent versions {sorted(documented)}, "
             f"expected only {expected!r}"
         )
+
+
+def test_public_api_contract_document_exists() -> None:
+    assert PUBLIC_API_DOC.is_file()
+    text = PUBLIC_API_DOC.read_text(encoding="utf-8")
+    assert text.startswith("# Public API Contract (1.x)")
+    assert "Stability policy" in text
+    assert "Session ownership" in text
+    assert "Python support" in text
+
+
+def test_release_smoke_test_asserts_strict_http_default() -> None:
+    """The installed-wheel smoke test must match the version 1.0 strict default."""
+    text = VALIDATE_RELEASE.read_text(encoding="utf-8")
+    assert 'mlb_init["strict_http"].default is True' in text
+    assert 'adapter_init["strict_http"].default is True' in text
+    assert "Compatibility mode is the default in this release." not in text
 
 
 def test_ci_watches_the_current_release_branch() -> None:
