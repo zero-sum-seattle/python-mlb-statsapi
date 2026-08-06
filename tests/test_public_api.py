@@ -74,6 +74,22 @@ ACCIDENTAL_PACKAGE_ROOT_SUBMODULES: tuple[str, ...] = (
 )
 
 
+# Python 3.14 renders typing.Union[a, b] as "a | b" while Python 3.10-3.13
+# render "Union[a, b]". The annotation object itself is unchanged, so the legacy
+# spelling is rewritten here and one manifest stays valid across the whole
+# supported interpreter matrix.
+LEGACY_UNION_RENDERINGS: dict[str, str] = {
+    "Union[str, List[int]]": "str | List[int]",
+}
+
+
+def _normalize_annotation(annotation: Any) -> str:
+    rendered = inspect.formatannotation(annotation)
+    for legacy, pep604 in LEGACY_UNION_RENDERINGS.items():
+        rendered = rendered.replace(legacy, pep604)
+    return rendered
+
+
 def _normalize_signature(fn: Any) -> str:
     """Return a stable, readable signature string without the ``self`` parameter."""
     sig = inspect.signature(fn)
@@ -84,7 +100,7 @@ def _normalize_signature(fn: Any) -> str:
         if parameter.kind is inspect.Parameter.VAR_KEYWORD:
             annotation = ""
             if parameter.annotation is not inspect.Parameter.empty:
-                annotation = f": {inspect.formatannotation(parameter.annotation)}"
+                annotation = f": {_normalize_annotation(parameter.annotation)}"
             parts.append(f"**{name}{annotation}")
             continue
         if parameter.kind is inspect.Parameter.VAR_POSITIONAL:
@@ -92,7 +108,7 @@ def _normalize_signature(fn: Any) -> str:
             continue
         piece = name
         if parameter.annotation is not inspect.Parameter.empty:
-            piece += f": {inspect.formatannotation(parameter.annotation)}"
+            piece += f": {_normalize_annotation(parameter.annotation)}"
         if parameter.default is not inspect.Parameter.empty:
             piece += f"={parameter.default!r}"
         parts.append(piece)
@@ -107,7 +123,7 @@ MLB_PUBLIC_METHOD_MANIFEST: dict[str, str] = {
     "__exit__": "(exc_type, exc, traceback)",
     "get_people": "(sport_id: int=1, **params)",
     "get_person": "(player_id: int, **params)",
-    "get_persons": "(person_ids: Union[str, List[int]], **params)",
+    "get_persons": "(person_ids: str | List[int], **params)",
     "get_people_id": (
         "(fullname: str, sport_id: int=1, search_key: str='fullName', **params)"
     ),
