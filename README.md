@@ -67,11 +67,50 @@ Seattle Mariners Seattle
 
 ## HTTP Sessions, Timeouts, Retries, and Error Behavior
 
-Version 0.8.0 added shared HTTP Sessions, explicit timeouts, optional Session injection, bounded retries, and structured transport exceptions. Version 0.9.0 builds on that transport with configurable HTTP behavior: a public retry policy, richer `MlbHttpError` context, an optional strict mode, compatibility warnings, and a versioned User-Agent.
+Version 0.8.0 added shared HTTP Sessions, explicit timeouts, optional Session injection, bounded retries, and structured transport exceptions. Version 0.9.0 made that transport configurable with a public retry policy, richer `MlbHttpError` context, compatibility warnings, and a versioned User-Agent. Version 1.0.0 makes strict HTTP handling the default and documents the stable public API contract.
 
 The `Mlb` client remains synchronous. Shared Sessions pool reusable connections; they do not cache MLB response bodies, and the client does not enable response caching by default.
 
-For the complete reference see the [HTTP transport documentation](docs/http-transport.md). For what changed in this release see the [0.9.0 release notes](docs/releases/0.9.0.md).
+For the complete reference see the [HTTP transport documentation](docs/http-transport.md). For what changed in this release see the [1.0.0 release notes](docs/releases/1.0.0.md). For the stable public API boundary see the [public API contract](docs/public-api.md).
+
+### Upgrading to version 1.0
+
+`Mlb()` now uses strict HTTP handling by default. It is equivalent to `Mlb(strict_http=True)`.
+
+```text
+Mlb() now uses strict HTTP handling by default
+Final non-404 4xx responses raise MlbHttpError
+404 keeps endpoint-specific None / [] / {} behavior
+Final 5xx still raises MlbHttpError
+Timeouts still raise MlbTimeoutError
+Transport failures still raise MlbTransportError
+Successful invalid JSON still raises MlbDecodeError
+```
+
+Recommended version 1.0 usage:
+
+```python
+import mlbstatsapi
+
+try:
+    with mlbstatsapi.Mlb() as mlb:
+        player = mlb.get_person(664034)
+except mlbstatsapi.MlbHttpError as exc:
+    print(exc.status_code)
+    print(exc.reason)
+    print(exc.url)
+```
+
+Temporary compatibility opt-out while migrating:
+
+```python
+import mlbstatsapi
+
+with mlbstatsapi.Mlb(strict_http=False) as mlb:
+    player = mlb.get_person(664034)
+```
+
+`strict_http=False` is a temporary migration opt-out and an explicit request for historical 0.9 behavior. It is not the recommended long-term 1.0 configuration. See [Migrating from 0.9.x to 1.0](docs/http-transport.md#migrating-from-09x-to-10) for the full process, warning-as-error guidance, and before-and-after examples.
 
 ### Recommended context-manager usage
 
@@ -89,51 +128,9 @@ One `Mlb` client uses one shared `requests.Session`. The v1 and v1.1 adapters sh
 
 Callers who do not use a context manager may call `mlb.close()` instead. Repeated `close()` calls are safe. Closing a client only closes a Session the library created; a caller-injected Session is left open for its owner.
 
-### Compatibility mode is the default
+### Compatibility mode
 
-Existing construction continues to work unchanged:
-
-```python
-import mlbstatsapi
-
-with mlbstatsapi.Mlb() as mlb:
-    player = mlb.get_person(664034)
-```
-
-That is equivalent to:
-
-```python
-mlb = mlbstatsapi.Mlb(
-    strict_http=False,
-)
-```
-
-Compatibility mode remains the default in version 0.9.0. A final non-404 4xx response still returns the historical empty result instead of raising, so existing applications keep working after upgrading.
-
-### Optional strict HTTP mode
-
-Applications that would rather fail loudly can opt in to strict mode:
-
-```python
-import mlbstatsapi
-
-with mlbstatsapi.Mlb(
-    strict_http=True,
-) as mlb:
-    player = mlb.get_person(664034)
-```
-
-In strict mode:
-
-* A final non-404 4xx response raises `MlbHttpError`
-* A final 5xx response raises `MlbHttpError`, as it already did in compatibility mode
-* A 404 keeps the existing endpoint-specific behavior and does not raise
-
-"Final" means after the bounded retry policy has been exhausted. Strict mode is opt-in; it is not the default.
-
-### Compatibility warnings
-
-When compatibility mode converts a final non-404 4xx response into the historical empty result, the library emits `MlbHttpCompatibilityWarning`. The warning marks a response that strict mode would have raised on, so it doubles as migration guidance.
+Callers who need historical 0.9 empty-result behavior for final non-404 4xx responses can pass `strict_http=False`. That path emits `MlbHttpCompatibilityWarning` exactly once per suppressed final response, does not change 404 handling, and does not suppress final 5xx, timeout, transport, or decode failures.
 
 The category inherits from `FutureWarning`, so it stays visible under default Python warning filters. Applications can promote only this package category to an error:
 
@@ -147,7 +144,7 @@ warnings.filterwarnings(
 )
 ```
 
-Filter on `mlbstatsapi.MlbHttpCompatibilityWarning` specifically rather than disabling all warnings or all `FutureWarning` instances, which would also hide unrelated notices from other libraries. No warning is emitted for successful responses, 404 responses, intermediate retries, final 5xx responses, or in strict mode.
+Filter on `mlbstatsapi.MlbHttpCompatibilityWarning` specifically rather than disabling all warnings or all `FutureWarning` instances, which would also hide unrelated notices from other libraries. Prefer removing `strict_http=False` and catching `MlbHttpError` over permanently ignoring the warning.
 
 ### Custom timeouts
 
@@ -218,7 +215,7 @@ Caller-injected Session
 
 ### Reusing the retry policy on a caller-managed Session
 
-`create_retry_policy()` is public in version 0.9.0. It returns a new instance of the same tested policy the library mounts on Sessions it creates, so a caller-managed Session can opt in to identical retry behavior:
+`create_retry_policy()` remains public. It returns a new instance of the same tested policy the library mounts on Sessions it creates, so a caller-managed Session can opt in to identical retry behavior:
 
 ```python
 import requests
@@ -250,7 +247,7 @@ A Session created by the library sends a package-specific User-Agent:
 python-mlb-statsapi/<installed-version>
 ```
 
-For this release that resolves to `python-mlb-statsapi/0.9.0`. The version is read from the installed distribution metadata, so it always matches the installed release. Only the `User-Agent` header is set; other Requests defaults such as `Accept-Encoding` remain intact, and the header carries no identifiers beyond the package name and version.
+For this release that resolves to `python-mlb-statsapi/1.0.0`. The version is read from the installed distribution metadata, so it always matches the installed release. Only the `User-Agent` header is set; other Requests defaults such as `Accept-Encoding` remain intact, and the header carries no identifiers beyond the package name and version.
 
 Headers on a caller-injected Session are left untouched, so applications that set their own User-Agent keep it.
 
@@ -282,7 +279,7 @@ except mlbstatsapi.MlbDecodeError:
 * `MlbHttpError` represents an unexpected final HTTP response
 * `MlbDecodeError` represents invalid JSON in a successful response
 
-Version 0.9.0 adds `method`, `response_data`, and `body_excerpt` to `MlbHttpError` alongside the existing `status_code`, `reason`, and `url`. `response_data` holds the decoded JSON dictionary or list when the error body contains one, and is `None` otherwise. `body_excerpt` is a bounded excerpt of the response text, capped at 500 characters. Complete response bodies are never automatically logged, and `str(exc)` stays concise.
+`MlbHttpError` exposes `method`, `status_code`, `reason`, `url`, `response_data`, and `body_excerpt`. `response_data` holds the decoded JSON dictionary or list when the error body contains one, and is `None` otherwise. `body_excerpt` is a bounded excerpt of the response text, capped at 500 characters. Complete response bodies are never automatically logged, and `str(exc)` stays concise.
 
 ### Backward-compatible exception handling
 
@@ -318,11 +315,11 @@ Backoff factor: 0.5
 Retry-After respected: yes
 ```
 
-Only GET requests are retried, and retries are bounded. Ordinary client errors such as 400, 401, 403, and 404 are not retried. Invalid JSON and Pydantic validation failures are not retried. Retries improve resilience for transient failures, but they do not guarantee success. The retry values are unchanged from version 0.8.0.
+Only GET requests are retried, and retries are bounded. Ordinary client errors such as 400, 401, 403, and 404 are not retried. Invalid JSON and Pydantic validation failures are not retried. Retries improve resilience for transient failures, but they do not guarantee success. The retry values are unchanged from versions 0.8.0 and 0.9.0. The version 1.0 strict default does not change retry or Session behavior.
 
 ### Existing 404 compatibility
 
-Version 0.9.0 preserves existing endpoint-specific not-found behavior in both compatibility mode and strict mode. Depending on the endpoint, a 404 may still produce:
+Version 1.0.0 preserves existing endpoint-specific not-found behavior under both the default and `strict_http=False`. Depending on the endpoint, a 404 may still produce:
 
 ```text
 None
@@ -330,19 +327,19 @@ None
 {}
 ```
 
-Not every 404 raises `MlbHttpError`, and strict mode does not change that.
+Not every 404 raises `MlbHttpError`, and the strict default does not change that.
 
 ### HTTP behavior at a glance
 
-| Final response | Compatibility mode (default) | Strict mode |
-| -------------- | ---------------------------- | ----------- |
+| Final response | Default 1.0 behavior | Explicit compatibility mode |
+| -------------- | -------------------- | --------------------------- |
 | Successful 2xx | Normal result | Normal result |
-| Non-404 4xx | Warning and historical empty result | `MlbHttpError` |
+| Non-404 4xx | `MlbHttpError` | Warning and historical empty result |
 | 404 | Existing endpoint behavior | Existing endpoint behavior |
-| Final 429 | Warning and historical empty result | `MlbHttpError` |
+| Final 429 | `MlbHttpError` after retries | Warning and historical empty result after retries |
 | Final 5xx | `MlbHttpError` | `MlbHttpError` |
 
-See the [HTTP transport documentation](docs/http-transport.md) for the complete retry policy, Session ownership rules, warning behavior, cleanup behavior, and exception hierarchy, and the [0.9.0 release notes](docs/releases/0.9.0.md) for the release summary and migration guidance.
+See the [HTTP transport documentation](docs/http-transport.md) for the complete retry policy, Session ownership rules, warning behavior, cleanup behavior, and migration guidance, and the [1.0.0 release notes](docs/releases/1.0.0.md) for the release summary.
 
 ## Working with Pydantic Models
 
