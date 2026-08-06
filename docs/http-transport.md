@@ -198,7 +198,7 @@ python-mlb-statsapi/<installed-version>
 With the package version currently declared in project metadata that resolves to:
 
 ```text
-python-mlb-statsapi/0.9.0
+python-mlb-statsapi/1.0.0
 ```
 
 The version comes from the installed package metadata, so it always matches

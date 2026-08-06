@@ -258,7 +258,7 @@ A Session created by the library sends a package-specific User-Agent:
 python-mlb-statsapi/<installed-version>
 ```
 
-For this release's currently declared package metadata that resolves to `python-mlb-statsapi/0.9.0`. The version is read from the installed distribution metadata, so it always matches the installed release. Only the `User-Agent` header is set; other Requests defaults such as `Accept-Encoding` remain intact, and the header carries no identifiers beyond the package name and version.
+For this release's currently declared package metadata that resolves to `python-mlb-statsapi/1.0.0`. The version is read from the installed distribution metadata, so it always matches the installed release. Only the `User-Agent` header is set; other Requests defaults such as `Accept-Encoding` remain intact, and the header carries no identifiers beyond the package name and version.
 
 Headers on a caller-injected Session are left untouched, so applications that set their own User-Agent keep it.
 
