@@ -332,12 +332,18 @@ Caller-injected Session
 | Claim | Value |
 | --- | --- |
 | Minimum declared Python version (`Requires-Python`) | `>=3.10` |
-| Actively validated CI versions on this release branch | 3.10, 3.11, 3.12 |
+| CI-validated versions | 3.10, 3.11, 3.12, 3.13, 3.14 |
 | Later Python versions | May work, but are not claimed as CI-validated unless added to the matrix |
 
-Version 1.0 does not add an upper Python bound. Absence of Python 3.13 (or
-newer) CI coverage should be tracked under the release-validator / CI issue
-stream rather than silently claimed here.
+The minimum declared Python version is 3.10 and the CI-validated versions are
+3.10 through 3.14. Every version in that range runs the deterministic offline
+suite on each pull request and push to a watched branch. Prerelease
+interpreters are deliberately excluded from the required matrix and are not
+claimed as supported until they reach a stable release.
+
+Version 1.0 does not add an upper Python bound, and the declared runtime
+requirement stays `>=3.10`. Adding a new interpreter is a compatible change:
+extend the CI matrix and update this table in the same pull request.
 
 ## Mlb endpoint methods
 

@@ -39,6 +39,17 @@ For detailed documentation, check out the [Wiki](https://github.com/zero-sum-sea
 python3 -m pip install python-mlb-statsapi
 ```
 
+### Python support
+
+| Claim | Value |
+| --- | --- |
+| Minimum declared Python version (`Requires-Python`) | `>=3.10` |
+| CI-validated versions | 3.10, 3.11, 3.12, 3.13, 3.14 |
+
+The minimum declared Python version is 3.10 and the CI-validated versions are
+3.10 through 3.14. There is no upper Python bound. Prerelease interpreters are
+excluded from the required test matrix and are not claimed as supported.
+
 ## Quick Start
 ```python
 >>> import mlbstatsapi
@@ -480,9 +491,10 @@ poetry run pytest tests/
 rm -rf dist
 poetry build
 python3 scripts/validate_release.py
+poetry run twine check dist/*
 ```
 
-`scripts/validate_release.py` is the same release check offline CI runs. It inspects the built wheel and source distribution, installs the wheel into a temporary virtual environment, and runs a public-import smoke test against the installed package. It never contacts the MLB API.
+`scripts/validate_release.py` is the same release check offline CI runs. It inspects the built wheel and source distribution, clean-installs each artifact into its own temporary virtual environment, and runs the same public-API smoke test against both installed artifacts. The smoke test verifies the declared metadata, the supported package-root imports, the strict HTTP default, explicit strict and compatibility modes, the versioned `User-Agent`, and injected-Session ownership. Every response it observes comes from an injected fake Session, so it never contacts the MLB API.
 
 Offline CI is the normal pull-request gate. External tests are available manually, on a weekly schedule, and before releases.
 
