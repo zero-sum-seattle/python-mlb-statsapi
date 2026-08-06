@@ -195,10 +195,10 @@ Library-created Sessions send a package-specific User-Agent:
 python-mlb-statsapi/<installed-version>
 ```
 
-For this release that resolves to:
+With the package version currently declared in project metadata that resolves to:
 
 ```text
-python-mlb-statsapi/1.0.0
+python-mlb-statsapi/0.9.0
 ```
 
 The version comes from the installed package metadata, so it always matches
