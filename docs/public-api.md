@@ -139,7 +139,7 @@ accidental submodule names (for example, a documented deprecation period).
 
 ### Constructor
 
-```python
+```text
 Mlb(
     hostname="statsapi.mlb.com",
     logger=None,
@@ -188,7 +188,7 @@ endpoint. Standalone `MlbDataAdapter(ver="v1")` and
 
 ### Constructor
 
-```python
+```text
 MlbDataAdapter(
     hostname="statsapi.mlb.com",
     ver="v1",
@@ -215,7 +215,7 @@ explicitly when they own a standalone adapter.
 
 ## Result object
 
-```python
+```text
 MlbResult(
     status_code,
     message,
@@ -237,7 +237,7 @@ Stable behaviors already covered by offline tests:
 
 ## Retry policy
 
-```python
+```text
 create_retry_policy()
 ```
 
@@ -298,7 +298,7 @@ string-formatting promise for every exception type.
 
 ## Compatibility warning
 
-```python
+```text
 issubclass(MlbHttpCompatibilityWarning, FutureWarning)
 ```
 
