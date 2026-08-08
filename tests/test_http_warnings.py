@@ -31,7 +31,6 @@ from http_contract_support import (
     HTTP_REASON_BY_STATUS,
     NOT_FOUND_STATUS,
     SERVER_ERRORS,
-    XFAIL_PENDING_WARNING_CALL_SITE,
     adapter_for_api_version,
     standalone_adapter_for_version,
 )
@@ -171,10 +170,11 @@ def test_compatibility_warning_message_contains_migration_guidance(status_code):
     message = str(warning_info[0].message)
     assert str(status_code) in message
     assert SPORTS_URL in message
+    assert "strict_http=False" in message
     assert "compatibility mode" in message
+    assert "default in version 1.0" in message
     assert "strict_http=True" in message
     assert "MlbHttpError" in message
-    assert "version 1.0" in message
 
 
 def test_compatibility_warning_excludes_response_body():
@@ -490,7 +490,6 @@ def test_compatibility_warning_points_to_direct_adapter_caller_line():
     assert warning.lineno == expected_lineno
 
 
-@XFAIL_PENDING_WARNING_CALL_SITE
 def test_compatibility_warning_points_to_public_mlb_endpoint_caller_line():
     """Public Mlb endpoint warnings must reference the application caller line."""
     import inspect

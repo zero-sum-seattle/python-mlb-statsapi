@@ -1,7 +1,6 @@
 """Offline HTTP contract tests for version 1.0 strict defaults and compatibility mode.
 
-Documents the version 1.0 HTTP behavior in deterministic tests. Unimplemented
-1.0 default wiring is marked xfail pending issue #284.
+Documents the version 1.0 HTTP behavior in deterministic tests.
 """
 
 from __future__ import annotations
@@ -30,7 +29,6 @@ from http_contract_support import (
     HTTP_REASON_BY_STATUS,
     NOT_FOUND_STATUS,
     SERVER_ERRORS,
-    XFAIL_PENDING_STRICT_DEFAULT,
     adapter_for_api_version,
     assert_library_retry_policy,
     standalone_adapter_for_version,
@@ -114,10 +112,9 @@ def test_status_matrices_document_compatibility_baseline():
     assert set(SERVER_ERRORS).isdisjoint(COMPATIBILITY_CLIENT_ERRORS)
 
 
-# --- Version 1.0 default strict wiring (pending implementation #284) ---
+# --- Version 1.0 default strict wiring ---
 
 
-@XFAIL_PENDING_STRICT_DEFAULT
 def test_mlb_default_matches_explicit_strict_mode_wiring():
     """Mlb() must default to strict mode on the client and both adapters."""
     mlb = Mlb()
@@ -129,7 +126,6 @@ def test_mlb_default_matches_explicit_strict_mode_wiring():
         mlb.close()
 
 
-@XFAIL_PENDING_STRICT_DEFAULT
 def test_mlb_data_adapter_default_is_strict():
     """MlbDataAdapter() must default to strict HTTP in version 1.0."""
     adapter = MlbDataAdapter()
@@ -236,12 +232,11 @@ def test_compatibility_client_errors_do_not_raise_mlb_http_error(
     assert result.data == {}
 
 
-# --- Version 1.0 default: final non-404 4xx raises (pending #284) ---
+# --- Version 1.0 default: final non-404 4xx raises ---
 
 
 @pytest.mark.parametrize("api_version", API_VERSIONS)
 @pytest.mark.parametrize("status_code", COMPATIBILITY_CLIENT_ERRORS)
-@XFAIL_PENDING_STRICT_DEFAULT
 def test_default_adapter_raises_on_final_non_404_client_error(
     api_version,
     status_code,
@@ -275,7 +270,6 @@ def test_default_adapter_raises_on_final_non_404_client_error(
 
 
 @pytest.mark.parametrize("status_code", COMPATIBILITY_CLIENT_ERRORS)
-@XFAIL_PENDING_STRICT_DEFAULT
 def test_default_mlb_raises_on_final_non_404_client_error(status_code):
     """Default Mlb() raises MlbHttpError for final non-404 4xx."""
     reason = HTTP_REASON_BY_STATUS[status_code]
@@ -665,7 +659,7 @@ def test_mlb_constructors_remain_compatible():
     try:
         assert isinstance(mlb_default._session, requests.Session)
         assert mlb_default._timeout == DEFAULT_TIMEOUT
-        assert mlb_default._strict_http is False
+        assert mlb_default._strict_http is True
     finally:
         mlb_default.close()
 
@@ -697,7 +691,7 @@ def test_mlb_positional_timeout_remains_third_argument():
     assert session.calls[0]["timeout"] == 10
     assert session.calls[1]["timeout"] == 10
     assert mlb._session is session
-    assert mlb._strict_http is False
+    assert mlb._strict_http is True
 
 
 def test_mlb_strict_http_is_keyword_only():
@@ -709,7 +703,7 @@ def test_mlb_strict_http_is_keyword_only():
     mlb = Mlb("statsapi.mlb.com", logger, 10, session)
     assert mlb._session is session
     assert mlb._timeout == 10
-    assert mlb._strict_http is False
+    assert mlb._strict_http is True
 
     mlb_strict = Mlb(
         "statsapi.mlb.com",
@@ -723,6 +717,17 @@ def test_mlb_strict_http_is_keyword_only():
     assert mlb_strict._strict_http is True
     assert mlb_strict._mlb_adapter_v1._strict_http is True
     assert mlb_strict._mlb_adapter_v1_1._strict_http is True
+
+    mlb_compat = Mlb(
+        "statsapi.mlb.com",
+        logger,
+        10,
+        session,
+        strict_http=False,
+    )
+    assert mlb_compat._strict_http is False
+    assert mlb_compat._mlb_adapter_v1._strict_http is False
+    assert mlb_compat._mlb_adapter_v1_1._strict_http is False
 
     with pytest.raises(TypeError):
         Mlb("statsapi.mlb.com", logger, 10, session, True)
@@ -738,7 +743,7 @@ def test_adapter_positional_construction_remains_compatible():
     assert adapter._logger is logger
     assert adapter._timeout == (5.0, 60.0)
     assert adapter._session is session
-    assert adapter._strict_http is False
+    assert adapter._strict_http is True
 
     adapter.get(endpoint="game")
     assert session.calls[0]["timeout"] == (5.0, 60.0)

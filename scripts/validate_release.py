@@ -1,18 +1,28 @@
 """Validate the built python-mlb-statsapi distributions before a release.
 
-Checks the artifacts in ``dist/``, then installs the wheel into a throwaway
-virtual environment and runs a public-import smoke test against the *installed*
-package.
+Checks the artifacts in ``dist/``, then clean-installs each distribution
+artifact into its own throwaway virtual environment and runs a public-API
+smoke test against the *installed* package.
+
+Both the wheel and the source distribution are installed separately so a
+broken sdist build, a missing runtime dependency, or an omitted package file
+cannot hide behind a working wheel.
 
 The smoke test deliberately runs from a temporary directory so the repository
-checkout cannot shadow the installed distribution.
+checkout cannot shadow the installed distribution artifact.
 
-Nothing here contacts the MLB API.
+Nothing here contacts the MLB API. Every HTTP response exercised by the smoke
+test is produced by an injected fake Session.
 
 Usage::
 
     python scripts/validate_release.py
-    python scripts/validate_release.py --dist dist --expected-version 0.9.0
+    python scripts/validate_release.py --expected-version 1.0.0
+    python scripts/validate_release.py --dist dist
+
+Without ``--expected-version`` the expected artifact version is read from the
+version declared in ``pyproject.toml``, so the same validator follows the
+project through a version bump without being edited.
 """
 
 from __future__ import annotations
@@ -32,23 +42,56 @@ DISTRIBUTION_NAME = "python-mlb-statsapi"
 NORMALIZED_DISTRIBUTION_NAME = "python_mlb_statsapi"
 EXPECTED_REQUIRES_PYTHON = ">=3.10"
 
-# Paths every source distribution must carry so the project can be rebuilt and
-# read from the sdist alone.
+WHEEL_LABEL = "wheel"
+SDIST_LABEL = "source distribution"
+
+# Paths every source distribution must carry so the project can be rebuilt,
+# installed, and read from the sdist alone. Each entry was confirmed present in
+# the archive Poetry actually generates; tests, docs, and scripts are
+# intentionally excluded from the sdist and must not be listed here.
 REQUIRED_SDIST_PATHS = (
+    "PKG-INFO",
+    "LICENSE",
     "README.md",
     "pyproject.toml",
     "mlbstatsapi/__init__.py",
+    "mlbstatsapi/exceptions.py",
+    "mlbstatsapi/warnings.py",
+    "mlbstatsapi/mlb_api.py",
+    "mlbstatsapi/mlb_dataadapter.py",
+    "mlbstatsapi/mlb_module.py",
+    "mlbstatsapi/models/__init__.py",
+)
+
+# Explicit failure messages for the version 1.0 strict defaults. They are
+# module-level constants so the offline validator tests can assert that the
+# smoke-test contract still reports a reverted default in an understandable way.
+MLB_STRICT_DEFAULT_MESSAGE = "Mlb.strict_http must default to True for the 1.0 contract"
+ADAPTER_STRICT_DEFAULT_MESSAGE = (
+    "MlbDataAdapter.strict_http must default to True for the 1.0 contract"
 )
 
 SMOKE_TEST_SOURCE = '''
-"""Public import smoke test for an installed python-mlb-statsapi wheel."""
+"""Public API smoke test for an installed python-mlb-statsapi artifact.
+
+Runs inside a throwaway virtual environment against the installed
+distribution, never against a repository checkout.
+
+Every HTTP response comes from an injected fake Session, so this test performs
+no network I/O and never reaches the MLB API.
+"""
 
 import importlib.metadata
 import inspect
+import json
+import logging
 import sys
+import sysconfig
+import warnings
 from pathlib import Path
 
 import requests
+from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 import mlbstatsapi
@@ -58,17 +101,49 @@ from mlbstatsapi import (
     MlbDecodeError,
     MlbHttpCompatibilityWarning,
     MlbHttpError,
+    MlbResult,
     MlbTimeoutError,
     MlbTransportError,
     TheMlbStatsApiException,
     create_retry_policy,
+    get_stat_attributes,
+    return_splits,
 )
 
 expected_version = sys.argv[1]
 
+# The adapter logs an error for every fake 403, which is expected here. Silence
+# it from the consumer side so the smoke-test output stays readable; the library
+# itself must never configure logging for its callers.
+package_logger = logging.getLogger("mlbstatsapi")
+package_logger.addHandler(logging.NullHandler())
+package_logger.propagate = False
+
+MLB_STRICT_DEFAULT_MESSAGE = (
+    "Mlb.strict_http must default to True for the 1.0 contract"
+)
+ADAPTER_STRICT_DEFAULT_MESSAGE = (
+    "MlbDataAdapter.strict_http must default to True for the 1.0 contract"
+)
+
+# Small deterministic error payload; MlbHttpError must expose it unchanged.
+FORBIDDEN_PAYLOAD = {"messageNumber": 403, "message": "Forbidden"}
+V1_SPORTS_URL = "https://statsapi.mlb.com/api/v1/sports"
+V1_1_SPORTS_URL = "https://statsapi.mlb.com/api/v1.1/sports"
+DOCUMENTED_RETRY_STATUSES = {429, 500, 502, 503, 504}
+
+
+# --- The installed artifact, not the repository checkout ---
+
+assert sys.prefix != sys.base_prefix, (
+    "the smoke test must run inside the throwaway virtual environment"
+)
+
+site_packages = Path(sysconfig.get_paths()["purelib"]).resolve()
 package_file = Path(mlbstatsapi.__file__).resolve()
-assert "site-packages" in package_file.parts, (
-    f"mlbstatsapi was imported from {package_file}, not from the installed wheel"
+assert package_file.is_relative_to(site_packages), (
+    f"mlbstatsapi was imported from {package_file}, not from the installed "
+    f"distribution artifact under {site_packages}"
 )
 
 installed_version = importlib.metadata.version("python-mlb-statsapi")
@@ -76,50 +151,354 @@ assert installed_version == expected_version, (
     f"installed metadata reports {installed_version}, expected {expected_version}"
 )
 
+
+# --- Supported package-root surface ---
+
+supported_symbols = (
+    "Mlb",
+    "MlbDataAdapter",
+    "MlbDecodeError",
+    "MlbHttpCompatibilityWarning",
+    "MlbHttpError",
+    "MlbResult",
+    "MlbTimeoutError",
+    "MlbTransportError",
+    "TheMlbStatsApiException",
+    "create_retry_policy",
+    "get_stat_attributes",
+    "return_splits",
+)
+for name in supported_symbols:
+    assert hasattr(mlbstatsapi, name), f"mlbstatsapi.{name} is not importable"
+    assert getattr(mlbstatsapi, name) is not None, f"mlbstatsapi.{name} is None"
+
+# Version 1.0 intentionally omits __all__; adding it would narrow star imports.
+assert getattr(mlbstatsapi, "__all__", None) is None, (
+    "version 1.0 must not define mlbstatsapi.__all__"
+)
+
+
+def assert_documented_retry_policy(retry, *, label):
+    """Assert the documented retry values without freezing Requests internals."""
+    assert isinstance(retry, Retry), f"{label}: {type(retry)!r} is not a Retry"
+    assert retry.total == 3, f"{label}: total={retry.total}"
+    assert retry.connect == 3, f"{label}: connect={retry.connect}"
+    assert retry.read == 2, f"{label}: read={retry.read}"
+    assert retry.status == 3, f"{label}: status={retry.status}"
+    assert retry.backoff_factor == 0.5, f"{label}: backoff_factor={retry.backoff_factor}"
+    assert set(retry.status_forcelist) == DOCUMENTED_RETRY_STATUSES, (
+        f"{label}: status_forcelist={sorted(retry.status_forcelist)}"
+    )
+    assert retry.allowed_methods == frozenset({"GET"}), (
+        f"{label}: allowed_methods={retry.allowed_methods}"
+    )
+    assert retry.respect_retry_after_header is True, label
+    assert retry.raise_on_status is False, label
+
+
 assert callable(create_retry_policy)
+assert inspect.signature(create_retry_policy).parameters == {}
 retry_policy = create_retry_policy()
-assert isinstance(retry_policy, Retry), type(retry_policy)
+assert_documented_retry_policy(retry_policy, label="create_retry_policy()")
 assert create_retry_policy() is not retry_policy, (
     "create_retry_policy() must return a new Retry instance per call"
 )
 
 assert issubclass(MlbHttpCompatibilityWarning, FutureWarning)
+assert issubclass(TheMlbStatsApiException, Exception)
 assert issubclass(MlbHttpError, TheMlbStatsApiException)
 assert issubclass(MlbTimeoutError, MlbTransportError)
 assert issubclass(MlbTransportError, TheMlbStatsApiException)
 assert issubclass(MlbDecodeError, TheMlbStatsApiException)
 
-# Compatibility mode is the default in this release.
-assert (
-    inspect.signature(Mlb.__init__).parameters["strict_http"].default is False
-)
-assert (
-    inspect.signature(MlbDataAdapter.__init__).parameters["strict_http"].default
-    is False
+mlb_init = inspect.signature(Mlb.__init__).parameters
+adapter_init = inspect.signature(MlbDataAdapter.__init__).parameters
+result_init = inspect.signature(MlbResult.__init__).parameters
+
+assert list(mlb_init) == [
+    "self",
+    "hostname",
+    "logger",
+    "timeout",
+    "session",
+    "strict_http",
+]
+assert mlb_init["hostname"].default == "statsapi.mlb.com"
+assert mlb_init["logger"].default is None
+assert mlb_init["timeout"].default == (3.05, 30.0)
+assert mlb_init["session"].default is None
+assert mlb_init["strict_http"].default is True, MLB_STRICT_DEFAULT_MESSAGE
+assert mlb_init["strict_http"].kind is inspect.Parameter.KEYWORD_ONLY
+
+assert list(adapter_init) == [
+    "self",
+    "hostname",
+    "ver",
+    "logger",
+    "timeout",
+    "session",
+    "strict_http",
+]
+assert adapter_init["hostname"].default == "statsapi.mlb.com"
+assert adapter_init["ver"].default == "v1"
+assert adapter_init["logger"].default is None
+assert adapter_init["timeout"].default == (3.05, 30.0)
+assert adapter_init["session"].default is None
+assert adapter_init["strict_http"].default is True, ADAPTER_STRICT_DEFAULT_MESSAGE
+assert adapter_init["strict_http"].kind is inspect.Parameter.KEYWORD_ONLY
+
+assert list(result_init) == ["self", "status_code", "message", "data"]
+assert result_init["data"].default is None
+
+result = MlbResult(200, "OK", {"copyright": "x", "ok": True})
+assert result.status_code == 200
+assert result.message == "OK"
+assert result.data == {"ok": True}
+
+assert callable(return_splits)
+assert callable(get_stat_attributes)
+assert return_splits is mlbstatsapi.return_splits
+assert get_stat_attributes is mlbstatsapi.get_stat_attributes
+
+
+# --- Offline HTTP behavior ---
+
+
+class ForbiddenSession:
+    """Injected Session stand-in that answers every GET with a final 403.
+
+    A realistic requests.Response is built for the requested URL so the
+    installed adapter runs its real status handling. No network I/O happens,
+    so the smoke test never reaches the MLB API.
+    """
+
+    def __init__(self):
+        self.requested_urls = []
+
+    def get(self, url, params=None, timeout=None, **kwargs):
+        self.requested_urls.append(url)
+        response = requests.Response()
+        response.status_code = 403
+        response.reason = "Forbidden"
+        response.url = url
+        response.headers["Content-Type"] = "application/json"
+        response.encoding = "utf-8"
+        # requests only exposes a body through Response._content; building it
+        # directly is the way to produce a realistic offline Response.
+        response._content = json.dumps(FORBIDDEN_PAYLOAD).encode("utf-8")
+        return response
+
+    def close(self):
+        pass
+
+
+def assert_forbidden_error(exc, *, expected_url, label):
+    assert exc.status_code == 403, f"{label}: status_code={exc.status_code}"
+    assert exc.reason == "Forbidden", f"{label}: reason={exc.reason!r}"
+    assert exc.method == "GET", f"{label}: method={exc.method!r}"
+    assert exc.url == expected_url, f"{label}: url={exc.url!r}"
+    assert isinstance(exc.response_data, dict), (
+        f"{label}: response_data={exc.response_data!r}"
+    )
+    for key, value in FORBIDDEN_PAYLOAD.items():
+        assert exc.response_data.get(key) == value, (
+            f"{label}: response_data={exc.response_data!r}"
+        )
+
+
+def assert_raises_forbidden(call, *, expected_url, label):
+    try:
+        call()
+    except MlbHttpError as exc:
+        assert_forbidden_error(exc, expected_url=expected_url, label=label)
+        return
+    raise AssertionError(f"{label}: a final 403 did not raise MlbHttpError")
+
+
+def capture_compatibility_warnings(call):
+    """Run *call* and return (result, captured MlbHttpCompatibilityWarnings)."""
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        result = call()
+    compatibility = [
+        record
+        for record in caught
+        if issubclass(record.category, MlbHttpCompatibilityWarning)
+    ]
+    return result, compatibility
+
+
+def assert_single_compatibility_warning(captured, *, label):
+    assert len(captured) == 1, (
+        f"{label}: expected exactly one MlbHttpCompatibilityWarning, "
+        f"captured {[str(record.message) for record in captured]}"
+    )
+    record = captured[0]
+    assert record.category is MlbHttpCompatibilityWarning, (
+        f"{label}: warning category is {record.category!r}"
+    )
+    assert "strict_http=False" in str(record.message), (
+        f"{label}: warning message does not mention strict_http=False: "
+        f"{str(record.message)!r}"
+    )
+
+
+# Constructed without strict_http so the real constructor default is exercised.
+session = ForbiddenSession()
+with Mlb(session=session) as mlb:
+    assert_raises_forbidden(
+        mlb.get_sports,
+        expected_url=V1_SPORTS_URL,
+        label=MLB_STRICT_DEFAULT_MESSAGE,
+    )
+
+session = ForbiddenSession()
+with Mlb(session=session, strict_http=True) as mlb:
+    assert_raises_forbidden(
+        mlb.get_sports,
+        expected_url=V1_SPORTS_URL,
+        label="Mlb(strict_http=True).get_sports()",
+    )
+
+session = ForbiddenSession()
+with Mlb(session=session, strict_http=False) as mlb:
+    sports, captured = capture_compatibility_warnings(mlb.get_sports)
+
+assert sports == [], f"Mlb(strict_http=False).get_sports() returned {sports!r}"
+assert_single_compatibility_warning(
+    captured,
+    label="Mlb(strict_http=False).get_sports()",
 )
 
-# A library-created Session is library-owned, so reading its User-Agent through
-# the private attribute is acceptable for internal release validation only.
+
+# --- Direct adapter construction, both documented API versions ---
+
+for api_version, sports_url in (("v1", V1_SPORTS_URL), ("v1.1", V1_1_SPORTS_URL)):
+    # Omitting strict_http exercises the real adapter default.
+    adapter = MlbDataAdapter(ver=api_version, session=ForbiddenSession())
+    try:
+        assert_raises_forbidden(
+            lambda: adapter.get(endpoint="sports"),
+            expected_url=sports_url,
+            label=f"{ADAPTER_STRICT_DEFAULT_MESSAGE} (ver={api_version})",
+        )
+    finally:
+        adapter.close()
+
+    adapter = MlbDataAdapter(
+        ver=api_version,
+        session=ForbiddenSession(),
+        strict_http=True,
+    )
+    try:
+        assert_raises_forbidden(
+            lambda: adapter.get(endpoint="sports"),
+            expected_url=sports_url,
+            label=f"MlbDataAdapter(ver={api_version}, strict_http=True).get()",
+        )
+    finally:
+        adapter.close()
+
+    adapter = MlbDataAdapter(
+        ver=api_version,
+        session=ForbiddenSession(),
+        strict_http=False,
+    )
+    label = f"MlbDataAdapter(ver={api_version}, strict_http=False).get()"
+    try:
+        result, captured = capture_compatibility_warnings(
+            lambda: adapter.get(endpoint="sports"),
+        )
+    finally:
+        adapter.close()
+
+    assert isinstance(result, MlbResult), f"{label}: {type(result)!r}"
+    assert result.status_code == 403, f"{label}: status_code={result.status_code}"
+    assert result.message == "Forbidden", f"{label}: message={result.message!r}"
+    assert result.data == {}, f"{label}: data={result.data!r}"
+    assert_single_compatibility_warning(captured, label=label)
+
+
+# --- Library-created Session ---
+
+# A library-created Session is library-owned, so reading its headers and
+# adapters through private attributes is acceptable for release validation only.
 expected_user_agent = f"python-mlb-statsapi/{expected_version}"
 with Mlb() as mlb:
     user_agent = mlb._session.headers["User-Agent"]
-    assert user_agent == expected_user_agent, user_agent
+    assert user_agent == expected_user_agent, (
+        f"library-created Session sends User-Agent {user_agent!r}, "
+        f"expected {expected_user_agent!r}"
+    )
+    assert mlb._strict_http is True, MLB_STRICT_DEFAULT_MESSAGE
+    for scheme in ("https://", "http://"):
+        assert_documented_retry_policy(
+            mlb._session.get_adapter(scheme).max_retries,
+            label=f"library-created Session {scheme} adapter",
+        )
 
-# Strict mode is constructible and injected Session headers stay untouched.
-session = requests.Session()
-session.headers.update(
-    {
-        "User-Agent": "release-smoke-test/1.0",
-        "X-Release-Test": "preserved",
-    }
-)
+adapter = MlbDataAdapter()
 try:
-    with Mlb(session=session, strict_http=True):
-        pass
+    assert adapter._session.headers["User-Agent"] == expected_user_agent
+    assert adapter._strict_http is True, ADAPTER_STRICT_DEFAULT_MESSAGE
+finally:
+    adapter.close()
+
+
+# --- Injected Session stays caller-owned and unmodified ---
+
+
+class OwnershipSession(requests.Session):
+    """Real Session that records close() so caller ownership is observable."""
+
+    def __init__(self):
+        super().__init__()
+        self.close_calls = 0
+
+    def close(self):
+        self.close_calls += 1
+        super().close()
+
+
+session = OwnershipSession()
+session.headers["User-Agent"] = "release-smoke-test/1.0"
+session.headers["X-Release-Test"] = "preserved"
+# max_retries=0 so a library retry policy mounted here would be detectable.
+injected_https_adapter = HTTPAdapter(max_retries=0)
+injected_http_adapter = HTTPAdapter(max_retries=0)
+session.mount("https://", injected_https_adapter)
+session.mount("http://", injected_http_adapter)
+headers_before = dict(session.headers)
+
+try:
+    with Mlb(session=session) as mlb:
+        assert mlb._session is session
+
+    assert session.close_calls == 0, (
+        "the library must not close a caller-injected Session"
+    )
+    assert dict(session.headers) == headers_before, dict(session.headers)
     assert session.headers["User-Agent"] == "release-smoke-test/1.0"
     assert session.headers["X-Release-Test"] == "preserved"
+    assert session.get_adapter("https://") is injected_https_adapter, (
+        "the injected https:// adapter was replaced"
+    )
+    assert session.get_adapter("http://") is injected_http_adapter, (
+        "the injected http:// adapter was replaced"
+    )
+    for scheme in ("https://", "http://"):
+        mounted_retries = session.get_adapter(scheme).max_retries
+        assert mounted_retries.total == 0, (
+            "the library must not mount its retry policy on an injected "
+            f"Session: {scheme} total={mounted_retries.total}"
+        )
 finally:
     session.close()
+
+assert session.close_calls == 1, (
+    f"the smoke test must close its own Session exactly once, "
+    f"saw {session.close_calls}"
+)
 
 print(f"smoke test passed for python-mlb-statsapi {installed_version}")
 '''
@@ -166,13 +545,16 @@ def _read_expected_version(project_root: Path) -> str:
 def _find_single(dist_dir: Path, pattern: str, label: str) -> Path:
     matches = sorted(dist_dir.glob(pattern))
     if not matches:
+        present = ", ".join(sorted(path.name for path in dist_dir.iterdir())) or "nothing"
         raise ValidationError(
-            f"no {label} matching {pattern!r} in {dist_dir}; run `poetry build` first"
+            f"{label}: no artifact matching {pattern!r} in {dist_dir}; "
+            f"found {present}. Run `poetry build` first."
         )
     if len(matches) > 1:
         names = ", ".join(path.name for path in matches)
         raise ValidationError(
-            f"expected exactly one {label} in {dist_dir}, found: {names}. "
+            f"{label}: expected exactly one artifact matching {pattern!r} in "
+            f"{dist_dir}, found {len(matches)}: {names}. "
             "Remove stale artifacts and rebuild."
         )
     return matches[0]
@@ -187,7 +569,8 @@ def _check_wheel_metadata(wheel: Path, expected_version: str) -> None:
         ]
         if len(metadata_names) != 1:
             raise ValidationError(
-                f"expected one METADATA file in {wheel.name}, found {metadata_names}"
+                f"{WHEEL_LABEL} {wheel.name}: expected exactly one "
+                f".dist-info/METADATA file, found {metadata_names}"
             )
         raw_metadata = archive.read(metadata_names[0]).decode("utf-8")
 
@@ -195,19 +578,23 @@ def _check_wheel_metadata(wheel: Path, expected_version: str) -> None:
 
     name = metadata.get("Name")
     if name != DISTRIBUTION_NAME:
-        raise ValidationError(f"wheel Name is {name!r}, expected {DISTRIBUTION_NAME!r}")
+        raise ValidationError(
+            f"{WHEEL_LABEL} {wheel.name}: metadata Name is {name!r}, "
+            f"expected {DISTRIBUTION_NAME!r}"
+        )
 
     version = metadata.get("Version")
     if version != expected_version:
         raise ValidationError(
-            f"wheel Version is {version!r}, expected {expected_version!r}"
+            f"{WHEEL_LABEL} {wheel.name}: metadata Version is {version!r}, "
+            f"expected {expected_version!r}"
         )
 
     requires_python = metadata.get("Requires-Python")
     if requires_python != EXPECTED_REQUIRES_PYTHON:
         raise ValidationError(
-            f"wheel Requires-Python is {requires_python!r}, "
-            f"expected {EXPECTED_REQUIRES_PYTHON!r}"
+            f"{WHEEL_LABEL} {wheel.name}: metadata Requires-Python is "
+            f"{requires_python!r}, expected {EXPECTED_REQUIRES_PYTHON!r}"
         )
 
     _log(
@@ -226,7 +613,9 @@ def _check_sdist_contents(sdist: Path) -> None:
     missing = [path for path in REQUIRED_SDIST_PATHS if path not in relative_paths]
     if missing:
         raise ValidationError(
-            f"source distribution {sdist.name} is missing: {', '.join(missing)}"
+            f"{SDIST_LABEL} {sdist.name}: missing required path(s) "
+            f"{', '.join(missing)}; expected every path in "
+            f"{', '.join(REQUIRED_SDIST_PATHS)}"
         )
 
     _log(f"  sdist contains: {', '.join(REQUIRED_SDIST_PATHS)}")
@@ -243,39 +632,58 @@ def _venv_python(venv_dir: Path) -> Path:
     raise ValidationError(f"no interpreter found in {venv_dir}")
 
 
-def _run(command: list[str], *, cwd: Path) -> None:
+def _run(command: list[str], *, cwd: Path, label: str) -> None:
     result = subprocess.run(command, cwd=cwd, check=False)
     if result.returncode != 0:
         printable = " ".join(command)
-        raise ValidationError(f"command failed ({result.returncode}): {printable}")
+        raise ValidationError(
+            f"{label} failed (exit code {result.returncode}): {printable}"
+        )
 
 
-def _check_clean_install(wheel: Path, expected_version: str) -> None:
+def _create_clean_environment(venv_dir: Path) -> Path:
+    """Create an empty virtual environment and return its interpreter."""
+    venv.EnvBuilder(with_pip=True, clear=True).create(venv_dir)
+    return _venv_python(venv_dir)
+
+
+def _check_clean_install(artifact: Path, expected_version: str, *, label: str) -> None:
+    """Clean-install one distribution artifact and smoke test the result.
+
+    Each artifact gets its own virtual environment so the wheel and the source
+    distribution are never validated against a shared install.
+    """
     with tempfile.TemporaryDirectory(prefix="python-mlb-statsapi-release-") as tmp:
         workspace = Path(tmp)
         venv_dir = workspace / "venv"
 
-        _log(f"  creating clean virtual environment in {venv_dir}")
-        venv.EnvBuilder(with_pip=True, clear=True).create(venv_dir)
-        python = _venv_python(venv_dir)
+        _log(f"  creating clean virtual environment for the {label} in {venv_dir}")
+        python = _create_clean_environment(venv_dir)
 
         _run(
             [str(python), "-m", "pip", "install", "--upgrade", "--quiet", "pip"],
             cwd=workspace,
+            label=f"pip upgrade for the {label} environment",
         )
-        _log(f"  installing {wheel.name}")
+
+        _log(f"  installing {label}: {artifact.name}")
         _run(
-            [str(python), "-m", "pip", "install", "--quiet", str(wheel.resolve())],
+            [str(python), "-m", "pip", "install", "--quiet", str(artifact.resolve())],
             cwd=workspace,
+            label=f"{label} installation of {artifact.name}",
         )
 
         smoke_test = workspace / "release_smoke_test.py"
         smoke_test.write_text(SMOKE_TEST_SOURCE, encoding="utf-8")
 
-        # Run from the temporary directory so the repository checkout is not on
-        # sys.path and cannot shadow the installed distribution.
-        _log("  running public import smoke test against the installed wheel")
-        _run([str(python), str(smoke_test), expected_version], cwd=workspace)
+        # Run from the temporary workspace so the repository checkout is not on
+        # sys.path and cannot shadow the installed distribution artifact.
+        _log(f"  running {label} smoke test against the installed artifact")
+        _run(
+            [str(python), str(smoke_test), expected_version],
+            cwd=workspace,
+            label=f"{label} smoke test",
+        )
 
 
 def validate(dist_dir: Path, expected_version: str) -> None:
@@ -284,20 +692,24 @@ def validate(dist_dir: Path, expected_version: str) -> None:
     wheel = _find_single(
         dist_dir,
         f"{NORMALIZED_DISTRIBUTION_NAME}-{expected_version}-*.whl",
-        "wheel",
+        WHEEL_LABEL,
     )
     _log(f"  wheel: {wheel.name}")
 
     sdist = _find_single(
         dist_dir,
         f"{NORMALIZED_DISTRIBUTION_NAME}-{expected_version}.tar.gz",
-        "source distribution",
+        SDIST_LABEL,
     )
     _log(f"  source distribution: {sdist.name}")
 
     _check_wheel_metadata(wheel, expected_version)
     _check_sdist_contents(sdist)
-    _check_clean_install(wheel, expected_version)
+
+    # Separate environments: an sdist that cannot build, omits package files, or
+    # loses a runtime dependency must not be masked by the wheel install.
+    _check_clean_install(wheel, expected_version, label=WHEEL_LABEL)
+    _check_clean_install(sdist, expected_version, label=SDIST_LABEL)
 
     _log(f"Release validation passed for {DISTRIBUTION_NAME} {expected_version}")
 

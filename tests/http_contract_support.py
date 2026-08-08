@@ -12,9 +12,9 @@ import pytest
 from urllib3.util.retry import Retry
 
 
-# Final non-404 client errors that currently return an empty MlbResult by
-# default rather than raising MlbHttpError. Later strict-mode work should
-# reuse this matrix when asserting the opposite behavior.
+# Final non-404 client errors that raise MlbHttpError under the version 1.0
+# strict default, and return an empty MlbResult with a compatibility warning
+# when strict_http=False.
 COMPATIBILITY_CLIENT_ERRORS = (
     400,
     401,
@@ -93,17 +93,8 @@ def assert_library_retry_policy(retry: Retry) -> None:
 
 API_VERSIONS = ("v1", "v1.1")
 
-# Pending version 1.0 default strict HTTP behavior (#284).
-XFAIL_PENDING_STRICT_DEFAULT = pytest.mark.xfail(
-    strict=True,
-    reason="Pending #284: strict HTTP behavior becomes the 1.0 default",
-)
-
-# Pending compatibility warning caller location via public Mlb endpoints (#285).
-XFAIL_PENDING_WARNING_CALL_SITE = pytest.mark.xfail(
-    strict=True,
-    reason="Pending #285: compatibility warning must point to the public caller",
-)
+# Sentinel so helpers can omit strict_http and exercise the real constructor default.
+_UNSET = object()
 
 
 def adapter_for_api_version(mlb, api_version: str):
@@ -119,13 +110,19 @@ def standalone_adapter_for_version(
     session,
     api_version: str,
     *,
-    strict_http: bool = False,
+    strict_http=_UNSET,
 ) -> "MlbDataAdapter":
-    """Build a versioned MlbDataAdapter sharing a mocked session."""
+    """Build a versioned MlbDataAdapter sharing a mocked session.
+
+    Omitting ``strict_http`` leaves the constructor argument unset so tests
+    exercise the real production default rather than an explicit False.
+    """
     from mlbstatsapi import MlbDataAdapter
 
-    return MlbDataAdapter(
-        session=session,
-        ver=api_version,
-        strict_http=strict_http,
-    )
+    kwargs = {
+        "session": session,
+        "ver": api_version,
+    }
+    if strict_http is not _UNSET:
+        kwargs["strict_http"] = strict_http
+    return MlbDataAdapter(**kwargs)

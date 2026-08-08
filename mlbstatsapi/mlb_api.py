@@ -52,12 +52,14 @@ class Mlb:
         timeout: TimeoutType = DEFAULT_TIMEOUT,
         session: requests.Session | None = None,
         *,
-        strict_http: bool = False,
+        strict_http: bool = True,
     ):
         # One session is shared by the v1 and v1.1 adapters. The library closes
         # only sessions it creates; caller-injected sessions remain caller-owned.
         # The versioned User-Agent and retry adapters are applied only to
         # library-created Sessions.
+        # strict_http defaults to True in version 1.0; pass False for the
+        # historical empty-result compatibility path on final non-404 4xx.
         self._owns_session = session is None
         if session is None:
             self._session = requests.Session()
@@ -1042,7 +1044,7 @@ class Mlb:
         Examples
         --------
         >>> mlb = Mlb()
-        >>> mlb.get_game_line_scrore(662242)
+        >>> mlb.get_game_line_score(662242)
         Linescore
         """
 
@@ -1682,10 +1684,10 @@ class Mlb:
 
         return divisions
 
-    def get_division_id(self, division_name: str, 
-                        search_key: str = 'name', **params) -> List[Division]:
+    def get_division_id(self, division_name: str,
+                        search_key: str = 'name', **params) -> List[int]:
         """
-        return divsion id
+        return division id
 
         Parameters
         ----------
