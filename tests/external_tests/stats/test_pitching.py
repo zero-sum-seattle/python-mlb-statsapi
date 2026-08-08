@@ -9,7 +9,7 @@ class TestPitchingStats(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.mlb = Mlb()
         cls.al_team = 133
-        cls.shoei_ohtani = 660271
+        cls.shohei_ohtani = 660271
         cls.utility_player = 647351
         cls.ty_france = 664034
                     
@@ -24,7 +24,7 @@ class TestPitchingStats(unittest.TestCase):
         self.params = {'season': 2022}
 
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
+        stats = self.mlb.get_player_stats(self.shohei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -112,7 +112,7 @@ class TestPitchingStats(unittest.TestCase):
         self.params = {'season': 2022}
 
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
+        stats = self.mlb.get_player_stats(self.shohei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -131,7 +131,7 @@ class TestPitchingStats(unittest.TestCase):
         self.params = {'season': 2022, 'startDate': '2022-05-07'}
 
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
+        stats = self.mlb.get_player_stats(self.shohei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -149,7 +149,7 @@ class TestPitchingStats(unittest.TestCase):
         self.group = ['pitching']
         self.params = {'season': 2022}
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
+        stats = self.mlb.get_player_stats(self.shohei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -166,7 +166,7 @@ class TestPitchingStats(unittest.TestCase):
         self.group = ['pitching']
         self.params = {'season': 2022}
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
+        stats = self.mlb.get_player_stats(self.shohei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -183,7 +183,7 @@ class TestPitchingStats(unittest.TestCase):
         self.group = ['pitching']
         self.params = {'opposingPlayerId': 664034}
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
+        stats = self.mlb.get_player_stats(self.shohei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -200,7 +200,7 @@ class TestPitchingStats(unittest.TestCase):
         self.group = ['pitching']
         self.params = {'season': 2022}
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
+        stats = self.mlb.get_player_stats(self.shohei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -217,7 +217,7 @@ class TestPitchingStats(unittest.TestCase):
         self.group = ['pitching']
         self.params = {'season': 2022}
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
+        stats = self.mlb.get_player_stats(self.shohei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -234,7 +234,7 @@ class TestPitchingStats(unittest.TestCase):
         self.group = ['pitching']
         self.params = {'season': 2022}
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
+        stats = self.mlb.get_player_stats(self.shohei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})
@@ -251,7 +251,7 @@ class TestPitchingStats(unittest.TestCase):
         self.group = ['pitching']
         self.params = {'season': 2022}
         # let's get some stats
-        stats = self.mlb.get_player_stats(self.shoei_ohtani, stats=self.stats, groups=self.group, **self.params)
+        stats = self.mlb.get_player_stats(self.shohei_ohtani, stats=self.stats, groups=self.group, **self.params)
 
         # check for empty dict
         self.assertNotEqual(stats, {})

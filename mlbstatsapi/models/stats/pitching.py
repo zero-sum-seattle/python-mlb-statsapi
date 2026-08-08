@@ -1,6 +1,6 @@
 from typing import Optional, List, Any, ClassVar
 from pydantic import Field, field_validator
-from mlbstatsapi.models.base import MLBBaseModel
+from mlbstatsapi.models.base import MLBBaseModel, OptionalFloat
 from mlbstatsapi.models.people import Person, Pitcher, Batter
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
@@ -36,7 +36,7 @@ class SimplePitchingSplit(MLBBaseModel):
     home_runs : int
         The number of home runs given up by the pitcher.
     strikeouts : int
-        The number of strike outs performed by the pitcher.
+        The number of strikeouts performed by the pitcher.
     base_on_balls : int
         The number of base on balls (walks) performed by the pitcher.
     intentional_walks : int
@@ -45,29 +45,29 @@ class SimplePitchingSplit(MLBBaseModel):
         The number of hits given up by the pitcher.
     hit_by_pitch : int
         The number of batters hit by the pitcher.
-    avg : str
+    avg : float
         The batting avg against the pitcher.
     at_bats : int
         The at bats pitched by the pitcher.
-    obp : str
+    obp : float
         The on base percentage against the pitcher.
-    slg : str
+    slg : float
         The slugging percentage against the pitcher.
-    ops : str
+    ops : float
         The on base slugging against the pitcher.
     caught_stealing : int
         The number of runners caught stealing against the pitcher.
     stolen_bases : int
         The number of stolen bases while pitching.
-    stolen_base_percentage : str
+    stolen_base_percentage : float
         The stolen base percentage while pitching.
     ground_into_double_play : int
         The number of double plays hit into.
     number_of_pitches : int
         The number of pitches thrown.
-    era : str
+    era : float
         The earned run average of the pitcher.
-    innings_pitched : str
+    innings_pitched : float
         The number of innings pitched by the pitcher.
     wins : int
         The number of wins by the pitcher.
@@ -83,7 +83,7 @@ class SimplePitchingSplit(MLBBaseModel):
         The number of blown saves performed by the pitcher.
     earned_runs : int
         The number of earned runs given up by the pitcher.
-    whip : str
+    whip : float
         The number of walks and hits per inning pitched.
     outs : int
         The number of outs.
@@ -97,7 +97,7 @@ class SimplePitchingSplit(MLBBaseModel):
         The number of strikes thrown by the pitcher.
     hit_batsmen : int
         The number of batters hit by a pitch.
-    strike_percentage : str
+    strike_percentage : float
         The strike percentage thrown by the pitcher.
     wild_pitches : int
         The number of wild pitches thrown by the pitcher.
@@ -107,25 +107,25 @@ class SimplePitchingSplit(MLBBaseModel):
         The total bases given up by the pitcher.
     pickoffs : int
         The number of pick offs performed by the pitcher.
-    win_percentage : str
+    win_percentage : float
         The win percentage of the pitcher.
-    groundouts_to_airouts : str
+    groundouts_to_airouts : float
         The groundout-to-airout ratio of the pitcher.
     games_finished : int
         The number of games finished by the pitcher.
-    pitches_per_inning : str
+    pitches_per_inning : float
         The number of pitches thrown per inning by the pitcher.
-    strikeouts_per_9_inn : str
+    strikeouts_per_9_inn : float
         The number of strike outs per 9 innings by the pitcher.
-    strikeout_walk_ratio : str
+    strikeout_walk_ratio : float
         The strike out to walk ratio of the pitcher.
-    hits_per_9_inn : str
+    hits_per_9_inn : float
         The number of hits per 9 innings pitched.
-    walks_per_9_inn : str
+    walks_per_9_inn : float
         The number of walks per 9 innings pitched.
-    home_runs_per_9 : str
+    home_runs_per_9 : float
         The number of home runs per 9 innings pitched.
-    runs_scored_per_9 : str
+    runs_scored_per_9 : float
         The number of runs scored per 9 innings pitched.
     sac_bunts : int
         The number of sac bunts given up when pitched.
@@ -141,7 +141,7 @@ class SimplePitchingSplit(MLBBaseModel):
         The number of inherited runners for the pitcher.
     age : int
         The age of the pitcher.
-    caught_stealing_percentage : str
+    caught_stealing_percentage : float
         The caught stealing percentage for the pitcher.
     """
     summary: Optional[str] = None
@@ -160,19 +160,19 @@ class SimplePitchingSplit(MLBBaseModel):
     intentional_walks: Optional[int] = Field(default=None, alias="intentionalWalks")
     hits: Optional[int] = None
     hit_by_pitch: Optional[int] = Field(default=None, alias="hitByPitch")
-    avg: Optional[str] = None
+    avg: OptionalFloat = None
     at_bats: Optional[int] = Field(default=None, alias="atBats")
-    obp: Optional[str] = None
-    slg: Optional[str] = None
-    ops: Optional[str] = None
+    obp: OptionalFloat = None
+    slg: OptionalFloat = None
+    ops: OptionalFloat = None
     caught_stealing: Optional[int] = Field(default=None, alias="caughtStealing")
-    caught_stealing_percentage: Optional[str] = Field(default=None, alias="caughtStealingPercentage")
+    caught_stealing_percentage: OptionalFloat = Field(default=None, alias="caughtStealingPercentage")
     stolen_bases: Optional[int] = Field(default=None, alias="stolenBases")
-    stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenBasePercentage")
+    stolen_base_percentage: OptionalFloat = Field(default=None, alias="stolenBasePercentage")
     ground_into_double_play: Optional[int] = Field(default=None, alias="groundIntoDoublePlay")
     number_of_pitches: Optional[int] = Field(default=None, alias="numberOfPitches")
-    era: Optional[str] = None
-    innings_pitched: Optional[str] = Field(default=None, alias="inningsPitched")
+    era: OptionalFloat = None
+    innings_pitched: OptionalFloat = Field(default=None, alias="inningsPitched")
     wins: Optional[int] = None
     losses: Optional[int] = None
     saves: Optional[int] = None
@@ -180,28 +180,28 @@ class SimplePitchingSplit(MLBBaseModel):
     holds: Optional[int] = None
     blown_saves: Optional[int] = Field(default=None, alias="blownSaves")
     earned_runs: Optional[int] = Field(default=None, alias="earnedRuns")
-    whip: Optional[str] = None
+    whip: OptionalFloat = None
     outs: Optional[int] = None
     games_pitched: Optional[int] = Field(default=None, alias="gamesPitched")
     complete_games: Optional[int] = Field(default=None, alias="completeGames")
     shutouts: Optional[int] = None
     strikes: Optional[int] = None
-    strike_percentage: Optional[str] = Field(default=None, alias="strikePercentage")
+    strike_percentage: OptionalFloat = Field(default=None, alias="strikePercentage")
     hit_batsmen: Optional[int] = Field(default=None, alias="hitBatsmen")
     balks: Optional[int] = None
     wild_pitches: Optional[int] = Field(default=None, alias="wildPitches")
     pickoffs: Optional[int] = None
     total_bases: Optional[int] = Field(default=None, alias="totalBases")
-    groundouts_to_airouts: Optional[str] = Field(default=None, alias="groundoutsToAirouts")
-    win_percentage: Optional[str] = Field(default=None, alias="winPercentage")
-    pitches_per_inning: Optional[str] = Field(default=None, alias="pitchesPerInning")
+    groundouts_to_airouts: OptionalFloat = Field(default=None, alias="groundoutsToAirouts")
+    win_percentage: OptionalFloat = Field(default=None, alias="winPercentage")
+    pitches_per_inning: OptionalFloat = Field(default=None, alias="pitchesPerInning")
     games_finished: Optional[int] = Field(default=None, alias="gamesFinished")
-    strikeout_walk_ratio: Optional[str] = Field(default=None, alias="strikeoutWalkRatio")
-    strikeouts_per_9_inn: Optional[str] = Field(default=None, alias="strikeoutsPer9Inn")
-    walks_per_9_inn: Optional[str] = Field(default=None, alias="walksPer9Inn")
-    hits_per_9_inn: Optional[str] = Field(default=None, alias="hitsPer9Inn")
-    runs_scored_per_9: Optional[str] = Field(default=None, alias="runsScoredPer9")
-    home_runs_per_9: Optional[str] = Field(default=None, alias="homeRunsPer9")
+    strikeout_walk_ratio: OptionalFloat = Field(default=None, alias="strikeoutWalkRatio")
+    strikeouts_per_9_inn: OptionalFloat = Field(default=None, alias="strikeoutsPer9Inn")
+    walks_per_9_inn: OptionalFloat = Field(default=None, alias="walksPer9Inn")
+    hits_per_9_inn: OptionalFloat = Field(default=None, alias="hitsPer9Inn")
+    runs_scored_per_9: OptionalFloat = Field(default=None, alias="runsScoredPer9")
+    home_runs_per_9: OptionalFloat = Field(default=None, alias="homeRunsPer9")
     catchers_interference: Optional[int] = Field(default=None, alias="catchersInterference")
     sac_bunts: Optional[int] = Field(default=None, alias="sacBunts")
     sac_flies: Optional[int] = Field(default=None, alias="sacFlies")
@@ -221,29 +221,29 @@ class AdvancedPitchingSplit(MLBBaseModel):
     ----------
     age : int
         The age of the pitcher.
-    winning_percentage : str
+    winning_percentage : float
         The winning percentage of the pitcher.
-    runs_scored_per_9 : str
+    runs_scored_per_9 : float
         The number of runs scored per 9 innings.
     batters_faced : int
         The number of batters faced.
-    babip : str
+    babip : float
         The BABIP of the pitcher.
-    obp : str
+    obp : float
         The on base percentage against the pitcher.
-    slg : str
+    slg : float
         The slugging percentage against the pitcher.
-    ops : str
+    ops : float
         The on base slugging against the pitcher.
-    strikeouts_per_9 : str
+    strikeouts_per_9 : float
         The number of strike outs per 9 innings.
-    base_on_balls_per_9 : str
+    base_on_balls_per_9 : float
         The number of base on balls per 9 innings.
-    home_runs_per_9 : str
+    home_runs_per_9 : float
         The number of home runs per 9 innings.
-    hits_per_9 : str
+    hits_per_9 : float
         The number of hits per 9 innings.
-    strikeouts_to_walks : str
+    strikeouts_to_walks : float
         The strike out to walk ratio.
     stolen_bases : int
         The number of stolen bases while pitching.
@@ -275,21 +275,21 @@ class AdvancedPitchingSplit(MLBBaseModel):
         The number of balls put into play.
     run_support : int
         The number of run support.
-    strike_percentage : str
+    strike_percentage : float
         The strike percentage thrown.
-    pitches_per_inning : str
+    pitches_per_inning : float
         The number of pitches per inning.
-    pitches_per_plate_appearance : str
+    pitches_per_plate_appearance : float
         The avg number of pitches per plate appearance.
-    walks_per_plate_appearance : str
+    walks_per_plate_appearance : float
         The number of walks per plate appearance.
-    strikeouts_per_plate_appearance : str
-        The strike outs per plate appearance.
-    home_runs_per_plate_appearance : str
+    strikeouts_per_plate_appearance : float
+        The strikeouts per plate appearance.
+    home_runs_per_plate_appearance : float
         The home runs per plate appearance.
-    walks_per_strikeout : str
+    walks_per_strikeout : float
         The walk per strike out ratio.
-    iso : str
+    iso : float
         Isolated power.
     flyouts : int
         The number of fly outs given up.
@@ -317,18 +317,18 @@ class AdvancedPitchingSplit(MLBBaseModel):
         The number of bequeathed runners scored.
     """
     age: Optional[int] = None
-    winning_percentage: Optional[str] = Field(default=None, alias="winningPercentage")
-    runs_scored_per_9: Optional[str] = Field(default=None, alias="runsScoredPer9")
+    winning_percentage: OptionalFloat = Field(default=None, alias="winningPercentage")
+    runs_scored_per_9: OptionalFloat = Field(default=None, alias="runsScoredPer9")
     batters_faced: Optional[int] = Field(default=None, alias="battersFaced")
-    babip: Optional[str] = None
-    obp: Optional[str] = None
-    slg: Optional[str] = None
-    ops: Optional[str] = None
-    strikeouts_per_9: Optional[str] = Field(default=None, alias="strikeoutsPer9")
-    base_on_balls_per_9: Optional[str] = Field(default=None, alias="baseOnBallsPer9")
-    home_runs_per_9: Optional[str] = Field(default=None, alias="homeRunsPer9")
-    hits_per_9: Optional[str] = Field(default=None, alias="hitsPer9")
-    strikeouts_to_walks: Optional[str] = Field(default=None, alias="strikeoutsToWalks")
+    babip: OptionalFloat = None
+    obp: OptionalFloat = None
+    slg: OptionalFloat = None
+    ops: OptionalFloat = None
+    strikeouts_per_9: OptionalFloat = Field(default=None, alias="strikeoutsPer9")
+    base_on_balls_per_9: OptionalFloat = Field(default=None, alias="baseOnBallsPer9")
+    home_runs_per_9: OptionalFloat = Field(default=None, alias="homeRunsPer9")
+    hits_per_9: OptionalFloat = Field(default=None, alias="hitsPer9")
+    strikeouts_to_walks: OptionalFloat = Field(default=None, alias="strikeoutsToWalks")
     stolen_bases: Optional[int] = Field(default=None, alias="stolenBases")
     caught_stealing: Optional[int] = Field(default=None, alias="caughtStealing")
     quality_starts: Optional[int] = Field(default=None, alias="qualityStarts")
@@ -342,22 +342,22 @@ class AdvancedPitchingSplit(MLBBaseModel):
     pickoffs: Optional[int] = None
     total_swings: Optional[int] = Field(default=None, alias="totalSwings")
     swing_and_misses: Optional[int] = Field(default=None, alias="swingAndMisses")
-    strikeouts_minus_walks_percentage: Optional[str] = Field(default=None, alias="strikeoutsMinusWalksPercentage")
-    gidp_percentage: Optional[str] = Field(default=None, alias="gidpPercentage")
-    batters_faced_per_game: Optional[str] = Field(default=None, alias="battersFacedPerGame")
+    strikeouts_minus_walks_percentage: OptionalFloat = Field(default=None, alias="strikeoutsMinusWalksPercentage")
+    gidp_percentage: OptionalFloat = Field(default=None, alias="gidpPercentage")
+    batters_faced_per_game: OptionalFloat = Field(default=None, alias="battersFacedPerGame")
     bunts_failed: Optional[int] = Field(default=None, alias="buntsFailed")
     bunts_missed_tipped: Optional[int] = Field(default=None, alias="buntsMissedTipped")
-    whiff_percentage: Optional[str] = Field(default=None, alias="whiffPercentage")
+    whiff_percentage: OptionalFloat = Field(default=None, alias="whiffPercentage")
     balls_in_play: Optional[int] = Field(default=None, alias="ballsInPlay")
     run_support: Optional[int] = Field(default=None, alias="runSupport")
-    strike_percentage: Optional[str] = Field(default=None, alias="strikePercentage")
-    pitches_per_inning: Optional[str] = Field(default=None, alias="pitchesPerInning")
-    pitches_per_plate_appearance: Optional[str] = Field(default=None, alias="pitchesPerPlateAppearance")
-    walks_per_plate_appearance: Optional[str] = Field(default=None, alias="walksPerPlateAppearance")
-    strikeouts_per_plate_appearance: Optional[str] = Field(default=None, alias="strikeoutsPerPlateAppearance")
-    home_runs_per_plate_appearance: Optional[str] = Field(default=None, alias="homeRunsPerPlateAppearance")
-    walks_per_strikeout: Optional[str] = Field(default=None, alias="walksPerStrikeout")
-    iso: Optional[str] = None
+    strike_percentage: OptionalFloat = Field(default=None, alias="strikePercentage")
+    pitches_per_inning: OptionalFloat = Field(default=None, alias="pitchesPerInning")
+    pitches_per_plate_appearance: OptionalFloat = Field(default=None, alias="pitchesPerPlateAppearance")
+    walks_per_plate_appearance: OptionalFloat = Field(default=None, alias="walksPerPlateAppearance")
+    strikeouts_per_plate_appearance: OptionalFloat = Field(default=None, alias="strikeoutsPerPlateAppearance")
+    home_runs_per_plate_appearance: OptionalFloat = Field(default=None, alias="homeRunsPerPlateAppearance")
+    walks_per_strikeout: OptionalFloat = Field(default=None, alias="walksPerStrikeout")
+    iso: OptionalFloat = None
     flyouts: Optional[int] = None
     popouts: Optional[int] = None
     lineouts: Optional[int] = None
@@ -370,8 +370,8 @@ class AdvancedPitchingSplit(MLBBaseModel):
     inherited_runners_scored: Optional[int] = Field(default=None, alias="inheritedRunnersScored")
     bequeathed_runners: Optional[int] = Field(default=None, alias="bequeathedRunners")
     bequeathed_runners_scored: Optional[int] = Field(default=None, alias="bequeathedRunnersScored")
-    innings_pitched_per_game: Optional[str] = Field(default=None, alias="inningsPitchedPerGame")
-    flyball_percentage: Optional[str] = Field(default=None, alias="flyballPercentage")
+    innings_pitched_per_game: OptionalFloat = Field(default=None, alias="inningsPitchedPerGame")
+    flyball_percentage: OptionalFloat = Field(default=None, alias="flyballPercentage")
 
 
 class PitchingSabermetrics(Split):

@@ -1,6 +1,6 @@
 from typing import Optional, List, Any, ClassVar
 from pydantic import Field, field_validator
-from mlbstatsapi.models.base import MLBBaseModel
+from mlbstatsapi.models.base import MLBBaseModel, OptionalFloat
 from mlbstatsapi.models.people import Person, Position, Batter, Pitcher
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
@@ -83,18 +83,18 @@ class AdvancedHittingSplit(MLBBaseModel):
     left_on_base: Optional[int] = Field(default=None, alias="leftOnBase")
     sac_bunts: Optional[int] = Field(default=None, alias="sacBunts")
     sac_flies: Optional[int] = Field(default=None, alias="sacFlies")
-    babip: Optional[str] = None
+    babip: OptionalFloat = None
     extra_base_hits: Optional[int] = Field(default=None, alias="extraBaseHits")
     hit_by_pitch: Optional[int] = Field(default=None, alias="hitByPitch")
     gidp: Optional[int] = None
     gidp_opp: Optional[int] = Field(default=None, alias="gidpOpp")
     number_of_pitches: Optional[int] = Field(default=None, alias="numberOfPitches")
-    pitches_per_plate_appearance: Optional[str] = Field(default=None, alias="pitchesPerPlateAppearance")
-    walks_per_plate_appearance: Optional[str] = Field(default=None, alias="walksPerPlateAppearance")
-    strikeouts_per_plate_appearance: Optional[str] = Field(default=None, alias="strikeoutsPerPlateAppearance")
-    home_runs_per_plate_appearance: Optional[str] = Field(default=None, alias="homeRunsPerPlateAppearance")
-    walks_per_strikeout: Optional[str] = Field(default=None, alias="walksPerStrikeout")
-    iso: Optional[str] = None
+    pitches_per_plate_appearance: OptionalFloat = Field(default=None, alias="pitchesPerPlateAppearance")
+    walks_per_plate_appearance: OptionalFloat = Field(default=None, alias="walksPerPlateAppearance")
+    strikeouts_per_plate_appearance: OptionalFloat = Field(default=None, alias="strikeoutsPerPlateAppearance")
+    home_runs_per_plate_appearance: OptionalFloat = Field(default=None, alias="homeRunsPerPlateAppearance")
+    walks_per_strikeout: OptionalFloat = Field(default=None, alias="walksPerStrikeout")
+    iso: OptionalFloat = None
     reached_on_error: Optional[int] = Field(default=None, alias="reachedOnError")
     walkoffs: Optional[int] = Field(default=None, alias="walkOffs")
     flyouts: Optional[int] = Field(default=None, alias="flyOuts")
@@ -203,15 +203,15 @@ class SimpleHittingSplit(MLBBaseModel):
     intentional_walks: Optional[int] = Field(default=None, alias="intentionalWalks")
     hits: Optional[int] = None
     hit_by_pitch: Optional[int] = Field(default=None, alias="hitByPitch")
-    avg: Optional[str] = None
+    avg: OptionalFloat = None
     at_bats: Optional[int] = Field(default=None, alias="atBats")
-    obp: Optional[str] = None
-    slg: Optional[str] = None
-    ops: Optional[str] = None
+    obp: OptionalFloat = None
+    slg: OptionalFloat = None
+    ops: OptionalFloat = None
     caught_stealing: Optional[int] = Field(default=None, alias="caughtStealing")
-    caught_stealing_percentage: Optional[str] = Field(default=None, alias="caughtStealingPercentage")
+    caught_stealing_percentage: OptionalFloat = Field(default=None, alias="caughtStealingPercentage")
     stolen_bases: Optional[int] = Field(default=None, alias="stolenBases")
-    stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenBasePercentage")
+    stolen_base_percentage: OptionalFloat = Field(default=None, alias="stolenBasePercentage")
     ground_into_double_play: Optional[int] = Field(default=None, alias="groundIntoDoublePlay")
     ground_into_triple_play: Optional[int] = Field(default=None, alias="groundIntoTriplePlay")
     number_of_pitches: Optional[int] = Field(default=None, alias="numberOfPitches")
@@ -221,10 +221,10 @@ class SimpleHittingSplit(MLBBaseModel):
     left_on_base: Optional[int] = Field(default=None, alias="leftOnBase")
     sac_bunts: Optional[int] = Field(default=None, alias="sacBunts")
     sac_flies: Optional[int] = Field(default=None, alias="sacFlies")
-    babip: Optional[str] = None
-    groundouts_to_airouts: Optional[str] = Field(default=None, alias="groundOutsToAirouts")
+    babip: OptionalFloat = None
+    groundouts_to_airouts: OptionalFloat = Field(default=None, alias="groundoutsToAirouts")
     catchers_interference: Optional[int] = Field(default=None, alias="catchersInterference")
-    at_bats_per_home_run: Optional[str] = Field(default=None, alias="atBatsPerHomeRun")
+    at_bats_per_home_run: OptionalFloat = Field(default=None, alias="atBatsPerHomeRun")
 
 
 class HittingWinLoss(Split):
