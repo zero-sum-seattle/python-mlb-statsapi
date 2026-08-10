@@ -809,11 +809,11 @@ class Mlb:
         """
         
         if start_date and end_date:
-            params['startDate'] = start_date
-            params['endDate'] = end_date
+            params["startDate"] = start_date
+            params["endDate"] = end_date
         elif date and not (start_date or end_date):
-            params['date'] = date
-        else:
+            params["date"] = date
+        elif "gamePks" not in params:
             return None
 
 
@@ -886,14 +886,14 @@ class Mlb:
         >>> mlb.get_game_ids()
         """
         if start_date and end_date:
-            params['startDate'] = start_date
-            params['endDate'] = end_date
+            params["startDate"] = start_date
+            params["endDate"] = end_date
         elif date and not (start_date or end_date):
-            params['date'] = date
-        else:
-            return None
+            params["date"] = date
+        elif "gamePks" not in params:
+            return []
 
-        params['sportId'] = sport_id
+        params["sportId"] = sport_id
 
         games = []
 
