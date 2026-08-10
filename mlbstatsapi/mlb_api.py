@@ -891,7 +891,7 @@ class Mlb:
         elif date and not (start_date or end_date):
             params["date"] = date
         elif "gamePks" not in params:
-            return []
+            return None
 
         params["sportId"] = sport_id
 

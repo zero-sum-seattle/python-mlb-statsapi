@@ -40,14 +40,16 @@ EXTERNAL_WORKFLOW = PROJECT_ROOT / ".github" / "workflows" / "external-tests.yml
 # Release notes for the version this branch is preparing. Kept explicit so the
 # current-document checks do not depend on the pyproject version bump, which is
 # owned by a separate issue.
-CURRENT_RELEASE_NOTES = RELEASE_NOTES_DIR / "1.0.0.md"
+CURRENT_RELEASE_NOTES = RELEASE_NOTES_DIR / "1.0.1.md"
 
 # Historical notes keep their own version-specific statements and must not be
 # rewritten to match the current release.
+
 HISTORICAL_RELEASE_NOTES = (
     RELEASE_NOTES_DIR / "0.7.1.md",
     RELEASE_NOTES_DIR / "0.8.0.md",
     RELEASE_NOTES_DIR / "0.9.0.md",
+    RELEASE_NOTES_DIR / "1.0.0.md",
 )
 
 # Deterministic CI contract for the 1.0 release.
