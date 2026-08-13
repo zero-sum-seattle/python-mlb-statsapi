@@ -1,0 +1,2 @@
+    assert parse_teams({}) == []
+    assert parse_teams({"teams": []}) == []
