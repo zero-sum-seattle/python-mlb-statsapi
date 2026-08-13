@@ -22,6 +22,11 @@ from mlbstatsapi.models.gamepace import GamePace
 from mlbstatsapi.models.homerunderby import HomeRunDerby
 from mlbstatsapi.models.standings import Standings
 
+
+from ._parsers.people import parse_people, parse_person
+from ._parsers.teams import parse_teams, parse_team
+from ._parsers.schedules import parse_schedule
+
 from .mlb_dataadapter import (
     DEFAULT_TIMEOUT,
     MlbDataAdapter,
@@ -145,7 +150,7 @@ class Mlb:
         people = []
 
         if 'people' in mlb_data.data and mlb_data.data['people']:
-            people = [Person(**person) for person in mlb_data.data['people']]
+            people = parse_people(mlb_data.data)
 
         return people
 
@@ -181,9 +186,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'people' in mlb_data.data and mlb_data.data['people']:
-            for person in mlb_data.data['people']:
-                return Person(**person)
+        return parse_person(mlb_data.data)
 
     def get_persons(self, person_ids: Union[str, List[int]], **params) -> List[Person]:
         """
@@ -243,13 +246,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        person_list = []
-
-        if 'people' in mlb_data.data and mlb_data.data['people']:
-            for person in mlb_data.data['people']:
-                person_list.append(Person(**person))
-
-        return person_list
+        return parse_people(mlb_data.data)
 
     def get_people_id(self, fullname: str, sport_id: int = 1, 
                       search_key: str = 'fullName', **params) -> List[int]:
@@ -379,12 +376,8 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        teams = []
+        return parse_teams(mlb_data.data)
 
-        if 'teams' in mlb_data.data and mlb_data.data['teams']:
-            teams = [Team(**team) for team in mlb_data.data['teams']]
-
-        return teams
 
     def get_team(self, team_id: int, **params) -> Union[Team, None]:
         """
@@ -450,9 +443,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'teams' in mlb_data.data and mlb_data.data['teams']:
-            for team in mlb_data.data['teams']:
-                return Team(**team)
+        return parse_team(mlb_data.data)
 
     def get_team_id(self, team_name: str,
                     search_key: str = 'name', **params) -> List[int]:
@@ -830,8 +821,7 @@ class Mlb:
         # can sometimes be an empty list when there are no scheduled game for the date(s).
         # Only check for existance 'dates' key for this reason.
 
-        if 'dates' in mlb_data.data and mlb_data.data['dates']:
-            return Schedule(**mlb_data.data)
+        return parse_schedule(mlb_data.data)
 
     def get_scheduled_games_by_date(self, date: str = None,
                                     start_date: str = None, 
