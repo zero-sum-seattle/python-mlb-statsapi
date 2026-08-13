@@ -14,7 +14,16 @@ def test_parse_schedule():
         "totalEvents": 0,
         "totalGames": 1,
         "totalGamesInProgress": 0,
-        "dates": [],
+        "dates": [
+            {
+                "date": "2026-08-12",
+                "totalItems": 1,
+                "totalEvents": 0,
+                "totalGames": 1,
+                "totalGamesInProgress": 0,
+                "games": [],
+            }
+        ]
     }
     schedule = parse_schedule(payload)
 
@@ -25,4 +34,17 @@ def test_parse_schedule():
 def test_parse_schedule_requires_totals():
     """Schedule requires the MLB total* fields from the response body."""
     with pytest.raises(ValidationError):
-        parse_schedule({"dates": []})
+        parse_schedule(
+            {
+                "dates": [
+                    {
+                        "date": "2026-08-12",
+                        "totalItems": 0,
+                        "totalEvents": 0,
+                        "totalGames": 0,
+                        "totalGamesInProgress": 0,
+                        "games": [],
+                    }
+                ]
+            }
+        )

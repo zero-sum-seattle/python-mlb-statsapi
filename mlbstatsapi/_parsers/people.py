@@ -10,6 +10,11 @@ def parse_people(data: dict) -> list[Person]:
 
 def parse_person(data: dict) -> Person | None:
     """Parse a Person from a single person payload."""
-    if not data:
+
+    people = parse_people(data)
+
+    if not people:
         return None
-    return Person(**data)
+
+    return people[0]
+

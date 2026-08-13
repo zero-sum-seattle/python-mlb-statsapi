@@ -187,11 +187,7 @@ class Mlb:
             return None
 
         if 'people' in mlb_data.data and mlb_data.data['people']:
-            for person in mlb_data.data['people']:
-                person = parse_person(person)
-                if person:
-                    return person
-        return None
+            return parse_person(mlb_data.data)
 
     def get_persons(self, person_ids: Union[str, List[int]], **params) -> List[Person]:
         """
@@ -457,9 +453,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'teams' in mlb_data.data and mlb_data.data['teams']:
-            return parse_team(mlb_data.data['teams'][0])
-        return None
+        return parse_team(mlb_data.data)
 
     def get_team_id(self, team_name: str,
                     search_key: str = 'name', **params) -> List[int]:

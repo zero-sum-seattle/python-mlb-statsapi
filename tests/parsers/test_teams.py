@@ -29,7 +29,7 @@ def test_parse_team():
     """parse_team builds a Team from one team payload."""
     assert parse_team({}) is None
 
-    team = parse_team({"id": 1, "link": "/api/v1/teams/1", "name": "Team 1"})
+    team = parse_team({"teams": [{"id": 1, "link": "/api/v1/teams/1", "name": "Team 1"}]})
 
     assert isinstance(team, Team)
     assert team == Team(id=1, link="/api/v1/teams/1", name="Team 1")
@@ -38,4 +38,4 @@ def test_parse_team():
 def test_parse_team_requires_link():
     """Team requires link, the same required field used by the MLB API."""
     with pytest.raises(ValidationError):
-        parse_team({"id": 1, "name": "Team 1"})
+        parse_team({"teams": [{"id": 1, "name": "Team 1"}]})

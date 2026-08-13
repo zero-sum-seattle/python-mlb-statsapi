@@ -13,6 +13,10 @@ def parse_teams(data: dict) -> list[Team]:
 
 def parse_team(data: dict) -> Team | None:
     """Parse a Team from a single team payload."""
-    if not data:
+    teams = parse_teams(data)
+
+    if not teams:
         return None
-    return Team(**data)
+
+    return teams[0]
+

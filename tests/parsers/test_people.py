@@ -30,7 +30,7 @@ def test_parse_person():
     assert parse_person({}) is None
 
     person = parse_person(
-        {"id": 1, "link": "/api/v1/people/1", "fullName": "Person 1"}
+        {"people": [{"id": 1, "link": "/api/v1/people/1", "fullName": "Person 1"}]} 
     )
 
     assert isinstance(person, Person)
@@ -40,4 +40,4 @@ def test_parse_person():
 def test_parse_person_requires_link():
     """Person requires link, the same required field used by the MLB API."""
     with pytest.raises(ValidationError):
-        parse_person({"id": 1, "fullName": "Person 1"})
+        parse_person({"people": [{"id": 1, "fullName": "Person 1"}]})
