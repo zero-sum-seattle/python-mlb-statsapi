@@ -1,37 +1,28 @@
 import pytest
 from pydantic import ValidationError
-from mlbstatsapi._parsers.schedules import parse_schedules, parse_schedule
+
+from mlbstatsapi._parsers.schedules import parse_schedule
 from mlbstatsapi.models.schedules import Schedule
 
-def test_parse_schedules():
-    """Test the parse_schedules function"""
-    assert parse_schedules({}) == []
-    assert parse_schedules({"schedules": []}) == []
-
-    schedules = parse_schedules(
-        {
-            "schedules": [
-                {"id": 1, "name": "Schedule 1"},
-                {"id": 2, "name": "Schedule 2"},
-            ]
-        }
-    )
-
-    assert schedules == [
-        Schedule(id=1, name="Schedule 1"),
-        Schedule(id=2, name="Schedule 2"),
-    ]
 
 def test_parse_schedule():
-    """Test the parse_schedule function"""
+    """parse_schedule builds a Schedule from the full MLB schedule body."""
     assert parse_schedule({}) is None
 
-    schedule = parse_schedule({"id": 1, "name": "Schedule 1"})
+    payload = {
+        "totalItems": 1,
+        "totalEvents": 0,
+        "totalGames": 1,
+        "totalGamesInProgress": 0,
+        "dates": [],
+    }
+    schedule = parse_schedule(payload)
 
     assert isinstance(schedule, Schedule)
-    assert schedule == Schedule(id=1, name="Schedule 1")
+    assert schedule == Schedule(**payload)
 
-def test_parse_schedule_requires_name():
-    """Test the parse_schedule function requires name"""
+
+def test_parse_schedule_requires_totals():
+    """Schedule requires the MLB total* fields from the response body."""
     with pytest.raises(ValidationError):
-        parse_schedule({"id": 1})
+        parse_schedule({"dates": []})

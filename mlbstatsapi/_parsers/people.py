@@ -1,9 +1,15 @@
 from mlbstatsapi.models.people import Person
 
-def parse_people(data: dict) -> list[Person]:
-    """Parse a list of people from the data"""
-    return [Person(**person) for person in data['people']] if data['people'] else []
 
-def parse_person(data: dict) -> Person:
-    """Parse a person from the data"""
-    return Person(**data) if data else None
+def parse_people(data: dict) -> list[Person]:
+    """Parse Person models from an MLB /people response body."""
+    if not data or not data.get("people"):
+        return []
+    return [Person(**person) for person in data["people"]]
+
+
+def parse_person(data: dict) -> Person | None:
+    """Parse a Person from a single person payload."""
+    if not data:
+        return None
+    return Person(**data)
