@@ -186,8 +186,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'people' in mlb_data.data and mlb_data.data['people']:
-            return parse_person(mlb_data.data)
+        return parse_person(mlb_data.data)
 
     def get_persons(self, person_ids: Union[str, List[int]], **params) -> List[Person]:
         """
@@ -831,9 +830,7 @@ class Mlb:
         # can sometimes be an empty list when there are no scheduled game for the date(s).
         # Only check for existance 'dates' key for this reason.
 
-        if 'dates' in mlb_data.data and mlb_data.data['dates']:
-            return parse_schedule(mlb_data.data)
-        return None
+        return parse_schedule(mlb_data.data)
 
     def get_scheduled_games_by_date(self, date: str = None,
                                     start_date: str = None, 
