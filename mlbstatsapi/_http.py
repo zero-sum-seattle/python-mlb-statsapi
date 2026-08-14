@@ -107,8 +107,15 @@ def _build_http_error(
     method: str,
 ) -> MlbHttpError:
     """Build MlbHttpError from transport-neutral response context."""
-    response_data = _extract_error_response_data(response)
-    body_excerpt = _extract_error_body_excerpt(response)
+    try:
+        response_data = _extract_error_response_data(response)
+    except Exception:
+        response_data = None
+
+    try:
+        body_excerpt = _extract_error_body_excerpt(response)
+    except Exception:
+        body_excerpt = None
 
     return MlbHttpError(
         status_code=status_code,
