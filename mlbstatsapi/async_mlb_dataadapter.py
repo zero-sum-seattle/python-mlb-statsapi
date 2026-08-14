@@ -6,7 +6,6 @@ from typing import Dict
 
 from .exceptions import (
     MlbDecodeError,
-    MlbHttpError,
     MlbTimeoutError,
     MlbTransportError,
 )
@@ -16,6 +15,10 @@ from .mlb_dataadapter import (
     TimeoutType,
 )
 
+from ._http import (
+    _build_http_error,
+    _warn_http_compatibility,
+)
 
 
 class AsyncMlbDataAdapter:
@@ -104,8 +107,10 @@ class AsyncMlbDataAdapter:
             if self._strict_http and status_code != 404:
                 raise _build_http_error(
                     response,
+                    status_code=response.status_code,
+                    reason=response.reason_phrase,
+                    url=str(response.url) if response.url else full_url,
                     method="GET",
-                    fallback_url=full_url,
                 )
             if status_code != 404:
                 _warn_http_compatibility(

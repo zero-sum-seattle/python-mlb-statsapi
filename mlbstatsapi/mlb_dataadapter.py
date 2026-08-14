@@ -3,14 +3,10 @@ from typing import Dict
 
 from .exceptions import (
     MlbDecodeError,
-    MlbHttpError,
     MlbTimeoutError,
     MlbTransportError,
 )
-from .warnings import MlbHttpCompatibilityWarning
-import inspect
 import logging
-import warnings
 
 import requests
 from requests.adapters import HTTPAdapter
