@@ -16,6 +16,10 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
+from ._http import (
+    _build_http_error,
+    _warn_http_compatibility,
+)
 
 # Connect timeout, then read timeout. Callers may override with a scalar or tuple.
 DEFAULT_TIMEOUT = (3.05, 30.0)
@@ -25,131 +29,6 @@ TimeoutType = int | float | tuple[float, float]
 # installed metadata so no release version is duplicated in source.
 PACKAGE_DISTRIBUTION_NAME = "python-mlb-statsapi"
 UNKNOWN_PACKAGE_VERSION = "unknown"
-
-# Bounded excerpt for error response bodies attached to MlbHttpError.
-HTTP_ERROR_BODY_EXCERPT_LIMIT = 500
-
-
-def _is_mlbstatsapi_module(module_name: str) -> bool:
-    """Return True when *module_name* belongs to this package."""
-    return module_name == "mlbstatsapi" or module_name.startswith("mlbstatsapi.")
-
-
-def _compatibility_warning_stacklevel() -> int:
-    """Return a warnings.warn stacklevel for the first non-package caller.
-
-    A fixed stack level cannot serve both direct MlbDataAdapter.get() calls and
-    public Mlb endpoint methods that wrap the adapter. Walk frames from the
-    caller of this helper outward and stop at the first module outside the
-    mlbstatsapi package namespace.
-    """
-    frame = inspect.currentframe()
-    stacklevel = 1
-    try:
-        frame = frame.f_back
-        while frame is not None:
-            module_name = frame.f_globals.get("__name__", "")
-            if not _is_mlbstatsapi_module(module_name):
-                return stacklevel
-            stacklevel += 1
-            frame = frame.f_back
-    finally:
-        del frame
-    return 1
-
-
-def _warn_http_compatibility(
-    *,
-    status_code: int,
-    url: str,
-) -> None:
-    """Warn that compatibility mode suppressed an error strict mode would raise.
-
-    Only the status code and URL are reported; response bodies, headers, and
-    credentials must never reach a warning message.
-    """
-    warnings.warn(
-        (
-            f"HTTP {status_code} for {url} was suppressed because "
-            "strict_http=False explicitly selected compatibility mode, so the "
-            "historical empty result was returned. Strict HTTP behavior is the "
-            "default in version 1.0. Remove strict_http=False or pass "
-            "strict_http=True to raise MlbHttpError."
-        ),
-        MlbHttpCompatibilityWarning,
-        stacklevel=_compatibility_warning_stacklevel(),
-    )
-
-
-def _extract_error_response_data(
-    response: requests.Response,
-) -> dict | list | None:
-    """Best-effort JSON object/list extraction from an error response.
-
-    Returns None for empty bodies, invalid JSON, scalars, or unexpected failures.
-    Must not raise; context extraction cannot replace the original HTTP error.
-    """
-    try:
-        if not response.content:
-            return None
-        data = response.json()
-    except Exception:
-        return None
-
-    if isinstance(data, (dict, list)):
-        return data
-    return None
-
-
-def _extract_error_body_excerpt(
-    response: requests.Response,
-) -> str | None:
-    """Best-effort bounded text excerpt from an error response body.
-
-    Returns None for empty bodies or unexpected text-decoding failures.
-    Must not raise; context extraction cannot replace the original HTTP error.
-    """
-    try:
-        if not response.content:
-            return None
-        text = response.text
-    except Exception:
-        return None
-
-    if not text:
-        return None
-    return text[:HTTP_ERROR_BODY_EXCERPT_LIMIT]
-
-
-def _build_http_error(
-    response: requests.Response,
-    *,
-    method: str,
-    fallback_url: str,
-) -> MlbHttpError:
-    """Build an MlbHttpError with best-effort response context.
-
-    Extraction failures must not prevent raising MlbHttpError with status,
-    reason, URL, and method.
-    """
-    try:
-        response_data = _extract_error_response_data(response)
-    except Exception:
-        response_data = None
-
-    try:
-        body_excerpt = _extract_error_body_excerpt(response)
-    except Exception:
-        body_excerpt = None
-
-    return MlbHttpError(
-        status_code=response.status_code,
-        reason=response.reason,
-        url=response.url or fallback_url,
-        method=method,
-        response_data=response_data,
-        body_excerpt=body_excerpt,
-    )
 
 
 def create_retry_policy() -> Retry:
@@ -340,8 +219,10 @@ class MlbDataAdapter:
             if self._strict_http and status_code != 404:
                 raise _build_http_error(
                     response,
+                    status_code=response.status_code,
+                    reason=response.reason,
+                    url=response.url or full_url,
                     method="GET",
-                    fallback_url=full_url,
                 )
             if status_code != 404:
                 _warn_http_compatibility(
@@ -363,15 +244,19 @@ class MlbDataAdapter:
             ))
             raise _build_http_error(
                 response,
+                status_code=response.status_code,
+                reason=response.reason,
+                url=response.url or full_url,
                 method="GET",
-                fallback_url=full_url,
             )
 
         if not 200 <= status_code <= 299:
             raise _build_http_error(
                 response,
+                status_code=response.status_code,
+                reason=response.reason,
+                url=response.url or full_url,
                 method="GET",
-                fallback_url=full_url,
             )
 
         self._logger.debug(msg=logline_post.format(
