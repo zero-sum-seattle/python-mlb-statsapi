@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 import httpx
@@ -13,6 +14,7 @@ from .mlb_dataadapter import (
     DEFAULT_TIMEOUT,
     MlbResult,
     TimeoutType,
+    create_retry_policy,
 )
 
 from ._http import (
@@ -40,6 +42,7 @@ class AsyncMlbDataAdapter:
         self._timeout = timeout
         self._strict_http = strict_http
         self._owns_client = client is None
+        self._retry_policy = create_retry_policy()
 
         if client is None:
             self._client = httpx.AsyncClient()
@@ -76,22 +79,8 @@ class AsyncMlbDataAdapter:
             )
         )
 
-        try:
-            self._logger.debug(logline_post)
-
-            response = await self._client.get(
-                url=full_url,
-                params=ep_params,
-                timeout=self._translate_timeout(self._timeout),
-            )
-
-        except httpx.TimeoutException as exc:
-            self._logger.error(msg=str(exc))
-            raise MlbTimeoutError("Request failed") from exc
-
-        except httpx.RequestError as exc:
-            self._logger.error(msg=str(exc))
-            raise MlbTransportError("Request failed") from exc  
+        self._logger.debug(logline_post)
+        response = await self._request_with_retries(full_url, ep_params)
 
         status_code = response.status_code
 
@@ -170,6 +159,72 @@ class AsyncMlbDataAdapter:
             message=response.reason_phrase,
             data=response_data,
         )
+
+    async def _request_with_retries(
+        self,
+        full_url: str,
+        ep_params: Dict,
+    ) -> httpx.Response:
+        """Issue the GET call, retrying with bounded backoff when this
+        adapter owns its httpx.AsyncClient.
+
+        An injected client is called exactly once; its retry behavior stays
+        under caller control, matching the sync adapter's session-ownership
+        rule.
+        """
+        policy = self._retry_policy
+        max_attempts = policy.total + 1 if self._owns_client else 1
+
+        attempt = 0
+        while True:
+            attempt += 1
+            try:
+                response = await self._client.get(
+                    url=full_url,
+                    params=ep_params,
+                    timeout=self._translate_timeout(self._timeout),
+                )
+            except httpx.TimeoutException as exc:
+                if attempt >= max_attempts:
+                    self._logger.error(msg=str(exc))
+                    raise MlbTimeoutError("Request failed") from exc
+                await self._sleep_before_retry(attempt=attempt, response=None)
+                continue
+            except httpx.RequestError as exc:
+                if attempt >= max_attempts:
+                    self._logger.error(msg=str(exc))
+                    raise MlbTransportError("Request failed") from exc
+                await self._sleep_before_retry(attempt=attempt, response=None)
+                continue
+
+            if response.status_code not in policy.status_forcelist or attempt >= max_attempts:
+                return response
+
+            await self._sleep_before_retry(attempt=attempt, response=response)
+
+    async def _sleep_before_retry(
+        self,
+        *,
+        attempt: int,
+        response: httpx.Response | None,
+    ) -> None:
+        policy = self._retry_policy
+
+        if policy.respect_retry_after_header and response is not None:
+            retry_after = policy.get_retry_after(response)
+            if retry_after:
+                await asyncio.sleep(retry_after)
+                return
+
+        # Mirrors urllib3's Retry.get_backoff_time(): no delay before the
+        # first retry, exponential thereafter, capped at backoff_max.
+        delay = 0.0 if attempt <= 1 else min(
+            policy.backoff_factor * (2 ** (attempt - 1)),
+            policy.backoff_max,
+        )
+
+        if delay > 0:
+            await asyncio.sleep(delay)
 
     @staticmethod
     def _translate_timeout(timeout: TimeoutType) -> httpx.Timeout:
