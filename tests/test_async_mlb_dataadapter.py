@@ -99,6 +99,152 @@ def test_200_succeeds_with_no_retry():
     sleep_mock.assert_not_awaited()
 
 
+def test_200_response_returns_actual_json_data():
+    payload = {"sports": [{"id": 1, "name": "Major League Baseball"}]}
+    handler = _ScriptedHandler(httpx.Response(200, json=payload))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        return await adapter.get(endpoint="sports")
+
+    result = run_async(scenario())
+    assert result.status_code == 200
+    assert result.data == payload
+
+
+def test_explicit_empty_successful_response_returns_empty_data():
+    handler = _ScriptedHandler(_response(204, text=""))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        return await adapter.get(endpoint="sports")
+
+    result = run_async(scenario())
+    assert result.status_code == 204
+    assert result.data == {}
+
+
+def test_mlb_http_error_has_structured_context():
+    payload = {"messageNumber": 1, "message": "Internal error occurred"}
+    handler = _ScriptedHandler(httpx.Response(500, json=payload))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with pytest.raises(MlbHttpError) as exc_info:
+                await adapter.get(endpoint="sports")
+            return exc_info.value
+
+    error = run_async(scenario())
+    assert error.status_code == 500
+    assert error.reason == "Internal Server Error"
+    assert error.method == "GET"
+    assert error.url == f"{BASE_URL}sports"
+    assert error.response_data == payload
+    assert error.body_excerpt is not None
+    assert "Internal error occurred" in error.body_excerpt
+
+
+def test_library_owned_client_closes():
+    async def scenario():
+        adapter = AsyncMlbDataAdapter()
+        was_open = not adapter._client.is_closed
+        await adapter.aclose()
+        return was_open, adapter._client.is_closed
+
+    was_open, is_closed = run_async(scenario())
+    assert was_open is True
+    assert is_closed is True
+
+
+def test_aclose_is_idempotent():
+    async def scenario():
+        adapter = AsyncMlbDataAdapter()
+        await adapter.aclose()
+        with patch.object(adapter._client, "aclose", new_callable=AsyncMock) as aclose_mock:
+            await adapter.aclose()
+            return aclose_mock
+
+    aclose_mock = run_async(scenario())
+    aclose_mock.assert_not_awaited()
+
+
+def test_injected_client_is_not_closed():
+    async def scenario():
+        client = httpx.AsyncClient()
+        adapter = AsyncMlbDataAdapter(client=client)
+        await adapter.aclose()
+        was_closed = client.is_closed
+        await client.aclose()
+        return was_closed
+
+    was_closed = run_async(scenario())
+    assert was_closed is False
+
+
+def test_scalar_timeout_translation():
+    result = AsyncMlbDataAdapter._translate_timeout(5)
+    assert result.connect == 5
+    assert result.read == 5
+    assert result.write == 5
+    assert result.pool == 5
+
+
+def test_tuple_timeout_translation():
+    result = AsyncMlbDataAdapter._translate_timeout((3.05, 30.0))
+    assert result.connect == 3.05
+    assert result.pool == 3.05
+    assert result.read == 30.0
+    assert result.write == 30.0
+
+
+def test_multiple_concurrent_requests_on_one_adapter():
+    responses = {
+        "sports": httpx.Response(200, json={"id": "sports"}),
+        "teams": httpx.Response(200, json={"id": "teams"}),
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        endpoint = request.url.path.rsplit("/", 1)[-1]
+        return responses[endpoint]
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        return await asyncio.gather(
+            adapter.get(endpoint="sports"),
+            adapter.get(endpoint="teams"),
+        )
+
+    sports_result, teams_result = run_async(scenario())
+    assert sports_result.data == {"id": "sports"}
+    assert teams_result.data == {"id": "teams"}
+
+
+def test_cancelling_one_request_does_not_cancel_another():
+    async def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path.endswith("hang"):
+            await asyncio.sleep(10)
+            raise AssertionError("handler should have been cancelled before returning")
+        return _response(200)
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+
+        hanging_task = asyncio.ensure_future(adapter.get(endpoint="hang"))
+        await asyncio.sleep(0)
+
+        other_task = asyncio.ensure_future(adapter.get(endpoint="sports"))
+
+        hanging_task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await hanging_task
+
+        return await other_task
+
+    result = run_async(scenario())
+    assert result.status_code == 200
+
+
 def test_injected_client_persistent_server_error_is_not_retried():
     handler = _ScriptedHandler(_response(500))
 
