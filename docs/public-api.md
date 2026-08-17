@@ -14,6 +14,8 @@ affiliated with Major League Baseball.
 Related documents:
 
 * [HTTP transport](http-transport.md) — timeouts, retries, strict mode, and Session details
+* [Usage examples](examples.md) — worked examples for the endpoint methods below
+* [Async usage](async.md) — status of the planned asynchronous client
 * Issue #286 — define the stable 1.0 public API
 * Issue #282 — parent 1.0 release tracking
 
@@ -419,6 +421,29 @@ Notes and known conflicts (documented, not redesigned by this contract):
   instead of `return None`, so execution may continue. A focused bugfix is
   recommended.
 * Nested Pydantic model fields are not frozen by this contract.
+
+### Endpoint and model reference
+
+This contract defines which methods are supported and what shapes they return.
+It is not a tutorial. For return-object structure, model fields, and endpoint
+usage, use the Wiki data-type pages:
+
+* [People, Person, Players, Coaches](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-People)
+* [Teams](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Team)
+* [Stats](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Stats)
+* [Schedules](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Schedule)
+* [Games](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Game)
+* [Gamepace](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Gamepace)
+* [Standings](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Standings)
+* [Leagues](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-League)
+* [Divisions](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Division)
+* [Seasons](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Season)
+* [Sports](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Sport)
+* [Venues](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Venue)
+* [Draft](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Draft\(round\))
+* [Awards](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Award)
+
+Worked examples for these endpoints live in [examples.md](examples.md).
 
 ## Return-contract boundaries
 

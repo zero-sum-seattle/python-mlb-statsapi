@@ -118,6 +118,11 @@ mlb = mlbstatsapi.Mlb(
 )
 ```
 
+```text
+5.0 seconds: connection timeout
+60.0 seconds: read timeout
+```
+
 ## Shared Session model
 
 One `requests.Session` is shared by the client's adapters:
@@ -714,4 +719,5 @@ The client has no default response cache.
 
 The client remains synchronous.
 
-Async support is not part of version 1.0.0.
+Async support is not part of version 1.0.0. For the status of the planned
+asynchronous client see [async.md](async.md).
