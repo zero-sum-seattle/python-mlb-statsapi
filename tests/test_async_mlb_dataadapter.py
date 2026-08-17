@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+from importlib.metadata import PackageNotFoundError
 from unittest.mock import AsyncMock, patch
 
 import httpx
@@ -25,6 +26,7 @@ from mlbstatsapi import (
     MlbTransportError,
 )
 from mlbstatsapi.async_mlb_dataadapter import AsyncMlbDataAdapter
+from mlbstatsapi.mlb_dataadapter import PACKAGE_DISTRIBUTION_NAME
 
 from http_contract_support import (
     RETRYABLE_STATUS_CODES,
@@ -36,6 +38,10 @@ from http_contract_support import (
 BASE_URL = "https://statsapi.mlb.com/api/v1/"
 
 SLEEP_TARGET = "mlbstatsapi.async_mlb_dataadapter.asyncio.sleep"
+
+# Matches tests/test_mlb_session.py, so both adapters assert the same contract.
+MOCKED_PACKAGE_VERSION = "9.8.7"
+MOCKED_USER_AGENT = f"python-mlb-statsapi/{MOCKED_PACKAGE_VERSION}"
 
 
 def run_async(coro):
@@ -538,3 +544,68 @@ def test_json_decode_failure_is_not_retried():
 
     run_async(scenario())
     assert handler.call_count == 1
+
+
+# --- Versioned User-Agent ---
+
+
+def test_library_owned_client_has_versioned_user_agent():
+    """A library-created AsyncClient sends the package and version User-Agent."""
+    with patch(
+        "mlbstatsapi.mlb_dataadapter.package_version",
+        return_value=MOCKED_PACKAGE_VERSION,
+    ) as lookup:
+        adapter = AsyncMlbDataAdapter()
+        try:
+            assert adapter._client.headers["User-Agent"] == MOCKED_USER_AGENT
+        finally:
+            run_async(adapter.aclose())
+
+    lookup.assert_called_with(PACKAGE_DISTRIBUTION_NAME)
+
+
+def test_library_owned_client_user_agent_uses_installed_version():
+    """Without patching, the User-Agent still names this package."""
+    adapter = AsyncMlbDataAdapter()
+    try:
+        assert adapter._client.headers["User-Agent"].startswith(
+            f"{PACKAGE_DISTRIBUTION_NAME}/",
+        )
+    finally:
+        run_async(adapter.aclose())
+
+
+def test_library_owned_client_user_agent_falls_back_when_metadata_missing():
+    """Missing distribution metadata yields the "unknown" fallback, not an error."""
+    with patch(
+        "mlbstatsapi.mlb_dataadapter.package_version",
+        side_effect=PackageNotFoundError(PACKAGE_DISTRIBUTION_NAME),
+    ):
+        adapter = AsyncMlbDataAdapter()
+        try:
+            assert adapter._client.headers["User-Agent"] == "python-mlb-statsapi/unknown"
+        finally:
+            run_async(adapter.aclose())
+
+
+def test_injected_client_headers_are_unchanged():
+    """Headers on a caller-supplied client survive adapter construction."""
+    async def scenario():
+        client = httpx.AsyncClient(
+            headers={
+                "User-Agent": "my-baseball-project/1.0",
+                "X-Application": "scoreboard",
+            },
+        )
+        headers_before = dict(client.headers)
+        try:
+            adapter = AsyncMlbDataAdapter(client=client)
+
+            assert adapter._client is client
+            assert dict(client.headers) == headers_before
+            assert client.headers["User-Agent"] == "my-baseball-project/1.0"
+            assert client.headers["X-Application"] == "scoreboard"
+        finally:
+            await client.aclose()
+
+    run_async(scenario())

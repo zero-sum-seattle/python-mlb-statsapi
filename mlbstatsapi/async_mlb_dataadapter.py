@@ -14,6 +14,7 @@ from .mlb_dataadapter import (
     DEFAULT_TIMEOUT,
     MlbResult,
     TimeoutType,
+    _build_user_agent,
     create_retry_policy,
 )
 
@@ -45,8 +46,14 @@ class AsyncMlbDataAdapter:
         self._retry_policy = create_retry_policy()
 
         if client is None:
-            self._client = httpx.AsyncClient()
+            # Only a library-owned client gets the package User-Agent. Passing
+            # it to the constructor replaces just that header, so httpx's other
+            # default headers (Accept, Accept-Encoding, Connection) survive.
+            self._client = httpx.AsyncClient(
+                headers={"User-Agent": _build_user_agent()},
+            )
         else:
+            # An injected client stays exactly as the caller configured it.
             self._client = client
 
         self._closed = False
