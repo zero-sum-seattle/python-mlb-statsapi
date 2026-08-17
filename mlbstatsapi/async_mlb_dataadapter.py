@@ -173,7 +173,6 @@ class AsyncMlbDataAdapter:
         rule.
         """
         policy = self._retry_policy
-        max_attempts = policy.total + 1 if self._owns_client else 1
 
         attempt = 0
         while True:
@@ -184,18 +183,52 @@ class AsyncMlbDataAdapter:
                     params=ep_params,
                     timeout=self._translate_timeout(self._timeout),
                 )
-            except httpx.TimeoutException as exc:
+
+            except httpx.ReadTimeout as exc:
+                max_attempts = policy.read + 1 if self._owns_client else 1
+
                 if attempt >= max_attempts:
                     self._logger.error(msg=str(exc))
                     raise MlbTimeoutError("Request failed") from exc
+
                 await self._sleep_before_retry(attempt=attempt, response=None)
                 continue
+
+            except httpx.ConnectError as exc:
+                max_attempts = policy.connect + 1 if self._owns_client else 1
+
+                if attempt >= max_attempts:
+                    raise MlbTransportError("Request failed") from exc
+
+                await self._sleep_before_retry(
+                    attempt=attempt,
+                    response=None,
+                )
+                continue
+
+            except httpx.TimeoutException as exc:
+                max_attempts = policy.total + 1 if self._owns_client else 1
+
+                if attempt >= max_attempts:
+                    raise MlbTimeoutError("Request failed") from exc
+
+                await self._sleep_before_retry(
+                    attempt=attempt,
+                    response=None,
+                )
+                continue
+
             except httpx.RequestError as exc:
+                max_attempts = policy.total + 1 if self._owns_client else 1
+
                 if attempt >= max_attempts:
                     self._logger.error(msg=str(exc))
                     raise MlbTransportError("Request failed") from exc
+
                 await self._sleep_before_retry(attempt=attempt, response=None)
                 continue
+
+            max_attempts = policy.status + 1 if self._owns_client else 1
 
             if response.status_code not in policy.status_forcelist or attempt >= max_attempts:
                 return response

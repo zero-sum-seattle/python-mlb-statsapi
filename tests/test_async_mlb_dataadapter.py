@@ -11,6 +11,7 @@ These tests must not contact the live MLB API.
 from __future__ import annotations
 
 import asyncio
+import contextlib
 from unittest.mock import AsyncMock, patch
 
 import httpx
@@ -81,6 +82,21 @@ def _injected_adapter(handler, **kwargs) -> AsyncMlbDataAdapter:
 def test_retry_policy_matches_library_default():
     adapter = AsyncMlbDataAdapter()
     assert_library_retry_policy(adapter._retry_policy)
+
+
+def test_200_succeeds_with_no_retry():
+    handler = _ScriptedHandler(_response(200))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        with patch(SLEEP_TARGET, new_callable=AsyncMock) as sleep_mock:
+            result = await adapter.get(endpoint="sports")
+            return result, sleep_mock
+
+    result, sleep_mock = run_async(scenario())
+    assert result.status_code == 200
+    assert handler.call_count == 1
+    sleep_mock.assert_not_awaited()
 
 
 def test_injected_client_persistent_server_error_is_not_retried():
@@ -219,7 +235,7 @@ def test_timeout_exhausts_retries_and_raises_mlb_timeout_error():
                 await adapter.get(endpoint="sports")
 
     run_async(scenario())
-    assert handler.call_count == 4
+    assert handler.call_count == 3
 
 
 def test_transport_error_retried_then_succeeds():
@@ -289,6 +305,44 @@ def test_backoff_grows_exponentially_between_retries():
 
     sleep_mock = run_async(scenario())
     assert [call.args[0] for call in sleep_mock.await_args_list] == [1.0, 2.0]
+
+
+def test_retry_sleep_is_async_and_non_blocking():
+    """A real (unmocked) backoff wait must yield the event loop.
+
+    If _sleep_before_retry ever used a blocking call (e.g. time.sleep)
+    instead of `await asyncio.sleep(...)`, the whole event loop would
+    freeze for the wait's duration and the concurrently running marker
+    task below would make zero progress during it.
+    """
+    handler = _ScriptedHandler(_response(500), _response(500), _response(200))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        # Small but real backoff so the test stays fast without mocking sleep.
+        adapter._retry_policy.backoff_factor = 0.05
+
+        marker_ticks = 0
+
+        async def marker():
+            nonlocal marker_ticks
+            for _ in range(50):
+                await asyncio.sleep(0.005)
+                marker_ticks += 1
+
+        marker_task = asyncio.ensure_future(marker())
+        try:
+            result = await adapter.get(endpoint="sports")
+        finally:
+            marker_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await marker_task
+
+        return result, marker_ticks
+
+    result, marker_ticks = run_async(scenario())
+    assert result.status_code == 200
+    assert marker_ticks > 0
 
 
 def test_cancelled_error_propagates_without_retry_during_network_call():
