@@ -133,6 +133,36 @@ surface.
 A future focused issue may introduce `__all__` after deciding how to treat the
 accidental submodule names (for example, a documented deprecation period).
 
+## Optional async support
+
+`AsyncMlbDataAdapter` is a public package-root symbol, like `MlbDataAdapter`,
+but its HTTP dependency is optional and installed with the `async` extra:
+
+```bash
+pip install "python-mlb-statsapi[async]"
+```
+
+With the extra installed:
+
+```python
+from mlbstatsapi import AsyncMlbDataAdapter
+```
+
+Async symbols are resolved on first access, so the optional dependency is not
+imported by `import mlbstatsapi`. A synchronous-only install is unaffected:
+
+* `import mlbstatsapi` succeeds without the `async` extra
+* every supported package-root symbol listed above stays importable
+* nothing in the synchronous surface changes
+
+Requesting async functionality without the extra raises `ImportError` naming
+the install command above. That failure happens only when async functionality
+is requested — importing the package, or any supported synchronous symbol,
+never triggers it.
+
+The async HTTP library is an implementation detail. It is not re-exported from
+the package root, and its types are not part of the public API.
+
 ## Primary client
 
 `Mlb` is the primary synchronous client.

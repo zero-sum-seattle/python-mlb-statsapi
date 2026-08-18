@@ -1,10 +1,9 @@
 import asyncio
 import logging
 
-import httpx
-
 from typing import Dict
 
+from ._async_support import import_httpx
 from .exceptions import (
     MlbDecodeError,
     MlbTimeoutError,
@@ -22,6 +21,13 @@ from ._http import (
     _build_http_error,
     _warn_http_compatibility,
 )
+
+# HTTPX is optional; it ships with the ``async`` extra. Importing it through
+# the shared boundary means a sync-only install that reaches for async
+# functionality gets install guidance instead of a bare ModuleNotFoundError
+# naming a library it never asked for. Binding the module here keeps every
+# ``httpx.`` reference below unchanged.
+httpx = import_httpx()
 
 
 class AsyncMlbDataAdapter:
