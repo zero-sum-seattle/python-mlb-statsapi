@@ -53,8 +53,8 @@ HISTORICAL_RELEASE_NOTES = (
 )
 
 # Deterministic CI contract for the 1.0 release.
-RELEASE_BRANCH = "release/1.0.0"
-STALE_RELEASE_BRANCH = "release/0.9.0"
+# Deterministic CI contract for maintained release branches.
+RELEASE_BRANCH_PATTERN = 'release/**'
 SUPPORTED_PYTHON_VERSIONS = ("3.10", "3.11", "3.12", "3.13", "3.14")
 CI_VALIDATED_PYTHON_RANGE = "3.10 through 3.14"
 # Prerelease during this work, so it is deliberately excluded from the matrix.
@@ -921,21 +921,26 @@ def _matrix_python_versions() -> list[str]:
     assert match is not None, "no python-version matrix found in the offline workflow"
     return re.findall(r'- "([^"]+)"', match.group(1))
 
-
-def test_ci_watches_the_current_release_branch() -> None:
-    """Pull requests and pushes must watch main and release/1.0.0.
-
-    The trigger is asserted literally instead of being derived from the package
-    version, which is still 0.9.0 until the release bump lands.
-    """
+def test_ci_watches_main_and_release_branches() -> None:
+    """Pull requests and pushes must watch main and release branches."""
     text = OFFLINE_WORKFLOW.read_text(encoding="utf-8")
 
-    assert text.count(f"- {RELEASE_BRANCH}") == 2, text
+    assert text.count(f'- "{RELEASE_BRANCH_PATTERN}"') == 2, text
     assert text.count("- main") == 2, text
-    assert STALE_RELEASE_BRANCH not in text, (
-        f"the stale {STALE_RELEASE_BRANCH} trigger must be removed"
-    )
     assert "workflow_dispatch:" in text
+
+def test_ci_matrix_installs_the_async_extra() -> None:
+    text = OFFLINE_WORKFLOW.read_text(encoding="utf-8")
+
+    assert "poetry install --no-interaction -E async" in text
+
+def test_ci_preserves_a_sync_only_installation_check() -> None:
+    text = OFFLINE_WORKFLOW.read_text(encoding="utf-8")
+
+    assert "sync-only:" in text
+    assert "poetry install --no-interaction --only main" in text
+    assert 'find_spec("httpx") is None' in text
+    assert "from mlbstatsapi import Mlb, MlbDataAdapter" in text
 
 
 def test_ci_matrix_covers_every_supported_python_version() -> None:

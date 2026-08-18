@@ -4,11 +4,11 @@ on:
   pull_request:
     branches:
       - main
-      - release/1.0.0
+      - "release/**"
   push:
     branches:
       - main
-      - release/1.0.0
+      - "release/**"
   workflow_dispatch:
 
 permissions:
@@ -27,7 +27,7 @@ jobs:
       # first failure, so a single-version incompatibility is easy to isolate.
       fail-fast: false
       # Python 3.15 is intentionally absent: it is still a prerelease during the
-      # 1.0 release work and is not claimed as a supported version.
+      # 1.1 release work and is not claimed as a supported version.
       matrix:
         python-version:
           - "3.10"
@@ -48,12 +48,52 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
       - name: Install dependencies
-        run: poetry install --no-interaction
+        run: poetry install --no-interaction -E async
       - name: Run offline tests
         run: |
           poetry run pytest \
             tests/ \
             --ignore=tests/external_tests
+
+  sync-only:
+    name: Sync-only installation
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Install dependencies without async extra
+        run: poetry install --no-interaction --only main
+
+      - name: Verify sync-only installation
+        run: |
+          poetry run python - <<'PY'
+          import importlib.util
+
+          assert importlib.util.find_spec("httpx") is None, (
+              "HTTPX should not be installed without the async extra"
+          )
+
+          import mlbstatsapi
+          from mlbstatsapi import Mlb, MlbDataAdapter
+
+          assert mlbstatsapi.Mlb is Mlb
+          assert mlbstatsapi.MlbDataAdapter is MlbDataAdapter
+
+          print("Sync-only installation verified without HTTPX")
+          PY
+
 
   build-package:
     name: Build and validate package
