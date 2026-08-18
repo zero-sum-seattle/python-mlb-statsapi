@@ -178,6 +178,16 @@ class AsyncMlbDataAdapter:
         An injected client is called exactly once; its retry behavior stays
         under caller control, matching the sync adapter's session-ownership
         rule.
+
+        Failures spend the retry budget the sync policy would spend, and
+        surface the public exception the sync adapter raises:
+
+            ReadTimeout             -> read budget    -> MlbTimeoutError
+            ConnectTimeout          -> connect budget -> MlbTimeoutError
+            ConnectError            -> connect budget -> MlbTransportError
+            other TimeoutException  -> total budget   -> MlbTimeoutError
+            other RequestError      -> total budget   -> MlbTransportError
+            retryable HTTP status   -> status budget
         """
         policy = self._retry_policy
 
@@ -201,10 +211,24 @@ class AsyncMlbDataAdapter:
                 await self._sleep_before_retry(attempt=attempt, response=None)
                 continue
 
+            except httpx.ConnectTimeout as exc:
+                # Caught before httpx.TimeoutException: a connect timeout is a
+                # timeout for the caller, but it spends the connect budget so
+                # the retry accounting matches the sync policy.
+                max_attempts = policy.connect + 1 if self._owns_client else 1
+
+                if attempt >= max_attempts:
+                    self._logger.error(msg=str(exc))
+                    raise MlbTimeoutError("Request failed") from exc
+
+                await self._sleep_before_retry(attempt=attempt, response=None)
+                continue
+
             except httpx.ConnectError as exc:
                 max_attempts = policy.connect + 1 if self._owns_client else 1
 
                 if attempt >= max_attempts:
+                    self._logger.error(msg=str(exc))
                     raise MlbTransportError("Request failed") from exc
 
                 await self._sleep_before_retry(

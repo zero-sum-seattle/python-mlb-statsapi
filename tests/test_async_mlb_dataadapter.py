@@ -1,6 +1,11 @@
-"""Offline tests for AsyncMlbDataAdapter's bounded retry-with-backoff behavior.
+"""Focused offline tests for the AsyncMlbDataAdapter implementation.
 
-Mirrors the retry contract asserted for the sync adapter in
+Covers the behavior delivered in issue #301: successful GETs, the HTTP status
+contract, exception mapping, lifecycle and ownership, timeout translation,
+User-Agent, bounded retry-with-backoff, cancellation, and concurrency. The
+exhaustive async transport-contract matrix belongs to #302.
+
+The retry assertions mirror the contract asserted for the sync adapter in
 tests/test_mlb_retries.py, adapted to httpx.MockTransport instead of a real
 threaded HTTP server, since the async retry loop here is hand-rolled Python
 rather than logic buried inside urllib3/requests internals.
@@ -39,13 +44,29 @@ BASE_URL = "https://statsapi.mlb.com/api/v1/"
 
 SLEEP_TARGET = "mlbstatsapi.async_mlb_dataadapter.asyncio.sleep"
 
+# Patched only while a test adapter is constructed, so the adapter creates its
+# own library-owned client the way production does, over a MockTransport.
+CLIENT_TARGET = "mlbstatsapi.async_mlb_dataadapter.httpx.AsyncClient"
+
 # Matches tests/test_mlb_session.py, so both adapters assert the same contract.
 MOCKED_PACKAGE_VERSION = "9.8.7"
 MOCKED_USER_AGENT = f"python-mlb-statsapi/{MOCKED_PACKAGE_VERSION}"
 
 
+# Adapters built by _owned_adapter(); run_async() closes them inside the same
+# event loop that used them, so no AsyncClient is left open by a test.
+_ADAPTERS_TO_CLOSE: list[AsyncMlbDataAdapter] = []
+
+
 def run_async(coro):
-    return asyncio.run(coro)
+    async def runner():
+        try:
+            return await coro
+        finally:
+            while _ADAPTERS_TO_CLOSE:
+                await _ADAPTERS_TO_CLOSE.pop().aclose()
+
+    return asyncio.run(runner())
 
 
 class _ScriptedHandler:
@@ -73,9 +94,26 @@ def _response(status_code: int, *, headers: dict | None = None, text: str | None
 
 
 def _owned_adapter(handler, **kwargs) -> AsyncMlbDataAdapter:
-    """Build an adapter that owns its client, so retries are active."""
-    adapter = AsyncMlbDataAdapter(**kwargs)
-    adapter._client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    """Build an adapter that owns its client, so retries are active.
+
+    The adapter still builds its own client through the production path — only
+    the transport is swapped for a MockTransport — so ownership, headers, and
+    retry behavior are exactly what the library does at runtime, and no client
+    is constructed and then discarded. Call this from inside a run_async()
+    scenario; run_async() closes what it creates.
+    """
+    real_async_client = httpx.AsyncClient
+
+    def mock_transport_client(**client_kwargs) -> httpx.AsyncClient:
+        return real_async_client(
+            transport=httpx.MockTransport(handler),
+            **client_kwargs,
+        )
+
+    with patch(CLIENT_TARGET, mock_transport_client):
+        adapter = AsyncMlbDataAdapter(**kwargs)
+
+    _ADAPTERS_TO_CLOSE.append(adapter)
     return adapter
 
 
@@ -186,6 +224,29 @@ def test_injected_client_is_not_closed():
 
     was_closed = run_async(scenario())
     assert was_closed is False
+
+
+def test_injected_client_timeout_configuration_is_not_mutated():
+    """The library's timeout is applied per request, not written to the client."""
+    handler = _ScriptedHandler(_response(200))
+
+    async def scenario():
+        client = httpx.AsyncClient(
+            transport=httpx.MockTransport(handler),
+            timeout=httpx.Timeout(11.0),
+        )
+        try:
+            adapter = AsyncMlbDataAdapter(client=client, timeout=(1.0, 2.0))
+            await adapter.get(endpoint="sports")
+            return client.timeout
+        finally:
+            await client.aclose()
+
+    timeout = run_async(scenario())
+    assert timeout.connect == 11.0
+    assert timeout.read == 11.0
+    assert timeout.write == 11.0
+    assert timeout.pool == 11.0
 
 
 def test_scalar_timeout_translation():
@@ -364,6 +425,25 @@ def test_404_is_not_retried():
     assert handler.call_count == 1
 
 
+def test_other_non_2xx_status_raises_http_error():
+    """A final non-2xx outside the 4xx/5xx ranges still raises MlbHttpError."""
+    handler = _ScriptedHandler(
+        _response(302, headers={"Location": "https://example.test/moved"}),
+    )
+
+    async def scenario():
+        # Redirects are not followed, so the 302 reaches the status contract.
+        adapter = _owned_adapter(handler)
+        with pytest.raises(MlbHttpError) as exc_info:
+            await adapter.get(endpoint="sports")
+        return exc_info.value
+
+    error = run_async(scenario())
+    assert error.status_code == 302
+    assert error.method == "GET"
+    assert handler.call_count == 1
+
+
 def test_timeout_retried_then_succeeds():
     handler = _ScriptedHandler(httpx.ReadTimeout("timed out"), _response(200))
 
@@ -388,6 +468,51 @@ def test_timeout_exhausts_retries_and_raises_mlb_timeout_error():
 
     run_async(scenario())
     assert handler.call_count == 3
+
+
+def test_connect_timeout_exhausts_retries_and_raises_mlb_timeout_error():
+    """A connect timeout stays a timeout for the caller.
+
+    httpx.ConnectTimeout subclasses httpx.TimeoutException, so it needs its
+    own branch to spend the connect budget while still raising
+    MlbTimeoutError rather than MlbTransportError.
+    """
+    handler = _ScriptedHandler(httpx.ConnectTimeout("connect timed out"))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with pytest.raises(MlbTimeoutError) as exc_info:
+                await adapter.get(endpoint="sports")
+            return exc_info.value
+
+    error = run_async(scenario())
+    assert handler.call_count == 4
+    # MlbTimeoutError subclasses MlbTransportError, so only the exact type
+    # distinguishes a timeout from a plain transport failure.
+    assert type(error) is MlbTimeoutError
+    assert isinstance(error.__cause__, httpx.ConnectTimeout)
+
+
+def test_connect_timeout_spends_the_connect_retry_budget():
+    """The connect budget bounds a connect timeout, not the total or read one.
+
+    The default policy uses total=3 and connect=3, so attempt counts alone
+    cannot tell those two budgets apart. Narrowing connect makes the
+    difference observable: falling through to the generic timeout branch
+    would still allow four attempts here.
+    """
+    handler = _ScriptedHandler(httpx.ConnectTimeout("connect timed out"))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        adapter._retry_policy.connect = 1
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with pytest.raises(MlbTimeoutError):
+                await adapter.get(endpoint="sports")
+
+    run_async(scenario())
+    assert handler.call_count == 2
 
 
 def test_transport_error_retried_then_succeeds():
@@ -539,10 +664,13 @@ def test_json_decode_failure_is_not_retried():
 
     async def scenario():
         adapter = _owned_adapter(handler)
-        with pytest.raises(MlbDecodeError):
+        with pytest.raises(MlbDecodeError) as exc_info:
             await adapter.get(endpoint="sports")
+        return exc_info.value
 
-    run_async(scenario())
+    error = run_async(scenario())
+    # Matches the sync adapter: the underlying decode failure stays the cause.
+    assert isinstance(error.__cause__, ValueError)
     assert handler.call_count == 1
 
 
@@ -586,6 +714,29 @@ def test_library_owned_client_user_agent_falls_back_when_metadata_missing():
             assert adapter._client.headers["User-Agent"] == "python-mlb-statsapi/unknown"
         finally:
             run_async(adapter.aclose())
+
+
+def test_library_owned_client_preserves_httpx_default_headers():
+    """Only User-Agent changes; HTTPX's other default headers are untouched.
+
+    Mirrors test_mlb_session.test_library_created_session_preserves_requests_
+    default_headers for the async client.
+    """
+    baseline = httpx.AsyncClient()
+    adapter = AsyncMlbDataAdapter()
+    try:
+        for header, value in baseline.headers.items():
+            if header.lower() == "user-agent":
+                continue
+            assert adapter._client.headers[header] == value
+
+        for header in ("Accept", "Accept-Encoding", "Connection"):
+            assert adapter._client.headers[header] == baseline.headers[header]
+
+        assert adapter._client.headers["User-Agent"] != baseline.headers["User-Agent"]
+    finally:
+        run_async(adapter.aclose())
+        run_async(baseline.aclose())
 
 
 def test_injected_client_headers_are_unchanged():
