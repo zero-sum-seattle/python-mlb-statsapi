@@ -18,6 +18,11 @@ Optional-import behavior is easy to test misleadingly, because ``httpx`` and
 import at ``sys.meta_path`` before ``mlbstatsapi`` is imported at all, which
 also means the developer environment never has to uninstall anything.
 
+Unlike tests/test_async_mlb_dataadapter.py, this module must never skip as a
+whole: most of what it asserts is exactly the behavior of an install that has no
+HTTPX, so it has to keep running in one. Nothing that needs HTTPX is imported at
+module scope; the few cases that do require it skip individually.
+
 These tests must not contact the live MLB API.
 """
 
@@ -32,7 +37,6 @@ from pathlib import Path
 import pytest
 
 import mlbstatsapi
-from mlbstatsapi.async_mlb_dataadapter import AsyncMlbDataAdapter
 
 from test_public_api import (
     OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS,
@@ -129,11 +133,17 @@ def _run_child(
 
 
 # ---------------------------------------------------------------------------
-# With HTTPX installed
+# Package-root boundary
+#
+# These run in any environment. The two cases that need a real HTTPX to prove
+# anything skip individually rather than taking the module with them.
 # ---------------------------------------------------------------------------
 
 
 def test_async_adapter_is_exported_from_the_package_root() -> None:
+    pytest.importorskip("httpx", reason="requires the async extra (HTTPX)")
+    from mlbstatsapi.async_mlb_dataadapter import AsyncMlbDataAdapter
+
     from mlbstatsapi import AsyncMlbDataAdapter as exported
 
     assert exported is AsyncMlbDataAdapter
@@ -173,6 +183,7 @@ def test_importing_the_package_does_not_import_httpx() -> None:
 
 
 def test_async_access_imports_httpx_on_demand() -> None:
+    pytest.importorskip("httpx", reason="requires the async extra (HTTPX)")
     _run_child(
         """
         import sys

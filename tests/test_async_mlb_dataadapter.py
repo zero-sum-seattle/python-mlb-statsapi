@@ -10,6 +10,9 @@ tests/test_mlb_retries.py, adapted to httpx.MockTransport instead of a real
 threaded HTTP server, since the async retry loop here is hand-rolled Python
 rather than logic buried inside urllib3/requests internals.
 
+HTTPX ships only with the ``async`` extra, so the whole module skips when it is
+absent. See the import section below.
+
 These tests must not contact the live MLB API.
 """
 
@@ -20,20 +23,26 @@ import contextlib
 from importlib.metadata import PackageNotFoundError
 from unittest.mock import AsyncMock, patch
 
-import httpx
 import pytest
 
-from mlbstatsapi import (
+# Every test below drives the real HTTPX-backed adapter, so a sync-only install
+# has nothing here to run. Skipping at collection keeps ``pytest tests/``
+# working without the ``async`` extra instead of erroring on the import. The
+# optional-dependency contract itself is asserted in
+# tests/test_async_optional_dependency.py, which runs with or without HTTPX.
+httpx = pytest.importorskip("httpx", reason="requires the async extra (HTTPX)")
+
+from mlbstatsapi import (  # noqa: E402
     MlbDecodeError,
     MlbHttpCompatibilityWarning,
     MlbHttpError,
     MlbTimeoutError,
     MlbTransportError,
 )
-from mlbstatsapi.async_mlb_dataadapter import AsyncMlbDataAdapter
-from mlbstatsapi.mlb_dataadapter import PACKAGE_DISTRIBUTION_NAME
+from mlbstatsapi.async_mlb_dataadapter import AsyncMlbDataAdapter  # noqa: E402
+from mlbstatsapi.mlb_dataadapter import PACKAGE_DISTRIBUTION_NAME  # noqa: E402
 
-from http_contract_support import (
+from http_contract_support import (  # noqa: E402
     RETRYABLE_STATUS_CODES,
     SERVER_ERRORS,
     assert_library_retry_policy,
