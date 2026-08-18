@@ -78,22 +78,37 @@ from mlbstatsapi import (
 )
 ```
 
+The symbols above are available in every install. `AsyncMlbDataAdapter` is
+equally public, but it resolves only when the optional `async` extra is
+installed; see [Optional async support](#optional-async-support).
+
 ### Classification of package-root symbols
 
-| Symbol | Status |
-| --- | --- |
-| `Mlb` | Public and stable in 1.x |
-| `MlbDataAdapter` | Public and stable in 1.x |
-| `MlbResult` | Public and stable in 1.x |
-| `create_retry_policy` | Public and stable in 1.x |
-| `TheMlbStatsApiException` | Public and stable in 1.x |
-| `MlbTransportError` | Public and stable in 1.x |
-| `MlbTimeoutError` | Public and stable in 1.x |
-| `MlbHttpError` | Public and stable in 1.x |
-| `MlbDecodeError` | Public and stable in 1.x |
-| `MlbHttpCompatibilityWarning` | Public and stable in 1.x |
-| `return_splits` | Public legacy helper, stable in 1.x but not preferred for new code |
-| `get_stat_attributes` | Public legacy helper, stable in 1.x but not preferred for new code |
+Status and availability are separate questions. Every symbol below is public and
+covered by the stability policy above; the availability column records whether
+resolving it needs an optional dependency.
+
+| Symbol | Status | Availability |
+| --- | --- | --- |
+| `Mlb` | Public and stable in 1.x | Always available |
+| `MlbDataAdapter` | Public and stable in 1.x | Always available |
+| `AsyncMlbDataAdapter` | Public and stable in 1.x | Requires the optional `async` extra |
+| `MlbResult` | Public and stable in 1.x | Always available |
+| `create_retry_policy` | Public and stable in 1.x | Always available |
+| `TheMlbStatsApiException` | Public and stable in 1.x | Always available |
+| `MlbTransportError` | Public and stable in 1.x | Always available |
+| `MlbTimeoutError` | Public and stable in 1.x | Always available |
+| `MlbHttpError` | Public and stable in 1.x | Always available |
+| `MlbDecodeError` | Public and stable in 1.x | Always available |
+| `MlbHttpCompatibilityWarning` | Public and stable in 1.x | Always available |
+| `return_splits` | Public legacy helper, stable in 1.x but not preferred for new code | Always available |
+| `get_stat_attributes` | Public legacy helper, stable in 1.x but not preferred for new code | Always available |
+
+`AsyncMlbDataAdapter` is supported 1.x API on the same terms as the synchronous
+symbols: it will not be removed or renamed during the series, and its documented
+behavior stays compatible. Only its availability is conditional, because its
+HTTP dependency ships with the `async` extra. See
+[Optional async support](#optional-async-support).
 
 No package-root symbol is marked deprecated in version 1.0. Deprecation requires
 a documented replacement, a warning strategy, a removal timeline, and a
@@ -136,7 +151,8 @@ accidental submodule names (for example, a documented deprecation period).
 ## Optional async support
 
 `AsyncMlbDataAdapter` is a public package-root symbol, like `MlbDataAdapter`,
-but its HTTP dependency is optional and installed with the `async` extra:
+and appears in the classification table above. Its HTTP dependency is optional
+and installed with the `async` extra:
 
 ```bash
 pip install "python-mlb-statsapi[async]"
@@ -152,7 +168,7 @@ Async symbols are resolved on first access, so the optional dependency is not
 imported by `import mlbstatsapi`. A synchronous-only install is unaffected:
 
 * `import mlbstatsapi` succeeds without the `async` extra
-* every supported package-root symbol listed above stays importable
+* every package-root symbol marked "Always available" above stays importable
 * nothing in the synchronous surface changes
 
 Requesting async functionality without the extra raises `ImportError` naming

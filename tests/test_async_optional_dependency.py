@@ -9,6 +9,9 @@ have to hold at once:
 * reaching for async functionality without it produces actionable install
   guidance instead of a bare ``ModuleNotFoundError``
 
+That guidance is reserved for a genuinely missing HTTPX: an installed but broken
+HTTPX must keep reporting its own failure.
+
 Optional-import behavior is easy to test misleadingly, because ``httpx`` and
 ``mlbstatsapi`` are already in ``sys.modules`` by the time this file runs. Every
 "HTTPX is missing" case therefore runs in a child interpreter that blocks the
@@ -31,7 +34,10 @@ import pytest
 import mlbstatsapi
 from mlbstatsapi.async_mlb_dataadapter import AsyncMlbDataAdapter
 
-from test_public_api import SUPPORTED_PACKAGE_ROOT_SYMBOLS
+from test_public_api import (
+    OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS,
+    SUPPORTED_PACKAGE_ROOT_SYMBOLS,
+)
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -62,12 +68,47 @@ assert "httpx" not in sys.modules, "child started with httpx already imported"
 assert "mlbstatsapi" not in sys.modules, "child started with mlbstatsapi imported"
 """
 
+# Prepended to a child program to simulate an installed but broken HTTPX: the
+# httpx import fails, yet httpx itself is present. The user's problem is a
+# broken dependency tree, not a missing extra, so the boundary must not rewrite
+# it into install guidance.
+BREAK_HTTPX_DEPENDENCY = """
+import sys
 
-def _run_child(body: str, *, block_httpx: bool) -> str:
-    """Run ``body`` in a fresh interpreter against this working tree."""
+
+class _BrokenHttpxDependency:
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname == "httpx":
+            raise ModuleNotFoundError(
+                "No module named 'httpcore'", name="httpcore"
+            )
+        return None
+
+
+sys.meta_path.insert(0, _BrokenHttpxDependency())
+assert "httpx" not in sys.modules, "child started with httpx already imported"
+"""
+
+
+def _run_child(
+    body: str,
+    *,
+    block_httpx: bool = False,
+    break_httpx: bool = False,
+) -> str:
+    """Run ``body`` in a fresh interpreter against this working tree.
+
+    ``block_httpx`` makes HTTPX look uninstalled; ``break_httpx`` makes it look
+    installed but unimportable. They describe different environments, so a test
+    picks exactly one.
+    """
+    assert not (block_httpx and break_httpx), "pick one HTTPX environment"
+
     program = textwrap.dedent(body)
     if block_httpx:
         program = BLOCK_HTTPX + program
+    elif break_httpx:
+        program = BREAK_HTTPX_DEPENDENCY + program
 
     completed = subprocess.run(
         [sys.executable, "-c", program],
@@ -171,13 +212,36 @@ def test_sync_only_install_can_import_the_package() -> None:
 
 
 def test_sync_only_install_keeps_every_supported_package_root_symbol() -> None:
-    """The frozen 1.x package-root manifest must not depend on the async extra."""
+    """Every always-available public symbol must resolve without the extra.
+
+    ``SUPPORTED_PACKAGE_ROOT_SYMBOLS`` is the always-available half of the 1.x
+    package-root API. The async half is covered separately below; both halves
+    are public API.
+    """
     _run_child(
         f"""
         import mlbstatsapi
 
         for name in {list(SUPPORTED_PACKAGE_ROOT_SYMBOLS)!r}:
             assert getattr(mlbstatsapi, name) is not None, name
+        """,
+        block_httpx=True,
+    )
+
+
+def test_sync_only_install_reports_the_extra_for_every_async_symbol() -> None:
+    """The optional async manifest is exactly what the extra unlocks."""
+    _run_child(
+        f"""
+        import mlbstatsapi
+
+        for name in {list(OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS)!r}:
+            try:
+                getattr(mlbstatsapi, name)
+            except ImportError as exc:
+                assert "python-mlb-statsapi[async]" in str(exc), str(exc)
+            else:
+                raise AssertionError(f"expected an ImportError for {{name}}")
         """,
         block_httpx=True,
     )
@@ -278,12 +342,13 @@ def test_missing_httpx_reports_the_async_extra_from_the_async_module() -> None:
 def test_async_name_stays_discoverable_without_httpx() -> None:
     """Discoverability must not require the optional dependency."""
     _run_child(
-        """
+        f"""
         import sys
 
         import mlbstatsapi
 
-        assert "AsyncMlbDataAdapter" in dir(mlbstatsapi)
+        for name in {list(OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS)!r}:
+            assert name in dir(mlbstatsapi), name
         assert "httpx" not in sys.modules
         """,
         block_httpx=True,
@@ -310,4 +375,42 @@ def test_failed_async_access_leaves_the_sync_api_usable() -> None:
             adapter.close()
         """,
         block_httpx=True,
+    )
+
+
+# ---------------------------------------------------------------------------
+# With HTTPX installed but broken
+# ---------------------------------------------------------------------------
+
+
+def test_broken_httpx_install_is_not_reported_as_a_missing_extra() -> None:
+    """Installing the extra would not fix a broken HTTPX, so do not suggest it."""
+    _run_child(
+        """
+        try:
+            import mlbstatsapi.async_mlb_dataadapter  # noqa: F401
+        except ModuleNotFoundError as exc:
+            assert exc.name == "httpcore", exc.name
+            assert "python-mlb-statsapi[async]" not in str(exc), str(exc)
+        else:
+            raise AssertionError("expected the underlying import failure")
+        """,
+        break_httpx=True,
+    )
+
+
+def test_broken_httpx_install_surfaces_from_the_package_root_too() -> None:
+    _run_child(
+        """
+        import mlbstatsapi
+
+        try:
+            mlbstatsapi.AsyncMlbDataAdapter
+        except ModuleNotFoundError as exc:
+            assert exc.name == "httpcore", exc.name
+            assert "python-mlb-statsapi[async]" not in str(exc), str(exc)
+        else:
+            raise AssertionError("expected the underlying import failure")
+        """,
+        break_httpx=True,
     )
