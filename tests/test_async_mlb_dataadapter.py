@@ -68,6 +68,10 @@ MOCKED_USER_AGENT = f"python-mlb-statsapi/{MOCKED_PACKAGE_VERSION}"
 SECRET_BODY_MARKER = "SUPER_SECRET_RESPONSE"
 SECRET_HEADER_MARKER = "SUPER_SECRET_HEADER"
 
+# Failure guard for the concurrency tests: a request that should never wait is
+# bounded so a serializing regression fails fast instead of hanging CI.
+BLOCKED_REQUEST_TIMEOUT = 10
+
 
 # Adapters built by _owned_adapter(); run_async() closes them inside the same
 # event loop that used them, so no AsyncClient is left open by a test.
@@ -282,25 +286,125 @@ def test_tuple_timeout_translation():
 
 
 def test_multiple_concurrent_requests_on_one_adapter():
+    """Concurrent requests keep their own params and their own response.
+
+    Each request carries different ep_params, so neither the query sent to the
+    transport nor the returned data may pick up the other request's values.
+    """
     responses = {
         "sports": httpx.Response(200, json={"id": "sports"}),
         "teams": httpx.Response(200, json={"id": "teams"}),
     }
+    observed_params: dict[str, dict[str, str]] = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
         endpoint = request.url.path.rsplit("/", 1)[-1]
+        observed_params[endpoint] = dict(request.url.params)
         return responses[endpoint]
 
     async def scenario():
         adapter = _owned_adapter(handler)
         return await asyncio.gather(
-            adapter.get(endpoint="sports"),
-            adapter.get(endpoint="teams"),
+            adapter.get(endpoint="sports", ep_params={"sportId": 1}),
+            adapter.get(endpoint="teams", ep_params={"season": 2026}),
         )
 
     sports_result, teams_result = run_async(scenario())
     assert sports_result.data == {"id": "sports"}
     assert teams_result.data == {"id": "teams"}
+    # Query values arrive as strings; each endpoint sees only its own params.
+    assert observed_params == {
+        "sports": {"sportId": "1"},
+        "teams": {"season": "2026"},
+    }
+
+
+def test_failure_of_one_concurrent_request_does_not_affect_another():
+    """A failing request must not disturb an unrelated concurrent request.
+
+    Request A exhausts the status retry budget and raises MlbHttpError while
+    request B, sharing the same adapter and client, still completes normally
+    on its single attempt.
+    """
+    attempts: dict[str, int] = {"sports": 0, "teams": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        endpoint = request.url.path.rsplit("/", 1)[-1]
+        attempts[endpoint] += 1
+        if endpoint == "sports":
+            return _response(503)
+        return httpx.Response(200, json={"id": "teams"})
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            # Caller-controlled orchestration: gather is the caller's choice,
+            # so a failure in A is reported without cancelling B.
+            return await asyncio.gather(
+                adapter.get(endpoint="sports"),
+                adapter.get(endpoint="teams"),
+                return_exceptions=True,
+            )
+
+    failure, success = run_async(scenario())
+    assert isinstance(failure, MlbHttpError)
+    assert failure.status_code == 503
+    assert success.status_code == 200
+    assert success.data == {"id": "teams"}
+    # A spent its full status budget; B was never retried on A's behalf.
+    assert attempts == {"sports": 4, "teams": 1}
+
+
+def test_backoff_in_one_request_does_not_block_another():
+    """Another request makes progress while one is waiting out its backoff.
+
+    test_retry_sleep_is_async_and_non_blocking proves an unrelated task keeps
+    running during backoff; this proves the same for a second request on the
+    same adapter, without depending on wall-clock timing: B's result exists
+    before b_completed is set, so A cannot have left its backoff first.
+    """
+    attempts: dict[str, int] = {"sports": 0, "teams": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        endpoint = request.url.path.rsplit("/", 1)[-1]
+        attempts[endpoint] += 1
+        # The first retry has no delay, so A must fail twice to reach a real
+        # backoff wait; the third attempt succeeds once the test releases it.
+        if endpoint == "sports" and attempts["sports"] <= 2:
+            return _response(503)
+        return httpx.Response(200, json={"id": endpoint})
+
+    async def scenario():
+        a_in_backoff = asyncio.Event()
+        b_completed = asyncio.Event()
+
+        async def parked_backoff(delay):
+            a_in_backoff.set()
+            await b_completed.wait()
+
+        adapter = _owned_adapter(handler)
+        with patch(SLEEP_TARGET, parked_backoff):
+            a_task = asyncio.ensure_future(adapter.get(endpoint="sports"))
+            await asyncio.wait_for(a_in_backoff.wait(), BLOCKED_REQUEST_TIMEOUT)
+
+            # Not a timing assertion: on the passing path nothing waits. The
+            # bound only turns a regression that serializes requests into a
+            # fast failure instead of a hung test run.
+            b_result = await asyncio.wait_for(
+                adapter.get(endpoint="teams"),
+                BLOCKED_REQUEST_TIMEOUT,
+            )
+
+            b_completed.set()
+            a_result = await a_task
+
+        return a_result, b_result
+
+    a_result, b_result = run_async(scenario())
+    assert b_result.status_code == 200
+    assert b_result.data == {"id": "teams"}
+    assert a_result.status_code == 200
+    assert attempts == {"sports": 3, "teams": 1}
 
 
 def test_cancelling_one_request_does_not_cancel_another():
