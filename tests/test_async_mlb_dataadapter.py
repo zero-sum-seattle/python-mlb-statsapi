@@ -20,6 +20,8 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import inspect
+import warnings
 from importlib.metadata import PackageNotFoundError
 from unittest.mock import AsyncMock, patch
 
@@ -43,6 +45,7 @@ from mlbstatsapi.async_mlb_dataadapter import AsyncMlbDataAdapter  # noqa: E402
 from mlbstatsapi.mlb_dataadapter import PACKAGE_DISTRIBUTION_NAME  # noqa: E402
 
 from http_contract_support import (  # noqa: E402
+    HTTP_REASON_BY_STATUS,
     RETRYABLE_STATUS_CODES,
     SERVER_ERRORS,
     assert_library_retry_policy,
@@ -60,6 +63,10 @@ CLIENT_TARGET = "mlbstatsapi.async_mlb_dataadapter.httpx.AsyncClient"
 # Matches tests/test_mlb_session.py, so both adapters assert the same contract.
 MOCKED_PACKAGE_VERSION = "9.8.7"
 MOCKED_USER_AGENT = f"python-mlb-statsapi/{MOCKED_PACKAGE_VERSION}"
+
+# Obvious sentinels, so a leak into a compatibility warning is unmistakable.
+SECRET_BODY_MARKER = "SUPER_SECRET_RESPONSE"
+SECRET_HEADER_MARKER = "SUPER_SECRET_HEADER"
 
 
 # Adapters built by _owned_adapter(); run_async() closes them inside the same
@@ -681,6 +688,140 @@ def test_json_decode_failure_is_not_retried():
     # Matches the sync adapter: the underlying decode failure stays the cause.
     assert isinstance(error.__cause__, ValueError)
     assert handler.call_count == 1
+
+
+# --- Final non-404 4xx contract ---
+
+
+def test_final_non_404_client_error_raises_under_strict_http():
+    """Strict mode raises MlbHttpError with the sync structured context.
+
+    test_400_is_not_retried already proves a 4xx is final on the first
+    response; this asserts the #298 decision-table outcome for an explicit
+    strict_http=True adapter, including the structured error context.
+    """
+    handler = _ScriptedHandler(_response(403))
+
+    async def scenario():
+        adapter = _owned_adapter(handler, strict_http=True)
+        with pytest.raises(MlbHttpError) as exc_info:
+            await adapter.get(endpoint="sports")
+        return exc_info.value
+
+    error = run_async(scenario())
+    assert error.status_code == 403
+    assert error.reason == HTTP_REASON_BY_STATUS[403]
+    assert error.method == "GET"
+    assert error.url == f"{BASE_URL}sports"
+    assert handler.call_count == 1
+
+
+def test_final_non_404_client_error_returns_empty_result_in_compatibility_mode():
+    """strict_http=False suppresses a non-404 4xx into a warned empty result."""
+    handler = _ScriptedHandler(_response(403, text='{"message": "denied"}'))
+
+    async def scenario():
+        adapter = _owned_adapter(handler, strict_http=False)
+        with pytest.warns(MlbHttpCompatibilityWarning) as warning_info:
+            result = await adapter.get(endpoint="sports")
+        return result, [str(warning.message) for warning in warning_info]
+
+    result, messages = run_async(scenario())
+    assert result.status_code == 403
+    assert result.message == HTTP_REASON_BY_STATUS[403]
+    assert result.data == {}
+    assert len(messages) == 1
+    assert "403" in messages[0]
+    assert f"{BASE_URL}sports" in messages[0]
+    assert handler.call_count == 1
+
+
+# --- Compatibility warning safety ---
+
+
+def test_compatibility_warning_does_not_leak_response_body_or_headers():
+    """Response bodies and headers must never reach the warning message."""
+    handler = _ScriptedHandler(
+        _response(
+            403,
+            headers={"X-Debug-Token": SECRET_HEADER_MARKER},
+            text=f'{{"message": "{SECRET_BODY_MARKER}"}}',
+        ),
+    )
+
+    async def scenario():
+        adapter = _owned_adapter(handler, strict_http=False)
+        with pytest.warns(MlbHttpCompatibilityWarning) as warning_info:
+            await adapter.get(endpoint="sports")
+        return [str(warning.message) for warning in warning_info]
+
+    messages = run_async(scenario())
+    assert len(messages) == 1
+    assert SECRET_BODY_MARKER not in messages[0]
+    assert SECRET_HEADER_MARKER not in messages[0]
+    assert "X-Debug-Token" not in messages[0]
+
+
+def test_compatibility_warning_points_to_awaiting_caller_line():
+    """The warning is attributed to the awaiting caller, not package internals.
+
+    Mirrors test_http_warnings.test_compatibility_warning_points_to_direct_
+    adapter_caller_line for an awaited call.
+    """
+    handler = _ScriptedHandler(_response(403))
+
+    async def scenario():
+        adapter = _owned_adapter(handler, strict_http=False)
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", MlbHttpCompatibilityWarning)
+            expected_lineno = inspect.currentframe().f_lineno + 1
+            await adapter.get(endpoint="sports")
+        return caught, expected_lineno
+
+    caught, expected_lineno = run_async(scenario())
+    compatibility = [
+        warning
+        for warning in caught
+        if issubclass(warning.category, MlbHttpCompatibilityWarning)
+    ]
+    assert len(compatibility) == 1
+    assert compatibility[0].filename == __file__
+    assert compatibility[0].lineno == expected_lineno
+
+
+# --- Structured MlbHttpError context ---
+
+
+def test_error_context_extraction_failure_does_not_replace_http_error():
+    """A broken optional-context extraction must not hide the HTTP failure.
+
+    The best-effort response context is a debugging aid, so a failure while
+    collecting it degrades that one field instead of raising something other
+    than the original MlbHttpError.
+    """
+    handler = _ScriptedHandler(
+        _response(500, text='{"message": "Internal error occurred"}'),
+    )
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        with patch(
+            "mlbstatsapi._http._extract_error_response_data",
+            side_effect=RuntimeError("error-context extraction failed"),
+        ):
+            with patch(SLEEP_TARGET, new_callable=AsyncMock):
+                with pytest.raises(MlbHttpError) as exc_info:
+                    await adapter.get(endpoint="sports")
+        return exc_info.value
+
+    error = run_async(scenario())
+    assert error.status_code == 500
+    assert error.reason == HTTP_REASON_BY_STATUS[500]
+    assert error.method == "GET"
+    assert error.url == f"{BASE_URL}sports"
+    assert error.response_data is None
+    # The independent excerpt extraction still succeeds.
+    assert "Internal error occurred" in (error.body_excerpt or "")
 
 
 # --- Versioned User-Agent ---
