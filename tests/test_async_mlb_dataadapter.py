@@ -20,6 +20,8 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import inspect
+import warnings
 from importlib.metadata import PackageNotFoundError
 from unittest.mock import AsyncMock, patch
 
@@ -43,6 +45,7 @@ from mlbstatsapi.async_mlb_dataadapter import AsyncMlbDataAdapter  # noqa: E402
 from mlbstatsapi.mlb_dataadapter import PACKAGE_DISTRIBUTION_NAME  # noqa: E402
 
 from http_contract_support import (  # noqa: E402
+    HTTP_REASON_BY_STATUS,
     RETRYABLE_STATUS_CODES,
     SERVER_ERRORS,
     assert_library_retry_policy,
@@ -60,6 +63,14 @@ CLIENT_TARGET = "mlbstatsapi.async_mlb_dataadapter.httpx.AsyncClient"
 # Matches tests/test_mlb_session.py, so both adapters assert the same contract.
 MOCKED_PACKAGE_VERSION = "9.8.7"
 MOCKED_USER_AGENT = f"python-mlb-statsapi/{MOCKED_PACKAGE_VERSION}"
+
+# Obvious sentinels, so a leak into a compatibility warning is unmistakable.
+SECRET_BODY_MARKER = "SUPER_SECRET_RESPONSE"
+SECRET_HEADER_MARKER = "SUPER_SECRET_HEADER"
+
+# Failure guard for the concurrency tests: a request that should never wait is
+# bounded so a serializing regression fails fast instead of hanging CI.
+BLOCKED_REQUEST_TIMEOUT = 10
 
 
 # Adapters built by _owned_adapter(); run_async() closes them inside the same
@@ -258,6 +269,83 @@ def test_injected_client_timeout_configuration_is_not_mutated():
     assert timeout.pool == 11.0
 
 
+# --- Explicit cleanup after the adapter has been used ---
+#
+# test_library_owned_client_closes covers an adapter that never issued a
+# request. These cover the states a request can leave behind: success, a
+# public failure, and caller cancellation. In each case explicit cleanup must
+# still close the library-owned client without altering what the caller
+# already observed.
+
+
+def test_owned_client_closes_after_a_successful_request():
+    """A used adapter is still safely closable."""
+    handler = _ScriptedHandler(httpx.Response(200, json={"id": "sports"}))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        result = await adapter.get(endpoint="sports")
+        await adapter.aclose()
+        return result, adapter._client.is_closed
+
+    result, is_closed = run_async(scenario())
+    assert result.status_code == 200
+    assert result.data == {"id": "sports"}
+    assert is_closed is True
+
+
+def test_owned_client_closes_after_a_failed_request():
+    """A failed request leaves the adapter closable, and the error intact."""
+    handler = _ScriptedHandler(_response(503))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with pytest.raises(MlbHttpError) as exc_info:
+                await adapter.get(endpoint="sports")
+
+        error = exc_info.value
+        await adapter.aclose()
+        return error, adapter._client.is_closed
+
+    error, is_closed = run_async(scenario())
+    assert error.status_code == 503
+    assert error.reason == HTTP_REASON_BY_STATUS[503]
+    assert error.method == "GET"
+    assert error.url == f"{BASE_URL}sports"
+    assert is_closed is True
+
+
+def test_owned_client_closes_after_a_cancelled_request():
+    """Cancelling an in-flight request still leaves the adapter closable.
+
+    The cancellation itself stays the caller's outcome: aclose() runs after
+    CancelledError has already propagated, and does not replace it.
+    """
+    async def scenario():
+        request_started = asyncio.Event()
+
+        async def hanging_handler(request: httpx.Request) -> httpx.Response:
+            request_started.set()
+            await asyncio.sleep(10)
+            raise AssertionError("handler should have been cancelled before returning")
+
+        adapter = _owned_adapter(hanging_handler)
+        task = asyncio.ensure_future(adapter.get(endpoint="sports"))
+        # Cancel only once the request is genuinely in flight.
+        await asyncio.wait_for(request_started.wait(), BLOCKED_REQUEST_TIMEOUT)
+
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+
+        await adapter.aclose()
+        return adapter._client.is_closed
+
+    is_closed = run_async(scenario())
+    assert is_closed is True
+
+
 def test_scalar_timeout_translation():
     result = AsyncMlbDataAdapter._translate_timeout(5)
     assert result.connect == 5
@@ -275,25 +363,125 @@ def test_tuple_timeout_translation():
 
 
 def test_multiple_concurrent_requests_on_one_adapter():
+    """Concurrent requests keep their own params and their own response.
+
+    Each request carries different ep_params, so neither the query sent to the
+    transport nor the returned data may pick up the other request's values.
+    """
     responses = {
         "sports": httpx.Response(200, json={"id": "sports"}),
         "teams": httpx.Response(200, json={"id": "teams"}),
     }
+    observed_params: dict[str, dict[str, str]] = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
         endpoint = request.url.path.rsplit("/", 1)[-1]
+        observed_params[endpoint] = dict(request.url.params)
         return responses[endpoint]
 
     async def scenario():
         adapter = _owned_adapter(handler)
         return await asyncio.gather(
-            adapter.get(endpoint="sports"),
-            adapter.get(endpoint="teams"),
+            adapter.get(endpoint="sports", ep_params={"sportId": 1}),
+            adapter.get(endpoint="teams", ep_params={"season": 2026}),
         )
 
     sports_result, teams_result = run_async(scenario())
     assert sports_result.data == {"id": "sports"}
     assert teams_result.data == {"id": "teams"}
+    # Query values arrive as strings; each endpoint sees only its own params.
+    assert observed_params == {
+        "sports": {"sportId": "1"},
+        "teams": {"season": "2026"},
+    }
+
+
+def test_failure_of_one_concurrent_request_does_not_affect_another():
+    """A failing request must not disturb an unrelated concurrent request.
+
+    Request A exhausts the status retry budget and raises MlbHttpError while
+    request B, sharing the same adapter and client, still completes normally
+    on its single attempt.
+    """
+    attempts: dict[str, int] = {"sports": 0, "teams": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        endpoint = request.url.path.rsplit("/", 1)[-1]
+        attempts[endpoint] += 1
+        if endpoint == "sports":
+            return _response(503)
+        return httpx.Response(200, json={"id": "teams"})
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            # Caller-controlled orchestration: gather is the caller's choice,
+            # so a failure in A is reported without cancelling B.
+            return await asyncio.gather(
+                adapter.get(endpoint="sports"),
+                adapter.get(endpoint="teams"),
+                return_exceptions=True,
+            )
+
+    failure, success = run_async(scenario())
+    assert isinstance(failure, MlbHttpError)
+    assert failure.status_code == 503
+    assert success.status_code == 200
+    assert success.data == {"id": "teams"}
+    # A spent its full status budget; B was never retried on A's behalf.
+    assert attempts == {"sports": 4, "teams": 1}
+
+
+def test_backoff_in_one_request_does_not_block_another():
+    """Another request makes progress while one is waiting out its backoff.
+
+    test_retry_sleep_is_async_and_non_blocking proves an unrelated task keeps
+    running during backoff; this proves the same for a second request on the
+    same adapter, without depending on wall-clock timing: B's result exists
+    before b_completed is set, so A cannot have left its backoff first.
+    """
+    attempts: dict[str, int] = {"sports": 0, "teams": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        endpoint = request.url.path.rsplit("/", 1)[-1]
+        attempts[endpoint] += 1
+        # The first retry has no delay, so A must fail twice to reach a real
+        # backoff wait; the third attempt succeeds once the test releases it.
+        if endpoint == "sports" and attempts["sports"] <= 2:
+            return _response(503)
+        return httpx.Response(200, json={"id": endpoint})
+
+    async def scenario():
+        a_in_backoff = asyncio.Event()
+        b_completed = asyncio.Event()
+
+        async def parked_backoff(delay):
+            a_in_backoff.set()
+            await b_completed.wait()
+
+        adapter = _owned_adapter(handler)
+        with patch(SLEEP_TARGET, parked_backoff):
+            a_task = asyncio.ensure_future(adapter.get(endpoint="sports"))
+            await asyncio.wait_for(a_in_backoff.wait(), BLOCKED_REQUEST_TIMEOUT)
+
+            # Not a timing assertion: on the passing path nothing waits. The
+            # bound only turns a regression that serializes requests into a
+            # fast failure instead of a hung test run.
+            b_result = await asyncio.wait_for(
+                adapter.get(endpoint="teams"),
+                BLOCKED_REQUEST_TIMEOUT,
+            )
+
+            b_completed.set()
+            a_result = await a_task
+
+        return a_result, b_result
+
+    a_result, b_result = run_async(scenario())
+    assert b_result.status_code == 200
+    assert b_result.data == {"id": "teams"}
+    assert a_result.status_code == 200
+    assert attempts == {"sports": 3, "teams": 1}
 
 
 def test_cancelling_one_request_does_not_cancel_another():
@@ -375,6 +563,37 @@ def test_owned_client_exhausts_retries_on_persistent_server_error(status_code):
     returned_status = run_async(scenario())
     assert returned_status == status_code
     assert handler.call_count == 4
+
+
+def test_persistent_server_error_raises_despite_compatibility_mode():
+    """A final 5xx raises MlbHttpError regardless of strict_http.
+
+    Compatibility mode suppresses non-404 4xx only. A server error is never
+    downgraded to a warned empty MlbResult, so strict_http=False must not
+    change either the exception or the retry behavior here.
+    """
+    handler = _ScriptedHandler(_response(503))
+
+    async def scenario():
+        adapter = _owned_adapter(handler, strict_http=False)
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter("always", MlbHttpCompatibilityWarning)
+                with pytest.raises(MlbHttpError) as exc_info:
+                    await adapter.get(endpoint="sports")
+
+        return exc_info.value.status_code, caught
+
+    status_code, caught = run_async(scenario())
+    assert status_code == 503
+    # One initial attempt plus the status retry budget.
+    assert handler.call_count == 4
+    compatibility = [
+        warning
+        for warning in caught
+        if issubclass(warning.category, MlbHttpCompatibilityWarning)
+    ]
+    assert compatibility == []
 
 
 def test_owned_client_final_429_raises_under_strict_http():
@@ -550,6 +769,81 @@ def test_transport_error_exhausts_retries_and_raises_mlb_transport_error():
     assert handler.call_count == 4
 
 
+# --- Retry budget independence ---
+#
+# The default policy uses total=3, connect=3 and status=3, so an attempt count
+# of four cannot tell those budgets apart. Each test below narrows the single
+# budget it is about, which makes the observed attempt count uniquely
+# attributable to that budget while the public failure stays unchanged.
+
+
+@pytest.mark.parametrize(
+    "failure, expected_exception",
+    ((httpx.PoolTimeout("pool timed out"), MlbTimeoutError),),
+    ids=("timeout",),
+)
+def test_generic_failures_spend_the_total_retry_budget(failure, expected_exception):
+    """A generic timeout is bounded by the total budget.
+
+    A pool timeout is neither a connect nor a read timeout, so it falls
+    through to the generic timeout handling. Narrowing total to one retry
+    makes that budget observable: spending connect (3) or read (2) instead
+    would allow four or three attempts here.
+    """
+    handler = _ScriptedHandler(failure)
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        adapter._retry_policy.total = 1
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with pytest.raises(expected_exception) as exc_info:
+                await adapter.get(endpoint="sports")
+            return exc_info.value
+
+    error = run_async(scenario())
+    assert handler.call_count == 2
+    # MlbTimeoutError subclasses MlbTransportError, so only the exact type
+    # separates a timeout from a plain transport failure.
+    assert type(error) is expected_exception
+    assert isinstance(error.__cause__, type(failure))
+
+
+def test_connect_error_spends_the_connect_retry_budget():
+    """A connection failure is bounded by the connect budget, not the total one.
+
+    test_transport_error_exhausts_retries_and_raises_mlb_transport_error shows
+    four attempts under the default policy, which total=3 would also produce.
+    """
+    handler = _ScriptedHandler(httpx.ConnectError("connection refused"))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        adapter._retry_policy.connect = 1
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with pytest.raises(MlbTransportError):
+                await adapter.get(endpoint="sports")
+
+    run_async(scenario())
+    assert handler.call_count == 2
+
+
+def test_retryable_status_spends_the_status_retry_budget():
+    """Retryable statuses are bounded by the status budget, not the total one."""
+    handler = _ScriptedHandler(_response(503))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        adapter._retry_policy.status = 1
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with pytest.raises(MlbHttpError) as exc_info:
+                await adapter.get(endpoint="sports")
+            return exc_info.value.status_code
+
+    status_code = run_async(scenario())
+    assert status_code == 503
+    assert handler.call_count == 2
+
+
 def test_retry_after_header_drives_sleep_duration():
     handler = _ScriptedHandler(
         _response(429, headers={"Retry-After": "7"}),
@@ -681,6 +975,140 @@ def test_json_decode_failure_is_not_retried():
     # Matches the sync adapter: the underlying decode failure stays the cause.
     assert isinstance(error.__cause__, ValueError)
     assert handler.call_count == 1
+
+
+# --- Final non-404 4xx contract ---
+
+
+def test_final_non_404_client_error_raises_under_strict_http():
+    """Strict mode raises MlbHttpError with the sync structured context.
+
+    test_400_is_not_retried already proves a 4xx is final on the first
+    response; this asserts the #298 decision-table outcome for an explicit
+    strict_http=True adapter, including the structured error context.
+    """
+    handler = _ScriptedHandler(_response(403))
+
+    async def scenario():
+        adapter = _owned_adapter(handler, strict_http=True)
+        with pytest.raises(MlbHttpError) as exc_info:
+            await adapter.get(endpoint="sports")
+        return exc_info.value
+
+    error = run_async(scenario())
+    assert error.status_code == 403
+    assert error.reason == HTTP_REASON_BY_STATUS[403]
+    assert error.method == "GET"
+    assert error.url == f"{BASE_URL}sports"
+    assert handler.call_count == 1
+
+
+def test_final_non_404_client_error_returns_empty_result_in_compatibility_mode():
+    """strict_http=False suppresses a non-404 4xx into a warned empty result."""
+    handler = _ScriptedHandler(_response(403, text='{"message": "denied"}'))
+
+    async def scenario():
+        adapter = _owned_adapter(handler, strict_http=False)
+        with pytest.warns(MlbHttpCompatibilityWarning) as warning_info:
+            result = await adapter.get(endpoint="sports")
+        return result, [str(warning.message) for warning in warning_info]
+
+    result, messages = run_async(scenario())
+    assert result.status_code == 403
+    assert result.message == HTTP_REASON_BY_STATUS[403]
+    assert result.data == {}
+    assert len(messages) == 1
+    assert "403" in messages[0]
+    assert f"{BASE_URL}sports" in messages[0]
+    assert handler.call_count == 1
+
+
+# --- Compatibility warning safety ---
+
+
+def test_compatibility_warning_does_not_leak_response_body_or_headers():
+    """Response bodies and headers must never reach the warning message."""
+    handler = _ScriptedHandler(
+        _response(
+            403,
+            headers={"X-Debug-Token": SECRET_HEADER_MARKER},
+            text=f'{{"message": "{SECRET_BODY_MARKER}"}}',
+        ),
+    )
+
+    async def scenario():
+        adapter = _owned_adapter(handler, strict_http=False)
+        with pytest.warns(MlbHttpCompatibilityWarning) as warning_info:
+            await adapter.get(endpoint="sports")
+        return [str(warning.message) for warning in warning_info]
+
+    messages = run_async(scenario())
+    assert len(messages) == 1
+    assert SECRET_BODY_MARKER not in messages[0]
+    assert SECRET_HEADER_MARKER not in messages[0]
+    assert "X-Debug-Token" not in messages[0]
+
+
+def test_compatibility_warning_points_to_awaiting_caller_line():
+    """The warning is attributed to the awaiting caller, not package internals.
+
+    Mirrors test_http_warnings.test_compatibility_warning_points_to_direct_
+    adapter_caller_line for an awaited call.
+    """
+    handler = _ScriptedHandler(_response(403))
+
+    async def scenario():
+        adapter = _owned_adapter(handler, strict_http=False)
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", MlbHttpCompatibilityWarning)
+            expected_lineno = inspect.currentframe().f_lineno + 1
+            await adapter.get(endpoint="sports")
+        return caught, expected_lineno
+
+    caught, expected_lineno = run_async(scenario())
+    compatibility = [
+        warning
+        for warning in caught
+        if issubclass(warning.category, MlbHttpCompatibilityWarning)
+    ]
+    assert len(compatibility) == 1
+    assert compatibility[0].filename == __file__
+    assert compatibility[0].lineno == expected_lineno
+
+
+# --- Structured MlbHttpError context ---
+
+
+def test_error_context_extraction_failure_does_not_replace_http_error():
+    """A broken optional-context extraction must not hide the HTTP failure.
+
+    The best-effort response context is a debugging aid, so a failure while
+    collecting it degrades that one field instead of raising something other
+    than the original MlbHttpError.
+    """
+    handler = _ScriptedHandler(
+        _response(500, text='{"message": "Internal error occurred"}'),
+    )
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        with patch(
+            "mlbstatsapi._http._extract_error_response_data",
+            side_effect=RuntimeError("error-context extraction failed"),
+        ):
+            with patch(SLEEP_TARGET, new_callable=AsyncMock):
+                with pytest.raises(MlbHttpError) as exc_info:
+                    await adapter.get(endpoint="sports")
+        return exc_info.value
+
+    error = run_async(scenario())
+    assert error.status_code == 500
+    assert error.reason == HTTP_REASON_BY_STATUS[500]
+    assert error.method == "GET"
+    assert error.url == f"{BASE_URL}sports"
+    assert error.response_data is None
+    # The independent excerpt extraction still succeeds.
+    assert "Internal error occurred" in (error.body_excerpt or "")
 
 
 # --- Versioned User-Agent ---
