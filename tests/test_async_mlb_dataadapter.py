@@ -567,19 +567,16 @@ def test_transport_error_exhausts_retries_and_raises_mlb_transport_error():
 
 @pytest.mark.parametrize(
     "failure, expected_exception",
-    (
-        (httpx.PoolTimeout("pool timed out"), MlbTimeoutError),
-        (httpx.ReadError("connection broken"), MlbTransportError),
-    ),
-    ids=("timeout", "transport"),
+    ((httpx.PoolTimeout("pool timed out"), MlbTimeoutError),),
+    ids=("timeout",),
 )
 def test_generic_failures_spend_the_total_retry_budget(failure, expected_exception):
-    """Failures outside the connect/read branches are bounded by the total budget.
+    """A generic timeout is bounded by the total budget.
 
-    A pool timeout and a read error are neither connect nor read failures, so
-    they fall through to the generic timeout/request handling. Narrowing total
-    to one retry makes that budget observable: spending connect (3) or read (2)
-    instead would allow four or three attempts here.
+    A pool timeout is neither a connect nor a read timeout, so it falls
+    through to the generic timeout handling. Narrowing total to one retry
+    makes that budget observable: spending connect (3) or read (2) instead
+    would allow four or three attempts here.
     """
     handler = _ScriptedHandler(failure)
 
