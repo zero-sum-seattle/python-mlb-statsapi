@@ -557,6 +557,84 @@ def test_transport_error_exhausts_retries_and_raises_mlb_transport_error():
     assert handler.call_count == 4
 
 
+# --- Retry budget independence ---
+#
+# The default policy uses total=3, connect=3 and status=3, so an attempt count
+# of four cannot tell those budgets apart. Each test below narrows the single
+# budget it is about, which makes the observed attempt count uniquely
+# attributable to that budget while the public failure stays unchanged.
+
+
+@pytest.mark.parametrize(
+    "failure, expected_exception",
+    (
+        (httpx.PoolTimeout("pool timed out"), MlbTimeoutError),
+        (httpx.ReadError("connection broken"), MlbTransportError),
+    ),
+    ids=("timeout", "transport"),
+)
+def test_generic_failures_spend_the_total_retry_budget(failure, expected_exception):
+    """Failures outside the connect/read branches are bounded by the total budget.
+
+    A pool timeout and a read error are neither connect nor read failures, so
+    they fall through to the generic timeout/request handling. Narrowing total
+    to one retry makes that budget observable: spending connect (3) or read (2)
+    instead would allow four or three attempts here.
+    """
+    handler = _ScriptedHandler(failure)
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        adapter._retry_policy.total = 1
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with pytest.raises(expected_exception) as exc_info:
+                await adapter.get(endpoint="sports")
+            return exc_info.value
+
+    error = run_async(scenario())
+    assert handler.call_count == 2
+    # MlbTimeoutError subclasses MlbTransportError, so only the exact type
+    # separates a timeout from a plain transport failure.
+    assert type(error) is expected_exception
+    assert isinstance(error.__cause__, type(failure))
+
+
+def test_connect_error_spends_the_connect_retry_budget():
+    """A connection failure is bounded by the connect budget, not the total one.
+
+    test_transport_error_exhausts_retries_and_raises_mlb_transport_error shows
+    four attempts under the default policy, which total=3 would also produce.
+    """
+    handler = _ScriptedHandler(httpx.ConnectError("connection refused"))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        adapter._retry_policy.connect = 1
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with pytest.raises(MlbTransportError):
+                await adapter.get(endpoint="sports")
+
+    run_async(scenario())
+    assert handler.call_count == 2
+
+
+def test_retryable_status_spends_the_status_retry_budget():
+    """Retryable statuses are bounded by the status budget, not the total one."""
+    handler = _ScriptedHandler(_response(503))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        adapter._retry_policy.status = 1
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with pytest.raises(MlbHttpError) as exc_info:
+                await adapter.get(endpoint="sports")
+            return exc_info.value.status_code
+
+    status_code = run_async(scenario())
+    assert status_code == 503
+    assert handler.call_count == 2
+
+
 def test_retry_after_header_drives_sleep_duration():
     handler = _ScriptedHandler(
         _response(429, headers={"Retry-After": "7"}),
