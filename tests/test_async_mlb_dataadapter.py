@@ -269,6 +269,83 @@ def test_injected_client_timeout_configuration_is_not_mutated():
     assert timeout.pool == 11.0
 
 
+# --- Explicit cleanup after the adapter has been used ---
+#
+# test_library_owned_client_closes covers an adapter that never issued a
+# request. These cover the states a request can leave behind: success, a
+# public failure, and caller cancellation. In each case explicit cleanup must
+# still close the library-owned client without altering what the caller
+# already observed.
+
+
+def test_owned_client_closes_after_a_successful_request():
+    """A used adapter is still safely closable."""
+    handler = _ScriptedHandler(httpx.Response(200, json={"id": "sports"}))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        result = await adapter.get(endpoint="sports")
+        await adapter.aclose()
+        return result, adapter._client.is_closed
+
+    result, is_closed = run_async(scenario())
+    assert result.status_code == 200
+    assert result.data == {"id": "sports"}
+    assert is_closed is True
+
+
+def test_owned_client_closes_after_a_failed_request():
+    """A failed request leaves the adapter closable, and the error intact."""
+    handler = _ScriptedHandler(_response(503))
+
+    async def scenario():
+        adapter = _owned_adapter(handler)
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with pytest.raises(MlbHttpError) as exc_info:
+                await adapter.get(endpoint="sports")
+
+        error = exc_info.value
+        await adapter.aclose()
+        return error, adapter._client.is_closed
+
+    error, is_closed = run_async(scenario())
+    assert error.status_code == 503
+    assert error.reason == HTTP_REASON_BY_STATUS[503]
+    assert error.method == "GET"
+    assert error.url == f"{BASE_URL}sports"
+    assert is_closed is True
+
+
+def test_owned_client_closes_after_a_cancelled_request():
+    """Cancelling an in-flight request still leaves the adapter closable.
+
+    The cancellation itself stays the caller's outcome: aclose() runs after
+    CancelledError has already propagated, and does not replace it.
+    """
+    async def scenario():
+        request_started = asyncio.Event()
+
+        async def hanging_handler(request: httpx.Request) -> httpx.Response:
+            request_started.set()
+            await asyncio.sleep(10)
+            raise AssertionError("handler should have been cancelled before returning")
+
+        adapter = _owned_adapter(hanging_handler)
+        task = asyncio.ensure_future(adapter.get(endpoint="sports"))
+        # Cancel only once the request is genuinely in flight.
+        await asyncio.wait_for(request_started.wait(), BLOCKED_REQUEST_TIMEOUT)
+
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+
+        await adapter.aclose()
+        return adapter._client.is_closed
+
+    is_closed = run_async(scenario())
+    assert is_closed is True
+
+
 def test_scalar_timeout_translation():
     result = AsyncMlbDataAdapter._translate_timeout(5)
     assert result.connect == 5
