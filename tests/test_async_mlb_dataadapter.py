@@ -565,6 +565,37 @@ def test_owned_client_exhausts_retries_on_persistent_server_error(status_code):
     assert handler.call_count == 4
 
 
+def test_persistent_server_error_raises_despite_compatibility_mode():
+    """A final 5xx raises MlbHttpError regardless of strict_http.
+
+    Compatibility mode suppresses non-404 4xx only. A server error is never
+    downgraded to a warned empty MlbResult, so strict_http=False must not
+    change either the exception or the retry behavior here.
+    """
+    handler = _ScriptedHandler(_response(503))
+
+    async def scenario():
+        adapter = _owned_adapter(handler, strict_http=False)
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter("always", MlbHttpCompatibilityWarning)
+                with pytest.raises(MlbHttpError) as exc_info:
+                    await adapter.get(endpoint="sports")
+
+        return exc_info.value.status_code, caught
+
+    status_code, caught = run_async(scenario())
+    assert status_code == 503
+    # One initial attempt plus the status retry budget.
+    assert handler.call_count == 4
+    compatibility = [
+        warning
+        for warning in caught
+        if issubclass(warning.category, MlbHttpCompatibilityWarning)
+    ]
+    assert compatibility == []
+
+
 def test_owned_client_final_429_raises_under_strict_http():
     handler = _ScriptedHandler(_response(429))
 
