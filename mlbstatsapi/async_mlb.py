@@ -6,7 +6,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from ._parsers.people import parse_person, parse_people
-from ._parsers.schedules import parse_schedule
+from ._parsers.schedules import parse_schedule, build_schedule_params
 from ._parsers.teams import parse_team, parse_teams
 from .async_mlb_dataadapter import AsyncMlbDataAdapter
 from .mlb_dataadapter import DEFAULT_TIMEOUT, TimeoutType
@@ -139,18 +139,17 @@ class AsyncMlb:
         **params,
     ) -> Schedule | None:
 
-        if start_date and end_date:
-            params["startDate"] = start_date
-            params["endDate"] = end_date
-        elif date and not (start_date or end_date):
-            params["date"] = date
-        elif "gamePks" not in params:
+        params = build_schedule_params(
+            date=date,
+            start_date=start_date,
+            end_date=end_date,
+            sport_id=sport_id,
+            team_id=team_id,
+            **params,
+        )
+
+        if not params:
             return None
-
-        if team_id:
-            params['teamId'] = team_id
-
-        params['sportId'] = sport_id
 
         mlb_data = await self._mlb_adapter_v1.get(
             endpoint="schedule",
