@@ -148,7 +148,7 @@ class AsyncMlb:
             **params,
         )
 
-        if not params:
+        if params is None:
             return None
 
         mlb_data = await self._mlb_adapter_v1.get(

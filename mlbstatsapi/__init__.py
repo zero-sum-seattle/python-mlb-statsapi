@@ -54,3 +54,8 @@ def __getattr__(name: str):
     raise AttributeError(
         f"module {__name__!r} has no attribute {name!r}"
     )
+
+
+def __dir__() -> list[str]:
+    return sorted(set(globals()) | set(_LAZY_ASYNC_EXPORTS))
+    )
