@@ -22,7 +22,10 @@ def test_async_get_teams():
             teams = await mlb.get_teams()
 
         assert isinstance(teams, list)
+        assert teams
         assert all(isinstance(team, Team) for team in teams)
+
+    asyncio.run(scenario())
 
 
 def test_async_get_person():
@@ -37,13 +40,11 @@ def test_async_get_person():
 
 def test_async_get_people():
     async def scenario():
-
-        player_ids_l = [605151,592450]
-
         async with AsyncMlb() as mlb:
-            people = await mlb.get_people(player_ids_l)
+            people = await mlb.get_people()
 
         assert isinstance(people, list)
+        assert people
         assert all(isinstance(person, Person) for person in people)
 
     asyncio.run(scenario())

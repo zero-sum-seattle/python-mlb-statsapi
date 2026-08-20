@@ -83,8 +83,16 @@ class AsyncMlb:
 
     async def get_teams(
         self,
+        sport_id: int = 1,
         **params,
     ) -> list[Team]:
+        """Return every Team for a sport id.
+
+        Async counterpart of ``Mlb.get_teams``; see that method for the
+        supported keyword parameters.
+        """
+        params["sportId"] = sport_id
+
         mlb_data = await self._mlb_adapter_v1.get(
             endpoint="teams",
             ep_params=params,
@@ -112,14 +120,16 @@ class AsyncMlb:
 
     async def get_people(
         self,
-        person_ids: Union[str, List[int]],
+        sport_id: int = 1,
         **params,
     ) -> list[Person]:
+        """Return every player for a sport id.
 
-        params['personIds'] = person_ids
-
+        Async counterpart of ``Mlb.get_people``, which reads the
+        ``sports/{sport_id}/players`` endpoint rather than ``people``.
+        """
         mlb_data = await self._mlb_adapter_v1.get(
-            endpoint="people",
+            endpoint=f"sports/{sport_id}/players",
             ep_params=params,
         )
 
