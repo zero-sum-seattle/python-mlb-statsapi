@@ -57,17 +57,59 @@ with mlbstatsapi.Mlb() as mlb:
 
 A context manager closes the HTTP resources the library created when the block exits, including when it exits because of an exception. Callers who do not use a context manager can call `mlb.close()` instead. Requests sent through a library-created Session identify as `python-mlb-statsapi/1.0.1`; see [User-Agent](docs/http-transport.md#user-agent) for the details and for injected-Session behavior.
 
-Looking up stats:
+## Common Methods
+
+A representative call for each of the most-used endpoints, assuming an `mlb` client from the quick start above. Every method also accepts `**params` for additional MLB query parameters.
+
+### Players
 
 ```python
->>> stats = ['season', 'seasonAdvanced']
->>> groups = ['hitting']
->>> params = {'season': 2022}
->>> mlb.get_player_stats(664034, stats, groups, **params)
-{'hitting': {'season': Stat, 'seasonAdvanced': Stat }}
+player = mlb.get_person(664034)              # Person | None
+players = mlb.get_people()                   # list[Person], sport_id=1 by default
+player_ids = mlb.get_people_id("Ty France")  # list[int]
 ```
 
-More endpoint examples live in the [usage examples](docs/examples.md) and the [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki).
+### Teams
+
+```python
+team = mlb.get_team(136)                        # Team | None
+teams = mlb.get_teams()                         # list[Team], sport_id=1 by default
+team_ids = mlb.get_team_id("Seattle Mariners")  # list[int]
+```
+
+### Stats
+
+```python
+stats = mlb.get_player_stats(
+    664034,
+    stats=['season', 'career'],
+    groups=['hitting'],
+    season=2022,
+)
+season_hitting = stats['hitting']['season']
+```
+
+`get_player_stats` returns a `dict` keyed by group, then by stat type.
+
+### Schedules
+
+```python
+schedule = mlb.get_schedule(date='2022-10-13')  # Schedule | None
+
+for date in schedule.dates:
+    for game in date.games:
+        print(game.game_pk, game.status.detailed_state)
+```
+
+### Games
+
+```python
+game = mlb.get_game(662242)                     # Game | None
+box_score = mlb.get_game_box_score(662242)      # BoxScore | None
+plays = mlb.get_game_play_by_play(662242)       # Plays | None
+```
+
+Longer runnable examples live in the [usage examples](docs/examples.md). The complete method list, with parameters, return types, and 404 behavior, is in the [public API contract](docs/public-api.md#mlb-endpoint-methods); the [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) documents every endpoint and model in full.
 
 ## Async Usage
 
