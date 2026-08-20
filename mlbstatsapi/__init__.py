@@ -32,20 +32,25 @@ from .mlb_module import (
 # first access keeps async functionality discoverable from the package root
 # while the missing-dependency error surfaces only when async is actually
 # requested. See docs/public-api.md.
-_LAZY_ASYNC_EXPORTS = ("AsyncMlbDataAdapter",)
+_LAZY_ASYNC_EXPORTS = (
+    "AsyncMlb",
+    "AsyncMlbDataAdapter",
+)
 
 
 def __getattr__(name: str):
-    if name in _LAZY_ASYNC_EXPORTS:
+    if name == "AsyncMlb":
+        from .async_mlb import AsyncMlb
+
+        globals()["AsyncMlb"] = AsyncMlb
+        return AsyncMlb
+
+    if name == "AsyncMlbDataAdapter":
         from .async_mlb_dataadapter import AsyncMlbDataAdapter
 
-        # Cache on the module so later attribute access is an ordinary lookup.
         globals()["AsyncMlbDataAdapter"] = AsyncMlbDataAdapter
         return AsyncMlbDataAdapter
 
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
-
-
-def __dir__() -> list[str]:
-    # Keeps the lazy async names discoverable without importing HTTPX.
-    return sorted(set(globals()) | set(_LAZY_ASYNC_EXPORTS))
+    raise AttributeError(
+        f"module {__name__!r} has no attribute {name!r}"
+    )
