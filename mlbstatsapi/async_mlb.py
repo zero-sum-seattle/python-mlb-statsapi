@@ -5,8 +5,9 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from ._helpers.schedule import build_schedule_params
 from ._parsers.people import parse_person, parse_people
-from ._parsers.schedules import parse_schedule, build_schedule_params
+from ._parsers.schedules import parse_schedule
 from ._parsers.teams import parse_team, parse_teams
 from .async_mlb_dataadapter import AsyncMlbDataAdapter
 from .mlb_dataadapter import DEFAULT_TIMEOUT, TimeoutType
