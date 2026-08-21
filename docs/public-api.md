@@ -4,9 +4,10 @@ This document is the authoritative public API contract for the
 `python-mlb-statsapi` **1.x** series.
 
 It defines which package-root symbols, constructor signatures, exception and
-warning relationships, Session ownership rules, and `Mlb` endpoint methods are
-supported after version 1.0. Maintainers should use this document when deciding
-whether a change is a patch, a minor release, or a major release.
+warning relationships, resource ownership rules, and `Mlb` and `AsyncMlb`
+endpoint methods are supported after version 1.0. Maintainers should use this
+document when deciding whether a change is a patch, a minor release, or a major
+release.
 
 This package is an unofficial wrapper for the MLB Stats API and is not
 affiliated with Major League Baseball.
@@ -78,9 +79,10 @@ from mlbstatsapi import (
 )
 ```
 
-The symbols above are available in every install. `AsyncMlbDataAdapter` is
-equally public, but it resolves only when the optional `async` extra is
-installed; see [Optional async support](#optional-async-support).
+The symbols above are available in every install. `AsyncMlb` and
+`AsyncMlbDataAdapter` are equally public, but they resolve only when the
+optional `async` extra is installed; see
+[Optional async support](#optional-async-support).
 
 ### Classification of package-root symbols
 
@@ -91,6 +93,7 @@ resolving it needs an optional dependency.
 | Symbol | Status | Availability |
 | --- | --- | --- |
 | `Mlb` | Public and stable in 1.x | Always available |
+| `AsyncMlb` | Public and stable in 1.x | Requires the optional `async` extra |
 | `MlbDataAdapter` | Public and stable in 1.x | Always available |
 | `AsyncMlbDataAdapter` | Public and stable in 1.x | Requires the optional `async` extra |
 | `MlbResult` | Public and stable in 1.x | Always available |
@@ -104,10 +107,11 @@ resolving it needs an optional dependency.
 | `return_splits` | Public legacy helper, stable in 1.x but not preferred for new code | Always available |
 | `get_stat_attributes` | Public legacy helper, stable in 1.x but not preferred for new code | Always available |
 
-`AsyncMlbDataAdapter` is supported 1.x API on the same terms as the synchronous
-symbols: it will not be removed or renamed during the series, and its documented
-behavior stays compatible. Only its availability is conditional, because its
-HTTP dependency ships with the `async` extra. See
+`AsyncMlb` and `AsyncMlbDataAdapter` are supported 1.x API on the same terms as
+the synchronous symbols: they will not be removed or renamed during the
+series, and their documented behavior stays compatible. Only their
+availability is conditional, because their HTTP dependency ships with the
+`async` extra. See
 [Optional async support](#optional-async-support).
 
 No package-root symbol is marked deprecated in version 1.0. Deprecation requires
@@ -150,9 +154,9 @@ accidental submodule names (for example, a documented deprecation period).
 
 ## Optional async support
 
-`AsyncMlbDataAdapter` is a public package-root symbol, like `MlbDataAdapter`,
-and appears in the classification table above. Its HTTP dependency is optional
-and installed with the `async` extra:
+`AsyncMlb` and `AsyncMlbDataAdapter` are public package-root symbols, like
+`Mlb` and `MlbDataAdapter`, and appear in the classification table above. Their
+HTTP dependency is optional and installed with the `async` extra:
 
 ```bash
 pip install "python-mlb-statsapi[async]"
@@ -161,7 +165,7 @@ pip install "python-mlb-statsapi[async]"
 With the extra installed:
 
 ```python
-from mlbstatsapi import AsyncMlbDataAdapter
+from mlbstatsapi import AsyncMlb, AsyncMlbDataAdapter
 ```
 
 Async symbols are resolved on first access, so the optional dependency is not
@@ -227,6 +231,61 @@ with mlbstatsapi.Mlb() as mlb:
 Session. Most endpoint methods use `v1`. `get_game` uses the `v1.1` live feed
 endpoint. Standalone `MlbDataAdapter(ver="v1")` and
 `MlbDataAdapter(ver="v1.1")` remain supported.
+
+## AsyncMlb public client
+
+`AsyncMlb` is the public asynchronous client and requires the optional `async`
+extra.
+
+### Constructor
+
+```text
+AsyncMlb(
+    hostname="statsapi.mlb.com",
+    logger=None,
+    timeout=(3.05, 30.0),
+    client=None,
+    *,
+    strict_http=True,
+)
+```
+
+Parameter order and default values above are part of the API.
+`strict_http` is keyword-only.
+
+### Lifecycle
+
+* `async with AsyncMlb(...) as mlb` returns the `AsyncMlb` instance itself
+* `AsyncMlb.__aexit__` awaits cleanup
+* Explicit cleanup with `await mlb.aclose()` is supported
+* Repeated `aclose()` calls are safe
+* Library-owned async clients are closed
+* Caller-injected async clients remain caller-owned and open
+
+### Concurrency
+
+One `AsyncMlb` instance supports concurrent in-flight requests on the same
+event loop. Concurrency is caller-controlled. Cross-event-loop use is not
+promised.
+
+### Endpoint methods
+
+The currently supported awaitable endpoint methods are:
+
+```text
+get_team(team_id: int, **params)
+get_teams(sport_id: int = 1, **params)
+get_person(player_id: int, **params)
+get_people(sport_id: int = 1, **params)
+get_schedule(
+    date: str = None,
+    start_date: str = None,
+    end_date: str = None,
+    sport_id: int = 1,
+    team_id: int = None,
+    **params,
+)
+```
 
 ## Low-level adapter
 
