@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from ._helpers.id_lookup import find_ids_by_key
 from ._helpers.schedule import build_schedule_params
 from ._parsers.attendance import parse_attendance
 from ._parsers.awards import parse_awards
@@ -242,6 +243,58 @@ class AsyncMlb:
 
         return parse_teams(mlb_data.data)
 
+    async def get_team_id(
+        self,
+        team_name: str,
+        search_key: str = "name",
+        **params,
+    ) -> list[int]:
+        """
+        return a team Id
+
+        Async counterpart of ``Mlb.get_team_id``.
+
+        Parameters
+        ----------
+        team_name : str
+            Teams name
+
+        search_key : str
+            search key search json for matching team_name
+
+        Other Parameters
+        ----------------
+        sportId : int
+            sport id number for team search
+
+        Returns
+        -------
+        list of ints
+            returns a list of matching team ids
+
+        See Also
+        --------
+        AsyncMlb.get_teams : Return a list of Teams from sport id.
+        AsyncMlb.get_team : Return a Team from id
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     ids = await mlb.get_team_id("Athletics")
+        [133]
+        """
+        params["fields"] = "teams,id,name"
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="teams",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return find_ids_by_key(mlb_data.data.get("teams") or [], search_key, team_name)
+
     async def get_team_roster(
         self,
         team_id: int,
@@ -464,6 +517,60 @@ class AsyncMlb:
 
         return parse_people(mlb_data.data)
 
+    async def get_people_id(
+        self,
+        fullname: str,
+        sport_id: int = 1,
+        search_key: str = "fullName",
+        **params,
+    ) -> list[int]:
+        """
+        Returns specific player information based on players fullname
+
+        Async counterpart of ``Mlb.get_people_id``.
+
+        Parameters
+        ----------
+        fullname : str
+            Person full name
+        sport_id : int
+            Insert sportId to return player information for particular sport.
+
+        Other Parameters
+        ----------------
+        season : int
+            Insert year to return player information for a particular season.
+        gameType : str
+            Insert gameType to return player information for a particular
+            gameType.
+
+        Returns
+        -------
+        list of int
+            Returns a list of person ids
+
+        See Also
+        --------
+        AsyncMlb.get_people : Return a list of People from sport id.
+        AsyncMlb.get_person : Return Person from id.
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     ids = await mlb.get_people_id("Ty France")
+        [664034]
+        """
+        params["fields"] = "people,id,fullName"
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"sports/{sport_id}/players",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return find_ids_by_key(mlb_data.data.get("people") or [], search_key, fullname)
 
     async def get_schedule(
         self,
@@ -739,6 +846,50 @@ class AsyncMlb:
 
         return parse_sports(mlb_data.data)
 
+    async def get_sport_id(
+        self,
+        sport_name: str,
+        search_key: str = "name",
+        **params,
+    ) -> list[int]:
+        """
+        return sport id
+
+        Async counterpart of ``Mlb.get_sport_id``.
+
+        Parameters
+        ----------
+        sport_name : str
+            Sport name
+        search_key : str
+            search key name
+
+        Returns
+        -------
+        list of ints
+            returns a list of sport ids
+
+        See Also
+        --------
+        AsyncMlb.get_sports : return a list of sports
+        AsyncMlb.get_sport : return a sport from id
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     ids = await mlb.get_sport_id("Major League Baseball")
+        [1]
+        """
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="sports",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return find_ids_by_key(mlb_data.data.get("sports") or [], search_key, sport_name)
+
     async def get_league(
         self,
         league_id: int,
@@ -832,6 +983,49 @@ class AsyncMlb:
 
         return parse_leagues(mlb_data.data)
 
+    async def get_league_id(
+        self,
+        league_name: str,
+        search_key: str = "name",
+        **params,
+    ) -> list[int]:
+        """
+        return league id
+
+        Async counterpart of ``Mlb.get_league_id``.
+
+        Parameters
+        ----------
+        league_name : str
+            League name
+
+        Returns
+        -------
+        list of ints
+
+        See Also
+        --------
+        AsyncMlb.get_league : return a League from league id
+        AsyncMlb.get_leagues : return a list of Leagues
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     ids = await mlb.get_league_id('American League')
+        [103]
+        """
+        params["fields"] = "leagues,id,name"
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="leagues",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return find_ids_by_key(mlb_data.data.get("leagues") or [], search_key, league_name)
+
     async def get_division(
         self,
         division_id: int,
@@ -917,6 +1111,50 @@ class AsyncMlb:
             return []
 
         return parse_divisions(mlb_data.data)
+
+    async def get_division_id(
+        self,
+        division_name: str,
+        search_key: str = "name",
+        **params,
+    ) -> list[int]:
+        """
+        return division id
+
+        Async counterpart of ``Mlb.get_division_id``.
+
+        Parameters
+        ----------
+        division_name : str
+            Division name
+        search_key : str
+            search key name
+
+        Returns
+        -------
+        list of ints
+            returns a matching list of division ids
+
+        See Also
+        --------
+        AsyncMlb.get_division : return a Division from id
+        AsyncMlb.get_divisions : return a list of Divisions
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     ids = await mlb.get_division_id('American League West')
+        [200]
+        """
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="divisions",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return find_ids_by_key(mlb_data.data.get("divisions") or [], search_key, division_name)
 
     async def get_season(
         self,
@@ -1131,6 +1369,48 @@ class AsyncMlb:
             return []
 
         return parse_venues(mlb_data.data)
+
+    async def get_venue_id(
+        self,
+        venue_name: str,
+        search_key: str = "name",
+        **params,
+    ) -> list[int]:
+        """
+        return venue id
+
+        Async counterpart of ``Mlb.get_venue_id``.
+
+        Parameters
+        ----------
+        venue_name : str
+            venue name
+
+        Returns
+        -------
+        list of ints
+            returns a list of matching venue ints
+
+        See Also
+        --------
+        AsyncMlb.get_venue : return a Venue
+        AsyncMlb.get_venues : return a list of Venues
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     ids = await mlb.get_venue_id('PNC Park')
+        [31]
+        """
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="venues",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return find_ids_by_key(mlb_data.data.get("venues") or [], search_key, venue_name)
 
     async def get_standings(
         self,

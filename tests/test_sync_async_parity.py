@@ -660,6 +660,84 @@ def test_get_homerun_derby_success_parity():
     assert result.request == ("GET", "/api/v1/homeRunDerby/511101", {})
 
 
+def test_get_team_id_success_parity():
+    """A matching name is resolved to the same id list on both clients."""
+    result = call_both(
+        "get_team_id", "Athletics", payload={"teams": [{"id": 133, "name": "Athletics"}]}
+    )
+
+    assert result.sync == [133]
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/teams", {"fields": "teams,id,name"})
+
+
+def test_get_people_id_success_parity():
+    """A matching name is resolved to the same id list on both clients."""
+    result = call_both(
+        "get_people_id",
+        "Ty France",
+        payload={"people": [{"id": 664034, "fullName": "Ty France"}]},
+    )
+
+    assert result.sync == [664034]
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/sports/1/players",
+        {"fields": "people,id,fullName"},
+    )
+
+
+def test_get_sport_id_success_parity():
+    """A matching name is resolved to the same id list on both clients."""
+    result = call_both(
+        "get_sport_id",
+        "Major League Baseball",
+        payload={"sports": [{"id": 1, "name": "Major League Baseball"}]},
+    )
+
+    assert result.sync == [1]
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/sports", {})
+
+
+def test_get_league_id_success_parity():
+    """A matching name is resolved to the same id list on both clients."""
+    result = call_both(
+        "get_league_id",
+        "American League",
+        payload={"leagues": [{"id": 103, "name": "American League"}]},
+    )
+
+    assert result.sync == [103]
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/leagues", {"fields": "leagues,id,name"})
+
+
+def test_get_division_id_success_parity():
+    """A matching name is resolved to the same id list on both clients."""
+    result = call_both(
+        "get_division_id",
+        "American League West",
+        payload={"divisions": [{"id": 200, "name": "American League West"}]},
+    )
+
+    assert result.sync == [200]
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/divisions", {})
+
+
+def test_get_venue_id_success_parity():
+    """A matching name is resolved to the same id list on both clients."""
+    result = call_both(
+        "get_venue_id", "PNC Park", payload={"venues": [{"id": 31, "name": "PNC Park"}]}
+    )
+
+    assert result.sync == [31]
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/venues", {})
+
+
 # ---------------------------------------------------------------------------
 # Nothing to return
 # ---------------------------------------------------------------------------

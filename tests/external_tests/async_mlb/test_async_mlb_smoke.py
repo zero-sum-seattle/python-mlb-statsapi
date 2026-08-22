@@ -177,3 +177,63 @@ def test_async_get_homerun_derby():
         assert isinstance(derby, HomeRunDerby)
 
     asyncio.run(scenario())
+
+
+def test_async_get_team_id():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            ids = await mlb.get_team_id("Athletics")
+
+        assert ids == [133]
+
+    asyncio.run(scenario())
+
+
+def test_async_get_people_id():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            ids = await mlb.get_people_id("Ty France")
+
+        assert ids == [664034]
+
+    asyncio.run(scenario())
+
+
+def test_async_get_sport_id():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            ids = await mlb.get_sport_id("Major League Baseball")
+
+        assert ids == [1]
+
+    asyncio.run(scenario())
+
+
+def test_async_get_league_id():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            ids = await mlb.get_league_id("American League")
+
+        assert ids == [103]
+
+    asyncio.run(scenario())
+
+
+def test_async_get_division_id():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            ids = await mlb.get_division_id("American League West")
+
+        assert ids == [200]
+
+    asyncio.run(scenario())
+
+
+def test_async_get_venue_id():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            ids = await mlb.get_venue_id("PNC Park")
+
+        assert ids == [31]
+
+    asyncio.run(scenario())

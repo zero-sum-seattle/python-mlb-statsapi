@@ -1009,6 +1009,82 @@ def test_get_homerun_derby_returns_none_when_there_is_no_derby(label):
     assert asyncio.run(scenario()) is None
 
 
+def test_get_team_id_request_matches_the_sync_client():
+    handler = _Handler(_json({"teams": [{"id": 133, "name": "Athletics"}]}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_team_id("Athletics")
+
+    assert asyncio.run(scenario()) == [133]
+    assert_matches_sync(handler.request, "get_team_id", "Athletics")
+
+
+def test_get_team_id_returns_empty_list_when_there_is_no_match():
+    handler = _Handler(_json({"teams": []}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_team_id("Nonexistent")
+
+    assert asyncio.run(scenario()) == []
+
+
+def test_get_people_id_request_matches_the_sync_client():
+    handler = _Handler(_json({"people": [{"id": 664034, "fullName": "Ty France"}]}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_people_id("Ty France")
+
+    assert asyncio.run(scenario()) == [664034]
+    assert_matches_sync(handler.request, "get_people_id", "Ty France")
+
+
+def test_get_sport_id_request_matches_the_sync_client():
+    handler = _Handler(_json({"sports": [{"id": 1, "name": "Major League Baseball"}]}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_sport_id("Major League Baseball")
+
+    assert asyncio.run(scenario()) == [1]
+    assert_matches_sync(handler.request, "get_sport_id", "Major League Baseball")
+
+
+def test_get_league_id_request_matches_the_sync_client():
+    handler = _Handler(_json({"leagues": [{"id": 103, "name": "American League"}]}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_league_id("American League")
+
+    assert asyncio.run(scenario()) == [103]
+    assert_matches_sync(handler.request, "get_league_id", "American League")
+
+
+def test_get_division_id_request_matches_the_sync_client():
+    handler = _Handler(_json({"divisions": [{"id": 200, "name": "American League West"}]}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_division_id("American League West")
+
+    assert asyncio.run(scenario()) == [200]
+    assert_matches_sync(handler.request, "get_division_id", "American League West")
+
+
+def test_get_venue_id_request_matches_the_sync_client():
+    handler = _Handler(_json({"venues": [{"id": 31, "name": "PNC Park"}]}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_venue_id("PNC Park")
+
+    assert asyncio.run(scenario()) == [31]
+    assert_matches_sync(handler.request, "get_venue_id", "PNC Park")
+
+
 # ---------------------------------------------------------------------------
 # Parity and concurrency
 # ---------------------------------------------------------------------------
@@ -1021,21 +1097,27 @@ def test_public_signatures_match_the_sync_client():
     for name in (
         "get_team",
         "get_teams",
+        "get_team_id",
         "get_team_roster",
         "get_team_coaches",
         "get_person",
         "get_people",
+        "get_people_id",
         "get_schedule",
         "get_sport",
         "get_sports",
+        "get_sport_id",
         "get_league",
         "get_leagues",
+        "get_league_id",
         "get_division",
         "get_divisions",
+        "get_division_id",
         "get_season",
         "get_seasons",
         "get_venue",
         "get_venues",
+        "get_venue_id",
         "get_standings",
         "get_attendance",
         "get_draft",

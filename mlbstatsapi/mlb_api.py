@@ -23,6 +23,7 @@ from mlbstatsapi.models.homerunderby import HomeRunDerby
 from mlbstatsapi.models.standings import Standings
 
 
+from ._helpers.id_lookup import find_ids_by_key
 from ._parsers.attendance import parse_attendance
 from ._parsers.awards import parse_awards
 from ._parsers.divisions import parse_divisions, parse_division
@@ -302,16 +303,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        player_ids = []
-
-        if 'people' in mlb_data.data and mlb_data.data['people']:
-            for person in mlb_data.data['people']:
-                try:
-                    if person[search_key].lower() == fullname.lower():
-                        player_ids.append(person['id'])
-                except KeyError:
-                    continue
-        return player_ids
+        return find_ids_by_key(mlb_data.data.get('people') or [], search_key, fullname)
 
     def get_teams(self, sport_id: int = 1, **params) -> List[Team]:
         """
@@ -499,16 +491,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        team_ids = []
-    
-        if 'teams' in mlb_data.data and mlb_data.data['teams']:
-            for team in mlb_data.data['teams']:
-                try:
-                    if team[search_key].lower() == team_name.lower():
-                        team_ids.append(team['id'])
-                except (KeyError):
-                    continue
-        return team_ids
+        return find_ids_by_key(mlb_data.data.get('teams') or [], search_key, team_name)
 
     def get_team_roster(self, team_id: int, **params) -> List[Player]:
         """
@@ -1327,16 +1310,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        venue_ids = []
-
-        if 'venues' in mlb_data.data and mlb_data.data['venues']:
-            for venue in mlb_data.data['venues']:
-                try:
-                    if venue[search_key].lower() == venue_name.lower():
-                        venue_ids.append(venue['id'])
-                except KeyError:
-                    continue
-        return venue_ids
+        return find_ids_by_key(mlb_data.data.get('venues') or [], search_key, venue_name)
 
     def get_sport(self, sport_id: int, **params) -> Union[Sport, None]:
         """
@@ -1443,17 +1417,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        sport_ids = []
-
-        if 'sports' in mlb_data.data and mlb_data.data['sports']:
-            for sport in mlb_data.data['sports']:
-                try:
-                    if sport[search_key].lower() == sport_name.lower():
-                        sport_ids.append(sport['id'])
-                except KeyError:
-                    continue
-
-        return sport_ids
+        return find_ids_by_key(mlb_data.data.get('sports') or [], search_key, sport_name)
 
     def get_league(self, league_id: int, **params) -> Union[League, None]:
         """
@@ -1565,16 +1529,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        league_ids = []
-
-        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
-            for league in mlb_data.data['leagues']:
-                try:
-                    if league[search_key].lower() == league_name.lower():
-                        league_ids.append(league['id'])
-                except KeyError:
-                    continue
-        return league_ids
+        return find_ids_by_key(mlb_data.data.get('leagues') or [], search_key, league_name)
 
     def get_division(self, division_id: int, **params) -> Union[Division, None]:
         """
@@ -1679,17 +1634,8 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint='divisions', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
-        
-        division_ids = []
 
-        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
-            for division in mlb_data.data['divisions']:
-                try:
-                    if division[search_key].lower() == division_name.lower():
-                        division_ids.append(division['id'])
-                except KeyError:
-                    continue
-        return division_ids
+        return find_ids_by_key(mlb_data.data.get('divisions') or [], search_key, division_name)
 
     def get_season(self, season_id: str, sport_id: int = 1, **params) -> Season:
         """
