@@ -28,6 +28,7 @@ from ._parsers.attendance import parse_attendance
 from ._parsers.awards import parse_awards
 from ._parsers.divisions import parse_divisions, parse_division
 from ._parsers.draft import parse_draft
+from ._parsers.games import parse_boxscore, parse_game, parse_game_ids, parse_linescore, parse_plays
 from ._parsers.homerunderby import parse_homerun_derby
 from ._parsers.leagues import parse_leagues, parse_league
 from ._parsers.people import parse_people, parse_person
@@ -934,8 +935,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'gamePk' in mlb_data.data and mlb_data.data['gamePk'] == game_id:
-            return Game(**mlb_data.data)
+        return parse_game(mlb_data.data, game_id)
 
     def get_game_play_by_play(self, game_id: int, **params) -> Union[Plays, None]:
         """
@@ -979,8 +979,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'allPlays' in mlb_data.data and mlb_data.data['allPlays']:
-            return Plays(**mlb_data.data)
+        return parse_plays(mlb_data.data)
 
     def get_game_line_score(self, game_id: int, **params) -> Union[Linescore, None]:
         """
@@ -1022,8 +1021,7 @@ class Mlb:
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/linescore', ep_params=params)
 
-        if 'teams' in mlb_data.data and mlb_data.data['teams']:
-            return Linescore(**mlb_data.data)
+        return parse_linescore(mlb_data.data)
 
     def get_game_box_score(self, game_id: int, **params) -> Union[BoxScore, None]:
         """
@@ -1067,8 +1065,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'teams' in mlb_data.data and mlb_data.data['teams']:
-            return BoxScore(**mlb_data.data)
+        return parse_boxscore(mlb_data.data)
 
 
     def get_game_ids(self, date: str = None,
@@ -1121,14 +1118,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        game_ids = []
-
-        if 'dates' in mlb_data.data and mlb_data.data['dates']:
-            for date in mlb_data.data['dates']:
-               for game in date['games']:
-                   game_ids.append(game['gamePk'])
-
-        return game_ids
+        return parse_game_ids(mlb_data.data)
 
     def get_gamepace(self, season: str, sport_id=1, **params) -> Union[GamePace, None]:
         """

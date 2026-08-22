@@ -5,6 +5,7 @@ from mlbstatsapi.models.attendances import Attendance
 from mlbstatsapi.models.awards import Award
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.drafts import Round
+from mlbstatsapi.models.game import BoxScore, Game, Linescore, Plays
 from mlbstatsapi.models.homerunderby import HomeRunDerby
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.people import Coach, Person, Player
@@ -235,5 +236,57 @@ def test_async_get_venue_id():
             ids = await mlb.get_venue_id("PNC Park")
 
         assert ids == [31]
+
+    asyncio.run(scenario())
+
+
+def test_async_get_game():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            game = await mlb.get_game(717911)
+
+        assert isinstance(game, Game)
+        assert game.id == 717911
+
+    asyncio.run(scenario())
+
+
+def test_async_get_game_play_by_play():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            plays = await mlb.get_game_play_by_play(717911)
+
+        assert isinstance(plays, Plays)
+        assert plays.all_plays
+
+    asyncio.run(scenario())
+
+
+def test_async_get_game_line_score():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            linescore = await mlb.get_game_line_score(717911)
+
+        assert isinstance(linescore, Linescore)
+
+    asyncio.run(scenario())
+
+
+def test_async_get_game_box_score():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            boxscore = await mlb.get_game_box_score(717911)
+
+        assert isinstance(boxscore, BoxScore)
+
+    asyncio.run(scenario())
+
+
+def test_async_get_game_ids():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            ids = await mlb.get_game_ids(date="2023-06-03")
+
+        assert 717911 in ids
 
     asyncio.run(scenario())

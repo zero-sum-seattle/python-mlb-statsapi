@@ -43,12 +43,21 @@ class AsyncMlbDataAdapter:
         client: httpx.AsyncClient | None = None,
         *,
         strict_http: bool = True,
+        retries_enabled: bool | None = None,
     ):
         self.url = f"https://{hostname}/api/{ver}/"
         self._logger = logger or logging.getLogger(__name__)
         self._timeout = timeout
         self._strict_http = strict_http
         self._owns_client = client is None
+        # Retry eligibility normally follows client ownership, like the sync
+        # adapter (retries are mounted on the Session, not per MlbDataAdapter
+        # version). AsyncMlb overrides this for its v1.1 adapter, which
+        # borrows the v1 adapter's client rather than owning it directly, so
+        # both adapters retry exactly when the shared client is library-owned.
+        self._retries_enabled = (
+            self._owns_client if retries_enabled is None else retries_enabled
+        )
         self._retry_policy = create_retry_policy()
 
         if client is None:
@@ -208,7 +217,7 @@ class AsyncMlbDataAdapter:
                 )
 
             except httpx.ReadTimeout as exc:
-                max_attempts = policy.read + 1 if self._owns_client else 1
+                max_attempts = policy.read + 1 if self._retries_enabled else 1
 
                 if attempt >= max_attempts:
                     self._logger.error(msg=str(exc))
@@ -221,7 +230,7 @@ class AsyncMlbDataAdapter:
                 # Caught before httpx.TimeoutException: a connect timeout is a
                 # timeout for the caller, but it spends the connect budget so
                 # the retry accounting matches the sync policy.
-                max_attempts = policy.connect + 1 if self._owns_client else 1
+                max_attempts = policy.connect + 1 if self._retries_enabled else 1
 
                 if attempt >= max_attempts:
                     self._logger.error(msg=str(exc))
@@ -231,7 +240,7 @@ class AsyncMlbDataAdapter:
                 continue
 
             except httpx.ConnectError as exc:
-                max_attempts = policy.connect + 1 if self._owns_client else 1
+                max_attempts = policy.connect + 1 if self._retries_enabled else 1
 
                 if attempt >= max_attempts:
                     self._logger.error(msg=str(exc))
@@ -244,7 +253,7 @@ class AsyncMlbDataAdapter:
                 continue
 
             except httpx.TimeoutException as exc:
-                max_attempts = policy.total + 1 if self._owns_client else 1
+                max_attempts = policy.total + 1 if self._retries_enabled else 1
 
                 if attempt >= max_attempts:
                     raise MlbTimeoutError("Request failed") from exc
@@ -256,7 +265,7 @@ class AsyncMlbDataAdapter:
                 continue
 
             except httpx.RequestError as exc:
-                max_attempts = policy.total + 1 if self._owns_client else 1
+                max_attempts = policy.total + 1 if self._retries_enabled else 1
 
                 if attempt >= max_attempts:
                     self._logger.error(msg=str(exc))
@@ -265,7 +274,7 @@ class AsyncMlbDataAdapter:
                 await self._sleep_before_retry(attempt=attempt, response=None)
                 continue
 
-            max_attempts = policy.status + 1 if self._owns_client else 1
+            max_attempts = policy.status + 1 if self._retries_enabled else 1
 
             if response.status_code not in policy.status_forcelist or attempt >= max_attempts:
                 return response

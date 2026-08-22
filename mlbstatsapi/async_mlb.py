@@ -11,6 +11,13 @@ from ._parsers.attendance import parse_attendance
 from ._parsers.awards import parse_awards
 from ._parsers.divisions import parse_division, parse_divisions
 from ._parsers.draft import parse_draft
+from ._parsers.games import (
+    parse_boxscore,
+    parse_game,
+    parse_game_ids,
+    parse_linescore,
+    parse_plays,
+)
 from ._parsers.homerunderby import parse_homerun_derby
 from ._parsers.leagues import parse_league, parse_leagues
 from ._parsers.people import parse_person, parse_people
@@ -27,6 +34,7 @@ from .models.attendances import Attendance
 from .models.awards import Award
 from .models.divisions import Division
 from .models.drafts import Round
+from .models.game import BoxScore, Game, Linescore, Plays
 from .models.homerunderby import HomeRunDerby
 from .models.leagues import League
 from .models.people import Coach, Person, Player
@@ -55,6 +63,11 @@ class AsyncMlb:
     ):
         self._logger = logger or logging.getLogger(__name__)
 
+        # One client is shared by the v1 and v1.1 adapters, mirroring Mlb's
+        # shared-Session pattern. The v1 adapter resolves and owns the client
+        # (library-created when the caller passes none); the v1.1 adapter
+        # borrows that same client and never closes it itself, but still
+        # retries exactly when the shared client is library-owned.
         self._mlb_adapter_v1 = AsyncMlbDataAdapter(
             hostname=hostname,
             ver="v1",
@@ -62,6 +75,15 @@ class AsyncMlb:
             timeout=timeout,
             client=client,
             strict_http=strict_http,
+        )
+        self._mlb_adapter_v1_1 = AsyncMlbDataAdapter(
+            hostname=hostname,
+            ver="v1.1",
+            logger=self._logger,
+            timeout=timeout,
+            client=self._mlb_adapter_v1._client,
+            strict_http=strict_http,
+            retries_enabled=self._mlb_adapter_v1._owns_client,
         )
 
     async def aclose(self) -> None:
@@ -759,6 +781,279 @@ class AsyncMlb:
             return None
 
         return parse_schedule(mlb_data.data)
+
+    async def get_game(
+        self,
+        game_id: int,
+        **params,
+    ) -> Game | None:
+        """
+        Return the game for a specific game id
+        Gumbo Live Feed for a specific gamePk.
+
+        Async counterpart of ``Mlb.get_game``. Uses the ``v1.1`` live feed
+        endpoint, like the sync client.
+
+        Parameters
+        ----------
+        game_id : int
+            Insert gamePk to return the GUMBO live feed for a specific game.
+
+        Other Parameters
+        ----------------
+        timecode : str
+            Use this parameter to return a snapshot of the data at the
+            specified time. Format: YYYYMMDD_HHMMSS.
+            Return timecodes from timecodes endpoint
+            https://statsapi.mlb.com/api/v1.1/game/534196/feed/live/timestamps
+        hydrate : str
+            Insert hydration(s) to return putout credits or defensive
+            positioning data for all plays in a particular game.
+            Format 'credits,alignment,flags'
+            Available Hydrations:
+                credits
+                alignment
+                flags
+                officials
+        fields : str
+            Comma delimited list of specific fields to be returned.
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        Game
+
+        See Also
+        --------
+        AsyncMlb.get_game_play_by_play : return play by play data for a game
+        AsyncMlb.get_game_line_score : return a linescore for a game
+        AsyncMlb.get_game_box_score : return a boxscore for a game
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     game = await mlb.get_game(662242)
+        Game
+        """
+        mlb_data = await self._mlb_adapter_v1_1.get(
+            endpoint=f"game/{game_id}/feed/live",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return None
+
+        return parse_game(mlb_data.data, game_id)
+
+    async def get_game_play_by_play(
+        self,
+        game_id: int,
+        **params,
+    ) -> Plays | None:
+        """
+        return the playbyplay of a game for a specific game id
+
+        Async counterpart of ``Mlb.get_game_play_by_play``.
+
+        Parameters
+        ----------
+        game_id : int
+            Game id number
+
+        Other Parameters
+        ----------------
+        timecode : int
+            Use this parameter to return a snapshot of the data at the
+            specified time. Format: YYYYMMDD_HHMMSS
+        fields :
+            Comma delimited list of specific fields to be returned.
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        Plays
+
+        See Also
+        --------
+        AsyncMlb.get_game_line_score : return a linescore for a game
+        AsyncMlb.get_game_box_score : return a boxscore for a game
+        AsyncMlb.get_game : return a specific game from game id
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     plays = await mlb.get_game_play_by_play(662242)
+        Plays
+        """
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"game/{game_id}/playByPlay",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return None
+
+        return parse_plays(mlb_data.data)
+
+    async def get_game_line_score(
+        self,
+        game_id: int,
+        **params,
+    ) -> Linescore | None:
+        """
+        return the Linescore of a game for a specific game id
+
+        Async counterpart of ``Mlb.get_game_line_score``.
+
+        Parameters
+        ----------
+        game_id : int
+            Game id number
+
+        Other Parameters
+        ----------------
+        timecode : int
+            Use this parameter to return a snapshot of the data at the
+            specified time. Format: YYYYMMDD_HHMMSS
+        fields :
+            Comma delimited list of specific fields to be returned.
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        Linescore
+
+        See Also
+        --------
+        AsyncMlb.get_game_play_by_play : return play by play data for a game
+        AsyncMlb.get_game_box_score : return a boxscore for a game
+        AsyncMlb.get_game : return a specific game from game id
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     linescore = await mlb.get_game_line_score(662242)
+        Linescore
+        """
+        # Documented quirk: unlike its sibling game helpers, this does not
+        # short-circuit on a 400-499 status; missing linescore data falls
+        # through to an implicit None below. See docs/public-api.md.
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"game/{game_id}/linescore",
+            ep_params=params,
+        )
+
+        return parse_linescore(mlb_data.data)
+
+    async def get_game_box_score(
+        self,
+        game_id: int,
+        **params,
+    ) -> BoxScore | None:
+        """
+        return the boxscore of a game for a specific game id
+
+        Async counterpart of ``Mlb.get_game_box_score``.
+
+        Parameters
+        ----------
+        game_id : int
+            Game id number
+
+        Other Parameters
+        ----------------
+        timecode : int
+            Use this parameter to return a snapshot of the data at the
+            specified time. Format: YYYYMMDD_HHMMSS
+        fields :
+            Comma delimited list of specific fields to be returned.
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        BoxScore
+
+        See Also
+        --------
+        AsyncMlb.get_game_play_by_play : return play by play data for a game
+        AsyncMlb.get_game_line_score : return a linescore for a game
+        AsyncMlb.get_game : return a specific game from game id
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     boxscore = await mlb.get_game_box_score(662242)
+        BoxScore
+        """
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"game/{game_id}/boxscore",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return None
+
+        return parse_boxscore(mlb_data.data)
+
+    async def get_game_ids(
+        self,
+        date: str = None,
+        start_date: str = None,
+        end_date: str = None,
+        sport_id: int = 1,
+        **params,
+    ) -> list[int]:
+        """
+        return game ids for a specific date and game status
+
+        Async counterpart of ``Mlb.get_game_ids``.
+
+        Parameters
+        ----------
+        date : str
+            date, 'yyyy-mm-dd'
+        start_date : str
+            start date, 'yyyy-mm-dd'
+        end_date : str
+            end date, 'yyyy-mm-dd'
+        spord_id : int
+            spord id of schedule defaults to 1
+
+        Returns
+        -------
+        list of ints
+            returns a list of matching game ids
+
+        See Also
+        --------
+        AsyncMlb.get_game_play_by_play : return play by play data for a game
+        AsyncMlb.get_game_line_score : return a linescore for a game
+        AsyncMlb.get_game : return a specific game from game id
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     ids = await mlb.get_game_ids(date="2022-09-26")
+        """
+        if start_date and end_date:
+            params["startDate"] = start_date
+            params["endDate"] = end_date
+        elif date and not (start_date or end_date):
+            params["date"] = date
+        else:
+            return None
+
+        params["sportId"] = sport_id
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="schedule",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return parse_game_ids(mlb_data.data)
 
     async def get_sport(
         self,

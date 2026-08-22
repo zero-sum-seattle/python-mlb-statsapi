@@ -46,6 +46,7 @@ from mlbstatsapi.models.attendances import Attendance  # noqa: E402
 from mlbstatsapi.models.awards import Award  # noqa: E402
 from mlbstatsapi.models.divisions import Division  # noqa: E402
 from mlbstatsapi.models.drafts import Round  # noqa: E402
+from mlbstatsapi.models.game import BoxScore, Game, Linescore, Plays  # noqa: E402
 from mlbstatsapi.models.homerunderby import HomeRunDerby  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
@@ -240,6 +241,68 @@ HOMERUN_DERBY_PAYLOAD = {
         "clockStopped": True,
         "bonusTime": False,
     },
+}
+GAME_FEED_PAYLOAD = {"gamePk": 717911, "link": "/api/v1.1/game/717911/feed/live"}
+PLAY_PAYLOAD = {
+    "result": {
+        "type": "atBat",
+        "event": "Single",
+        "eventType": "single",
+        "description": "x",
+        "rbi": 0,
+        "awayScore": 0,
+        "homeScore": 0,
+    },
+    "about": {
+        "atBatIndex": 0,
+        "halfInning": "top",
+        "isTopInning": True,
+        "inning": 1,
+        "isComplete": True,
+        "isScoringPlay": False,
+        "hasOut": True,
+        "captivatingIndex": 0,
+    },
+    "count": {"balls": 0, "outs": 1, "strikes": 0},
+    "matchup": {
+        "batter": {"id": 1, "link": "/api/v1/people/1", "fullName": "x"},
+        "batSide": {"code": "R", "description": "Right"},
+        "pitcher": {"id": 2, "link": "/api/v1/people/2", "fullName": "y"},
+        "pitchHand": {"code": "R", "description": "Right"},
+        "batterHotColdZones": [],
+        "pitcherHotColdZones": [],
+        "splits": {"batter": "vs_RHP", "pitcher": "vs_RHB", "menOnBase": "Empty"},
+    },
+    "pitchIndex": [],
+    "actionIndex": [],
+    "runnerIndex": [],
+    "atBatIndex": 0,
+}
+PLAYS_PAYLOAD = {"scoringPlays": [], "allPlays": [PLAY_PAYLOAD]}
+GAME_TEAM_PAYLOAD = {"id": 133, "link": "/api/v1/teams/133", "name": "Athletics"}
+LINESCORE_PAYLOAD = {
+    "scheduledInnings": 9,
+    "teams": {"home": {}, "away": {}},
+    "defense": {"team": GAME_TEAM_PAYLOAD},
+    "offense": {"team": GAME_TEAM_PAYLOAD},
+}
+BOXSCORE_SIDE = {
+    "team": GAME_TEAM_PAYLOAD,
+    "teamStats": {},
+    "players": {},
+    "batters": [],
+    "pitchers": [],
+    "bench": [],
+    "bullpen": [],
+    "battingOrder": [],
+    "info": [],
+}
+BOXSCORE_PAYLOAD = {"teams": {"home": BOXSCORE_SIDE, "away": BOXSCORE_SIDE}}
+SCHEDULE_WITH_GAMES_PAYLOAD = {
+    "dates": [
+        {"games": [{"gamePk": 1}, {"gamePk": 2}]},
+        {"games": [{"gamePk": 3}]},
+    ]
 }
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
@@ -738,6 +801,65 @@ def test_get_venue_id_success_parity():
     assert result.request == ("GET", "/api/v1/venues", {})
 
 
+def test_get_game_success_parity():
+    """A successful game feed response parses to the same Game on both clients,
+    hitting the v1.1 endpoint on both."""
+    result = call_both("get_game", 717911, payload=GAME_FEED_PAYLOAD)
+
+    assert isinstance(result.sync, Game), "sync get_game did not return a Game"
+    assert result.sync.id == 717911
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1.1/game/717911/feed/live", {})
+
+
+def test_get_game_play_by_play_success_parity():
+    """A successful play-by-play response parses to the same Plays on both clients."""
+    result = call_both("get_game_play_by_play", 717911, payload=PLAYS_PAYLOAD)
+
+    assert isinstance(result.sync, Plays), (
+        "sync get_game_play_by_play did not return a Plays"
+    )
+    assert len(result.sync.all_plays) == 1
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/game/717911/playByPlay", {})
+
+
+def test_get_game_line_score_success_parity():
+    """A successful linescore response parses to the same Linescore on both clients."""
+    result = call_both("get_game_line_score", 717911, payload=LINESCORE_PAYLOAD)
+
+    assert isinstance(result.sync, Linescore), (
+        "sync get_game_line_score did not return a Linescore"
+    )
+    assert result.sync.scheduled_innings == 9
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/game/717911/linescore", {})
+
+
+def test_get_game_box_score_success_parity():
+    """A successful boxscore response parses to the same BoxScore on both clients."""
+    result = call_both("get_game_box_score", 717911, payload=BOXSCORE_PAYLOAD)
+
+    assert isinstance(result.sync, BoxScore), (
+        "sync get_game_box_score did not return a BoxScore"
+    )
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/game/717911/boxscore", {})
+
+
+def test_get_game_ids_success_parity():
+    """A successful schedule response resolves to the same gamePk list on both clients."""
+    result = call_both("get_game_ids", date="2022-09-26", payload=SCHEDULE_WITH_GAMES_PAYLOAD)
+
+    assert result.sync == [1, 2, 3]
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/schedule",
+        {"date": "2022-09-26", "sportId": "1"},
+    )
+
+
 # ---------------------------------------------------------------------------
 # Nothing to return
 # ---------------------------------------------------------------------------
@@ -946,6 +1068,70 @@ def test_get_homerun_derby_malformed_error_body_parity():
 
     assert result.sync is None
     assert result.asynchronous is None
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_game_no_result_parity(label):
+    """Every no-result response returns None on either client (v1.1 endpoint)."""
+    result = call_both("get_game", 1, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, f"sync get_game returned {result.sync!r} for {label}"
+    assert result.asynchronous is None, (
+        f"async get_game returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_game_play_by_play_no_result_parity(label):
+    """Every no-result response returns None on either client."""
+    result = call_both("get_game_play_by_play", 1, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, (
+        f"sync get_game_play_by_play returned {result.sync!r} for {label}"
+    )
+    assert result.asynchronous is None, (
+        f"async get_game_play_by_play returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_game_line_score_no_result_parity(label):
+    """Every no-result response returns None on either client, even without
+    get_game_line_score's missing 400-499 guard (documented quirk)."""
+    result = call_both("get_game_line_score", 1, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, (
+        f"sync get_game_line_score returned {result.sync!r} for {label}"
+    )
+    assert result.asynchronous is None, (
+        f"async get_game_line_score returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_game_box_score_no_result_parity(label):
+    """Every no-result response returns None on either client."""
+    result = call_both("get_game_box_score", 1, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, (
+        f"sync get_game_box_score returned {result.sync!r} for {label}"
+    )
+    assert result.asynchronous is None, (
+        f"async get_game_box_score returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_game_ids_no_result_parity(label):
+    """Every no-result response returns an empty list on either client."""
+    result = call_both(
+        "get_game_ids", date="2022-09-26", **NO_RESULT_RESPONSES[label]
+    )
+
+    assert result.sync == [], f"sync get_game_ids returned {result.sync!r} for {label}"
+    assert result.asynchronous == [], (
+        f"async get_game_ids returned {result.asynchronous!r} for {label}"
+    )
 
 
 # ---------------------------------------------------------------------------

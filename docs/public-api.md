@@ -268,6 +268,18 @@ One `AsyncMlb` instance supports concurrent in-flight requests on the same
 event loop. Concurrency is caller-controlled. Cross-event-loop use is not
 promised.
 
+### API versions used by `AsyncMlb`
+
+`AsyncMlb` constructs internal adapters for both `v1` and `v1.1` that share
+one HTTPX client, mirroring `Mlb`'s shared-Session pattern. Most endpoint
+methods use `v1`. `get_game` uses the `v1.1` live feed endpoint. The `v1`
+adapter resolves and owns the shared client (library-created when the caller
+passes none to `AsyncMlb`, otherwise the caller's own); the `v1.1` adapter
+borrows that same client and never closes it directly. Retry eligibility
+follows the shared client's ownership on both adapters, not which adapter
+version issues a given request, matching `Mlb`'s single retry policy mounted
+on the shared `Session`.
+
 ### Endpoint methods
 
 The currently supported awaitable endpoint methods are:
@@ -318,12 +330,28 @@ get_sport_id(sport_name: str, search_key: str = 'name', **params)
 get_league_id(league_name: str, search_key: str = 'name', **params)
 get_division_id(division_name: str, search_key: str = 'name', **params)
 get_venue_id(venue_name: str, search_key: str = 'name', **params)
+get_game(game_id: int, **params)
+get_game_play_by_play(game_id: int, **params)
+get_game_line_score(game_id: int, **params)
+get_game_box_score(game_id: int, **params)
+get_game_ids(
+    date: str = None,
+    start_date: str = None,
+    end_date: str = None,
+    sport_id: int = 1,
+    **params,
+)
 ```
 
 `get_venue` inherits the same documented quirk as `Mlb.get_venue`: it is
 annotated `Venue | None` but returns `[]` (not `None`) on a 400–499 response,
 matching the sync behavior noted above. This is preserved for parity, not
 introduced by the async port.
+
+`get_game_line_score` inherits the same documented quirk as
+`Mlb.get_game_line_score`: it does not short-circuit on a 400–499 status the
+way its sibling game helpers do; missing linescore data falls through to an
+implicit `None`.
 
 Every other `Mlb` endpoint method not listed above is not yet supported on
 `AsyncMlb`; calling it there raises `AttributeError`. See issue #305 for the

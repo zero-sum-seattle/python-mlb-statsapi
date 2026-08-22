@@ -42,6 +42,7 @@ from mlbstatsapi.models.attendances import Attendance  # noqa: E402
 from mlbstatsapi.models.awards import Award  # noqa: E402
 from mlbstatsapi.models.divisions import Division  # noqa: E402
 from mlbstatsapi.models.drafts import Round  # noqa: E402
+from mlbstatsapi.models.game import BoxScore, Game, Linescore, Plays  # noqa: E402
 from mlbstatsapi.models.homerunderby import HomeRunDerby  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
@@ -237,6 +238,68 @@ HOMERUN_DERBY_PAYLOAD = {
         "bonusTime": False,
     },
 }
+GAME_FEED_PAYLOAD = {"gamePk": 717911, "link": "/api/v1.1/game/717911/feed/live"}
+PLAY_PAYLOAD = {
+    "result": {
+        "type": "atBat",
+        "event": "Single",
+        "eventType": "single",
+        "description": "x",
+        "rbi": 0,
+        "awayScore": 0,
+        "homeScore": 0,
+    },
+    "about": {
+        "atBatIndex": 0,
+        "halfInning": "top",
+        "isTopInning": True,
+        "inning": 1,
+        "isComplete": True,
+        "isScoringPlay": False,
+        "hasOut": True,
+        "captivatingIndex": 0,
+    },
+    "count": {"balls": 0, "outs": 1, "strikes": 0},
+    "matchup": {
+        "batter": {"id": 1, "link": "/api/v1/people/1", "fullName": "x"},
+        "batSide": {"code": "R", "description": "Right"},
+        "pitcher": {"id": 2, "link": "/api/v1/people/2", "fullName": "y"},
+        "pitchHand": {"code": "R", "description": "Right"},
+        "batterHotColdZones": [],
+        "pitcherHotColdZones": [],
+        "splits": {"batter": "vs_RHP", "pitcher": "vs_RHB", "menOnBase": "Empty"},
+    },
+    "pitchIndex": [],
+    "actionIndex": [],
+    "runnerIndex": [],
+    "atBatIndex": 0,
+}
+PLAYS_PAYLOAD = {"scoringPlays": [], "allPlays": [PLAY_PAYLOAD]}
+GAME_TEAM_PAYLOAD = {"id": 133, "link": "/api/v1/teams/133", "name": "Athletics"}
+LINESCORE_PAYLOAD = {
+    "scheduledInnings": 9,
+    "teams": {"home": {}, "away": {}},
+    "defense": {"team": GAME_TEAM_PAYLOAD},
+    "offense": {"team": GAME_TEAM_PAYLOAD},
+}
+BOXSCORE_SIDE = {
+    "team": GAME_TEAM_PAYLOAD,
+    "teamStats": {},
+    "players": {},
+    "batters": [],
+    "pitchers": [],
+    "bench": [],
+    "bullpen": [],
+    "battingOrder": [],
+    "info": [],
+}
+BOXSCORE_PAYLOAD = {"teams": {"home": BOXSCORE_SIDE, "away": BOXSCORE_SIDE}}
+SCHEDULE_WITH_GAMES_PAYLOAD = {
+    "dates": [
+        {"games": [{"gamePk": 1}, {"gamePk": 2}]},
+        {"games": [{"gamePk": 3}]},
+    ]
+}
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
     "totalEvents": 0,
@@ -349,23 +412,31 @@ async def async_mlb(handler: _Handler):
         await mlb._mlb_adapter_v1._client.aclose()
 
 
-def sync_request_for(method: str, *args, **kwargs) -> tuple[str, dict]:
-    """Return the endpoint and params ``Mlb`` builds for a call.
+def sync_request_for(method: str, *args, **kwargs) -> tuple[str, dict, str]:
+    """Return the endpoint, params, and API version ``Mlb`` builds for a call.
 
-    The adapter is stubbed, so this reaches no network; it just reads back what
-    the synchronous client asked for.
+    The adapters are stubbed, so this reaches no network; it just reads back
+    what the synchronous client asked for. Most methods call the v1 adapter;
+    get_game calls v1.1, so both are stubbed and whichever one was actually
+    called wins.
     """
     with Mlb() as sync_mlb:
         sync_mlb._mlb_adapter_v1.get = MagicMock(
             return_value=MlbResult(status_code=200, message=None, data={})
         )
+        sync_mlb._mlb_adapter_v1_1.get = MagicMock(
+            return_value=MlbResult(status_code=200, message=None, data={})
+        )
         getattr(sync_mlb, method)(*args, **kwargs)
-        call = sync_mlb._mlb_adapter_v1.get.call_args
+        if sync_mlb._mlb_adapter_v1.get.called:
+            call, ver = sync_mlb._mlb_adapter_v1.get.call_args, "v1"
+        else:
+            call, ver = sync_mlb._mlb_adapter_v1_1.get.call_args, "v1.1"
 
     # Most Mlb methods pass endpoint as a keyword; get_attendance passes it
     # positionally, so fall back to the first positional argument.
     endpoint = call.kwargs["endpoint"] if "endpoint" in call.kwargs else call.args[0]
-    return endpoint, call.kwargs["ep_params"]
+    return endpoint, call.kwargs["ep_params"], ver
 
 
 def _flatten_params(params: dict) -> list[tuple[str, str]]:
@@ -386,12 +457,12 @@ def _flatten_params(params: dict) -> list[tuple[str, str]]:
 
 def assert_matches_sync(request: httpx.Request, method: str, *args, **kwargs) -> None:
     """Assert an observed request is the one ``Mlb`` would have made."""
-    endpoint, params = sync_request_for(method, *args, **kwargs)
+    endpoint, params, ver = sync_request_for(method, *args, **kwargs)
 
     # get_awards's endpoint string has a trailing "?" (harmless legacy cruft
     # both Requests and HTTPX strip as an empty query separator), which never
     # shows up in url.path.
-    assert request.url.path == f"/api/v1/{endpoint}".rstrip("?")
+    assert request.url.path == f"/api/{ver}/{endpoint}".rstrip("?")
     assert sorted(request.url.params.multi_items()) == _flatten_params(params)
 
 
@@ -506,6 +577,48 @@ def test_caller_injected_client_is_left_open():
                 await mlb.get_team(133)
 
             assert client.is_closed is False
+        finally:
+            await client.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_v1_and_v1_1_adapters_share_one_client():
+    """One client is shared by both adapters, mirroring Mlb's shared Session."""
+
+    async def scenario():
+        async with async_mlb(_Handler(_json(TEAM_PAYLOAD))) as mlb:
+            assert mlb._mlb_adapter_v1._client is mlb._mlb_adapter_v1_1._client
+            # Only v1 tracks close-ownership of the shared client; v1.1 must
+            # never double-close it.
+            assert mlb._mlb_adapter_v1._owns_client is True
+            assert mlb._mlb_adapter_v1_1._owns_client is False
+
+    asyncio.run(scenario())
+
+
+def test_v1_1_adapter_retries_when_the_shared_client_is_library_owned():
+    """Retry eligibility follows the shared client's ownership, not which
+    adapter version issues the request (matching Mlb, which configures
+    retries once on the shared Session)."""
+
+    async def scenario():
+        async with async_mlb(_Handler(_json(TEAM_PAYLOAD))) as mlb:
+            assert mlb._mlb_adapter_v1._retries_enabled is True
+            assert mlb._mlb_adapter_v1_1._retries_enabled is True
+
+    asyncio.run(scenario())
+
+
+def test_v1_1_adapter_does_not_retry_with_a_caller_injected_client():
+    handler = _Handler(_json(TEAM_PAYLOAD))
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+
+    async def scenario():
+        try:
+            async with AsyncMlb(client=client) as mlb:
+                assert mlb._mlb_adapter_v1._retries_enabled is False
+                assert mlb._mlb_adapter_v1_1._retries_enabled is False
         finally:
             await client.aclose()
 
@@ -1085,6 +1198,141 @@ def test_get_venue_id_request_matches_the_sync_client():
     assert_matches_sync(handler.request, "get_venue_id", "PNC Park")
 
 
+def test_get_game_requests_the_v1_1_feed_endpoint_and_parses_the_result():
+    handler = _Handler(_json(GAME_FEED_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_game(717911)
+
+    game = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_game", 717911)
+    assert isinstance(game, Game)
+    assert game.id == 717911
+    assert handler.request.url.path == "/api/v1.1/game/717911/feed/live"
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_game_returns_none_when_there_is_no_game(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_game(1)
+
+    assert asyncio.run(scenario()) is None
+
+
+def test_get_game_play_by_play_requests_the_playbyplay_endpoint_and_parses_the_result():
+    handler = _Handler(_json(PLAYS_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_game_play_by_play(717911)
+
+    plays = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_game_play_by_play", 717911)
+    assert isinstance(plays, Plays)
+    assert len(plays.all_plays) == 1
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_game_play_by_play_returns_none_when_there_are_no_plays(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_game_play_by_play(1)
+
+    assert asyncio.run(scenario()) is None
+
+
+def test_get_game_line_score_requests_the_linescore_endpoint_and_parses_the_result():
+    handler = _Handler(_json(LINESCORE_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_game_line_score(717911)
+
+    linescore = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_game_line_score", 717911)
+    assert isinstance(linescore, Linescore)
+    assert linescore.scheduled_innings == 9
+
+
+def test_get_game_line_score_returns_none_on_an_empty_200_without_a_status_guard():
+    """get_game_line_score has no 400-499 guard; documented in public-api.md."""
+    handler = _Handler(NO_RESULT_RESPONSES["empty 200"])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_game_line_score(1)
+
+    assert asyncio.run(scenario()) is None
+
+
+def test_get_game_box_score_requests_the_boxscore_endpoint_and_parses_the_result():
+    handler = _Handler(_json(BOXSCORE_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_game_box_score(717911)
+
+    boxscore = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_game_box_score", 717911)
+    assert isinstance(boxscore, BoxScore)
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_game_box_score_returns_none_when_there_is_no_boxscore(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_game_box_score(1)
+
+    assert asyncio.run(scenario()) is None
+
+
+def test_get_game_ids_requests_the_schedule_endpoint_and_parses_the_result():
+    handler = _Handler(_json(SCHEDULE_WITH_GAMES_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_game_ids(date="2022-09-26")
+
+    game_ids = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_game_ids", date="2022-09-26")
+    assert game_ids == [1, 2, 3]
+
+
+def test_get_game_ids_without_a_selector_returns_none_without_requesting():
+    handler = _Handler(_json(SCHEDULE_WITH_GAMES_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_game_ids()
+
+    assert asyncio.run(scenario()) is None
+    assert handler.requests == []
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_game_ids_returns_empty_list_when_there_are_no_games(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_game_ids(date="2022-09-26")
+
+    assert asyncio.run(scenario()) == []
+
+
 # ---------------------------------------------------------------------------
 # Parity and concurrency
 # ---------------------------------------------------------------------------
@@ -1123,6 +1371,11 @@ def test_public_signatures_match_the_sync_client():
         "get_draft",
         "get_awards",
         "get_homerun_derby",
+        "get_game",
+        "get_game_play_by_play",
+        "get_game_line_score",
+        "get_game_box_score",
+        "get_game_ids",
     ):
         sync_params = inspect.signature(getattr(Mlb, name)).parameters
         async_params = inspect.signature(getattr(AsyncMlb, name)).parameters

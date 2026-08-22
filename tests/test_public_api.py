@@ -272,6 +272,14 @@ ASYNC_MLB_PUBLIC_METHOD_MANIFEST: dict[str, str] = {
     "get_league_id": "(league_name: str, search_key: str='name', **params)",
     "get_division_id": "(division_name: str, search_key: str='name', **params)",
     "get_venue_id": "(venue_name: str, search_key: str='name', **params)",
+    "get_game": "(game_id: int, **params)",
+    "get_game_play_by_play": "(game_id: int, **params)",
+    "get_game_line_score": "(game_id: int, **params)",
+    "get_game_box_score": "(game_id: int, **params)",
+    "get_game_ids": (
+        "(date: str=None, start_date: str=None, end_date: str=None, "
+        "sport_id: int=1, **params)"
+    ),
 }
 
 
