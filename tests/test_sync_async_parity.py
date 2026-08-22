@@ -146,13 +146,28 @@ ASYNC_FAILURES = {
     ),
 }
 
-RequestSignature = tuple[str, str, dict[str, str]]
+RequestSignature = tuple[str, str, dict[str, str | tuple[str, ...]]]
 
 
 def request_signature(method: str, url: str) -> RequestSignature:
-    """Normalize one observed request for transport-independent comparison."""
+    """Normalize one observed request for transport-independent comparison.
+
+    A query parameter sent once is kept as its value; one sent repeatedly —
+    as `get_persons` does with a list of ids — is kept as the tuple of every
+    value, in order. Nothing here is dropped, so two signatures compare equal
+    only when the clients sent the same query.
+    """
     parsed_url = urlsplit(url)
-    return method, parsed_url.path, dict(parse_qsl(parsed_url.query))
+
+    query: dict[str, str | tuple[str, ...]] = {}
+    for name, value in parse_qsl(parsed_url.query):
+        if name not in query:
+            query[name] = value
+            continue
+        seen = query[name]
+        query[name] = (*seen, value) if isinstance(seen, tuple) else (seen, value)
+
+    return method, parsed_url.path, query
 
 
 def call_sync(
@@ -340,10 +355,12 @@ def test_get_persons_id_list_request_parity():
     result = call_both("get_persons", [660271, 664034], payload=PEOPLE_PAYLOAD)
 
     assert result.asynchronous == result.sync
-    # Both clients repeat the query pair rather than joining the ids, and
-    # `request_signature` keeps the last value of a repeated pair. `call_both`
-    # has already compared the two full query strings.
-    assert result.request == ("GET", "/api/v1/people", {"personIds": "664034"})
+    # A list is sent as a repeated query pair rather than one joined value.
+    assert result.request == (
+        "GET",
+        "/api/v1/people",
+        {"personIds": ("660271", "664034")},
+    )
 
 
 @pytest.mark.parametrize("label", list(PEOPLE_ID_LOOKUPS))
@@ -452,7 +469,9 @@ def test_get_persons_no_result_parity(label):
     result = call_both("get_persons", "660271", **NO_RESULT_RESPONSES[label])
 
     assert result.sync == [], f"sync get_persons returned {result.sync!r} for {label}"
-    assert result.asynchronous == result.sync
+    assert result.asynchronous == [], (
+        f"async get_persons returned {result.asynchronous!r} for {label}"
+    )
 
 
 @pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
@@ -461,7 +480,9 @@ def test_get_people_id_no_result_parity(label):
     result = call_both("get_people_id", "Ty France", **NO_RESULT_RESPONSES[label])
 
     assert result.sync == [], f"sync get_people_id returned {result.sync!r} for {label}"
-    assert result.asynchronous == result.sync
+    assert result.asynchronous == [], (
+        f"async get_people_id returned {result.asynchronous!r} for {label}"
+    )
 
 
 @pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
@@ -470,7 +491,9 @@ def test_get_team_id_no_result_parity(label):
     result = call_both("get_team_id", "Athletics", **NO_RESULT_RESPONSES[label])
 
     assert result.sync == [], f"sync get_team_id returned {result.sync!r} for {label}"
-    assert result.asynchronous == result.sync
+    assert result.asynchronous == [], (
+        f"async get_team_id returned {result.asynchronous!r} for {label}"
+    )
 
 
 @pytest.mark.parametrize("label", list(SCHEDULE_NO_RESULT_RESPONSES))
