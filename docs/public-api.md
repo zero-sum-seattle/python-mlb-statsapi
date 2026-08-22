@@ -293,6 +293,8 @@ get_league(league_id: int, **params)
 get_leagues(**params)
 get_division(division_id: int, **params)
 get_divisions(**params)
+get_season(season_id: str, sport_id: int = 1, **params)
+get_seasons(sport_id: int = 1, **params)
 ```
 
 Every other `Mlb` endpoint method not listed above is not yet supported on

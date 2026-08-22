@@ -46,6 +46,7 @@ from mlbstatsapi.models.divisions import Division  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
 from mlbstatsapi.models.schedules import Schedule  # noqa: E402
+from mlbstatsapi.models.seasons import Season  # noqa: E402
 from mlbstatsapi.models.sports import Sport  # noqa: E402
 from mlbstatsapi.models.teams import Team  # noqa: E402
 
@@ -86,6 +87,7 @@ ROSTER_COACH_PAYLOAD = {
         }
     ]
 }
+SEASON_PAYLOAD = {"seasons": [{"seasonId": "2021", "hasWildcard": True}]}
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
     "totalEvents": 0,
@@ -424,6 +426,16 @@ def test_get_team_coaches_success_parity():
     assert result.request == ("GET", "/api/v1/teams/133/coaches", {})
 
 
+def test_get_season_success_parity():
+    """A successful season response parses to the same Season on both clients."""
+    result = call_both("get_season", "2021", payload=SEASON_PAYLOAD)
+
+    assert isinstance(result.sync, Season), "sync get_season did not return a Season"
+    assert (result.sync.season_id, result.sync.has_wildcard) == ("2021", True)
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/seasons/2021", {"sportId": "1"})
+
+
 # ---------------------------------------------------------------------------
 # Nothing to return
 # ---------------------------------------------------------------------------
@@ -516,6 +528,17 @@ def test_get_team_coaches_no_result_parity(label):
     assert result.sync == [], f"sync get_team_coaches returned {result.sync!r} for {label}"
     assert result.asynchronous == [], (
         f"async get_team_coaches returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_season_no_result_parity(label):
+    """Every no-result response returns None on either client."""
+    result = call_both("get_season", "2021", **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, f"sync get_season returned {result.sync!r} for {label}"
+    assert result.asynchronous is None, (
+        f"async get_season returned {result.asynchronous!r} for {label}"
     )
 
 

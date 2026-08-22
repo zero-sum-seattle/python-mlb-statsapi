@@ -27,6 +27,7 @@ from ._parsers.divisions import parse_divisions, parse_division
 from ._parsers.leagues import parse_leagues, parse_league
 from ._parsers.people import parse_people, parse_person
 from ._parsers.roster import parse_roster_coaches, parse_roster_players
+from ._parsers.seasons import parse_seasons, parse_season
 from ._parsers.sports import parse_sports, parse_sport
 from ._parsers.teams import parse_teams, parse_team
 from ._parsers.schedules import parse_schedule
@@ -1730,9 +1731,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
-            for season in mlb_data.data['seasons']:
-                return Season(**season)
+        return parse_season(mlb_data.data)
 
     def get_seasons(self, sport_id: int = 1, **params) -> List[Season]:
         """
@@ -1787,13 +1786,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        season_list = []
-
-        if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
-            for season in mlb_data.data['seasons']:
-                season_list.append(Season(**season))
-        
-        return season_list
+        return parse_seasons(mlb_data.data)
 
     def get_standings(self, league_id: int, season: str, **params):
         """

@@ -11,6 +11,7 @@ from ._parsers.leagues import parse_league, parse_leagues
 from ._parsers.people import parse_person, parse_people
 from ._parsers.roster import parse_roster_coaches, parse_roster_players
 from ._parsers.schedules import parse_schedule
+from ._parsers.seasons import parse_season, parse_seasons
 from ._parsers.sports import parse_sport, parse_sports
 from ._parsers.teams import parse_team, parse_teams
 from .async_mlb_dataadapter import AsyncMlbDataAdapter
@@ -19,6 +20,7 @@ from .models.divisions import Division
 from .models.leagues import League
 from .models.people import Coach, Person, Player
 from .models.schedules import Schedule
+from .models.seasons import Season
 from .models.sports import Sport
 from .models.teams import Team
 
@@ -903,3 +905,116 @@ class AsyncMlb:
             return []
 
         return parse_divisions(mlb_data.data)
+
+    async def get_season(
+        self,
+        season_id: str,
+        sport_id: int = 1,
+        **params,
+    ) -> Season | None:
+        """
+        return a season object for seasonid and sportid
+
+        Async counterpart of ``Mlb.get_season``.
+
+        Parameters
+        ----------
+        sport_id : int
+            Insert a sportId to return a directory of seasons for a specific sport.
+        season_id : str
+            Insert year to return season information for a particular season.
+
+        Other Parameters
+        ----------------
+        withGameTypeDates : bool, optional
+            Insert a withGameTypeDates to return season information for all gameTypes.
+        fields : str
+            Comma delimited list of specific fields to be returned.
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        Season
+            returns a season object
+
+        See Also
+        --------
+        AsyncMlb.get_seasons : return a list of seasons
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     season = await mlb.get_season(season_id="2021", sport_id=1)
+        Season
+        """
+        if sport_id is not None:
+            params["sportId"] = sport_id
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"seasons/{season_id}",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return None
+
+        return parse_season(mlb_data.data)
+
+    async def get_seasons(
+        self,
+        sport_id: int = 1,
+        **params,
+    ) -> list[Season]:
+        """
+        return a season object for sportid
+
+        Async counterpart of ``Mlb.get_seasons``.
+
+        Parameters
+        ----------
+        sport_id : int
+            Insert a sportId to return a directory of seasons for a specific
+            sport.
+
+        Other Parameters
+        ----------------
+        divisionId : int, optional
+            Insert divisionId to return a directory of seasons for a specific
+            division.
+        leagueId : int, optional
+            Insert leagueId to return a directory of seasons in a specific
+            league.
+        withGameTypeDates : bool, optional
+            Insert a withGameTypeDates to return season information for all
+            gameTypes.
+        fields : str
+            Comma delimited list of specific fields to be returned.
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        Season
+            returns a season object
+
+        See Also
+        --------
+        AsyncMlb.get_season : return a Season from season id
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     seasons = await mlb.get_seasons(1)
+        [Season, Season, Season, Season]
+        """
+        if sport_id is not None:
+            params["sportId"] = sport_id
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="seasons/all",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return parse_seasons(mlb_data.data)

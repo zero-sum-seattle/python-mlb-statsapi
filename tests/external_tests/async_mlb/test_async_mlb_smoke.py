@@ -5,6 +5,7 @@ from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.people import Coach, Person, Player
 from mlbstatsapi.models.schedules import Schedule
+from mlbstatsapi.models.seasons import Season
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.teams import Team
 
@@ -93,5 +94,16 @@ def test_async_get_division():
 
         assert isinstance(division, Division)
         assert division.id == 200
+
+    asyncio.run(scenario())
+
+
+def test_async_get_season():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            season = await mlb.get_season("2021")
+
+        assert isinstance(season, Season)
+        assert season.season_id == "2021"
 
     asyncio.run(scenario())

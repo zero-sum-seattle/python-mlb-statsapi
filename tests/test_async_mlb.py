@@ -42,6 +42,7 @@ from mlbstatsapi.models.divisions import Division  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
 from mlbstatsapi.models.schedules import Schedule  # noqa: E402
+from mlbstatsapi.models.seasons import Season  # noqa: E402
 from mlbstatsapi.models.sports import Sport  # noqa: E402
 from mlbstatsapi.models.teams import Team  # noqa: E402
 
@@ -82,6 +83,7 @@ ROSTER_COACH_PAYLOAD = {
         }
     ]
 }
+SEASON_PAYLOAD = {"seasons": [{"seasonId": "2021", "hasWildcard": True}]}
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
     "totalEvents": 0,
@@ -125,6 +127,7 @@ EXPECTED_ROSTER_COACH = Coach(
     job_id="MNGR",
     title="Manager",
 )
+EXPECTED_SEASON = Season(seasonId="2021", hasWildcard=True)
 
 # The two ways an endpoint legitimately comes back with nothing to parse.
 NO_RESULT_RESPONSES = {
@@ -616,6 +619,41 @@ def test_get_team_coaches_returns_empty_list_when_there_are_no_coaches(label):
     assert asyncio.run(scenario()) == []
 
 
+def test_get_season_requests_the_season_endpoint_and_parses_the_result():
+    handler = _Handler(_json(SEASON_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_season("2021")
+
+    season = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_season", "2021")
+    assert season == EXPECTED_SEASON
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_season_returns_none_when_there_is_no_season(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_season("2021")
+
+    assert asyncio.run(scenario()) is None
+
+
+def test_get_seasons_request_matches_the_sync_client():
+    handler = _Handler(_json({"seasons": []}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_seasons(11)
+
+    assert asyncio.run(scenario()) == []
+    assert_matches_sync(handler.request, "get_seasons", 11)
+
+
 # ---------------------------------------------------------------------------
 # Parity and concurrency
 # ---------------------------------------------------------------------------
@@ -639,6 +677,8 @@ def test_public_signatures_match_the_sync_client():
         "get_leagues",
         "get_division",
         "get_divisions",
+        "get_season",
+        "get_seasons",
     ):
         sync_params = inspect.signature(getattr(Mlb, name)).parameters
         async_params = inspect.signature(getattr(AsyncMlb, name)).parameters

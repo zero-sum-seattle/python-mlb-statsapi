@@ -252,6 +252,8 @@ ASYNC_MLB_PUBLIC_METHOD_MANIFEST: dict[str, str] = {
     "get_leagues": "(**params)",
     "get_division": "(division_id: int, **params)",
     "get_divisions": "(**params)",
+    "get_season": "(season_id: str, sport_id: int=1, **params)",
+    "get_seasons": "(sport_id: int=1, **params)",
 }
 
 
