@@ -5,6 +5,7 @@ from mlbstatsapi.models.attendances import Attendance
 from mlbstatsapi.models.awards import Award
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.drafts import Round
+from mlbstatsapi.models.homerunderby import HomeRunDerby
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.people import Coach, Person, Player
 from mlbstatsapi.models.schedules import Schedule
@@ -164,5 +165,15 @@ def test_async_get_awards():
 
         assert awards
         assert isinstance(awards[0], Award)
+
+    asyncio.run(scenario())
+
+
+def test_async_get_homerun_derby():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            derby = await mlb.get_homerun_derby(511101)
+
+        assert isinstance(derby, HomeRunDerby)
 
     asyncio.run(scenario())

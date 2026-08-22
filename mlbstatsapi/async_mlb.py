@@ -10,6 +10,7 @@ from ._parsers.attendance import parse_attendance
 from ._parsers.awards import parse_awards
 from ._parsers.divisions import parse_division, parse_divisions
 from ._parsers.draft import parse_draft
+from ._parsers.homerunderby import parse_homerun_derby
 from ._parsers.leagues import parse_league, parse_leagues
 from ._parsers.people import parse_person, parse_people
 from ._parsers.roster import parse_roster_coaches, parse_roster_players
@@ -25,6 +26,7 @@ from .models.attendances import Attendance
 from .models.awards import Award
 from .models.divisions import Division
 from .models.drafts import Round
+from .models.homerunderby import HomeRunDerby
 from .models.leagues import League
 from .models.people import Coach, Person, Player
 from .models.schedules import Schedule
@@ -1390,3 +1392,47 @@ class AsyncMlb:
             return []
 
         return parse_awards(mlb_data.data)
+
+    async def get_homerun_derby(
+        self,
+        game_id,
+        **params,
+    ) -> HomeRunDerby | None:
+        """
+        The homerun derby endpoint on the Stats API allows for users to
+        request information from the MLB database pertaining to the
+        homerun derby. This is endpoint contains Statcast trajectory,
+        launchSpeed, launchAngle, & hit coordinates data. Also a timeRemaning
+        string is added to track the progress of the derby in real time.
+
+        Async counterpart of ``Mlb.get_homerun_derby``.
+
+        Parameters
+        ----------
+        game_id : int
+            Insert gamePk to return HomerunDerby data for a specific gamePk.
+
+        Other Parameters
+        ----------------
+        fields : str
+            Format: Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        HomeRunDerby object
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     derby = await mlb.get_homerun_derby(511101)
+        HomeRunDerby
+        """
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"homeRunDerby/{game_id}",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return None
+
+        return parse_homerun_derby(mlb_data.data)

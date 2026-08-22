@@ -306,6 +306,7 @@ get_attendance(
 )
 get_draft(year_id: int, **params)
 get_awards(award_id: str, **params)
+get_homerun_derby(game_id, **params)
 ```
 
 `get_venue` inherits the same documented quirk as `Mlb.get_venue`: it is
@@ -550,9 +551,11 @@ Notes and known conflicts (documented, not redesigned by this contract):
 * `get_venue` is annotated to return `Venue | None` but currently returns `[]`
   on 400–499 statuses. Treat the implementation shape as the observed behavior
   until a focused fix lands.
-* `get_homerun_derby` currently executes a bare `None` expression on 400–499
-  instead of `return None`, so execution may continue. A focused bugfix is
-  recommended.
+* `get_homerun_derby` previously executed a bare `None` expression on
+  400–499 instead of `return None`, so a 4xx response whose body happened to
+  contain a truthy `status` key would have continued into
+  `HomeRunDerby(**data)` and raised instead of returning `None`. Fixed to
+  `return None` while porting the endpoint to `AsyncMlb` (issue #305).
 * `get_attendance`'s "at least one of `team_id`/`league_id`/`league_list_id`"
   guard previously used `any(required_args)`, which iterates dict keys
   (always truthy) rather than values, so the guard never actually fired. This

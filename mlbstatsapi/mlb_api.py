@@ -27,6 +27,7 @@ from ._parsers.attendance import parse_attendance
 from ._parsers.awards import parse_awards
 from ._parsers.divisions import parse_divisions, parse_division
 from ._parsers.draft import parse_draft
+from ._parsers.homerunderby import parse_homerun_derby
 from ._parsers.leagues import parse_leagues, parse_league
 from ._parsers.people import parse_people, parse_person
 from ._parsers.roster import parse_roster_coaches, parse_roster_players
@@ -2040,10 +2041,9 @@ class Mlb:
         """
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'homeRunDerby/{game_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
-            None
-        
-        if 'status' in mlb_data.data and mlb_data.data['status']:
-            return HomeRunDerby(**mlb_data.data)
+            return None
+
+        return parse_homerun_derby(mlb_data.data)
 
 
     def get_team_stats(self, team_id: int, stats: list, groups: list, **params) -> dict:

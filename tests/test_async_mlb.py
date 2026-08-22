@@ -42,6 +42,7 @@ from mlbstatsapi.models.attendances import Attendance  # noqa: E402
 from mlbstatsapi.models.awards import Award  # noqa: E402
 from mlbstatsapi.models.divisions import Division  # noqa: E402
 from mlbstatsapi.models.drafts import Round  # noqa: E402
+from mlbstatsapi.models.homerunderby import HomeRunDerby  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
 from mlbstatsapi.models.schedules import Schedule  # noqa: E402
@@ -212,6 +213,30 @@ AWARD_PAYLOAD = {
     "player": {"id": 592450, "link": "/api/v1/people/592450", "fullName": "Aaron Judge"},
 }
 AWARDS_PAYLOAD = {"awards": [AWARD_PAYLOAD]}
+HOMERUN_DERBY_PAYLOAD = {
+    "info": {
+        "id": 511101,
+        "nonGameGuid": "test-guid",
+        "name": "Home Run Derby",
+        "eventType": {"code": "O", "name": "Other"},
+        "eventDate": "2017-07-11T00:00:00Z",
+        "venue": {"id": 4169, "link": "/api/v1/venues/4169", "name": "Marlins Park"},
+        "isMultiDay": False,
+        "isPrimaryCalendar": True,
+        "fileCode": "2017/07/10/mlb-112",
+        "eventNumber": 103,
+        "publicFacing": True,
+    },
+    "status": {
+        "state": "Final",
+        "currentRound": 3,
+        "currentRoundTimeLeft": "0:00",
+        "inTieBreaker": False,
+        "tieBreakerNum": 0,
+        "clockStopped": True,
+        "bonusTime": False,
+    },
+}
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
     "totalEvents": 0,
@@ -959,6 +984,31 @@ def test_get_awards_returns_empty_list_when_there_are_no_awards(label):
     assert asyncio.run(scenario()) == []
 
 
+def test_get_homerun_derby_requests_the_homerunderby_endpoint_and_parses_the_result():
+    handler = _Handler(_json(HOMERUN_DERBY_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_homerun_derby(511101)
+
+    derby = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_homerun_derby", 511101)
+    assert isinstance(derby, HomeRunDerby)
+    assert derby.status.state == "Final"
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_homerun_derby_returns_none_when_there_is_no_derby(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_homerun_derby(1)
+
+    assert asyncio.run(scenario()) is None
+
+
 # ---------------------------------------------------------------------------
 # Parity and concurrency
 # ---------------------------------------------------------------------------
@@ -990,6 +1040,7 @@ def test_public_signatures_match_the_sync_client():
         "get_attendance",
         "get_draft",
         "get_awards",
+        "get_homerun_derby",
     ):
         sync_params = inspect.signature(getattr(Mlb, name)).parameters
         async_params = inspect.signature(getattr(AsyncMlb, name)).parameters

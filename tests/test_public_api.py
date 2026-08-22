@@ -263,6 +263,7 @@ ASYNC_MLB_PUBLIC_METHOD_MANIFEST: dict[str, str] = {
     ),
     "get_draft": "(year_id: int, **params)",
     "get_awards": "(award_id: str, **params)",
+    "get_homerun_derby": "(game_id, **params)",
 }
 
 

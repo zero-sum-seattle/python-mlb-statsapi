@@ -46,6 +46,7 @@ from mlbstatsapi.models.attendances import Attendance  # noqa: E402
 from mlbstatsapi.models.awards import Award  # noqa: E402
 from mlbstatsapi.models.divisions import Division  # noqa: E402
 from mlbstatsapi.models.drafts import Round  # noqa: E402
+from mlbstatsapi.models.homerunderby import HomeRunDerby  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
 from mlbstatsapi.models.schedules import Schedule  # noqa: E402
@@ -216,6 +217,30 @@ AWARD_PAYLOAD = {
     "player": {"id": 592450, "link": "/api/v1/people/592450", "fullName": "Aaron Judge"},
 }
 AWARDS_PAYLOAD = {"awards": [AWARD_PAYLOAD]}
+HOMERUN_DERBY_PAYLOAD = {
+    "info": {
+        "id": 511101,
+        "nonGameGuid": "test-guid",
+        "name": "Home Run Derby",
+        "eventType": {"code": "O", "name": "Other"},
+        "eventDate": "2017-07-11T00:00:00Z",
+        "venue": {"id": 4169, "link": "/api/v1/venues/4169", "name": "Marlins Park"},
+        "isMultiDay": False,
+        "isPrimaryCalendar": True,
+        "fileCode": "2017/07/10/mlb-112",
+        "eventNumber": 103,
+        "publicFacing": True,
+    },
+    "status": {
+        "state": "Final",
+        "currentRound": 3,
+        "currentRoundTimeLeft": "0:00",
+        "inTieBreaker": False,
+        "tieBreakerNum": 0,
+        "clockStopped": True,
+        "bonusTime": False,
+    },
+}
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
     "totalEvents": 0,
@@ -623,6 +648,18 @@ def test_get_awards_success_parity():
     assert result.request == ("GET", "/api/v1/awards/ALMVP/recipients", {})
 
 
+def test_get_homerun_derby_success_parity():
+    """A successful homerun derby response parses to the same object on both clients."""
+    result = call_both("get_homerun_derby", 511101, payload=HOMERUN_DERBY_PAYLOAD)
+
+    assert isinstance(result.sync, HomeRunDerby), (
+        "sync get_homerun_derby did not return a HomeRunDerby"
+    )
+    assert result.sync.status.state == "Final"
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/homeRunDerby/511101", {})
+
+
 # ---------------------------------------------------------------------------
 # Nothing to return
 # ---------------------------------------------------------------------------
@@ -806,6 +843,31 @@ def test_get_awards_no_result_parity(label):
     assert result.asynchronous == [], (
         f"async get_awards returned {result.asynchronous!r} for {label}"
     )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_homerun_derby_no_result_parity(label):
+    """Every no-result response returns None on either client."""
+    result = call_both("get_homerun_derby", 1, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, f"sync get_homerun_derby returned {result.sync!r} for {label}"
+    assert result.asynchronous is None, (
+        f"async get_homerun_derby returned {result.asynchronous!r} for {label}"
+    )
+
+
+def test_get_homerun_derby_malformed_error_body_parity():
+    """Regression coverage: the bare-None-instead-of-return-None bug fix.
+
+    A 4xx body with a truthy "status" key must not reach HomeRunDerby(**data)
+    and raise on either client, now that the guard actually returns.
+    """
+    result = call_both(
+        "get_homerun_derby", 1, status=404, payload={"status": "error"}
+    )
+
+    assert result.sync is None
+    assert result.asynchronous is None
 
 
 # ---------------------------------------------------------------------------
