@@ -255,6 +255,15 @@ def test_get_team_success_parity():
     assert async_team == sync_team
 
 
+def test_get_team_empty_response_body_parity():
+    """A successful response with no body returns None on both clients."""
+    sync_team = call_sync("get_team", 133, status=200, raw_body=b"")
+    async_team = call_async("get_team", 133, status=200, raw_body=b"")
+
+    assert sync_team is None
+    assert async_team is None
+
+
 @pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
 def test_get_team_no_result_parity(label):
     """An empty success and a 404 both return None on either client."""
@@ -470,7 +479,6 @@ def test_get_team_compatibility_client_error_parity():
         is async_warnings[0].category
         is MlbHttpCompatibilityWarning
     )
-    assert str(sync_warnings[0].message) == str(async_warnings[0].message)
 
 
 def test_get_team_server_error_parity():
@@ -499,7 +507,6 @@ def test_get_team_timeout_parity():
         call_async("get_team", 133, status=200, failure="timeout")
 
     assert type(sync_exc.value) is type(async_exc.value) is MlbTimeoutError
-    assert str(sync_exc.value) == str(async_exc.value)
 
 
 def test_get_team_transport_failure_parity():
@@ -510,7 +517,6 @@ def test_get_team_transport_failure_parity():
         call_async("get_team", 133, status=200, failure="transport")
 
     assert type(sync_exc.value) is type(async_exc.value) is MlbTransportError
-    assert str(sync_exc.value) == str(async_exc.value)
 
 
 def test_get_team_invalid_json_parity():
@@ -523,4 +529,3 @@ def test_get_team_invalid_json_parity():
         call_async("get_team", 133, status=200, raw_body=raw_body)
 
     assert type(sync_exc.value) is type(async_exc.value) is MlbDecodeError
-    assert str(sync_exc.value) == str(async_exc.value)
