@@ -275,6 +275,8 @@ The currently supported awaitable endpoint methods are:
 ```text
 get_team(team_id: int, **params)
 get_teams(sport_id: int = 1, **params)
+get_team_roster(team_id: int, **params)
+get_team_coaches(team_id: int, **params)
 get_person(player_id: int, **params)
 get_people(sport_id: int = 1, **params)
 get_schedule(
@@ -285,7 +287,17 @@ get_schedule(
     team_id: int = None,
     **params,
 )
+get_sport(sport_id: int, **params)
+get_sports(**params)
+get_league(league_id: int, **params)
+get_leagues(**params)
+get_division(division_id: int, **params)
+get_divisions(**params)
 ```
+
+Every other `Mlb` endpoint method not listed above is not yet supported on
+`AsyncMlb`; calling it there raises `AttributeError`. See issue #305 for the
+tracked expansion plan.
 
 ## Low-level adapter
 

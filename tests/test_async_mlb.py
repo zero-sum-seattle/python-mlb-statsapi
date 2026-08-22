@@ -38,14 +38,49 @@ httpx = pytest.importorskip("httpx", reason="requires the async extra (HTTPX)")
 from mlbstatsapi import Mlb  # noqa: E402
 from mlbstatsapi.async_mlb import AsyncMlb  # noqa: E402
 from mlbstatsapi.mlb_dataadapter import MlbResult  # noqa: E402
-from mlbstatsapi.models.people import Person  # noqa: E402
+from mlbstatsapi.models.divisions import Division  # noqa: E402
+from mlbstatsapi.models.leagues import League  # noqa: E402
+from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
 from mlbstatsapi.models.schedules import Schedule  # noqa: E402
+from mlbstatsapi.models.sports import Sport  # noqa: E402
 from mlbstatsapi.models.teams import Team  # noqa: E402
 
 
 TEAM_PAYLOAD = {"teams": [{"id": 133, "link": "/api/v1/teams/133", "name": "Athletics"}]}
 PERSON_PAYLOAD = {
     "people": [{"id": 660271, "link": "/api/v1/people/660271", "fullName": "Shohei Ohtani"}]
+}
+SPORT_PAYLOAD = {
+    "sports": [{"id": 1, "link": "/api/v1/sports/1", "name": "Major League Baseball"}]
+}
+LEAGUE_PAYLOAD = {
+    "leagues": [{"id": 103, "link": "/api/v1/leagues/103", "name": "American League"}]
+}
+DIVISION_PAYLOAD = {
+    "divisions": [
+        {"id": 200, "link": "/api/v1/divisions/200", "name": "American League West"}
+    ]
+}
+ROSTER_PLAYER_PAYLOAD = {
+    "roster": [
+        {
+            "person": {"id": 675961, "fullName": "Alika Williams", "link": "/api/v1/people/675961"},
+            "jerseyNumber": "12",
+            "status": {"code": "A", "description": "Active"},
+            "parentTeamId": 133,
+        }
+    ]
+}
+ROSTER_COACH_PAYLOAD = {
+    "roster": [
+        {
+            "person": {"id": 117276, "fullName": "Mark Kotsay", "link": "/api/v1/people/117276"},
+            "jerseyNumber": "7",
+            "job": "Manager",
+            "jobId": "MNGR",
+            "title": "Manager",
+        }
+    ]
 }
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
@@ -67,6 +102,28 @@ SCHEDULE_PAYLOAD = {
 EXPECTED_TEAM = Team(id=133, link="/api/v1/teams/133", name="Athletics")
 EXPECTED_PERSON = Person(
     id=660271, link="/api/v1/people/660271", full_name="Shohei Ohtani"
+)
+EXPECTED_SPORT = Sport(id=1, link="/api/v1/sports/1", name="Major League Baseball")
+EXPECTED_LEAGUE = League(id=103, link="/api/v1/leagues/103", name="American League")
+EXPECTED_DIVISION = Division(
+    id=200, link="/api/v1/divisions/200", name="American League West"
+)
+EXPECTED_ROSTER_PLAYER = Player(
+    id=675961,
+    full_name="Alika Williams",
+    link="/api/v1/people/675961",
+    jersey_number="12",
+    status={"code": "A", "description": "Active"},
+    parent_team_id=133,
+)
+EXPECTED_ROSTER_COACH = Coach(
+    id=117276,
+    full_name="Mark Kotsay",
+    link="/api/v1/people/117276",
+    jersey_number="7",
+    job="Manager",
+    job_id="MNGR",
+    title="Manager",
 )
 
 # The two ways an endpoint legitimately comes back with nothing to parse.
@@ -406,6 +463,159 @@ def test_get_people_request_matches_the_sync_client():
     assert_matches_sync(handler.request, "get_people", 11, season="2021")
 
 
+def test_get_sport_requests_the_sport_endpoint_and_parses_the_result():
+    handler = _Handler(_json(SPORT_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_sport(1)
+
+    sport = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_sport", 1)
+    assert sport == EXPECTED_SPORT
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_sport_returns_none_when_there_is_no_sport(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_sport(1)
+
+    assert asyncio.run(scenario()) is None
+
+
+def test_get_sports_request_matches_the_sync_client():
+    handler = _Handler(_json({"sports": []}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_sports()
+
+    assert asyncio.run(scenario()) == []
+    assert_matches_sync(handler.request, "get_sports")
+
+
+def test_get_league_requests_the_league_endpoint_and_parses_the_result():
+    handler = _Handler(_json(LEAGUE_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_league(103)
+
+    league = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_league", 103)
+    assert league == EXPECTED_LEAGUE
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_league_returns_none_when_there_is_no_league(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_league(103)
+
+    assert asyncio.run(scenario()) is None
+
+
+def test_get_leagues_request_matches_the_sync_client():
+    handler = _Handler(_json({"leagues": []}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_leagues()
+
+    assert asyncio.run(scenario()) == []
+    assert_matches_sync(handler.request, "get_leagues")
+
+
+def test_get_division_requests_the_division_endpoint_and_parses_the_result():
+    handler = _Handler(_json(DIVISION_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_division(200)
+
+    division = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_division", 200)
+    assert division == EXPECTED_DIVISION
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_division_returns_none_when_there_is_no_division(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_division(200)
+
+    assert asyncio.run(scenario()) is None
+
+
+def test_get_divisions_request_matches_the_sync_client():
+    handler = _Handler(_json({"divisions": []}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_divisions()
+
+    assert asyncio.run(scenario()) == []
+    assert_matches_sync(handler.request, "get_divisions")
+
+
+def test_get_team_roster_requests_the_roster_endpoint_and_parses_the_result():
+    handler = _Handler(_json(ROSTER_PLAYER_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_team_roster(133, rosterType="40Man")
+
+    roster = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_team_roster", 133, rosterType="40Man")
+    assert roster == [EXPECTED_ROSTER_PLAYER]
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_team_roster_returns_empty_list_when_there_is_no_roster(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_team_roster(133)
+
+    assert asyncio.run(scenario()) == []
+
+
+def test_get_team_coaches_requests_the_coaches_endpoint_and_parses_the_result():
+    handler = _Handler(_json(ROSTER_COACH_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_team_coaches(133)
+
+    coaches = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_team_coaches", 133)
+    assert coaches == [EXPECTED_ROSTER_COACH]
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_team_coaches_returns_empty_list_when_there_are_no_coaches(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_team_coaches(133)
+
+    assert asyncio.run(scenario()) == []
+
+
 # ---------------------------------------------------------------------------
 # Parity and concurrency
 # ---------------------------------------------------------------------------
@@ -415,7 +625,21 @@ def test_public_signatures_match_the_sync_client():
     """Argument names, kinds, and defaults must not drift from Mlb's."""
     import inspect
 
-    for name in ("get_team", "get_teams", "get_person", "get_people", "get_schedule"):
+    for name in (
+        "get_team",
+        "get_teams",
+        "get_team_roster",
+        "get_team_coaches",
+        "get_person",
+        "get_people",
+        "get_schedule",
+        "get_sport",
+        "get_sports",
+        "get_league",
+        "get_leagues",
+        "get_division",
+        "get_divisions",
+    ):
         sync_params = inspect.signature(getattr(Mlb, name)).parameters
         async_params = inspect.signature(getattr(AsyncMlb, name)).parameters
 

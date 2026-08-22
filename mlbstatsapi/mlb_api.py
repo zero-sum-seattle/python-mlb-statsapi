@@ -23,7 +23,11 @@ from mlbstatsapi.models.homerunderby import HomeRunDerby
 from mlbstatsapi.models.standings import Standings
 
 
+from ._parsers.divisions import parse_divisions, parse_division
+from ._parsers.leagues import parse_leagues, parse_league
 from ._parsers.people import parse_people, parse_person
+from ._parsers.roster import parse_roster_coaches, parse_roster_players
+from ._parsers.sports import parse_sports, parse_sport
 from ._parsers.teams import parse_teams, parse_team
 from ._parsers.schedules import parse_schedule
 
@@ -573,13 +577,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        players = []
-
-        if 'roster' in mlb_data.data and mlb_data.data['roster']:
-            for player in mlb_data.data['roster']:
-                players.append(Player(**mlb_module.merge_keys(player, ['person'])))
-
-        return players
+        return parse_roster_players(mlb_data.data)
 
     def get_team_coaches(self, team_id: int, **params) -> List[Coach]:
         """
@@ -623,13 +621,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        coaches = []
-
-        if 'roster' in mlb_data.data and mlb_data.data['roster']:
-            for coach in mlb_data.data['roster']:
-                coaches.append(Coach(**mlb_module.merge_keys(coach, ['person'])))
-
-        return coaches
+        return parse_roster_coaches(mlb_data.data)
 
     def get_schedule(self, 
                     date: str = None, 
@@ -1381,9 +1373,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'sports' in mlb_data.data and mlb_data.data['sports']:
-            for sport in mlb_data.data['sports']:
-                return Sport(**sport)
+        return parse_sport(mlb_data.data)
 
     def get_sports(self, **params) -> List[Sport]:
         """
@@ -1416,12 +1406,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        sports = []
-
-        if 'sports' in mlb_data.data and mlb_data.data['sports']:
-            sports = [Sport(**sport) for sport in mlb_data.data['sports']]
-
-        return sports
+        return parse_sports(mlb_data.data)
 
     def get_sport_id(self, sport_name: str,
                      search_key: str = 'name', **params) -> List[int]:
@@ -1503,9 +1488,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
-            for league in mlb_data.data['leagues']:
-                return League(**league)
+        return parse_league(mlb_data.data)
 
     def get_leagues(self, **params) -> List[League]:
         """
@@ -1546,12 +1529,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        leagues = []
-
-        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
-            leagues = [League(**league) for league in mlb_data.data['leagues']]
-
-        return leagues
+        return parse_leagues(mlb_data.data)
 
     def get_league_id(self, league_name: str,
                       search_key: str = 'name', **params) -> List[int]:
@@ -1626,9 +1604,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
-            for division in mlb_data.data['divisions']:
-                return Division(**division)
+        return parse_division(mlb_data.data)
 
     def get_divisions(self, **params) -> List[Division]:
         """
@@ -1667,12 +1643,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        divisions = []
-
-        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
-            divisions = [Division(**division) for division in mlb_data.data['divisions']]
-
-        return divisions
+        return parse_divisions(mlb_data.data)
 
     def get_division_id(self, division_name: str,
                         search_key: str = 'name', **params) -> List[int]:

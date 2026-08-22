@@ -1,8 +1,11 @@
 import asyncio
 
 from mlbstatsapi import AsyncMlb
-from mlbstatsapi.models.people import Person
+from mlbstatsapi.models.divisions import Division
+from mlbstatsapi.models.leagues import League
+from mlbstatsapi.models.people import Coach, Person, Player
 from mlbstatsapi.models.schedules import Schedule
+from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.teams import Team
 
 
@@ -13,6 +16,28 @@ def test_async_get_team():
 
         assert isinstance(team, Team)
         assert team.id == 133
+
+    asyncio.run(scenario())
+
+
+def test_async_get_team_roster():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            roster = await mlb.get_team_roster(133)
+
+        assert roster
+        assert isinstance(roster[0], Player)
+
+    asyncio.run(scenario())
+
+
+def test_async_get_team_coaches():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            coaches = await mlb.get_team_coaches(133)
+
+        assert coaches
+        assert isinstance(coaches[0], Coach)
 
     asyncio.run(scenario())
 
@@ -35,5 +60,38 @@ def test_async_get_schedule():
 
         assert isinstance(schedule, Schedule)
         assert schedule.dates
+
+    asyncio.run(scenario())
+
+
+def test_async_get_sport():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            sport = await mlb.get_sport(1)
+
+        assert isinstance(sport, Sport)
+        assert sport.id == 1
+
+    asyncio.run(scenario())
+
+
+def test_async_get_league():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            league = await mlb.get_league(103)
+
+        assert isinstance(league, League)
+        assert league.id == 103
+
+    asyncio.run(scenario())
+
+
+def test_async_get_division():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            division = await mlb.get_division(200)
+
+        assert isinstance(division, Division)
+        assert division.id == 200
 
     asyncio.run(scenario())

@@ -42,14 +42,49 @@ from mlbstatsapi import (  # noqa: E402
     MlbTimeoutError,
     MlbTransportError,
 )
-from mlbstatsapi.models.people import Person  # noqa: E402
+from mlbstatsapi.models.divisions import Division  # noqa: E402
+from mlbstatsapi.models.leagues import League  # noqa: E402
+from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
 from mlbstatsapi.models.schedules import Schedule  # noqa: E402
+from mlbstatsapi.models.sports import Sport  # noqa: E402
 from mlbstatsapi.models.teams import Team  # noqa: E402
 
 
 TEAM_PAYLOAD = {"teams": [{"id": 133, "link": "/api/v1/teams/133", "name": "Athletics"}]}
 PERSON_PAYLOAD = {
     "people": [{"id": 660271, "link": "/api/v1/people/660271", "fullName": "Shohei Ohtani"}]
+}
+SPORT_PAYLOAD = {
+    "sports": [{"id": 1, "link": "/api/v1/sports/1", "name": "Major League Baseball"}]
+}
+LEAGUE_PAYLOAD = {
+    "leagues": [{"id": 103, "link": "/api/v1/leagues/103", "name": "American League"}]
+}
+DIVISION_PAYLOAD = {
+    "divisions": [
+        {"id": 200, "link": "/api/v1/divisions/200", "name": "American League West"}
+    ]
+}
+ROSTER_PLAYER_PAYLOAD = {
+    "roster": [
+        {
+            "person": {"id": 675961, "fullName": "Alika Williams", "link": "/api/v1/people/675961"},
+            "jerseyNumber": "12",
+            "status": {"code": "A", "description": "Active"},
+            "parentTeamId": 133,
+        }
+    ]
+}
+ROSTER_COACH_PAYLOAD = {
+    "roster": [
+        {
+            "person": {"id": 117276, "fullName": "Mark Kotsay", "link": "/api/v1/people/117276"},
+            "jerseyNumber": "7",
+            "job": "Manager",
+            "jobId": "MNGR",
+            "title": "Manager",
+        }
+    ]
 }
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
@@ -315,6 +350,80 @@ def test_get_schedule_range_team_and_sport_request_parity():
     )
 
 
+def test_get_sport_success_parity():
+    """A successful sport response parses to the same Sport on both clients."""
+    result = call_both("get_sport", 1, payload=SPORT_PAYLOAD)
+
+    assert isinstance(result.sync, Sport), "sync get_sport did not return a Sport"
+    assert (result.sync.id, result.sync.link, result.sync.name) == (
+        1,
+        "/api/v1/sports/1",
+        "Major League Baseball",
+    )
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/sports/1", {})
+
+
+def test_get_league_success_parity():
+    """A successful league response parses to the same League on both clients."""
+    result = call_both("get_league", 103, payload=LEAGUE_PAYLOAD)
+
+    assert isinstance(result.sync, League), "sync get_league did not return a League"
+    assert (result.sync.id, result.sync.link, result.sync.name) == (
+        103,
+        "/api/v1/leagues/103",
+        "American League",
+    )
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/leagues/103", {})
+
+
+def test_get_division_success_parity():
+    """A successful division response parses to the same Division on both clients."""
+    result = call_both("get_division", 200, payload=DIVISION_PAYLOAD)
+
+    assert isinstance(result.sync, Division), "sync get_division did not return a Division"
+    assert (result.sync.id, result.sync.link, result.sync.name) == (
+        200,
+        "/api/v1/divisions/200",
+        "American League West",
+    )
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/divisions/200", {})
+
+
+def test_get_team_roster_success_parity():
+    """A successful roster response parses to the same Players on both clients."""
+    result = call_both("get_team_roster", 133, payload=ROSTER_PLAYER_PAYLOAD)
+
+    assert isinstance(result.sync, list) and isinstance(result.sync[0], Player), (
+        "sync get_team_roster did not return a list of Player"
+    )
+    assert (result.sync[0].id, result.sync[0].full_name, result.sync[0].jersey_number) == (
+        675961,
+        "Alika Williams",
+        "12",
+    )
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/teams/133/roster", {})
+
+
+def test_get_team_coaches_success_parity():
+    """A successful coaches response parses to the same Coaches on both clients."""
+    result = call_both("get_team_coaches", 133, payload=ROSTER_COACH_PAYLOAD)
+
+    assert isinstance(result.sync, list) and isinstance(result.sync[0], Coach), (
+        "sync get_team_coaches did not return a list of Coach"
+    )
+    assert (result.sync[0].id, result.sync[0].full_name, result.sync[0].job) == (
+        117276,
+        "Mark Kotsay",
+        "Manager",
+    )
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/teams/133/coaches", {})
+
+
 # ---------------------------------------------------------------------------
 # Nothing to return
 # ---------------------------------------------------------------------------
@@ -352,6 +461,61 @@ def test_get_schedule_no_result_parity(label):
     assert result.sync is None, f"sync get_schedule returned {result.sync!r} for {label}"
     assert result.asynchronous is None, (
         f"async get_schedule returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_sport_no_result_parity(label):
+    """Every no-result response returns None on either client."""
+    result = call_both("get_sport", 1, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, f"sync get_sport returned {result.sync!r} for {label}"
+    assert result.asynchronous is None, (
+        f"async get_sport returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_league_no_result_parity(label):
+    """Every no-result response returns None on either client."""
+    result = call_both("get_league", 103, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, f"sync get_league returned {result.sync!r} for {label}"
+    assert result.asynchronous is None, (
+        f"async get_league returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_division_no_result_parity(label):
+    """Every no-result response returns None on either client."""
+    result = call_both("get_division", 200, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, f"sync get_division returned {result.sync!r} for {label}"
+    assert result.asynchronous is None, (
+        f"async get_division returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_team_roster_no_result_parity(label):
+    """Every no-result response returns an empty list on either client."""
+    result = call_both("get_team_roster", 133, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync == [], f"sync get_team_roster returned {result.sync!r} for {label}"
+    assert result.asynchronous == [], (
+        f"async get_team_roster returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_team_coaches_no_result_parity(label):
+    """Every no-result response returns an empty list on either client."""
+    result = call_both("get_team_coaches", 133, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync == [], f"sync get_team_coaches returned {result.sync!r} for {label}"
+    assert result.asynchronous == [], (
+        f"async get_team_coaches returned {result.asynchronous!r} for {label}"
     )
 
 
