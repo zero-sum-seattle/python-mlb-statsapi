@@ -1,13 +1,16 @@
 import asyncio
 
 from mlbstatsapi import AsyncMlb
+from mlbstatsapi.models.attendances import Attendance
 from mlbstatsapi.models.divisions import Division
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.people import Coach, Person, Player
 from mlbstatsapi.models.schedules import Schedule
 from mlbstatsapi.models.seasons import Season
 from mlbstatsapi.models.sports import Sport
+from mlbstatsapi.models.standings import Standings
 from mlbstatsapi.models.teams import Team
+from mlbstatsapi.models.venues import Venue
 
 
 def test_async_get_team():
@@ -105,5 +108,37 @@ def test_async_get_season():
 
         assert isinstance(season, Season)
         assert season.season_id == "2021"
+
+    asyncio.run(scenario())
+
+
+def test_async_get_venue():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            venue = await mlb.get_venue(31)
+
+        assert isinstance(venue, Venue)
+        assert venue.id == 31
+
+    asyncio.run(scenario())
+
+
+def test_async_get_standings():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            standings = await mlb.get_standings(103, "2022")
+
+        assert standings
+        assert isinstance(standings[0], Standings)
+
+    asyncio.run(scenario())
+
+
+def test_async_get_attendance():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            attendance = await mlb.get_attendance(team_id=133, season=2022)
+
+        assert isinstance(attendance, Attendance)
 
     asyncio.run(scenario())

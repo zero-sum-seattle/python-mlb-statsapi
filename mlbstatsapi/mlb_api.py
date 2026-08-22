@@ -23,14 +23,17 @@ from mlbstatsapi.models.homerunderby import HomeRunDerby
 from mlbstatsapi.models.standings import Standings
 
 
+from ._parsers.attendance import parse_attendance
 from ._parsers.divisions import parse_divisions, parse_division
 from ._parsers.leagues import parse_leagues, parse_league
 from ._parsers.people import parse_people, parse_person
 from ._parsers.roster import parse_roster_coaches, parse_roster_players
 from ._parsers.seasons import parse_seasons, parse_season
 from ._parsers.sports import parse_sports, parse_sport
+from ._parsers.standings import parse_standings
 from ._parsers.teams import parse_teams, parse_team
 from ._parsers.schedules import parse_schedule
+from ._parsers.venues import parse_venues, parse_venue
 
 from .mlb_dataadapter import (
     DEFAULT_TIMEOUT,
@@ -1241,11 +1244,11 @@ class Mlb:
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'venues/{venue_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
+            # Documented quirk: this returns [] rather than None here, unlike
+            # every other single-resource endpoint. See docs/public-api.md.
             return []
 
-        if 'venues' in mlb_data.data and mlb_data.data['venues']:
-            for venue in mlb_data.data['venues']:
-                return Venue(**venue)
+        return parse_venue(mlb_data.data)
 
     def get_venues(self, **params) -> List[Venue]:
         """
@@ -1289,12 +1292,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        venues = []
-
-        if 'venues' in mlb_data.data and mlb_data.data['venues']:
-            venues = [Venue(**venue) for venue in mlb_data.data['venues']]
-
-        return venues
+        return parse_venues(mlb_data.data)
 
     def get_venue_id(self, venue_name: str,
                      search_key: str = 'name', **params) -> List[int]:
@@ -1857,14 +1855,8 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'standings', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
-        
-        standings_list = []
 
-        if 'records' in mlb_data.data and mlb_data.data['records']:
-            for standing in mlb_data.data['records']:
-                standings_list.append(Standings(**standing))
-        
-        return standings_list
+        return parse_standings(mlb_data.data)
 
 
     def get_attendance(self, team_id: int = None, league_id: int = None,
@@ -1919,8 +1911,8 @@ class Mlb:
         """
         required_args = {'teamId': team_id, 'leagueId': league_id, 'leagueListId': league_list_id}
 
-        if not any(required_args):
-            return
+        if not any(required_args.values()):
+            return None
 
         # let's create a list of the args passed
         # this will filter out None
@@ -1932,8 +1924,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'records' in mlb_data.data and mlb_data.data['records']:
-            return Attendance(**mlb_data.data)
+        return parse_attendance(mlb_data.data)
 
     def get_draft(self, year_id: int, **params) -> List[Round]:
         """

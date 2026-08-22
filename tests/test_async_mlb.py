@@ -38,13 +38,16 @@ httpx = pytest.importorskip("httpx", reason="requires the async extra (HTTPX)")
 from mlbstatsapi import Mlb  # noqa: E402
 from mlbstatsapi.async_mlb import AsyncMlb  # noqa: E402
 from mlbstatsapi.mlb_dataadapter import MlbResult  # noqa: E402
+from mlbstatsapi.models.attendances import Attendance  # noqa: E402
 from mlbstatsapi.models.divisions import Division  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
 from mlbstatsapi.models.schedules import Schedule  # noqa: E402
 from mlbstatsapi.models.seasons import Season  # noqa: E402
 from mlbstatsapi.models.sports import Sport  # noqa: E402
+from mlbstatsapi.models.standings import Standings  # noqa: E402
 from mlbstatsapi.models.teams import Team  # noqa: E402
+from mlbstatsapi.models.venues import Venue  # noqa: E402
 
 
 TEAM_PAYLOAD = {"teams": [{"id": 133, "link": "/api/v1/teams/133", "name": "Athletics"}]}
@@ -84,6 +87,119 @@ ROSTER_COACH_PAYLOAD = {
     ]
 }
 SEASON_PAYLOAD = {"seasons": [{"seasonId": "2021", "hasWildcard": True}]}
+VENUE_PAYLOAD = {"venues": [{"id": 31, "link": "/api/v1/venues/31", "name": "PNC Park"}]}
+STANDINGS_RECORD = {
+    "standingsType": "regularSeason",
+    "league": {"id": 103, "link": "/api/v1/league/103"},
+    "division": {"id": 201, "link": "/api/v1/divisions/201"},
+    "sport": {"id": 1, "link": "/api/v1/sports/1"},
+    "roundRobin": {"status": "false"},
+    "lastUpdated": "2025-10-16T23:15:55.082Z",
+    "teamRecords": [
+        {
+            "team": {"id": 147, "name": "Yankees", "link": "/api/v1/teams/147"},
+            "season": "2022",
+            "streak": {"streakCode": "L2", "streakType": "losses", "streakNumber": 2},
+            "clinchIndicator": "y",
+            "divisionRank": "1",
+            "leagueRank": "2",
+            "sportRank": "5",
+            "gamesPlayed": 162,
+            "gamesBack": "-",
+            "wildCardGamesBack": "-",
+            "leagueGamesBack": "7.0",
+            "springLeagueGamesBack": "-",
+            "sportGamesBack": "7.0",
+            "divisionGamesBack": "-",
+            "conferenceGamesBack": "-",
+            "leagueRecord": {"wins": 99, "losses": 63, "ties": 0, "pct": ".611"},
+            "lastUpdated": "2025-10-16T23:14:26Z",
+            "records": {
+                "splitRecords": [{"wins": 57, "losses": 24, "type": "home", "pct": ".704"}],
+                "divisionRecords": [
+                    {
+                        "wins": 17,
+                        "losses": 16,
+                        "pct": ".515",
+                        "division": {
+                            "id": 200,
+                            "name": "American League West",
+                            "link": "/api/v1/divisions/200",
+                        },
+                    }
+                ],
+                "overallRecords": [{"wins": 57, "losses": 24, "type": "home", "pct": ".704"}],
+                "leagueRecords": [
+                    {
+                        "wins": 89,
+                        "losses": 53,
+                        "pct": ".627",
+                        "league": {
+                            "id": 103,
+                            "name": "American League",
+                            "link": "/api/v1/league/103",
+                        },
+                    }
+                ],
+                "expectedRecords": [
+                    {"wins": 106, "losses": 56, "type": "xWinLoss", "pct": ".654"}
+                ],
+            },
+            "runsAllowed": 567,
+            "runsScored": 807,
+            "divisionChamp": True,
+            "divisionLeader": True,
+            "hasWildcard": True,
+            "clinched": True,
+            "eliminationNumber": "-",
+            "eliminationNumberSport": "E",
+            "eliminationNumberLeague": "E",
+            "eliminationNumberDivision": "-",
+            "eliminationNumberConference": "E",
+            "wildCardEliminationNumber": "-",
+            "magicNumber": "-",
+            "wins": 99,
+            "losses": 63,
+            "runDifferential": 240,
+            "winningPercentage": ".611",
+        }
+    ],
+}
+STANDINGS_PAYLOAD = {"records": [STANDINGS_RECORD]}
+ATTENDANCE_PAYLOAD = {
+    "records": [
+        {
+            "openingsTotal": 160,
+            "openingsTotalAway": 81,
+            "openingsTotalHome": 79,
+            "openingsTotalLost": 2,
+            "gamesTotal": 162,
+            "gamesAwayTotal": 82,
+            "gamesHomeTotal": 80,
+            "year": "2022",
+            "attendanceAverageYtd": 18103,
+            "attendanceHigh": 40065,
+            "attendanceHighDate": "2022-08-06T00:00:00",
+            "attendanceTotal": 2896460,
+            "attendanceTotalAway": 2108558,
+            "attendanceTotalHome": 787902,
+            "gameType": {"id": "R", "description": "Regular Season"},
+            "team": {"id": 133, "name": "Oakland Athletics", "link": "/api/v1/teams/133"},
+        }
+    ],
+    "aggregateTotals": {
+        "openingsTotalAway": 81,
+        "openingsTotalHome": 79,
+        "openingsTotalLost": 2,
+        "openingsTotalYtd": 0,
+        "attendanceAverageYtd": 18103,
+        "attendanceHigh": 40065,
+        "attendanceHighDate": "2022-08-06T00:00:00",
+        "attendanceTotal": 2896460,
+        "attendanceTotalAway": 2108558,
+        "attendanceTotalHome": 787902,
+    },
+}
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
     "totalEvents": 0,
@@ -128,6 +244,7 @@ EXPECTED_ROSTER_COACH = Coach(
     title="Manager",
 )
 EXPECTED_SEASON = Season(seasonId="2021", hasWildcard=True)
+EXPECTED_VENUE = Venue(id=31, link="/api/v1/venues/31", name="PNC Park")
 
 # The two ways an endpoint legitimately comes back with nothing to parse.
 NO_RESULT_RESPONSES = {
@@ -208,7 +325,26 @@ def sync_request_for(method: str, *args, **kwargs) -> tuple[str, dict]:
         getattr(sync_mlb, method)(*args, **kwargs)
         call = sync_mlb._mlb_adapter_v1.get.call_args
 
-    return call.kwargs["endpoint"], call.kwargs["ep_params"]
+    # Most Mlb methods pass endpoint as a keyword; get_attendance passes it
+    # positionally, so fall back to the first positional argument.
+    endpoint = call.kwargs["endpoint"] if "endpoint" in call.kwargs else call.args[0]
+    return endpoint, call.kwargs["ep_params"]
+
+
+def _flatten_params(params: dict) -> list[tuple[str, str]]:
+    """Expand a params dict into (key, str(value)) pairs, list values repeated.
+
+    Mirrors how both Requests and HTTPX serialize a list-valued query
+    parameter: as the same key repeated once per item, e.g.
+    ``?hydrate=a&hydrate=b`` rather than a single comma-joined value.
+    """
+    pairs: list[tuple[str, str]] = []
+    for key, value in params.items():
+        if isinstance(value, list):
+            pairs.extend((key, str(item)) for item in value)
+        else:
+            pairs.append((key, str(value)))
+    return sorted(pairs)
 
 
 def assert_matches_sync(request: httpx.Request, method: str, *args, **kwargs) -> None:
@@ -216,8 +352,7 @@ def assert_matches_sync(request: httpx.Request, method: str, *args, **kwargs) ->
     endpoint, params = sync_request_for(method, *args, **kwargs)
 
     assert request.url.path == f"/api/v1/{endpoint}"
-    # Query values arrive as strings, whatever type the client passed in.
-    assert dict(request.url.params) == {k: str(v) for k, v in params.items()}
+    assert sorted(request.url.params.multi_items()) == _flatten_params(params)
 
 
 # ---------------------------------------------------------------------------
@@ -654,6 +789,113 @@ def test_get_seasons_request_matches_the_sync_client():
     assert_matches_sync(handler.request, "get_seasons", 11)
 
 
+def test_get_venue_requests_the_venue_endpoint_and_parses_the_result():
+    handler = _Handler(_json(VENUE_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_venue(31)
+
+    venue = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_venue", 31)
+    assert venue == EXPECTED_VENUE
+
+
+def test_get_venue_returns_empty_list_on_404():
+    """get_venue mirrors Mlb's documented quirk: [] rather than None on 4xx."""
+    handler = _Handler(NO_RESULT_RESPONSES["404"])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_venue(1)
+
+    assert asyncio.run(scenario()) == []
+
+
+def test_get_venue_returns_none_on_empty_200():
+    """Unlike the 4xx quirk, an empty 200 falls through to the normal None."""
+    handler = _Handler(NO_RESULT_RESPONSES["empty 200"])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_venue(1)
+
+    assert asyncio.run(scenario()) is None
+
+
+def test_get_venues_request_matches_the_sync_client():
+    handler = _Handler(_json({"venues": []}))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_venues()
+
+    assert asyncio.run(scenario()) == []
+    assert_matches_sync(handler.request, "get_venues")
+
+
+def test_get_standings_requests_the_standings_endpoint_and_parses_the_result():
+    handler = _Handler(_json(STANDINGS_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_standings(103, "2022")
+
+    standings = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_standings", 103, "2022")
+    assert standings == [Standings(**STANDINGS_RECORD)]
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_standings_returns_empty_list_when_there_are_no_standings(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_standings(103, "2022")
+
+    assert asyncio.run(scenario()) == []
+
+
+def test_get_attendance_requests_the_attendance_endpoint_and_parses_the_result():
+    handler = _Handler(_json(ATTENDANCE_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_attendance(team_id=133)
+
+    attendance = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_attendance", team_id=133)
+    assert isinstance(attendance, Attendance)
+    assert attendance.aggregate_totals.attendance_total == 2896460
+
+
+def test_get_attendance_without_an_identifier_returns_none_without_requesting():
+    """Regression coverage for the any(dict) vs any(dict.values()) guard bug."""
+    handler = _Handler(_json(ATTENDANCE_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_attendance()
+
+    assert asyncio.run(scenario()) is None
+    assert handler.requests == []
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_attendance_returns_none_when_there_is_no_attendance(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_attendance(team_id=133)
+
+    assert asyncio.run(scenario()) is None
+
+
 # ---------------------------------------------------------------------------
 # Parity and concurrency
 # ---------------------------------------------------------------------------
@@ -679,6 +921,10 @@ def test_public_signatures_match_the_sync_client():
         "get_divisions",
         "get_season",
         "get_seasons",
+        "get_venue",
+        "get_venues",
+        "get_standings",
+        "get_attendance",
     ):
         sync_params = inspect.signature(getattr(Mlb, name)).parameters
         async_params = inspect.signature(getattr(AsyncMlb, name)).parameters

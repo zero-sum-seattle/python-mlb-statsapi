@@ -295,7 +295,21 @@ get_division(division_id: int, **params)
 get_divisions(**params)
 get_season(season_id: str, sport_id: int = 1, **params)
 get_seasons(sport_id: int = 1, **params)
+get_venue(venue_id: int, **params)
+get_venues(**params)
+get_standings(league_id: int, season: str, **params)
+get_attendance(
+    team_id: int = None,
+    league_id: int = None,
+    league_list_id: str = None,
+    **params,
+)
 ```
+
+`get_venue` inherits the same documented quirk as `Mlb.get_venue`: it is
+annotated `Venue | None` but returns `[]` (not `None`) on a 400–499 response,
+matching the sync behavior noted above. This is preserved for parity, not
+introduced by the async port.
 
 Every other `Mlb` endpoint method not listed above is not yet supported on
 `AsyncMlb`; calling it there raises `AttributeError`. See issue #305 for the
@@ -537,6 +551,12 @@ Notes and known conflicts (documented, not redesigned by this contract):
 * `get_homerun_derby` currently executes a bare `None` expression on 400–499
   instead of `return None`, so execution may continue. A focused bugfix is
   recommended.
+* `get_attendance`'s "at least one of `team_id`/`league_id`/`league_list_id`"
+  guard previously used `any(required_args)`, which iterates dict keys
+  (always truthy) rather than values, so the guard never actually fired. This
+  was fixed to `any(required_args.values())` while porting the endpoint to
+  `AsyncMlb` (issue #305); calling either client with no identifier now
+  returns `None` without making a request, as already documented above.
 * Nested Pydantic model fields are not frozen by this contract.
 
 ## Return-contract boundaries

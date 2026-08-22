@@ -42,13 +42,16 @@ from mlbstatsapi import (  # noqa: E402
     MlbTimeoutError,
     MlbTransportError,
 )
+from mlbstatsapi.models.attendances import Attendance  # noqa: E402
 from mlbstatsapi.models.divisions import Division  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
 from mlbstatsapi.models.schedules import Schedule  # noqa: E402
 from mlbstatsapi.models.seasons import Season  # noqa: E402
 from mlbstatsapi.models.sports import Sport  # noqa: E402
+from mlbstatsapi.models.standings import Standings  # noqa: E402
 from mlbstatsapi.models.teams import Team  # noqa: E402
+from mlbstatsapi.models.venues import Venue  # noqa: E402
 
 
 TEAM_PAYLOAD = {"teams": [{"id": 133, "link": "/api/v1/teams/133", "name": "Athletics"}]}
@@ -88,6 +91,119 @@ ROSTER_COACH_PAYLOAD = {
     ]
 }
 SEASON_PAYLOAD = {"seasons": [{"seasonId": "2021", "hasWildcard": True}]}
+VENUE_PAYLOAD = {"venues": [{"id": 31, "link": "/api/v1/venues/31", "name": "PNC Park"}]}
+STANDINGS_RECORD = {
+    "standingsType": "regularSeason",
+    "league": {"id": 103, "link": "/api/v1/league/103"},
+    "division": {"id": 201, "link": "/api/v1/divisions/201"},
+    "sport": {"id": 1, "link": "/api/v1/sports/1"},
+    "roundRobin": {"status": "false"},
+    "lastUpdated": "2025-10-16T23:15:55.082Z",
+    "teamRecords": [
+        {
+            "team": {"id": 147, "name": "Yankees", "link": "/api/v1/teams/147"},
+            "season": "2022",
+            "streak": {"streakCode": "L2", "streakType": "losses", "streakNumber": 2},
+            "clinchIndicator": "y",
+            "divisionRank": "1",
+            "leagueRank": "2",
+            "sportRank": "5",
+            "gamesPlayed": 162,
+            "gamesBack": "-",
+            "wildCardGamesBack": "-",
+            "leagueGamesBack": "7.0",
+            "springLeagueGamesBack": "-",
+            "sportGamesBack": "7.0",
+            "divisionGamesBack": "-",
+            "conferenceGamesBack": "-",
+            "leagueRecord": {"wins": 99, "losses": 63, "ties": 0, "pct": ".611"},
+            "lastUpdated": "2025-10-16T23:14:26Z",
+            "records": {
+                "splitRecords": [{"wins": 57, "losses": 24, "type": "home", "pct": ".704"}],
+                "divisionRecords": [
+                    {
+                        "wins": 17,
+                        "losses": 16,
+                        "pct": ".515",
+                        "division": {
+                            "id": 200,
+                            "name": "American League West",
+                            "link": "/api/v1/divisions/200",
+                        },
+                    }
+                ],
+                "overallRecords": [{"wins": 57, "losses": 24, "type": "home", "pct": ".704"}],
+                "leagueRecords": [
+                    {
+                        "wins": 89,
+                        "losses": 53,
+                        "pct": ".627",
+                        "league": {
+                            "id": 103,
+                            "name": "American League",
+                            "link": "/api/v1/league/103",
+                        },
+                    }
+                ],
+                "expectedRecords": [
+                    {"wins": 106, "losses": 56, "type": "xWinLoss", "pct": ".654"}
+                ],
+            },
+            "runsAllowed": 567,
+            "runsScored": 807,
+            "divisionChamp": True,
+            "divisionLeader": True,
+            "hasWildcard": True,
+            "clinched": True,
+            "eliminationNumber": "-",
+            "eliminationNumberSport": "E",
+            "eliminationNumberLeague": "E",
+            "eliminationNumberDivision": "-",
+            "eliminationNumberConference": "E",
+            "wildCardEliminationNumber": "-",
+            "magicNumber": "-",
+            "wins": 99,
+            "losses": 63,
+            "runDifferential": 240,
+            "winningPercentage": ".611",
+        }
+    ],
+}
+STANDINGS_PAYLOAD = {"records": [STANDINGS_RECORD]}
+ATTENDANCE_PAYLOAD = {
+    "records": [
+        {
+            "openingsTotal": 160,
+            "openingsTotalAway": 81,
+            "openingsTotalHome": 79,
+            "openingsTotalLost": 2,
+            "gamesTotal": 162,
+            "gamesAwayTotal": 82,
+            "gamesHomeTotal": 80,
+            "year": "2022",
+            "attendanceAverageYtd": 18103,
+            "attendanceHigh": 40065,
+            "attendanceHighDate": "2022-08-06T00:00:00",
+            "attendanceTotal": 2896460,
+            "attendanceTotalAway": 2108558,
+            "attendanceTotalHome": 787902,
+            "gameType": {"id": "R", "description": "Regular Season"},
+            "team": {"id": 133, "name": "Oakland Athletics", "link": "/api/v1/teams/133"},
+        }
+    ],
+    "aggregateTotals": {
+        "openingsTotalAway": 81,
+        "openingsTotalHome": 79,
+        "openingsTotalLost": 2,
+        "openingsTotalYtd": 0,
+        "attendanceAverageYtd": 18103,
+        "attendanceHigh": 40065,
+        "attendanceHighDate": "2022-08-06T00:00:00",
+        "attendanceTotal": 2896460,
+        "attendanceTotalAway": 2108558,
+        "attendanceTotalHome": 787902,
+    },
+}
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
     "totalEvents": 0,
@@ -436,6 +552,45 @@ def test_get_season_success_parity():
     assert result.request == ("GET", "/api/v1/seasons/2021", {"sportId": "1"})
 
 
+def test_get_venue_success_parity():
+    """A successful venue response parses to the same Venue on both clients."""
+    result = call_both("get_venue", 31, payload=VENUE_PAYLOAD)
+
+    assert isinstance(result.sync, Venue), "sync get_venue did not return a Venue"
+    assert (result.sync.id, result.sync.link, result.sync.name) == (
+        31,
+        "/api/v1/venues/31",
+        "PNC Park",
+    )
+    assert result.asynchronous == result.sync
+    # hydrate is sent as a repeated query param (?hydrate=a&hydrate=b&...);
+    # request_signature's dict(parse_qsl(...)) keeps only the last value, so
+    # this only proves the two clients agree, not the full query string.
+    assert result.request == ("GET", "/api/v1/venues/31", {"hydrate": "timezone"})
+
+
+def test_get_standings_success_parity():
+    """A successful standings response parses to the same Standings on both clients."""
+    result = call_both("get_standings", 103, "2022", payload=STANDINGS_PAYLOAD)
+
+    assert isinstance(result.sync, list) and isinstance(result.sync[0], Standings), (
+        "sync get_standings did not return a list of Standings"
+    )
+    assert result.sync[0].team_records[0].team.name == "Yankees"
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/standings", {"leagueId": "103", "season": "2022"})
+
+
+def test_get_attendance_success_parity():
+    """A successful attendance response parses to the same Attendance on both clients."""
+    result = call_both("get_attendance", team_id=133, payload=ATTENDANCE_PAYLOAD)
+
+    assert isinstance(result.sync, Attendance), "sync get_attendance did not return an Attendance"
+    assert result.sync.aggregate_totals.attendance_total == 2896460
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/attendance", {"teamId": "133"})
+
+
 # ---------------------------------------------------------------------------
 # Nothing to return
 # ---------------------------------------------------------------------------
@@ -540,6 +695,63 @@ def test_get_season_no_result_parity(label):
     assert result.asynchronous is None, (
         f"async get_season returned {result.asynchronous!r} for {label}"
     )
+
+
+def test_get_venue_no_result_parity_404():
+    """404 hits Mlb.get_venue's documented quirk: [] rather than None."""
+    result = call_both("get_venue", 1, status=404, payload={})
+
+    assert result.sync == [], f"sync get_venue returned {result.sync!r} for 404"
+    assert result.asynchronous == [], (
+        f"async get_venue returned {result.asynchronous!r} for 404"
+    )
+
+
+@pytest.mark.parametrize("label", ["empty 200", "empty body"])
+def test_get_venue_no_result_parity_non_4xx(label):
+    """Unlike the 404 quirk, a non-4xx empty response falls through to None."""
+    result = call_both("get_venue", 1, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, f"sync get_venue returned {result.sync!r} for {label}"
+    assert result.asynchronous is None, (
+        f"async get_venue returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_standings_no_result_parity(label):
+    """Every no-result response returns an empty list on either client."""
+    result = call_both("get_standings", 103, "2022", **NO_RESULT_RESPONSES[label])
+
+    assert result.sync == [], f"sync get_standings returned {result.sync!r} for {label}"
+    assert result.asynchronous == [], (
+        f"async get_standings returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_attendance_no_result_parity(label):
+    """Every no-result response returns None on either client."""
+    result = call_both("get_attendance", team_id=133, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, f"sync get_attendance returned {result.sync!r} for {label}"
+    assert result.asynchronous is None, (
+        f"async get_attendance returned {result.asynchronous!r} for {label}"
+    )
+
+
+def test_get_attendance_without_an_identifier_parity():
+    """Regression coverage: the any(dict) vs any(dict.values()) guard bug fix."""
+    sync_requests: list = []
+    async_requests: list = []
+
+    sync_result = call_sync("get_attendance", observed=sync_requests)
+    async_result = call_async("get_attendance", observed=async_requests)
+
+    assert sync_result is None
+    assert async_result is None
+    assert sync_requests == []
+    assert async_requests == []
 
 
 # ---------------------------------------------------------------------------

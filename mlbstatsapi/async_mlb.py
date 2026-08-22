@@ -6,6 +6,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from ._helpers.schedule import build_schedule_params
+from ._parsers.attendance import parse_attendance
 from ._parsers.divisions import parse_division, parse_divisions
 from ._parsers.leagues import parse_league, parse_leagues
 from ._parsers.people import parse_person, parse_people
@@ -13,16 +14,21 @@ from ._parsers.roster import parse_roster_coaches, parse_roster_players
 from ._parsers.schedules import parse_schedule
 from ._parsers.seasons import parse_season, parse_seasons
 from ._parsers.sports import parse_sport, parse_sports
+from ._parsers.standings import parse_standings
 from ._parsers.teams import parse_team, parse_teams
+from ._parsers.venues import parse_venue, parse_venues
 from .async_mlb_dataadapter import AsyncMlbDataAdapter
 from .mlb_dataadapter import DEFAULT_TIMEOUT, TimeoutType
+from .models.attendances import Attendance
 from .models.divisions import Division
 from .models.leagues import League
 from .models.people import Coach, Person, Player
 from .models.schedules import Schedule
 from .models.seasons import Season
 from .models.sports import Sport
+from .models.standings import Standings
 from .models.teams import Team
+from .models.venues import Venue
 
 if TYPE_CHECKING:
     import httpx
@@ -1018,3 +1024,263 @@ class AsyncMlb:
             return []
 
         return parse_seasons(mlb_data.data)
+
+    async def get_venue(
+        self,
+        venue_id: int,
+        **params,
+    ) -> Venue | None:
+        """
+        returns venue directorial information for all available venues in the Stats API.
+
+        Async counterpart of ``Mlb.get_venue``.
+
+        Parameters
+        ----------
+        venue_id : int
+            venueId to return venue directorial information based venueId.
+
+        Other Parameters
+        ----------------
+        fields : str
+            Comma delimited list of specific fields to be returned.
+
+        Returns
+        -------
+        Venue
+
+        See Also
+        --------
+        AsyncMlb.get_venues : return a list of Venues
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     venue = await mlb.get_venue(31)
+        Venue
+        """
+        params["hydrate"] = ["location", "fieldInfo", "timezone"]
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"venues/{venue_id}",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            # Documented quirk: this returns [] rather than None here, unlike
+            # every other single-resource endpoint, matching Mlb.get_venue.
+            # See docs/public-api.md.
+            return []
+
+        return parse_venue(mlb_data.data)
+
+    async def get_venues(
+        self,
+        **params,
+    ) -> list[Venue]:
+        """
+        return all venues
+
+        Async counterpart of ``Mlb.get_venues``.
+
+        Returns
+        -------
+        list of Venues
+            returns a list of Venues
+
+        Other Parameters
+        ----------------
+        venueIds : int, List[int]
+            Insert venueId to return venue directorial information based
+            venueId.
+        sportIds : int, List[int]
+            Insert sportIds to return venue directorial information based a
+            given sport(s). For a list of all sports:
+            https://statsapi.mlb.com/api/v1/sports
+        season : int
+            Insert year to return venue directorial information for a given
+            season.
+        fields : str
+            Comma delimited list of specific fields to be returned.
+            Format: topLevelNode, childNode, attribute
+
+        See Also
+        --------
+        AsyncMlb.get_venue : return a Venue
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     venues = await mlb.get_venues()
+        [Venue, Venue, Venue]
+        """
+        params["hydrate"] = ["location", "fieldInfo", "timezone"]
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="venues",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return parse_venues(mlb_data.data)
+
+    async def get_standings(
+        self,
+        league_id: int,
+        season: str,
+        **params,
+    ) -> list[Standings]:
+        """
+        return a list of standings for league_id and season
+
+        Async counterpart of ``Mlb.get_standings``.
+
+        Parameters
+        ----------
+        league_id : str
+            Insert leagueId to return all standings based on a particular
+            standingType for a specific league.
+        season : str
+            Insert year to return all standings based on a particular year.
+
+        Other Parameters
+        ----------------
+        standingsTypes : str
+            Insert standingType to return all standings based on a particular
+            year.
+            Description of all standingTypes:
+                regularSeason - Regular Season Standings
+                wildCard - Wild card standings
+                divisionLeaders - Division Leader standings
+                wildCardWithLeaders - Wild card standings with Division
+                Leaders firstHalf - First half standings. Only valid for
+                                    leagues with a split season
+                                    (Mexican League).
+                secondHalf - Second half standings. Only valid for leagues
+                             with a split season (Mexican League).
+                springTraining - Spring Training Standings
+                postseason - Postseason Standings
+                byDivision - Standings by Division
+                byConference - Standings by Conference
+                byLeague - Standings by League
+            Find standingTypes at https://statsapi.mlb.com/api/v1/standingsTypes
+        date : str
+            Insert date to return standing information for on a particular
+            date. Format: MM/DD/YYYY
+        hydrate : str
+            Insert Hydration(s) to return data for any available standings
+            hydration. Format "team,league"
+            Available Hydrations:
+                team
+                league
+                division
+                sport
+                conference
+                record(conference)
+                record(division)
+        fields : str
+            Comma delimited list of specific fields to be returned. Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        list of Standings
+            returns a list of Standings
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     standings = await mlb.get_standings(103, "2022")
+        [Standings, Standings, Standings]
+        """
+        if league_id is not None:
+            params["leagueId"] = league_id
+
+        if season is not None:
+            params["season"] = season
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="standings",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return parse_standings(mlb_data.data)
+
+    async def get_attendance(
+        self,
+        team_id: int = None,
+        league_id: int = None,
+        league_list_id: str = None,
+        **params,
+    ) -> Attendance | None:
+        """
+        returns attendance data based on teamId, leagueId, or leagueListId.
+
+        Async counterpart of ``Mlb.get_attendance``.
+
+        Required Parameters (at least one)
+        ----------
+        team_id : int
+            Insert a teamId to return directory of attendnace for a given team
+        league_id : int
+            Insert leagueId(s) to return a directory of attendanace for a
+            specific league. Format '103,104'
+        league_list_id : str
+            Insert a unique League List Identifier to return a directory of
+            attendanace for a specific league listId.
+            Available values : milb_full, milb_short, milb_complex, milb_all,
+            milb_all_nomex, milb_all_domestic, milb_noncomp,
+            milb_noncomp_nomex, milb_domcomp, milb_intcomp, win_noabl,
+            win_caribbean, win_all, abl, mlb, mlb_hist, mlb_milb,
+            mlb_milb_hist, mlb_milb_win, baseball_all
+
+        Parameters
+        ----------
+        season : int
+            Insert year(s) to return a directory of attendance for a given
+            season. Season year number format yyyy
+        date : str 'yyyy-mm-dd'
+            Insert date to return information for attendance on a particular
+            date. Format: MM/DD/YYYY
+        gametype : str
+            Insert gameType(s) a directory of attendance for a given gameType.
+            For a list of all gameTypes:
+            https://statsapi.mlb.com/api/v1/gameTypes
+
+        Returns
+        -------
+        Attendance
+
+        See Also
+        --------
+        AsyncMlb.get_leagues : return a list of Leagues
+        AsyncMlb.get_venues : return a list of Venues
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     attendance = await mlb.get_attendance(team_id=133, season=2022)
+        Attendance
+        """
+        required_args = {"teamId": team_id, "leagueId": league_id, "leagueListId": league_list_id}
+
+        if not any(required_args.values()):
+            return None
+
+        for arg_name, arg_value in required_args.items():
+            if arg_value:
+                params[arg_name] = arg_value
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="attendance",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return None
+
+        return parse_attendance(mlb_data.data)
