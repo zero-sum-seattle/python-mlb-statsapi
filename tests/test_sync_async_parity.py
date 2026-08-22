@@ -51,6 +51,27 @@ TEAM_PAYLOAD = {"teams": [{"id": 133, "link": "/api/v1/teams/133", "name": "Athl
 PERSON_PAYLOAD = {
     "people": [{"id": 660271, "link": "/api/v1/people/660271", "fullName": "Shohei Ohtani"}]
 }
+PEOPLE_PAYLOAD = {
+    "people": [
+        {"id": 660271, "link": "/api/v1/people/660271", "fullName": "Shohei Ohtani"},
+        {"id": 664034, "link": "/api/v1/people/664034", "fullName": "Ty France"},
+    ]
+}
+# The lookup endpoints request reduced fields, so their payloads carry only the
+# id and the searchable names. The second row is missing the alternate search
+# key on purpose: a row without it is skipped rather than raising.
+PEOPLE_LOOKUP_PAYLOAD = {
+    "people": [
+        {"id": 664034, "fullName": "Ty France", "lastName": "France"},
+        {"id": 660271, "fullName": "Shohei Ohtani"},
+    ]
+}
+TEAMS_LOOKUP_PAYLOAD = {
+    "teams": [
+        {"id": 133, "name": "Athletics", "abbreviation": "OAK"},
+        {"id": 136, "name": "Seattle Mariners"},
+    ]
+}
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
     "totalEvents": 0,
@@ -69,7 +90,8 @@ SCHEDULE_PAYLOAD = {
 }
 
 # Every way a call legitimately comes back with nothing to parse, held as the
-# keyword arguments that produce it. Both clients are expected to answer None.
+# keyword arguments that produce it. Both clients are expected to answer the
+# method's documented empty result: None, or an empty list.
 NO_RESULT_RESPONSES = {
     "empty 200": {"payload": {}},
     "empty body": {"raw_body": b""},
@@ -86,6 +108,28 @@ SCHEDULE_NO_RESULT_RESPONSES = NO_RESULT_RESPONSES | {
             "dates": [],
         }
     },
+}
+
+# What each lookup method is expected to answer for one canned payload, held
+# as the keyword arguments that produce it. The two tables are deliberately
+# parallel: people and teams differ only in the names being matched.
+PEOPLE_ID_LOOKUPS = {
+    "exact match": ({"fullname": "Ty France"}, [664034]),
+    "case-insensitive match": ({"fullname": "tY fRaNcE"}, [664034]),
+    "alternate search key": (
+        {"fullname": "France", "search_key": "lastName"},
+        [664034],
+    ),
+    "no match": ({"fullname": "Nobody At All"}, []),
+}
+TEAM_ID_LOOKUPS = {
+    "exact match": ({"team_name": "Athletics"}, [133]),
+    "case-insensitive match": ({"team_name": "aThLeTiCs"}, [133]),
+    "alternate search key": (
+        {"team_name": "OAK", "search_key": "abbreviation"},
+        [133],
+    ),
+    "no match": ({"team_name": "Nobody At All"}, []),
 }
 
 # The canned transport failures, per client. Each pair is the closest
@@ -272,6 +316,66 @@ def test_get_person_success_parity():
     assert result.request == ("GET", "/api/v1/people/660271", {})
 
 
+def test_get_persons_success_parity():
+    """A successful people response parses to the same People on both clients."""
+    result = call_both("get_persons", "660271,664034", payload=PEOPLE_PAYLOAD)
+
+    assert all(isinstance(person, Person) for person in result.sync), (
+        "sync get_persons did not return People"
+    )
+    assert [(person.id, person.full_name) for person in result.sync] == [
+        (660271, "Shohei Ohtani"),
+        (664034, "Ty France"),
+    ]
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/people",
+        {"personIds": "660271,664034"},
+    )
+
+
+def test_get_persons_id_list_request_parity():
+    """A list of person ids produces equivalent requests on both clients."""
+    result = call_both("get_persons", [660271, 664034], payload=PEOPLE_PAYLOAD)
+
+    assert result.asynchronous == result.sync
+    # Both clients repeat the query pair rather than joining the ids, and
+    # `request_signature` keeps the last value of a repeated pair. `call_both`
+    # has already compared the two full query strings.
+    assert result.request == ("GET", "/api/v1/people", {"personIds": "664034"})
+
+
+@pytest.mark.parametrize("label", list(PEOPLE_ID_LOOKUPS))
+def test_get_people_id_lookup_parity(label):
+    """Each lookup answers with the same person ids on either client."""
+    kwargs, expected = PEOPLE_ID_LOOKUPS[label]
+    result = call_both("get_people_id", payload=PEOPLE_LOOKUP_PAYLOAD, **kwargs)
+
+    assert result.sync == expected, f"sync get_people_id returned {result.sync!r}"
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/sports/1/players",
+        {"fields": "people,id,fullName"},
+    )
+
+
+@pytest.mark.parametrize("label", list(TEAM_ID_LOOKUPS))
+def test_get_team_id_lookup_parity(label):
+    """Each lookup answers with the same team ids on either client."""
+    kwargs, expected = TEAM_ID_LOOKUPS[label]
+    result = call_both("get_team_id", payload=TEAMS_LOOKUP_PAYLOAD, **kwargs)
+
+    assert result.sync == expected, f"sync get_team_id returned {result.sync!r}"
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/teams",
+        {"fields": "teams,id,name"},
+    )
+
+
 def test_get_schedule_success_parity():
     """A successful date schedule parses identically and sends the same request."""
     result = call_both("get_schedule", date="2022-10-07", payload=SCHEDULE_PAYLOAD)
@@ -340,6 +444,33 @@ def test_get_person_no_result_parity(label):
     assert result.asynchronous is None, (
         f"async get_person returned {result.asynchronous!r} for {label}"
     )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_persons_no_result_parity(label):
+    """Every no-result response returns an empty list on either client."""
+    result = call_both("get_persons", "660271", **NO_RESULT_RESPONSES[label])
+
+    assert result.sync == [], f"sync get_persons returned {result.sync!r} for {label}"
+    assert result.asynchronous == result.sync
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_people_id_no_result_parity(label):
+    """Every no-result response returns an empty list on either client."""
+    result = call_both("get_people_id", "Ty France", **NO_RESULT_RESPONSES[label])
+
+    assert result.sync == [], f"sync get_people_id returned {result.sync!r} for {label}"
+    assert result.asynchronous == result.sync
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_team_id_no_result_parity(label):
+    """Every no-result response returns an empty list on either client."""
+    result = call_both("get_team_id", "Athletics", **NO_RESULT_RESPONSES[label])
+
+    assert result.sync == [], f"sync get_team_id returned {result.sync!r} for {label}"
+    assert result.asynchronous == result.sync
 
 
 @pytest.mark.parametrize("label", list(SCHEDULE_NO_RESULT_RESPONSES))

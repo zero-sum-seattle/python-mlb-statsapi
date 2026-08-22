@@ -139,6 +139,96 @@ class AsyncMlb:
 
         return parse_people(mlb_data.data)
 
+    async def get_persons(
+        self,
+        person_ids: str | list[int],
+        **params,
+    ) -> list[Person]:
+        """Return a Person for each requested person id.
+
+        Async counterpart of ``Mlb.get_persons``; ``person_ids`` accepts the
+        same ``'605151,592450'`` or ``[605151, 592450]`` forms.
+        """
+        params["personIds"] = person_ids
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="people",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return parse_people(mlb_data.data)
+
+    async def get_people_id(
+        self,
+        fullname: str,
+        sport_id: int = 1,
+        search_key: str = "fullName",
+        **params,
+    ) -> list[int]:
+        """Return the person ids whose ``search_key`` matches ``fullname``.
+
+        Async counterpart of ``Mlb.get_people_id``; matching is
+        case-insensitive and people missing ``search_key`` are skipped.
+        """
+        # Used to reduce the amount of unneccessary data requested from api
+        params["fields"] = "people,id,fullName"
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"sports/{sport_id}/players",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        player_ids = []
+
+        if "people" in mlb_data.data and mlb_data.data["people"]:
+            for person in mlb_data.data["people"]:
+                try:
+                    if person[search_key].lower() == fullname.lower():
+                        player_ids.append(person["id"])
+                except KeyError:
+                    continue
+
+        return player_ids
+
+    async def get_team_id(
+        self,
+        team_name: str,
+        search_key: str = "name",
+        **params,
+    ) -> list[int]:
+        """Return the team ids whose ``search_key`` matches ``team_name``.
+
+        Async counterpart of ``Mlb.get_team_id``; matching is
+        case-insensitive and teams missing ``search_key`` are skipped.
+        """
+        # Used to reduce the amount of unneccessary data requested from api
+        params["fields"] = "teams,id,name"
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="teams",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        team_ids = []
+
+        if "teams" in mlb_data.data and mlb_data.data["teams"]:
+            for team in mlb_data.data["teams"]:
+                try:
+                    if team[search_key].lower() == team_name.lower():
+                        team_ids.append(team["id"])
+                except KeyError:
+                    continue
+
+        return team_ids
 
     async def get_schedule(
         self,

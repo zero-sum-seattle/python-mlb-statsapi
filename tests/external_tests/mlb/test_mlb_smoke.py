@@ -20,6 +20,14 @@ def test_get_person():
     assert person.id == 664034
 
 
+def test_get_persons():
+    with Mlb() as mlb:
+        people = mlb.get_persons([664034])
+
+    assert people
+    assert people[0].id == 664034
+
+
 def test_get_schedule():
     with Mlb() as mlb:
         schedule = mlb.get_schedule(date="2022-10-07")

@@ -28,6 +28,17 @@ def test_async_get_person():
     asyncio.run(scenario())
 
 
+def test_async_get_persons():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            people = await mlb.get_persons([664034])
+
+        assert people
+        assert people[0].id == 664034
+
+    asyncio.run(scenario())
+
+
 def test_async_get_schedule():
     async def scenario():
         async with AsyncMlb() as mlb:

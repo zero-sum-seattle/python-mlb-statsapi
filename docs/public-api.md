@@ -277,6 +277,9 @@ get_team(team_id: int, **params)
 get_teams(sport_id: int = 1, **params)
 get_person(player_id: int, **params)
 get_people(sport_id: int = 1, **params)
+get_persons(person_ids: str | list[int], **params)
+get_people_id(fullname: str, sport_id: int = 1, search_key: str = 'fullName', **params)
+get_team_id(team_name: str, search_key: str = 'name', **params)
 get_schedule(
     date: str = None,
     start_date: str = None,
