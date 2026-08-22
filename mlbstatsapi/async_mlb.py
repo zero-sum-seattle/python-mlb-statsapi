@@ -7,7 +7,9 @@ from typing import TYPE_CHECKING
 
 from ._helpers.schedule import build_schedule_params
 from ._parsers.attendance import parse_attendance
+from ._parsers.awards import parse_awards
 from ._parsers.divisions import parse_division, parse_divisions
+from ._parsers.draft import parse_draft
 from ._parsers.leagues import parse_league, parse_leagues
 from ._parsers.people import parse_person, parse_people
 from ._parsers.roster import parse_roster_coaches, parse_roster_players
@@ -20,7 +22,9 @@ from ._parsers.venues import parse_venue, parse_venues
 from .async_mlb_dataadapter import AsyncMlbDataAdapter
 from .mlb_dataadapter import DEFAULT_TIMEOUT, TimeoutType
 from .models.attendances import Attendance
+from .models.awards import Award
 from .models.divisions import Division
+from .models.drafts import Round
 from .models.leagues import League
 from .models.people import Coach, Person, Player
 from .models.schedules import Schedule
@@ -1284,3 +1288,105 @@ class AsyncMlb:
             return None
 
         return parse_attendance(mlb_data.data)
+
+    async def get_draft(
+        self,
+        year_id: int,
+        **params,
+    ) -> list[Round]:
+        """
+        return a draft object for year_id
+
+        Async counterpart of ``Mlb.get_draft``.
+
+        Parameters
+        ----------
+        year_id : int
+            Insert a year_id to return a directory of seasons for a specific sport.
+
+        Other Parameters
+        ----------------
+        round : str
+            Insert a round to return biographical and financial data for a specific round in a Rule 4 draft.
+        name : str
+            Insert the first letter of a draftees last name to return their Rule 4 biographical and financial data.
+        school : str
+            Insert the first letter of a draftees school to return their Rule 4 biographical and financial data.
+        state : str
+            Insert state to return a list of Rule 4 draftees from that given state
+        country : str
+            Insert state to return a list of Rule 4 draftees from that given state
+        position : str
+            Insert the position to return Rule 4 biographical and financial data for a players drafted at that position.
+        teamId : int
+            Insert teamId to return Rule 4 biographical and financial data for all picks made by a specific team.
+        playerId : int
+            Insert MLB playerId to return a player's Rule 4 biographical and financial data a specific Rule 4 draft.
+        bisPlayerId : int
+            Insert bisPlayerId to return a player's Rule 4 biographical and financial data a specific Rule 4 draft.
+
+        Returns
+        -------
+        list of DraftPicks
+            returns a list of DraftPicks
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     rounds = await mlb.get_draft(2019)
+        [Round, Round, Round]
+        """
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"draft/{year_id}",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return parse_draft(mlb_data.data)
+
+    async def get_awards(
+        self,
+        award_id: str,
+        **params,
+    ) -> list[Award]:
+        """
+        return a list of awards for award_id
+
+        Async counterpart of ``Mlb.get_awards``.
+
+        Parameters
+        ----------
+        award_id : str
+            Insert a awardId to return a directory of players for a given award.
+
+        Other Parameters
+        ----------------
+        sportId : int
+            Insert a sportId to return a directory of players for a given award in a specific sport.
+        leagueId : int, List[int]
+            Insert leagueId(s) to return a directory of players for a given award in a specific league. Format '103,104'
+        season : int, List[int]
+            Insert year(s) to return a directory of players for a given award in a given season. Format '2016,2017'
+
+        Returns
+        -------
+        list of Awards
+            returns a list of awards
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     awards = await mlb.get_awards("ALMVP")
+        [Award, Award, Award]
+        """
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"awards/{award_id}/recipients?",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return parse_awards(mlb_data.data)

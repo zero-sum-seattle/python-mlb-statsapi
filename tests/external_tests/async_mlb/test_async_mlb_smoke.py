@@ -2,7 +2,9 @@ import asyncio
 
 from mlbstatsapi import AsyncMlb
 from mlbstatsapi.models.attendances import Attendance
+from mlbstatsapi.models.awards import Award
 from mlbstatsapi.models.divisions import Division
+from mlbstatsapi.models.drafts import Round
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.people import Coach, Person, Player
 from mlbstatsapi.models.schedules import Schedule
@@ -140,5 +142,27 @@ def test_async_get_attendance():
             attendance = await mlb.get_attendance(team_id=133, season=2022)
 
         assert isinstance(attendance, Attendance)
+
+    asyncio.run(scenario())
+
+
+def test_async_get_draft():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            rounds = await mlb.get_draft(2019)
+
+        assert rounds
+        assert isinstance(rounds[0], Round)
+
+    asyncio.run(scenario())
+
+
+def test_async_get_awards():
+    async def scenario():
+        async with AsyncMlb() as mlb:
+            awards = await mlb.get_awards("ALMVP")
+
+        assert awards
+        assert isinstance(awards[0], Award)
 
     asyncio.run(scenario())

@@ -24,7 +24,9 @@ from mlbstatsapi.models.standings import Standings
 
 
 from ._parsers.attendance import parse_attendance
+from ._parsers.awards import parse_awards
 from ._parsers.divisions import parse_divisions, parse_division
+from ._parsers.draft import parse_draft
 from ._parsers.leagues import parse_leagues, parse_league
 from ._parsers.people import parse_people, parse_person
 from ._parsers.roster import parse_roster_coaches, parse_roster_players
@@ -1971,13 +1973,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        round_list = []
-
-        if 'drafts' in mlb_data.data and mlb_data.data['drafts']:
-            if mlb_data.data['drafts']['rounds']:
-                for round in mlb_data.data['drafts']['rounds']:
-                    round_list.append(Round(**round))
-        return round_list
+        return parse_draft(mlb_data.data)
 
     def get_awards(self, award_id: str, **params) -> List[Award]:
         """
@@ -2011,14 +2007,8 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'awards/{award_id}/recipients?', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
-        
-        awards_list = []
 
-        if 'awards' in mlb_data.data and mlb_data.data['awards']:
-            for award in mlb_data.data['awards']:
-                awards_list.append(Award(**award))
-        
-        return awards_list
+        return parse_awards(mlb_data.data)
 
     def get_homerun_derby(self, game_id, **params) -> Union[HomeRunDerby, None]:
         """

@@ -304,6 +304,8 @@ get_attendance(
     league_list_id: str = None,
     **params,
 )
+get_draft(year_id: int, **params)
+get_awards(award_id: str, **params)
 ```
 
 `get_venue` inherits the same documented quirk as `Mlb.get_venue`: it is

@@ -43,7 +43,9 @@ from mlbstatsapi import (  # noqa: E402
     MlbTransportError,
 )
 from mlbstatsapi.models.attendances import Attendance  # noqa: E402
+from mlbstatsapi.models.awards import Award  # noqa: E402
 from mlbstatsapi.models.divisions import Division  # noqa: E402
+from mlbstatsapi.models.drafts import Round  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
 from mlbstatsapi.models.schedules import Schedule  # noqa: E402
@@ -204,6 +206,16 @@ ATTENDANCE_PAYLOAD = {
         "attendanceTotalHome": 787902,
     },
 }
+DRAFT_PAYLOAD = {"drafts": {"rounds": [{"round": "1"}]}}
+AWARD_PAYLOAD = {
+    "id": "ALMVP",
+    "name": "AL Most Valuable Player",
+    "date": "2022-11-17",
+    "season": "2022",
+    "team": {"id": 147, "link": "/api/v1/teams/147", "name": "Yankees"},
+    "player": {"id": 592450, "link": "/api/v1/people/592450", "fullName": "Aaron Judge"},
+}
+AWARDS_PAYLOAD = {"awards": [AWARD_PAYLOAD]}
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
     "totalEvents": 0,
@@ -591,6 +603,26 @@ def test_get_attendance_success_parity():
     assert result.request == ("GET", "/api/v1/attendance", {"teamId": "133"})
 
 
+def test_get_draft_success_parity():
+    """A successful draft response parses to the same Round list on both clients."""
+    result = call_both("get_draft", 2019, payload=DRAFT_PAYLOAD)
+
+    assert result.sync == [Round(round="1")], "sync get_draft did not return the round"
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/draft/2019", {})
+
+
+def test_get_awards_success_parity():
+    """A successful awards response parses to the same Award list on both clients."""
+    result = call_both("get_awards", "ALMVP", payload=AWARDS_PAYLOAD)
+
+    assert result.sync == [Award(**AWARD_PAYLOAD)], "sync get_awards did not return the award"
+    assert result.asynchronous == result.sync
+    # The endpoint string has a trailing "?"; both clients strip it as an
+    # empty query separator, so it never appears in the request path.
+    assert result.request == ("GET", "/api/v1/awards/ALMVP/recipients", {})
+
+
 # ---------------------------------------------------------------------------
 # Nothing to return
 # ---------------------------------------------------------------------------
@@ -752,6 +784,28 @@ def test_get_attendance_without_an_identifier_parity():
     assert async_result is None
     assert sync_requests == []
     assert async_requests == []
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_draft_no_result_parity(label):
+    """Every no-result response returns an empty list on either client."""
+    result = call_both("get_draft", 2019, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync == [], f"sync get_draft returned {result.sync!r} for {label}"
+    assert result.asynchronous == [], (
+        f"async get_draft returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_awards_no_result_parity(label):
+    """Every no-result response returns an empty list on either client."""
+    result = call_both("get_awards", "ALMVP", **NO_RESULT_RESPONSES[label])
+
+    assert result.sync == [], f"sync get_awards returned {result.sync!r} for {label}"
+    assert result.asynchronous == [], (
+        f"async get_awards returned {result.asynchronous!r} for {label}"
+    )
 
 
 # ---------------------------------------------------------------------------

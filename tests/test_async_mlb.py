@@ -39,7 +39,9 @@ from mlbstatsapi import Mlb  # noqa: E402
 from mlbstatsapi.async_mlb import AsyncMlb  # noqa: E402
 from mlbstatsapi.mlb_dataadapter import MlbResult  # noqa: E402
 from mlbstatsapi.models.attendances import Attendance  # noqa: E402
+from mlbstatsapi.models.awards import Award  # noqa: E402
 from mlbstatsapi.models.divisions import Division  # noqa: E402
+from mlbstatsapi.models.drafts import Round  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
 from mlbstatsapi.models.schedules import Schedule  # noqa: E402
@@ -200,6 +202,16 @@ ATTENDANCE_PAYLOAD = {
         "attendanceTotalHome": 787902,
     },
 }
+DRAFT_PAYLOAD = {"drafts": {"rounds": [{"round": "1"}]}}
+AWARD_PAYLOAD = {
+    "id": "ALMVP",
+    "name": "AL Most Valuable Player",
+    "date": "2022-11-17",
+    "season": "2022",
+    "team": {"id": 147, "link": "/api/v1/teams/147", "name": "Yankees"},
+    "player": {"id": 592450, "link": "/api/v1/people/592450", "fullName": "Aaron Judge"},
+}
+AWARDS_PAYLOAD = {"awards": [AWARD_PAYLOAD]}
 SCHEDULE_PAYLOAD = {
     "totalItems": 1,
     "totalEvents": 0,
@@ -351,7 +363,10 @@ def assert_matches_sync(request: httpx.Request, method: str, *args, **kwargs) ->
     """Assert an observed request is the one ``Mlb`` would have made."""
     endpoint, params = sync_request_for(method, *args, **kwargs)
 
-    assert request.url.path == f"/api/v1/{endpoint}"
+    # get_awards's endpoint string has a trailing "?" (harmless legacy cruft
+    # both Requests and HTTPX strip as an empty query separator), which never
+    # shows up in url.path.
+    assert request.url.path == f"/api/v1/{endpoint}".rstrip("?")
     assert sorted(request.url.params.multi_items()) == _flatten_params(params)
 
 
@@ -896,6 +911,54 @@ def test_get_attendance_returns_none_when_there_is_no_attendance(label):
     assert asyncio.run(scenario()) is None
 
 
+def test_get_draft_requests_the_draft_endpoint_and_parses_the_result():
+    handler = _Handler(_json(DRAFT_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_draft(2019)
+
+    rounds = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_draft", 2019)
+    assert rounds == [Round(round="1")]
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_draft_returns_empty_list_when_there_is_no_draft(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_draft(2019)
+
+    assert asyncio.run(scenario()) == []
+
+
+def test_get_awards_requests_the_awards_endpoint_and_parses_the_result():
+    handler = _Handler(_json(AWARDS_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_awards("ALMVP")
+
+    awards = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_awards", "ALMVP")
+    assert awards == [Award(**AWARD_PAYLOAD)]
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_awards_returns_empty_list_when_there_are_no_awards(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_awards("ALMVP")
+
+    assert asyncio.run(scenario()) == []
+
+
 # ---------------------------------------------------------------------------
 # Parity and concurrency
 # ---------------------------------------------------------------------------
@@ -925,6 +988,8 @@ def test_public_signatures_match_the_sync_client():
         "get_venues",
         "get_standings",
         "get_attendance",
+        "get_draft",
+        "get_awards",
     ):
         sync_params = inspect.signature(getattr(Mlb, name)).parameters
         async_params = inspect.signature(getattr(AsyncMlb, name)).parameters

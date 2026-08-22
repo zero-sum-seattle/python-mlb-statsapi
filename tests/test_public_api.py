@@ -261,6 +261,8 @@ ASYNC_MLB_PUBLIC_METHOD_MANIFEST: dict[str, str] = {
         "(team_id: int=None, league_id: int=None, "
         "league_list_id: str=None, **params)"
     ),
+    "get_draft": "(year_id: int, **params)",
+    "get_awards": "(award_id: str, **params)",
 }
 
 
