@@ -1,17 +1,17 @@
-"""Sync/async behavioral parity tests (issue #304, batches 1-2).
+"""Sync/async behavioral parity tests (issue #304, batches 1-3).
 
 `Mlb` is the compatibility baseline. These tests prove that `AsyncMlb`'s
 public endpoint behavior stays aligned with it: the same response produces the
 same model type, the same parsed values, and the same "nothing to return"
 answer.
 
-The scope is deliberately narrow. Transport behavior — retries, timeouts,
-strict-mode status mapping, exception translation — is already covered by
+The scope is deliberately narrow. Detailed transport behavior — retries,
+timing, backoff, and transport-specific context — is already covered by
 tests/test_http_contract.py, tests/test_mlb_dataadapter.py and
 tests/test_async_mlb_dataadapter.py, and payload parsing by tests/parsers/.
 None of that is re-asserted here, and nothing compares Requests internals with
 HTTPX internals. Each test drives both public clients over an equivalent canned
-response and compares only what a caller can see.
+response or failure and compares only what a caller can see.
 
 These tests must not contact the live MLB API.
 """
@@ -19,6 +19,7 @@ These tests must not contact the live MLB API.
 from __future__ import annotations
 
 import asyncio
+from http import HTTPStatus
 from urllib.parse import parse_qsl, urlsplit
 
 import pytest
@@ -30,7 +31,15 @@ import requests_mock
 # failing a sync-only install at import time.
 httpx = pytest.importorskip("httpx", reason="requires the async extra (HTTPX)")
 
-from mlbstatsapi import AsyncMlb, Mlb  # noqa: E402
+from mlbstatsapi import (  # noqa: E402
+    AsyncMlb,
+    Mlb,
+    MlbDecodeError,
+    MlbHttpCompatibilityWarning,
+    MlbHttpError,
+    MlbTimeoutError,
+    MlbTransportError,
+)
 from mlbstatsapi.models.people import Person  # noqa: E402
 from mlbstatsapi.models.schedules import Schedule  # noqa: E402
 from mlbstatsapi.models.teams import Team  # noqa: E402
@@ -88,19 +97,52 @@ def call_sync(
     method: str,
     *args,
     status: int,
-    payload: dict,
+    payload: dict | None = None,
+    raw_body: bytes | None = None,
+    failure: str | None = None,
+    mlb_options: dict | None = None,
     request_signatures: list[tuple[str, str, dict[str, str]]] | None = None,
     **kwargs,
 ):
     """Call a method on `Mlb` against a canned response."""
     adapter = requests_mock.Adapter()
-    adapter.register_uri("GET", requests_mock.ANY, status_code=status, json=payload)
+    if failure == "timeout":
+        adapter.register_uri(
+            "GET",
+            requests_mock.ANY,
+            exc=requests.exceptions.Timeout("timed out"),
+        )
+    elif failure == "transport":
+        adapter.register_uri(
+            "GET",
+            requests_mock.ANY,
+            exc=requests.exceptions.ConnectionError("connection refused"),
+        )
+    elif failure is not None:
+        raise ValueError(f"Unsupported canned failure: {failure}")
+    elif raw_body is not None:
+        adapter.register_uri(
+            "GET",
+            requests_mock.ANY,
+            status_code=status,
+            content=raw_body,
+            reason=HTTPStatus(status).phrase,
+        )
+    else:
+        assert payload is not None
+        adapter.register_uri(
+            "GET",
+            requests_mock.ANY,
+            status_code=status,
+            json=payload,
+            reason=HTTPStatus(status).phrase,
+        )
 
     session = requests.Session()
     session.mount("https://", adapter)
 
     try:
-        with Mlb(session=session) as mlb:
+        with Mlb(session=session, **(mlb_options or {})) as mlb:
             result = getattr(mlb, method)(*args, **kwargs)
 
         if request_signatures is not None:
@@ -117,7 +159,10 @@ def call_async(
     method: str,
     *args,
     status: int,
-    payload: dict,
+    payload: dict | None = None,
+    raw_body: bytes | None = None,
+    failure: str | None = None,
+    mlb_options: dict | None = None,
     request_signatures: list[tuple[str, str, dict[str, str]]] | None = None,
     **kwargs,
 ):
@@ -126,6 +171,16 @@ def call_async(
 
     def handler(request):
         requests_seen.append(request)
+        if failure == "timeout":
+            raise httpx.ReadTimeout("timed out", request=request)
+        if failure == "transport":
+            raise httpx.ConnectError("connection refused", request=request)
+        if failure is not None:
+            raise ValueError(f"Unsupported canned failure: {failure}")
+        if raw_body is not None:
+            return httpx.Response(status, content=raw_body)
+
+        assert payload is not None
         return httpx.Response(status, json=payload)
 
     client = httpx.AsyncClient(
@@ -134,7 +189,7 @@ def call_async(
 
     async def scenario():
         try:
-            async with AsyncMlb(client=client) as mlb:
+            async with AsyncMlb(client=client, **(mlb_options or {})) as mlb:
                 return await getattr(mlb, method)(*args, **kwargs)
         finally:
             await client.aclose()
@@ -326,3 +381,146 @@ def test_get_schedule_range_team_and_sport_request_parity():
         },
     )
     assert requests_seen == [expected_request, expected_request]
+
+
+# ---------------------------------------------------------------------------
+# Representative public failure behavior (get_team)
+# ---------------------------------------------------------------------------
+
+
+def assert_http_error_parity(
+    sync_error: MlbHttpError,
+    async_error: MlbHttpError,
+    *,
+    status_code: int,
+    reason: str,
+    response_data: dict,
+):
+    """Compare stable public HTTP error context without transport internals."""
+    expected = (
+        status_code,
+        reason,
+        "GET",
+        "https://statsapi.mlb.com/api/v1/teams/133",
+        response_data,
+    )
+    attributes = ("status_code", "reason", "method", "url", "response_data")
+
+    assert tuple(getattr(sync_error, name) for name in attributes) == expected
+    assert tuple(getattr(async_error, name) for name in attributes) == expected
+
+
+def test_get_team_strict_client_error_parity():
+    """Strict non-404 4xx responses expose equivalent public error context."""
+    payload = {"message": "access denied"}
+    options = {"strict_http": True}
+
+    with pytest.raises(MlbHttpError) as sync_exc:
+        call_sync(
+            "get_team",
+            133,
+            status=403,
+            payload=payload,
+            mlb_options=options,
+        )
+    with pytest.raises(MlbHttpError) as async_exc:
+        call_async(
+            "get_team",
+            133,
+            status=403,
+            payload=payload,
+            mlb_options=options,
+        )
+
+    assert_http_error_parity(
+        sync_exc.value,
+        async_exc.value,
+        status_code=403,
+        reason="Forbidden",
+        response_data=payload,
+    )
+
+
+def test_get_team_compatibility_client_error_parity():
+    """Compatibility mode warns and returns None on both public clients."""
+    options = {"strict_http": False}
+
+    with pytest.warns(MlbHttpCompatibilityWarning) as sync_warnings:
+        sync_team = call_sync(
+            "get_team",
+            133,
+            status=403,
+            payload={"message": "access denied"},
+            mlb_options=options,
+        )
+    with pytest.warns(MlbHttpCompatibilityWarning) as async_warnings:
+        async_team = call_async(
+            "get_team",
+            133,
+            status=403,
+            payload={"message": "access denied"},
+            mlb_options=options,
+        )
+
+    assert sync_team is None
+    assert async_team is None
+    assert len(sync_warnings) == len(async_warnings) == 1
+    assert (
+        sync_warnings[0].category
+        is async_warnings[0].category
+        is MlbHttpCompatibilityWarning
+    )
+    assert str(sync_warnings[0].message) == str(async_warnings[0].message)
+
+
+def test_get_team_server_error_parity():
+    """One representative 5xx exposes equivalent public error context."""
+    payload = {"message": "server error"}
+
+    with pytest.raises(MlbHttpError) as sync_exc:
+        call_sync("get_team", 133, status=500, payload=payload)
+    with pytest.raises(MlbHttpError) as async_exc:
+        call_async("get_team", 133, status=500, payload=payload)
+
+    assert_http_error_parity(
+        sync_exc.value,
+        async_exc.value,
+        status_code=500,
+        reason="Internal Server Error",
+        response_data=payload,
+    )
+
+
+def test_get_team_timeout_parity():
+    """A deterministic timeout raises the same public exception on both clients."""
+    with pytest.raises(MlbTimeoutError) as sync_exc:
+        call_sync("get_team", 133, status=200, failure="timeout")
+    with pytest.raises(MlbTimeoutError) as async_exc:
+        call_async("get_team", 133, status=200, failure="timeout")
+
+    assert type(sync_exc.value) is type(async_exc.value) is MlbTimeoutError
+    assert str(sync_exc.value) == str(async_exc.value)
+
+
+def test_get_team_transport_failure_parity():
+    """A generic transport failure has the same public result on both clients."""
+    with pytest.raises(MlbTransportError) as sync_exc:
+        call_sync("get_team", 133, status=200, failure="transport")
+    with pytest.raises(MlbTransportError) as async_exc:
+        call_async("get_team", 133, status=200, failure="transport")
+
+    assert type(sync_exc.value) is type(async_exc.value) is MlbTransportError
+    assert str(sync_exc.value) == str(async_exc.value)
+
+
+def test_get_team_invalid_json_parity():
+    """Invalid JSON in a successful response raises on both public clients."""
+    raw_body = b'{"teams": ['
+
+    with pytest.raises(MlbDecodeError) as sync_exc:
+        call_sync("get_team", 133, status=200, raw_body=raw_body)
+    with pytest.raises(MlbDecodeError) as async_exc:
+        call_async("get_team", 133, status=200, raw_body=raw_body)
+
+    assert type(sync_exc.value) is type(async_exc.value) is MlbDecodeError
+    assert str(sync_exc.value) == str(async_exc.value)
