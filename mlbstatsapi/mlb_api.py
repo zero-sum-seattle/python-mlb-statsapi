@@ -36,6 +36,7 @@ from ._parsers.roster import parse_roster_coaches, parse_roster_players
 from ._parsers.seasons import parse_seasons, parse_season
 from ._parsers.sports import parse_sports, parse_sport
 from ._parsers.standings import parse_standings
+from ._parsers.stats import parse_split_stats
 from ._parsers.teams import parse_teams, parse_team
 from ._parsers.schedules import parse_schedule
 from ._parsers.venues import parse_venues, parse_venue
@@ -2027,12 +2028,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
-        if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            splits = mlb_module.create_split_data(mlb_data.data['stats'])
-        else:
-            return {}
-            
-        return splits
+        return parse_split_stats(mlb_data.data)
 
     def get_players_stats_for_game(self, person_id: int, game_id: int, **params) -> dict:
         """
@@ -2043,9 +2039,9 @@ class Mlb:
         Parameters
         ----------
         person_id : int
-            the team id 
-        game_id : list
-            list of stat types
+            the person id
+        game_id : int
+            the game id
 
         Returns
         -------
@@ -2063,20 +2059,16 @@ class Mlb:
         >>> mlb = Mlb()
         >>> player_id = 663728
         >>> game_id = 715757
-        >>> stats = mlb.get_player_stats_for_game(person_id=person_id, game_id=game_id)
+        >>> stats = mlb.get_players_stats_for_game(person_id=person_id, game_id=game_id)
         >>> print(stats['stats']['gameLog'])
         >>> print(stats['hitting']['playLog'])
         """
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats/game/{game_id}')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats/game/{game_id}',
+                                            ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
-        if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            splits = mlb_module.create_split_data(mlb_data.data['stats'])
-        else:
-            return {}
-            
-        return splits
+        return parse_split_stats(mlb_data.data)
         
     def get_player_stats(self, person_id: int, stats: list, groups: list, **params) -> dict:
         """
@@ -2125,12 +2117,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
-        if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            splits = mlb_module.create_split_data(mlb_data.data['stats'])
-        else:
-            return {}
-
-        return splits
+        return parse_split_stats(mlb_data.data)
 
     def get_stats(self, stats: list, groups: list, **params: dict) -> dict:
         """
@@ -2184,11 +2171,6 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
-        if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            splits = mlb_module.create_split_data(mlb_data.data['stats'])
-        else:
-            return {}
-            
-        return splits
+        return parse_split_stats(mlb_data.data)
 
 # This is to test pypi, please delete later

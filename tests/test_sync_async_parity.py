@@ -54,6 +54,7 @@ from mlbstatsapi.models.schedules import Schedule  # noqa: E402
 from mlbstatsapi.models.seasons import Season  # noqa: E402
 from mlbstatsapi.models.sports import Sport  # noqa: E402
 from mlbstatsapi.models.standings import Standings  # noqa: E402
+from mlbstatsapi.models.stats import Stat  # noqa: E402
 from mlbstatsapi.models.teams import Team  # noqa: E402
 from mlbstatsapi.models.venues import Venue  # noqa: E402
 
@@ -339,6 +340,32 @@ SCHEDULE_NO_RESULT_RESPONSES = NO_RESULT_RESPONSES | {
             "dates": [],
         }
     },
+}
+
+STATS_PAYLOAD = {
+    "stats": [
+        {
+            "type": {"displayName": "season"},
+            "group": {"displayName": "hitting"},
+            "totalSplits": 1,
+            "splits": [
+                {
+                    "season": "2022",
+                    "stat": {"gamesPlayed": 157, "homeRuns": 34, "avg": ".273"},
+                    "team": {
+                        "id": 108,
+                        "name": "Los Angeles Angels",
+                        "link": "/api/v1/teams/108",
+                    },
+                    "player": {
+                        "id": 660271,
+                        "fullName": "Shohei Ohtani",
+                        "link": "/api/v1/people/660271",
+                    },
+                }
+            ],
+        }
+    ]
 }
 
 # The canned transport failures, per client. Each pair is the closest
@@ -723,6 +750,87 @@ def test_get_homerun_derby_success_parity():
     assert result.request == ("GET", "/api/v1/homeRunDerby/511101", {})
 
 
+def test_get_stats_success_parity():
+    """A successful stats response parses to the same split mapping on both clients."""
+    result = call_both("get_stats", ["season"], ["hitting"], payload=STATS_PAYLOAD)
+
+    assert list(result.sync) == ["hitting"], "sync get_stats did not key by group"
+    assert isinstance(result.sync["hitting"]["season"], Stat)
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/stats",
+        {"stats": "season", "group": "hitting"},
+    )
+
+
+def test_get_player_stats_success_parity():
+    """A successful player stats response parses the same on both clients."""
+    result = call_both(
+        "get_player_stats", 660271, ["season"], ["hitting"], payload=STATS_PAYLOAD
+    )
+
+    assert isinstance(result.sync["hitting"]["season"], Stat)
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/people/660271/stats",
+        {"stats": "season", "group": "hitting"},
+    )
+
+
+def test_get_team_stats_success_parity():
+    """A successful team stats response parses the same on both clients."""
+    result = call_both(
+        "get_team_stats", 133, ["season"], ["hitting"], payload=STATS_PAYLOAD
+    )
+
+    assert isinstance(result.sync["hitting"]["season"], Stat)
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/teams/133/stats",
+        {"stats": "season", "group": "hitting"},
+    )
+
+
+def test_get_players_stats_for_game_success_parity():
+    """A successful per-game stats response parses the same on both clients."""
+    result = call_both(
+        "get_players_stats_for_game", 660271, 715757, payload=STATS_PAYLOAD
+    )
+
+    assert isinstance(result.sync["hitting"]["season"], Stat)
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/people/660271/stats/game/715757",
+        {},
+    )
+
+
+def test_get_players_stats_for_game_forwards_params_on_both_clients():
+    """Regression coverage: **params used to be accepted and silently dropped.
+
+    ``get_players_stats_for_game`` advertises ``**params`` but never passed
+    ``ep_params`` to the adapter, so every caller-supplied keyword vanished
+    before the request was built. Both clients now forward them.
+    """
+    result = call_both(
+        "get_players_stats_for_game",
+        660271,
+        715757,
+        eventType="single",
+        payload=STATS_PAYLOAD,
+    )
+
+    assert result.request == (
+        "GET",
+        "/api/v1/people/660271/stats/game/715757",
+        {"eventType": "single"},
+    )
+
+
 def test_get_team_id_success_parity():
     """A matching name is resolved to the same id list on both clients."""
     result = call_both(
@@ -1053,6 +1161,26 @@ def test_get_homerun_derby_no_result_parity(label):
     assert result.sync is None, f"sync get_homerun_derby returned {result.sync!r} for {label}"
     assert result.asynchronous is None, (
         f"async get_homerun_derby returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize(
+    "method, args",
+    [
+        ("get_stats", (["season"], ["hitting"])),
+        ("get_player_stats", (660271, ["season"], ["hitting"])),
+        ("get_team_stats", (133, ["season"], ["hitting"])),
+        ("get_players_stats_for_game", (660271, 715757)),
+    ],
+)
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_stat_endpoint_no_result_parity(method, args, label):
+    """Every no-result response returns an empty mapping on either client."""
+    result = call_both(method, *args, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync == {}, f"sync {method} returned {result.sync!r} for {label}"
+    assert result.asynchronous == {}, (
+        f"async {method} returned {result.asynchronous!r} for {label}"
     )
 
 

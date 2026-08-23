@@ -27,6 +27,7 @@ from ._parsers.schedules import parse_schedule
 from ._parsers.seasons import parse_season, parse_seasons
 from ._parsers.sports import parse_sport, parse_sports
 from ._parsers.standings import parse_standings
+from ._parsers.stats import parse_split_stats
 from ._parsers.teams import parse_team, parse_teams
 from ._parsers.venues import parse_venue, parse_venues
 from .async_mlb_dataadapter import AsyncMlbDataAdapter
@@ -2022,3 +2023,231 @@ class AsyncMlb:
             return None
 
         return parse_homerun_derby(mlb_data.data)
+
+    async def get_team_stats(
+        self,
+        team_id: int,
+        stats: list,
+        groups: list,
+        **params,
+    ) -> dict:
+        """
+        returns a split stat data for a team
+
+        Async counterpart of ``Mlb.get_team_stats``.
+
+        Parameters
+        ----------
+        team_id : int
+            the team id
+        stats : list
+            list of stat types. List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
+        groups : list
+            list of stat groups. List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
+
+        Other Parameters
+        ----------------
+        season : str
+            Insert year to return team stats for a particular season, season=2018
+
+        Returns
+        -------
+        dict
+            returns a dict of stats
+
+        See Also
+        --------
+        AsyncMlb.get_player_stats : Get stats for a player
+        AsyncMlb.get_stats : Get stats
+        AsyncMlb.get_players_stats_for_game : Get player stats for a game
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     stats = await mlb.get_team_stats(133, ["season"], ["pitching"])
+        {'pitching': {'season': Stat}}
+        """
+        params["stats"] = stats
+        params["group"] = groups
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"teams/{team_id}/stats",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return {}
+
+        return parse_split_stats(mlb_data.data)
+
+    async def get_players_stats_for_game(
+        self,
+        person_id: int,
+        game_id: int,
+        **params,
+    ) -> dict:
+        """
+        Insert personId and gamePk to view stats for individual player based on a specific game.
+
+        Fielding, Hitting, & Pitching gameLog Statistics as well as vsPlayer stats.
+
+        Async counterpart of ``Mlb.get_players_stats_for_game``.
+
+        Parameters
+        ----------
+        person_id : int
+            the person id
+        game_id : int
+            the game id
+
+        Returns
+        -------
+        dict
+            returns a dict of stats
+
+        See Also
+        --------
+        AsyncMlb.get_team_stats : Get team stats
+        AsyncMlb.get_player_stats : Get stats for a player
+        AsyncMlb.get_stats : Get stats
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     stats = await mlb.get_players_stats_for_game(663728, 715757)
+        ...     print(stats["stats"]["gameLog"])
+        ...     print(stats["hitting"]["playLog"])
+        """
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"people/{person_id}/stats/game/{game_id}",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return {}
+
+        return parse_split_stats(mlb_data.data)
+
+    async def get_player_stats(
+        self,
+        person_id: int,
+        stats: list,
+        groups: list,
+        **params,
+    ) -> dict:
+        """
+        returns stat data for a player
+
+        Async counterpart of ``Mlb.get_player_stats``.
+
+        Parameters
+        ----------
+        person_id : int
+            the person id
+        stats : list
+            list of stat types. List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
+        groups : list
+            list of stat groups. List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
+
+        Other Parameters
+        ----------------
+        season : str
+            Insert year to return player stats for a particular season, season=2018
+        eventType : str
+            Notes for individual events for playLog, playLog can be filered by individual events.
+            List of eventTypes can be found at https://statsapi.mlb.com/api/v1/eventTypes
+
+        Returns
+        -------
+        dict
+            returns a dict of stats
+
+        See Also
+        --------
+        AsyncMlb.get_stats : Get stats
+        AsyncMlb.get_team_stats : Get team stats
+        AsyncMlb.get_players_stats_for_game : Get player stats for a game
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     stats = await mlb.get_player_stats(647351, ["season"], ["hitting"])
+        {'hitting': {'season': Stat}}
+        """
+        params["stats"] = stats
+        params["group"] = groups
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint=f"people/{person_id}/stats",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return {}
+
+        return parse_split_stats(mlb_data.data)
+
+    async def get_stats(
+        self,
+        stats: list,
+        groups: list,
+        **params,
+    ) -> dict:
+        """
+        return a stat dictionary
+
+        Async counterpart of ``Mlb.get_stats``.
+
+        Parameters
+        ----------
+        stats : list
+            list of stat types. List of statTypes can be found at https://statsapi.mlb.com/api/v1/statTypes
+        groups : list
+            list of stat groups. List of statGroups can be found at https://statsapi.mlb.com/api/v1/statGroups
+
+        Other Parameters
+        ----------------
+        season : str
+            Insert year to return stats for a particular season, season=2018
+        teamId : int
+            Insert teamId to return statistics for a given team. Default to "Qualified" playerPool.
+            For a list of all teamIds : AsyncMlb.get_leagues()
+        leagueId : int
+            Insert leagueId to return statistics for a given league. Default to "Qualified" playerPool
+            For a list of all leagueIds : AsyncMlb.get_leagues()
+        gameType : str
+            Insert gameType to return statistics for a given sport or league based on gameType. Default to "Qualified" playerPool
+            Find available gameType at https://statsapi.mlb.com/api/v1/gameTypes
+        sportIds : int
+            Insert sportId to return statistics for a given sport.
+            For a list of all sportIds : AsyncMlb.get_sports()
+
+        Returns
+        -------
+        dict
+            returns a dict of stats
+
+        See Also
+        --------
+        AsyncMlb.get_team_stats : Get team stats
+        AsyncMlb.get_player_stats : Get player stats
+        AsyncMlb.get_players_stats_for_game : Get player stats for a game
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     stats = await mlb.get_stats(["season"], ["hitting"])
+        {'hitting': {'season': Stat}}
+        """
+        params["stats"] = stats
+        params["group"] = groups
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="stats",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return {}
+
+        return parse_split_stats(mlb_data.data)

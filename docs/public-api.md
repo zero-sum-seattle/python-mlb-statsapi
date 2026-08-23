@@ -323,6 +323,10 @@ get_attendance(
 get_draft(year_id: int, **params)
 get_awards(award_id: str, **params)
 get_homerun_derby(game_id, **params)
+get_team_stats(team_id: int, stats: list, groups: list, **params)
+get_players_stats_for_game(person_id: int, game_id: int, **params)
+get_player_stats(person_id: int, stats: list, groups: list, **params)
+get_stats(stats: list, groups: list, **params)
 get_team_id(team_name: str, search_key: str = 'name', **params)
 get_people_id(
     fullname: str,
@@ -356,6 +360,14 @@ introduced by the async port.
 `Mlb.get_game_line_score`: it does not short-circuit on a 400–499 status the
 way its sibling game helpers do; missing linescore data falls through to an
 implicit `None`.
+
+The four stat methods return the same nested `dict` their sync counterparts
+do, keyed by stat group and then by stat type — `{'hitting': {'season': Stat}}`
+— and return `{}` on a 400–499 response, on a body with no `stats`, and on a
+`stats` entry carrying no splits. Note that an unrecognized value in `stats` or
+`groups` is not rejected; it produces the same empty `{}`. Valid values are
+listed at `https://statsapi.mlb.com/api/v1/statTypes` and
+`https://statsapi.mlb.com/api/v1/statGroups`.
 
 Every other `Mlb` endpoint method not listed above is not yet supported on
 `AsyncMlb`; calling it there raises `AttributeError`. See issue #305 for the

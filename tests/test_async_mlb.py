@@ -51,6 +51,7 @@ from mlbstatsapi.models.schedules import Schedule  # noqa: E402
 from mlbstatsapi.models.seasons import Season  # noqa: E402
 from mlbstatsapi.models.sports import Sport  # noqa: E402
 from mlbstatsapi.models.standings import Standings  # noqa: E402
+from mlbstatsapi.models.stats import Stat  # noqa: E402
 from mlbstatsapi.models.teams import Team  # noqa: E402
 from mlbstatsapi.models.venues import Venue  # noqa: E402
 
@@ -348,6 +349,28 @@ EXPECTED_SEASON = Season(seasonId="2021", hasWildcard=True)
 EXPECTED_VENUE = Venue(id=31, link="/api/v1/venues/31", name="PNC Park")
 
 # The two ways an endpoint legitimately comes back with nothing to parse.
+STATS_PAYLOAD = {
+    "stats": [
+        {
+            "type": {"displayName": "season"},
+            "group": {"displayName": "hitting"},
+            "totalSplits": 1,
+            "splits": [
+                {
+                    "season": "2022",
+                    "stat": {"gamesPlayed": 157, "homeRuns": 34, "avg": ".273"},
+                    "team": {"id": 108, "name": "Los Angeles Angels", "link": "/api/v1/teams/108"},
+                    "player": {
+                        "id": 660271,
+                        "fullName": "Shohei Ohtani",
+                        "link": "/api/v1/people/660271",
+                    },
+                }
+            ],
+        }
+    ]
+}
+
 NO_RESULT_RESPONSES = {
     "404": httpx.Response(404, json={}),
     "empty 200": httpx.Response(200, json={}),
@@ -1122,6 +1145,102 @@ def test_get_homerun_derby_returns_none_when_there_is_no_derby(label):
     assert asyncio.run(scenario()) is None
 
 
+def test_get_stats_request_matches_the_sync_client():
+    handler = _Handler(_json(STATS_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_stats(["season"], ["hitting"])
+
+    stats = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_stats", ["season"], ["hitting"])
+    assert list(stats) == ["hitting"]
+    assert isinstance(stats["hitting"]["season"], Stat)
+
+
+def test_get_player_stats_request_matches_the_sync_client():
+    handler = _Handler(_json(STATS_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_player_stats(660271, ["season"], ["hitting"])
+
+    stats = asyncio.run(scenario())
+
+    assert_matches_sync(
+        handler.request, "get_player_stats", 660271, ["season"], ["hitting"]
+    )
+    assert isinstance(stats["hitting"]["season"], Stat)
+
+
+def test_get_team_stats_request_matches_the_sync_client():
+    handler = _Handler(_json(STATS_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_team_stats(133, ["season"], ["hitting"])
+
+    stats = asyncio.run(scenario())
+
+    assert_matches_sync(
+        handler.request, "get_team_stats", 133, ["season"], ["hitting"]
+    )
+    assert isinstance(stats["hitting"]["season"], Stat)
+
+
+def test_get_players_stats_for_game_request_matches_the_sync_client():
+    handler = _Handler(_json(STATS_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_players_stats_for_game(660271, 715757)
+
+    stats = asyncio.run(scenario())
+
+    assert_matches_sync(
+        handler.request, "get_players_stats_for_game", 660271, 715757
+    )
+    assert isinstance(stats["hitting"]["season"], Stat)
+
+
+def test_get_players_stats_for_game_forwards_extra_params():
+    """The signature accepts **params, so they have to reach the query string."""
+    handler = _Handler(_json(STATS_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_players_stats_for_game(
+                660271, 715757, eventType="single"
+            )
+
+    asyncio.run(scenario())
+
+    assert handler.request.url.params["eventType"] == "single"
+
+
+@pytest.mark.parametrize(
+    "method, args",
+    [
+        ("get_stats", (["season"], ["hitting"])),
+        ("get_player_stats", (660271, ["season"], ["hitting"])),
+        ("get_team_stats", (133, ["season"], ["hitting"])),
+        ("get_players_stats_for_game", (660271, 715757)),
+    ],
+)
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_stat_endpoints_return_an_empty_mapping_when_there_are_no_stats(
+    method, args, label
+):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await getattr(mlb, method)(*args)
+
+    assert asyncio.run(scenario()) == {}
+
+
 def test_get_team_id_request_matches_the_sync_client():
     handler = _Handler(_json({"teams": [{"id": 133, "name": "Athletics"}]}))
 
@@ -1371,6 +1490,10 @@ def test_public_signatures_match_the_sync_client():
         "get_draft",
         "get_awards",
         "get_homerun_derby",
+        "get_stats",
+        "get_player_stats",
+        "get_team_stats",
+        "get_players_stats_for_game",
         "get_game",
         "get_game_play_by_play",
         "get_game_line_score",

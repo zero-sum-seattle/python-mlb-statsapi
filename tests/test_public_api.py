@@ -264,6 +264,10 @@ ASYNC_MLB_PUBLIC_METHOD_MANIFEST: dict[str, str] = {
     "get_draft": "(year_id: int, **params)",
     "get_awards": "(award_id: str, **params)",
     "get_homerun_derby": "(game_id, **params)",
+    "get_team_stats": "(team_id: int, stats: list, groups: list, **params)",
+    "get_players_stats_for_game": "(person_id: int, game_id: int, **params)",
+    "get_player_stats": "(person_id: int, stats: list, groups: list, **params)",
+    "get_stats": "(stats: list, groups: list, **params)",
     "get_team_id": "(team_name: str, search_key: str='name', **params)",
     "get_people_id": (
         "(fullname: str, sport_id: int=1, search_key: str='fullName', **params)"
