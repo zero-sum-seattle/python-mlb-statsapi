@@ -83,8 +83,13 @@ class AsyncMlb:
             timeout=timeout,
             client=self._mlb_adapter_v1._client,
             strict_http=strict_http,
-            retries_enabled=self._mlb_adapter_v1._owns_client,
         )
+        # AsyncMlb, not either adapter, actually owns this shared transport,
+        # so it is the one that knows whether the client is library-owned.
+        # The v1.1 adapter received a non-None client above, so it would
+        # otherwise conclude it's using a caller-injected client and disable
+        # retries even when the client is really library-owned via v1.
+        self._mlb_adapter_v1_1._set_retries_enabled(self._mlb_adapter_v1._owns_client)
 
     async def aclose(self) -> None:
         """Close library-owned async resources."""

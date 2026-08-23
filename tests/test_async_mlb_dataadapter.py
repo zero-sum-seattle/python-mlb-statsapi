@@ -148,6 +148,37 @@ def test_retry_policy_matches_library_default():
     assert_library_retry_policy(adapter._retry_policy)
 
 
+def test_set_retries_enabled_does_not_change_client_ownership():
+    """The private coordination hook AsyncMlb uses for its v1.1 adapter only
+    overrides retry eligibility; it must never grant close-ownership over a
+    client this adapter did not create."""
+    handler = _ScriptedHandler(_response(200))
+    adapter = _injected_adapter(handler)
+    assert adapter._retries_enabled is False
+
+    adapter._set_retries_enabled(True)
+
+    assert adapter._retries_enabled is True
+    assert adapter._owns_client is False
+
+
+def test_set_retries_enabled_true_makes_an_injected_client_retry():
+    """An injected client normally gets zero retries; overriding the flag
+    must actually change retry behavior, not just the stored value."""
+    handler = _ScriptedHandler(_response(503), _response(200))
+
+    async def scenario():
+        adapter = _injected_adapter(handler)
+        adapter._set_retries_enabled(True)
+
+        with patch(SLEEP_TARGET, new_callable=AsyncMock):
+            return await adapter.get(endpoint="sports")
+
+    result = run_async(scenario())
+    assert result.status_code == 200
+    assert handler.call_count == 2
+
+
 def test_200_succeeds_with_no_retry():
     handler = _ScriptedHandler(_response(200))
 

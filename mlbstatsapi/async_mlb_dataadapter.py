@@ -43,21 +43,20 @@ class AsyncMlbDataAdapter:
         client: httpx.AsyncClient | None = None,
         *,
         strict_http: bool = True,
-        retries_enabled: bool | None = None,
     ):
         self.url = f"https://{hostname}/api/{ver}/"
         self._logger = logger or logging.getLogger(__name__)
         self._timeout = timeout
         self._strict_http = strict_http
         self._owns_client = client is None
-        # Retry eligibility normally follows client ownership, like the sync
-        # adapter (retries are mounted on the Session, not per MlbDataAdapter
-        # version). AsyncMlb overrides this for its v1.1 adapter, which
-        # borrows the v1 adapter's client rather than owning it directly, so
-        # both adapters retry exactly when the shared client is library-owned.
-        self._retries_enabled = (
-            self._owns_client if retries_enabled is None else retries_enabled
-        )
+        # Retry eligibility follows client ownership by default, like the
+        # sync adapter (retries are mounted on the Session, not per
+        # MlbDataAdapter version). This is not a constructor knob: a caller
+        # that owns this adapter's transport (AsyncMlb, for its v1.1 adapter
+        # sharing v1's client) may call _set_retries_enabled() after
+        # construction, since it — not this adapter — is the one that knows
+        # whether the shared client is actually library-owned.
+        self._retries_enabled = self._owns_client
         self._retry_policy = create_retry_policy()
 
         if client is None:
@@ -323,3 +322,14 @@ class AsyncMlbDataAdapter:
         if self._owns_client and not self._closed:
             await self._client.aclose()
             self._closed = True
+
+    def _set_retries_enabled(self, enabled: bool) -> None:
+        """Override retry eligibility for a borrowed, non-owned client.
+
+        Internal coordination hook, not public API: only a caller that
+        actually owns this adapter's transport (AsyncMlb, wiring up its v1.1
+        adapter to share the v1 adapter's client) should call this. Standalone
+        use never needs it; retry eligibility already follows client
+        ownership by default.
+        """
+        self._retries_enabled = enabled
