@@ -38,7 +38,8 @@ from ._parsers.sports import parse_sports, parse_sport
 from ._parsers.standings import parse_standings
 from ._parsers.stats import parse_split_stats
 from ._parsers.teams import parse_teams, parse_team
-from ._parsers.schedules import parse_schedule
+from ._parsers.gamepace import parse_gamepace
+from ._parsers.schedules import parse_schedule, parse_scheduled_games
 from ._parsers.venues import parse_venues, parse_venue
 
 from .mlb_dataadapter import (
@@ -869,18 +870,11 @@ class Mlb:
 
         params["sportId"] = sport_id
 
-        games = []
-
         mlb_data = self._mlb_adapter_v1.get(endpoint='schedule', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        if 'dates' in mlb_data.data and mlb_data.data['dates']:
-            for date in mlb_data.data['dates']:
-               for game in date['games']:
-                   games.append(ScheduleGames(**game))
-
-        return games
+        return parse_scheduled_games(mlb_data.data)
 
     def get_game(self, game_id: int, **params) -> Union[Game, None]:
         """
@@ -1182,11 +1176,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if ('teams' in mlb_data.data and mlb_data.data['teams']
-            or 'leagues' in mlb_data.data and mlb_data.data['leagues']
-            or 'sports' in mlb_data.data and mlb_data.data['sports']):
-
-            return GamePace(**mlb_data.data)
+        return parse_gamepace(mlb_data.data)
 
     def get_venue(self, venue_id: int, **params) -> Union[Venue, None]:
         """

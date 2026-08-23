@@ -25,6 +25,7 @@ from __future__ import annotations
 import asyncio
 from contextlib import asynccontextmanager
 from unittest.mock import AsyncMock, MagicMock
+from urllib.parse import parse_qsl
 
 import pytest
 
@@ -44,6 +45,7 @@ from mlbstatsapi.models.awards import Award  # noqa: E402
 from mlbstatsapi.models.divisions import Division  # noqa: E402
 from mlbstatsapi.models.drafts import Round  # noqa: E402
 from mlbstatsapi.models.game import BoxScore, Game, Linescore, Plays  # noqa: E402
+from mlbstatsapi.models.gamepace import GamePace  # noqa: E402
 from mlbstatsapi.models.homerunderby import HomeRunDerby  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
@@ -349,6 +351,94 @@ EXPECTED_SEASON = Season(seasonId="2021", hasWildcard=True)
 EXPECTED_VENUE = Venue(id=31, link="/api/v1/venues/31", name="PNC Park")
 
 # The two ways an endpoint legitimately comes back with nothing to parse.
+SCHEDULED_GAME = {
+    "gamePk": 715757,
+    "gameGuid": "d344c53c-9e37-4c4b-86ae-f20e769115fc",
+    "link": "/api/v1.1/game/715757/feed/live",
+    "gameType": "D",
+    "season": "2022",
+    "gameDate": "2022-10-13T19:37:00Z",
+    "officialDate": "2022-10-13",
+    "status": {
+        "abstractGameState": "Final",
+        "codedGameState": "F",
+        "detailedState": "Final",
+        "statusCode": "F",
+        "startTimeTBD": False,
+        "abstractGameCode": "F",
+    },
+    "teams": {
+        "away": {
+            "team": {"id": 136, "name": "Seattle Mariners", "link": "/api/v1/teams/136"},
+            "leagueRecord": {"wins": 0, "losses": 2, "ties": 0, "pct": ".000"},
+            "score": 2,
+            "isWinner": False,
+            "splitSquad": False,
+            "seriesNumber": 1,
+        },
+        "home": {
+            "team": {"id": 117, "name": "Houston Astros", "link": "/api/v1/teams/117"},
+            "leagueRecord": {"wins": 2, "losses": 0, "ties": 0, "pct": "1.000"},
+            "score": 4,
+            "isWinner": True,
+            "splitSquad": False,
+            "seriesNumber": 1,
+        },
+    },
+    "venue": {"id": 2392, "name": "Minute Maid Park", "link": "/api/v1/venues/2392"},
+    "content": {"link": "/api/v1/game/715757/content"},
+    "isTie": False,
+    "gameNumber": 1,
+    "publicFacing": True,
+    "doubleHeader": "N",
+    "gamedayType": "P",
+    "tiebreaker": "N",
+    "calendarEventID": "14-715757-2022-10-13",
+    "seasonDisplay": "2022",
+    "dayNight": "day",
+    "description": "ALDS Game 2",
+    "scheduledInnings": 9,
+    "reverseHomeAwayStatus": False,
+    "inningBreakLength": 120,
+    "gamesInSeries": 5,
+    "seriesGameNumber": 2,
+    "seriesDescription": "AL Division Series",
+    "recordSource": "S",
+    "ifNecessary": "N",
+    "ifNecessaryDescription": "Normal Game",
+}
+
+SCHEDULED_GAMES_PAYLOAD = {
+    "totalItems": 1,
+    "totalEvents": 0,
+    "totalGames": 1,
+    "totalGamesInProgress": 0,
+    "dates": [
+        {
+            "date": "2022-10-13",
+            "totalItems": 1,
+            "totalEvents": 0,
+            "totalGames": 1,
+            "totalGamesInProgress": 0,
+            "games": [SCHEDULED_GAME],
+        }
+    ],
+}
+
+GAMEPACE_PAYLOAD = {
+    "sports": [
+        {
+            "hitsPer9Inn": 16.68,
+            "runsPer9Inn": 9.3,
+            "pitchesPer9Inn": 299.83,
+            "totalGames": 2429,
+            "timePerGame": "03:11:26",
+            "season": "2021",
+            "sport": {"id": 1, "code": "mlb", "link": "/api/v1/sports/1"},
+        }
+    ]
+}
+
 STATS_PAYLOAD = {
     "stats": [
         {
@@ -474,14 +564,20 @@ def _flatten_params(params: dict) -> list[tuple[str, str]]:
 
 
 def assert_matches_sync(request: httpx.Request, method: str, *args, **kwargs) -> None:
-    """Assert an observed request is the one ``Mlb`` would have made."""
+    """Assert an observed request is the one ``Mlb`` would have made.
+
+    Some Mlb endpoint strings carry their own query: get_gamepace embeds the
+    season, and get_awards ends in a bare "?". Requests merges that query with
+    ep_params, so the expectation is the two combined -- which is what either
+    client has to end up sending, however it chose to build the URL.
+    """
     endpoint, params, ver = sync_request_for(method, *args, **kwargs)
 
-    # get_awards's endpoint string has a trailing "?" (harmless legacy cruft
-    # both Requests and HTTPX strip as an empty query separator), which never
-    # shows up in url.path.
-    assert request.url.path == f"/api/{ver}/{endpoint}".rstrip("?")
-    assert sorted(request.url.params.multi_items()) == _flatten_params(params)
+    path, _, embedded_query = endpoint.partition("?")
+    expected = _flatten_params(params) + list(parse_qsl(embedded_query))
+
+    assert request.url.path == f"/api/{ver}/{path}"
+    assert sorted(request.url.params.multi_items()) == sorted(expected)
 
 
 # ---------------------------------------------------------------------------
@@ -1241,6 +1337,153 @@ def test_stat_endpoints_return_an_empty_mapping_when_there_are_no_stats(
     assert asyncio.run(scenario()) == {}
 
 
+def test_get_persons_request_matches_the_sync_client():
+    handler = _Handler(_json(PERSON_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_persons("660271,605151")
+
+    people = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_persons", "660271,605151")
+    assert people == [EXPECTED_PERSON]
+
+
+def test_get_persons_accepts_a_list_of_ids():
+    """The signature allows a list as well as a comma-delimited string."""
+    handler = _Handler(_json(PERSON_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_persons([660271, 605151])
+
+    asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_persons", [660271, 605151])
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_persons_returns_an_empty_list_when_there_are_no_people(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_persons("1")
+
+    assert asyncio.run(scenario()) == []
+
+
+def test_get_scheduled_games_by_date_request_matches_the_sync_client():
+    handler = _Handler(_json(SCHEDULED_GAMES_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_scheduled_games_by_date("2022-10-13")
+
+    games = asyncio.run(scenario())
+
+    assert_matches_sync(
+        handler.request, "get_scheduled_games_by_date", "2022-10-13"
+    )
+    assert [game.game_pk for game in games] == [715757]
+
+
+def test_get_scheduled_games_by_date_accepts_a_date_range():
+    handler = _Handler(_json(SCHEDULED_GAMES_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_scheduled_games_by_date(
+                start_date="2022-10-13", end_date="2022-10-14"
+            )
+
+    asyncio.run(scenario())
+
+    assert_matches_sync(
+        handler.request,
+        "get_scheduled_games_by_date",
+        start_date="2022-10-13",
+        end_date="2022-10-14",
+    )
+
+
+def test_get_scheduled_games_by_date_accepts_game_pks_without_a_date():
+    """gamePks is its own selector; no date is required alongside it."""
+    handler = _Handler(_json(SCHEDULED_GAMES_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_scheduled_games_by_date(gamePks=715757)
+
+    asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_scheduled_games_by_date", gamePks=715757)
+
+
+def test_get_scheduled_games_by_date_without_a_selector_returns_none_without_requesting():
+    """Mirrors Mlb, which returns None rather than [] when nothing selects a date."""
+    handler = _Handler(_json(SCHEDULED_GAMES_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_scheduled_games_by_date()
+
+    assert asyncio.run(scenario()) is None
+    assert handler.requests == []
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_scheduled_games_by_date_returns_an_empty_list_when_there_are_no_games(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_scheduled_games_by_date("2022-10-13")
+
+    assert asyncio.run(scenario()) == []
+
+
+def test_get_gamepace_request_matches_the_sync_client():
+    handler = _Handler(_json(GAMEPACE_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_gamepace("2021")
+
+    gamepace = asyncio.run(scenario())
+
+    assert_matches_sync(handler.request, "get_gamepace", "2021")
+    assert isinstance(gamepace, GamePace)
+    assert gamepace.sports[0].season == "2021"
+
+
+def test_get_gamepace_puts_the_season_in_the_query_string():
+    """The season rides in the endpoint string rather than in ep_params."""
+    handler = _Handler(_json(GAMEPACE_PAYLOAD))
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_gamepace("2021")
+
+    asyncio.run(scenario())
+
+    assert handler.request.url.path == "/api/v1/gamePace"
+    assert handler.request.url.params["season"] == "2021"
+    assert handler.request.url.params["sportId"] == "1"
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_gamepace_returns_none_when_there_is_no_pace_data(label):
+    handler = _Handler(NO_RESULT_RESPONSES[label])
+
+    async def scenario():
+        async with async_mlb(handler) as mlb:
+            return await mlb.get_gamepace("2021")
+
+    assert asyncio.run(scenario()) is None
+
+
 def test_get_team_id_request_matches_the_sync_client():
     handler = _Handler(_json({"teams": [{"id": 133, "name": "Athletics"}]}))
 
@@ -1494,6 +1737,9 @@ def test_public_signatures_match_the_sync_client():
         "get_player_stats",
         "get_team_stats",
         "get_players_stats_for_game",
+        "get_persons",
+        "get_scheduled_games_by_date",
+        "get_gamepace",
         "get_game",
         "get_game_play_by_play",
         "get_game_line_score",

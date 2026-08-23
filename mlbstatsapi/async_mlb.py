@@ -19,11 +19,12 @@ from ._parsers.games import (
     parse_linescore,
     parse_plays,
 )
+from ._parsers.gamepace import parse_gamepace
 from ._parsers.homerunderby import parse_homerun_derby
 from ._parsers.leagues import parse_league, parse_leagues
 from ._parsers.people import parse_person, parse_people
 from ._parsers.roster import parse_roster_coaches, parse_roster_players
-from ._parsers.schedules import parse_schedule
+from ._parsers.schedules import parse_schedule, parse_scheduled_games
 from ._parsers.seasons import parse_season, parse_seasons
 from ._parsers.sports import parse_sport, parse_sports
 from ._parsers.standings import parse_standings
@@ -37,10 +38,11 @@ from .models.awards import Award
 from .models.divisions import Division
 from .models.drafts import Round
 from .models.game import BoxScore, Game, Linescore, Plays
+from .models.gamepace import GamePace
 from .models.homerunderby import HomeRunDerby
 from .models.leagues import League
 from .models.people import Coach, Person, Player
-from .models.schedules import Schedule
+from .models.schedules import Schedule, ScheduleGames
 from .models.seasons import Season
 from .models.sports import Sport
 from .models.standings import Standings
@@ -2251,3 +2253,214 @@ class AsyncMlb:
             return {}
 
         return parse_split_stats(mlb_data.data)
+
+    async def get_persons(
+        self,
+        person_ids: str | list[int],
+        **params,
+    ) -> list[Person]:
+        """
+        This endpoint returns statistical data and biographical information
+        for players, umpires, and coaches based on playerId.
+
+        Async counterpart of ``Mlb.get_persons``.
+
+        Parameters
+        ----------
+        person_ids : str, list[int]
+            Insert personId(s) to return biographical information for a
+            specific player. Format '605151,592450' or [605151,592450]
+
+        Other Parameters
+        ----------------
+        hydrate : str
+            Insert hydration(s) to return statistical or biographical data
+            for a specific player(s).
+            Format stats(group=["statGroup1","statGroup2"],
+                         type=["statType1","statType2"]).
+        fields : str
+            Comma delimited list of specific fields to be returned.
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        list of Person
+            returns a list of Person
+
+        See Also
+        --------
+        AsyncMlb.get_people : Return a list of People from sport id.
+        AsyncMlb.get_people_id : Return person id from name.
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     people = await mlb.get_persons("605151,592450")
+        [Person, Person]
+        """
+        params["personIds"] = person_ids
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="people",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return parse_people(mlb_data.data)
+
+    async def get_scheduled_games_by_date(
+        self,
+        date: str = None,
+        start_date: str = None,
+        end_date: str = None,
+        sport_id: int = 1,
+        **params,
+    ) -> list[ScheduleGames]:
+        """
+        return game ids for a specific date and game status
+
+        Async counterpart of ``Mlb.get_scheduled_games_by_date``.
+
+        Parameters
+        ----------
+        date : str
+            start date, 'yyyy-mm-dd'
+        start_date : str
+            Start date, 'yyyy-mm-dd'
+        end_date : str
+            end date, 'yyyy-mm-dd'
+        sport_id : int
+            sport id of schedule, defaults to 1
+
+        Other Parameters
+        ----------------
+        leagueId : int, str
+            Insert leagueId to return all schedules based on a particular
+            scheduleType for a specific league. Usage: 1 or '1,11'
+        gamePks : int, str
+            Insert gamePks to return all schedules based on a particular
+            scheduleType for specific games. Usage: 531493 or '531493,531497'
+        venueIds : int
+            Insert venueId to return all schedules based on a particular
+            scheduleType for a specific venueId.
+        gameTypes : str
+            Insert gameTypes to return schedule information for all games in
+            particular gameTypes. For a list of all gameTypes:
+            https://statsapi.mlb.com/api/v1/gameTypes
+
+        Returns
+        -------
+        list of ScheduleGames
+            returns a list of matching games
+
+        See Also
+        --------
+        AsyncMlb.get_game_ids : return a list of game ids
+        AsyncMlb.get_game : return a specific game from game id
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     games = await mlb.get_scheduled_games_by_date("2022-10-13")
+        [ScheduleGames, ScheduleGames]
+        """
+        params = build_schedule_params(
+            date=date,
+            start_date=start_date,
+            end_date=end_date,
+            sport_id=sport_id,
+            **params,
+        )
+
+        # Mirrors Mlb.get_scheduled_games_by_date, which returns None -- not
+        # the empty list its annotation promises -- when no date selector was
+        # given. Preserved for parity, not introduced here.
+        if params is None:
+            return None
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="schedule",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return []
+
+        return parse_scheduled_games(mlb_data.data)
+
+    async def get_gamepace(
+        self,
+        season: str,
+        sport_id=1,
+        **params,
+    ) -> GamePace | None:
+        """
+        Get pace of game metrics for specific sport, league or team.
+
+        Async counterpart of ``Mlb.get_gamepace``.
+
+        Parameters
+        ----------
+        season : str
+            Insert year to return a directory of pace of game metrics for a
+            given season.
+        sport_id : int
+            Insert a sportId to return a directory of pace of game metrics
+            for a specific sport, defaults to 1
+
+        Other Parameters
+        ----------------
+        teamIds : int
+            Insert a teamIds to return directory of pace of game metrics for
+            a given team. Format '110' or '110,147'
+        leagueId : int
+            Insert leagueIds to return a directory of pace of game metrics
+            for a given league. Format '103' or '103,104'
+        leagueListId : str
+            Insert a unique League List Identifier to return a directory of
+            pace of game metrics for a specific league listId.
+        gameType : str
+            Insert gameType(s) to return a directory of pace of game metrics
+            for a specific gameType. For a list of all gameTypes:
+            https://statsapi.mlb.com/api/v1/gameTypes
+        orgType : str
+            Insert a orgType to return a directory of pace of game metrics
+            based on team, league or sport.
+            Available values : T- TEAM, L- LEAGUE, S- SPORT
+        includeChildren : bool
+            Insert includeChildren to return a directory of pace of game
+            metrics for all child teams in a given parent sport.
+        fields : str
+            Comma delimited list of specific fields to be returned.
+            Format: topLevelNode, childNode, attribute
+
+        Returns
+        -------
+        GamePace
+
+        Examples
+        --------
+        >>> async with AsyncMlb() as mlb:
+        ...     gamepace = await mlb.get_gamepace("2021")
+        GamePace
+        """
+        # Mlb.get_gamepace embeds the season in the endpoint string
+        # ("gamePace?season=2021") and lets Requests merge that query with
+        # ep_params. HTTPX does not merge -- passing params replaces a query
+        # already present on the URL -- so copying that idiom here would drop
+        # the season silently. Passing it as a param produces the identical
+        # request on both clients.
+        params["season"] = season
+        params["sportId"] = sport_id
+
+        mlb_data = await self._mlb_adapter_v1.get(
+            endpoint="gamePace",
+            ep_params=params,
+        )
+
+        if 400 <= mlb_data.status_code <= 499:
+            return None
+
+        return parse_gamepace(mlb_data.data)
