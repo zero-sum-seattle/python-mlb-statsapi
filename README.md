@@ -9,7 +9,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-mlb-statsapi)
 ![GitHub](https://img.shields.io/github/license/zero-sum-seattle/python-mlb-statsapi)
 
-### [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | [Examples](docs/examples.md) | [Async](docs/async.md) | [Public API](docs/public-api.md) | [MLB Stats API](https://statsapi.mlb.com/)
+### [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | [Methods](docs/methods.md) | [Examples](docs/examples.md) | [Async](docs/async.md) | [Public API](docs/public-api.md) | [MLB Stats API](https://statsapi.mlb.com/)
 
 </div>
 
@@ -166,7 +166,7 @@ schedule = mlb.get_schedule(date="2022-10-13")
 
 `get_schedule` is available on both `Mlb` and `AsyncMlb`.
 
-Longer runnable examples live in [docs/examples.md](docs/examples.md).
+See the [method reference](docs/methods.md) for the full method documentation that previously lived in the README. Longer runnable examples live in [docs/examples.md](docs/examples.md).
 
 ## HTTP and Error Behavior
 
@@ -213,6 +213,7 @@ print(player.model_dump_json(indent=2))
 | Document | Contents |
 | --- | --- |
 | [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | Endpoint reference, return objects, and model documentation |
+| [Method reference](docs/methods.md) | Method signatures and short descriptions from the original README reference |
 | [Usage examples](docs/examples.md) | Extended synchronous examples |
 | [Async usage](docs/async.md) | Async installation, lifecycle, concurrency, and examples |
 | [HTTP transport](docs/http-transport.md) | Timeouts, retries, strict HTTP, exceptions, and ownership |
