@@ -272,13 +272,17 @@ promised.
 
 `AsyncMlb` constructs internal adapters for both `v1` and `v1.1` that share
 one HTTPX client, mirroring `Mlb`'s shared-Session pattern. Most endpoint
-methods use `v1`. `get_game` uses the `v1.1` live feed endpoint. The `v1`
-adapter resolves and owns the shared client (library-created when the caller
-passes none to `AsyncMlb`, otherwise the caller's own); the `v1.1` adapter
-borrows that same client and never closes it directly. Retry eligibility
-follows the shared client's ownership on both adapters, not which adapter
-version issues a given request, matching `Mlb`'s single retry policy mounted
-on the shared `Session`.
+methods use `v1`. `get_game` uses the `v1.1` live feed endpoint. `AsyncMlb`
+owns the shared client, exactly as `Mlb` owns the shared `Session`: it creates
+one when the caller passes none, closes only a client it created, and hands
+the same client to both adapters.
+
+Retries are a property of that client, not of either adapter. A
+library-created client is built with the library retry transport mounted on
+it, the way a library-created `Session` is built with the library retry
+adapters mounted on it, so both API versions retry identically without either
+adapter holding retry state. A caller-injected client keeps whatever transport
+its caller mounted.
 
 ### Endpoint methods
 

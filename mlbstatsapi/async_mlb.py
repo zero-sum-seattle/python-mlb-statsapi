@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from ._async_transport import create_library_async_client
 from ._helpers.id_lookup import find_ids_by_key
 from ._helpers.schedule import build_schedule_params
 from ._parsers.attendance import parse_attendance
@@ -63,17 +64,23 @@ class AsyncMlb:
     ):
         self._logger = logger or logging.getLogger(__name__)
 
-        # One client is shared by the v1 and v1.1 adapters, mirroring Mlb's
-        # shared-Session pattern. The v1 adapter resolves and owns the client
-        # (library-created when the caller passes none); the v1.1 adapter
-        # borrows that same client and never closes it itself, but still
-        # retries exactly when the shared client is library-owned.
+        # One client is shared by the v1 and v1.1 adapters, and this client
+        # owns it, mirroring Mlb's shared-Session pattern. The library closes
+        # only clients it creates; caller-injected clients remain caller-owned.
+        # The versioned User-Agent and the retry transport are applied only to
+        # library-created clients.
+        self._owns_client = client is None
+        if client is None:
+            self._client = create_library_async_client()
+        else:
+            self._client = client
+        self._closed = False
         self._mlb_adapter_v1 = AsyncMlbDataAdapter(
             hostname=hostname,
             ver="v1",
             logger=self._logger,
             timeout=timeout,
-            client=client,
+            client=self._client,
             strict_http=strict_http,
         )
         self._mlb_adapter_v1_1 = AsyncMlbDataAdapter(
@@ -81,19 +88,18 @@ class AsyncMlb:
             ver="v1.1",
             logger=self._logger,
             timeout=timeout,
-            client=self._mlb_adapter_v1._client,
+            client=self._client,
             strict_http=strict_http,
         )
-        # AsyncMlb, not either adapter, actually owns this shared transport,
-        # so it is the one that knows whether the client is library-owned.
-        # The v1.1 adapter received a non-None client above, so it would
-        # otherwise conclude it's using a caller-injected client and disable
-        # retries even when the client is really library-owned via v1.
-        self._mlb_adapter_v1_1._set_retries_enabled(self._mlb_adapter_v1._owns_client)
 
     async def aclose(self) -> None:
-        """Close library-owned async resources."""
-        await self._mlb_adapter_v1.aclose()
+        """Close the HTTP client when this client owns it.
+
+        Safe to call more than once. Caller-injected clients are left alone.
+        """
+        if self._owns_client and not self._closed:
+            await self._client.aclose()
+            self._closed = True
 
     async def __aenter__(self) -> "AsyncMlb":
         return self

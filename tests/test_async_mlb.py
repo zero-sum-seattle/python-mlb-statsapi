@@ -36,6 +36,7 @@ import pytest
 httpx = pytest.importorskip("httpx", reason="requires the async extra (HTTPX)")
 
 from mlbstatsapi import Mlb  # noqa: E402
+from mlbstatsapi._async_transport import MlbAsyncRetryTransport  # noqa: E402
 from mlbstatsapi.async_mlb import AsyncMlb  # noqa: E402
 from mlbstatsapi.mlb_dataadapter import MlbResult  # noqa: E402
 from mlbstatsapi.models.attendances import Attendance  # noqa: E402
@@ -387,29 +388,23 @@ class _Handler:
 async def async_mlb(handler: _Handler):
     """Yield an AsyncMlb whose own client talks to ``handler``, then close it.
 
-    AsyncMlb builds its adapter and client through the production path; only
-    the transport is swapped. Teardown closes the adapter's client directly
-    rather than calling AsyncMlb.aclose(), so the lifecycle tests that replace
-    aclose with a mock still get their real client closed.
+    AsyncMlb builds its client, its retry transport and its adapters through
+    the production path; only the innermost network transport is swapped.
+    Teardown closes the client directly rather than calling AsyncMlb.aclose(),
+    so the lifecycle tests that replace aclose with a mock still get their real
+    client closed.
     """
-    real_async_client = httpx.AsyncClient
-
-    def mock_transport_client(**client_kwargs) -> httpx.AsyncClient:
-        return real_async_client(
-            transport=httpx.MockTransport(handler), **client_kwargs
-        )
-
     with pytest.MonkeyPatch.context() as monkeypatch:
         monkeypatch.setattr(
-            "mlbstatsapi.async_mlb_dataadapter.httpx.AsyncClient",
-            mock_transport_client,
+            "mlbstatsapi._async_transport.httpx.AsyncHTTPTransport",
+            lambda **kwargs: httpx.MockTransport(handler),
         )
         mlb = AsyncMlb()
 
     try:
         yield mlb
     finally:
-        await mlb._mlb_adapter_v1._client.aclose()
+        await mlb._client.aclose()
 
 
 def sync_request_for(method: str, *args, **kwargs) -> tuple[str, dict, str]:
@@ -495,7 +490,7 @@ def test_aenter_returns_self():
 def test_context_exit_closes_the_owned_client():
     async def scenario():
         async with async_mlb(_Handler(_json(TEAM_PAYLOAD))) as mlb:
-            client = mlb._mlb_adapter_v1._client
+            client = mlb._client
 
             async with mlb:
                 await mlb.get_team(133)
@@ -508,7 +503,7 @@ def test_context_exit_closes_the_owned_client():
 def test_context_exit_closes_the_owned_client_when_the_body_raises():
     async def scenario():
         async with async_mlb(_Handler(_json(TEAM_PAYLOAD))) as mlb:
-            client = mlb._mlb_adapter_v1._client
+            client = mlb._client
 
             with pytest.raises(ValueError, match="boom"):
                 async with mlb:
@@ -528,7 +523,7 @@ def test_cleanup_failure_does_not_replace_the_original_exception():
 
     async def scenario():
         async with async_mlb(_Handler(_json(TEAM_PAYLOAD))) as mlb:
-            mlb._mlb_adapter_v1.aclose = AsyncMock(
+            mlb.aclose = AsyncMock(
                 side_effect=RuntimeError("cleanup failed")
             )
 
@@ -548,7 +543,7 @@ def test_cancellation_is_preserved_through_cleanup():
 
     async def scenario():
         async with async_mlb(_Handler(_json(TEAM_PAYLOAD))) as mlb:
-            client = mlb._mlb_adapter_v1._client
+            client = mlb._client
 
             async def worker():
                 async with mlb:
@@ -583,42 +578,47 @@ def test_caller_injected_client_is_left_open():
     asyncio.run(scenario())
 
 
-def test_v1_and_v1_1_adapters_share_one_client():
-    """One client is shared by both adapters, mirroring Mlb's shared Session."""
+def test_v1_and_v1_1_adapters_share_the_client_this_client_owns():
+    """One client is shared by both adapters and owned by AsyncMlb itself,
+    mirroring Mlb's shared Session."""
 
     async def scenario():
         async with async_mlb(_Handler(_json(TEAM_PAYLOAD))) as mlb:
-            assert mlb._mlb_adapter_v1._client is mlb._mlb_adapter_v1_1._client
-            # Only v1 tracks close-ownership of the shared client; v1.1 must
-            # never double-close it.
-            assert mlb._mlb_adapter_v1._owns_client is True
+            assert mlb._mlb_adapter_v1._client is mlb._client
+            assert mlb._mlb_adapter_v1_1._client is mlb._client
+            # Close-ownership lives on AsyncMlb, so neither adapter can close
+            # the shared client out from under the other.
+            assert mlb._owns_client is True
+            assert mlb._mlb_adapter_v1._owns_client is False
             assert mlb._mlb_adapter_v1_1._owns_client is False
 
     asyncio.run(scenario())
 
 
-def test_v1_1_adapter_retries_when_the_shared_client_is_library_owned():
-    """Retry eligibility follows the shared client's ownership, not which
-    adapter version issues the request (matching Mlb, which configures
-    retries once on the shared Session)."""
+def test_both_api_versions_retry_because_the_shared_client_carries_the_policy():
+    """Retries belong to the shared client's transport, not to an adapter, so
+    the two versions cannot disagree about them (matching Mlb, which mounts
+    one retry policy on the shared Session)."""
 
     async def scenario():
         async with async_mlb(_Handler(_json(TEAM_PAYLOAD))) as mlb:
-            assert mlb._mlb_adapter_v1._retries_enabled is True
-            assert mlb._mlb_adapter_v1_1._retries_enabled is True
+            assert isinstance(mlb._client._transport, MlbAsyncRetryTransport)
 
     asyncio.run(scenario())
 
 
-def test_v1_1_adapter_does_not_retry_with_a_caller_injected_client():
+def test_caller_injected_client_keeps_its_own_transport():
+    """The library mounts nothing on a client it did not create, so an
+    injected client retries exactly as much as its caller configured."""
     handler = _Handler(_json(TEAM_PAYLOAD))
-    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    transport = httpx.MockTransport(handler)
+    client = httpx.AsyncClient(transport=transport)
 
     async def scenario():
         try:
             async with AsyncMlb(client=client) as mlb:
-                assert mlb._mlb_adapter_v1._retries_enabled is False
-                assert mlb._mlb_adapter_v1_1._retries_enabled is False
+                assert mlb._client is client
+                assert mlb._client._transport is transport
         finally:
             await client.aclose()
 
