@@ -47,6 +47,7 @@ from mlbstatsapi.models.awards import Award  # noqa: E402
 from mlbstatsapi.models.divisions import Division  # noqa: E402
 from mlbstatsapi.models.drafts import Round  # noqa: E402
 from mlbstatsapi.models.game import BoxScore, Game, Linescore, Plays  # noqa: E402
+from mlbstatsapi.models.gamepace import GamePace  # noqa: E402
 from mlbstatsapi.models.homerunderby import HomeRunDerby  # noqa: E402
 from mlbstatsapi.models.leagues import League  # noqa: E402
 from mlbstatsapi.models.people import Coach, Person, Player  # noqa: E402
@@ -54,6 +55,7 @@ from mlbstatsapi.models.schedules import Schedule  # noqa: E402
 from mlbstatsapi.models.seasons import Season  # noqa: E402
 from mlbstatsapi.models.sports import Sport  # noqa: E402
 from mlbstatsapi.models.standings import Standings  # noqa: E402
+from mlbstatsapi.models.stats import Stat  # noqa: E402
 from mlbstatsapi.models.teams import Team  # noqa: E402
 from mlbstatsapi.models.venues import Venue  # noqa: E402
 
@@ -339,6 +341,120 @@ SCHEDULE_NO_RESULT_RESPONSES = NO_RESULT_RESPONSES | {
             "dates": [],
         }
     },
+}
+
+SCHEDULED_GAMES_PAYLOAD = {
+    "totalItems": 1,
+    "totalEvents": 0,
+    "totalGames": 1,
+    "totalGamesInProgress": 0,
+    "dates": [
+        {
+            "date": "2022-10-13",
+            "totalItems": 1,
+            "totalEvents": 0,
+            "totalGames": 1,
+            "totalGamesInProgress": 0,
+            "games": [
+                {
+                    "gamePk": 715757,
+                    "gameGuid": "d344c53c-9e37-4c4b-86ae-f20e769115fc",
+                    "link": "/api/v1.1/game/715757/feed/live",
+                    "gameType": "D",
+                    "season": "2022",
+                    "gameDate": "2022-10-13T19:37:00Z",
+                    "officialDate": "2022-10-13",
+                    "status": {
+                        "abstractGameState": "Final",
+                        "codedGameState": "F",
+                        "detailedState": "Final",
+                        "statusCode": "F",
+                        "startTimeTBD": False,
+                        "abstractGameCode": "F",
+                    },
+                    "teams": {
+                        "away": {
+                            "team": {"id": 136, "name": "Seattle Mariners", "link": "/api/v1/teams/136"},
+                            "leagueRecord": {"wins": 0, "losses": 2, "ties": 0, "pct": ".000"},
+                            "score": 2,
+                            "isWinner": False,
+                            "splitSquad": False,
+                            "seriesNumber": 1,
+                        },
+                        "home": {
+                            "team": {"id": 117, "name": "Houston Astros", "link": "/api/v1/teams/117"},
+                            "leagueRecord": {"wins": 2, "losses": 0, "ties": 0, "pct": "1.000"},
+                            "score": 4,
+                            "isWinner": True,
+                            "splitSquad": False,
+                            "seriesNumber": 1,
+                        },
+                    },
+                    "venue": {"id": 2392, "name": "Minute Maid Park", "link": "/api/v1/venues/2392"},
+                    "content": {"link": "/api/v1/game/715757/content"},
+                    "isTie": False,
+                    "gameNumber": 1,
+                    "publicFacing": True,
+                    "doubleHeader": "N",
+                    "gamedayType": "P",
+                    "tiebreaker": "N",
+                    "calendarEventID": "14-715757-2022-10-13",
+                    "seasonDisplay": "2022",
+                    "dayNight": "day",
+                    "description": "ALDS Game 2",
+                    "scheduledInnings": 9,
+                    "reverseHomeAwayStatus": False,
+                    "inningBreakLength": 120,
+                    "gamesInSeries": 5,
+                    "seriesGameNumber": 2,
+                    "seriesDescription": "AL Division Series",
+                    "recordSource": "S",
+                    "ifNecessary": "N",
+                    "ifNecessaryDescription": "Normal Game",
+                }
+            ],
+        }
+    ],
+}
+
+GAMEPACE_PAYLOAD = {
+    "sports": [
+        {
+            "hitsPer9Inn": 16.68,
+            "runsPer9Inn": 9.3,
+            "pitchesPer9Inn": 299.83,
+            "totalGames": 2429,
+            "timePerGame": "03:11:26",
+            "season": "2021",
+            "sport": {"id": 1, "code": "mlb", "link": "/api/v1/sports/1"},
+        }
+    ]
+}
+
+STATS_PAYLOAD = {
+    "stats": [
+        {
+            "type": {"displayName": "season"},
+            "group": {"displayName": "hitting"},
+            "totalSplits": 1,
+            "splits": [
+                {
+                    "season": "2022",
+                    "stat": {"gamesPlayed": 157, "homeRuns": 34, "avg": ".273"},
+                    "team": {
+                        "id": 108,
+                        "name": "Los Angeles Angels",
+                        "link": "/api/v1/teams/108",
+                    },
+                    "player": {
+                        "id": 660271,
+                        "fullName": "Shohei Ohtani",
+                        "link": "/api/v1/people/660271",
+                    },
+                }
+            ],
+        }
+    ]
 }
 
 # The canned transport failures, per client. Each pair is the closest
@@ -723,6 +839,131 @@ def test_get_homerun_derby_success_parity():
     assert result.request == ("GET", "/api/v1/homeRunDerby/511101", {})
 
 
+def test_get_stats_success_parity():
+    """A successful stats response parses to the same split mapping on both clients."""
+    result = call_both("get_stats", ["season"], ["hitting"], payload=STATS_PAYLOAD)
+
+    assert list(result.sync) == ["hitting"], "sync get_stats did not key by group"
+    assert isinstance(result.sync["hitting"]["season"], Stat)
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/stats",
+        {"stats": "season", "group": "hitting"},
+    )
+
+
+def test_get_player_stats_success_parity():
+    """A successful player stats response parses the same on both clients."""
+    result = call_both(
+        "get_player_stats", 660271, ["season"], ["hitting"], payload=STATS_PAYLOAD
+    )
+
+    assert isinstance(result.sync["hitting"]["season"], Stat)
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/people/660271/stats",
+        {"stats": "season", "group": "hitting"},
+    )
+
+
+def test_get_team_stats_success_parity():
+    """A successful team stats response parses the same on both clients."""
+    result = call_both(
+        "get_team_stats", 133, ["season"], ["hitting"], payload=STATS_PAYLOAD
+    )
+
+    assert isinstance(result.sync["hitting"]["season"], Stat)
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/teams/133/stats",
+        {"stats": "season", "group": "hitting"},
+    )
+
+
+def test_get_players_stats_for_game_success_parity():
+    """A successful per-game stats response parses the same on both clients."""
+    result = call_both(
+        "get_players_stats_for_game", 660271, 715757, payload=STATS_PAYLOAD
+    )
+
+    assert isinstance(result.sync["hitting"]["season"], Stat)
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/people/660271/stats/game/715757",
+        {},
+    )
+
+
+def test_get_players_stats_for_game_forwards_params_on_both_clients():
+    """Regression coverage: **params used to be accepted and silently dropped.
+
+    ``get_players_stats_for_game`` advertises ``**params`` but never passed
+    ``ep_params`` to the adapter, so every caller-supplied keyword vanished
+    before the request was built. Both clients now forward them.
+    """
+    result = call_both(
+        "get_players_stats_for_game",
+        660271,
+        715757,
+        eventType="single",
+        payload=STATS_PAYLOAD,
+    )
+
+    assert result.request == (
+        "GET",
+        "/api/v1/people/660271/stats/game/715757",
+        {"eventType": "single"},
+    )
+
+
+def test_get_persons_success_parity():
+    """A successful people response parses to the same Person list on both clients."""
+    result = call_both("get_persons", "660271", payload=PERSON_PAYLOAD)
+
+    assert result.sync == [Person(**PERSON_PAYLOAD["people"][0])]
+    assert result.asynchronous == result.sync
+    assert result.request == ("GET", "/api/v1/people", {"personIds": "660271"})
+
+
+def test_get_scheduled_games_by_date_success_parity():
+    """A successful schedule response parses to the same game list on both clients."""
+    result = call_both(
+        "get_scheduled_games_by_date", "2022-10-13", payload=SCHEDULED_GAMES_PAYLOAD
+    )
+
+    assert [game.game_pk for game in result.sync] == [715757]
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/schedule",
+        {"date": "2022-10-13", "sportId": "1"},
+    )
+
+
+def test_get_gamepace_success_parity():
+    """A successful gamePace response parses to the same GamePace on both clients.
+
+    The season is the part that matters here. Mlb embeds it in the endpoint
+    string and relies on Requests merging that query with ep_params; HTTPX
+    replaces rather than merges, so AsyncMlb passes it as a param instead.
+    Asserting one shared request signature pins that the two routes converge.
+    """
+    result = call_both("get_gamepace", "2021", payload=GAMEPACE_PAYLOAD)
+
+    assert isinstance(result.sync, GamePace), "sync get_gamepace did not return a GamePace"
+    assert result.sync.sports[0].season == "2021"
+    assert result.asynchronous == result.sync
+    assert result.request == (
+        "GET",
+        "/api/v1/gamePace",
+        {"season": "2021", "sportId": "1"},
+    )
+
+
 def test_get_team_id_success_parity():
     """A matching name is resolved to the same id list on both clients."""
     result = call_both(
@@ -1053,6 +1294,74 @@ def test_get_homerun_derby_no_result_parity(label):
     assert result.sync is None, f"sync get_homerun_derby returned {result.sync!r} for {label}"
     assert result.asynchronous is None, (
         f"async get_homerun_derby returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize(
+    "method, args",
+    [
+        ("get_stats", (["season"], ["hitting"])),
+        ("get_player_stats", (660271, ["season"], ["hitting"])),
+        ("get_team_stats", (133, ["season"], ["hitting"])),
+        ("get_players_stats_for_game", (660271, 715757)),
+    ],
+)
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_stat_endpoint_no_result_parity(method, args, label):
+    """Every no-result response returns an empty mapping on either client."""
+    result = call_both(method, *args, **NO_RESULT_RESPONSES[label])
+
+    assert result.sync == {}, f"sync {method} returned {result.sync!r} for {label}"
+    assert result.asynchronous == {}, (
+        f"async {method} returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_persons_no_result_parity(label):
+    """Every no-result response returns an empty list on either client."""
+    result = call_both("get_persons", "1", **NO_RESULT_RESPONSES[label])
+
+    assert result.sync == [], f"sync get_persons returned {result.sync!r} for {label}"
+    assert result.asynchronous == [], (
+        f"async get_persons returned {result.asynchronous!r} for {label}"
+    )
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_scheduled_games_by_date_no_result_parity(label):
+    """Every no-result response returns an empty list on either client."""
+    result = call_both(
+        "get_scheduled_games_by_date", "2022-10-13", **NO_RESULT_RESPONSES[label]
+    )
+
+    assert result.sync == [], (
+        f"sync get_scheduled_games_by_date returned {result.sync!r} for {label}"
+    )
+    assert result.asynchronous == [], (
+        f"async get_scheduled_games_by_date returned {result.asynchronous!r} for {label}"
+    )
+
+
+def test_get_scheduled_games_by_date_without_a_selector_parity():
+    """Both clients return None -- not [] -- when nothing selects a date.
+
+    The annotation promises list[ScheduleGames]. Mlb returns a bare None here
+    and AsyncMlb preserves that rather than quietly correcting it, so the two
+    stay interchangeable.
+    """
+    assert call_sync("get_scheduled_games_by_date") is None
+    assert call_async("get_scheduled_games_by_date") is None
+
+
+@pytest.mark.parametrize("label", list(NO_RESULT_RESPONSES))
+def test_get_gamepace_no_result_parity(label):
+    """Every no-result response returns None on either client."""
+    result = call_both("get_gamepace", "2021", **NO_RESULT_RESPONSES[label])
+
+    assert result.sync is None, f"sync get_gamepace returned {result.sync!r} for {label}"
+    assert result.asynchronous is None, (
+        f"async get_gamepace returned {result.asynchronous!r} for {label}"
     )
 
 

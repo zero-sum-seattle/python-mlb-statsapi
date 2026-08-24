@@ -323,6 +323,19 @@ get_attendance(
 get_draft(year_id: int, **params)
 get_awards(award_id: str, **params)
 get_homerun_derby(game_id, **params)
+get_team_stats(team_id: int, stats: list, groups: list, **params)
+get_players_stats_for_game(person_id: int, game_id: int, **params)
+get_player_stats(person_id: int, stats: list, groups: list, **params)
+get_stats(stats: list, groups: list, **params)
+get_persons(person_ids: str | list[int], **params)
+get_scheduled_games_by_date(
+    date: str = None,
+    start_date: str = None,
+    end_date: str = None,
+    sport_id: int = 1,
+    **params,
+)
+get_gamepace(season: str, sport_id=1, **params)
 get_team_id(team_name: str, search_key: str = 'name', **params)
 get_people_id(
     fullname: str,
@@ -357,9 +370,30 @@ introduced by the async port.
 way its sibling game helpers do; missing linescore data falls through to an
 implicit `None`.
 
-Every other `Mlb` endpoint method not listed above is not yet supported on
-`AsyncMlb`; calling it there raises `AttributeError`. See issue #305 for the
-tracked expansion plan.
+The four stat methods return the same nested `dict` their sync counterparts
+do, keyed by stat group and then by stat type — `{'hitting': {'season': Stat}}`
+— and return `{}` on a 400–499 response, on a body with no `stats`, and on a
+`stats` entry carrying no splits. Note that an unrecognized value in `stats` or
+`groups` is not rejected; it produces the same empty `{}`. Valid values are
+listed at `https://statsapi.mlb.com/api/v1/statTypes` and
+`https://statsapi.mlb.com/api/v1/statGroups`.
+
+`AsyncMlb` now covers every endpoint method `Mlb` exposes. The only public
+name that differs is lifecycle: `Mlb.close()` is spelled `AsyncMlb.aclose()`.
+
+`get_scheduled_games_by_date` inherits the same documented quirk as
+`Mlb.get_scheduled_games_by_date`: it is annotated `list[ScheduleGames]` but
+returns `None` when no `date`, `start_date`/`end_date` pair, or `gamePks` was
+given to select with. This is preserved for parity, not introduced by the
+async port.
+
+`get_gamepace` sends the same request on both clients but builds it
+differently. `Mlb` embeds the season in the endpoint string
+(`gamePace?season=2021`) and relies on Requests merging that query with the
+rest of the parameters. HTTPX replaces a URL's existing query rather than
+merging into it, so `AsyncMlb` passes the season as an ordinary parameter.
+Callers see no difference; this matters only if you are reading the two
+implementations side by side.
 
 ## Low-level adapter
 
