@@ -268,6 +268,22 @@ One `AsyncMlb` instance supports concurrent in-flight requests on the same
 event loop. Concurrency is caller-controlled. Cross-event-loop use is not
 promised.
 
+### API versions used by `AsyncMlb`
+
+`AsyncMlb` constructs internal adapters for both `v1` and `v1.1` that share
+one HTTPX client, mirroring `Mlb`'s shared-Session pattern. Most endpoint
+methods use `v1`. `get_game` uses the `v1.1` live feed endpoint. `AsyncMlb`
+owns the shared client, exactly as `Mlb` owns the shared `Session`: it creates
+one when the caller passes none, closes only a client it created, and hands
+the same client to both adapters.
+
+Retries are a property of that client, not of either adapter. A
+library-created client is built with the library retry transport mounted on
+it, the way a library-created `Session` is built with the library retry
+adapters mounted on it, so both API versions retry identically without either
+adapter holding retry state. A caller-injected client keeps whatever transport
+its caller mounted.
+
 ### Endpoint methods
 
 The currently supported awaitable endpoint methods are:
@@ -275,6 +291,8 @@ The currently supported awaitable endpoint methods are:
 ```text
 get_team(team_id: int, **params)
 get_teams(sport_id: int = 1, **params)
+get_team_roster(team_id: int, **params)
+get_team_coaches(team_id: int, **params)
 get_person(player_id: int, **params)
 get_people(sport_id: int = 1, **params)
 get_schedule(
@@ -285,7 +303,97 @@ get_schedule(
     team_id: int = None,
     **params,
 )
+get_sport(sport_id: int, **params)
+get_sports(**params)
+get_league(league_id: int, **params)
+get_leagues(**params)
+get_division(division_id: int, **params)
+get_divisions(**params)
+get_season(season_id: str, sport_id: int = 1, **params)
+get_seasons(sport_id: int = 1, **params)
+get_venue(venue_id: int, **params)
+get_venues(**params)
+get_standings(league_id: int, season: str, **params)
+get_attendance(
+    team_id: int = None,
+    league_id: int = None,
+    league_list_id: str = None,
+    **params,
+)
+get_draft(year_id: int, **params)
+get_awards(award_id: str, **params)
+get_homerun_derby(game_id, **params)
+get_team_stats(team_id: int, stats: list, groups: list, **params)
+get_players_stats_for_game(person_id: int, game_id: int, **params)
+get_player_stats(person_id: int, stats: list, groups: list, **params)
+get_stats(stats: list, groups: list, **params)
+get_persons(person_ids: str | list[int], **params)
+get_scheduled_games_by_date(
+    date: str = None,
+    start_date: str = None,
+    end_date: str = None,
+    sport_id: int = 1,
+    **params,
+)
+get_gamepace(season: str, sport_id=1, **params)
+get_team_id(team_name: str, search_key: str = 'name', **params)
+get_people_id(
+    fullname: str,
+    sport_id: int = 1,
+    search_key: str = 'fullName',
+    **params,
+)
+get_sport_id(sport_name: str, search_key: str = 'name', **params)
+get_league_id(league_name: str, search_key: str = 'name', **params)
+get_division_id(division_name: str, search_key: str = 'name', **params)
+get_venue_id(venue_name: str, search_key: str = 'name', **params)
+get_game(game_id: int, **params)
+get_game_play_by_play(game_id: int, **params)
+get_game_line_score(game_id: int, **params)
+get_game_box_score(game_id: int, **params)
+get_game_ids(
+    date: str = None,
+    start_date: str = None,
+    end_date: str = None,
+    sport_id: int = 1,
+    **params,
+)
 ```
+
+`get_venue` inherits the same documented quirk as `Mlb.get_venue`: it is
+annotated `Venue | None` but returns `[]` (not `None`) on a 400–499 response,
+matching the sync behavior noted above. This is preserved for parity, not
+introduced by the async port.
+
+`get_game_line_score` inherits the same documented quirk as
+`Mlb.get_game_line_score`: it does not short-circuit on a 400–499 status the
+way its sibling game helpers do; missing linescore data falls through to an
+implicit `None`.
+
+The four stat methods return the same nested `dict` their sync counterparts
+do, keyed by stat group and then by stat type — `{'hitting': {'season': Stat}}`
+— and return `{}` on a 400–499 response, on a body with no `stats`, and on a
+`stats` entry carrying no splits. Note that an unrecognized value in `stats` or
+`groups` is not rejected; it produces the same empty `{}`. Valid values are
+listed at `https://statsapi.mlb.com/api/v1/statTypes` and
+`https://statsapi.mlb.com/api/v1/statGroups`.
+
+`AsyncMlb` now covers every endpoint method `Mlb` exposes. The only public
+name that differs is lifecycle: `Mlb.close()` is spelled `AsyncMlb.aclose()`.
+
+`get_scheduled_games_by_date` inherits the same documented quirk as
+`Mlb.get_scheduled_games_by_date`: it is annotated `list[ScheduleGames]` but
+returns `None` when no `date`, `start_date`/`end_date` pair, or `gamePks` was
+given to select with. This is preserved for parity, not introduced by the
+async port.
+
+`get_gamepace` sends the same request on both clients but builds it
+differently. `Mlb` embeds the season in the endpoint string
+(`gamePace?season=2021`) and relies on Requests merging that query with the
+rest of the parameters. HTTPX replaces a URL's existing query rather than
+merging into it, so `AsyncMlb` passes the season as an ordinary parameter.
+Callers see no difference; this matters only if you are reading the two
+implementations side by side.
 
 ## Low-level adapter
 
@@ -520,9 +628,17 @@ Notes and known conflicts (documented, not redesigned by this contract):
 * `get_venue` is annotated to return `Venue | None` but currently returns `[]`
   on 400–499 statuses. Treat the implementation shape as the observed behavior
   until a focused fix lands.
-* `get_homerun_derby` currently executes a bare `None` expression on 400–499
-  instead of `return None`, so execution may continue. A focused bugfix is
-  recommended.
+* `get_homerun_derby` previously executed a bare `None` expression on
+  400–499 instead of `return None`, so a 4xx response whose body happened to
+  contain a truthy `status` key would have continued into
+  `HomeRunDerby(**data)` and raised instead of returning `None`. Fixed to
+  `return None` while porting the endpoint to `AsyncMlb` (issue #305).
+* `get_attendance`'s "at least one of `team_id`/`league_id`/`league_list_id`"
+  guard previously used `any(required_args)`, which iterates dict keys
+  (always truthy) rather than values, so the guard never actually fired. This
+  was fixed to `any(required_args.values())` while porting the endpoint to
+  `AsyncMlb` (issue #305); calling either client with no identifier now
+  returns `None` without making a request, as already documented above.
 * Nested Pydantic model fields are not frozen by this contract.
 
 ## Return-contract boundaries

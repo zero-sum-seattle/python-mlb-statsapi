@@ -238,11 +238,57 @@ ASYNC_MLB_PUBLIC_METHOD_MANIFEST: dict[str, str] = {
     "__aexit__": "(exc_type, exc, traceback)",
     "get_team": "(team_id: int, **params)",
     "get_teams": "(sport_id: int=1, **params)",
+    "get_team_roster": "(team_id: int, **params)",
+    "get_team_coaches": "(team_id: int, **params)",
     "get_person": "(player_id: int, **params)",
     "get_people": "(sport_id: int=1, **params)",
     "get_schedule": (
         "(date: str=None, start_date: str=None, end_date: str=None, "
         "sport_id: int=1, team_id: int=None, **params)"
+    ),
+    "get_sport": "(sport_id: int, **params)",
+    "get_sports": "(**params)",
+    "get_league": "(league_id: int, **params)",
+    "get_leagues": "(**params)",
+    "get_division": "(division_id: int, **params)",
+    "get_divisions": "(**params)",
+    "get_season": "(season_id: str, sport_id: int=1, **params)",
+    "get_seasons": "(sport_id: int=1, **params)",
+    "get_venue": "(venue_id: int, **params)",
+    "get_venues": "(**params)",
+    "get_standings": "(league_id: int, season: str, **params)",
+    "get_attendance": (
+        "(team_id: int=None, league_id: int=None, "
+        "league_list_id: str=None, **params)"
+    ),
+    "get_draft": "(year_id: int, **params)",
+    "get_awards": "(award_id: str, **params)",
+    "get_homerun_derby": "(game_id, **params)",
+    "get_team_stats": "(team_id: int, stats: list, groups: list, **params)",
+    "get_players_stats_for_game": "(person_id: int, game_id: int, **params)",
+    "get_player_stats": "(person_id: int, stats: list, groups: list, **params)",
+    "get_stats": "(stats: list, groups: list, **params)",
+    "get_persons": "(person_ids: str | list[int], **params)",
+    "get_scheduled_games_by_date": (
+        "(date: str=None, start_date: str=None, end_date: str=None, "
+        "sport_id: int=1, **params)"
+    ),
+    "get_gamepace": "(season: str, sport_id=1, **params)",
+    "get_team_id": "(team_name: str, search_key: str='name', **params)",
+    "get_people_id": (
+        "(fullname: str, sport_id: int=1, search_key: str='fullName', **params)"
+    ),
+    "get_sport_id": "(sport_name: str, search_key: str='name', **params)",
+    "get_league_id": "(league_name: str, search_key: str='name', **params)",
+    "get_division_id": "(division_name: str, search_key: str='name', **params)",
+    "get_venue_id": "(venue_name: str, search_key: str='name', **params)",
+    "get_game": "(game_id: int, **params)",
+    "get_game_play_by_play": "(game_id: int, **params)",
+    "get_game_line_score": "(game_id: int, **params)",
+    "get_game_box_score": "(game_id: int, **params)",
+    "get_game_ids": (
+        "(date: str=None, start_date: str=None, end_date: str=None, "
+        "sport_id: int=1, **params)"
     ),
 }
 

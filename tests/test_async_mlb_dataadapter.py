@@ -41,6 +41,10 @@ from mlbstatsapi import (  # noqa: E402
     MlbTimeoutError,
     MlbTransportError,
 )
+from mlbstatsapi._async_transport import (  # noqa: E402
+    MlbAsyncRetryTransport,
+    create_library_async_client,
+)
 from mlbstatsapi.async_mlb_dataadapter import AsyncMlbDataAdapter  # noqa: E402
 from mlbstatsapi.mlb_dataadapter import PACKAGE_DISTRIBUTION_NAME  # noqa: E402
 
@@ -54,11 +58,13 @@ from http_contract_support import (  # noqa: E402
 
 BASE_URL = "https://statsapi.mlb.com/api/v1/"
 
-SLEEP_TARGET = "mlbstatsapi.async_mlb_dataadapter.asyncio.sleep"
+SLEEP_TARGET = "mlbstatsapi._async_transport.asyncio.sleep"
 
 # Patched only while a test adapter is constructed, so the adapter creates its
-# own library-owned client the way production does, over a MockTransport.
-CLIENT_TARGET = "mlbstatsapi.async_mlb_dataadapter.httpx.AsyncClient"
+# own library-owned client the way production does. Only the innermost network
+# transport is swapped, so the library retry transport under test is the real
+# one, wrapping a MockTransport instead of a socket.
+INNER_TRANSPORT_TARGET = "mlbstatsapi._async_transport.httpx.AsyncHTTPTransport"
 
 # Matches tests/test_mlb_session.py, so both adapters assert the same contract.
 MOCKED_PACKAGE_VERSION = "9.8.7"
@@ -117,24 +123,21 @@ def _owned_adapter(handler, **kwargs) -> AsyncMlbDataAdapter:
     """Build an adapter that owns its client, so retries are active.
 
     The adapter still builds its own client through the production path — only
-    the transport is swapped for a MockTransport — so ownership, headers, and
-    retry behavior are exactly what the library does at runtime, and no client
-    is constructed and then discarded. Call this from inside a run_async()
-    scenario; run_async() closes what it creates.
+    the innermost network transport is swapped for a MockTransport — so
+    ownership, headers, and retry behavior are exactly what the library does at
+    runtime, and no client is constructed and then discarded. Call this from
+    inside a run_async() scenario; run_async() closes what it creates.
     """
-    real_async_client = httpx.AsyncClient
-
-    def mock_transport_client(**client_kwargs) -> httpx.AsyncClient:
-        return real_async_client(
-            transport=httpx.MockTransport(handler),
-            **client_kwargs,
-        )
-
-    with patch(CLIENT_TARGET, mock_transport_client):
+    with patch(INNER_TRANSPORT_TARGET, lambda **kwargs: httpx.MockTransport(handler)):
         adapter = AsyncMlbDataAdapter(**kwargs)
 
     _ADAPTERS_TO_CLOSE.append(adapter)
     return adapter
+
+
+def _retry_policy_of(adapter: AsyncMlbDataAdapter):
+    """Read the retry policy the adapter's client actually uses."""
+    return adapter._client._transport._retry_policy
 
 
 def _injected_adapter(handler, **kwargs) -> AsyncMlbDataAdapter:
@@ -145,7 +148,47 @@ def _injected_adapter(handler, **kwargs) -> AsyncMlbDataAdapter:
 
 def test_retry_policy_matches_library_default():
     adapter = AsyncMlbDataAdapter()
-    assert_library_retry_policy(adapter._retry_policy)
+    assert_library_retry_policy(_retry_policy_of(adapter))
+
+
+def test_library_created_client_mounts_the_retry_transport():
+    """Retries are configured onto the client at creation, the way the sync
+    side mounts them onto a library-created Session."""
+    client = create_library_async_client()
+
+    assert isinstance(client._transport, MlbAsyncRetryTransport)
+
+
+def test_injected_client_transport_is_left_alone():
+    """The library mounts nothing on a client it did not create, so an
+    injected client keeps exactly the retry behavior its caller gave it."""
+    transport = httpx.MockTransport(_ScriptedHandler(_response(200)))
+    client = httpx.AsyncClient(transport=transport)
+    adapter = AsyncMlbDataAdapter(client=client)
+
+    assert adapter._client._transport is transport
+    assert adapter._owns_client is False
+
+
+def test_mounting_the_retry_transport_makes_an_injected_client_retry():
+    """The supported way for a caller to opt their own client into library
+    retry behavior, mirroring the sync create_retry_policy() recipe."""
+    handler = _ScriptedHandler(_response(503), _response(200))
+
+    async def scenario():
+        client = httpx.AsyncClient(
+            transport=MlbAsyncRetryTransport(httpx.MockTransport(handler)),
+        )
+        adapter = AsyncMlbDataAdapter(client=client)
+        try:
+            with patch(SLEEP_TARGET, new_callable=AsyncMock):
+                return await adapter.get(endpoint="sports")
+        finally:
+            await client.aclose()
+
+    result = run_async(scenario())
+    assert result.status_code == 200
+    assert handler.call_count == 2
 
 
 def test_200_succeeds_with_no_retry():
@@ -734,7 +777,7 @@ def test_connect_timeout_spends_the_connect_retry_budget():
 
     async def scenario():
         adapter = _owned_adapter(handler)
-        adapter._retry_policy.connect = 1
+        _retry_policy_of(adapter).connect = 1
         with patch(SLEEP_TARGET, new_callable=AsyncMock):
             with pytest.raises(MlbTimeoutError):
                 await adapter.get(endpoint="sports")
@@ -794,7 +837,7 @@ def test_generic_failures_spend_the_total_retry_budget(failure, expected_excepti
 
     async def scenario():
         adapter = _owned_adapter(handler)
-        adapter._retry_policy.total = 1
+        _retry_policy_of(adapter).total = 1
         with patch(SLEEP_TARGET, new_callable=AsyncMock):
             with pytest.raises(expected_exception) as exc_info:
                 await adapter.get(endpoint="sports")
@@ -818,7 +861,7 @@ def test_connect_error_spends_the_connect_retry_budget():
 
     async def scenario():
         adapter = _owned_adapter(handler)
-        adapter._retry_policy.connect = 1
+        _retry_policy_of(adapter).connect = 1
         with patch(SLEEP_TARGET, new_callable=AsyncMock):
             with pytest.raises(MlbTransportError):
                 await adapter.get(endpoint="sports")
@@ -833,7 +876,7 @@ def test_retryable_status_spends_the_status_retry_budget():
 
     async def scenario():
         adapter = _owned_adapter(handler)
-        adapter._retry_policy.status = 1
+        _retry_policy_of(adapter).status = 1
         with patch(SLEEP_TARGET, new_callable=AsyncMock):
             with pytest.raises(MlbHttpError) as exc_info:
                 await adapter.get(endpoint="sports")
@@ -890,9 +933,9 @@ def test_backoff_grows_exponentially_between_retries():
 def test_retry_sleep_is_async_and_non_blocking():
     """A real (unmocked) backoff wait must yield the event loop.
 
-    If _sleep_before_retry ever used a blocking call (e.g. time.sleep)
-    instead of `await asyncio.sleep(...)`, the whole event loop would
-    freeze for the wait's duration and the concurrently running marker
+    If the retry transport's backoff ever used a blocking call (e.g.
+    time.sleep) instead of `await asyncio.sleep(...)`, the whole event loop
+    would freeze for the wait's duration and the concurrently running marker
     task below would make zero progress during it.
     """
     handler = _ScriptedHandler(_response(500), _response(500), _response(200))
@@ -900,7 +943,7 @@ def test_retry_sleep_is_async_and_non_blocking():
     async def scenario():
         adapter = _owned_adapter(handler)
         # Small but real backoff so the test stays fast without mocking sleep.
-        adapter._retry_policy.backoff_factor = 0.05
+        _retry_policy_of(adapter).backoff_factor = 0.05
 
         marker_ticks = 0
 

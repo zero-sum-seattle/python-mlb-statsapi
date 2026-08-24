@@ -23,9 +23,24 @@ from mlbstatsapi.models.homerunderby import HomeRunDerby
 from mlbstatsapi.models.standings import Standings
 
 
+from ._helpers.id_lookup import find_ids_by_key
+from ._parsers.attendance import parse_attendance
+from ._parsers.awards import parse_awards
+from ._parsers.divisions import parse_divisions, parse_division
+from ._parsers.draft import parse_draft
+from ._parsers.games import parse_boxscore, parse_game, parse_game_ids, parse_linescore, parse_plays
+from ._parsers.homerunderby import parse_homerun_derby
+from ._parsers.leagues import parse_leagues, parse_league
 from ._parsers.people import parse_people, parse_person
+from ._parsers.roster import parse_roster_coaches, parse_roster_players
+from ._parsers.seasons import parse_seasons, parse_season
+from ._parsers.sports import parse_sports, parse_sport
+from ._parsers.standings import parse_standings
+from ._parsers.stats import parse_split_stats
 from ._parsers.teams import parse_teams, parse_team
-from ._parsers.schedules import parse_schedule
+from ._parsers.gamepace import parse_gamepace
+from ._parsers.schedules import parse_schedule, parse_scheduled_games
+from ._parsers.venues import parse_venues, parse_venue
 
 from .mlb_dataadapter import (
     DEFAULT_TIMEOUT,
@@ -291,16 +306,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        player_ids = []
-
-        if 'people' in mlb_data.data and mlb_data.data['people']:
-            for person in mlb_data.data['people']:
-                try:
-                    if person[search_key].lower() == fullname.lower():
-                        player_ids.append(person['id'])
-                except KeyError:
-                    continue
-        return player_ids
+        return find_ids_by_key(mlb_data.data.get('people') or [], search_key, fullname)
 
     def get_teams(self, sport_id: int = 1, **params) -> List[Team]:
         """
@@ -488,16 +494,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        team_ids = []
-    
-        if 'teams' in mlb_data.data and mlb_data.data['teams']:
-            for team in mlb_data.data['teams']:
-                try:
-                    if team[search_key].lower() == team_name.lower():
-                        team_ids.append(team['id'])
-                except (KeyError):
-                    continue
-        return team_ids
+        return find_ids_by_key(mlb_data.data.get('teams') or [], search_key, team_name)
 
     def get_team_roster(self, team_id: int, **params) -> List[Player]:
         """
@@ -573,13 +570,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        players = []
-
-        if 'roster' in mlb_data.data and mlb_data.data['roster']:
-            for player in mlb_data.data['roster']:
-                players.append(Player(**mlb_module.merge_keys(player, ['person'])))
-
-        return players
+        return parse_roster_players(mlb_data.data)
 
     def get_team_coaches(self, team_id: int, **params) -> List[Coach]:
         """
@@ -623,13 +614,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        coaches = []
-
-        if 'roster' in mlb_data.data and mlb_data.data['roster']:
-            for coach in mlb_data.data['roster']:
-                coaches.append(Coach(**mlb_module.merge_keys(coach, ['person'])))
-
-        return coaches
+        return parse_roster_coaches(mlb_data.data)
 
     def get_schedule(self, 
                     date: str = None, 
@@ -885,18 +870,11 @@ class Mlb:
 
         params["sportId"] = sport_id
 
-        games = []
-
         mlb_data = self._mlb_adapter_v1.get(endpoint='schedule', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        if 'dates' in mlb_data.data and mlb_data.data['dates']:
-            for date in mlb_data.data['dates']:
-               for game in date['games']:
-                   games.append(ScheduleGames(**game))
-
-        return games
+        return parse_scheduled_games(mlb_data.data)
 
     def get_game(self, game_id: int, **params) -> Union[Game, None]:
         """
@@ -952,8 +930,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'gamePk' in mlb_data.data and mlb_data.data['gamePk'] == game_id:
-            return Game(**mlb_data.data)
+        return parse_game(mlb_data.data, game_id)
 
     def get_game_play_by_play(self, game_id: int, **params) -> Union[Plays, None]:
         """
@@ -997,8 +974,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'allPlays' in mlb_data.data and mlb_data.data['allPlays']:
-            return Plays(**mlb_data.data)
+        return parse_plays(mlb_data.data)
 
     def get_game_line_score(self, game_id: int, **params) -> Union[Linescore, None]:
         """
@@ -1040,8 +1016,7 @@ class Mlb:
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'game/{game_id}/linescore', ep_params=params)
 
-        if 'teams' in mlb_data.data and mlb_data.data['teams']:
-            return Linescore(**mlb_data.data)
+        return parse_linescore(mlb_data.data)
 
     def get_game_box_score(self, game_id: int, **params) -> Union[BoxScore, None]:
         """
@@ -1085,8 +1060,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'teams' in mlb_data.data and mlb_data.data['teams']:
-            return BoxScore(**mlb_data.data)
+        return parse_boxscore(mlb_data.data)
 
 
     def get_game_ids(self, date: str = None,
@@ -1139,14 +1113,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        game_ids = []
-
-        if 'dates' in mlb_data.data and mlb_data.data['dates']:
-            for date in mlb_data.data['dates']:
-               for game in date['games']:
-                   game_ids.append(game['gamePk'])
-
-        return game_ids
+        return parse_game_ids(mlb_data.data)
 
     def get_gamepace(self, season: str, sport_id=1, **params) -> Union[GamePace, None]:
         """
@@ -1209,11 +1176,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if ('teams' in mlb_data.data and mlb_data.data['teams']
-            or 'leagues' in mlb_data.data and mlb_data.data['leagues']
-            or 'sports' in mlb_data.data and mlb_data.data['sports']):
-
-            return GamePace(**mlb_data.data)
+        return parse_gamepace(mlb_data.data)
 
     def get_venue(self, venue_id: int, **params) -> Union[Venue, None]:
         """
@@ -1248,11 +1211,11 @@ class Mlb:
 
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'venues/{venue_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
+            # Documented quirk: this returns [] rather than None here, unlike
+            # every other single-resource endpoint. See docs/public-api.md.
             return []
 
-        if 'venues' in mlb_data.data and mlb_data.data['venues']:
-            for venue in mlb_data.data['venues']:
-                return Venue(**venue)
+        return parse_venue(mlb_data.data)
 
     def get_venues(self, **params) -> List[Venue]:
         """
@@ -1296,12 +1259,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        venues = []
-
-        if 'venues' in mlb_data.data and mlb_data.data['venues']:
-            venues = [Venue(**venue) for venue in mlb_data.data['venues']]
-
-        return venues
+        return parse_venues(mlb_data.data)
 
     def get_venue_id(self, venue_name: str,
                      search_key: str = 'name', **params) -> List[int]:
@@ -1333,16 +1291,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        venue_ids = []
-
-        if 'venues' in mlb_data.data and mlb_data.data['venues']:
-            for venue in mlb_data.data['venues']:
-                try:
-                    if venue[search_key].lower() == venue_name.lower():
-                        venue_ids.append(venue['id'])
-                except KeyError:
-                    continue
-        return venue_ids
+        return find_ids_by_key(mlb_data.data.get('venues') or [], search_key, venue_name)
 
     def get_sport(self, sport_id: int, **params) -> Union[Sport, None]:
         """
@@ -1381,9 +1330,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'sports' in mlb_data.data and mlb_data.data['sports']:
-            for sport in mlb_data.data['sports']:
-                return Sport(**sport)
+        return parse_sport(mlb_data.data)
 
     def get_sports(self, **params) -> List[Sport]:
         """
@@ -1416,12 +1363,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        sports = []
-
-        if 'sports' in mlb_data.data and mlb_data.data['sports']:
-            sports = [Sport(**sport) for sport in mlb_data.data['sports']]
-
-        return sports
+        return parse_sports(mlb_data.data)
 
     def get_sport_id(self, sport_name: str,
                      search_key: str = 'name', **params) -> List[int]:
@@ -1456,17 +1398,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        sport_ids = []
-
-        if 'sports' in mlb_data.data and mlb_data.data['sports']:
-            for sport in mlb_data.data['sports']:
-                try:
-                    if sport[search_key].lower() == sport_name.lower():
-                        sport_ids.append(sport['id'])
-                except KeyError:
-                    continue
-
-        return sport_ids
+        return find_ids_by_key(mlb_data.data.get('sports') or [], search_key, sport_name)
 
     def get_league(self, league_id: int, **params) -> Union[League, None]:
         """
@@ -1503,9 +1435,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
-            for league in mlb_data.data['leagues']:
-                return League(**league)
+        return parse_league(mlb_data.data)
 
     def get_leagues(self, **params) -> List[League]:
         """
@@ -1546,12 +1476,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        leagues = []
-
-        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
-            leagues = [League(**league) for league in mlb_data.data['leagues']]
-
-        return leagues
+        return parse_leagues(mlb_data.data)
 
     def get_league_id(self, league_name: str,
                       search_key: str = 'name', **params) -> List[int]:
@@ -1585,16 +1510,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        league_ids = []
-
-        if 'leagues' in mlb_data.data and mlb_data.data['leagues']:
-            for league in mlb_data.data['leagues']:
-                try:
-                    if league[search_key].lower() == league_name.lower():
-                        league_ids.append(league['id'])
-                except KeyError:
-                    continue
-        return league_ids
+        return find_ids_by_key(mlb_data.data.get('leagues') or [], search_key, league_name)
 
     def get_division(self, division_id: int, **params) -> Union[Division, None]:
         """
@@ -1626,9 +1542,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
-            for division in mlb_data.data['divisions']:
-                return Division(**division)
+        return parse_division(mlb_data.data)
 
     def get_divisions(self, **params) -> List[Division]:
         """
@@ -1667,12 +1581,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        divisions = []
-
-        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
-            divisions = [Division(**division) for division in mlb_data.data['divisions']]
-
-        return divisions
+        return parse_divisions(mlb_data.data)
 
     def get_division_id(self, division_name: str,
                         search_key: str = 'name', **params) -> List[int]:
@@ -1706,17 +1615,8 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint='divisions', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
-        
-        division_ids = []
 
-        if 'divisions' in mlb_data.data and mlb_data.data['divisions']:
-            for division in mlb_data.data['divisions']:
-                try:
-                    if division[search_key].lower() == division_name.lower():
-                        division_ids.append(division['id'])
-                except KeyError:
-                    continue
-        return division_ids
+        return find_ids_by_key(mlb_data.data.get('divisions') or [], search_key, division_name)
 
     def get_season(self, season_id: str, sport_id: int = 1, **params) -> Season:
         """
@@ -1759,9 +1659,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
-            for season in mlb_data.data['seasons']:
-                return Season(**season)
+        return parse_season(mlb_data.data)
 
     def get_seasons(self, sport_id: int = 1, **params) -> List[Season]:
         """
@@ -1816,13 +1714,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        season_list = []
-
-        if 'seasons' in mlb_data.data and mlb_data.data['seasons']:
-            for season in mlb_data.data['seasons']:
-                season_list.append(Season(**season))
-        
-        return season_list
+        return parse_seasons(mlb_data.data)
 
     def get_standings(self, league_id: int, season: str, **params):
         """
@@ -1893,14 +1785,8 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'standings', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
-        
-        standings_list = []
 
-        if 'records' in mlb_data.data and mlb_data.data['records']:
-            for standing in mlb_data.data['records']:
-                standings_list.append(Standings(**standing))
-        
-        return standings_list
+        return parse_standings(mlb_data.data)
 
 
     def get_attendance(self, team_id: int = None, league_id: int = None,
@@ -1955,8 +1841,8 @@ class Mlb:
         """
         required_args = {'teamId': team_id, 'leagueId': league_id, 'leagueListId': league_list_id}
 
-        if not any(required_args):
-            return
+        if not any(required_args.values()):
+            return None
 
         # let's create a list of the args passed
         # this will filter out None
@@ -1968,8 +1854,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return None
 
-        if 'records' in mlb_data.data and mlb_data.data['records']:
-            return Attendance(**mlb_data.data)
+        return parse_attendance(mlb_data.data)
 
     def get_draft(self, year_id: int, **params) -> List[Round]:
         """
@@ -2016,13 +1901,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return []
 
-        round_list = []
-
-        if 'drafts' in mlb_data.data and mlb_data.data['drafts']:
-            if mlb_data.data['drafts']['rounds']:
-                for round in mlb_data.data['drafts']['rounds']:
-                    round_list.append(Round(**round))
-        return round_list
+        return parse_draft(mlb_data.data)
 
     def get_awards(self, award_id: str, **params) -> List[Award]:
         """
@@ -2056,14 +1935,8 @@ class Mlb:
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'awards/{award_id}/recipients?', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return []
-        
-        awards_list = []
 
-        if 'awards' in mlb_data.data and mlb_data.data['awards']:
-            for award in mlb_data.data['awards']:
-                awards_list.append(Award(**award))
-        
-        return awards_list
+        return parse_awards(mlb_data.data)
 
     def get_homerun_derby(self, game_id, **params) -> Union[HomeRunDerby, None]:
         """
@@ -2095,10 +1968,9 @@ class Mlb:
         """
         mlb_data = self._mlb_adapter_v1.get(endpoint=f'homeRunDerby/{game_id}', ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
-            None
-        
-        if 'status' in mlb_data.data and mlb_data.data['status']:
-            return HomeRunDerby(**mlb_data.data)
+            return None
+
+        return parse_homerun_derby(mlb_data.data)
 
 
     def get_team_stats(self, team_id: int, stats: list, groups: list, **params) -> dict:
@@ -2146,12 +2018,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
-        if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            splits = mlb_module.create_split_data(mlb_data.data['stats'])
-        else:
-            return {}
-            
-        return splits
+        return parse_split_stats(mlb_data.data)
 
     def get_players_stats_for_game(self, person_id: int, game_id: int, **params) -> dict:
         """
@@ -2162,9 +2029,9 @@ class Mlb:
         Parameters
         ----------
         person_id : int
-            the team id 
-        game_id : list
-            list of stat types
+            the person id
+        game_id : int
+            the game id
 
         Returns
         -------
@@ -2182,20 +2049,16 @@ class Mlb:
         >>> mlb = Mlb()
         >>> player_id = 663728
         >>> game_id = 715757
-        >>> stats = mlb.get_player_stats_for_game(person_id=person_id, game_id=game_id)
+        >>> stats = mlb.get_players_stats_for_game(person_id=person_id, game_id=game_id)
         >>> print(stats['stats']['gameLog'])
         >>> print(stats['hitting']['playLog'])
         """
-        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats/game/{game_id}')
+        mlb_data = self._mlb_adapter_v1.get(endpoint=f'people/{person_id}/stats/game/{game_id}',
+                                            ep_params=params)
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
-        if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            splits = mlb_module.create_split_data(mlb_data.data['stats'])
-        else:
-            return {}
-            
-        return splits
+        return parse_split_stats(mlb_data.data)
         
     def get_player_stats(self, person_id: int, stats: list, groups: list, **params) -> dict:
         """
@@ -2244,12 +2107,7 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
-        if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            splits = mlb_module.create_split_data(mlb_data.data['stats'])
-        else:
-            return {}
-
-        return splits
+        return parse_split_stats(mlb_data.data)
 
     def get_stats(self, stats: list, groups: list, **params: dict) -> dict:
         """
@@ -2303,11 +2161,6 @@ class Mlb:
         if 400 <= mlb_data.status_code <= 499:
             return {}
 
-        if 'stats' in mlb_data.data and mlb_data.data['stats']:
-            splits = mlb_module.create_split_data(mlb_data.data['stats'])
-        else:
-            return {}
-            
-        return splits
+        return parse_split_stats(mlb_data.data)
 
 # This is to test pypi, please delete later
