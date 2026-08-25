@@ -32,15 +32,32 @@ asyncio.run(main())
 ```
 
 Use `async with` when possible so library-owned HTTP resources are closed when
-the block exits. If a context manager is not practical, explicit cleanup is
-also supported:
+the block exits.
+
+## Without a context manager
+
+If a context manager is not practical, create `AsyncMlb` directly and call
+`await mlb.aclose()` when finished:
 
 ```python
-mlb = AsyncMlb()
-try:
-    player = await mlb.get_person(664034)
-finally:
-    await mlb.aclose()
+import asyncio
+
+from mlbstatsapi import AsyncMlb
+
+
+async def main():
+    mlb = AsyncMlb()
+    try:
+        player = await mlb.get_person(664034)
+        team = await mlb.get_team(136)
+
+        print(player.full_name)
+        print(team.name)
+    finally:
+        await mlb.aclose()
+
+
+asyncio.run(main())
 ```
 
 Repeated `aclose()` calls are safe.
