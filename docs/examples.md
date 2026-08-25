@@ -2,7 +2,7 @@
 
 This document collects the longer usage examples that previously lived in the README. The README keeps a short quick start; this guide is the extended tour.
 
-Every example in this file uses the synchronous `Mlb` client. Async usage is documented separately in [async.md](async.md).
+Every example in this file uses the synchronous `Mlb` client. Async usage is documented separately in [async.md](async.md). Stats have their own detailed [stats guide](stats.md) with both sync and async examples.
 
 For return-object structure and endpoint details see the [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki). For the supported method list, parameters, and return shapes see the [public API contract](public-api.md). For transport behavior see the [HTTP transport documentation](http-transport.md).
 
@@ -55,43 +55,9 @@ print(player.full_name)
 print(team.name)
 ```
 
-## Player stats
+## Stats
 
-```python
-from mlbstatsapi import Mlb
-
-with Mlb() as mlb:
-    player_id = mlb.get_people_id("Ty France")[0]
-    stats = mlb.get_player_stats(
-        player_id,
-        stats=["season", "career"],
-        groups=["hitting", "pitching"],
-        season=2022,
-    )
-
-season_hitting = stats["hitting"]["season"]
-for split in season_hitting.splits:
-    print(split.stat.model_dump(exclude_none=True))
-```
-
-## Team stats
-
-```python
-from mlbstatsapi import Mlb
-
-with Mlb() as mlb:
-    team_id = mlb.get_team_id("Seattle Mariners")[0]
-    stats = mlb.get_team_stats(
-        team_id,
-        stats=["season", "seasonAdvanced"],
-        groups=["hitting"],
-        season=2022,
-    )
-
-season_hitting = stats["hitting"]["season"]
-for split in season_hitting.splits:
-    print(split.stat.model_dump_json(indent=2, exclude_none=True))
-```
+Player, team, general, and per-game stat examples live in the dedicated [Stats Guide](stats.md). It also explains the nested `stats[group][type]` return structure and includes matching `Mlb` and `AsyncMlb` examples.
 
 ## Schedule
 
