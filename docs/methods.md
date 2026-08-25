@@ -90,7 +90,6 @@ Mlb.get_game_box_score(game_id: int, **params)
 | `get_scheduled_games_by_date()` | Return scheduled games from dates |
 
 ```text
-Mlb.get_schedule(date: str, start_date: str, end_date: str, sport_id: int, team_id: int, **params)
 Mlb.get_schedule(date: str = None, start_date: str = None, end_date: str = None, sport_id: int = 1, team_id: int = None, **params)
 Mlb.get_scheduled_games_by_date(date: str = None, start_date: str = None, end_date: str = None, sport_id: int = 1, **params)
 ```
