@@ -164,7 +164,10 @@ web framework's request handler, an existing event loop, and so on. Nothing
 here requires restructuring your application around a `main()` entry point;
 `get_person_with_custom_client()` itself has no opinion on how it is invoked.
 
-For a minimal, runnable entry point:
+Below are a few ways to invoke it, depending on how your application already
+enters async code.
+
+**Script entry point**
 
 ```python
 import asyncio
@@ -178,11 +181,43 @@ async def main():
 asyncio.run(main())
 ```
 
+**Inside an application that already runs on an event loop** — a web
+framework's request handler, a worker task, and so on — just `await` it
+directly with a client your application already owns:
+
+```python
+async def handle_request(client: httpx.AsyncClient, person_id: int):
+    return await get_person_with_custom_client(client, person_id)
+```
+
+**FastAPI (or another ASGI framework)**
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+http_client = httpx.AsyncClient()
+
+
+@app.get("/players/{person_id}")
+async def read_player(person_id: int):
+    return await get_person_with_custom_client(http_client, person_id)
+```
+
+**Interactively, with no wrapper at all** — Jupyter/IPython and the
+`python -m asyncio` REPL both support top-level `await`:
+
+```pycon
+>>> import httpx
+>>> client = httpx.AsyncClient()
+>>> player = await get_person_with_custom_client(client, 664034)
+>>> await client.aclose()
+```
+
 An injected client remains caller-owned and is not closed by `AsyncMlb`. In a
 real application the client is typically created once, reused across calls,
-and closed by whatever code owns its lifecycle — the entry point above is
-only there to show one way to run the example, not the required shape of
-your application.
+and closed by whatever code owns its lifecycle — the examples above show a
+few ways to run this, not the required shape of your application.
 
 ## Documentation boundaries
 
