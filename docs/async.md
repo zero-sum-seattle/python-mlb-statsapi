@@ -91,23 +91,11 @@ Cross-event-loop use of the same client is not promised.
 
 ## Supported endpoints
 
-The async surface is intentionally smaller than the synchronous `Mlb` surface
-while 1.1 support is being expanded. The currently supported awaitable endpoint
-methods on `release/1.1.0` are:
+`AsyncMlb` mirrors the endpoint surface exposed by `Mlb`. Its endpoint methods
+are asynchronous and return the same parsed Pydantic model types while following
+the same public HTTP/error behavior as their synchronous counterparts.
 
-```text
-get_team(...)
-get_teams(...)
-get_person(...)
-get_people(...)
-get_schedule(...)
-```
-
-Where an async endpoint is supported, it returns the same Pydantic model types
-and follows the same public HTTP/error behavior as the matching synchronous
-method.
-
-For the authoritative list and signatures, see the
+For the authoritative method list and signatures, see the
 [public API contract](public-api.md#asyncmlb-public-client).
 
 ## Error handling
