@@ -44,7 +44,7 @@ Mlb.get_team_roster(team_id: int, **params)
 
 ## Stats
 
-[Wiki: Stats](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Stats)
+[Wiki: Stats](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki/Data-Types:-Stats) · [Stats Guide](stats.md)
 
 | Method | Description |
 | --- | --- |
@@ -59,6 +59,8 @@ Mlb.get_team_stats(team_id: int, stats: list, groups: list, **params)
 Mlb.get_stats(stats: list, groups: list, **params: dict)
 Mlb.get_players_stats_for_game(person_id: int, game_id: int, **params)
 ```
+
+The [Stats Guide](stats.md) includes runnable `Mlb` and `AsyncMlb` examples and explains the nested `stats[group][type]` return structure.
 
 ## Games
 
