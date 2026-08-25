@@ -48,7 +48,7 @@ The async extra installs HTTPX. Python 3.10 or newer is required.
 | Claim | Value |
 | --- | --- |
 | Minimum Python version | `>=3.10` |
-| CI-validated versions | Python 3.10 through 3.14 |
+| CI-validated versions | Python 3.10 through 3.14 (`3.10`, `3.11`, `3.12`, `3.13`, `3.14`) |
 
 See [Python support](docs/public-api.md#python-support) for the complete policy.
 
