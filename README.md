@@ -9,7 +9,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-mlb-statsapi)
 ![GitHub](https://img.shields.io/github/license/zero-sum-seattle/python-mlb-statsapi)
 
-### [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | [Methods](docs/methods.md) | [Examples](docs/examples.md) | [Async](docs/async.md) | [Public API](docs/public-api.md) | [MLB Stats API](https://statsapi.mlb.com/)
+### [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | [Methods](docs/methods.md) | [Examples](docs/examples.md) | [Stats](docs/stats.md) | [Async](docs/async.md) | [Public API](docs/public-api.md) | [MLB Stats API](https://statsapi.mlb.com/)
 
 </div>
 
@@ -143,7 +143,7 @@ See [Async usage](docs/async.md) for lifecycle, concurrency, custom HTTPX client
 
 Where an async endpoint is supported, both clients return the same Pydantic models and follow the same public HTTP/error behavior.
 
-The async surface is still smaller than the full synchronous API while 1.1 coverage is expanded. The [public API contract](docs/public-api.md#asyncmlb-public-client) is the authoritative list of supported async methods.
+The [public API contract](docs/public-api.md#asyncmlb-public-client) is the authoritative list of supported async methods.
 
 ## Concurrent Async Requests
 
@@ -190,16 +190,7 @@ team_ids = mlb.get_team_id("Seattle Mariners")
 
 ### Stats
 
-```python
-stats = mlb.get_player_stats(
-    664034,
-    stats=["season", "career"],
-    groups=["hitting"],
-    season=2022,
-)
-```
-
-Higher-level stats helpers remain on the synchronous `Mlb` client in the current 1.1 async surface.
+The stats API has several entry points and returns a nested `stats[group][type]` structure. See the dedicated [Stats Guide](docs/stats.md) for `get_player_stats()`, `get_team_stats()`, `get_stats()`, and `get_players_stats_for_game()` examples using both `Mlb` and `AsyncMlb`.
 
 ### Schedule
 
@@ -258,6 +249,7 @@ print(player.model_dump_json(indent=2))
 | [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | Endpoint reference, return objects, and model documentation |
 | [Method reference](docs/methods.md) | Method signatures and short descriptions from the original README reference |
 | [Usage examples](docs/examples.md) | Extended synchronous examples |
+| [Stats guide](docs/stats.md) | Player, team, general, and per-game stat queries with sync and async examples |
 | [Async usage](docs/async.md) | Async installation, lifecycle, concurrency, and examples |
 | [HTTP transport](docs/http-transport.md) | Timeouts, retries, strict HTTP, exceptions, and ownership |
 | [Public API contract](docs/public-api.md) | Supported symbols, signatures, endpoint methods, and stability policy |
