@@ -87,6 +87,49 @@ async def main():
 asyncio.run(main())
 ```
 
+### Without a context manager
+
+Context managers are recommended, but both clients can also be created directly. When doing that, close library-owned HTTP resources explicitly.
+
+#### Sync
+
+```python
+from mlbstatsapi import Mlb
+
+mlb = Mlb()
+try:
+    player = mlb.get_person(664034)
+    team = mlb.get_team(136)
+
+    print(player.full_name)
+    print(team.name)
+finally:
+    mlb.close()
+```
+
+#### Async
+
+```python
+import asyncio
+
+from mlbstatsapi import AsyncMlb
+
+
+async def main():
+    mlb = AsyncMlb()
+    try:
+        player = await mlb.get_person(664034)
+        team = await mlb.get_team(136)
+
+        print(player.full_name)
+        print(team.name)
+    finally:
+        await mlb.aclose()
+
+
+asyncio.run(main())
+```
+
 See [Async usage](docs/async.md) for lifecycle, concurrency, custom HTTPX clients, and the current async endpoint list.
 
 ## Sync or Async?
