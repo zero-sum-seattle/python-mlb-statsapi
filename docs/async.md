@@ -152,15 +152,37 @@ import httpx
 from mlbstatsapi import AsyncMlb
 
 
-client = httpx.AsyncClient()
-try:
+async def get_person_with_custom_client(client: httpx.AsyncClient, person_id: int):
     async with AsyncMlb(client=client) as mlb:
-        player = await mlb.get_person(664034)
-finally:
-    await client.aclose()
+        return await mlb.get_person(person_id)
 ```
 
-An injected client remains caller-owned and is not closed by `AsyncMlb`.
+`async with` and `await` are only valid inside an `async def`, so this is
+written as a plain, reusable function rather than a top-level script. Call it
+however your application already enters async code — `asyncio.run(...)`, a
+web framework's request handler, an existing event loop, and so on. Nothing
+here requires restructuring your application around a `main()` entry point;
+`get_person_with_custom_client()` itself has no opinion on how it is invoked.
+
+For a minimal, runnable entry point:
+
+```python
+import asyncio
+
+
+async def main():
+    async with httpx.AsyncClient() as client:
+        return await get_person_with_custom_client(client, 664034)
+
+
+asyncio.run(main())
+```
+
+An injected client remains caller-owned and is not closed by `AsyncMlb`. In a
+real application the client is typically created once, reused across calls,
+and closed by whatever code owns its lifecycle — the entry point above is
+only there to show one way to run the example, not the required shape of
+your application.
 
 ## Documentation boundaries
 
