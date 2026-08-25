@@ -17,7 +17,7 @@ For detailed return-object and model documentation, follow the linked Wiki pages
 | `get_people()` | Return all players for a sport |
 
 ```text
-Mlb.get_people_id(fullname: str, sport_id: int = 1, search_key: str = 'fullname', **params)
+Mlb.get_people_id(fullname: str, sport_id: int = 1, search_key: str = 'fullName', **params)
 Mlb.get_person(player_id: int, **params)
 Mlb.get_people(sport_id: int = 1, **params)
 ```
@@ -168,8 +168,8 @@ Mlb.get_division_id(division_name: str, search_key: str = 'name', **params)
 | `get_seasons()` | Return all seasons |
 
 ```text
-Mlb.get_season(season_id: str, sport_id: int = None, **params)
-Mlb.get_seasons(sportid: int = None, **params)
+Mlb.get_season(season_id: str, sport_id: int = 1, **params)
+Mlb.get_seasons(sport_id: int = 1, **params)
 ```
 
 ## Standings
@@ -205,7 +205,7 @@ Mlb.get_draft(year_id: int, **params)
 | `get_awards()` | Return award recipients for an award |
 
 ```text
-Mlb.get_awards(award_id: int, **params)
+Mlb.get_awards(award_id: str, **params)
 ```
 
 ## Gamepace

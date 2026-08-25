@@ -141,9 +141,9 @@ See [Async usage](docs/async.md) for lifecycle, concurrency, custom HTTPX client
 | Request | `mlb.get_team(...)` | `await mlb.get_team(...)` |
 | Explicit cleanup | `mlb.close()` | `await mlb.aclose()` |
 
-Where an async endpoint is supported, both clients return the same Pydantic models and follow the same public HTTP/error behavior.
+`AsyncMlb` mirrors the full endpoint surface of `Mlb`. Both clients return the same Pydantic models and follow the same public HTTP/error behavior.
 
-The [public API contract](docs/public-api.md#asyncmlb-public-client) is the authoritative list of supported async methods.
+See the [public API contract](docs/public-api.md#asyncmlb-public-client) for the authoritative method list and signatures.
 
 ## Concurrent Async Requests
 
@@ -199,8 +199,6 @@ The stats API has several entry points and returns a nested `stats[group][type]`
 ```python
 schedule = mlb.get_schedule(date="2022-10-13")
 ```
-
-`get_schedule` is available on both `Mlb` and `AsyncMlb`.
 
 See the [method reference](docs/methods.md) for the full method documentation that previously lived in the README. Longer runnable examples live in [docs/examples.md](docs/examples.md).
 
