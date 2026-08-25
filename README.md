@@ -172,6 +172,8 @@ player, team = asyncio.run(main())
 
 ## Common Methods
 
+The examples below assume an initialized `Mlb` client named `mlb`, as shown in [Quick Start](#quick-start).
+
 ### Players
 
 ```python
