@@ -6,6 +6,24 @@ Every example in this file uses the synchronous `Mlb` client. Async usage is doc
 
 For return-object structure and endpoint details see the [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki). For the supported method list, parameters, and return shapes see the [public API contract](public-api.md). For transport behavior see the [HTTP transport documentation](http-transport.md).
 
+## Without a context manager
+
+A context manager is recommended, but `Mlb` can also be created directly. Call `mlb.close()` when finished so library-owned HTTP resources are released.
+
+```python
+from mlbstatsapi import Mlb
+
+mlb = Mlb()
+try:
+    player = mlb.get_person(664034)
+    team = mlb.get_team(136)
+
+    print(player.full_name)
+    print(team.name)
+finally:
+    mlb.close()
+```
+
 ## Working with Pydantic Models
 
 All returned objects are Pydantic models, giving you access to serialization and validation helpers.
