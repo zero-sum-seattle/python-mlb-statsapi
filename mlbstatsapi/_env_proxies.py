@@ -12,8 +12,12 @@ This module reimplements that discovery from the stdlib and hands the result
 to HTTPX's public ``mounts=`` argument instead, so the library stays off
 HTTPX's private ``httpx._utils.get_environment_proxies``. The parsing here
 intentionally mirrors that private function's semantics, verified against
-installed httpx 0.28.1, so the two must be updated together if a manual
-recheck against a newer httpx ever turns up drift.
+installed httpx 0.28.1. The differential test in
+``tests/test_async_env_proxies.py`` (``test_matches_stock_httpx_env_proxy_resolution``)
+is the drift alarm: it resolves the same URLs against a stock
+``httpx.AsyncClient()`` and against this module's output on every run, so a
+future httpx release changing ``NO_PROXY`` or proxy semantics fails that test
+instead of silently diverging.
 
 No httpx import here: environment variables in, a plain ``dict`` out.
 """

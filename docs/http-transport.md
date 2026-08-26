@@ -732,7 +732,7 @@ library only ever configures a client it created itself. See
 [async.md](async.md#custom-httpx-client) for injecting a client, including one
 configured with its own proxy settings.
 
-## No async support in this section
+## Scope of this document
 
 The retry, timeout, User-Agent, and strict-HTTP behavior documented above
 apply to the synchronous `Mlb` client. For the asynchronous client, see
