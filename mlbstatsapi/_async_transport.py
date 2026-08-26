@@ -25,6 +25,7 @@ transport themselves, mirroring the documented sync recipe for
 import asyncio
 
 from ._async_support import import_httpx
+from ._env_proxies import environment_proxy_map
 from .mlb_dataadapter import _build_user_agent, create_retry_policy
 
 httpx = import_httpx()
@@ -151,15 +152,51 @@ class MlbAsyncRetryTransport(httpx.AsyncBaseTransport):
         await self._inner.aclose()
 
 
-def create_library_async_client() -> httpx.AsyncClient:
+def create_library_async_client(*, trust_env: bool = True) -> httpx.AsyncClient:
     """Build the async client the library creates and owns.
 
     The counterpart of ``_configure_library_session()`` on the sync side:
     library defaults are applied here, at creation, and only to clients the
     library creates. Passing headers to the constructor replaces just the
     User-Agent, so HTTPX's other default headers survive.
+
+    HTTPX only builds its own environment-proxy mounts when the caller leaves
+    ``transport=None`` (``allow_env_proxies = trust_env and transport is
+    None`` in ``httpx.Client.__init__``). Passing ``transport=`` here, which
+    is required to install the retry transport, would otherwise silently
+    disable ``HTTP_PROXY`` / ``HTTPS_PROXY`` / ``ALL_PROXY`` / ``NO_PROXY``
+    support for every library-created async client (issue #324). This
+    rebuilds that discovery from the stdlib (see ``_env_proxies.py``) and
+    passes it through HTTPX's public ``mounts=`` argument instead, wrapping
+    every proxy transport in the same retry transport the direct path uses,
+    so a request routed through a proxy still gets library retries.
+
+    One retry policy instance is shared by the direct transport and every
+    proxy transport, mirroring the sync side sharing one Session across the
+    v1 and v1.1 adapters: retries are a property of the client, not of any
+    one transport within it.
     """
+    retry_policy = create_retry_policy()
+    direct = MlbAsyncRetryTransport(
+        httpx.AsyncHTTPTransport(), retry_policy=retry_policy
+    )
+
+    mounts: dict[str, httpx.AsyncBaseTransport | None] = {}
+    for pattern, proxy in environment_proxy_map(trust_env=trust_env).items():
+        if proxy is None:
+            # None tells HTTPX to fall back to client._transport for this
+            # pattern (see AsyncClient._transport_for_url), i.e. bypass the
+            # proxy rather than route through a second transport instance.
+            # aclose() also skips a None mount, so this never gets closed
+            # twice via both the direct transport and a mount entry.
+            mounts[pattern] = None
+        else:
+            mounts[pattern] = MlbAsyncRetryTransport(
+                httpx.AsyncHTTPTransport(proxy=proxy), retry_policy=retry_policy
+            )
+
     return httpx.AsyncClient(
         headers={"User-Agent": _build_user_agent()},
-        transport=MlbAsyncRetryTransport(),
+        transport=direct,
+        mounts=mounts,
     )

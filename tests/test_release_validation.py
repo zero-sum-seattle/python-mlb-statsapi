@@ -44,12 +44,18 @@ CURRENT_RELEASE_NOTES = RELEASE_NOTES_DIR / "1.0.1.md"
 
 # Historical notes keep their own version-specific statements and must not be
 # rewritten to match the current release.
+#
+# 1.1.0.md documents a release that has landed on this branch but is not yet
+# the pyproject-declared version (that bump is the separate issue referenced
+# above), so it is validated the same way as an already-shipped release
+# rather than promoted to CURRENT_RELEASE_NOTES.
 
 HISTORICAL_RELEASE_NOTES = (
     RELEASE_NOTES_DIR / "0.7.1.md",
     RELEASE_NOTES_DIR / "0.8.0.md",
     RELEASE_NOTES_DIR / "0.9.0.md",
     RELEASE_NOTES_DIR / "1.0.0.md",
+    RELEASE_NOTES_DIR / "1.1.0.md",
 )
 
 # Deterministic CI contract for the 1.0 release.
