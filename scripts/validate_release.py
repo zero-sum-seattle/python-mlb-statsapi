@@ -759,9 +759,40 @@ async def check_strict_http_and_caller_ownership() -> None:
     assert caller_client.is_closed is True
 
 
+async def check_standalone_data_adapter_library_owned_lifecycle() -> None:
+    """Directly exercise AsyncMlbDataAdapter() and its own library-owned client.
+
+    AsyncMlb() only ever constructs AsyncMlbDataAdapter through its own client,
+    so this constructs the public standalone adapter with client=None to prove
+    the library-owned-client construction and cleanup path independently.
+    """
+    expected_user_agent = f"python-mlb-statsapi/{expected_version}"
+
+    adapter = AsyncMlbDataAdapter()
+    owned_httpx_client = adapter._client
+    assert adapter._owns_client is True, (
+        "AsyncMlbDataAdapter() must own the httpx.AsyncClient it creates"
+    )
+    assert adapter._strict_http is True, ASYNC_ADAPTER_STRICT_DEFAULT_MESSAGE
+    assert owned_httpx_client.headers["User-Agent"] == expected_user_agent, (
+        f"library-created httpx.AsyncClient sends User-Agent "
+        f"{owned_httpx_client.headers['User-Agent']!r}, expected "
+        f"{expected_user_agent!r}"
+    )
+    assert owned_httpx_client.is_closed is False
+
+    await adapter.aclose()
+    assert owned_httpx_client.is_closed is True
+
+    # Repeated cleanup of a library-owned client is safe/idempotent.
+    await adapter.aclose()
+    assert owned_httpx_client.is_closed is True
+
+
 async def main() -> None:
     await check_library_owned_lifecycle_and_user_agent()
     await check_strict_http_and_caller_ownership()
+    await check_standalone_data_adapter_library_owned_lifecycle()
 
 
 asyncio.run(main())

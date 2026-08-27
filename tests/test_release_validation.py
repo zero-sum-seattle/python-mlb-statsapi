@@ -1043,6 +1043,22 @@ def test_async_smoke_test_checks_lifecycle_strict_modes_and_ownership() -> None:
     assert 'f"python-mlb-statsapi/{expected_version}"' in source
 
 
+def test_async_smoke_test_checks_standalone_data_adapter_lifecycle() -> None:
+    """AsyncMlbDataAdapter()'s own library-owned client path must be exercised
+    directly, not only indirectly through AsyncMlb()."""
+    source = validator.ASYNC_SMOKE_TEST_SOURCE
+
+    assert (
+        "async def check_standalone_data_adapter_library_owned_lifecycle"
+        in source
+    )
+    assert "AsyncMlbDataAdapter()" in source
+    assert "adapter._owns_client is True" in source
+    assert "adapter._strict_http is True" in source
+    assert source.count("await adapter.aclose()") == 2
+    assert "check_standalone_data_adapter_library_owned_lifecycle()" in source
+
+
 def test_async_smoke_test_runs_against_the_installed_distribution() -> None:
     source = validator.ASYNC_SMOKE_TEST_SOURCE
 
