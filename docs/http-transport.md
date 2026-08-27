@@ -386,9 +386,10 @@ is an explicit compatibility opt-out. It:
 * Does not alter timeout, transport, or decode failures
 * Runs only after retry exhaustion
 
-Compatibility mode is a temporary migration path and an explicit request for
-historical 0.9 behavior. It is not the recommended long-term 1.0
-configuration.
+`strict_http=False` is a compatibility mode for users migrating from pre-1.0
+behavior. It will remain available throughout the 1.x release series and may
+be removed in 2.0. New code should use the default `strict_http=True` behavior
+and handle `MlbHttpError`.
 
 ## Compatibility warnings
 
