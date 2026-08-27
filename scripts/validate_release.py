@@ -1,8 +1,8 @@
 """Validate the built python-mlb-statsapi distributions before a release.
 
 Checks the artifacts in ``dist/``, then clean-installs each distribution
-artifact into its own throwaway virtual environment and runs a public-API
-smoke test against the *installed* package.
+artifact into throwaway virtual environments and runs synchronous and async
+public-API smoke tests against the *installed* package.
 
 Both the wheel and the source distribution are installed separately so a
 broken sdist build, a missing runtime dependency, or an omitted package file
@@ -12,12 +12,12 @@ The smoke test deliberately runs from a temporary directory so the repository
 checkout cannot shadow the installed distribution artifact.
 
 Nothing here contacts the MLB API. Every HTTP response exercised by the smoke
-test is produced by an injected fake Session.
+tests is produced by an injected fake Session or HTTPX MockTransport.
 
 Usage::
 
     python scripts/validate_release.py
-    python scripts/validate_release.py --expected-version 1.0.0
+    python scripts/validate_release.py --expected-version 1.1.0
     python scripts/validate_release.py --dist dist
 
 Without ``--expected-version`` the expected artifact version is read from the
@@ -57,6 +57,12 @@ REQUIRED_SDIST_PATHS = (
     "mlbstatsapi/__init__.py",
     "mlbstatsapi/exceptions.py",
     "mlbstatsapi/warnings.py",
+    "mlbstatsapi/_async_support.py",
+    "mlbstatsapi/_async_transport.py",
+    "mlbstatsapi/_env_proxies.py",
+    "mlbstatsapi/_http.py",
+    "mlbstatsapi/async_mlb.py",
+    "mlbstatsapi/async_mlb_dataadapter.py",
     "mlbstatsapi/mlb_api.py",
     "mlbstatsapi/mlb_dataadapter.py",
     "mlbstatsapi/mlb_module.py",
@@ -69,6 +75,12 @@ REQUIRED_SDIST_PATHS = (
 MLB_STRICT_DEFAULT_MESSAGE = "Mlb.strict_http must default to True for the 1.0 contract"
 ADAPTER_STRICT_DEFAULT_MESSAGE = (
     "MlbDataAdapter.strict_http must default to True for the 1.0 contract"
+)
+ASYNC_MLB_STRICT_DEFAULT_MESSAGE = (
+    "AsyncMlb.strict_http must default to True for the 1.1 contract"
+)
+ASYNC_ADAPTER_STRICT_DEFAULT_MESSAGE = (
+    "AsyncMlbDataAdapter.strict_http must default to True for the 1.1 contract"
 )
 
 SMOKE_TEST_SOURCE = '''
@@ -504,6 +516,262 @@ print(f"smoke test passed for python-mlb-statsapi {installed_version}")
 '''
 
 
+ASYNC_SMOKE_TEST_SOURCE = '''
+"""Async public API smoke test for an installed artifact with its async extra.
+
+Runs inside a throwaway virtual environment against the installed
+distribution, never against a repository checkout. Every exercised HTTP
+response comes from HTTPX MockTransport, so this test performs no network I/O
+and never reaches the MLB API.
+"""
+
+import asyncio
+import importlib.metadata
+import inspect
+import logging
+import sys
+import sysconfig
+import warnings
+from pathlib import Path
+
+import httpx
+
+import mlbstatsapi
+from mlbstatsapi import (
+    AsyncMlb,
+    AsyncMlbDataAdapter,
+    MlbHttpCompatibilityWarning,
+    MlbHttpError,
+)
+
+expected_version = sys.argv[1]
+
+# Final 403 responses exercise both strict and 1.x compatibility behavior
+# without contacting the live service.
+FORBIDDEN_PAYLOAD = {"messageNumber": 403, "message": "Forbidden"}
+SPORTS_URL = "https://statsapi.mlb.com/api/v1/sports"
+ASYNC_MLB_STRICT_DEFAULT_MESSAGE = (
+    "AsyncMlb.strict_http must default to True for the 1.1 contract"
+)
+ASYNC_ADAPTER_STRICT_DEFAULT_MESSAGE = (
+    "AsyncMlbDataAdapter.strict_http must default to True for the 1.1 contract"
+)
+
+# Expected final 403s are logged by the adapter. Keep release output concise
+# without configuring logging from inside the installed package.
+package_logger = logging.getLogger("mlbstatsapi")
+package_logger.addHandler(logging.NullHandler())
+package_logger.propagate = False
+
+
+# --- The installed artifact and its optional dependency ---
+
+assert sys.prefix != sys.base_prefix, (
+    "the async smoke test must run inside the throwaway virtual environment"
+)
+
+site_packages = Path(sysconfig.get_paths()["purelib"]).resolve()
+package_file = Path(mlbstatsapi.__file__).resolve()
+assert package_file.is_relative_to(site_packages), (
+    f"mlbstatsapi was imported from {package_file}, not from the installed "
+    f"distribution artifact under {site_packages}"
+)
+
+installed_version = importlib.metadata.version("python-mlb-statsapi")
+assert installed_version == expected_version, (
+    f"installed metadata reports {installed_version}, expected {expected_version}"
+)
+
+# In this otherwise-clean environment, importing HTTPX and reading its
+# distribution metadata proves that installing the local artifact's [async]
+# extra installed the optional transport dependency.
+installed_httpx_version = importlib.metadata.version("httpx")
+assert installed_httpx_version, "the async extra did not install HTTPX metadata"
+assert httpx.__version__ == installed_httpx_version
+
+for name in ("AsyncMlb", "AsyncMlbDataAdapter"):
+    assert hasattr(mlbstatsapi, name), f"mlbstatsapi.{name} is not importable"
+    assert getattr(mlbstatsapi, name) is not None, f"mlbstatsapi.{name} is None"
+
+
+# --- Public constructor and lifecycle contracts ---
+
+async_mlb_init = inspect.signature(AsyncMlb.__init__).parameters
+async_adapter_init = inspect.signature(AsyncMlbDataAdapter.__init__).parameters
+
+assert list(async_mlb_init) == [
+    "self",
+    "hostname",
+    "logger",
+    "timeout",
+    "client",
+    "strict_http",
+]
+assert async_mlb_init["hostname"].default == "statsapi.mlb.com"
+assert async_mlb_init["logger"].default is None
+assert async_mlb_init["timeout"].default == (3.05, 30.0)
+assert async_mlb_init["client"].default is None
+assert async_mlb_init["strict_http"].default is True, (
+    ASYNC_MLB_STRICT_DEFAULT_MESSAGE
+)
+assert async_mlb_init["strict_http"].kind is inspect.Parameter.KEYWORD_ONLY
+
+assert list(async_adapter_init) == [
+    "self",
+    "hostname",
+    "ver",
+    "logger",
+    "timeout",
+    "client",
+    "strict_http",
+]
+assert async_adapter_init["hostname"].default == "statsapi.mlb.com"
+assert async_adapter_init["ver"].default == "v1"
+assert async_adapter_init["logger"].default is None
+assert async_adapter_init["timeout"].default == (3.05, 30.0)
+assert async_adapter_init["client"].default is None
+assert async_adapter_init["strict_http"].default is True, (
+    ASYNC_ADAPTER_STRICT_DEFAULT_MESSAGE
+)
+assert async_adapter_init["strict_http"].kind is inspect.Parameter.KEYWORD_ONLY
+assert inspect.iscoroutinefunction(AsyncMlb.aclose)
+assert inspect.iscoroutinefunction(AsyncMlbDataAdapter.aclose)
+
+
+def forbidden_response(request: httpx.Request) -> httpx.Response:
+    """Return one deterministic final 403 through HTTPX's fake transport."""
+    return httpx.Response(
+        403,
+        headers={"Content-Type": "application/json"},
+        json=FORBIDDEN_PAYLOAD,
+        request=request,
+    )
+
+
+def assert_forbidden_error(exc: MlbHttpError, *, label: str) -> None:
+    assert exc.status_code == 403, f"{label}: status_code={exc.status_code}"
+    assert exc.reason == "Forbidden", f"{label}: reason={exc.reason!r}"
+    assert exc.method == "GET", f"{label}: method={exc.method!r}"
+    assert exc.url == SPORTS_URL, f"{label}: url={exc.url!r}"
+    assert isinstance(exc.response_data, dict), (
+        f"{label}: response_data={exc.response_data!r}"
+    )
+    for key, value in FORBIDDEN_PAYLOAD.items():
+        assert exc.response_data.get(key) == value, (
+            f"{label}: response_data={exc.response_data!r}"
+        )
+
+
+def compatibility_warnings(caught):
+    return [
+        record
+        for record in caught
+        if issubclass(record.category, MlbHttpCompatibilityWarning)
+    ]
+
+
+async def check_library_owned_lifecycle_and_user_agent() -> None:
+    expected_user_agent = f"python-mlb-statsapi/{expected_version}"
+
+    # Construction plus async context-manager cleanup. No request is made with
+    # this library-created client; its configuration is inspected directly.
+    client = AsyncMlb()
+    owned_httpx_client = client._client
+    assert owned_httpx_client.headers["User-Agent"] == expected_user_agent
+    assert client._mlb_adapter_v1._strict_http is True, (
+        ASYNC_MLB_STRICT_DEFAULT_MESSAGE
+    )
+    async with client as entered:
+        assert entered is client
+        assert owned_httpx_client.is_closed is False
+    assert owned_httpx_client.is_closed is True
+
+    # Explicit cleanup is supported and idempotent for a library-owned client.
+    explicitly_closed = AsyncMlb()
+    explicitly_owned_httpx_client = explicitly_closed._client
+    await explicitly_closed.aclose()
+    assert explicitly_owned_httpx_client.is_closed is True
+    await explicitly_closed.aclose()
+    assert explicitly_owned_httpx_client.is_closed is True
+
+
+async def check_strict_http_and_caller_ownership() -> None:
+    transport = httpx.MockTransport(forbidden_response)
+    caller_client = httpx.AsyncClient(
+        transport=transport,
+        headers={
+            "User-Agent": "release-async-smoke-test/1.0",
+            "X-Release-Test": "preserved",
+        },
+    )
+    headers_before = dict(caller_client.headers)
+
+    try:
+        # Omitting strict_http exercises the real True default. The context
+        # manager must leave the injected HTTPX client caller-owned and open.
+        async with AsyncMlb(client=caller_client) as strict_client:
+            assert strict_client._client is caller_client
+            assert strict_client._mlb_adapter_v1._strict_http is True, (
+                ASYNC_MLB_STRICT_DEFAULT_MESSAGE
+            )
+            try:
+                await strict_client.get_sports()
+            except MlbHttpError as exc:
+                assert_forbidden_error(
+                    exc,
+                    label="AsyncMlb(strict_http=True).get_sports()",
+                )
+            else:
+                raise AssertionError(
+                    "AsyncMlb strict_http=True did not raise MlbHttpError"
+                )
+
+        assert caller_client.is_closed is False, (
+            "AsyncMlb must not close a caller-injected httpx.AsyncClient"
+        )
+        assert dict(caller_client.headers) == headers_before
+
+        # Compatibility mode remains available through 1.x and returns the
+        # endpoint's historical empty result with its compatibility warning.
+        async with AsyncMlb(
+            client=caller_client,
+            strict_http=False,
+        ) as compatibility_client:
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter("always")
+                sports = await compatibility_client.get_sports()
+
+        assert sports == [], (
+            f"AsyncMlb(strict_http=False).get_sports() returned {sports!r}"
+        )
+        captured = compatibility_warnings(caught)
+        assert len(captured) == 1, (
+            "AsyncMlb(strict_http=False) expected exactly one "
+            f"MlbHttpCompatibilityWarning, captured {captured!r}"
+        )
+        assert "strict_http=False" in str(captured[0].message)
+        assert caller_client.is_closed is False, (
+            "compatibility mode closed a caller-injected httpx.AsyncClient"
+        )
+    finally:
+        await caller_client.aclose()
+
+    assert caller_client.is_closed is True
+
+
+async def main() -> None:
+    await check_library_owned_lifecycle_and_user_agent()
+    await check_strict_http_and_caller_ownership()
+
+
+asyncio.run(main())
+print(
+    f"async smoke test passed for python-mlb-statsapi {installed_version} "
+    f"with HTTPX {installed_httpx_version}"
+)
+'''
+
+
 class ValidationError(Exception):
     """A release validation check failed."""
 
@@ -648,7 +916,7 @@ def _create_clean_environment(venv_dir: Path) -> Path:
 
 
 def _check_clean_install(artifact: Path, expected_version: str, *, label: str) -> None:
-    """Clean-install one distribution artifact and smoke test the result.
+    """Clean-install one distribution artifact and smoke test the sync result.
 
     Each artifact gets its own virtual environment so the wheel and the source
     distribution are never validated against a shared install.
@@ -686,6 +954,66 @@ def _check_clean_install(artifact: Path, expected_version: str, *, label: str) -
         )
 
 
+def _check_async_clean_install(
+    artifact: Path,
+    expected_version: str,
+    *,
+    label: str,
+) -> None:
+    """Clean-install one artifact with ``[async]`` and smoke test the result.
+
+    This environment is separate from both sync artifact environments. That
+    separation proves HTTPX arrives through the exact local wheel or sdist's
+    optional extra rather than being left over from another validation phase.
+    """
+    with tempfile.TemporaryDirectory(
+        prefix="python-mlb-statsapi-release-async-"
+    ) as tmp:
+        workspace = Path(tmp)
+        venv_dir = workspace / "venv"
+
+        _log(
+            f"  creating clean async virtual environment for the {label} "
+            f"in {venv_dir}"
+        )
+        python = _create_clean_environment(venv_dir)
+
+        _run(
+            [str(python), "-m", "pip", "install", "--upgrade", "--quiet", "pip"],
+            cwd=workspace,
+            label=f"pip upgrade for the {label} async environment",
+        )
+
+        artifact_with_extra = f"{artifact.resolve()}[async]"
+        _log(f"  installing {label} with async extra: {artifact.name}")
+        _run(
+            [
+                str(python),
+                "-m",
+                "pip",
+                "install",
+                "--quiet",
+                artifact_with_extra,
+            ],
+            cwd=workspace,
+            label=f"{label} async-extra installation of {artifact.name}",
+        )
+
+        smoke_test = workspace / "release_async_smoke_test.py"
+        smoke_test.write_text(ASYNC_SMOKE_TEST_SOURCE, encoding="utf-8")
+
+        # Running from the temporary workspace keeps the repository checkout
+        # off sys.path, exactly as the sync installed-artifact phase does.
+        _log(
+            f"  running {label} async smoke test against the installed artifact"
+        )
+        _run(
+            [str(python), str(smoke_test), expected_version],
+            cwd=workspace,
+            label=f"{label} async smoke test for {artifact.name}",
+        )
+
+
 def validate(dist_dir: Path, expected_version: str) -> None:
     _log(f"Validating release {expected_version} in {dist_dir}")
 
@@ -710,6 +1038,11 @@ def validate(dist_dir: Path, expected_version: str) -> None:
     # loses a runtime dependency must not be masked by the wheel install.
     _check_clean_install(wheel, expected_version, label=WHEEL_LABEL)
     _check_clean_install(sdist, expected_version, label=SDIST_LABEL)
+
+    # The optional dependency must be resolved from each exact artifact in a
+    # fresh environment; a working wheel must not mask a broken sdist extra.
+    _check_async_clean_install(wheel, expected_version, label=WHEEL_LABEL)
+    _check_async_clean_install(sdist, expected_version, label=SDIST_LABEL)
 
     _log(f"Release validation passed for {DISTRIBUTION_NAME} {expected_version}")
 

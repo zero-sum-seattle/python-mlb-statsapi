@@ -206,7 +206,7 @@ See the [method reference](docs/methods.md) for the full method documentation th
 
 Both clients use explicit timeouts, structured exceptions, and pooled HTTP connections. `strict_http=True` is the default. Final non-404 4xx responses raise `MlbHttpError`, while existing endpoint-specific 404 behavior is preserved.
 
-Library-created clients send a versioned User-Agent. The current package version sends `python-mlb-statsapi/1.0.1`. See the [HTTP transport documentation](docs/http-transport.md) for the full transport contract.
+Library-created clients send a versioned User-Agent. The current package version sends `python-mlb-statsapi/1.1.0`. See the [HTTP transport documentation](docs/http-transport.md) for the full transport contract.
 
 The main transport exceptions are:
 
