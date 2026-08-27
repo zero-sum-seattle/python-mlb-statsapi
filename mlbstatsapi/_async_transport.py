@@ -152,7 +152,7 @@ class MlbAsyncRetryTransport(httpx.AsyncBaseTransport):
         await self._inner.aclose()
 
 
-def create_library_async_client(*, trust_env: bool = True) -> httpx.AsyncClient:
+def create_library_async_client() -> httpx.AsyncClient:
     """Build the async client the library creates and owns.
 
     The counterpart of ``_configure_library_session()`` on the sync side:
@@ -171,6 +171,13 @@ def create_library_async_client(*, trust_env: bool = True) -> httpx.AsyncClient:
     every proxy transport in the same retry transport the direct path uses,
     so a request routed through a proxy still gets library retries.
 
+    Environment discovery always runs here, matching the ``trust_env=True``
+    default a caller gets from a plain ``httpx.AsyncClient()``. Neither
+    ``AsyncMlb`` nor ``AsyncMlbDataAdapter`` exposes a ``trust_env`` toggle;
+    a caller who needs one injects their own client instead, the same way
+    they would opt into any other HTTPX-level setting this factory does not
+    surface.
+
     One retry policy instance is shared by the direct transport and every
     proxy transport, mirroring the sync side sharing one Session across the
     v1 and v1.1 adapters: retries are a property of the client, not of any
@@ -182,7 +189,7 @@ def create_library_async_client(*, trust_env: bool = True) -> httpx.AsyncClient:
     )
 
     mounts: dict[str, httpx.AsyncBaseTransport | None] = {}
-    for pattern, proxy in environment_proxy_map(trust_env=trust_env).items():
+    for pattern, proxy in environment_proxy_map().items():
         if proxy is None:
             # None tells HTTPX to fall back to client._transport for this
             # pattern (see AsyncClient._transport_for_url), i.e. bypass the
