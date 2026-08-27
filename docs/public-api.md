@@ -29,6 +29,11 @@ During the 1.x series:
 * Documented Session ownership behavior will remain compatible
 * Documented endpoint-level 404 return shapes will remain compatible
 
+`strict_http=False` is a compatibility mode for users migrating from pre-1.0
+behavior. It will remain available throughout the 1.x release series and may
+be removed in 2.0. New code should use the default `strict_http=True` behavior
+and handle `MlbHttpError`.
+
 The following may still evolve in a compatible way:
 
 * New optional parameters
