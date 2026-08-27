@@ -207,6 +207,22 @@ real application the client is typically created once, reused across calls,
 and closed by whatever code owns its lifecycle — the examples above show a
 few ways to run this, not the required shape of your application.
 
+## Environment proxies
+
+A library-created client (the default — no `client=` passed) honors
+`HTTP_PROXY`, `HTTPS_PROXY`, `ALL_PROXY`, and `NO_PROXY` from the environment,
+the same variables a plain `httpx.AsyncClient()` discovers on its own.
+
+An injected client keeps whatever proxy configuration its caller gave it —
+`httpx.AsyncClient()` reads those variables itself by default, or a caller
+may pass `trust_env=False` or an explicit `proxy=`/`mounts=` to opt out or
+override. The library does not add or remove proxy configuration on an
+injected client.
+
+See [HTTP transport: async client environment
+proxies](http-transport.md#async-client-environment-proxies) for the full
+behavior.
+
 ## Documentation boundaries
 
 - [README](../README.md) — installation and quick-start examples

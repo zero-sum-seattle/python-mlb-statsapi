@@ -710,8 +710,31 @@ bodies.
 
 The client has no default response cache.
 
-## No async support
+## Async client environment proxies
 
-The client remains synchronous.
+Library-created `AsyncMlb` / `AsyncMlbDataAdapter` clients honor
+`HTTP_PROXY`, `HTTPS_PROXY`, `ALL_PROXY`, and `NO_PROXY` (any case), the same
+environment variables HTTPX itself discovers for a plain `httpx.AsyncClient()`.
 
-Async support is not part of version 1.0.0.
+```text
+Library-created async client
+    Reads HTTP_PROXY / HTTPS_PROXY / ALL_PROXY / NO_PROXY from the environment
+    Routes matching requests through the proxy
+    Applies the library retry policy to proxied and direct requests alike
+
+Caller-injected async client
+    Keeps exactly whatever transport and mounts its caller configured
+    The library never reads proxy environment variables for it
+```
+
+This mirrors [Session ownership](#session-ownership) on the sync side: the
+library only ever configures a client it created itself. See
+[async.md](async.md#custom-httpx-client) for injecting a client, including one
+configured with its own proxy settings.
+
+## Scope of this document
+
+The retry, timeout, User-Agent, and strict-HTTP behavior documented above
+apply to the synchronous `Mlb` client. For the asynchronous client, see
+[async.md](async.md); it shares this document's retry, timeout, and
+error-handling contract except where noted above.
