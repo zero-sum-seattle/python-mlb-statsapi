@@ -19,7 +19,7 @@
 - **Pythonic models:** Work with [Pydantic](https://docs.pydantic.dev/) objects whose fields use `snake_case` names.
 - **Sync and async:** Choose the synchronous `Mlb` client or the asynchronous `AsyncMlb` client. The async API is additive, so existing sync users can upgrade without changing their code.
 
-> **Unofficial project.** This package is not affiliated with or endorsed by Major League Baseball or any MLB team. Use of MLB data is subject to [MLB's copyright notice](https://gdx.mlb.com/components/copyright.txt). Intended for educational, non-commercial use.
+> **Unofficial project.** This package and its authors are not affiliated with or endorsed by Major League Baseball or any MLB team. Use of MLB data is subject to [MLB's copyright notice](https://gdx.mlb.com/components/copyright.txt). This is an educational project—not for commercial use.
 
 ![MLB Stats API](https://user-images.githubusercontent.com/2068393/203456246-dfdbdf0f-1e43-4329-aaa9-1c4008f9800d.jpg)
 
