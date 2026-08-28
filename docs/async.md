@@ -225,7 +225,7 @@ behavior.
 
 ## Documentation boundaries
 
-- [README](../README.md) — installation and quick-start examples
+- [Documentation home](index.md) — installation and quick-start examples
 - [Usage examples](examples.md) — longer synchronous examples
 - [Public API contract](public-api.md) — supported symbols, signatures, and endpoint coverage
 - [HTTP transport](http-transport.md) — timeouts, retries, errors, and compatibility behavior
