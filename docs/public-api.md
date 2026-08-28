@@ -4,9 +4,10 @@ This document is the authoritative public API contract for the
 `python-mlb-statsapi` **1.x** series.
 
 It defines which package-root symbols, constructor signatures, exception and
-warning relationships, Session ownership rules, and `Mlb` endpoint methods are
-supported after version 1.0. Maintainers should use this document when deciding
-whether a change is a patch, a minor release, or a major release.
+warning relationships, resource ownership rules, and `Mlb` and `AsyncMlb`
+endpoint methods are supported after version 1.0. Maintainers should use this
+document when deciding whether a change is a patch, a minor release, or a major
+release.
 
 This package is an unofficial wrapper for the MLB Stats API and is not
 affiliated with Major League Baseball.
@@ -27,6 +28,11 @@ During the 1.x series:
 * Structured exception inheritance will remain compatible
 * Documented Session ownership behavior will remain compatible
 * Documented endpoint-level 404 return shapes will remain compatible
+
+`strict_http=False` is a compatibility mode for users migrating from pre-1.0
+behavior. It will remain available throughout the 1.x release series and may
+be removed in 2.0. New code should use the default `strict_http=True` behavior
+and handle `MlbHttpError`.
 
 The following may still evolve in a compatible way:
 
@@ -78,22 +84,40 @@ from mlbstatsapi import (
 )
 ```
 
+The symbols above are available in every install. `AsyncMlb` and
+`AsyncMlbDataAdapter` are equally public, but they resolve only when the
+optional `async` extra is installed; see
+[Optional async support](#optional-async-support).
+
 ### Classification of package-root symbols
 
-| Symbol | Status |
-| --- | --- |
-| `Mlb` | Public and stable in 1.x |
-| `MlbDataAdapter` | Public and stable in 1.x |
-| `MlbResult` | Public and stable in 1.x |
-| `create_retry_policy` | Public and stable in 1.x |
-| `TheMlbStatsApiException` | Public and stable in 1.x |
-| `MlbTransportError` | Public and stable in 1.x |
-| `MlbTimeoutError` | Public and stable in 1.x |
-| `MlbHttpError` | Public and stable in 1.x |
-| `MlbDecodeError` | Public and stable in 1.x |
-| `MlbHttpCompatibilityWarning` | Public and stable in 1.x |
-| `return_splits` | Public legacy helper, stable in 1.x but not preferred for new code |
-| `get_stat_attributes` | Public legacy helper, stable in 1.x but not preferred for new code |
+Status and availability are separate questions. Every symbol below is public and
+covered by the stability policy above; the availability column records whether
+resolving it needs an optional dependency.
+
+| Symbol | Status | Availability |
+| --- | --- | --- |
+| `Mlb` | Public and stable in 1.x | Always available |
+| `AsyncMlb` | Public and stable in 1.x | Requires the optional `async` extra |
+| `MlbDataAdapter` | Public and stable in 1.x | Always available |
+| `AsyncMlbDataAdapter` | Public and stable in 1.x | Requires the optional `async` extra |
+| `MlbResult` | Public and stable in 1.x | Always available |
+| `create_retry_policy` | Public and stable in 1.x | Always available |
+| `TheMlbStatsApiException` | Public and stable in 1.x | Always available |
+| `MlbTransportError` | Public and stable in 1.x | Always available |
+| `MlbTimeoutError` | Public and stable in 1.x | Always available |
+| `MlbHttpError` | Public and stable in 1.x | Always available |
+| `MlbDecodeError` | Public and stable in 1.x | Always available |
+| `MlbHttpCompatibilityWarning` | Public and stable in 1.x | Always available |
+| `return_splits` | Public legacy helper, stable in 1.x but not preferred for new code | Always available |
+| `get_stat_attributes` | Public legacy helper, stable in 1.x but not preferred for new code | Always available |
+
+`AsyncMlb` and `AsyncMlbDataAdapter` are supported 1.x API on the same terms as
+the synchronous symbols: they will not be removed or renamed during the
+series, and their documented behavior stays compatible. Only their
+availability is conditional, because their HTTP dependency ships with the
+`async` extra. See
+[Optional async support](#optional-async-support).
 
 No package-root symbol is marked deprecated in version 1.0. Deprecation requires
 a documented replacement, a warning strategy, a removal timeline, and a
@@ -132,6 +156,37 @@ surface.
 
 A future focused issue may introduce `__all__` after deciding how to treat the
 accidental submodule names (for example, a documented deprecation period).
+
+## Optional async support
+
+`AsyncMlb` and `AsyncMlbDataAdapter` are public package-root symbols, like
+`Mlb` and `MlbDataAdapter`, and appear in the classification table above. Their
+HTTP dependency is optional and installed with the `async` extra:
+
+```bash
+pip install "python-mlb-statsapi[async]"
+```
+
+With the extra installed:
+
+```python
+from mlbstatsapi import AsyncMlb, AsyncMlbDataAdapter
+```
+
+Async symbols are resolved on first access, so the optional dependency is not
+imported by `import mlbstatsapi`. A synchronous-only install is unaffected:
+
+* `import mlbstatsapi` succeeds without the `async` extra
+* every package-root symbol marked "Always available" above stays importable
+* nothing in the synchronous surface changes
+
+Requesting async functionality without the extra raises `ImportError` naming
+the install command above. That failure happens only when async functionality
+is requested — importing the package, or any supported synchronous symbol,
+never triggers it.
+
+The async HTTP library is an implementation detail. It is not re-exported from
+the package root, and its types are not part of the public API.
 
 ## Primary client
 
@@ -181,6 +236,169 @@ with mlbstatsapi.Mlb() as mlb:
 Session. Most endpoint methods use `v1`. `get_game` uses the `v1.1` live feed
 endpoint. Standalone `MlbDataAdapter(ver="v1")` and
 `MlbDataAdapter(ver="v1.1")` remain supported.
+
+## AsyncMlb public client
+
+`AsyncMlb` is the public asynchronous client and requires the optional `async`
+extra.
+
+### Constructor
+
+```text
+AsyncMlb(
+    hostname="statsapi.mlb.com",
+    logger=None,
+    timeout=(3.05, 30.0),
+    client=None,
+    *,
+    strict_http=True,
+)
+```
+
+Parameter order and default values above are part of the API.
+`strict_http` is keyword-only.
+
+### Lifecycle
+
+* `async with AsyncMlb(...) as mlb` returns the `AsyncMlb` instance itself
+* `AsyncMlb.__aexit__` awaits cleanup
+* Explicit cleanup with `await mlb.aclose()` is supported
+* Repeated `aclose()` calls are safe
+* Library-owned async clients are closed
+* Caller-injected async clients remain caller-owned and open
+
+### Concurrency
+
+One `AsyncMlb` instance supports concurrent in-flight requests on the same
+event loop. Concurrency is caller-controlled. Cross-event-loop use is not
+promised.
+
+### API versions used by `AsyncMlb`
+
+`AsyncMlb` constructs internal adapters for both `v1` and `v1.1` that share
+one HTTPX client, mirroring `Mlb`'s shared-Session pattern. Most endpoint
+methods use `v1`. `get_game` uses the `v1.1` live feed endpoint. `AsyncMlb`
+owns the shared client, exactly as `Mlb` owns the shared `Session`: it creates
+one when the caller passes none, closes only a client it created, and hands
+the same client to both adapters.
+
+Retries are a property of that client, not of either adapter. A
+library-created client is built with the library retry transport mounted on
+it, the way a library-created `Session` is built with the library retry
+adapters mounted on it, so both API versions retry identically without either
+adapter holding retry state. A caller-injected client keeps whatever transport
+its caller mounted.
+
+### Endpoint methods
+
+The currently supported awaitable endpoint methods are:
+
+```text
+get_team(team_id: int, **params)
+get_teams(sport_id: int = 1, **params)
+get_team_roster(team_id: int, **params)
+get_team_coaches(team_id: int, **params)
+get_person(player_id: int, **params)
+get_people(sport_id: int = 1, **params)
+get_schedule(
+    date: str = None,
+    start_date: str = None,
+    end_date: str = None,
+    sport_id: int = 1,
+    team_id: int = None,
+    **params,
+)
+get_sport(sport_id: int, **params)
+get_sports(**params)
+get_league(league_id: int, **params)
+get_leagues(**params)
+get_division(division_id: int, **params)
+get_divisions(**params)
+get_season(season_id: str, sport_id: int = 1, **params)
+get_seasons(sport_id: int = 1, **params)
+get_venue(venue_id: int, **params)
+get_venues(**params)
+get_standings(league_id: int, season: str, **params)
+get_attendance(
+    team_id: int = None,
+    league_id: int = None,
+    league_list_id: str = None,
+    **params,
+)
+get_draft(year_id: int, **params)
+get_awards(award_id: str, **params)
+get_homerun_derby(game_id, **params)
+get_team_stats(team_id: int, stats: list, groups: list, **params)
+get_players_stats_for_game(person_id: int, game_id: int, **params)
+get_player_stats(person_id: int, stats: list, groups: list, **params)
+get_stats(stats: list, groups: list, **params)
+get_persons(person_ids: str | list[int], **params)
+get_scheduled_games_by_date(
+    date: str = None,
+    start_date: str = None,
+    end_date: str = None,
+    sport_id: int = 1,
+    **params,
+)
+get_gamepace(season: str, sport_id=1, **params)
+get_team_id(team_name: str, search_key: str = 'name', **params)
+get_people_id(
+    fullname: str,
+    sport_id: int = 1,
+    search_key: str = 'fullName',
+    **params,
+)
+get_sport_id(sport_name: str, search_key: str = 'name', **params)
+get_league_id(league_name: str, search_key: str = 'name', **params)
+get_division_id(division_name: str, search_key: str = 'name', **params)
+get_venue_id(venue_name: str, search_key: str = 'name', **params)
+get_game(game_id: int, **params)
+get_game_play_by_play(game_id: int, **params)
+get_game_line_score(game_id: int, **params)
+get_game_box_score(game_id: int, **params)
+get_game_ids(
+    date: str = None,
+    start_date: str = None,
+    end_date: str = None,
+    sport_id: int = 1,
+    **params,
+)
+```
+
+`get_venue` inherits the same documented quirk as `Mlb.get_venue`: it is
+annotated `Venue | None` but returns `[]` (not `None`) on a 400–499 response,
+matching the sync behavior noted above. This is preserved for parity, not
+introduced by the async port.
+
+`get_game_line_score` inherits the same documented quirk as
+`Mlb.get_game_line_score`: it does not short-circuit on a 400–499 status the
+way its sibling game helpers do; missing linescore data falls through to an
+implicit `None`.
+
+The four stat methods return the same nested `dict` their sync counterparts
+do, keyed by stat group and then by stat type — `{'hitting': {'season': Stat}}`
+— and return `{}` on a 400–499 response, on a body with no `stats`, and on a
+`stats` entry carrying no splits. Note that an unrecognized value in `stats` or
+`groups` is not rejected; it produces the same empty `{}`. Valid values are
+listed at `https://statsapi.mlb.com/api/v1/statTypes` and
+`https://statsapi.mlb.com/api/v1/statGroups`.
+
+`AsyncMlb` now covers every endpoint method `Mlb` exposes. The only public
+name that differs is lifecycle: `Mlb.close()` is spelled `AsyncMlb.aclose()`.
+
+`get_scheduled_games_by_date` inherits the same documented quirk as
+`Mlb.get_scheduled_games_by_date`: it is annotated `list[ScheduleGames]` but
+returns `None` when no `date`, `start_date`/`end_date` pair, or `gamePks` was
+given to select with. This is preserved for parity, not introduced by the
+async port.
+
+`get_gamepace` sends the same request on both clients but builds it
+differently. `Mlb` embeds the season in the endpoint string
+(`gamePace?season=2021`) and relies on Requests merging that query with the
+rest of the parameters. HTTPX replaces a URL's existing query rather than
+merging into it, so `AsyncMlb` passes the season as an ordinary parameter.
+Callers see no difference; this matters only if you are reading the two
+implementations side by side.
 
 ## Low-level adapter
 
@@ -415,9 +633,17 @@ Notes and known conflicts (documented, not redesigned by this contract):
 * `get_venue` is annotated to return `Venue | None` but currently returns `[]`
   on 400–499 statuses. Treat the implementation shape as the observed behavior
   until a focused fix lands.
-* `get_homerun_derby` currently executes a bare `None` expression on 400–499
-  instead of `return None`, so execution may continue. A focused bugfix is
-  recommended.
+* `get_homerun_derby` previously executed a bare `None` expression on
+  400–499 instead of `return None`, so a 4xx response whose body happened to
+  contain a truthy `status` key would have continued into
+  `HomeRunDerby(**data)` and raised instead of returning `None`. Fixed to
+  `return None` while porting the endpoint to `AsyncMlb` (issue #305).
+* `get_attendance`'s "at least one of `team_id`/`league_id`/`league_list_id`"
+  guard previously used `any(required_args)`, which iterates dict keys
+  (always truthy) rather than values, so the guard never actually fired. This
+  was fixed to `any(required_args.values())` while porting the endpoint to
+  `AsyncMlb` (issue #305); calling either client with no identifier now
+  returns `None` without making a request, as already documented above.
 * Nested Pydantic model fields are not frozen by this contract.
 
 ## Return-contract boundaries

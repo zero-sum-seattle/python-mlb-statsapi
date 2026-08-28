@@ -38,9 +38,9 @@ OFFLINE_WORKFLOW = PROJECT_ROOT / ".github" / "workflows" / "build-and-test.yml"
 EXTERNAL_WORKFLOW = PROJECT_ROOT / ".github" / "workflows" / "external-tests.yml"
 
 # Release notes for the version this branch is preparing. Kept explicit so the
-# current-document checks do not depend on the pyproject version bump, which is
-# owned by a separate issue.
-CURRENT_RELEASE_NOTES = RELEASE_NOTES_DIR / "1.0.1.md"
+# current-document checks cannot silently classify an unreviewed notes file as
+# the current release merely because the declared version changed.
+CURRENT_RELEASE_NOTES = RELEASE_NOTES_DIR / "1.1.0.md"
 
 # Historical notes keep their own version-specific statements and must not be
 # rewritten to match the current release.
@@ -50,11 +50,11 @@ HISTORICAL_RELEASE_NOTES = (
     RELEASE_NOTES_DIR / "0.8.0.md",
     RELEASE_NOTES_DIR / "0.9.0.md",
     RELEASE_NOTES_DIR / "1.0.0.md",
+    RELEASE_NOTES_DIR / "1.0.1.md",
 )
 
-# Deterministic CI contract for the 1.0 release.
-RELEASE_BRANCH = "release/1.0.0"
-STALE_RELEASE_BRANCH = "release/0.9.0"
+# Deterministic CI contract for maintained release branches.
+RELEASE_BRANCH_PATTERN = 'release/**'
 SUPPORTED_PYTHON_VERSIONS = ("3.10", "3.11", "3.12", "3.13", "3.14")
 CI_VALIDATED_PYTHON_RANGE = "3.10 through 3.14"
 # Prerelease during this work, so it is deliberately excluded from the matrix.
@@ -320,12 +320,16 @@ def _write_sdist(
 def _classify_command(command) -> str:
     parts = [str(part) for part in command]
     joined = " ".join(parts)
+    if "release_async_smoke_test.py" in joined:
+        return "async-smoke"
     if "release_smoke_test.py" in joined:
-        return "smoke"
+        return "sync-smoke"
     if "--upgrade" in parts:
         return "pip-upgrade"
     if "install" in parts:
-        return "install"
+        if any(part.endswith("[async]") for part in parts):
+            return "async-install"
+        return "sync-install"
     return "other"
 
 
@@ -337,10 +341,10 @@ class _CompletedProcess:
 def _stub_clean_install(monkeypatch, *, failing: str | None = None) -> list[list[str]]:
     """Stub environment creation and subprocess execution for install tests.
 
-    ``failing`` selects the step that returns a non-zero exit code: ``install``
-    for the artifact installation or ``smoke`` for the installed-package smoke
-    test. Only the validator's own ``subprocess`` reference is replaced, so no
-    real interpreter, environment, or download is involved.
+    ``failing`` selects the classified step that returns a non-zero exit code,
+    such as ``sync-install``, ``sync-smoke``, ``async-install``, or
+    ``async-smoke``. Only the validator's own ``subprocess`` reference is
+    replaced, so no real interpreter, environment, or download is involved.
     """
     commands: list[list[str]] = []
 
@@ -576,12 +580,22 @@ def test_missing_required_source_distribution_path_is_reported(
 
 
 def test_required_source_distribution_paths_cover_the_package_entry_points() -> None:
-    """The required list must include the files needed to rebuild and import."""
+    """The required list must cover both public clients and async support."""
     required = set(validator.REQUIRED_SDIST_PATHS)
 
     assert {"README.md", "pyproject.toml", "mlbstatsapi/__init__.py"} <= required
-    assert "mlbstatsapi/mlb_api.py" in required
-    assert "mlbstatsapi/mlb_dataadapter.py" in required
+    assert {
+        "mlbstatsapi/mlb_api.py",
+        "mlbstatsapi/mlb_dataadapter.py",
+        "mlbstatsapi/async_mlb.py",
+        "mlbstatsapi/async_mlb_dataadapter.py",
+    } <= required
+    assert {
+        "mlbstatsapi/_async_support.py",
+        "mlbstatsapi/_async_transport.py",
+        "mlbstatsapi/_env_proxies.py",
+        "mlbstatsapi/_http.py",
+    } <= required
     # Tests, docs, and scripts are intentionally absent from the sdist.
     assert not any(path.startswith(("tests/", "docs/", "scripts/")) for path in required)
 
@@ -596,7 +610,7 @@ def test_wheel_installation_failure_identifies_the_artifact(
     tmp_path: Path,
 ) -> None:
     wheel = _write_wheel(tmp_path)
-    _stub_clean_install(monkeypatch, failing="install")
+    _stub_clean_install(monkeypatch, failing="sync-install")
 
     with pytest.raises(validator.ValidationError) as exc_info:
         validator._check_clean_install(
@@ -616,7 +630,7 @@ def test_source_distribution_installation_failure_identifies_the_artifact(
     tmp_path: Path,
 ) -> None:
     sdist = _write_sdist(tmp_path)
-    _stub_clean_install(monkeypatch, failing="install")
+    _stub_clean_install(monkeypatch, failing="sync-install")
 
     with pytest.raises(validator.ValidationError) as exc_info:
         validator._check_clean_install(
@@ -645,13 +659,73 @@ def test_smoke_test_failure_identifies_the_artifact(
         if label == validator.WHEEL_LABEL
         else _write_sdist(tmp_path)
     )
-    _stub_clean_install(monkeypatch, failing="smoke")
+    _stub_clean_install(monkeypatch, failing="sync-smoke")
 
     with pytest.raises(validator.ValidationError) as exc_info:
         validator._check_clean_install(artifact, SYNTHETIC_VERSION, label=label)
 
     message = str(exc_info.value)
     assert f"{label} smoke test" in message
+    assert "exit code 1" in message
+
+
+@pytest.mark.parametrize(
+    "label",
+    (validator.WHEEL_LABEL, validator.SDIST_LABEL),
+)
+def test_async_extra_installation_failure_identifies_the_artifact_and_phase(
+    monkeypatch,
+    tmp_path: Path,
+    label: str,
+) -> None:
+    artifact = (
+        _write_wheel(tmp_path)
+        if label == validator.WHEEL_LABEL
+        else _write_sdist(tmp_path)
+    )
+    _stub_clean_install(monkeypatch, failing="async-install")
+
+    with pytest.raises(validator.ValidationError) as exc_info:
+        validator._check_async_clean_install(
+            artifact,
+            SYNTHETIC_VERSION,
+            label=label,
+        )
+
+    message = str(exc_info.value)
+    assert label in message
+    assert artifact.name in message
+    assert "async-extra installation" in message
+    assert "exit code 1" in message
+
+
+@pytest.mark.parametrize(
+    "label",
+    (validator.WHEEL_LABEL, validator.SDIST_LABEL),
+)
+def test_async_smoke_failure_identifies_the_artifact_and_phase(
+    monkeypatch,
+    tmp_path: Path,
+    label: str,
+) -> None:
+    artifact = (
+        _write_wheel(tmp_path)
+        if label == validator.WHEEL_LABEL
+        else _write_sdist(tmp_path)
+    )
+    _stub_clean_install(monkeypatch, failing="async-smoke")
+
+    with pytest.raises(validator.ValidationError) as exc_info:
+        validator._check_async_clean_install(
+            artifact,
+            SYNTHETIC_VERSION,
+            label=label,
+        )
+
+    message = str(exc_info.value)
+    assert label in message
+    assert artifact.name in message
+    assert "async smoke test" in message
     assert "exit code 1" in message
 
 
@@ -669,16 +743,51 @@ def test_clean_install_runs_the_artifact_and_smoke_test_from_a_temp_workspace(
     )
 
     steps = [_classify_command(command) for command in commands]
-    assert steps == ["pip-upgrade", "install", "smoke"]
+    assert steps == ["pip-upgrade", "sync-install", "sync-smoke"]
 
-    install_command = commands[steps.index("install")]
+    install_command = commands[steps.index("sync-install")]
     assert str(wheel.resolve()) in install_command
 
-    smoke_command = commands[steps.index("smoke")]
+    smoke_command = commands[steps.index("sync-smoke")]
     assert smoke_command[-1] == SYNTHETIC_VERSION
     smoke_script = Path(smoke_command[-2])
     # The script is written into a throwaway workspace, never the checkout.
     assert smoke_script.name == "release_smoke_test.py"
+    assert PROJECT_ROOT not in smoke_script.parents
+
+
+@pytest.mark.parametrize(
+    "label",
+    (validator.WHEEL_LABEL, validator.SDIST_LABEL),
+)
+def test_async_clean_install_requests_the_local_artifact_extra(
+    monkeypatch,
+    tmp_path: Path,
+    label: str,
+) -> None:
+    artifact = (
+        _write_wheel(tmp_path)
+        if label == validator.WHEEL_LABEL
+        else _write_sdist(tmp_path)
+    )
+    commands = _stub_clean_install(monkeypatch)
+
+    validator._check_async_clean_install(
+        artifact,
+        SYNTHETIC_VERSION,
+        label=label,
+    )
+
+    steps = [_classify_command(command) for command in commands]
+    assert steps == ["pip-upgrade", "async-install", "async-smoke"]
+
+    install_command = commands[steps.index("async-install")]
+    assert f"{artifact.resolve()}[async]" in install_command
+
+    smoke_command = commands[steps.index("async-smoke")]
+    assert smoke_command[-1] == SYNTHETIC_VERSION
+    smoke_script = Path(smoke_command[-2])
+    assert smoke_script.name == "release_async_smoke_test.py"
     assert PROJECT_ROOT not in smoke_script.parents
 
 
@@ -711,28 +820,62 @@ def test_each_artifact_is_installed_into_its_own_environment(
         SYNTHETIC_VERSION,
         label=validator.SDIST_LABEL,
     )
+    validator._check_async_clean_install(
+        wheel,
+        SYNTHETIC_VERSION,
+        label=validator.WHEEL_LABEL,
+    )
+    validator._check_async_clean_install(
+        sdist,
+        SYNTHETIC_VERSION,
+        label=validator.SDIST_LABEL,
+    )
 
-    assert len(created) == 2
-    assert created[0] != created[1]
+    assert len(created) == 4
+    assert len(set(created)) == 4
 
 
-def test_validate_clean_installs_both_artifacts(monkeypatch, tmp_path: Path) -> None:
-    """validate() must clean-install the wheel and the source distribution."""
+def test_validate_runs_sync_and_async_clean_installs_for_both_artifacts(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
+    """validate() must exercise both install modes for wheel and sdist."""
     wheel = _write_wheel(tmp_path)
     sdist = _write_sdist(tmp_path)
-    installs: list[tuple[Path, str, str]] = []
+    sync_installs: list[tuple[Path, str, str]] = []
+    async_installs: list[tuple[Path, str, str]] = []
 
-    def record_install(artifact: Path, expected_version: str, *, label: str) -> None:
-        installs.append((artifact, expected_version, label))
+    def record_sync_install(
+        artifact: Path,
+        expected_version: str,
+        *,
+        label: str,
+    ) -> None:
+        sync_installs.append((artifact, expected_version, label))
 
-    monkeypatch.setattr(validator, "_check_clean_install", record_install)
+    def record_async_install(
+        artifact: Path,
+        expected_version: str,
+        *,
+        label: str,
+    ) -> None:
+        async_installs.append((artifact, expected_version, label))
+
+    monkeypatch.setattr(validator, "_check_clean_install", record_sync_install)
+    monkeypatch.setattr(
+        validator,
+        "_check_async_clean_install",
+        record_async_install,
+    )
 
     validator.validate(tmp_path, SYNTHETIC_VERSION)
 
-    assert installs == [
+    expected = [
         (wheel, SYNTHETIC_VERSION, validator.WHEEL_LABEL),
         (sdist, SYNTHETIC_VERSION, validator.SDIST_LABEL),
     ]
+    assert sync_installs == expected
+    assert async_installs == expected
 
 
 def test_validate_reports_success_for_both_artifacts(
@@ -751,6 +894,10 @@ def test_validate_reports_success_for_both_artifacts(
     assert f"running {validator.WHEEL_LABEL} smoke test" in output
     assert f"installing {validator.SDIST_LABEL}" in output
     assert f"running {validator.SDIST_LABEL} smoke test" in output
+    assert f"installing {validator.WHEEL_LABEL} with async extra" in output
+    assert f"running {validator.WHEEL_LABEL} async smoke test" in output
+    assert f"installing {validator.SDIST_LABEL} with async extra" in output
+    assert f"running {validator.SDIST_LABEL} async smoke test" in output
     assert "Release validation passed" in output
 
 
@@ -766,6 +913,14 @@ def test_missing_interpreter_in_environment_is_reported(tmp_path: Path) -> None:
 
 def test_smoke_test_source_is_valid_python() -> None:
     compile(validator.SMOKE_TEST_SOURCE, "release_smoke_test.py", "exec")
+
+
+def test_async_smoke_test_source_is_valid_python() -> None:
+    compile(
+        validator.ASYNC_SMOKE_TEST_SOURCE,
+        "release_async_smoke_test.py",
+        "exec",
+    )
 
 
 def test_smoke_test_labels_reverted_strict_defaults() -> None:
@@ -794,6 +949,24 @@ def test_smoke_test_labels_reverted_strict_defaults() -> None:
     for message in (
         validator.MLB_STRICT_DEFAULT_MESSAGE,
         validator.ADAPTER_STRICT_DEFAULT_MESSAGE,
+    ):
+        assert message in source
+
+
+def test_async_smoke_test_labels_reverted_strict_defaults() -> None:
+    assert validator.ASYNC_MLB_STRICT_DEFAULT_MESSAGE == (
+        "AsyncMlb.strict_http must default to True for the 1.1 contract"
+    )
+    assert validator.ASYNC_ADAPTER_STRICT_DEFAULT_MESSAGE == (
+        "AsyncMlbDataAdapter.strict_http must default to True for the 1.1 contract"
+    )
+
+    source = validator.ASYNC_SMOKE_TEST_SOURCE
+    assert 'async_mlb_init["strict_http"].default is True' in source
+    assert 'async_adapter_init["strict_http"].default is True' in source
+    for message in (
+        validator.ASYNC_MLB_STRICT_DEFAULT_MESSAGE,
+        validator.ASYNC_ADAPTER_STRICT_DEFAULT_MESSAGE,
     ):
         assert message in source
 
@@ -844,6 +1017,64 @@ def test_smoke_test_checks_library_created_session_configuration() -> None:
     assert 'f"python-mlb-statsapi/{expected_version}"' in source
     assert "assert_documented_retry_policy" in source
     assert "create_retry_policy() must return a new Retry instance per call" in source
+
+
+def test_async_smoke_test_checks_optional_public_surface_and_httpx_metadata() -> None:
+    source = validator.ASYNC_SMOKE_TEST_SOURCE
+
+    assert "import httpx" in source
+    assert 'importlib.metadata.version("httpx")' in source
+    assert "    AsyncMlb,\n" in source
+    assert "    AsyncMlbDataAdapter,\n" in source
+    assert 'for name in ("AsyncMlb", "AsyncMlbDataAdapter")' in source
+
+
+def test_async_smoke_test_checks_lifecycle_strict_modes_and_ownership() -> None:
+    source = validator.ASYNC_SMOKE_TEST_SOURCE
+
+    assert "async with client as entered:" in source
+    assert "assert entered is client" in source
+    assert source.count("await explicitly_closed.aclose()") == 2
+    assert "AsyncMlb(client=caller_client)" in source
+    assert "strict_http=False" in source
+    assert "MlbHttpError" in source
+    assert "MlbHttpCompatibilityWarning" in source
+    assert "AsyncMlb must not close a caller-injected httpx.AsyncClient" in source
+    assert 'f"python-mlb-statsapi/{expected_version}"' in source
+
+
+def test_async_smoke_test_checks_standalone_data_adapter_lifecycle() -> None:
+    """AsyncMlbDataAdapter()'s own library-owned client path must be exercised
+    directly, not only indirectly through AsyncMlb()."""
+    source = validator.ASYNC_SMOKE_TEST_SOURCE
+
+    assert (
+        "async def check_standalone_data_adapter_library_owned_lifecycle"
+        in source
+    )
+    assert "AsyncMlbDataAdapter()" in source
+    assert "adapter._owns_client is True" in source
+    assert "adapter._strict_http is True" in source
+    assert source.count("await adapter.aclose()") == 2
+    assert "check_standalone_data_adapter_library_owned_lifecycle()" in source
+
+
+def test_async_smoke_test_runs_against_the_installed_distribution() -> None:
+    source = validator.ASYNC_SMOKE_TEST_SOURCE
+
+    assert "sys.prefix != sys.base_prefix" in source
+    assert 'sysconfig.get_paths()["purelib"]' in source
+    assert "is_relative_to(site_packages)" in source
+    assert 'importlib.metadata.version("python-mlb-statsapi")' in source
+
+
+def test_async_smoke_test_makes_no_live_mlb_request() -> None:
+    source = validator.ASYNC_SMOKE_TEST_SOURCE
+
+    assert "httpx.get(" not in source
+    assert "httpx.request(" not in source
+    assert "httpx.MockTransport(forbidden_response)" in source
+    assert "never reaches the MLB API" in source
 
 
 @pytest.mark.parametrize(
@@ -921,21 +1152,26 @@ def _matrix_python_versions() -> list[str]:
     assert match is not None, "no python-version matrix found in the offline workflow"
     return re.findall(r'- "([^"]+)"', match.group(1))
 
-
-def test_ci_watches_the_current_release_branch() -> None:
-    """Pull requests and pushes must watch main and release/1.0.0.
-
-    The trigger is asserted literally instead of being derived from the package
-    version, which is still 0.9.0 until the release bump lands.
-    """
+def test_ci_watches_main_and_release_branches() -> None:
+    """Pull requests and pushes must watch main and release branches."""
     text = OFFLINE_WORKFLOW.read_text(encoding="utf-8")
 
-    assert text.count(f"- {RELEASE_BRANCH}") == 2, text
+    assert text.count(f'- "{RELEASE_BRANCH_PATTERN}"') == 2, text
     assert text.count("- main") == 2, text
-    assert STALE_RELEASE_BRANCH not in text, (
-        f"the stale {STALE_RELEASE_BRANCH} trigger must be removed"
-    )
     assert "workflow_dispatch:" in text
+
+def test_ci_matrix_installs_the_async_extra() -> None:
+    text = OFFLINE_WORKFLOW.read_text(encoding="utf-8")
+
+    assert "poetry install --no-interaction -E async" in text
+
+def test_ci_preserves_a_sync_only_installation_check() -> None:
+    text = OFFLINE_WORKFLOW.read_text(encoding="utf-8")
+
+    assert "sync-only:" in text
+    assert "poetry install --no-interaction --only main" in text
+    assert 'find_spec("httpx") is None' in text
+    assert "from mlbstatsapi import Mlb, MlbDataAdapter" in text
 
 
 def test_ci_matrix_covers_every_supported_python_version() -> None:

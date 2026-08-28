@@ -1,18 +1,19 @@
 # HTTP Transport
 
 This document describes the HTTP transport behavior of the current release,
-version 1.0.0.
+version 1.1.0.
 
 Version 0.8.0 introduced shared Sessions, explicit timeouts, bounded retries,
 and structured exceptions. Version 0.9.0 introduced configurable strict
 behavior and compatibility warnings. Version 1.0.0 makes strict handling the
 default and defines the stable public contract.
 
-The public client remains synchronous. Ordinary usage does not need to
-configure sessions or retries.
+Version 1.1.0 adds the optional asynchronous `AsyncMlb` and
+`AsyncMlbDataAdapter` clients while preserving the existing synchronous API.
+Ordinary usage does not need to configure sessions, clients, or retries.
 
-See [the 1.0.0 release notes](releases/1.0.0.md) for a shorter summary of what
-changed. For the authoritative public API boundary see
+See [the 1.1.0 release notes](releases/1.1.0.md) for a shorter summary of what
+changed in the current release. For the authoritative public API boundary see
 [the public API contract](public-api.md).
 
 ## Public transport API
@@ -21,6 +22,8 @@ Everything this document describes is reachable from the package root:
 
 ```python
 from mlbstatsapi import (
+    AsyncMlb,
+    AsyncMlbDataAdapter,
     Mlb,
     MlbDataAdapter,
     MlbDecodeError,
@@ -32,6 +35,9 @@ from mlbstatsapi import (
     create_retry_policy,
 )
 ```
+
+The async symbols require the optional `async` installation extra. The
+synchronous symbols remain available without HTTPX.
 
 Names that are not exported from `mlbstatsapi` are internal and may change
 without a deprecation cycle. See [public-api.md](public-api.md) for the
@@ -48,8 +54,10 @@ mlb = mlbstatsapi.Mlb()
 player = mlb.get_person(664034)
 ```
 
-In version 1.0.0 that construction uses strict HTTP handling by default. The
-client remains synchronous. Async support is not part of version 1.0.0.
+Version 1.0.0 made strict HTTP handling the default for this construction.
+That synchronous behavior is unchanged in 1.1.0, and existing synchronous
+users require no code changes. Version 1.1.0 also provides the optional
+`AsyncMlb` client; see [Async usage](async.md).
 
 ## Context manager
 
@@ -189,7 +197,7 @@ to the library's tested retry policy.
 
 ## User-Agent
 
-Library-created Sessions send a package-specific User-Agent:
+Library-created Sessions and async clients send a package-specific User-Agent:
 
 ```text
 python-mlb-statsapi/<installed-version>
@@ -198,7 +206,7 @@ python-mlb-statsapi/<installed-version>
 With the package version currently declared in project metadata that resolves to:
 
 ```text
-python-mlb-statsapi/1.0.1
+python-mlb-statsapi/1.1.0
 ```
 
 The version comes from the installed package metadata, so it always matches
@@ -207,10 +215,10 @@ the installed release without a separately maintained version string.
 Notes:
 
 * The header helps identify package traffic while debugging
-* Other Requests default headers such as `Accept-Encoding`, `Accept`, and `Connection` remain intact
+* Other transport default headers remain intact
 * Only `User-Agent` is set; the full header mapping is never replaced
-* Caller-injected Sessions are never modified
-* Applications using an injected Session may set their own User-Agent
+* Caller-injected Sessions and HTTPX clients are never modified
+* Applications using an injected Session or client may set their own User-Agent
 * The header contains no machine identifiers, installation identifiers, hostnames, or user tracking data
 * This is not telemetry and sends no analytics
 
@@ -243,12 +251,12 @@ finally:
 
 ## Default retry policy
 
-Library-created Sessions mount a bounded retry policy for GET requests
-automatically.
+Library-created Sessions and async clients use a bounded retry policy for GET
+requests automatically.
 
-Caller-injected Sessions are never automatically reconfigured. Retry settings
-on an injected Session remain under the caller's control unless the caller
-opts in.
+Caller-injected Sessions and HTTPX clients are never automatically
+reconfigured. Retry settings on injected Sessions and clients remain under
+the caller's control.
 
 ```text
 Initial request: 1
@@ -386,9 +394,10 @@ is an explicit compatibility opt-out. It:
 * Does not alter timeout, transport, or decode failures
 * Runs only after retry exhaustion
 
-Compatibility mode is a temporary migration path and an explicit request for
-historical 0.9 behavior. It is not the recommended long-term 1.0
-configuration.
+`strict_http=False` is a compatibility mode for users migrating from pre-1.0
+behavior. It will remain available throughout the 1.x release series and may
+be removed in 2.0. New code should use the default `strict_http=True` behavior
+and handle `MlbHttpError`.
 
 ## Compatibility warnings
 
@@ -637,7 +646,7 @@ Notes:
 * `MlbTimeoutError` is a subtype of `MlbTransportError`
 * All new errors inherit from `TheMlbStatsApiException`
 * Existing broad exception handling remains valid
-* Original Requests or JSON decoding failures are preserved through exception chaining
+* Original Requests, HTTPX, or JSON decoding failures are preserved through exception chaining
 
 ## HTTP exception attributes
 
@@ -710,8 +719,32 @@ bodies.
 
 The client has no default response cache.
 
-## No async support
+## Async client environment proxies
 
-The client remains synchronous.
+Library-created `AsyncMlb` / `AsyncMlbDataAdapter` clients honor
+`HTTP_PROXY`, `HTTPS_PROXY`, `ALL_PROXY`, and `NO_PROXY` (any case), the same
+environment variables HTTPX itself discovers for a plain `httpx.AsyncClient()`.
 
-Async support is not part of version 1.0.0.
+```text
+Library-created async client
+    Reads HTTP_PROXY / HTTPS_PROXY / ALL_PROXY / NO_PROXY from the environment
+    Routes matching requests through the proxy
+    Applies the library retry policy to proxied and direct requests alike
+
+Caller-injected async client
+    Keeps exactly whatever transport and mounts its caller configured
+    The library never reads proxy environment variables for it
+```
+
+This mirrors [Session ownership](#session-ownership) on the sync side: the
+library only ever configures a client it created itself. See
+[async.md](async.md#custom-httpx-client) for injecting a client, including one
+configured with its own proxy settings.
+
+## Scope of this document
+
+The retry, timeout, User-Agent, strict-HTTP, and error-handling contract applies
+to both `Mlb` and `AsyncMlb`. Session-specific sections describe the
+synchronous Requests transport; `AsyncMlb` uses a caller-owned or
+library-created HTTPX client with the corresponding ownership rules. See
+[async.md](async.md) for async lifecycle, concurrency, and client injection.

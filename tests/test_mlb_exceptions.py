@@ -14,9 +14,9 @@ from mlbstatsapi import (
     MlbTransportError,
     TheMlbStatsApiException,
 )
-from mlbstatsapi.mlb_dataadapter import (
-    HTTP_ERROR_BODY_EXCERPT_LIMIT,
+from mlbstatsapi._http import (
     _build_http_error,
+    HTTP_ERROR_BODY_EXCERPT_LIMIT,
 )
 
 
@@ -404,11 +404,15 @@ def test_url_fallback_when_response_url_missing():
     response.json.return_value = {"message": "boom"}
     response.text = '{"message": "boom"}'
 
-    exc = _build_http_error(
-        response,
-        method="GET",
-        fallback_url=f"{BASE_URL}sports",
-    )
+    session = MagicMock()
+    session.get.return_value = response
+
+    adapter = MlbDataAdapter(session=session)
+
+    with pytest.raises(MlbHttpError) as exc_info:
+        adapter.get(endpoint="sports")
+
+    exc = exc_info.value
 
     assert exc.url == f"{BASE_URL}sports"
     assert exc.method == "GET"
@@ -426,11 +430,11 @@ def test_best_effort_extraction_failure_still_raises_mlb_http_error(requests_moc
 
     with (
         patch(
-            "mlbstatsapi.mlb_dataadapter._extract_error_response_data",
+            "mlbstatsapi._http._extract_error_response_data",
             side_effect=RuntimeError("unexpected json failure"),
         ),
         patch(
-            "mlbstatsapi.mlb_dataadapter._extract_error_body_excerpt",
+            "mlbstatsapi._http._extract_error_body_excerpt",
             side_effect=RuntimeError("unexpected text failure"),
         ),
         pytest.raises(MlbHttpError) as exc_info,

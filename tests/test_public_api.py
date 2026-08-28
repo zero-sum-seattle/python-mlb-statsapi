@@ -2,15 +2,24 @@
 
 These tests freeze the supported package-root symbols, constructor signatures,
 exception and warning inheritance, Session ownership guarantees, and the
-explicit ``Mlb`` public-method manifest documented in ``docs/public-api.md``.
+explicit ``Mlb`` and ``AsyncMlb`` public-method manifests documented in
+``docs/public-api.md``.
+
+The package-root surface is split across two manifests because "public API" and
+"available without optional dependencies" are different questions. Everything in
+either manifest is public and stable in 1.x; only the async manifest needs the
+optional ``async`` extra to resolve.
 
 They must not contact the live MLB API.
 """
 
 from __future__ import annotations
 
+import importlib.util
 import inspect
+import re
 import warnings
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -36,11 +45,18 @@ from mlbstatsapi import (
 from http_contract_support import assert_library_retry_policy
 
 
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PUBLIC_API_DOC = PROJECT_ROOT / "docs" / "public-api.md"
+
+
 # ---------------------------------------------------------------------------
 # Package-root manifests
 # ---------------------------------------------------------------------------
 
-# Intentionally supported package-root symbols for the 1.x series.
+# Supported package-root symbols for the 1.x series that are always available,
+# including in a sync-only install without the ``async`` extra. Sync-only
+# environments freeze their surface against this manifest, so a symbol that
+# needs an optional dependency must not be added here.
 SUPPORTED_PACKAGE_ROOT_SYMBOLS: tuple[str, ...] = (
     "Mlb",
     "MlbDataAdapter",
@@ -54,6 +70,19 @@ SUPPORTED_PACKAGE_ROOT_SYMBOLS: tuple[str, ...] = (
     "create_retry_policy",
     "get_stat_attributes",
     "return_splits",
+)
+
+# Supported package-root symbols for the 1.x series that require the optional
+# ``async`` extra (HTTPX). These are public and stable exactly like the symbols
+# above; only their availability is conditional. See docs/public-api.md.
+OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS: tuple[str, ...] = (
+    "AsyncMlb",
+    "AsyncMlbDataAdapter",
+)
+
+# The complete supported package-root API for the 1.x series.
+SUPPORTED_PACKAGE_ROOT_API: tuple[str, ...] = (
+    SUPPORTED_PACKAGE_ROOT_SYMBOLS + OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS
 )
 
 # Legacy helpers remain supported but are not preferred for new code.
@@ -74,6 +103,26 @@ ACCIDENTAL_PACKAGE_ROOT_SUBMODULES: tuple[str, ...] = (
 )
 
 
+# HTTPX ships only with the ``async`` extra, so this module must stay runnable
+# in a sync-only environment. Cases that assert async availability are skipped
+# there; tests/test_async_optional_dependency.py covers the sync-only half of
+# the contract in child interpreters that block HTTPX outright.
+def _async_extra_installed() -> bool:
+    """Report whether HTTPX is available, without importing it here."""
+    try:
+        return importlib.util.find_spec("httpx") is not None
+    except ImportError:
+        # An environment may also make httpx unavailable by raising from a meta
+        # path finder instead of reporting no spec.
+        return False
+
+
+requires_async_extra = pytest.mark.skipif(
+    not _async_extra_installed(),
+    reason="requires the optional async extra (HTTPX)",
+)
+
+
 # Python 3.14 renders typing.Union[a, b] as "a | b" while Python 3.10-3.13
 # render "Union[a, b]". The annotation object itself is unchanged, so the legacy
 # spelling is rewritten here and one manifest stays valid across the whole
@@ -84,7 +133,11 @@ LEGACY_UNION_RENDERINGS: dict[str, str] = {
 
 
 def _normalize_annotation(annotation: Any) -> str:
-    rendered = inspect.formatannotation(annotation)
+    rendered = (
+        annotation
+        if isinstance(annotation, str)
+        else inspect.formatannotation(annotation)
+    )
     for legacy, pep604 in LEGACY_UNION_RENDERINGS.items():
         rendered = rendered.replace(legacy, pep604)
     return rendered
@@ -177,6 +230,68 @@ MLB_PUBLIC_METHOD_MANIFEST: dict[str, str] = {
     "get_stats": "(stats: list, groups: list, **params: dict)",
 }
 
+# Explicit inventory of public methods defined directly on AsyncMlb.
+# Only currently supported async endpoints belong here.
+ASYNC_MLB_PUBLIC_METHOD_MANIFEST: dict[str, str] = {
+    "aclose": "()",
+    "__aenter__": "()",
+    "__aexit__": "(exc_type, exc, traceback)",
+    "get_team": "(team_id: int, **params)",
+    "get_teams": "(sport_id: int=1, **params)",
+    "get_team_roster": "(team_id: int, **params)",
+    "get_team_coaches": "(team_id: int, **params)",
+    "get_person": "(player_id: int, **params)",
+    "get_people": "(sport_id: int=1, **params)",
+    "get_schedule": (
+        "(date: str=None, start_date: str=None, end_date: str=None, "
+        "sport_id: int=1, team_id: int=None, **params)"
+    ),
+    "get_sport": "(sport_id: int, **params)",
+    "get_sports": "(**params)",
+    "get_league": "(league_id: int, **params)",
+    "get_leagues": "(**params)",
+    "get_division": "(division_id: int, **params)",
+    "get_divisions": "(**params)",
+    "get_season": "(season_id: str, sport_id: int=1, **params)",
+    "get_seasons": "(sport_id: int=1, **params)",
+    "get_venue": "(venue_id: int, **params)",
+    "get_venues": "(**params)",
+    "get_standings": "(league_id: int, season: str, **params)",
+    "get_attendance": (
+        "(team_id: int=None, league_id: int=None, "
+        "league_list_id: str=None, **params)"
+    ),
+    "get_draft": "(year_id: int, **params)",
+    "get_awards": "(award_id: str, **params)",
+    "get_homerun_derby": "(game_id, **params)",
+    "get_team_stats": "(team_id: int, stats: list, groups: list, **params)",
+    "get_players_stats_for_game": "(person_id: int, game_id: int, **params)",
+    "get_player_stats": "(person_id: int, stats: list, groups: list, **params)",
+    "get_stats": "(stats: list, groups: list, **params)",
+    "get_persons": "(person_ids: str | list[int], **params)",
+    "get_scheduled_games_by_date": (
+        "(date: str=None, start_date: str=None, end_date: str=None, "
+        "sport_id: int=1, **params)"
+    ),
+    "get_gamepace": "(season: str, sport_id=1, **params)",
+    "get_team_id": "(team_name: str, search_key: str='name', **params)",
+    "get_people_id": (
+        "(fullname: str, sport_id: int=1, search_key: str='fullName', **params)"
+    ),
+    "get_sport_id": "(sport_name: str, search_key: str='name', **params)",
+    "get_league_id": "(league_name: str, search_key: str='name', **params)",
+    "get_division_id": "(division_name: str, search_key: str='name', **params)",
+    "get_venue_id": "(venue_name: str, search_key: str='name', **params)",
+    "get_game": "(game_id: int, **params)",
+    "get_game_play_by_play": "(game_id: int, **params)",
+    "get_game_line_score": "(game_id: int, **params)",
+    "get_game_box_score": "(game_id: int, **params)",
+    "get_game_ids": (
+        "(date: str=None, start_date: str=None, end_date: str=None, "
+        "sport_id: int=1, **params)"
+    ),
+}
+
 
 # ---------------------------------------------------------------------------
 # Package-root symbols
@@ -185,6 +300,33 @@ MLB_PUBLIC_METHOD_MANIFEST: dict[str, str] = {
 
 def test_supported_package_root_symbols_are_unique() -> None:
     assert len(SUPPORTED_PACKAGE_ROOT_SYMBOLS) == len(set(SUPPORTED_PACKAGE_ROOT_SYMBOLS))
+
+
+def test_optional_async_package_root_symbols_are_unique() -> None:
+    assert len(OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS) == len(
+        set(OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS)
+    )
+
+
+def test_package_root_manifests_are_disjoint() -> None:
+    """A symbol is either always available or gated behind the async extra."""
+    assert not set(SUPPORTED_PACKAGE_ROOT_SYMBOLS) & set(
+        OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS
+    )
+
+
+def test_supported_package_root_api_is_the_union_of_both_manifests() -> None:
+    assert set(SUPPORTED_PACKAGE_ROOT_API) == set(SUPPORTED_PACKAGE_ROOT_SYMBOLS) | set(
+        OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS
+    )
+    assert len(SUPPORTED_PACKAGE_ROOT_API) == len(set(SUPPORTED_PACKAGE_ROOT_API))
+
+
+def test_async_symbols_are_part_of_the_supported_api() -> None:
+    """Async symbols are supported 1.x API, not merely optional add-ons."""
+    for name in ("AsyncMlb", "AsyncMlbDataAdapter"):
+        assert name in OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS
+        assert name in SUPPORTED_PACKAGE_ROOT_API
 
 
 def test_supported_package_root_symbols_are_importable_from_package() -> None:
@@ -201,12 +343,40 @@ def test_supported_symbols_are_importable_by_name(name: str) -> None:
     assert namespace[name] is getattr(mlbstatsapi, name)
 
 
+@pytest.mark.parametrize("name", OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS)
+def test_optional_async_symbols_are_discoverable_without_the_extra(name: str) -> None:
+    """Discoverability is unconditional; only resolution needs HTTPX."""
+    assert name in dir(mlbstatsapi)
+
+
+@requires_async_extra
+@pytest.mark.parametrize("name", OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS)
+def test_optional_async_symbols_are_importable_with_the_extra(name: str) -> None:
+    namespace: dict[str, Any] = {}
+    exec(f"from mlbstatsapi import {name}", namespace)
+    assert name in namespace
+    assert namespace[name] is getattr(mlbstatsapi, name)
+
+
+@requires_async_extra
+def test_async_data_adapter_resolves_to_the_async_module() -> None:
+    adapter_class = mlbstatsapi.AsyncMlbDataAdapter
+    assert adapter_class.__module__ == "mlbstatsapi.async_mlb_dataadapter"
+    assert adapter_class.__name__ == "AsyncMlbDataAdapter"
+
+
 def test_package_does_not_define_all_in_version_1_0() -> None:
     """``__all__`` is omitted so star-import behavior is not silently narrowed."""
     assert getattr(mlbstatsapi, "__all__", None) is None
 
 
 def test_star_import_includes_supported_symbols() -> None:
+    """Only the always-available manifest is asserted here.
+
+    Async symbols resolve lazily, so whether a wildcard import sees them depends
+    on whether something already touched them in this interpreter. Their
+    documented access path is an explicit import, not ``import *``.
+    """
     namespace: dict[str, Any] = {}
     exec("from mlbstatsapi import *", namespace)
     for name in SUPPORTED_PACKAGE_ROOT_SYMBOLS:
@@ -228,6 +398,40 @@ def test_legacy_helpers_remain_package_root_importable() -> None:
     assert callable(get_stat_attributes)
     for name in LEGACY_PACKAGE_ROOT_HELPERS:
         assert name in SUPPORTED_PACKAGE_ROOT_SYMBOLS
+
+
+# ---------------------------------------------------------------------------
+# Documented classification
+# ---------------------------------------------------------------------------
+
+
+def _documented_package_root_classifications() -> dict[str, str]:
+    """Return the symbol/status rows of the classification table in the docs."""
+    text = PUBLIC_API_DOC.read_text(encoding="utf-8")
+    section = text.split("### Classification of package-root symbols", 1)[1]
+    section = re.split(r"\n#{2,} ", section, maxsplit=1)[0]
+
+    rows: dict[str, str] = {}
+    for line in section.splitlines():
+        match = re.match(r"^\|\s*`([A-Za-z_][A-Za-z0-9_]*)`\s*\|(.+?)\|\s*$", line)
+        if match:
+            rows[match.group(1)] = match.group(2).strip()
+    return rows
+
+
+def test_documentation_classifies_every_supported_package_root_symbol() -> None:
+    documented = _documented_package_root_classifications()
+    for name in SUPPORTED_PACKAGE_ROOT_API:
+        assert name in documented, f"{name} is missing from the classification table"
+
+
+def test_documentation_classifies_async_symbols_as_public_and_optional() -> None:
+    """Public API status and optional-dependency availability stay separate."""
+    documented = _documented_package_root_classifications()
+    for name in OPTIONAL_ASYNC_PACKAGE_ROOT_SYMBOLS:
+        status = documented[name]
+        assert "Public and stable in 1.x" in status, status
+        assert "`async` extra" in status, status
 
 
 # ---------------------------------------------------------------------------
@@ -257,6 +461,26 @@ def test_mlb_constructor_parameter_order_and_defaults() -> None:
     assert parameters["logger"].default is None
     assert parameters["timeout"].default == (3.05, 30.0)
     assert parameters["session"].default is None
+    assert parameters["strict_http"].default is True
+    assert parameters["strict_http"].kind is inspect.Parameter.KEYWORD_ONLY
+
+
+@requires_async_extra
+def test_async_mlb_constructor_parameter_order_and_defaults() -> None:
+    async_mlb = mlbstatsapi.AsyncMlb
+    parameters = inspect.signature(async_mlb.__init__).parameters
+
+    assert _parameter_names(async_mlb.__init__) == [
+        "hostname",
+        "logger",
+        "timeout",
+        "client",
+        "strict_http",
+    ]
+    assert parameters["hostname"].default == "statsapi.mlb.com"
+    assert parameters["logger"].default is None
+    assert parameters["timeout"].default == (3.05, 30.0)
+    assert parameters["client"].default is None
     assert parameters["strict_http"].default is True
     assert parameters["strict_http"].kind is inspect.Parameter.KEYWORD_ONLY
 
@@ -346,6 +570,41 @@ def test_mlb_public_endpoint_count() -> None:
     ]
     assert len(endpoint_methods) == 40
     assert len(MLB_PUBLIC_METHOD_MANIFEST) == 43
+
+
+# ---------------------------------------------------------------------------
+# AsyncMlb public method manifest
+# ---------------------------------------------------------------------------
+
+
+def test_async_mlb_public_method_manifest_has_unique_names() -> None:
+    assert len(ASYNC_MLB_PUBLIC_METHOD_MANIFEST) == len(
+        set(ASYNC_MLB_PUBLIC_METHOD_MANIFEST)
+    )
+
+
+@requires_async_extra
+def test_async_mlb_public_method_manifest_matches_class_dict() -> None:
+    async_mlb = mlbstatsapi.AsyncMlb
+    discovered = {
+        name
+        for name, obj in async_mlb.__dict__.items()
+        if inspect.isfunction(obj)
+        and (not name.startswith("_") or name in ("__aenter__", "__aexit__"))
+        and name != "__init__"
+    }
+    assert discovered == set(ASYNC_MLB_PUBLIC_METHOD_MANIFEST)
+
+
+@requires_async_extra
+@pytest.mark.parametrize(
+    "method_name, expected", ASYNC_MLB_PUBLIC_METHOD_MANIFEST.items()
+)
+def test_async_mlb_public_method_signature(method_name: str, expected: str) -> None:
+    method = getattr(mlbstatsapi.AsyncMlb, method_name)
+    assert inspect.iscoroutinefunction(method), method_name
+    actual = _normalize_signature(method)
+    assert actual == expected, f"{method_name}: {actual} != {expected}"
 
 
 # ---------------------------------------------------------------------------
