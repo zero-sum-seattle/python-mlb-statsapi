@@ -13,17 +13,13 @@
 
 </div>
 
-`python-mlb-statsapi` provides Python access to the MLB Stats API for teams, players, schedules, games, stats, and more.
+`python-mlb-statsapi` is a Python client for MLB's Stats API.
 
-Returned objects are built with [Pydantic](https://docs.pydantic.dev/), and model fields use Python `snake_case` names.
+- **Broad API coverage:** Query teams, players, schedules, games, statistics, and more.
+- **Pythonic models:** Work with [Pydantic](https://docs.pydantic.dev/) objects whose fields use `snake_case` names.
+- **Sync and async:** Choose the synchronous `Mlb` client or the asynchronous `AsyncMlb` client. The async API is additive, so existing sync users can upgrade without changing their code.
 
-Version 1.1 adds first-class async support through `AsyncMlb` while keeping the existing synchronous `Mlb` API available without code changes for sync users.
-
-### Copyright Notice
-
-This package and its authors are not affiliated with MLB or any MLB team. This API wrapper interfaces with MLB's Stats API. Use of MLB data is subject to the notice posted at http://gdx.mlb.com/components/copyright.txt.
-
-###### This is an educational project - Not for commercial use.
+> **Unofficial project.** This package and its authors are not affiliated with or endorsed by Major League Baseball or any MLB team. Use of MLB data is subject to [MLB's copyright notice](https://gdx.mlb.com/components/copyright.txt). This is an educational project—not for commercial use.
 
 ![MLB Stats API](https://user-images.githubusercontent.com/2068393/203456246-dfdbdf0f-1e43-4329-aaa9-1c4008f9800d.jpg)
 
