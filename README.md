@@ -9,7 +9,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-mlb-statsapi)
 ![GitHub](https://img.shields.io/github/license/zero-sum-seattle/python-mlb-statsapi)
 
-### [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | [Methods](docs/methods.md) | [Examples](docs/examples.md) | [Stats](docs/stats.md) | [Async](docs/async.md) | [Public API](docs/public-api.md) | [MLB Stats API](https://statsapi.mlb.com/)
+### [Docs](https://zero-sum-seattle.github.io/python-mlb-statsapi/) | [Methods](https://zero-sum-seattle.github.io/python-mlb-statsapi/methods/) | [Examples](https://zero-sum-seattle.github.io/python-mlb-statsapi/examples/) | [Stats](https://zero-sum-seattle.github.io/python-mlb-statsapi/stats/) | [Async](https://zero-sum-seattle.github.io/python-mlb-statsapi/async/) | [Public API](https://zero-sum-seattle.github.io/python-mlb-statsapi/public-api/) | [MLB Stats API](https://statsapi.mlb.com/)
 
 </div>
 
@@ -46,7 +46,7 @@ The async extra installs HTTPX. Python 3.10 or newer is required.
 | Minimum Python version | `>=3.10` |
 | CI-validated versions | Python 3.10 through 3.14 (`3.10`, `3.11`, `3.12`, `3.13`, `3.14`) |
 
-See [Python support](docs/public-api.md#python-support) for the complete policy.
+See [Python support](https://zero-sum-seattle.github.io/python-mlb-statsapi/public-api/#python-support) for the complete policy.
 
 ## Quick Start
 
@@ -126,7 +126,7 @@ async def main():
 asyncio.run(main())
 ```
 
-See [Async usage](docs/async.md) for lifecycle, concurrency, custom HTTPX clients, and the current async endpoint list.
+See [Async usage](https://zero-sum-seattle.github.io/python-mlb-statsapi/async/) for lifecycle, concurrency, custom HTTPX clients, and the current async endpoint list.
 
 ## Sync or Async?
 
@@ -139,7 +139,7 @@ See [Async usage](docs/async.md) for lifecycle, concurrency, custom HTTPX client
 
 `AsyncMlb` mirrors the full endpoint surface of `Mlb`. Both clients return the same Pydantic models and follow the same public HTTP/error behavior.
 
-See the [public API contract](docs/public-api.md#asyncmlb-public-client) for the authoritative method list and signatures.
+See the [public API contract](https://zero-sum-seattle.github.io/python-mlb-statsapi/public-api/#asyncmlb-public-client) for the authoritative method list and signatures.
 
 ## Concurrent Async Requests
 
@@ -188,7 +188,7 @@ team_ids = mlb.get_team_id("Seattle Mariners")
 
 ### Stats
 
-The stats API has several entry points and returns a nested `stats[group][type]` structure. See the dedicated [Stats Guide](docs/stats.md) for `get_player_stats()`, `get_team_stats()`, `get_stats()`, and `get_players_stats_for_game()` examples using both `Mlb` and `AsyncMlb`.
+The stats API has several entry points and returns a nested `stats[group][type]` structure. See the dedicated [Stats Guide](https://zero-sum-seattle.github.io/python-mlb-statsapi/stats/) for `get_player_stats()`, `get_team_stats()`, `get_stats()`, and `get_players_stats_for_game()` examples using both `Mlb` and `AsyncMlb`.
 
 ### Schedule
 
@@ -196,13 +196,13 @@ The stats API has several entry points and returns a nested `stats[group][type]`
 schedule = mlb.get_schedule(date="2022-10-13")
 ```
 
-See the [method reference](docs/methods.md) for the full method documentation that previously lived in the README. Longer runnable examples live in [docs/examples.md](docs/examples.md).
+See the [method reference](https://zero-sum-seattle.github.io/python-mlb-statsapi/methods/) for the full method documentation that previously lived in the README. Longer runnable examples live in the [usage examples](https://zero-sum-seattle.github.io/python-mlb-statsapi/examples/).
 
 ## HTTP and Error Behavior
 
 Both clients use explicit timeouts, structured exceptions, and pooled HTTP connections. `strict_http=True` is the default. Final non-404 4xx responses raise `MlbHttpError`, while existing endpoint-specific 404 behavior is preserved.
 
-Library-created clients send a versioned User-Agent. The current package version sends `python-mlb-statsapi/1.1.0`. See the [HTTP transport documentation](docs/http-transport.md) for the full transport contract.
+Library-created clients send a versioned User-Agent. The current package version sends `python-mlb-statsapi/1.1.0`. See the [HTTP transport documentation](https://zero-sum-seattle.github.io/python-mlb-statsapi/http-transport/) for the full transport contract.
 
 The main transport exceptions are:
 
@@ -223,7 +223,7 @@ except MlbHttpError as exc:
     print(exc.status_code, exc.reason)
 ```
 
-For timeouts, retries, compatibility mode, ownership rules, and transport details, see [docs/http-transport.md](docs/http-transport.md).
+For timeouts, retries, compatibility mode, ownership rules, and transport details, see the [HTTP transport documentation](https://zero-sum-seattle.github.io/python-mlb-statsapi/http-transport/).
 
 ## Working with Models
 
@@ -244,14 +244,14 @@ print(player.model_dump_json(indent=2))
 
 | Document | Contents |
 | --- | --- |
-| [Wiki](https://github.com/zero-sum-seattle/python-mlb-statsapi/wiki) | Endpoint reference, return objects, and model documentation |
-| [Method reference](docs/methods.md) | Method signatures and short descriptions from the original README reference |
-| [Usage examples](docs/examples.md) | Extended synchronous examples |
-| [Stats guide](docs/stats.md) | Player, team, general, and per-game stat queries with sync and async examples |
-| [Async usage](docs/async.md) | Async installation, lifecycle, concurrency, and examples |
-| [HTTP transport](docs/http-transport.md) | Timeouts, retries, strict HTTP, exceptions, and ownership |
-| [Public API contract](docs/public-api.md) | Supported symbols, signatures, endpoint methods, and stability policy |
-| [Release notes](docs/releases/) | Release-specific changes and migration notes |
+| [Documentation home](https://zero-sum-seattle.github.io/python-mlb-statsapi/) | Installation, quick starts, and links to every guide |
+| [Method reference](https://zero-sum-seattle.github.io/python-mlb-statsapi/methods/) | Method signatures and short descriptions from the original README reference |
+| [Usage examples](https://zero-sum-seattle.github.io/python-mlb-statsapi/examples/) | Extended synchronous examples |
+| [Stats guide](https://zero-sum-seattle.github.io/python-mlb-statsapi/stats/) | Player, team, general, and per-game stat queries with sync and async examples |
+| [Async usage](https://zero-sum-seattle.github.io/python-mlb-statsapi/async/) | Async installation, lifecycle, concurrency, and examples |
+| [HTTP transport](https://zero-sum-seattle.github.io/python-mlb-statsapi/http-transport/) | Timeouts, retries, strict HTTP, exceptions, and ownership |
+| [Public API contract](https://zero-sum-seattle.github.io/python-mlb-statsapi/public-api/) | Supported symbols, signatures, endpoint methods, and stability policy |
+| [Release notes](https://zero-sum-seattle.github.io/python-mlb-statsapi/releases/) | Release-specific changes and migration notes |
 
 ## Contributing
 
