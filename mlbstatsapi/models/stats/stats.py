@@ -1,6 +1,6 @@
 from typing import Optional, List, Any, ClassVar
 from pydantic import Field, field_validator
-from mlbstatsapi.models.base import MLBBaseModel
+from mlbstatsapi.models.base import MLBBaseModel, OptionalFloat
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.people import Person, Batter, Position
 from mlbstatsapi.models.sports import Sport
@@ -47,10 +47,10 @@ class ExpectedStatistics(MLBBaseModel):
     wobacon : str
         Expected wOBA on contact.
     """
-    avg: str
-    slg: str
-    woba: str
-    wobacon: str = Field(alias="wobaCon")
+    avg: OptionalFloat
+    slg: OptionalFloat
+    woba: OptionalFloat
+    wobacon: OptionalFloat = Field(alias="wobaCon")
 
 
 class Sabermetrics(MLBBaseModel):
@@ -239,7 +239,7 @@ class HotColdZones(Split):
     stat : Zones
         The hot cold zones for the stat.
     """
-    _stat: ClassVar[List[str]] = ['hotColdZones']
+    _stat: ClassVar[List[OptionalFloat]] = ['hotColdZones']
     stat: Zones
 
 

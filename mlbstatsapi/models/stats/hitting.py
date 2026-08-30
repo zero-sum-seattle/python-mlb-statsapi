@@ -26,7 +26,7 @@ class AdvancedHittingSplit(MLBBaseModel):
         The amount of sac bunts.
     sac_flies : int
         The amount of sac flies.
-    babip : str
+    babip : float
         Batting Average on Balls in Play.
     extra_base_hits : int
         The amount of extra base hits.
@@ -38,17 +38,17 @@ class AdvancedHittingSplit(MLBBaseModel):
         The amount of GIDP opportunities.
     number_of_pitches : int
         The number of pitches the batter has faced.
-    pitches_per_plate_appearance : str
+    pitches_per_plate_appearance : float
         The avg amount of pitches per plate appearance.
-    walks_per_plate_appearance : str
+    walks_per_plate_appearance : float
         The avg walks per plate appearance.
-    strikeouts_per_plate_appearance : str
+    strikeouts_per_plate_appearance : float
         The amount of strike outs per plate appearance.
-    home_runs_per_plate_appearance : str
+    home_runs_per_plate_appearance : float
         The amount of home runs per plate appearance.
-    walks_per_strikeout : str
+    walks_per_strikeout : float
         The amount of walks per strike out.
-    iso : str
+    iso : float
         Isolated power.
     reached_on_error : int
         The amount of times the batter has reached base on an error.
@@ -144,19 +144,19 @@ class SimpleHittingSplit(MLBBaseModel):
         The number of hits for the batter.
     hit_by_pitch : int
         The number of pitches the batter has been hit by.
-    avg : str
+    avg : float
         The batting avg of the batter.
     at_bats : int
         The number of at bats of the batter.
-    obp : str
+    obp : float
         The on base percentage of the batter.
-    slg : str
+    slg : float
         The slugging percentage of the batter.
-    ops : str
+    ops : float
         The on-base plus slugging of the batter.
     caught_stealing : int
         The amount of times the batter has been caught stealing.
-    caught_stealing_percentage : str
+    caught_stealing_percentage : float
         The caught stealing percentage.
     stolen_bases : int
         The amount of stolen bases achieved by the batter.
@@ -180,7 +180,7 @@ class SimpleHittingSplit(MLBBaseModel):
         The number of sac bunts performed by the batter.
     sac_flies : int
         The number of sac flies performed by the batter.
-    babip : str
+    babip : float
         The batting average of balls in play of the batter.
     groundouts_to_airouts : int
         The groundout-to-airout ratio of the batter.
