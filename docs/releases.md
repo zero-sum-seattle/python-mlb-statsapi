@@ -4,6 +4,7 @@ Release notes describe user-visible changes, compatibility guidance, and validat
 
 ## Releases
 
+- [1.1.1](releases/1.1.1.md) — numeric stat field and MLB sentinel handling corrections
 - [1.1.0](releases/1.1.0.md) — first-class asynchronous client support
 - [1.0.1](releases/1.0.1.md) — packaging and Python support corrections
 - [1.0.0](releases/1.0.0.md) — strict HTTP behavior by default and a stable public API contract
