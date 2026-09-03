@@ -1,9 +1,10 @@
 from typing import Optional, List, ClassVar
-from pydantic import Field
+from pydantic import Field, field_validator
 from mlbstatsapi.models.base import MLBBaseModel
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 from .stats import Split
+from .sentinels import normalize_mlb_float_sentinel
 
 
 class SimpleCatchingSplit(MLBBaseModel):
@@ -106,6 +107,20 @@ class SimpleCatchingSplit(MLBBaseModel):
     sac_flies: Optional[int] = Field(default=None, alias="sacFlies")
     passed_ball: Optional[int] = Field(default=None, alias="passedBall")
     pickoff_attempts: Optional[int] = Field(default=None, alias="pickoffAttempts")
+
+    @field_validator(
+        "avg",
+        "obp",
+        "slg",
+        "ops",
+        "caught_stealing_percentage",
+        "stolen_base_percentage",
+        "strikeout_walk_ratio",
+        mode="before",
+    )
+    @classmethod
+    def normalize_float_sentinels(cls, value):
+        return normalize_mlb_float_sentinel(value)
 
 
 class CatchingSeason(Split):

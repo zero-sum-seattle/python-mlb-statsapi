@@ -6,6 +6,7 @@ from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 from mlbstatsapi.models.data import PitchData, HitData, Count, PlayDetails
 from .stats import Sabermetrics, ExpectedStatistics, Split
+from .sentinels import normalize_mlb_float_sentinel
 
 
 class AdvancedHittingSplit(MLBBaseModel):
@@ -108,6 +109,20 @@ class AdvancedHittingSplit(MLBBaseModel):
     pop_hits: Optional[int] = Field(default=None, alias="popHits")
     ground_hits: Optional[int] = Field(default=None, alias="groundHits")
     line_hits: Optional[int] = Field(default=None, alias="lineHits")
+
+    @field_validator(
+        "babip",
+        "pitches_per_plate_appearance",
+        "walks_per_plate_appearance",
+        "strikeouts_per_plate_appearance",
+        "home_runs_per_plate_appearance",
+        "walks_per_strikeout",
+        "iso",
+        mode="before",
+    )
+    @classmethod
+    def normalize_float_sentinels(cls, value):
+        return normalize_mlb_float_sentinel(value)
 
 
 class SimpleHittingSplit(MLBBaseModel):
@@ -225,6 +240,22 @@ class SimpleHittingSplit(MLBBaseModel):
     groundouts_to_airouts: Optional[float] = Field(default=None, alias="groundOutsToAirouts")
     catchers_interference: Optional[int] = Field(default=None, alias="catchersInterference")
     at_bats_per_home_run: Optional[float] = Field(default=None, alias="atBatsPerHomeRun")
+
+    @field_validator(
+        "avg",
+        "obp",
+        "slg",
+        "ops",
+        "caught_stealing_percentage",
+        "stolen_base_percentage",
+        "babip",
+        "groundouts_to_airouts",
+        "at_bats_per_home_run",
+        mode="before",
+    )
+    @classmethod
+    def normalize_float_sentinels(cls, value):
+        return normalize_mlb_float_sentinel(value)
 
 
 class HittingWinLoss(Split):

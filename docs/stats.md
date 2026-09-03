@@ -279,6 +279,14 @@ This is a behavioral change from earlier releases where these fields were
 `str`. Code relying on string operations (`avg.startswith(".")`) or on
 `avg == ".287"` needs to switch to numeric comparisons.
 
+The MLB Stats API also uses two placeholder strings, `".---"` and `"-.--"`,
+for these rate stats when the underlying value is not applicable (for
+example a caught-stealing percentage when nobody has attempted a steal).
+These two known sentinels are normalized to `None` before conversion, so
+`split.stat.avg` is `None` rather than raising a validation error. Any other
+non-numeric string still raises a `ValidationError`, since it isn't a
+sentinel MLB is known to send.
+
 Fields that use MLB's innings notation remain `str`, because values like
 `"6.2"` mean 6 2/3 innings rather than the decimal 6.2:
 

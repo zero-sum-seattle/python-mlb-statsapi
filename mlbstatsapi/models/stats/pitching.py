@@ -7,6 +7,7 @@ from mlbstatsapi.models.game import Game
 from mlbstatsapi.models.data import Count, PlayDetails
 from .stats import Sabermetrics, ExpectedStatistics, Split
 from .hitting import SimpleHittingSplit
+from .sentinels import normalize_mlb_float_sentinel
 
 
 class SimplePitchingSplit(MLBBaseModel):
@@ -214,6 +215,31 @@ class SimplePitchingSplit(MLBBaseModel):
     outs_pitched: Optional[int] = Field(default=None, alias="outsPitched")
     rbi: Optional[int] = None
 
+    @field_validator(
+        "avg",
+        "obp",
+        "slg",
+        "ops",
+        "caught_stealing_percentage",
+        "stolen_base_percentage",
+        "era",
+        "whip",
+        "strike_percentage",
+        "groundouts_to_airouts",
+        "win_percentage",
+        "pitches_per_inning",
+        "strikeout_walk_ratio",
+        "strikeouts_per_9_inn",
+        "walks_per_9_inn",
+        "hits_per_9_inn",
+        "runs_scored_per_9",
+        "home_runs_per_9",
+        mode="before",
+    )
+    @classmethod
+    def normalize_float_sentinels(cls, value: Any) -> Any:
+        return normalize_mlb_float_sentinel(value)
+
 
 class AdvancedPitchingSplit(MLBBaseModel):
     """
@@ -374,6 +400,37 @@ class AdvancedPitchingSplit(MLBBaseModel):
     bequeathed_runners_scored: Optional[int] = Field(default=None, alias="bequeathedRunnersScored")
     innings_pitched_per_game: Optional[str] = Field(default=None, alias="inningsPitchedPerGame")
     flyball_percentage: Optional[float] = Field(default=None, alias="flyballPercentage")
+
+    @field_validator(
+        "winning_percentage",
+        "runs_scored_per_9",
+        "babip",
+        "obp",
+        "slg",
+        "ops",
+        "strikeouts_per_9",
+        "base_on_balls_per_9",
+        "home_runs_per_9",
+        "hits_per_9",
+        "strikeouts_to_walks",
+        "strikeouts_minus_walks_percentage",
+        "gidp_percentage",
+        "batters_faced_per_game",
+        "whiff_percentage",
+        "strike_percentage",
+        "pitches_per_inning",
+        "pitches_per_plate_appearance",
+        "walks_per_plate_appearance",
+        "strikeouts_per_plate_appearance",
+        "home_runs_per_plate_appearance",
+        "walks_per_strikeout",
+        "iso",
+        "flyball_percentage",
+        mode="before",
+    )
+    @classmethod
+    def normalize_float_sentinels(cls, value: Any) -> Any:
+        return normalize_mlb_float_sentinel(value)
 
 
 class PitchingSabermetrics(Split):

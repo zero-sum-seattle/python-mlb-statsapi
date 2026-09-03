@@ -5,6 +5,7 @@ from mlbstatsapi.models.people import Position
 from mlbstatsapi.models.teams import Team
 from mlbstatsapi.models.game import Game
 from .stats import Split
+from .sentinels import normalize_mlb_float_sentinel
 
 
 class SimpleFieldingSplit(MLBBaseModel):
@@ -96,6 +97,19 @@ class SimpleFieldingSplit(MLBBaseModel):
         if isinstance(v, dict) and not v:
             return None
         return v
+
+    @field_validator(
+        "caught_stealing_percentage",
+        "stolen_base_percentage",
+        "fielding",
+        "range_factor_per_game",
+        "range_factor_per_9_inn",
+        "catcher_era",
+        mode="before",
+    )
+    @classmethod
+    def normalize_float_sentinels(cls, value: Any) -> Any:
+        return normalize_mlb_float_sentinel(value)
 
 
 class FieldingSeasonAdvanced(Split):
