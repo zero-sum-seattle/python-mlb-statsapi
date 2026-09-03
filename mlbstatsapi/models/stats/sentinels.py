@@ -12,6 +12,6 @@ MLB_FLOAT_SENTINELS = {".---", "-.--"}
 
 
 def normalize_mlb_float_sentinel(value):
-    if value in MLB_FLOAT_SENTINELS:
+    if isinstance(value, str) and value in MLB_FLOAT_SENTINELS:
         return None
     return value

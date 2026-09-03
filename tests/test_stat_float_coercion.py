@@ -154,6 +154,21 @@ class TestMlbFloatSentinelNormalization:
         assert normalize_mlb_float_sentinel(None) is None
         assert normalize_mlb_float_sentinel("banana") == "banana"
 
+    @pytest.mark.parametrize("unhashable", [{"unexpected": "value"}, ["unexpected"]])
+    def test_normalize_mlb_float_sentinel_does_not_raise_on_unhashable_input(self, unhashable):
+        """dicts/lists can't be checked with `in` against a set of strings.
+
+        The helper must not raise TypeError itself -- unexpected shapes
+        should pass through unchanged so Pydantic's own validation raises
+        the ValidationError, rather than the helper crashing first.
+        """
+        assert normalize_mlb_float_sentinel(unhashable) is unhashable
+
+    @pytest.mark.parametrize("unhashable", [{"unexpected": "value"}, ["unexpected"]])
+    def test_simple_hitting_split_unhashable_avg_raises_validation_error(self, unhashable):
+        with pytest.raises(ValidationError):
+            SimpleHittingSplit(avg=unhashable)
+
     @pytest.mark.parametrize("sentinel", [".---", "-.--"])
     def test_simple_hitting_split_sentinel_fields_become_none(self, sentinel):
         split = SimpleHittingSplit(
