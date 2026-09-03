@@ -263,6 +263,29 @@ The MLB Stats API publishes the available values directly:
 
 Common stat groups include `hitting`, `pitching`, and `fielding`. Available stat types depend on the group and endpoint. Examples include `season`, `career`, `seasonAdvanced`, `gameLog`, and `playLog`.
 
+## Numeric stat fields are typed as `float`
+
+Rate and average stats such as `avg`, `obp`, `slg`, `ops`, `era`, `whip`, and
+`babip` are typed as `Optional[float]`. The MLB Stats API returns these as
+decimal strings (for example `".287"`), and Pydantic converts them to floats
+automatically:
+
+```python
+split.stat.avg == 0.287        # not ".287"
+split.stat.model_dump()["avg"] # 0.287, not ".287"
+```
+
+This is a behavioral change from earlier releases where these fields were
+`str`. Code relying on string operations (`avg.startswith(".")`) or on
+`avg == ".287"` needs to switch to numeric comparisons.
+
+Fields that use MLB's innings notation remain `str`, because values like
+`"6.2"` mean 6 2/3 innings rather than the decimal 6.2:
+
+- `SimpleFieldingSplit.innings`
+- `SimplePitchingSplit.innings_pitched`
+- `AdvancedPitchingSplit.innings_pitched_per_game`
+
 ## Related documentation
 
 - [Method reference](methods.md)

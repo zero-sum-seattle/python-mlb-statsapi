@@ -38,19 +38,19 @@ class ExpectedStatistics(MLBBaseModel):
 
     Attributes
     ----------
-    avg : str
+    avg : float
         Expected batting average.
-    slg : str
+    slg : float
         Expected slugging.
-    woba : str
+    woba : float
         Expected wOBA.
-    wobacon : str
+    wobacon : float
         Expected wOBA on contact.
     """
-    avg: str
-    slg: str
-    woba: str
-    wobacon: str = Field(alias="wobaCon")
+    avg: Optional[float]
+    slg: Optional[float]
+    woba: Optional[float]
+    wobacon: Optional[float] = Field(alias="wobaCon")
 
 
 class Sabermetrics(MLBBaseModel):

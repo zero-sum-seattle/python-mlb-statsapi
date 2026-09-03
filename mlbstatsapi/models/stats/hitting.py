@@ -26,7 +26,7 @@ class AdvancedHittingSplit(MLBBaseModel):
         The amount of sac bunts.
     sac_flies : int
         The amount of sac flies.
-    babip : str
+    babip : float
         Batting Average on Balls in Play.
     extra_base_hits : int
         The amount of extra base hits.
@@ -38,17 +38,17 @@ class AdvancedHittingSplit(MLBBaseModel):
         The amount of GIDP opportunities.
     number_of_pitches : int
         The number of pitches the batter has faced.
-    pitches_per_plate_appearance : str
+    pitches_per_plate_appearance : float
         The avg amount of pitches per plate appearance.
-    walks_per_plate_appearance : str
+    walks_per_plate_appearance : float
         The avg walks per plate appearance.
-    strikeouts_per_plate_appearance : str
+    strikeouts_per_plate_appearance : float
         The amount of strike outs per plate appearance.
-    home_runs_per_plate_appearance : str
+    home_runs_per_plate_appearance : float
         The amount of home runs per plate appearance.
-    walks_per_strikeout : str
+    walks_per_strikeout : float
         The amount of walks per strike out.
-    iso : str
+    iso : float
         Isolated power.
     reached_on_error : int
         The amount of times the batter has reached base on an error.
@@ -83,18 +83,18 @@ class AdvancedHittingSplit(MLBBaseModel):
     left_on_base: Optional[int] = Field(default=None, alias="leftOnBase")
     sac_bunts: Optional[int] = Field(default=None, alias="sacBunts")
     sac_flies: Optional[int] = Field(default=None, alias="sacFlies")
-    babip: Optional[str] = None
+    babip: Optional[float] = None
     extra_base_hits: Optional[int] = Field(default=None, alias="extraBaseHits")
     hit_by_pitch: Optional[int] = Field(default=None, alias="hitByPitch")
     gidp: Optional[int] = None
     gidp_opp: Optional[int] = Field(default=None, alias="gidpOpp")
     number_of_pitches: Optional[int] = Field(default=None, alias="numberOfPitches")
-    pitches_per_plate_appearance: Optional[str] = Field(default=None, alias="pitchesPerPlateAppearance")
-    walks_per_plate_appearance: Optional[str] = Field(default=None, alias="walksPerPlateAppearance")
-    strikeouts_per_plate_appearance: Optional[str] = Field(default=None, alias="strikeoutsPerPlateAppearance")
-    home_runs_per_plate_appearance: Optional[str] = Field(default=None, alias="homeRunsPerPlateAppearance")
-    walks_per_strikeout: Optional[str] = Field(default=None, alias="walksPerStrikeout")
-    iso: Optional[str] = None
+    pitches_per_plate_appearance: Optional[float] = Field(default=None, alias="pitchesPerPlateAppearance")
+    walks_per_plate_appearance: Optional[float] = Field(default=None, alias="walksPerPlateAppearance")
+    strikeouts_per_plate_appearance: Optional[float] = Field(default=None, alias="strikeoutsPerPlateAppearance")
+    home_runs_per_plate_appearance: Optional[float] = Field(default=None, alias="homeRunsPerPlateAppearance")
+    walks_per_strikeout: Optional[float] = Field(default=None, alias="walksPerStrikeout")
+    iso: Optional[float] = None
     reached_on_error: Optional[int] = Field(default=None, alias="reachedOnError")
     walkoffs: Optional[int] = Field(default=None, alias="walkOffs")
     flyouts: Optional[int] = Field(default=None, alias="flyOuts")
@@ -144,23 +144,23 @@ class SimpleHittingSplit(MLBBaseModel):
         The number of hits for the batter.
     hit_by_pitch : int
         The number of pitches the batter has been hit by.
-    avg : str
+    avg : float
         The batting avg of the batter.
     at_bats : int
         The number of at bats of the batter.
-    obp : str
+    obp : float
         The on base percentage of the batter.
-    slg : str
+    slg : float
         The slugging percentage of the batter.
-    ops : str
+    ops : float
         The on-base plus slugging of the batter.
     caught_stealing : int
         The amount of times the batter has been caught stealing.
-    caught_stealing_percentage : str
+    caught_stealing_percentage : float
         The caught stealing percentage.
     stolen_bases : int
         The amount of stolen bases achieved by the batter.
-    stolen_base_percentage : int
+    stolen_base_percentage : float
         The stolen base percentage of the batter.
     ground_into_double_play : int
         The number of times the batter has hit into a double play.
@@ -180,13 +180,13 @@ class SimpleHittingSplit(MLBBaseModel):
         The number of sac bunts performed by the batter.
     sac_flies : int
         The number of sac flies performed by the batter.
-    babip : str
+    babip : float
         The batting average of balls in play of the batter.
-    groundouts_to_airouts : int
+    groundouts_to_airouts : float
         The groundout-to-airout ratio of the batter.
     catchers_interference : int
         The number of times the batter has reached base due to catchers interference.
-    at_bats_per_home_run : int
+    at_bats_per_home_run : float
         The number of at bats per home run of the batter.
     """
     age: Optional[int] = None
@@ -203,15 +203,15 @@ class SimpleHittingSplit(MLBBaseModel):
     intentional_walks: Optional[int] = Field(default=None, alias="intentionalWalks")
     hits: Optional[int] = None
     hit_by_pitch: Optional[int] = Field(default=None, alias="hitByPitch")
-    avg: Optional[str] = None
+    avg: Optional[float] = None
     at_bats: Optional[int] = Field(default=None, alias="atBats")
-    obp: Optional[str] = None
-    slg: Optional[str] = None
-    ops: Optional[str] = None
+    obp: Optional[float] = None
+    slg: Optional[float] = None
+    ops: Optional[float] = None
     caught_stealing: Optional[int] = Field(default=None, alias="caughtStealing")
-    caught_stealing_percentage: Optional[str] = Field(default=None, alias="caughtStealingPercentage")
+    caught_stealing_percentage: Optional[float] = Field(default=None, alias="caughtStealingPercentage")
     stolen_bases: Optional[int] = Field(default=None, alias="stolenBases")
-    stolen_base_percentage: Optional[str] = Field(default=None, alias="stolenBasePercentage")
+    stolen_base_percentage: Optional[float] = Field(default=None, alias="stolenBasePercentage")
     ground_into_double_play: Optional[int] = Field(default=None, alias="groundIntoDoublePlay")
     ground_into_triple_play: Optional[int] = Field(default=None, alias="groundIntoTriplePlay")
     number_of_pitches: Optional[int] = Field(default=None, alias="numberOfPitches")
@@ -221,10 +221,10 @@ class SimpleHittingSplit(MLBBaseModel):
     left_on_base: Optional[int] = Field(default=None, alias="leftOnBase")
     sac_bunts: Optional[int] = Field(default=None, alias="sacBunts")
     sac_flies: Optional[int] = Field(default=None, alias="sacFlies")
-    babip: Optional[str] = None
-    groundouts_to_airouts: Optional[str] = Field(default=None, alias="groundOutsToAirouts")
+    babip: Optional[float] = None
+    groundouts_to_airouts: Optional[float] = Field(default=None, alias="groundOutsToAirouts")
     catchers_interference: Optional[int] = Field(default=None, alias="catchersInterference")
-    at_bats_per_home_run: Optional[str] = Field(default=None, alias="atBatsPerHomeRun")
+    at_bats_per_home_run: Optional[float] = Field(default=None, alias="atBatsPerHomeRun")
 
 
 class HittingWinLoss(Split):
