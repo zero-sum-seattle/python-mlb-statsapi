@@ -6,6 +6,7 @@ from mlbstatsapi.models.people import Person, Batter, Position
 from mlbstatsapi.models.sports import Sport
 from mlbstatsapi.models.leagues import League
 from mlbstatsapi.models.data import CodeDesc
+from .sentinels import normalize_mlb_float_sentinel
 
 
 class PitchArsenalSplit(MLBBaseModel):
@@ -38,19 +39,24 @@ class ExpectedStatistics(MLBBaseModel):
 
     Attributes
     ----------
-    avg : str
+    avg : float
         Expected batting average.
-    slg : str
+    slg : float
         Expected slugging.
-    woba : str
+    woba : float
         Expected wOBA.
-    wobacon : str
+    wobacon : float
         Expected wOBA on contact.
     """
-    avg: str
-    slg: str
-    woba: str
-    wobacon: str = Field(alias="wobaCon")
+    avg: Optional[float]
+    slg: Optional[float]
+    woba: Optional[float]
+    wobacon: Optional[float] = Field(alias="wobaCon")
+
+    @field_validator("avg", "slg", "woba", "wobacon", mode="before")
+    @classmethod
+    def normalize_float_sentinels(cls, value: Any) -> Any:
+        return normalize_mlb_float_sentinel(value)
 
 
 class Sabermetrics(MLBBaseModel):
