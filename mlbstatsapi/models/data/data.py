@@ -203,7 +203,7 @@ class CodeDesc(MLBBaseModel):
     description : str
         The description of the attribute.
     """
-    code: str
+    code: Optional[str] = None
     description: Optional[str] = None
 
 
