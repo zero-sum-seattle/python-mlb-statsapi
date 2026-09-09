@@ -1,7 +1,7 @@
 # HTTP Transport
 
 This document describes the HTTP transport behavior of the current release,
-version 1.1.0.
+version 1.1.1.
 
 Version 0.8.0 introduced shared Sessions, explicit timeouts, bounded retries,
 and structured exceptions. Version 0.9.0 introduced configurable strict
@@ -12,7 +12,7 @@ Version 1.1.0 adds the optional asynchronous `AsyncMlb` and
 `AsyncMlbDataAdapter` clients while preserving the existing synchronous API.
 Ordinary usage does not need to configure sessions, clients, or retries.
 
-See [the 1.1.0 release notes](releases/1.1.0.md) for a shorter summary of what
+See [the 1.1.1 release notes](releases/1.1.1.md) for a shorter summary of what
 changed in the current release. For the authoritative public API boundary see
 [the public API contract](public-api.md).
 
@@ -206,7 +206,7 @@ python-mlb-statsapi/<installed-version>
 With the package version currently declared in project metadata that resolves to:
 
 ```text
-python-mlb-statsapi/1.1.0
+python-mlb-statsapi/1.1.1
 ```
 
 The version comes from the installed package metadata, so it always matches

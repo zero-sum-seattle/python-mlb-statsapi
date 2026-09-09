@@ -40,7 +40,7 @@ EXTERNAL_WORKFLOW = PROJECT_ROOT / ".github" / "workflows" / "external-tests.yml
 # Release notes for the version this branch is preparing. Kept explicit so the
 # current-document checks cannot silently classify an unreviewed notes file as
 # the current release merely because the declared version changed.
-CURRENT_RELEASE_NOTES = RELEASE_NOTES_DIR / "1.1.0.md"
+CURRENT_RELEASE_NOTES = RELEASE_NOTES_DIR / "1.1.1.md"
 
 # Historical notes keep their own version-specific statements and must not be
 # rewritten to match the current release.
@@ -51,6 +51,7 @@ HISTORICAL_RELEASE_NOTES = (
     RELEASE_NOTES_DIR / "0.9.0.md",
     RELEASE_NOTES_DIR / "1.0.0.md",
     RELEASE_NOTES_DIR / "1.0.1.md",
+    RELEASE_NOTES_DIR / "1.1.0.md",
 )
 
 # Deterministic CI contract for maintained release branches.
