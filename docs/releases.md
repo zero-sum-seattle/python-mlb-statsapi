@@ -4,6 +4,7 @@ Release notes describe user-visible changes, compatibility guidance, and validat
 
 ## Releases
 
+- [1.1.2](releases/1.1.2.md) — tolerate missing codes in MLB code-description payloads
 - [1.1.1](releases/1.1.1.md) — numeric stat field and MLB sentinel handling corrections
 - [1.1.0](releases/1.1.0.md) — first-class asynchronous client support
 - [1.0.1](releases/1.0.1.md) — packaging and Python support corrections
@@ -11,4 +12,3 @@ Release notes describe user-visible changes, compatibility guidance, and validat
 - [0.9.0](releases/0.9.0.md) — public retry policy, richer HTTP errors, and compatibility warnings
 - [0.8.0](releases/0.8.0.md) — shared sessions, explicit timeouts, retries, and structured exceptions
 - [0.7.1](releases/0.7.1.md) — Pydantic v2 migration and Pythonic model fields
-
