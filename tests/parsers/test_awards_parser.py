@@ -21,3 +21,20 @@ def test_parse_awards():
 
     assert awards == [Award(**AWARD_PAYLOAD)]
     assert awards[0].player.full_name == "Aaron Judge"
+
+
+def test_parse_awards_without_team():
+    """Recipients such as Hall of Fame executives come back without a team."""
+    payload = {
+        "id": "MLBHOF",
+        "name": "Hall Of Fame",
+        "date": "2021-12-05",
+        "season": "2021",
+        "player": {"id": 650067, "link": "/api/v1/people/650067", "nameFirstLast": "Buck O'Neil"},
+    }
+
+    awards = parse_awards({"awards": [AWARD_PAYLOAD, payload]})
+
+    assert len(awards) == 2
+    assert awards[1].team is None
+    assert awards[1].player.id == 650067
