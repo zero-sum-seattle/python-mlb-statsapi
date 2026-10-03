@@ -58,6 +58,52 @@ poetry run twine check dist/*
 
 Offline CI is the normal pull-request gate. External tests are available manually, on a weekly schedule, and before releases.
 
+## Preparing a release
+
+Release preparation starts with one command:
+
+```bash
+python scripts/prepare_release.py <version>
+```
+
+The version must be a plain `MAJOR.MINOR.PATCH` newer than the version in `pyproject.toml`. The script makes the version-specific edits every release needs:
+
+- bumps the version in `pyproject.toml`
+- creates a release-notes skeleton at `docs/releases/<version>.md`
+- lists the release first in `docs/releases.md` and in the Release Notes section of `mkdocs.yml`
+- updates the current User-Agent version in `README.md`
+- updates the current version, release-notes link, and User-Agent in `docs/http-transport.md`
+- points `CURRENT_RELEASE_NOTES` in `tests/test_release_validation.py` at the new notes and moves the previous release into `HISTORICAL_RELEASE_NOTES`
+
+Preview the same checks and the exact diff without changing any file:
+
+```bash
+python scripts/prepare_release.py <version> --dry-run
+```
+
+`--check` is an alias for `--dry-run`. Both exit with status 0 when preparation would succeed and 1 when it would be refused.
+
+The script refuses, without changing anything, when the version is invalid, not newer than the current version, already prepared, or partially prepared, or when any file no longer has the exact structure it expects. Every edit is computed before anything is written, so a refusal never leaves the repository half-updated. When it reports a partially prepared release, restore the listed files and run it again.
+
+After the script runs:
+
+1. Write the release notes. Replace every `TODO(release)` marker in `docs/releases/<version>.md` and the summary line in `docs/releases.md`, and confirm the `Python support` section carried over from the previous release is still accurate. Offline tests fail while any `TODO(release)` marker remains.
+2. Review the complete diff.
+3. Run the full validation:
+
+   ```bash
+   poetry run pytest tests/ --ignore=tests/external_tests
+   poetry run pytest tests/external_tests/
+   rm -rf dist
+   poetry build
+   python3 scripts/validate_release.py
+   poetry run twine check dist/*
+   ```
+
+4. Commit and open the release pull request.
+
+`prepare_release.py` only edits files in the working tree. It does not commit, push, tag, publish to PyPI, or create a GitHub Release; those steps remain manual.
+
 ## Pull Request Guidelines
 
 - Run offline tests before submitting a PR
